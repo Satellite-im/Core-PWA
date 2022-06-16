@@ -1,7 +1,7 @@
 <template src="./IncomingCall.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import {
@@ -10,8 +10,9 @@ import {
   VideoIcon,
   VideoOffIcon,
 } from 'satellite-lucide-icons'
-
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { Friend } from '~/types/ui/friends'
+import { Group } from '~/store/groups/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -34,48 +35,32 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['conversation', 'groups', 'friends']),
-    callType() {
-      return this.$store.state.webrtc.incomingCall?.callId &&
-        RegExp(this.$Config.regex.uuidv4).test(
-          this.$store.state.webrtc.incomingCall?.callId?.split('|')?.[1],
-        )
+    ...mapState({
+      callId: (state) => (state as RootState).webrtc.incomingCall?.callId,
+      friends: (state) => (state as RootState).friends.all,
+      groups: (state) => (state as RootState).groups.all,
+    }),
+    callType(): 'group' | 'friend' | undefined {
+      return this.callId &&
+        RegExp(this.$Config.regex.uuidv4).test(this.callId?.split('|')?.[1])
         ? 'group'
         : 'friend'
     },
-    caller() {
+    caller(): Friend | Group | undefined {
       if (!this.callType) {
         return
       }
       if (this.callType === 'friend') {
-        return this.$store.state.friends.all.find(
-          (f: any) =>
-            f.peerId === this.$store.state.webrtc.incomingCall?.callId,
-        )
+        return this.friends.find((f: Friend) => f.peerId === this.callId)
       }
-      return this.$store.state.groups.all.find(
-        (g: any) => g.id === this.$store.state.webrtc.incomingCall?.callId,
-      )
+      return this.groups.find((g: Group) => g.id === this.callId)
     },
     callerAvatar(): string {
       const hash = this.caller?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
-  watch: {
-    '$store.state.webrtc.incomingCall': {
-      handler() {},
-      deep: true,
-    },
-  },
-  mounted() {
-    this.$store.dispatch('sounds/playSound', Sounds.CALL)
-  },
-  beforeDestroy() {
-    this.$store.dispatch('sounds/stopSound', Sounds.CALL)
-  },
 })
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less" src="./IncomingCall.less"></style>
