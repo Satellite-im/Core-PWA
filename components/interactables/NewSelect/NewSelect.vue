@@ -42,10 +42,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    keyClear: null,
-    keysSoFar: '',
     listboxHidden: true,
-    searchIndex: null,
   }),
   computed: {
     selectedOptionLabel(): string | undefined {
@@ -125,14 +122,7 @@ export default Vue.extend({
           this.$refs.button.focus()
           break
         default: {
-          // If the user typed a set of characters,
-          // focus the option that matches those characters
-          console.log(key)
-          const itemToFocus = this.findItemToFocus(key)
-          console.log(itemToFocus)
-          if (itemToFocus) {
-            this.focusItem(itemToFocus)
-          }
+          // add logic to find result, maybe debounce?
           break
         }
       }
@@ -155,17 +145,6 @@ export default Vue.extend({
           break
       }
     },
-    // Resets the keysSoFar after 500ms
-    clearKeysSoFarAfterDelay() {
-      if (this.keyClear) {
-        clearTimeout(this.keyClear)
-        this.keyClear = null
-      }
-      this.keyClear = setTimeout(() => {
-        this.keysSoFar = ''
-        this.keyClear = null
-      }, 500)
-    },
     /**
      * defocus on the element passed as a parameter.
      *
@@ -176,56 +155,6 @@ export default Vue.extend({
         return
       }
       element.removeAttribute('aria-selected')
-    },
-    /**
-     * Returns an option that its label matches the key or
-     * null if none of the match the key entered.
-     *
-     * @param {String} key typed characters to check whether they match an option
-     */
-    findItemToFocus(key: KeyboardEvent['key']) {
-      // If it's the first time the user is typing to find an option
-      // set the search index to the active option
-      if (!this.keysSoFar) {
-        this.searchIndex = this.options.findIndex(
-          (option) => option.value === this.value,
-        )
-      }
-
-      this.keysSoFar += key
-      this.clearKeysSoFarAfterDelay()
-
-      // Find the next matching element starting from the search index
-      // until the end of all the options
-      let nextMatch = this.findMatchInOptions(
-        this.searchIndex + 1,
-        this.options.length,
-      )
-
-      // If there wasn't a match search for a match from the start of
-      // all the options until the search index
-      if (!nextMatch) {
-        nextMatch = this.findMatchInOptions(0, this.searchIndex)
-      }
-
-      return nextMatch
-    },
-    /**
-     * Returns an element that its label starts with keysSoFar
-     * or null if none is found in the options.
-     *
-     * @param {String} keysSoFar
-     */
-    findMatchInOptions(startIndex, endIndex) {
-      for (let i = startIndex; i < endIndex; i++) {
-        if (
-          this.options[i].label &&
-          this.options[i].label.toUpperCase().indexOf(this.keysSoFar) === 0
-        ) {
-          return this.$refs.options[i]
-        }
-      }
-      return null
     },
     /**
      *  Focus on the first option
