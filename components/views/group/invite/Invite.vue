@@ -28,6 +28,9 @@ export default Vue.extend({
   },
   methods: {
     async confirm() {
+      if (!this.recipients.length) {
+        return
+      }
       try {
         this.error = ''
         this.isLoading = true
