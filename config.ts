@@ -118,6 +118,7 @@ export const Config = {
   account: {
     minLength: 5,
     maxLength: 32,
+    statusMaxLength: 128,
   },
   profile: {
     noteMaxChars: 256,
