@@ -541,7 +541,7 @@ export default {
       older_messages: 'You are viewing older messages',
       recent_messages: 'Go to most recent messages',
       infinite_scroll: {
-        loading: 'Loading messages ...',
+        loading: 'Loading ...',
         no_more: 'No more data.',
       },
     },
