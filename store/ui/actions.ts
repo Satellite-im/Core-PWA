@@ -105,7 +105,10 @@ export default {
     if (!$TextileManager.notificationManager?.isInitialized()) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
-    if (rootState.textile.activeConversation !== payload.fromAddress) {
+    if (
+      rootState.textile.activeConversation !== payload.fromAddress ||
+      payload.type === AlertType.MISSED_CALL
+    ) {
       const userId = $TextileManager.getIdentityPublicKey()
       if (userId !== payload.fromAddress) {
         const notificationResponse =
