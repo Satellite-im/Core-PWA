@@ -1,7 +1,8 @@
 <div class="message-actions">
   <div
     class="reply-command"
-    v-tooltip.top="$t('ui.emotes')"
+    :class="{'coming-soon': isGroup}"
+    v-tooltip.top="$t(isGroup ? 'ui.coming_soon' : 'ui.emotes')"
     @click="emojiReaction"
   >
     <smile-icon
@@ -12,7 +13,8 @@
   <div
     v-if="!hideReply"
     class="reply-command"
-    v-tooltip.top="$t('messaging.reply')"
+    :class="{'coming-soon': isGroup}"
+    v-tooltip.top="$t(isGroup ? 'ui.coming_soon' : 'messaging.reply')"
     @click="setReplyChatbarContent"
   >
     <corner-down-right-icon size="1x" :class="'control-icon'" />

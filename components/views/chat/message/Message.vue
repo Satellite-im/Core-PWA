@@ -12,10 +12,11 @@ import {
   convertTimestampToDate,
 } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
-import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
+import { ContextMenuItem, EmojiUsage, ModalWindows } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -62,7 +63,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'textile', 'accounts']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      textile: (state) => (state as RootState).textile,
+      accounts: (state) => (state as RootState).accounts,
+      isGroup: (state) => (state as RootState).conversation.type === 'group',
+    }),
     ...mapGetters('friends', ['findFriendByAddress']),
     hasReactions(): boolean {
       return (
@@ -230,6 +236,10 @@ export default Vue.extend({
      * @example
      */
     setReplyChatbarContent() {
+      if (this.isGroup) {
+        this.toggleModal(ModalWindows.CALL_TO_ACTION)
+        return
+      }
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       const { id, type, payload, to, from } = this.$props.message
       let finalPayload = payload
@@ -253,6 +263,10 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent) {
+      if (this.isGroup) {
+        this.toggleModal(ModalWindows.CALL_TO_ACTION)
+        return
+      }
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
@@ -349,6 +363,12 @@ export default Vue.extend({
       }
 
       return response.blob()
+    },
+    toggleModal(modalName: ModalWindows) {
+      this.$store.commit('ui/toggleModal', {
+        name: modalName,
+        state: !this.ui.modals[modalName],
+      })
     },
   },
 })
