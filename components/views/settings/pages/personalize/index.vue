@@ -1,9 +1,9 @@
-<template src="./Personalize.html" />
+<template src="./Personalize.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Themes, Flairs, FlairColors, ThemeNames } from '~/store/ui/types.ts'
+import { Themes, Flairs, FlairColors, ThemeNames } from '~/store/ui/types'
 export default Vue.extend({
   name: 'PersonalizeSettings',
   layout: 'settings',
@@ -12,7 +12,6 @@ export default Vue.extend({
       ThemeNames,
       themes: Themes,
       flairs: Flairs,
-      test: '',
     }
   },
   computed: {
@@ -24,7 +23,7 @@ export default Vue.extend({
         const activeTheme = Themes.find((th) => {
           return th.value === state
         })
-        if (activeTheme?.name === ThemeNames.DEFAULT) {
+        if (activeTheme?.value === ThemeNames.DEFAULT) {
           const flairValue = Flairs.find(
             (flair) => flair.value === FlairColors.SATELLITE,
           )

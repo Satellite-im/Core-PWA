@@ -7,12 +7,7 @@ import keyCodes from './keyCodes'
 interface SelectOption {
   value: string
   label: string
-}
-
-enum selectSizes {
-  small = 100,
-  medium = 150,
-  large = 200,
+  color?: string
 }
 
 export default Vue.extend({
@@ -41,9 +36,9 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    size: {
-      type: Number as PropType<selectSizes>,
-      default: selectSizes.medium,
+    small: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({

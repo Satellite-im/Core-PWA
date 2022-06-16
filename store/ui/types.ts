@@ -76,14 +76,12 @@ export const Flairs = [
 
 export const Themes = [
   {
-    text: 'Default',
-    name: ThemeNames.DEFAULT,
+    label: 'Default',
     value: ThemeNames.DEFAULT,
     class: '',
   },
   {
-    text: 'Moonless Night',
-    name: ThemeNames.MOONLESS,
+    label: 'Moonless Night',
     value: ThemeNames.MOONLESS,
     class: 'moonless_night',
   },

@@ -1,4 +1,4 @@
-<div class="listbox" :value="value" ref="listbox">
+<div class="listbox" :class="{small : small}" :value="value" ref="listbox">
   <span
     :id="`${label}-label`"
     :class="{ hidden : !showLabel }"
@@ -9,13 +9,13 @@
   <div class="list-container" v-click-outside="hideListbox">
     <button
       :id="`${label}-button-label`"
+      :disabled="disabled"
       :aria-labelledby="`${label}-label ${label}-button-label`"
       type="button"
       aria-haspopup="listbox"
       @click="toggleListbox"
       @keydown="checkShow"
       ref="button"
-      :disabled="disabled"
     >
       {{ value ? selectedOptionLabel : placeholder }}
     </button>
@@ -34,6 +34,7 @@
         :key="`${label}-option-${index}`"
         :aria-selected="option.value === value"
         :data-value="option.value"
+        :style="option.color ? 'background:' + option.color : ''"
         role="option"
         ref="options"
       >

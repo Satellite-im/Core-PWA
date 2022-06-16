@@ -1,5 +1,13 @@
 .listbox {
-  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+
+  &.small {
+    button,
+    ul {
+      font-size: 0.75rem;
+    }
+  }
 
   .listbox-label {
     font-family: @secondary-font;
@@ -15,17 +23,17 @@
 }
 
 button {
-  width: 150px;
+  min-width: 150px;
+  font-size: 1rem;
   text-align: left;
   position: relative;
   border-radius: 4rem;
-  padding: @light-spacing @large-spacing @light-spacing @normal-spacing;
+  padding: @light-spacing @xlarge-spacing @light-spacing @normal-spacing;
 
   color: @white;
   background: @flair-color;
   box-shadow: 0 5px 14px -5px @flair-color;
   border: none;
-  cursor: pointer;
 
   &:extend(.ellipsis);
   &:disabled {
@@ -51,8 +59,7 @@ button {
 }
 
 ul {
-  width: 148px;
-  max-height: 10rem;
+  min-width: 150px;
   overflow-y: auto;
   position: absolute;
   margin-top: @xlight-spacing;
@@ -71,12 +78,13 @@ ul {
   scrollbar-width: thin;
   scrollbar-color: @flair-color transparent;
 
-  &:extend(.background-semitransparent-dark);
+  &:extend(.background-dark-gradient);
+  &:extend(.fifth-layer);
 }
 
 li {
   display: block;
-  padding: @xlight-spacing @light-spacing;
+  padding: @light-spacing @xlarge-spacing @light-spacing @normal-spacing;
   position: relative;
 
   &:focus,
