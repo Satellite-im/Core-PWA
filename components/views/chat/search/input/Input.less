@@ -3,6 +3,9 @@
   font-size: @text-size;
 }
 .search-box {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
   &:extend(.input-bg);
   &:extend(.round-corners);
   &.focus {
@@ -24,7 +27,8 @@
     line-height: 30px;
     white-space: nowrap;
     overflow: hidden;
-    font-size: @text-size;
+    font-family: @secondary-font;
+    font-size: @mini-text-size;
     background: transparent;
     outline: 0;
 
@@ -34,7 +38,7 @@
   display: inline-block;
   position: relative;
   width: 180px;
-  font-size: @text-size;
+  font-size: @mini-text-size;
   border: @light-border;
   display: flex;
   align-items: center;
@@ -67,16 +71,11 @@
   cursor: pointer;
 }
 .search-placeholder {
-  &:extend(.font-muted);
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 30px;
-  line-height: 30px;
-  font-size: @text-size;
+  &:extend(.font-muted);
+  font-size: @mini-text-size;
   font-family: @secondary-font;
   padding: 0 5px;
-  padding-left: 1.8rem;
 }
 .hide {
   display: none;
