@@ -3,7 +3,7 @@
     class="user-state"
     data-cy="user-state"
     :style="`width:${size}px; height:${size}px`"
-    :class="{ 'is-large': size > 36 }"
+    :class="{ 'is-large': size > 36, 'has-status': showStatus }"
   >
     <UiCircle
       data-cy="satellite-circle-profile"
@@ -13,22 +13,25 @@
       :source="src"
       @click="clickHandler"
     />
-    <div
-      v-if="user.state !== 'mobile' && !isTyping"
-      class="status"
-      :class="{ [`is-${user.state}`]: user.state }"
-    />
-    <smartphone-icon
-      v-else-if="user.state === 'mobile'"
-      size="1x"
-      :class="`mobile-status is-${user.state}`"
-    />
-    <UiChatTypingIndicator v-else />
+    <div v-if="showStatus" class="container-status">
+      <div
+        v-if="user.state !== 'mobile' && !isTyping"
+        class="status"
+        :class="{ [`is-${user.state}`]: user.state }"
+      />
+      <smartphone-icon
+        v-else-if="user.state === 'mobile'"
+        size="1x"
+        :class="`mobile-status is-${user.state}`"
+      />
+      <UiChatTypingIndicator v-else />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapState, mapGetters } from 'vuex'
 import { SmartphoneIcon } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
 
@@ -57,6 +60,19 @@ export default Vue.extend({
       required: false,
       default: () => {},
     },
+  },
+  computed: {
+    ...mapGetters('friends', ['friendExists']),
+    ...mapState(['accounts']),
+    showStatus() {
+      return (
+        this.friendExists(this.$props.user.address) ||
+        this.$props.user.address === this.accounts.active
+      )
+    },
+  },
+  mounted() {
+    console.log(this.showStatus)
   },
 })
 </script>
