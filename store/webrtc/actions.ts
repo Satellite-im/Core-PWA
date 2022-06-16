@@ -222,7 +222,6 @@ const webRTCActions = {
     $Peer2Peer.on(
       'peer:mute',
       ({ peerId, payload: { callId, trackId, kind } }) => {
-        console.log('MUTE')
         const peerIdStr = peerId.toB58String()
         commit('setMuted', {
           peerId: peerIdStr,
