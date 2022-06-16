@@ -457,22 +457,14 @@ a.link {
 //Sidebar
 #sidebar {
   .sidebar-nav {
-    .button,
-    div {
-      &.is-primary {
-        &:extend(.background-flair-gradient);
-        &:extend(.glow-flair);
-      }
-      .tag-inverted {
-        background: @midground !important;
-      }
+    .tag-inverted {
+      background: @midground;
     }
   }
 
   .label {
     &:extend(.background-flair);
   }
-  background: @background !important;
 }
 
 .side-bar-inner {
