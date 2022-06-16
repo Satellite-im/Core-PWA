@@ -1,12 +1,10 @@
-<div id="sidebar" class="collapsed">
-  <div
-    :class="media.streaming ? 'sidebar-inner sidebar-inner-streaming' : 'sidebar-inner'"
-  >
+<div id="sidebar">
+  <div class="sidebar-inner">
     <div class="sidebar-search">
       <menu-icon
         class="toggle-sidebar"
         data-cy="hamburger-button"
-        v-on:click="showMenu"
+        @click="showMenu"
         size="1.2x"
         full-width
         :style="`${sidebar ? 'display: block' : 'display: none'}`"
@@ -27,26 +25,24 @@
         />
       </UiComingSoon>
     </div>
-    <div class="sidebar-nav" v-if="!$device.isMobile">
-      <div style="position: relative">
-        <InteractablesButton
-          :inactive="$route.path.includes('/friends/list') ? false : true"
-          class="sidebar-full-btn"
-          data-cy="sidebar-friends"
-          :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
-          size="small"
-          :action="() => { friends.incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
-          :text="$t('friends.friends')"
-        >
-          <users-icon size="1.2x" />
-        </InteractablesButton>
-        <span
-          v-if="friends.incomingRequests.length && dataState.friends === DataStateType.Ready"
-          :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
-        >
-          {{friends.incomingRequests.length}}
-        </span>
-      </div>
+    <div class="sidebar-nav">
+      <InteractablesButton
+        :inactive="$route.path.includes('/friends/list') ? false : true"
+        class="sidebar-full-btn"
+        data-cy="sidebar-friends"
+        :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
+        size="small"
+        :action="() => { friends.incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
+        :text="$t('friends.friends')"
+      >
+        <users-icon size="1.2x" />
+      </InteractablesButton>
+      <span
+        v-if="friends.incomingRequests.length && dataState.friends === DataStateType.Ready"
+        :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
+      >
+        {{friends.incomingRequests.length}}
+      </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files') ? false : true"
         class="sidebar-full-btn"
@@ -59,48 +55,21 @@
         <folder-icon size="1.2x" />
       </InteractablesButton>
     </div>
-
-    <Slimbar
-      v-if="$device.isMobile"
-      :servers="$mock.servers"
-      :open-modal="toggleModal"
-      horizontal
-    />
-
-    <div class="tabs sidebar-selector padded no-top-pad flexy">
-      <div
-        class="quick-chat"
-        v-tooltip.top="$t('pages.chat.new_chat')"
-        @click="()=>toggleModal('quickchat')"
-        v-if="!$device.isMobile && toggleView"
-      >
-        <plus-circle-icon size="1x" />
-      </div>
-      <div
-        class="quick-chat"
-        v-tooltip.top="$t(pages.chat.new_group)"
-        @click="()=>toggleModal('creategroup')"
-        v-if="!$device.isMobile && !toggleView"
-      >
-        <plus-circle-icon size="1x" />
-      </div>
+    <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
+      <plus-circle-icon size="1x" @click="()=>toggleModal('quickchat')" />
+      <FriendsQuick
+        v-if="ui.modals.quickchat"
+        v-click-outside="()=>toggleModal('quickchat')"
+      />
     </div>
-    <FriendsQuick
-      v-if="ui.modals.quickchat"
-      v-click-outside="()=>toggleModal('quickchat')"
-    />
-    <div
-      v-if="ui.showSidebarUsers"
-      class="scrolling hidden-scroll users"
-      v-scroll-lock="true"
-    >
+    <div class="scrolling hidden-scroll users" v-scroll-lock="true">
       <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <UiLoadersAddress
           v-if="dataState.friends === DataStateType.Loading"
           :count="4"
           inverted
         />
-        <div v-else-if="friends.all && friends.all.length">
+        <template v-else-if="friends.all && friends.all.length">
           <UiInlineNotification
             v-if="ui.unreadMessage.length"
             :text="$t('messaging.new_messages')"
@@ -120,7 +89,7 @@
               :isSelected="thing.id === $route.params.id"
             />
           </div>
-        </div>
+        </template>
         <div
           v-else-if="dataState.friends !== DataStateType.Loading && !friends.all.length"
           class="mascot-container"
@@ -141,8 +110,6 @@
       </UiSimpleScroll>
     </div>
   </div>
-
-  <div class="filler"></div>
   <div class="controls">
     <SidebarLive />
     <SidebarControls />
