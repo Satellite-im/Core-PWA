@@ -138,13 +138,28 @@
     </UiComingSoon>
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <SearchInput
-      v-if="!$device.isMobile"
-      @search="handleSearch"
-      @change="handleChange"
-      :placeholder="$t('search.search')"
-      :searchRecommend="searchRecommend"
-    />
+    <template v-if="!$device.isMobile">
+      <UiComingSoon
+        v-if="isGroup"
+        :tooltipText="$t('coming_soon.group_chat_search')"
+        horizontal
+        tooltip-position="bottom"
+      >
+        <SearchInput
+          @search="handleSearch"
+          @change="handleChange"
+          :placeholder="$t('search.search')"
+          :searchRecommend="searchRecommend"
+        />
+      </UiComingSoon>
+      <SearchInput
+        v-else
+        @search="handleSearch"
+        @change="handleChange"
+        :placeholder="$t('search.search')"
+        :searchRecommend="searchRecommend"
+      />
+    </template>
     <SearchResult
       v-if="!$device.isMobile && searchQuery"
       :searchQuery="searchQuery"
