@@ -25,9 +25,9 @@
     "cy:first": "xvfb-run -a cypress run --config-file cypress-first-user.json --browser chrome",
     "cy:second": "xvfb-run -a cypress run --config-file cypress-second-user.json --browser chrome",
     "cy:chat": "concurrently npm:cy:first npm:cy:second",
-    "cy:first-local": "cypress run --config-file cypress-first-user.json --browser chrome",
-    "cy:second-local": "cypress run --config-file cypress-second-user.json --browser chrome",
-    "cy:chat-local": "concurrently npm:cy:first-local npm:cy:second-local",
+    "cy:first local": "cypress run --config-file cypress-first-user.json --browser chrome",
+    "cy:second local": "cypress run --config-file cypress-second-user.json --browser chrome",
+    "cy:chat local": "concurrently npm:cy:first local npm:cy:second local",
     "prepare": "husky install"
   },
   "dependencies": {
