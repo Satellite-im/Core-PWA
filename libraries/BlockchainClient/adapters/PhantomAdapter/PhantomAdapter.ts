@@ -17,11 +17,13 @@ import {
 import PhantomManager from '~/libraries/Phantom/PhantomManager/PhantomManager'
 import PhantomUser from '~/libraries/Phantom/PhantomUser/PhantomUser'
 import PhantomFriend from '~/libraries/Phantom/PhantomFriend/PhantomFriend'
+import PhantomGroup from '~/libraries/Phantom/PhantomGroup/PhantomGroup'
 
 export default class PhantomAdapter implements Adapter {
   private readonly $PhantomManager: PhantomManager = new PhantomManager()
   private phantomUser: PhantomUser | null = null
   private phantomFriend: PhantomFriend | null = null
+  private phantomGroup: PhantomGroup | null = null
 
   constructor() {
     this.$PhantomManager = new PhantomManager()
@@ -53,6 +55,17 @@ export default class PhantomAdapter implements Adapter {
     return this.phantomFriend
   }
 
+  _getPhantomGroup(): PhantomGroup {
+    if (!this.phantomGroup) {
+      if (this.$PhantomManager.getAdapter().connected) {
+        this.phantomGroup = new PhantomGroup(this.$PhantomManager)
+        return this.phantomGroup
+      }
+      throw new Error('Phantom group is not initialized')
+    }
+    return this.phantomGroup
+  }
+
   async setPhotoHash(_photoHash: string): Promise<string> {
     return await this._getPhantomUser().setPhotoHash(_photoHash)
   }
@@ -79,7 +92,7 @@ export default class PhantomAdapter implements Adapter {
   }
 
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null> {
-    throw new Error('Method not implemented..')
+    throw new Error('This method dose not exist in Phantom')
   }
 
   async createUser(_params: CreateUserParams): Promise<boolean> {
@@ -196,49 +209,52 @@ export default class PhantomAdapter implements Adapter {
     throw new Error('Method not implemented.')
   }
 
-  createGroup(_groupId: string, _name: string): Promise<Group> {
-    throw new Error('Method not implemented.')
+  async createGroup(_groupId: string, _name: string): Promise<Group> {
+    return await this._getPhantomGroup().create(_groupId, _name)
   }
 
-  getUserGroups(_address: string | PublicKey): Promise<Group[]> {
-    throw new Error('Method not implemented.')
+  async getUserGroups(_address: string | PublicKey): Promise<Group[]> {
+    return await this._getPhantomGroup().getUserGroups(_address)
   }
 
-  getGroupsUsers(
+  async getGroupsUsers(
     _groupIds: string[],
   ): Promise<{ id: string; users: string[] }[]> {
-    throw new Error('Method not implemented.')
+    return await this._getPhantomGroup().getGroupsUsers(_groupIds)
   }
 
-  inviteToGroup(_groupId: string, _recipient: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async inviteToGroup(_groupId: string, _recipient: string): Promise<void> {
+    return await this._getPhantomGroup().invite(_groupId, _recipient)
   }
 
-  addGroupInviteListener(_cb: (group: Group) => void): Promise<string> {
-    throw new Error('Method not implemented.')
+  async addGroupInviteListener(_cb: (group: Group) => void): Promise<string> {
+    return this._getPhantomGroup().addInviteListener(_cb)
   }
 
   unsubscribeGroupInviteListener(_id: number): Promise<void> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomGroup().unsubscribe(_id)
   }
 
-  addGroupListener(_id: string, _cb: (value: Group) => void): Promise<string> {
-    throw new Error('Method not implemented.')
+  async addGroupListener(
+    _id: string,
+    _cb: (value: Group) => void,
+  ): Promise<string> {
+    return this._getPhantomGroup().addGroupListener(_id, _cb)
   }
 
   removeGroupListeners(_keys: string[]): Promise<void> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomGroup().removeGroupListeners(_keys)
   }
 
   getGroupById(_id: string): Promise<Group> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomGroup().getGroupById(_id)
   }
 
   getGroupUsers(_groupId: string): Promise<string[]> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomGroup().getGroupUsers(_groupId)
   }
 
   addGroupsListener(_cb: (value: Group) => void): Promise<string[]> {
-    throw new Error('Method not implemented.')
+    return this._getPhantomGroup().addGroupsListener(_cb)
   }
 }
