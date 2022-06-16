@@ -69,3 +69,14 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+// hide from view, but not from screenreaders https://www.a11yproject.com/posts/how-to-hide-content/
+.hidden {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}

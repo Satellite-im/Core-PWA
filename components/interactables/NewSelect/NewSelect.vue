@@ -1,9 +1,15 @@
 <template src="./NewSelect.html"></template>
 
 <script lang="ts">
+import Vue, { PropType } from 'vue'
 import keyCodes from './keyCodes'
 
-export default {
+interface Options {
+  value: string
+  label: string
+}
+
+export default Vue.extend({
   props: {
     // eslint-disable-next-line vue/require-default-prop
     value: {
@@ -14,18 +20,18 @@ export default {
       required: true,
     },
     options: {
-      type: Array,
+      type: Array as PropType<Array<Options>>,
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
-    emptyOptionLabel: {
+    placeholder: {
       type: String,
       default: 'Choose a value',
     },
     showLabel: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
@@ -37,17 +43,16 @@ export default {
     searchIndex: null,
   }),
   computed: {
-    selectedOptionLabel() {
+    selectedOptionLabel(): string | undefined {
       const selectedOption = this.options.find(
         (option) => option.value === this.value,
       )
-      return selectedOption && selectedOption.label
+      return selectedOption?.label
     },
   },
   methods: {
     /**
-     * On option click it focuses on the option.
-     *
+     * @description focus option on click
      * @param {PointerEvent} event
      */
     checkClickItem(event: PointerEvent) {
@@ -57,14 +62,12 @@ export default {
       if ((event.target as HTMLElement).getAttribute('role') === 'option') {
         this.focusItem(event.target)
         this.hideListbox()
-        if (this.$refs.listboxButton)
-          (this.$refs.listboxButton as HTMLElement).focus()
+        if (this.$refs.button) (this.$refs.button as HTMLElement).focus()
       }
     },
     /**
-     * Handles various keyboard controls; UP/DOWN/HOME/END/PAGE_UP/PAGE_DOWN
-     *
-     * @param {Event} event The keydown event object
+     * @description various keyboard controls; UP/DOWN/HOME/END/PAGE_UP/PAGE_DOWN
+     * @param {KeyboardEvent} event The keydown event object
      */
     checkKeyDown(event: KeyboardEvent) {
       const key = event.which || event.keyCode
@@ -77,20 +80,20 @@ export default {
             (option) => option.value === this.value,
           )
           let nextItem = selectedItemIndex
-            ? this.$refs.listboxOptions[selectedItemIndex]
-            : this.$refs.listboxOptions[0]
+            ? this.$refs.options[selectedItemIndex]
+            : this.$refs.options[0]
 
           if (key === keyCodes.UP) {
             // If there's an option above the selected one
             if (selectedItemIndex - 1 >= 0) {
               // Assign the previous option to nextItem
-              nextItem = this.$refs.listboxOptions[selectedItemIndex - 1]
+              nextItem = this.$refs.options[selectedItemIndex - 1]
             }
           } else {
             // If there's an option below the selected one
             // eslint-disable-next-line no-lonely-if
             if (selectedItemIndex + 1 <= this.options.length) {
-              nextItem = this.$refs.listboxOptions[selectedItemIndex + 1]
+              nextItem = this.$refs.options[selectedItemIndex + 1]
             }
           }
 
@@ -114,7 +117,7 @@ export default {
         case keyCodes.ESC:
           event.preventDefault()
           this.hideListbox()
-          this.$refs.listboxButton.focus()
+          this.$refs.button.focus()
           break
         default: {
           // If the user typed a set of characters,
@@ -131,7 +134,7 @@ export default {
      * Keypress handler for the listbox button.
      * It shows the listbox list on up/down key press.
      */
-    checkShow(event) {
+    checkShow(event: KeyboardEvent) {
       const key = event.which || event.keyCode
 
       switch (key) {
@@ -161,7 +164,7 @@ export default {
      *
      * @param {Element} element
      */
-    defocusItem(element) {
+    defocusItem(element: HTMLElement) {
       if (!element) {
         return
       }
@@ -214,7 +217,7 @@ export default {
           this.options[i].label &&
           this.options[i].label.toUpperCase().indexOf(this.keysSoFar) === 0
         ) {
-          return this.$refs.listboxOptions[i]
+          return this.$refs.options[i]
         }
       }
       return null
@@ -223,24 +226,24 @@ export default {
      *  Focus on the first option
      */
     focusFirstItem() {
-      this.focusItem(this.$refs.listboxOptions[0])
+      this.focusItem(this.$refs.options[0])
     },
     /**
      * Select the option passed as the parameter.
      *
      * @param {Element} element - the option to select
      */
-    focusItem(element) {
+    focusItem(element: HTMLElement) {
       // Defocus active element
       if (this.value) {
         const index = this.options.findIndex(
           (option) => option.value === this.value,
         )
-        const listboxOption = this.$refs.listboxOptions[index]
+        const listboxOption = this.$refs.options[index]
         this.defocusItem(listboxOption)
       }
       element.setAttribute('aria-selected', 'true')
-      this.$refs.listboxNode.setAttribute(
+      this.$refs.list.setAttribute(
         'aria-activedescendant',
         element.getAttribute('data-value'),
       )
@@ -248,19 +251,16 @@ export default {
       this.$emit('input', element.getAttribute('data-value'))
 
       // Scroll up/down to show the listbox within the viewport
-      if (
-        this.$refs.listboxNode.scrollHeight >
-        this.$refs.listboxNode.clientHeight
-      ) {
+      if (this.$refs.list.scrollHeight > this.$refs.list.clientHeight) {
         const scrollBottom =
-          this.$refs.listboxNode.clientHeight + this.$refs.listboxNode.scrollTop
+          this.$refs.list.clientHeight + this.$refs.list.scrollTop
         const elementBottom = element.offsetTop + element.offsetHeight
 
         if (elementBottom > scrollBottom) {
-          this.$refs.listboxNode.scrollTop =
-            elementBottom - this.$refs.listboxNode.clientHeight
-        } else if (element.offsetTop < this.$refs.listboxNode.scrollTop) {
-          this.$refs.listboxNode.scrollTop = element.offsetTop
+          this.$refs.list.scrollTop =
+            elementBottom - this.$refs.list.clientHeight
+        } else if (element.offsetTop < this.$refs.list.scrollTop) {
+          this.$refs.list.scrollTop = element.offsetTop
         }
       }
     },
@@ -268,118 +268,26 @@ export default {
      *  Focus on the last option
      */
     focusLastItem() {
-      const lastListboxOption =
-        this.$refs.listboxOptions[this.options.length - 1]
+      const lastListboxOption = this.$refs.options[this.options.length - 1]
       this.focusItem(lastListboxOption)
     },
     // Hides the ListBox list
     hideListbox() {
       this.listboxHidden = true
-      this.$refs.listboxButton.removeAttribute('aria-expanded')
+      this.$refs.button.removeAttribute('aria-expanded')
     },
     // Shows the ListBox list and puts its on focus
     showListbox() {
       this.listboxHidden = false
-      this.$refs.listboxButton.setAttribute('aria-expanded', 'true')
-      this.$refs.listboxNode.focus()
+      this.$refs.button.setAttribute('aria-expanded', 'true')
+      this.$refs.list.focus()
     },
     // Toggles Listbox based on this.listboxHidden
     toggleListbox() {
       this.listboxHidden ? this.showListbox() : this.hideListbox()
     },
   },
-}
+})
 </script>
 
-<style scoped lang="less">
-.listbox {
-  font-size: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-[role='listbox'] {
-  min-height: 18em;
-  padding: 0;
-  background: white;
-  border: 1px solid #aaa;
-}
-
-[role='option'] {
-  display: block;
-  padding: 0 1em 0 1.5em;
-  position: relative;
-  line-height: 1.8em;
-  font-size: 1rem;
-  color: black;
-
-  &.focused {
-    background: #bde4ff;
-  }
-}
-
-[role='option'][aria-selected='true']::before {
-  content: '✓';
-  position: absolute;
-  left: 0.5em;
-}
-
-button {
-  font-size: 16px;
-
-  &[aria-disabled='true'] {
-    opacity: 0.5;
-  }
-}
-
-.listbox__button {
-  font-size: 1rem;
-  text-align: left;
-  padding: 5px 10px;
-  width: 150px;
-  position: relative;
-
-  &:after {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #6bc2d6;
-    content: ' ';
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  &[aria-expanded='true']::after {
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 0;
-    border-bottom: 5px solid #6bc2d6;
-  }
-}
-
-.listbox__list {
-  border-top: 0;
-  max-height: 10rem;
-  overflow-y: auto;
-  position: absolute;
-  margin: 0;
-  width: 148px;
-}
-
-.listbox__label {
-  font-size: 1rem;
-  padding-bottom: 0.5rem;
-  display: inline-block;
-}
-
-.listbox__label--visually-hidden {
-  position: absolute;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  white-space: nowrap;
-}
-</style>
+<style scoped lang="less" src="./NewSelect.less"></style>
