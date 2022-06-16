@@ -53,11 +53,7 @@ describe('Chat features with two accounts', () => {
   })
 
   it.skip('Context Menu Options - Text Message', () => {
-    let optionsMessage = [
-      'Add Reaction',
-      'Reply',
-      'Copy Message',
-    ]
+    let optionsMessage = ['Add Reaction', 'Reply', 'Copy Message']
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
