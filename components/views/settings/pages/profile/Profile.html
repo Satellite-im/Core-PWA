@@ -50,14 +50,14 @@
                 :seed="accounts.active"
                 :size="isSmallScreen ? 55 : 75"
               />
-              <!-- removing until it can be styled better -->
-              <!-- <UiCircle
+              <UiCircle
                 type="icon"
+                @click="openFileDialog"
                 icon="plus"
-                color="#000"
-                :size="18"
+                color="var(--flair-color)"
+                :size="20"
                 class="plus-button"
-              /> -->
+              />
             </div>
           </div>
           <div class="column username-column">
