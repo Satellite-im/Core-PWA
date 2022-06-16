@@ -663,6 +663,7 @@ export default {
         'Enter a username of at least {min} characters, up to {max}',
       status: 'Status',
       status_placeholder: 'Ready for launch...',
+      status_error: 'Status cannot exceed {max} characters',
       reg_status: {
         unknown: 'Not registered',
         in_progress: "We're transporting your data to the Realm...",
