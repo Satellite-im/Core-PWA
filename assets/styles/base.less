@@ -140,6 +140,7 @@ a.link {
   }
 
   li {
+    font-family: @primary-font;
     &.is-active {
       &:extend(.background-flair-gradient);
       &:extend(.glow-flair);
@@ -341,6 +342,7 @@ a.link {
 
 .is-primary {
   .custom-select {
+    font-family: @secondary-font;
     &:extend(.font-primary);
     .selected {
       &:extend(.background-flair-gradient);
@@ -414,6 +416,7 @@ a.link {
   }
   .vue-slider-dot-tooltip {
     .vue-slider-dot-tooltip-inner {
+      font-family: @secondary-font;
       &:extend(.background-flair);
       &::after {
         border-top-color: @flair-color !important;
@@ -508,6 +511,7 @@ a.link {
   .media-user .tag {
     &:extend(.background-semitransparent-dark);
     &:extend(.font-primary);
+    font-family: @primary-font;
   }
 }
 
@@ -537,6 +541,7 @@ a.link {
 
 //Tag
 .tag {
+  font-family: @secondary-font;
   &:extend(.background-flair-gradient);
   &:extend(.glow-flair);
   &:extend(.font-secondary);
@@ -729,6 +734,8 @@ a.link {
 
 //Inputs
 .input {
+  font-size: @text-size;
+  font-family: @secondary-font;
   &:extend(.input-bg);
   &:extend(.font-primary);
   box-shadow: none !important;
@@ -736,6 +743,26 @@ a.link {
   &:focus {
     background: @semitransparent-lightest-gradient !important;
   }
+  &::placeholder {
+    font-size: @mini-text-size;
+    font-family: @secondary-font;
+  }
+  &.is-normal {
+    height: 2.3rem;
+  }
+  &:disabled {
+    &::placeholder {
+      /* without !important it does not work */
+      color: grey !important;
+    }
+  }
+  &.invalid {
+    border: 1px solid @red;
+  }
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 ::placeholder {
