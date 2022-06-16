@@ -93,23 +93,13 @@
       </div>
     </UiComingSoon>
     <div
-      v-if="!isGroup"
-      class="control-button"
-      data-cy="toolbar-new-group"
-      v-tooltip.bottom="$t('pages.chat.new_group')"
-      @click="toggleModal('creategroup')"
-    >
-      <users-icon size="1x" class="control-icon" />
-    </div>
-    <div
-      v-else
+      v-if="isGroup"
       class="control-button"
       v-tooltip.bottom="$t('pages.chat.add_member')"
       @click="groupInvite"
     >
       <user-plus-icon size="1x" class="control-icon" />
     </div>
-    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
     <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
