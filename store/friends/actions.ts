@@ -2,7 +2,7 @@ import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
 import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
-import { uniqBy } from 'lodash'
+import { uniqBy, find } from 'lodash'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
@@ -296,11 +296,28 @@ export default {
       FriendsEvents.NEW_REQUEST,
       async (account) => {
         if (!account) return
-        const userInfo = await $BlockchainClient.getUserInfo(account.from)
-        commit(
-          'addIncomingRequest',
-          friendAccountToIncomingRequest(account, userInfo),
+        const { incoming } = await $BlockchainClient.getFriendsByStatus(
+          FriendStatus.PENDING,
         )
+
+        const incomingRequests = await Promise.all(
+          incoming.map(async (account) => {
+            const userInfo = await $BlockchainClient.getUserInfo(account.from)
+            return friendAccountToOutgoingRequest(account, userInfo)
+          }),
+        )
+
+        const existingRequest = find(incomingRequests, {
+          requestId: account.from,
+        })
+
+        if (!existingRequest) {
+          const userInfo = await $BlockchainClient.getUserInfo(account.from)
+          commit(
+            'addIncomingRequest',
+            friendAccountToIncomingRequest(account, userInfo),
+          )
+        }
       },
     )
 
