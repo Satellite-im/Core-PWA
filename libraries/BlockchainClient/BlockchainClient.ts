@@ -18,7 +18,7 @@ export default class BlockchainClient {
   private static instance: BlockchainClient // eslint-disable-line no-use-before-define
   private adapter: Adapter | null = null
   private _account?: Account
-  private _payerAccount?: Keypair
+  private _payerAccount?: Account
 
   public static getInstance(): BlockchainClient {
     if (!BlockchainClient.instance) {
@@ -69,7 +69,7 @@ export default class BlockchainClient {
    * @returns {KeyPair}
    * @throws {Error} if account is not initialized
    * */
-  get payerAccount(): Keypair {
+  get payerAccount(): Account {
     if (!this._payerAccount) {
       throw new Error('PayerAccount is not initialized')
     }
@@ -163,6 +163,15 @@ export default class BlockchainClient {
    */
   getUsersInfo(addresses: string[]): Promise<User[]> {
     return this._getAdapter().getUsersInfo(addresses)
+  }
+
+  /**
+   * @method getConnectionStatus
+   * Gets connection status, principally used with phantom wallet
+   * @returns boolean
+   */
+  getConnectionStatus(): boolean {
+    return this._getAdapter()._getConnectionStatus()
   }
 
   /**

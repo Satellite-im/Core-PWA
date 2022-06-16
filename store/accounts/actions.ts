@@ -5,6 +5,7 @@ import PeerId, {
   createFromPrivKey,
   createFromPubKey,
 } from 'peer-id'
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 import {
   AccountsError,
   AccountsState,
@@ -19,7 +20,6 @@ import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import BlockchainClient from '~/libraries/BlockchainClient'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/PhantomAdapter/PhantomAdapter'
-import PhantomManager from '~/libraries/Phantom/PhantomManager/PhantomManager'
 
 export default {
   /**
@@ -163,6 +163,14 @@ export default {
     dispatch,
   }: ActionsArguments<AccountsState>) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+
+    if (new PhantomWalletAdapter().connected) {
+      $BlockchainClient.setAdapter(new SolanaAdapter())
+      window.console.log('Using Solana adapter')
+    } else {
+      $BlockchainClient.setAdapter(new PhantomAdapter())
+      window.console.log('Using Phantom adapter')
+    }
 
     const mnemonic = state.phrase
 
@@ -407,20 +415,17 @@ export default {
    * @description changes the adapter to phantom
    **/
   async connectPhantom({ commit, state }: ActionsArguments<AccountsState>) {
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    $BlockchainClient.setAdapter(new PhantomAdapter())
     const { pin } = state
 
     if (!pin) {
       throw new Error(AccountsError.INVALID_PIN)
     }
-
-    const $PhantomWallet = new PhantomManager()
-    await $PhantomWallet.initWallet()
-    const message = `To avoid digital dognappers,
-    sign below to authenticate with CryptoCorgis`
-    const encodedMessage = new TextEncoder().encode(message)
-    window.console.log(
-      await $PhantomWallet.getAdapter().signMessage(encodedMessage),
-    )
+    await $BlockchainClient.initFromMnemonic()
+    if ($BlockchainClient.getConnectionStatus()) {
+      window.console.log('Connected to Phantom')
+    }
   },
 }
 

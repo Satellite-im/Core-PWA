@@ -4,6 +4,7 @@ import {
   Keypair,
   PublicKey,
 } from '@solana/web3.js'
+
 import {
   Account,
   Adapter,
@@ -14,6 +15,7 @@ import {
   Group,
   User,
 } from '../../interfaces'
+
 import PhantomManager from '~/libraries/Phantom/PhantomManager/PhantomManager'
 import PhantomUser from '~/libraries/Phantom/PhantomUser/PhantomUser'
 import PhantomFriend from '~/libraries/Phantom/PhantomFriend/PhantomFriend'
@@ -66,6 +68,10 @@ export default class PhantomAdapter implements Adapter {
     return this.phantomGroup
   }
 
+  _getConnectionStatus(): boolean {
+    return this.$PhantomManager.$PhantomWalletAdapter.connected
+  }
+
   async setPhotoHash(_photoHash: string): Promise<string> {
     return await this._getPhantomUser().setPhotoHash(_photoHash)
   }
@@ -80,6 +86,7 @@ export default class PhantomAdapter implements Adapter {
       this.$PhantomManager.initWallet()
       const account: Account = {
         address: this.$PhantomManager.getwalletPublicKey().toBase58(),
+        publicKey: this.$PhantomManager.getwalletPublicKey(),
       }
       return account
     } catch (e) {
@@ -107,8 +114,14 @@ export default class PhantomAdapter implements Adapter {
     return false
   }
 
-  getActiveAccount(): Promise<Keypair | undefined> {
-    throw new Error('Method not implemented.')
+  async getActiveAccount(): Promise<Account | undefined> {
+    if (this._getConnectionStatus()) {
+      return {
+        address: this.$PhantomManager.getwalletPublicKey().toBase58(),
+        publicKey: this.$PhantomManager.getwalletPublicKey(),
+      }
+    }
+    return undefined
   }
 
   async getCurrentUserInfo(): Promise<User | null> {
@@ -205,8 +218,8 @@ export default class PhantomAdapter implements Adapter {
     return await this._getPhantomFriend().closeRequest(_request)
   }
 
-  getPayerAccount(): Promise<Keypair | undefined> {
-    throw new Error('Method not implemented.')
+  async getPayerAccount(): Promise<Account | undefined> {
+    return await this.getActiveAccount()
   }
 
   async createGroup(_groupId: string, _name: string): Promise<Group> {

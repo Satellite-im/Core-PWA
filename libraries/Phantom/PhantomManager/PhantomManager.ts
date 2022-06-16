@@ -2,6 +2,7 @@ import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { Config } from '~/config'
 import { getClusterFromNetworkConfig } from '~/libraries/Solana/Solana'
+import { AccountsError } from '~/store/accounts/types'
 
 export default class PhantomManager {
   clusterApiUrl: string
@@ -45,7 +46,7 @@ export default class PhantomManager {
         return provider
       }
     }
-    window.open('https://phantom.app/', '_blank')
+    throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
   }
 
   /**

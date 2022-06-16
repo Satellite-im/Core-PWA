@@ -12,7 +12,11 @@ import {
   User,
   Group,
 } from '../../interfaces'
-import { accountFromWallet, walletFromAccount } from './utils'
+import {
+  accountFromKeyapair,
+  accountFromWallet,
+  walletFromAccount,
+} from './utils'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
@@ -22,7 +26,6 @@ import {
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { AccountsError } from '~/store/accounts/types'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-
 export default class SolanaAdapter implements Adapter {
   private readonly solanaManager: SolanaManager
   private usersProgram: UsersProgram | null = null
@@ -32,6 +35,13 @@ export default class SolanaAdapter implements Adapter {
   constructor() {
     this.solanaManager = new SolanaManager()
     this.usersProgram = null
+  }
+
+  _getConnectionStatus(): boolean {
+    if (this.solanaManager.isInitialized()) {
+      return true
+    }
+    return false
   }
 
   get friendsProgram(): FriendsProgram {
@@ -143,8 +153,9 @@ export default class SolanaAdapter implements Adapter {
     }
   }
 
-  async getActiveAccount(): Promise<Keypair | undefined> {
-    return this.solanaManager.getActiveAccount()
+  async getActiveAccount(): Promise<Account | undefined> {
+    const account = this.solanaManager.getActiveAccount()
+    return !account ? undefined : accountFromKeyapair(account)
   }
 
   async getCurrentUserInfo(): Promise<User | null> {
@@ -158,8 +169,9 @@ export default class SolanaAdapter implements Adapter {
     return null
   }
 
-  async getPayerAccount(): Promise<Keypair | undefined> {
-    return this.solanaManager.payerAccount
+  async getPayerAccount(): Promise<Account | undefined> {
+    const account = this.solanaManager.payerAccount
+    return !account ? undefined : accountFromKeyapair(account)
   }
 
   async setPhotoHash(photoHash: string): Promise<string> {

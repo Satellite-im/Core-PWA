@@ -9,6 +9,8 @@ export const accountFromWallet = (wallet: SolanaWallet): Account => {
     address: wallet.address,
     mnemonic: wallet.mnemonic,
     path: wallet.path,
+    publicKey: wallet.keypair.publicKey,
+    secretKey: wallet.keypair.secretKey,
   }
 }
 
@@ -33,6 +35,8 @@ export const accountFromKeyapair = (keypair: Keypair): Account => {
   return {
     privateKey: base58encode(keypair.secretKey),
     address: keypair.publicKey.toBase58(),
+    publicKey: keypair.publicKey,
+    secretKey: keypair.secretKey,
     mnemonic: '',
     path: '',
   }

@@ -5,6 +5,7 @@ import {
   PublicKey,
   ConfirmOptions,
 } from '@solana/web3.js'
+import { PrivateKey } from '@textile/hub'
 
 export interface RawUser {
   name: string
@@ -38,6 +39,8 @@ export interface Account {
   mnemonic?: string
   privateKey?: string
   path?: string
+  publicKey: PublicKey
+  secretKey?: Uint8Array
   address: string
 }
 
@@ -123,6 +126,7 @@ export interface OutgoingFriendRequest extends FriendAccount {
 
 export interface Adapter {
   initUserProgram(): Promise<void>
+  _getConnectionStatus(): boolean
   setPhotoHash(photoHash: string): Promise<string>
   createRandomAccount(): Promise<Account | undefined>
 
@@ -130,7 +134,7 @@ export interface Adapter {
   getAccountBalance(account: Account): Promise<number | null>
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null>
   createUser(params: CreateUserParams): Promise<boolean>
-  getActiveAccount(): Promise<Keypair | undefined>
+  getActiveAccount(): Promise<Account | undefined>
 
   getCurrentUserInfo(): Promise<User | null>
   getUserInfo(address: string): Promise<User | null>
@@ -163,7 +167,7 @@ export interface Adapter {
   removeFriend(request: PublicKey): Promise<string>
   closeFriendRequest(request: PublicKey): Promise<string>
 
-  getPayerAccount(): Promise<Keypair | undefined>
+  getPayerAccount(): Promise<Account | undefined>
   createGroup(groupId: string, name: string): Promise<Group>
   getUserGroups(address: string | PublicKey): Promise<Group[]>
   getGroupsUsers(groupIds: string[]): Promise<{ id: string; users: string[] }[]>
