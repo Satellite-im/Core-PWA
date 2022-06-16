@@ -81,12 +81,12 @@ exports[`check theme constants should return the theme constants 1`] = `
 Array [
   Object {
     "class": "",
-    "label": "Default",
+    "text": "Default",
     "value": "default",
   },
   Object {
     "class": "moonless_night",
-    "label": "Moonless Night",
+    "text": "Moonless Night",
     "value": "moonless_night",
   },
 ]

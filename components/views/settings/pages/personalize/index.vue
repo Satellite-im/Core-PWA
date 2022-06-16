@@ -12,6 +12,7 @@ export default Vue.extend({
       ThemeNames,
       themes: Themes,
       flairs: Flairs,
+      language: 'en_US',
     }
   },
   computed: {

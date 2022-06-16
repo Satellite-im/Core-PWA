@@ -101,7 +101,7 @@ Object {
   "theme": Object {
     "base": Object {
       "class": "",
-      "label": "Default",
+      "text": "Default",
       "value": "default",
     },
     "flair": Object {

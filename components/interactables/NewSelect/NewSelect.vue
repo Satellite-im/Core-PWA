@@ -6,7 +6,7 @@ import { KeybindingEnum } from '~/libraries/Enums/enums'
 
 interface SelectOption {
   value: string
-  label: string
+  text: string
   color?: string
 }
 
@@ -49,7 +49,7 @@ export default Vue.extend({
       const selectedOption = this.options.find(
         (option) => option.value === this.value,
       )
-      return selectedOption?.label
+      return selectedOption?.text
     },
   },
   methods: {
