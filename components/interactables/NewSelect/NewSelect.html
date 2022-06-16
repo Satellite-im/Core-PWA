@@ -1,0 +1,46 @@
+<div class="listbox" :value="value" ref="listbox">
+  <span
+    :id="`${name}-label`"
+    :class="{ 'listbox__label--visually-hidden': !showLabel }"
+    class="listbox__label"
+  >
+    {{ label }}
+  </span>
+  <div class="listbox__dropdown" v-click-outside="hideListbox">
+    <button
+      :id="`${name}-button-label`"
+      :aria-labelledby="`${name}-label ${name}-button-label`"
+      type="button"
+      aria-haspopup="listbox"
+      class="listbox__button"
+      @click="toggleListbox"
+      @keydown="checkShow"
+      ref="listboxButton"
+    >
+      {{ value ? selectedOptionLabel : emptyOptionLabel }}
+    </button>
+    <ul
+      v-show="!listboxHidden"
+      :aria-labelledby="`${name}-label`"
+      :aria-activedescendant="value"
+      tabindex="-1"
+      role="listbox"
+      class="listbox__list"
+      @keydown="checkKeyDown"
+      @click="checkClickItem"
+      ref="listboxNode"
+    >
+      <li
+        v-for="(option, index) in options"
+        :key="`${name}-option-${index}`"
+        :aria-selected="option.value === value"
+        :data-value="option.value"
+        class="listbox__option"
+        role="option"
+        ref="listboxOptions"
+      >
+        {{ option.label }}
+      </li>
+    </ul>
+  </div>
+</div>

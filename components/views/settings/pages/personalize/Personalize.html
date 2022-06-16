@@ -43,6 +43,16 @@
         :options="[{ text: 'English (USA)', value: 'en_US' }]"
         selected="en_US"
       />
+      <InteractablesNewSelect
+        v-model="test"
+        :options="[{ label: 'English (USA)', value: 'en_US' },
+        { label: 'ay', value: 'test' },
+        { label: 'yo', value: 'test2' }
+        ]"
+        :label="$t('pages.settings.personalize.language')"
+        name="test"
+        show-label
+      />
     </div>
   </div>
 </div>
