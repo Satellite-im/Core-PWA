@@ -290,11 +290,7 @@ const webRTCActions = {
    * @method sendTyping
    * @description - sent the TYPING event to the other conversation participants
    */
-  async sendTyping({
-    commit,
-    rootState,
-    dispatch,
-  }: ActionsArguments<WebRTCState>) {
+  sendTyping({ commit, rootState, dispatch }: ActionsArguments<WebRTCState>) {
     const $Peer2Peer = Peer2Peer.getInstance()
 
     rootState.conversation?.participants
