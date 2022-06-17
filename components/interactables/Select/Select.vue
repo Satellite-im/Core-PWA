@@ -1,172 +1,227 @@
 <template src="./Select.html"></template>
+
 <script lang="ts">
-// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
-import { SelectSize, SelectStyle } from './types.d'
-import { SelectOption } from '~/types/ui/inputs'
+import { KeybindingEnum } from '~/libraries/Enums/enums'
+
+export interface SelectOption {
+  value: string
+  text: string
+  color?: string
+}
 
 export default Vue.extend({
-  model: {
-    prop: 'selected',
-    event: 'change',
-  },
   props: {
-    colorSupport: {
-      type: Boolean,
-      default: false,
+    // eslint-disable-next-line vue/require-default-prop
+    value: {
+      type: String,
+    },
+    label: {
+      type: String,
+      required: true,
+    },
+    options: {
+      type: Array as PropType<Array<SelectOption>>,
+      required: true,
     },
     placeholder: {
       type: String,
-      default: '',
+      default: 'Choose a value',
+    },
+    showLabel: {
+      type: Boolean,
+      default: false,
     },
     disabled: {
       type: Boolean,
       default: false,
     },
-    /**
-     * If provided the select will cover 100% of the parent
-     */
-    fullWidth: Boolean,
-    /**
-     * The default selected value out of the options provided
-     */
-    selected: {
-      type: [String, Number, Boolean, Array],
+    small: {
+      type: Boolean,
       default: false,
     },
-    /**
-     * List of options for the select box
-     */
-    options: {
-      type: Array as PropType<Array<SelectOption>>,
-      default: () => [
-        {
-          value: 0,
-          text: 'No Options Provided',
-        },
-      ],
-    },
-    /**
-     * Determines the size of the select
-     *
-     * @remarks - Common values are small, regular, medium, large
-     */
-    size: {
-      type: String as PropType<SelectSize>,
-      default: 'normal',
-    },
-    /**
-     * Determines the style type of the select
-     *
-     * @remarks - Common values are primary, dark, danger, etc.
-     */
-    type: {
-      type: String as PropType<SelectStyle>,
-      default: 'primary',
-    },
   },
-  data() {
-    return {
-      selectedValue: this.placeholder.length ? null : this.selected,
-      open: false,
-      up: false,
-    }
-  },
+  data: () => ({
+    listboxHidden: true,
+  }),
   computed: {
-    /**
-     * @method getSelectLabel DocsTODO
-     * @description
-     * @param
-     * @returns
-     * @example
-     */
-    getSelectLabel() {
-      if (this.selectedValue) {
-        const item: any = (this.options as Array<SelectOption>).find(
-          (opt: SelectOption) => opt.value === this.selectedValue,
-        )
-        if (item) return item.text
-      }
-      return this.placeholder
-    },
-
-    /**
-     * @method getSelectLabelColor DocsTODO
-     * @description
-     * @param
-     * @returns
-     * @example
-     */
-    getSelectLabelColor() {
-      if (this.selectedValue) {
-        const item: any = (this.options as Array<SelectOption>).find(
-          (opt: SelectOption) =>
-            Array.isArray(this.selectedValue) &&
-            Array.isArray(opt.value) &&
-            this.selectedValue.length === opt.value.length &&
-            this.selectedValue.every((val, index) => val === opt.value[index]),
-        )
-
-        if (item) return item.text
-      }
-      return this.placeholder
-    },
-  },
-  watch: {
-    /**
-     * @method selected DocsTODO
-     * @description When the component is first created, if the user doesn't have a default value for the select, we set it here
-     * @param newValue
-     * @param oldValue
-     * @example
-     */
-    selected(newValue, oldValue) {
-      if (oldValue !== newValue) {
-        this.$data.selectedValue = newValue
-      }
+    selectedOptionLabel(): string | undefined {
+      const selectedOption = this.options.find(
+        (option) => option.value === this.value,
+      )
+      return selectedOption?.text
     },
   },
   methods: {
     /**
-     * @method change DocsTODO
-     * @description
-     * @param option
-     * @example
+     * @description focus option on click
+     * @param {PointerEvent} event
      */
-    change(option: any) {
-      if (option.disabled) return
-      this.selectedValue = option.value
-      this.$emit('change', this.selectedValue)
-      this.open = false
-    },
-    /**
-     * @method toggleOpen DocsTODO
-     * @description
-     * @param
-     * @example
-     */
-    toggleOpen() {
-      if (this.disabled) {
-        this.open = false
+    checkClickItem(event: PointerEvent) {
+      if (!event.target) {
         return
       }
-      const bodyRect = document.body.getBoundingClientRect()
-      const elementRect = this.$el.getBoundingClientRect()
-      this.up = elementRect.top > bodyRect.bottom / 2
-      this.open = !this.open
+      if ((event.target as HTMLElement).getAttribute('role') === 'option') {
+        this.focusItem(event.target)
+        this.hideListbox()
+        if (this.$refs.button) (this.$refs.button as HTMLElement).focus()
+      }
     },
-
     /**
-     * @method renderBgGradient DocsTODO
-     * @description
-     * @param
-     * @returns
-     * @example
+     * @description various keyboard controls; UP/DOWN/HOME/END/PAGE_UP/PAGE_DOWN
+     * @param {KeyboardEvent} event The keydown event object
      */
-    renderBgGradient(option) {
-      return `linear-gradient( 40deg, ${option.value[0]} 40%, ${option.value[1]}  100% )`
+    checkKeyDown(event: KeyboardEvent) {
+      const key = event.key
+
+      switch (key) {
+        case KeybindingEnum.ARROW_UP:
+        case KeybindingEnum.ARROW_DOWN: {
+          event.preventDefault()
+          const selectedItemIndex = this.options.findIndex(
+            (option) => option.value === this.value,
+          )
+          let nextItem = selectedItemIndex
+            ? this.$refs.options[selectedItemIndex]
+            : this.$refs.options[0]
+
+          if (key === KeybindingEnum.ARROW_UP) {
+            // If there's an option above the selected one
+            if (selectedItemIndex - 1 >= 0) {
+              // Assign the previous option to nextItem
+              nextItem = this.$refs.options[selectedItemIndex - 1]
+            }
+          } else {
+            // If there's an option below the selected one
+            // eslint-disable-next-line no-lonely-if
+            if (selectedItemIndex + 1 <= this.options.length) {
+              nextItem = this.$refs.options[selectedItemIndex + 1]
+            }
+          }
+
+          if (nextItem) {
+            this.focusItem(nextItem)
+          }
+
+          break
+        }
+        case KeybindingEnum.HOME:
+        case KeybindingEnum.PAGE_UP:
+          event.preventDefault()
+          this.focusFirstItem()
+          break
+        case KeybindingEnum.END:
+        case KeybindingEnum.PAGE_DOWN:
+          event.preventDefault()
+          this.focusLastItem()
+          break
+        case KeybindingEnum.ENTER:
+        case KeybindingEnum.ESCAPE:
+          event.preventDefault()
+          this.hideListbox()
+          this.$refs.button.focus()
+          break
+        default: {
+          // add logic to find result, maybe debounce?
+          break
+        }
+      }
+    },
+    /**
+     * Keypress handler for the listbox button.
+     * It shows the listbox list on up/down key press.
+     */
+    checkShow(event: KeyboardEvent) {
+      const key = event.key
+
+      switch (key) {
+        case KeybindingEnum.ARROW_UP:
+        case KeybindingEnum.ARROW_DOWN:
+          event.preventDefault()
+          this.showListbox()
+          this.checkKeyDown(event)
+          break
+        default:
+          break
+      }
+    },
+    /**
+     * defocus on the element passed as a parameter.
+     *
+     * @param {Element} element
+     */
+    defocusItem(element: HTMLElement) {
+      if (!element) {
+        return
+      }
+      element.removeAttribute('aria-selected')
+    },
+    /**
+     *  Focus on the first option
+     */
+    focusFirstItem() {
+      this.focusItem(this.$refs.options[0])
+    },
+    /**
+     * Select the option passed as the parameter.
+     *
+     * @param {Element} element - the option to select
+     */
+    focusItem(element: HTMLElement) {
+      // Defocus active element
+      if (this.value) {
+        const index = this.options.findIndex(
+          (option) => option.value === this.value,
+        )
+        const listboxOption = this.$refs.options[index]
+        this.defocusItem(listboxOption)
+      }
+      element.setAttribute('aria-selected', 'true')
+      this.$refs.list.setAttribute(
+        'aria-activedescendant',
+        element.getAttribute('data-value'),
+      )
+      // Trigger the v-model "input" event with value equal to element.id
+      this.$emit('input', element.getAttribute('data-value'))
+
+      // Scroll up/down to show the listbox within the viewport
+      if (this.$refs.list.scrollHeight > this.$refs.list.clientHeight) {
+        const scrollBottom =
+          this.$refs.list.clientHeight + this.$refs.list.scrollTop
+        const elementBottom = element.offsetTop + element.offsetHeight
+
+        if (elementBottom > scrollBottom) {
+          this.$refs.list.scrollTop =
+            elementBottom - this.$refs.list.clientHeight
+        } else if (element.offsetTop < this.$refs.list.scrollTop) {
+          this.$refs.list.scrollTop = element.offsetTop
+        }
+      }
+    },
+    /**
+     *  Focus on the last option
+     */
+    focusLastItem() {
+      const lastListboxOption = this.$refs.options[this.options.length - 1]
+      this.focusItem(lastListboxOption)
+    },
+    // Hides the ListBox list
+    hideListbox() {
+      this.listboxHidden = true
+      this.$refs.button.removeAttribute('aria-expanded')
+    },
+    // Shows the ListBox list and puts its on focus
+    showListbox() {
+      this.listboxHidden = false
+      this.$refs.button.setAttribute('aria-expanded', 'true')
+      this.$refs.list.focus()
+    },
+    // Toggles Listbox based on this.listboxHidden
+    toggleListbox() {
+      this.listboxHidden ? this.showListbox() : this.hideListbox()
     },
   },
 })
 </script>
+
 <style scoped lang="less" src="./Select.less"></style>

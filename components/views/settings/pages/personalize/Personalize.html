@@ -14,8 +14,7 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <br />
-      <InteractablesNewSelect
+      <InteractablesSelect
         v-model="theme"
         :options="themes"
         :label="$t('pages.settings.personalize.theme')"
@@ -27,7 +26,7 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <InteractablesNewSelect
+      <InteractablesSelect
         v-model="flair"
         :options="flairOptions"
         :label="$t('pages.settings.personalize.flair')"
@@ -40,7 +39,7 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <InteractablesNewSelect
+      <InteractablesSelect
         v-model="language"
         :options="[{ text: 'English (USA)', value: 'en_US' }]"
         :label="$t('pages.settings.personalize.language')"
