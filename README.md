@@ -21,9 +21,6 @@ cp .env.example .env
 
 Currently, the only environment variable you need is a [Textile](https://www.textile.io) API key.
 
-## Install Submodules
-
-Run `git submodule update --init --recursive` to pull down the submodules. This will pull down the `android` and `electron` submodules.
 
 ## Running Locally
 
