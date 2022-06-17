@@ -16,6 +16,7 @@ import { WireMessage } from './types'
 import type { CallPeerDescriptor } from './Call'
 import logger from '~/plugins/local/logger'
 import { ConversationParticipant } from '~/store/conversation/types'
+import { Bootstrap } from '@libp2p/bootstrap'
 
 enum P2PProtocols {
   COMMUNICATION_BUS = '/sattest/chat/1.0.0',
@@ -106,6 +107,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
   }
 
   async init(opts?: InitializationOptions) {
+    console.log('this.peerId', this.peerId)
     if (opts) {
       this._peerId = await this._getPeerIdByType(opts.privateKey)
     }
@@ -129,6 +131,9 @@ export class Peer2Peer extends Emitter<P2PListeners> {
           },
           webRTCStar: {
             enabled: true,
+          },
+          Bootstrap: {
+            list: [`'/dnsaddr/bootstrap.libp2p.io/p2p/${this.peerId}'`], // provide array of multiaddrs
           },
         },
         pubsub: {
@@ -209,10 +214,12 @@ export class Peer2Peer extends Emitter<P2PListeners> {
   }
 
   private _onPeerDiscovery(peerId: PeerId) {
+    console.log('_onPeerDiscovery', peerId)
     this.emit('peer:discovery', { peerId })
   }
 
   private async _onPeerConnect(connection: Connection) {
+    console.log('_onPeerConnect', connection)
     this.emit('peer:connect', { peerId: connection.remotePeer })
   }
 
