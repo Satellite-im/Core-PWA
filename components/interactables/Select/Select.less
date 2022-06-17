@@ -32,7 +32,9 @@ select {
   padding: @light-spacing @xlarge-spacing @light-spacing @normal-spacing;
 
   color: @white;
-  background-color: @flair-color;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>')
+    no-repeat @flair-color;
+  background-position: right 13px center;
   box-shadow: 0 5px 14px -5px @flair-color;
   border: none;
 
@@ -42,30 +44,12 @@ select {
     background: @gray;
     cursor: not-allowed;
   }
-
-  &:after {
-    width: 0.625em;
-    height: 0.625em;
-    position: absolute;
-    top: 50%;
-    right: 11.5px;
-    border: 3px solid #e5e5e5;
-    border-radius: 2px;
-    border-right: 0;
-    border-top: 0;
-    content: ' ';
-    margin-top: -0.4375em;
-    transform: rotate(-45deg);
-  }
 }
 
 select {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>')
-    no-repeat @flair-color;
-  background-position: right 13px center;
 }
 ul {
   min-width: 150px;
