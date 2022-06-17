@@ -42,12 +42,13 @@ export const Config = {
     announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
       ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
       : [
-          '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmZa1sAxajnQjVM8WjWXoMbmPd7NsWhfKsPkErzpm9wGkp',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+          'wss://tracker.openwebtorrent.com',
+          'wss://tracker.sloppyta.co:443/announce',
+          'wss://tracker.novage.com.ua:443/announce',
+          'udp://opentracker.i2p.rocks:6969/announce',
+          'http://opentracker.i2p.rocks:6969/announce',
+          'udp://tracker.opentrackr.org:1337/announce',
+          'http://tracker.opentrackr.org:1337/announce',
         ],
   },
   solana: {

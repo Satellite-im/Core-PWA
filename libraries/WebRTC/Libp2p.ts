@@ -11,12 +11,13 @@ import LibP2PCrypto, { keys } from 'libp2p-crypto'
 import type Libp2p from 'libp2p/dist/src/index'
 import PeerId, { createFromB58String, createFromPrivKey } from 'peer-id'
 import { pipe } from 'it-pipe'
+// import * as Bootstrap from 'libp2p-bootstrap'
 import Emitter from './Emitter'
 import { WireMessage } from './types'
 import type { CallPeerDescriptor } from './Call'
 import logger from '~/plugins/local/logger'
 import { ConversationParticipant } from '~/store/conversation/types'
-
+const Bootstrap = require('libp2p-bootstrap')
 enum P2PProtocols {
   COMMUNICATION_BUS = '/sattest/chat/1.0.0',
 }
@@ -113,6 +114,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
     this._node = await create({
       modules: {
         transport: [WStar],
+        peerDiscovery: [Bootstrap],
         streamMuxer: [Mplex],
         connEncryption: [NOISE, secio],
       },
@@ -125,6 +127,16 @@ export class Peer2Peer extends Emitter<P2PListeners> {
       config: {
         peerDiscovery: {
           mdns: {
+            enabled: true,
+          },
+          [Bootstrap.tag]: {
+            list: [
+              // a list of bootstrap peer multiaddrs to connect to on node startup
+              '/ip4/104.131.131.82/tcp/4001/ipfs/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ',
+              '/dnsaddr/bootstrap.libp2p.io/ipfs/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+              '/dnsaddr/bootstrap.libp2p.io/ipfs/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+            ],
+            interval: 5000, // default is 10 ms,
             enabled: true,
           },
           webRTCStar: {
