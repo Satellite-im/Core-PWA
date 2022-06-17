@@ -102,8 +102,12 @@
     line-height: 1;
     padding: 0.25rem;
     min-width: 18px;
-    &:extend(.font-primary);
     font-family: @primary-font;
+    &:extend(.font-primary);
+    &:extend(.background-flair);
+    &.tag-inverted {
+      background: @foreground;
+    }
   }
 
   .loading-container {
