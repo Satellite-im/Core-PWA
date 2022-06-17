@@ -5,13 +5,13 @@
   height: @background-call-height;
   z-index: @fifth-layer-zindex;
   font-size: @micro-text-size;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   text-align: center;
-  box-shadow: 0px 0px 30px rgba(39, 97, 253, 0.35),
-    0px 0px 20px rgba(39, 97, 253, 0.4);
+  box-shadow: 0px 0px 30px rgba(var(--flair-color-rgb), 0.35),
+    0px 0px 20px rgba(var(--flair-color-rgb), 0.4);
   padding: 10px;
   cursor: pointer;
   &-name {
