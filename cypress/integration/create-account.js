@@ -47,7 +47,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it('Create account with non-NSFW after attempting to load a NSFW image', () => {
+  it.skip('Create account with non-NSFW after attempting to load a NSFW image', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
@@ -79,7 +79,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it(
+  it.skip(
     'Create account successfully without image after attempting to add a NSFW picture',
     { retries: 2 },
     () => {
