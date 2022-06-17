@@ -63,7 +63,7 @@ describe('Create Account Validations', () => {
     cy.createAccountAddImage(filepathNsfw)
     cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
       'have.text',
-      '\n  Unable to upload file/s due to NSFW status\n',
+      'Unable to upload file/s due to NSFW status',
     )
 
     //Now adding a non-NSFW image and validating user can pass to next step
@@ -99,7 +99,7 @@ describe('Create Account Validations', () => {
       cy.createAccountAddImage(filepathNsfw)
       cy.get('[data-cy=error-message]', { timeout: 30000 }).should(
         'have.text',
-        '\n  Unable to upload file/s due to NSFW status\n',
+        'Unable to upload file/s due to NSFW status',
       )
 
       //User is still able to sign in and NSFW image will not be loaded
