@@ -327,6 +327,9 @@ export default Vue.extend({
 .editable-container {
   position: relative;
   width: 100%;
+  font-size: @mini-text-size;
+  font-family: @secondary-font;
+
   .placeholder {
     color: @text-muted;
     position: absolute;
