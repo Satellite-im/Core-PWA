@@ -41,6 +41,9 @@ export default Vue.extend({
   },
   methods: {
     async confirm() {
+      if (this.isLoading) {
+        return
+      }
       // if only 1 friend, direct to DM instead
       if (this.friends.length === 1) {
         const friend = this.friends[0]
