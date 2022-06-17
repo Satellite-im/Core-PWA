@@ -15,19 +15,21 @@
     type="dark"
     :placeholder="$t('servers.create.select_friends_placeholder')"
   />
-  <UiSimpleScroll scrollMode="vertical" scrollShow="scroll"
-    ><TypographyText
-      v-if="!filteredFriends.length"
-      :text="$t('servers.create.user_picker_empty')"
-      class="empty-results-text"
-    />
-    <InteractablesUserPickerListItem
-      v-else
-      v-for="friend in filteredFriends"
-      :key="friend.address"
-      :friend="friend"
-      :selected="isSelected(friend)"
-      @click="toggle(friend)"
-    />
-  </UiSimpleScroll>
+  <div class="scroll-wrapper">
+    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
+      <TypographyText
+        v-if="!filteredFriends.length"
+        :text="$t('servers.create.user_picker_empty')"
+        class="empty-results-text"
+      />
+      <InteractablesUserPickerListItem
+        v-else
+        v-for="friend in filteredFriends"
+        :key="friend.address"
+        :friend="friend"
+        :selected="isSelected(friend)"
+        @click="toggle(friend)"
+      />
+    </UiSimpleScroll>
+  </div>
 </div>
