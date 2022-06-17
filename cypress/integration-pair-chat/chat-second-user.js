@@ -6,6 +6,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair B')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
+const longMessage = faker.lorem.words(250) // generate random sentence
 
 describe('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat Pair B (second account)', () => {
@@ -17,18 +18,27 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Open a chat conversation
     cy.goToConversation('Chat Pair A')
+
+    //Click on toggle sidebar to display sidebar
+    cy.get('[data-cy=toggle-sidebar]').click()
+  })
+
+  it('Type a long message in chat bar without sending it', () => {
+    //Type a long message
+    cy.get('[data-cy=editable-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(longMessage)
+      .clear()
   })
 
   it('Receive Incoming Video Call', () => {
-    //Click on toggle sidebar to display sidebar
-    cy.get('[data-cy=toggle-sidebar]').click()
-
     //Answer remote videocall
     cy.get('[data-cy=incoming-call]', { timeout: 180000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
 
     //Wait until all validations from other user are completed
-    cy.wait(30000)
+    cy.wait(60000)
   })
 
   it('Mute microphone', () => {
@@ -65,13 +75,13 @@ describe('Chat features with two accounts at the same time - Second User', () =>
       .find('[data-cy=video-stream]')
       .should('not.exist')
 
-    //Video buttons show as unmuted
-    cy.get('[data-cy=video-unmuted]').should('be.visible')
+    //Video buttons show as muted
+    cy.get('[data-cy=video-muted]').should('be.visible')
     cy.get('[data-cy=sidebar-video-muted]').should('be.visible')
     cy.wait(30000)
   })
 
-  it('Enable screenshare', () => {
+  it.skip('Enable screenshare', () => {
     //Enable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -86,7 +96,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.wait(30000)
   })
 
-  it('Disable screenshare', () => {
+  it.skip('Disable screenshare', () => {
     //Disable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -101,16 +111,16 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   })
 
   it('Call finished on remote side should end call in local side', () => {
-    cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('not.exist')
+    cy.get('[data-cy=mediastream]', { timeout: 240000 }).should('not.exist')
   })
 
-  it('Type a long message in chat bar without sending it', () => {
-    //Type a long message
-    cy.get('[data-cy=editable-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(longMessage)
-      .clear()
+  it('User can deny an incoming call', () => {
+    //Deny incoming videocall
+    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call-deny]').click()
+
+    //Wait 30 seconds before calling User A again
+    cy.wait(30000)
   })
 
   it('Call to User A for a second time', () => {
@@ -120,7 +130,9 @@ describe('Chat features with two accounts at the same time - Second User', () =>
       .then(() => {
         cy.get('[data-cy=mediastream]').should('be.visible')
       })
-    cy.wait(30000)
+
+    //Wait 10 seconds before refreshing tab
+    cy.wait(10000)
   })
 
   it('Refresh tab to finish the videocall', () => {
@@ -132,17 +144,17 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Go to conversation
     cy.goToConversation('Chat Pair A')
+
+    //Click on toggle sidebar to display sidebar
+    cy.get('[data-cy=toggle-sidebar]').click()
   })
 
-  it('Call again to User A for a third time', () => {
-    //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]')
-      .click()
-      .then(() => {
-        cy.get('[data-cy=mediastream]').should('be.visible')
-      })
+  it('When closing tab should end a phone call', () => {
+    cy.get('[data-cy=incoming-call]', { timeout: 60000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call-accept]').click()
+    cy.get('[data-cy=mediastream]').should('be.visible')
 
-    //Wait 30 seconds and browser tab will be closed automatically when spec finishes running
-    cy.wait(30000)
+    //Wait until remote side closes the browser tab and call should be finished on both sides
+    cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 })

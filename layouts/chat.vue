@@ -42,6 +42,7 @@
         <!-- Hide swiper slide when no friends and mobile -->
         <swiper-slide
           v-if="!(isNoFriends && $device.isMobile)"
+          data-cy="swiper-slide"
           :class="`dynamic-content ${ui.fullscreen ? 'fullscreen-media' : ''}`"
         >
           <DroppableWrapper @handle-drop-prop="handleDrop">

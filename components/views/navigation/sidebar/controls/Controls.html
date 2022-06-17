@@ -18,6 +18,7 @@
   </InteractablesButton>
   <InteractablesButton
     :type="audio.deafened ? 'danger' : 'dark'"
+    data-cy="sidebar-audio-button"
     size="small"
     v-tooltip.top="audio.deafened ? $t('controls.undeafen') : $t('controls.deafen')"
     :action="() => toggleDeafen()"

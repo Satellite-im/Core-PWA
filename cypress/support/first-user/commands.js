@@ -74,6 +74,20 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
   cy.contains('Recover Account').click()
 })
 
+// Chat - URL Commands
+
+Cypress.Commands.add('validateURLOnClick', (expectedURL) => {
+  let locatorURL = 'a[href="' + expectedURL + '"]'
+  cy.get(locatorURL)
+    .last()
+    .scrollIntoView()
+    .should('have.attr', 'href', expectedURL)
+    .should('have.attr', 'target', '_blank')
+    .then((link) => {
+      cy.request(link.prop('href')).its('status').should('eq', 200)
+    })
+})
+
 // Chat - Page Load Commands
 
 Cypress.Commands.add('validateChatPageIsLoaded', () => {
@@ -91,12 +105,39 @@ Cypress.Commands.add('goToConversation', () => {
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
   cy.getAttached('[data-cy=sidebar-user-name]').click()
 
-  // Hide sidebar
-  cy.get('[data-cy=hamburger-button]').click()
-
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-loading]', { timeout: 180000 }).should('not.exist')
+  cy.get('[data-cy=chat-message]', { timeout: 180000 })
+    .last()
+    .should('be.visible')
 })
+
+// Paste Command
+
+Cypress.Commands.add(
+  'paste',
+  { prevSubject: true },
+  function (subject, pasteOptions) {
+    const { pastePayload, pasteType } = pasteOptions
+    const data =
+      pasteType === 'application/json'
+        ? JSON.stringify(pastePayload)
+        : pastePayload
+    // https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
+    const clipboardData = new DataTransfer()
+    clipboardData.setData(pasteType, data)
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event
+    const pasteEvent = new ClipboardEvent('paste', {
+      bubbles: true,
+      cancelable: true,
+      dataType: pasteType,
+      data,
+      clipboardData,
+    })
+    subject[0].dispatchEvent(pasteEvent)
+
+    return subject
+  },
+)
 
 // Get element attached to DOM
 

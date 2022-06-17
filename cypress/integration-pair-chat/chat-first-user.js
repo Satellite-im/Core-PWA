@@ -19,12 +19,13 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.goToConversation('Chat Pair B')
   })
 
-  //Tests validated in one single videocall
+  //Is typing indicator is displayed
+  it('Validate that is typing message is displayed', () => {
+    cy.contains('typing', { timeout: 60000 }).should('be.visible')
+  })
 
+  //Start of videocall tests
   it('Call to User B', () => {
-    //Click on toggle sidebar to display sidebar
-    cy.get('[data-cy=toggle-sidebar]').click()
-
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]')
       .click()
@@ -54,7 +55,10 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   it('User should be able to scroll on messages when call modal is open', () => {
     //Go to beginning of chat
-    cy.get('#encrypted-yellow').scrollIntoView().should('be.visible')
+    cy.get('[data-cy=chat-message]')
+      .first()
+      .scrollIntoView()
+      .should('be.visible')
   })
 
   it('Users can send links in chat while in a video/phone call', () => {
@@ -81,17 +85,16 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   it('Video boxes should adjust to size when the user enters fullscreen', () => {
-    // Initially video call is not on full screen
-    cy.get('[data-tooltip="Exit fullscreen"]').should('not.exist')
-
-    // Click on full screen and validate and conversation is not visible and Exit fullscreen tooltip exists
+    // Click on full screen and validate that videocall is on fullscreen mode
     cy.get('[data-cy=go-fullscreen]').click()
-    cy.get('#conversation').should('not.be.visible')
-    cy.get('[data-tooltip="Exit fullscreen"]').should('exist')
+    cy.get('[data-cy=swiper-slide]').should('have.class', 'fullscreen-media')
 
-    // Click on exit full screen and validate that Exit fullscreen tooltip does not exist
+    // Click on exit full screen and and validate that videocall is not on fullscreen mode
     cy.get('[data-cy=exit-fullscreen]').click()
-    cy.get('[data-tooltip="Exit fullscreen"]').should('not.exist')
+    cy.get('[data-cy=swiper-slide]').should(
+      'not.have.class',
+      'fullscreen-media',
+    )
   })
 
   it('Duration call appears on the call on the top left', () => {
@@ -142,7 +145,6 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
     //Mute mic from side menu
     cy.get('[data-cy=sidebar-mic-button]').click()
-    cy.get('[data-cy=call-audio]').click() // For now sidebar mic button does not work
     cy.get('[data-cy=local-video]')
       .find('[data-cy=muted-indicator]')
       .should('be.visible')
@@ -154,8 +156,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
     // Microphone buttons from chat screen and sidebar will show as unmuted
     cy.get('[data-cy=audio-unmuted]').should('be.visible')
-    // Commenting the line below due to an open issue not changing the button from red to normal
-    //cy.get('[data-cy=sidebar-mic-unmuted]').should('be.visible')
+    cy.get('[data-cy=sidebar-mic-unmuted]').should('be.visible')
   })
 
   it('User can mute microphone and microphone buttons will show as red', () => {
@@ -169,7 +170,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   it('Remote user can have microphone active - Mute indicator will not be displayed', () => {
     cy.get('[data-cy=remote-video]')
-      .find('[data-cy=muted-indicator]')
+      .find('[data-cy=muted-indicator]', { timeout: 60000 })
       .should('not.exist')
   })
 
@@ -211,7 +212,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
   it('Remote user can enable video - Remote camera will be displayed', () => {
     // Remote Camera is loaded
     cy.get('[data-cy=remote-video]')
-      .find('[data-cy=video-stream]', { timeout: 30000 })
+      .find('[data-cy=video-stream]', { timeout: 60000 })
       .should('be.visible')
       .and('have.class', 'loaded')
   })
@@ -252,7 +253,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .should('not.exist')
   })
 
-  it('Current user can screen share - Screen will be displayed instead of camera', () => {
+  it.skip('Current user can screen share - Screen will be displayed instead of camera', () => {
     //Enable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -266,7 +267,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=screen-unmuted]').should('be.visible')
   })
 
-  it('Current user can stop screen share - Screen will not be displayed now', () => {
+  it.skip('Current user can stop screen share - Screen will not be displayed now', () => {
     //Stop sharing screen
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -279,7 +280,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=screen-muted]').should('be.visible')
   })
 
-  it('Remote screen share - User can see remote screen instead of remote camera', () => {
+  it.skip('Remote screen share - User can see remote screen instead of remote camera', () => {
     // Remote Screenshare is loaded
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=screen-stream]', { timeout: 30000 })
@@ -287,17 +288,19 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .and('have.class', 'loaded')
   })
 
-  it('Remote screen share stopped - User will stop seeing the remote screen', () => {
+  it.skip('Remote screen share stopped - User will stop seeing the remote screen', () => {
     // Remote Screenshare is removed
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=screen-stream]', { timeout: 30000 })
       .should('not.exist')
   })
 
-  it('Videocall Settings Indicator - Shows a tooltip stating Not available yet', () => {
+  it('Videocall Settings Indicator - Option is not available yet', () => {
     cy.get('[data-cy=media-settings]')
       .should('be.visible')
-      .and('have.attr', 'data-tooltip', 'Not available yet')
+      //Changing the validation since data-tooltip is no longer a property of the element
+      .find('svg')
+      .should('have.attr', 'disabled', 'disabled')
   })
 
   it('Videocall Audio Indicator - Is displayed in screen', () => {
@@ -325,7 +328,11 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   it('Videocall Audio Indicator - Slider can be hidden again', () => {
+    //Click on volume icon to show the volume slider
+    cy.get('[data-cy=volume-icon]').click()
     cy.get('[data-cy=volume-slider]').should('be.visible')
+
+    //Click on volume icon to hide the volume slider
     cy.get('[data-cy=volume-icon]').click()
     cy.get('[data-cy=volume-slider]').should('not.exist')
   })
@@ -336,16 +343,14 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=elapsed-time]').should('not.exist')
     cy.goToConversation('Chat Pair B')
 
-    //Click on toggle sidebar to display sidebar
-    cy.get('[data-cy=toggle-sidebar]').click()
-
     //Live Indicator should be visible again
     cy.get('[data-cy=elapsed-time]').should('be.visible')
   })
 
   // Call Finished tests
-
   it('Finish videocall', () => {
+    //Wait 30 seconds before finishing the call
+    cy.wait(30000)
     cy.get('[data-cy=call-hangup]').click()
   })
 
@@ -357,35 +362,32 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=elapsed-time]').should('not.exist')
   })
 
-  //Is typing indicator is displayed
+  it('Call to User B for a second time', () => {
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]').click()
 
-  it('Validate that is typing message is displayed', () => {
-    cy.contains('typing', { timeout: 60000 }).should('be.visible')
-  })
-
-  //New call tests
-
-  it('User can deny an incoming call', () => {
-    //Deny incoming videocall
-    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
-    cy.get('[data-cy=incoming-call-deny]').click()
+    //Wait 10 seconds until other user denies the call
+    cy.wait(10000)
   })
 
   it('Refreshing tab should end call', () => {
+    //Accept the second incoming call from Chat User B
     cy.get('[data-cy=incoming-call]', { timeout: 60000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')
 
     //Wait until remote side refresh the browser tab and call should be finished on both sides
-    cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('not.exist')
+    cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 
-  it('When closing tab should end a phone call', () => {
-    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
-    cy.get('[data-cy=incoming-call-accept]').click()
-    cy.get('[data-cy=mediastream]').should('be.visible')
+  it('Call again to User B for a third time', () => {
+    //Wait 30 seconds until user reconnects again
+    cy.wait(60000)
 
-    //Wait until remote side closes the browser tab and call should be finished on both sides
-    cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('not.exist')
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]').click()
+
+    //Wait 30 seconds and browser tab will be closed automatically when spec finishes running
+    cy.wait(30000)
   })
 })
