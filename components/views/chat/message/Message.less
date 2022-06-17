@@ -60,6 +60,15 @@
       font-size: @text-size;
       display: inline;
     }
+    // override bulma link style
+    a {
+      color: @satellite-color;
+      &:hover,
+      &:focus {
+        color: @satellite-color;
+        text-decoration: underline;
+      }
+    }
   }
 
   .message-container {
