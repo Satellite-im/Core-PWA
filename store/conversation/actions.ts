@@ -1,7 +1,11 @@
 import { PublicKey } from '@solana/web3.js'
-import { createFromPubKey } from 'peer-id'
 import { keys } from 'libp2p-crypto'
-import { ConversationParticipant, ConversationState } from './types'
+import { createFromPubKey } from 'peer-id'
+import {
+  ConversationActivity,
+  ConversationParticipant,
+  ConversationState,
+} from './types'
 import { ActionsArguments } from '~/types/store/store'
 
 const actions = {
@@ -83,6 +87,7 @@ const actions = {
           : 'DISCONNECTED'
         : participant?.state || 'DISCONNECTED',
       profilePicture: participant?.profilePicture,
+      activity: ConversationActivity.NOT_TYPING,
     }
 
     commit(

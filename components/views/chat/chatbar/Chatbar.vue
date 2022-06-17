@@ -173,22 +173,11 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method typingNotifHandler
-     * @description Wraps the event handler for dispatching typing notifications
-     * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
-     * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
-     */
-    typingNotifHandler(
-      state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
-    ) {
-      // TODO use conversation participants
-    },
-    /**
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
     throttleTyping: throttle(function (ctx) {
-      ctx.typingNotifHandler(PropCommonEnum.TYPING)
+      ctx.$store.dispatch('webrtc/sendTyping')
     }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart

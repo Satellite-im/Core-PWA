@@ -1,20 +1,22 @@
-import Vue from 'vue'
 import type { SignalData } from 'simple-peer'
-import { ConversationParticipant } from '../conversation/types'
+import Vue from 'vue'
+import {
+  ConversationActivity,
+  ConversationParticipant,
+} from '../conversation/types'
 import { WebRTCState } from './types'
-
-import { ActionsArguments } from '~/types/store/store'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import Logger from '~/utilities/Logger'
-import { TrackKind } from '~/libraries/WebRTC/types'
 import { Config } from '~/config'
-import { PropCommonEnum } from '~/libraries/Enums/enums'
-import { Peer2Peer, PublicKeyInfo } from '~/libraries/WebRTC/Libp2p'
-import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-import { Friend } from '~/types/ui/friends'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
+import { TrackKind } from '~/libraries/WebRTC/types'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { ActionsArguments } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
+import Logger from '~/utilities/Logger'
 
 const announceFrequency = 5000
+
 const webRTCActions = {
   /**
    * @method initialized
@@ -161,14 +163,12 @@ const webRTCActions = {
 
     const timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
     $Peer2Peer.on('peer:typing', ({ peerId }) => {
-      const typingFriend = rootState.friends.all.find(
-        (friend) => friend.peerId === peerId.toB58String(),
-      )
-      if (!typingFriend) return
-
       commit(
-        'friends/setTyping',
-        { id: typingFriend.address, typingState: PropCommonEnum.TYPING },
+        'conversation/updateParticipant',
+        {
+          peerId: peerId.toB58String(),
+          activity: ConversationActivity.TYPING,
+        },
         { root: true },
       )
 
@@ -177,8 +177,11 @@ const webRTCActions = {
 
       timeoutMap[peerId.toB58String()] = setTimeout(() => {
         commit(
-          'friends/setTyping',
-          { id: typingFriend.address, typingState: PropCommonEnum.NOT_TYPING },
+          'conversation/updateParticipant',
+          {
+            peerId: peerId.toB58String(),
+            activity: ConversationActivity.NOT_TYPING,
+          },
           { root: true },
         )
       }, Config.chat.typingInputThrottle * 3)
@@ -286,7 +289,26 @@ const webRTCActions = {
 
     commit('setInitialized', { initialized: true, originator })
   },
+  /**
+   * @method sendTyping
+   * @description - send the TYPING event to the other conversation participants
+   */
+  sendTyping({ commit, rootState, dispatch }: ActionsArguments<WebRTCState>) {
+    const $Peer2Peer = Peer2Peer.getInstance()
 
+    rootState.conversation?.participants
+      .filter((p) => p.peerId && p.peerId !== $Peer2Peer.id)
+      .forEach((p) => {
+        $Peer2Peer.sendMessage(
+          {
+            type: 'TYPING_STATE',
+            payload: null,
+            sentAt: Date.now().valueOf(),
+          },
+          p.peerId as string,
+        )
+      })
+  },
   /**
    * @method toggleMute
    * @description - Turn on/off mute for the given stream in the active call
