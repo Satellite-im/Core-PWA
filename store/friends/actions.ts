@@ -2,7 +2,7 @@ import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
 import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
-import { uniqBy } from 'lodash'
+import { uniqBy, find } from 'lodash'
 import {
   AcceptFriendRequestArguments,
   CreateFriendRequestArguments,
@@ -28,6 +28,7 @@ import { ActionsArguments } from '~/types/store/store'
 import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 
 export default {
   async initialize({ dispatch, commit }: ActionsArguments<FriendsState>) {
@@ -180,6 +181,23 @@ export default {
 
     if (!friendExists) {
       commit('addFriend', friend)
+      const p2p = Peer2Peer.instance
+      // check if accepted friend is online on the peers network, if so? set their status online immediately
+      if (p2p && p2p.node) {
+        for (const [onlinePeerId] of p2p.node?.peerStore?.peers?.entries()) {
+          if (onlinePeerId === peerId.toB58String()) {
+            dispatch(
+              'friends/setFriendState',
+              {
+                address: friend.address,
+                state: 'online',
+              },
+              { root: true },
+            )
+            dispatch('textile/subscribeToMailbox', {}, { root: true })
+          }
+        }
+      }
 
       // Eventually delete the related friend request
       commit('removeIncomingRequest', friendAccount.accountId)
@@ -296,11 +314,18 @@ export default {
       FriendsEvents.NEW_REQUEST,
       async (account) => {
         if (!account) return
+
         const userInfo = await $BlockchainClient.getUserInfo(account.from)
-        commit(
-          'addIncomingRequest',
-          friendAccountToIncomingRequest(account, userInfo),
-        )
+        const existingRequest = find(rootState.friends.incomingRequests, {
+          from: account.from,
+        })
+
+        if (!existingRequest) {
+          commit(
+            'addIncomingRequest',
+            friendAccountToIncomingRequest(account, userInfo),
+          )
+        }
       },
     )
 

@@ -1,12 +1,17 @@
 <div id="file-controls">
   <div class="search-container">
-    <InteractablesInput
-      size="small"
-      input-kind="text"
-      type="dark"
-      :placeholder="$t('pages.files.browse.search')"
-      class="search"
-    />
+    <UiComingSoon
+      :tooltipText="this.$t('ui.coming_soon')"
+      :tooltipPosition="'top'"
+    >
+      <InteractablesInput
+        size="small"
+        input-kind="text"
+        type="dark"
+        :placeholder="$t('pages.files.browse.search')"
+        class="search"
+      />
+    </UiComingSoon>
     <!-- <InteractablesSelect
       :placeholder="$t('pages.files.file_type')"
       :options="[
@@ -43,7 +48,7 @@
       type="file"
       @click="resetFileUpload"
       @change="handleInput"
-      style="width: 0; height: 0"
+      style="display: none"
       multiple
     />
   </div>

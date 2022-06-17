@@ -140,6 +140,7 @@ a.link {
   }
 
   li {
+    font-family: @secondary-font;
     &.is-active {
       &:extend(.background-flair-gradient);
       &:extend(.glow-flair);
@@ -341,6 +342,7 @@ a.link {
 
 .is-primary {
   .custom-select {
+    font-family: @secondary-font;
     &:extend(.font-primary);
     .selected {
       &:extend(.background-flair-gradient);
@@ -414,6 +416,7 @@ a.link {
   }
   .vue-slider-dot-tooltip {
     .vue-slider-dot-tooltip-inner {
+      font-family: @secondary-font;
       &:extend(.background-flair);
       &::after {
         border-top-color: @flair-color !important;
@@ -455,18 +458,6 @@ a.link {
 }
 
 //Sidebar
-#sidebar {
-  .sidebar-nav {
-    .tag-inverted {
-      background: @midground;
-    }
-  }
-
-  .label {
-    &:extend(.background-flair);
-  }
-}
-
 .side-bar-inner {
   .body {
     .category-tree {
@@ -520,6 +511,7 @@ a.link {
   .media-user .tag {
     &:extend(.background-semitransparent-dark);
     &:extend(.font-primary);
+    font-family: @primary-font;
   }
 }
 
@@ -549,6 +541,7 @@ a.link {
 
 //Tag
 .tag {
+  font-family: @secondary-font;
   &:extend(.background-flair-gradient);
   &:extend(.glow-flair);
   &:extend(.font-secondary);

@@ -41,8 +41,7 @@ export default Vue.extend({
      * @description Navigate to chat "/chat/direct" without specific user
      */
     navigateToHome() {
-      this.$store.commit('ui/showSidebar', true)
-      this.$store.commit('ui/setSwiperSlideIndex', 0)
+      this.$store.commit('ui/setSwiperSlideIndex', 1)
       this.$router.push('/chat/direct')
     },
     /**
@@ -53,6 +52,9 @@ export default Vue.extend({
       this.$store.commit('ui/setSwiperSlideIndex', 1)
       this.$store.commit('ui/showSidebar', false)
       this.$router.push('/friends/list')
+    },
+    navigateToFiles() {
+      this.$router.push('/files/browse')
     },
   },
 })

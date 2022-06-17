@@ -1,24 +1,24 @@
 <div id="mobile-nav">
   <div>
-    <home-icon size="1x" v-on:click="navigateToHome" />
+    <home-icon size="1x" @click="navigateToHome" />
   </div>
   <div
     :class="`${$route.path.includes('/files') ? 'active' : ''}`"
     data-cy="mobile-nav-files"
   >
-    <folder-icon size="1x" v-on:click="() => $router.push('/files/browse')" />
+    <folder-icon size="1x" @click="navigateToFiles" />
   </div>
   <div data-cy="mobile-nav-marketplace">
     <shopping-bag-icon size="1x" @click="toggleModal" />
   </div>
   <div :class="`${$route.path.includes('/friends') ? 'active' : ''}`">
-    <users-icon size="1x" v-on:click="navigateToFriend" />
+    <users-icon size="1x" @click="navigateToFriend" />
   </div>
   <div
     :class="`${$route.path.includes('/settings') ? 'active' : ''}`"
     data-cy="mobile-nav-settings"
   >
-    <div v-on:click="$store.commit('ui/toggleSettings',  { show: true })">
+    <div @click="$store.commit('ui/toggleSettings',  { show: true })">
       <UiUserState
         :user="{address: accounts.active, state: accounts.details.state}"
         :src="src"

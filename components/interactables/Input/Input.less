@@ -27,24 +27,25 @@
     &:extend(.first-layer);
   }
   position: relative;
-}
 
-.input {
-  font-size: @text-size;
-  &.is-normal {
-    height: 2.3rem;
-  }
-  &:disabled {
-    &::placeholder {
-      /* without !important it does not work */
-      color: grey !important;
+  .input {
+    font-size: @mini-text-size;
+    font-family: @secondary-font;
+    &.is-normal {
+      height: 2.3rem;
     }
-  }
-  &.invalid {
-    border: 1px solid @red;
-  }
+    &:disabled {
+      &::placeholder {
+        /* without !important it does not work */
+        color: grey !important;
+      }
+    }
+    &.invalid {
+      border: 1px solid @red;
+    }
 
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }

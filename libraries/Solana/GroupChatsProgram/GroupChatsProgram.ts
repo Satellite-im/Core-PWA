@@ -20,6 +20,7 @@ import {
 import { Config } from '~/config'
 import GroupCrypto from '~/libraries/Solana/GroupChatsProgram/GroupCrypto'
 import Solana from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { retry } from '~/libraries/Solana/Solana'
 
 export const GROUPCHATS_PROGRAM_ID = new PublicKey(
   Config.solana.groupchatsProgramId,
@@ -374,7 +375,7 @@ export default class GroupChatsProgram extends EventEmitter {
     const inviterPDA = this._invitePDAPublicKey(payer.publicKey, groupKey)
     const inviteePDA = this._invitePDAPublicKey(user, groupKey)
 
-    const creatorInvite = await this.getInviteByGroupId(groupId)
+    const creatorInvite = await retry(() => this.getInviteByGroupId(groupId))
     if (!creatorInvite) throw new Error('Group not found')
 
     const encrypted = await this.crypto.encryptInvite({
