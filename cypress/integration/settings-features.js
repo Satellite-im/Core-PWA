@@ -23,8 +23,8 @@ describe('Settings Features Tests', () => {
     cy.contains('Make it your own and choose custom colors & themes.')
 
     // Go to profile tab
-    cy.contains('Profile').click()
-    cy.contains('Update your profile photo, status, banners and more.')
+    // cy.contains('Profile').click()
+    // cy.contains('Update your profile photo, status, banners and more.')
 
     // Go to Audio & Video tab
     cy.contains('Audio & Video').click()
