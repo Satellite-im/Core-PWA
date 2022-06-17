@@ -431,11 +431,7 @@ describe('SearchQuery.default.caretPosition', () => {
 
   test('0', () => {
     const result: any = inst2.caretPosition(
-      document.querySelector(
-        'canvas:first-of-type',
-        'span:first-of-type',
-        'div:first-of-type',
-      ),
+      document.querySelector('canvas:first-of-type'),
     )
     expect(result).toMatchSnapshot()
   })
