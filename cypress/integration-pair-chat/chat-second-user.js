@@ -34,7 +34,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
       })
   })
 
-  it('Type a long message in chat bar without sending it', () => {
+  it.skip('Type a long message in chat bar without sending it', () => {
     //Attempt 3 times to ensure that if second account loads before, first account will see the typing indicator
     for (let times = 0; times < 3; times++) {
       cy.get('[data-cy=editable-input]')
