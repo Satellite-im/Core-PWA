@@ -47,6 +47,11 @@ export default Vue.extend({
       default: () => () => {},
     },
   },
+  mounted() {
+    if (this.$device.isMobile) {
+      this.$store.commit('ui/setSettingsRoute', '')
+    }
+  },
   methods: {
     /**
      * @method closeModal DocsTODO
