@@ -79,10 +79,6 @@
       transition: @transition-all;
     }
 
-    #toolbar {
-      max-height: @toolbar-height;
-    }
-
     .media-open {
       &:extend(.full-width);
       flex: 1;
@@ -114,12 +110,6 @@
     }
   }
 
-  #servers-vertical-list,
-  #toolbar {
-    transition: @transition-all;
-    &:extend(.third-layer);
-  }
-
   &.is-collapsed {
     #sidebar .toggle-sidebar {
       right: -2rem;
@@ -131,19 +121,9 @@
     }
   }
 
-  #toolbar {
-    padding-left: 3rem;
-  }
-
   &.is-collapsed-aside {
     #aside {
       transform: translateX(calc(@sidebar-size));
-    }
-
-    &.group {
-      #toolbar {
-        padding-right: 3rem;
-      }
     }
 
     &.direct {
