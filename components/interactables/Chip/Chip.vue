@@ -56,6 +56,7 @@ export default Vue.extend({
   .fa-times {
     cursor: pointer;
   }
+
   display: inline-flex;
   flex-shrink: 0;
   flex-direction: row;
@@ -63,10 +64,17 @@ export default Vue.extend({
   padding: @xlight-spacing;
   border-radius: @corner-rounding-xxlarge;
   color: white;
-  line-height: 0;
+  max-width: 100%;
+
+  .circle,
+  .delete-icon {
+    flex-shrink: 0;
+  }
 
   .text {
     margin: 0 0.125rem 0 @xlight-spacing;
+    &:extend(.ellipsis);
+    align-self: stretch;
   }
 
   &.size-small {
