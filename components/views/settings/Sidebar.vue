@@ -41,10 +41,10 @@ export default Vue.extend({
               to: SettingsRoutes.PERSONALIZE,
               text: 'Personalize',
             },
-            {
+            /* {
               to: SettingsRoutes.PROFILE,
               text: 'Profile',
-            },
+            }, */
             {
               to: SettingsRoutes.AUDIO_AND_VIDEO,
               text: 'Audio & Video',

@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Group } from '~/store/groups/types'
+import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   mixins: [ContextMenu],
@@ -18,15 +19,15 @@ export default Vue.extend({
       required: false,
     },
   },
-  data() {
-    return {
-      contextMenuValues: [
-        { text: this.$t('context.send'), func: this.testFunc },
+  computed: {
+    contextMenuValues(): ContextMenuItem[] {
+      return [
+        { text: this.$t('context.send'), func: this.navigateToGroup },
         // { text: this.$t('context.voice'), func: this.testFunc },
         // { text: this.$t('context.video'), func: this.testFunc },
-        { text: this.$t('context.remove'), func: this.testFunc },
-      ],
-    }
+        // { text: this.$t('context.remove'), func: this.testFunc },
+      ]
+    },
   },
   methods: {
     testFunc(): void {
@@ -38,8 +39,8 @@ export default Vue.extend({
      * @param address The groups address you'd like to route to
      * @example v-on:click="navigateToGroup(group.address)"
      */
-    navigateToGroup(address: string) {
-      this.$router.push(`/chat/groups/${address}`)
+    navigateToGroup() {
+      this.$router.push(`/chat/groups/${this.group.id}`)
       this.$store.dispatch('conversation/setConversation', {
         id: this.group.id,
         type: 'group',

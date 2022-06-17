@@ -44,6 +44,20 @@ const webRTCActions = {
     await $Peer2Peer.node?.relay?.start()
 
     $Peer2Peer.on('peer:connect', ({ peerId }) => {
+      const connectedParticipant = rootState.conversation.participants.find(
+        (participant: ConversationParticipant) =>
+          participant.peerId === peerId.toB58String(),
+      )
+      if (connectedParticipant) {
+        commit(
+          'conversation/updateParticipant',
+          {
+            peerId: connectedParticipant.peerId,
+            state: 'CONNECTED',
+          },
+          { root: true },
+        )
+      }
       const connectedFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
@@ -250,7 +264,7 @@ const webRTCActions = {
           })
       }
       rootState.friends.all
-        .filter((friend) => !!friend.peerId && friend.state !== 'online')
+        .filter((friend) => !!friend.peerId)
         .forEach((friend) => {
           $Peer2Peer.sendMessage(
             {
@@ -410,6 +424,7 @@ const webRTCActions = {
         })
       }
       commit('ui/showMedia', true, { root: true })
+      dispatch('sounds/playSound', Sounds.CALL, { root: true })
     }
     call.on('INCOMING_CALL', onCallIncoming)
 
@@ -417,6 +432,7 @@ const webRTCActions = {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', { callId, peerId })
       commit('ui/showMedia', true, { root: true })
+      dispatch('sounds/playSound', Sounds.CALL, { root: true })
     }
     call.on('OUTGOING_CALL', onCallOutgoing)
 
@@ -429,6 +445,7 @@ const webRTCActions = {
         call.mute({ peerId: localId, kind: 'audio' })
       }
       commit('video/setDisabled', true, { root: true })
+      dispatch('sounds/stopSound', Sounds.CALL, { root: true })
     }
     call.on('CONNECTED', onCallConnected)
 
@@ -591,6 +608,7 @@ const webRTCActions = {
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
+      dispatch('sounds/stopSound', Sounds.CALL, { root: true })
       dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
     }
     call.on('DESTROY', onCallDestroy)
@@ -601,12 +619,11 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/deny')
    */
-  denyCall({ state, dispatch }: ActionsArguments<WebRTCState>) {
+  denyCall({ state }: ActionsArguments<WebRTCState>) {
     if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
     if (state.incomingCall) {
       $WebRTC.getCall(state.incomingCall.callId)?.destroy()
     }
-    dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
   },
   /**
    * @method hangUp
@@ -614,13 +631,12 @@ const webRTCActions = {
    * @example
    * this.$store.dispatch('webrtc/hangUp')
    */
-  hangUp({ state, commit, dispatch }: ActionsArguments<WebRTCState>) {
+  hangUp({ state, commit }: ActionsArguments<WebRTCState>) {
     if (state.activeCall) {
       $WebRTC.getCall(state.activeCall.callId)?.destroy()
     }
     commit('setActiveCall', undefined)
     commit('setIncomingCall', undefined)
-    dispatch('sounds/playSound', Sounds.HANGUP, { root: true })
   },
   /**
    * @method call

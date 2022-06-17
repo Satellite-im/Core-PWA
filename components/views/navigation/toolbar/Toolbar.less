@@ -1,9 +1,11 @@
 #toolbar {
-  flex: 1;
   display: flex;
+  align-items: center;
   height: @toolbar-height;
-  padding: 0 @normal-spacing;
-  min-width: 500px;
+  padding: 0 @normal-spacing 0 3rem;
+  min-height: @toolbar-height;
+  transition: @transition-all;
+  &:extend(.third-layer);
 
   .vertical-divider {
     height: 30px;
@@ -24,22 +26,15 @@
   }
 
   .controls {
+    display: flex;
+    align-items: center;
+    margin-left: @large-spacing;
+    font-size: @icon-size;
+    box-shadow: @ui-shadow;
+    &:extend(.light-padding);
     &:extend(.background-semitransparent-light);
     &:extend(.round-corners);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    justify-self: center;
-    align-self: center;
-    font-size: @icon-size;
-    &:extend(.light-padding);
-    box-shadow: @ui-shadow;
-    pointer-events: all;
-    margin-left: auto;
 
-    .input-wrap {
-      margin-left: @normal-spacing !important;
-    }
     .control-icon {
       margin: 0 @light-spacing;
       cursor: pointer;
@@ -52,52 +47,36 @@
     }
     .disabled {
       &:extend(.font-muted);
-      & {
-        cursor: not-allowed;
-      }
     }
-  }
-  .toolbar-spacer {
-    height: 45px;
-    flex: auto;
   }
   .circle {
     // cursor: pointer; // TODO: Re-enable when clickable
   }
 
   .circle-container {
-    height: @toolbar-height;
-    display: inline-flex;
-    position: relative;
-    align-items: center;
+    display: flex;
+    flex-shrink: 0;
   }
 
   .user-info {
     position: relative;
     align-self: center;
     margin-left: 0.75rem;
-    max-width: 250px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    &:extend(.no-select);
+    flex-grow: 1;
+    &:extend(.ellipsis);
     pointer-events: none;
 
     .title {
       margin: 0;
       font-size: @title-text;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+      &:extend(.ellipsis);
       line-height: 2 !important;
     }
     .subtitle {
       margin: 0;
       padding: 0;
       font-size: @mini-text-size;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      display: block;
-      white-space: nowrap;
+      &:extend(.ellipsis);
     }
   }
 
