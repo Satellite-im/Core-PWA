@@ -2,15 +2,12 @@ import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
 import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
-import {
-  AcceptFriendRequestArguments,
-  CreateFriendRequestArguments,
-  friendAccountToIncomingRequest,
-  friendAccountToOutgoingRequest,
-  FriendsError,
-  FriendsState,
-} from './types'
-import { FriendsGetters } from './getters'
+import type { FriendsState } from './types'
+import type {
+  FriendRequest,
+  Friend,
+  User,
+} from '~/libraries/Iridium/friends/types'
 import { DataStateType } from '~/store/dataState/types'
 import { TextileError } from '~/store/textile/types'
 import Crypto from '~/libraries/Crypto/Crypto'
@@ -25,8 +22,9 @@ import TextileManager from '~/libraries/Textile/TextileManager'
 import { AccountsError } from '~/store/accounts/types'
 import { ActionsArguments } from '~/types/store/store'
 import { FriendMetadata } from '~/types/textile/metadata'
-import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { FriendsGetters } from './getters'
 
 export default {
   async initialize({ dispatch, commit }: ActionsArguments<FriendsState>) {
@@ -36,11 +34,11 @@ export default {
       { root: true },
     )
 
-    await Promise.all([
-      dispatch('fetchFriends', {}),
-      dispatch('fetchFriendRequests', {}),
-      dispatch('subscribeToFriendsEvents', {}),
-    ])
+    if (!iridium.friends) {
+      throw new Error('Iridium not initialized')
+    }
+
+    await iridium.friends.init()
 
     commit(
       'dataState/setDataState',
@@ -48,6 +46,7 @@ export default {
       { root: true },
     )
   },
+
   /**
    * @method fetchFriendRequests DocsTODO
    * @description
@@ -55,28 +54,13 @@ export default {
    * @example
    */
   async fetchFriendRequests({ commit }: ActionsArguments<FriendsState>) {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-
-    const { incoming, outgoing } = await $BlockchainClient.getFriendsByStatus(
-      FriendStatus.PENDING,
+    const requests = Object.values(
+      await iridium.friends?.get(`/requests`),
+    ) as FriendRequest[]
+    commit(
+      'setRequests',
+      requests.filter((r: FriendRequest) => r.incoming),
     )
-
-    const incomingRequests = await Promise.all(
-      incoming.map(async (account) => {
-        const userInfo = await $BlockchainClient.getUserInfo(account.from)
-        return friendAccountToIncomingRequest(account, userInfo)
-      }),
-    )
-
-    const outgoingRequests = await Promise.all(
-      outgoing.map(async (account) => {
-        const userInfo = await $BlockchainClient.getUserInfo(account.to)
-        return friendAccountToOutgoingRequest(account, userInfo)
-      }),
-    )
-
-    commit('setIncomingRequests', incomingRequests)
-    commit('setOutgoingRequests', outgoingRequests)
   },
 
   /**
@@ -91,19 +75,11 @@ export default {
       { key: 'friends', value: DataStateType.Loading },
       { root: true },
     )
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
-    const { incoming, outgoing } = await $BlockchainClient.getFriendsByStatus(
-      FriendStatus.ACCEPTED,
-    )
-
-    // Concat incoming and outgoing friends into a single array
-    // and fetch user info for each friend
-    const friendData = incoming.concat(outgoing)
-
-    await Promise.all(
-      friendData.map((data) => dispatch('fetchFriendDetails', data)),
-    )
+    const friends = (await iridium.friends?.get(`/friends`)) as {
+      [key: string]: Friend
+    }
+    commit('setFriends', friends)
 
     commit(
       'dataState/setDataState',
@@ -119,127 +95,11 @@ export default {
    * @example
    */
   async fetchFriendDetails(
-    {
-      commit,
-      rootState,
-      dispatch,
-      getters,
-    }: ActionsArguments<FriendsState, FriendsGetters>,
-    friendAccount: FriendAccount,
-  ): Promise<void> {
-    // First grab the users from local db
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
-    // Check if the request was originally sent by the current user (outgoing)
-    // and then accepted, or the other way round
-    const userKey = rootState.accounts.active
-    const sentByMe = friendAccount.from === userKey
-    const friendKey = sentByMe ? friendAccount.to : friendAccount.from
-    const encryptedTextilePubkey = sentByMe
-      ? friendAccount.toMailboxId
-      : friendAccount.fromMailboxId
-
-    // Initialize encryption engine for the given recipient and decrypt
-    // the mailboxId
-    await $Crypto.initializeRecipient(new PublicKey(friendKey))
-    const textilePubkey = await $Crypto.decryptFrom(
-      friendKey,
-      encryptedTextilePubkey,
-    )
-
-    const userInfo = await $BlockchainClient.getUserInfo(friendKey)
-
-    if (!userInfo) {
-      throw new Error(FriendsError.FRIEND_INFO_NOT_FOUND)
-    }
-
-    const peerId = await createFromPubKey(
-      keys.supportedKeys.ed25519.unmarshalEd25519PublicKey(
-        new PublicKey(friendKey).toBytes(),
-      ).bytes,
-    )
-    const friendExists = getters.friendExists(friendKey)
-
-    const friend: Omit<Friend, 'publicKey' | 'typingState' | 'lastUpdate'> = {
-      account: friendAccount,
-      name: userInfo.name,
-      profilePicture: userInfo.photoHash,
-      status: userInfo.status,
-      encryptedTextilePubkey,
-      textilePubkey,
-      item: {},
-      pending: false,
-      stored: friendExists,
-      address: friendKey,
-      state: 'offline',
-      unreadCount: 0,
-      peerId: peerId.toB58String(),
-    }
-
-    if (!friendExists) {
-      commit('addFriend', friend)
-
-      // Eventually delete the related friend request
-      commit('removeIncomingRequest', friendAccount.accountId)
-      commit('removeOutgoingRequest', friendAccount.accountId)
-      dispatch('syncFriendIDB', friend)
-      return
-    }
-
-    commit('updateFriend', friend)
-    dispatch('syncFriendIDB', friend)
-
-    // Try update the webrtc connection
-    if (rootState.textile.activeConversation === friendKey) {
-      dispatch(
-        'conversation/setConversation',
-        {
-          id: friend.peerId,
-          type: 'friend',
-          participants: [],
-        },
-        { root: true },
-      )
-      dispatch('conversation/addParticipant', friend.address, { root: true })
-      return
-    }
-    commit(
-      'conversation/updateParticipant',
-      {
-        address: friend.address,
-        peerId: friend.peerId,
-      },
-      { root: true },
-    )
-  },
-  /**
-   * @method syncFriendIDB sync a friend with the local indexedDB
-   * @param arguments AccountArguments (dispatch)
-   * @param friend Friend
-   * @returns void
-   */
-  async syncFriendIDB(
     { commit }: ActionsArguments<FriendsState>,
-    friend: Friend,
-  ) {
-    const record = {
-      address: friend.address,
-      name: friend.name,
-      photoHash: friend.photoHash,
-      textilePubkey: friend.textilePubkey,
-      lastUpdate: friend.lastUpdate,
-    }
-    db.search.friends.add(record)
-    if (
-      (await db.friends.where('address').equals(friend.address).count()) === 0
-    ) {
-      await db.friends.add(record)
-    }
-    await db.friends.update(record.address, record)
-
-    // update stored state
-    commit('friends/setStored', friend, { root: true })
+    friendId: string,
+  ): Promise<void> {
+    const friend = await iridium.friends?.getFriend(friendId)
+    commit('updateFriend', friend)
   },
 
   /**
@@ -249,95 +109,21 @@ export default {
    */
   async updateFriendMetadata(
     { commit, rootState }: ActionsArguments<FriendsState>,
-    { to, metadata }: { to: string; metadata: FriendMetadata },
+    { friendId, metadata }: { friendId: string; metadata: FriendMetadata },
   ) {
-    const friend = rootState.friends.all.find((fr) => fr.address === to)
+    if (!iridium.friends) return
+    await iridium.friends?.set(`/friends/${friendId}/metadata`, metadata)
+    const friend = await iridium.friends.getFriend(friendId)
 
-    if (!friend) {
-      throw new Error(TextileError.FRIEND_NOT_FOUND)
-    }
-    const updatedFriend = {
-      ...friend,
-      metadata,
-    }
-    commit('friends/updateFriend', updatedFriend, { root: true })
+    commit('updateFriend', friend)
     if (rootState.ui.userProfile) {
       const userProfile: Friend = rootState.ui.userProfile as Friend
-      if (userProfile.address === to) {
-        commit('ui/setUserProfile', updatedFriend, { root: true })
+      if (userProfile.id === friendId) {
+        commit('ui/setUserProfile', friend, { root: true })
       }
     }
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-    if (!$TextileManager.metadataManager) {
-      throw new Error(TextileError.METADATA_MANAGER_NOT_FOUND)
-    }
-    const $MetadataManager: MetadataManager = $TextileManager.metadataManager
-    friend.metadata = metadata
-    await $MetadataManager.updateFriendMetadata({ to, metadata })
   },
-  /**
-   * @method subscribeToFriendsEvents DocsTODO
-   * @description
-   * @param
-   * @example
-   */
-  subscribeToFriendsEvents({
-    dispatch,
-    commit,
-    rootState,
-  }: ActionsArguments<FriendsState>) {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
-    $BlockchainClient.subscribeToEvents()
-
-    $BlockchainClient.addFriendEventListener(
-      FriendsEvents.NEW_REQUEST,
-      async (account) => {
-        if (!account) return
-        const userInfo = await $BlockchainClient.getUserInfo(account.from)
-        commit(
-          'addIncomingRequest',
-          friendAccountToIncomingRequest(account, userInfo),
-        )
-      },
-    )
-
-    $BlockchainClient.addFriendEventListener(
-      FriendsEvents.NEW_FRIEND,
-      (account) => {
-        if (!account) return
-        dispatch('fetchFriendDetails', account)
-      },
-    )
-
-    $BlockchainClient.addFriendEventListener(
-      FriendsEvents.REQUEST_DENIED,
-      (account) => {
-        if (!account) return
-        commit('removeOutgoingRequest', account.accountId)
-      },
-    )
-
-    $BlockchainClient.addFriendEventListener(
-      FriendsEvents.REQUEST_REMOVED,
-      (account) => {
-        if (!account) return
-        commit('removeIncomingRequest', account.accountId)
-      },
-    )
-
-    $BlockchainClient.addFriendEventListener(
-      FriendsEvents.FRIEND_REMOVED,
-      (account) => {
-        if (!account) return
-
-        const sentByMe = rootState.accounts.active === account.from
-        const address = sentByMe ? account.to : account.from
-        commit('removeFriend', address)
-      },
-    )
-  },
   setFriendState(
     { commit }: ActionsArguments<FriendsState>,
     { address, state }: { address: string; state: string },
@@ -580,9 +366,4 @@ export default {
 
     await $BlockchainClient.closeFriendRequest(friendAccountKey)
   },
-}
-
-export const exportForTesting = {
-  friendAccountToIncomingRequest,
-  friendAccountToOutgoingRequest,
 }

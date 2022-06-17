@@ -8,10 +8,10 @@ import {
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
-import TextileManager from '~/libraries/Textile/TextileManager'
+import iridium from '~/libraries/Iridium/IridiumManager'
 import { ActionsArguments } from '~/types/store/store'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import logger from '~/plugins/local/logger'
 
 export default {
   /**
@@ -29,9 +29,7 @@ export default {
       throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
-    const pinHash = await $Crypto.hash(pin)
+    const pinHash = await Crypto.hash(pin)
 
     // The cleartext version of the pin will not be persisted
     commit('setPin', pin)
@@ -59,14 +57,14 @@ export default {
 
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
-    const computedPinHash = await $Crypto.hash(pin)
+    const computedPinHash = await Crypto.hash(pin)
 
     if (computedPinHash !== pinHash) {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
     if (encryptedPhrase !== '') {
-      const decryptedPhrase = await $Crypto.decryptWithPassword(
+      const decryptedPhrase = await Crypto.decryptWithPassword(
         encryptedPhrase,
         pin,
       )
@@ -93,8 +91,6 @@ export default {
 
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
     await $BlockchainClient.initRandom()
     const userWallet = $BlockchainClient.account
 
@@ -104,7 +100,7 @@ export default {
 
     await commit('setPhrase', userWallet.mnemonic)
 
-    const encryptedPhrase = await $Crypto.encryptWithPassword(
+    const encryptedPhrase = await Crypto.encryptWithPassword(
       userWallet.mnemonic,
       pin,
     )
@@ -131,8 +127,7 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-    const encryptedPhrase = await $Crypto.encryptWithPassword(mnemonic, pin)
+    const encryptedPhrase = await Crypto.encryptWithPassword(mnemonic, pin)
 
     await commit('setEncryptedPhrase', encryptedPhrase)
   },
@@ -168,9 +163,8 @@ export default {
 
     commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
-    const userInfo = await $BlockchainClient.getCurrentUserInfo()
-
-    if (userInfo === null) {
+    const userInfo = await iridium.profile?.get('/')
+    if (!userInfo?.id) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 
@@ -217,37 +211,30 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
 
-    const balance = await $BlockchainClient.getBalance()
-
-    if (balance === 0) {
-      commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
-      await $BlockchainClient.requestAirdrop()
-    }
+    // const balance = await $BlockchainClient.getBalance()
+    // if (balance === 0) {
+    //   commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
+    //   await $BlockchainClient.requestAirdrop()
+    // }
 
     const payerAccount = await $BlockchainClient.payerAccount
-
     if (!payerAccount) {
       commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userInfo = await $BlockchainClient.getCurrentUserInfo()
-
-    if (userInfo) {
+    const userInfo = await iridium.profile?.get('/')
+    if (userInfo?.id) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       throw new Error(AccountsError.USER_ALREADY_REGISTERED)
     }
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
-    /* textilePubKey is generated first before setting account details if user is registered with avatar */
-    let preGeneratedTextilePubKey = null
-    // only init textile if we need to push an image to bucket
-    if (userData.image) {
+    if (!iridium.ready) {
       const { pin } = state
-      preGeneratedTextilePubKey = await dispatch(
-        'textile/initialize',
+      await dispatch(
+        'iridium/initialize',
         {
-          id: payerAccount?.publicKey.toBase58(),
           pass: pin,
           wallet: $BlockchainClient.account,
         },
@@ -256,28 +243,20 @@ export default {
     }
 
     const imagePath = await uploadPicture(userData.image)
-
-    await $BlockchainClient.createUser(
-      userData.name,
-      imagePath,
-      userData.status,
-    )
-
+    await iridium.profile?.set('/', {
+      name: userData.name,
+      status: userData.status,
+      photoHash: imagePath,
+    })
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-
-    commit('setActiveAccount', payerAccount.publicKey.toBase58())
-
+    commit('setActiveAccount', iridium.connector?.id)
     dispatch('initializeEncryptionEngine', payerAccount)
-
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
       photoHash: imagePath,
       address: payerAccount.publicKey.toBase58(),
     })
-    /* reset textilePubKey after setting user detail if it is not set properly */
-    if (preGeneratedTextilePubKey && !state.details?.textilePubkey)
-      commit('updateTextilePubkey', preGeneratedTextilePubKey)
     dispatch('startup', payerAccount)
   },
 
@@ -296,13 +275,9 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     image: string,
   ) {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-
     const imagePath = await uploadPicture(image)
-
-    await $BlockchainClient.setPhotoHash(imagePath)
-
-    commit('setProfilePicture', imagePath)
+    await iridium.profile?.set('/photoHash', imagePath)
+    commit('setPhotoHash', imagePath)
   },
 
   /**
@@ -322,58 +297,52 @@ export default {
     const $Crypto: Crypto = Vue.prototype.$Crypto
     await $Crypto.init(userAccount)
   },
+
   async startup(
     { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
     payerAccount: Keypair,
   ) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-    const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
-
-    const { initialized: textileInitialized } = rootState.textile
-
-    commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
 
     db.initializeSearchIndexes()
 
     const { pin } = state
-    dispatch('loadTextileAndRelated', {
-      initTextile: !textileInitialized && pin,
-      payerPublicKey: payerAccount?.publicKey.toBase58(),
+    await dispatch('loadIridium', {
+      pin,
     })
     await dispatch('friends/initialize', {}, { root: true })
-
     if ($BlockchainClient.payerAccount?.secretKey) {
       dispatch(
         'webrtc/initialize',
         {
           privateKeyInfo: {
             type: 'ed25519',
-            privateKey: $BlockchainClient.payerAccount?.secretKey,
+            privateKey: iridium.connector?.peerId,
           },
-          originator: payerAccount.publicKey.toBase58(),
+          originator: iridium.connector?.peerId,
         },
         {
           root: true,
         },
       )
     }
-
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
-  async loadTextileAndRelated(
-    { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
-    {
-      initTextile,
-      payerPublicKey,
-    }: { initTextile?: boolean; payerPublicKey?: string },
-  ) {
-    if (initTextile) {
+  async loadIridium({
+    commit,
+    dispatch,
+    state,
+  }: ActionsArguments<AccountsState>) {
+    if (!iridium.ready) {
+      logger.log(
+        'accounts/loadIridium',
+        'Loading Iridium from accounts startup',
+      )
       const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
       const { pin } = state
       await dispatch(
-        'textile/initialize',
+        'iridium/initialize',
         {
-          id: payerPublicKey,
           pass: pin,
           wallet: $BlockchainClient.account,
         },
@@ -382,8 +351,6 @@ export default {
     }
 
     await dispatch('groups/initialize', {}, { root: true })
-    await dispatch('textile/listenToThread', {}, { root: true })
-    commit('textile/textileInitialized', true, { root: true })
   },
 }
 
@@ -391,28 +358,20 @@ export default {
  * @method uploadPicture
  * @description helper function to upload image to textile if needed
  * @param image data string of uploaded image
- * @returns textile hash of image, or '' if no image is present
+ * @returns IPFS CID of image, or '' if no image is present
  */
 async function uploadPicture(image: string) {
   if (!image) {
     return ''
   }
-
   // convert data string image to File
   const imageFile: File = await fetch(image)
     .then((res) => res.blob())
     .then((blob) => {
       return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
     })
-
-  const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-  const res = await $TextileManager.sharedBucket?.pushFile(
-    imageFile,
-    imageFile.name,
-    () => {},
-  )
-
-  return res?.path.root.toString() ?? ''
+  // store image in IPFS
+  return iridium.connector?.store(imageFile)
 }
 
 export const exportForTesting = {

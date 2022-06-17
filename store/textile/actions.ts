@@ -56,29 +56,7 @@ export default {
   async initialize(
     { commit, dispatch }: ActionsArguments<TextileState>,
     config: TextileConfig,
-  ) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-    await $TextileManager.init(config)
-
-    const textilePublicKey = $TextileManager.getIdentityPublicKey()
-
-    commit('accounts/updateTextilePubkey', textilePublicKey, { root: true })
-
-    const record = await $TextileManager.userInfoManager?.getUserRecord()
-    if (!record) {
-      await dispatch('updateUserThreadData', {
-        consentToScan: false,
-        blockNsfw: true,
-        flipVideo: true,
-      })
-      return textilePublicKey
-    }
-    /* Log CSAM Consent Data for future ticket as Hogan requested */
-    Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
-    commit('setUserThreadData', record)
-    return textilePublicKey
-  },
+  ) {},
   /**
    * @description Fetches messages that comes from a specific user
    * @param param0 Action Arguments

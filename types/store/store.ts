@@ -12,6 +12,7 @@ import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
 import { MediaState } from '~/store/media/types'
+import { IridiumState } from '~/store/iridium/types'
 
 export interface RootState {
   accounts: AccountsState
@@ -20,6 +21,7 @@ export interface RootState {
   friends: FriendsState
   media: MediaState
   textile: TextileState
+  iridium: IridiumState
   webrtc: WebRTCState
   groups: GroupsState
   video: VideoState

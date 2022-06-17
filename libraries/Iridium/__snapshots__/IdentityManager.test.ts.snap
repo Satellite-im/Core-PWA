@@ -1,0 +1,207 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IdentityManager.default.generateMessageForEntropy 0 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+192.168.1.5
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+!Lov3MyPianoPony
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`IdentityManager.default.generateMessageForEntropy 1 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+0.0.0.0
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+accessdenied4u
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`IdentityManager.default.generateMessageForEntropy 2 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+192.168.1.5
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+NoWiFi4you
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`IdentityManager.default.generateMessageForEntropy 3 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+0.0.0.0
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+YouarenotAllowed2Use
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`IdentityManager.default.generateMessageForEntropy 4 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+0.0.0.0
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+NoWiFi4you
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`IdentityManager.default.generateMessageForEntropy 5 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`IdentityManager.default.isInitialized 0 1`] = `false`;

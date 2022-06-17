@@ -1,17 +1,10 @@
 // import { Context } from '@textile/context'
-import { Identity, PrivateKey } from '@textile/crypto'
-import { Client } from '@textile/hub-threads-client'
-import { Users } from '@textile/users'
 import { Account } from '../BlockchainClient/interfaces'
-import { Config } from '~/config'
 import Crypto from '~/libraries/Crypto/Crypto'
+import logger from '~/plugins/local/logger'
 // @ts-ignore
 
 export default class IdentityManager {
-  client?: Client
-  users?: Users
-  identity?: Identity
-
   /**
    * @method
    * Generates a string to be signed
@@ -19,7 +12,7 @@ export default class IdentityManager {
    * @param secret secret string
    * @returns a message to be signed
    */
-  private generateMessageForEntropy(address: string, secret: string): string {
+  static generateEntropyMessage(address: string, secret: string): string {
     return (
       '******************************************************************************** \n' +
       'READ THIS MESSAGE CAREFULLY. \n' +
@@ -64,33 +57,14 @@ export default class IdentityManager {
    * @param wallet a Solana Wallet instance
    * @returns the identity
    */
-  async initFromWallet(wallet: Account): Promise<Identity> {
-    const secret = await Crypto.hash('Satellite.im')
-    const message = this.generateMessageForEntropy(wallet.address, secret)
-    const signedText = await Crypto.signMessageWithKey(
+  static async seedFromWallet(
+    passphrase: string,
+    wallet: Account,
+  ): Promise<Uint8Array> {
+    return IdentityManager.seedFromPrivateKey(
+      passphrase,
       Buffer.from(wallet.privateKey),
-      message,
     )
-    const hash = await Crypto.hash(signedText)
-
-    if (hash === null) {
-      throw new Error(
-        'No account is provided. Please provide an account to this application.',
-      )
-    }
-
-    const array = Buffer.from(hash, 'hex')
-
-    if (array.length !== 32) {
-      throw new Error(
-        'Hash of signature is not the correct size! Something went wrong!',
-      )
-    }
-
-    this.identity = PrivateKey.fromRawEd25519Seed(Uint8Array.from(array))
-
-    // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
-    return this.identity
   }
 
   /**
@@ -98,51 +72,42 @@ export default class IdentityManager {
    * Generates a new random identity
    * @returns the identity
    */
-  async createRandom(): Promise<Identity> {
-    /** No cached identity existed, so create a new one */
-    this.identity = await PrivateKey.fromRandom()
-
-    return this.identity
+  static async seedRandom(): Promise<Uint8Array> {
+    return Crypto.getRandomSeed()
   }
 
-  /**
-   * @method
-   * Initializes an identity from a given privateKey
-   * @param privateKey string representation of a private key
-   * @returns the identity
-   */
-  initFromPrivateKey(privateKey: string): Identity {
-    this.identity = PrivateKey.fromString(privateKey)
-    return this.identity
-  }
+  static async seedFromPrivateKey(
+    passphrase: string,
+    privateKey: Uint8Array,
+  ): Promise<Uint8Array> {
+    logger.log('iridium/manager', 'seedFromPrivateKey()', {
+      passphrase,
+      privateKey,
+    })
+    const publicKey = await Crypto.getPublicKey(privateKey.slice(4, 36))
+    const secret = await Crypto.hash(passphrase)
+    const message = IdentityManager.generateEntropyMessage(
+      Buffer.from(publicKey).toString('hex'),
+      secret,
+    )
+    const signedText = await Crypto.signMessageWithKey(
+      privateKey.slice(4, 36),
+      message,
+    )
+    const seed = await Crypto.sha256(signedText)
 
-  async authorize(identity: Identity): Promise<any> {
-    if (!Config.textile.key) {
-      throw new Error('Textile key not found')
+    if (seed === null) {
+      throw new Error(
+        'No account is provided. Please provide an account to this application.',
+      )
     }
 
-    this.client = await Client.withKeyInfo(
-      { key: Config.textile.key },
-      Config.textile.apiUrl,
-    )
-
-    this.users = await Users.withKeyInfo(
-      { key: Config.textile.key },
-      { host: Config.textile.apiUrl },
-    )
-
-    await this.users.getToken(identity)
-
-    const token = await this.client.getToken(identity)
-
-    return {
-      client: this.client,
-      token,
-      users: this.users,
+    if (seed.length !== 32) {
+      throw new Error(
+        'Hash of signature is not the correct size! Something went wrong!',
+      )
     }
-  }
 
-  isInitialized(): boolean {
-    return Boolean(this.identity)
+    return seed
   }
 }
