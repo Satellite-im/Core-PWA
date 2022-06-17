@@ -27,14 +27,15 @@ export default Vue.extend({
           this.onlineParticipants.length ? 'ui.online' : 'ui.offline',
           1,
           {
-            name: this.otherParticipants[0].name,
+            name: encodeURIComponent(this.otherParticipants[0].name),
           },
         )
       }
       // if group
       return this.$tc('ui.online', this.onlineParticipants.length, {
         name: this.onlineParticipants
-          .map((p: ConversationParticipant) => p.name)
+          // @ts-ignore // to encode strings to allow for custom modifier special characters to be used while pluralizing locales
+          .map((p: ConversationParticipant) => encodeURIComponent(p.name))
           .join(', '),
       })
     },
