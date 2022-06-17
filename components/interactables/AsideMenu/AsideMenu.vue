@@ -51,6 +51,16 @@ export default Vue.extend({
       default: () => () => {},
     },
   },
+  methods: {
+    /**
+     * @method closeModal DocsTODO
+     * @description
+     * @example
+     */
+    closeModal() {
+      this.$store.commit('ui/toggleSettings', { show: false })
+    },
+  },
 })
 </script>
 
