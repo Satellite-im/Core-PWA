@@ -298,10 +298,9 @@ export default {
         if (!account) return
 
         const userInfo = await $BlockchainClient.getUserInfo(account.from)
-        const existingRequest = find(
-          rootState.friends.incomingRequests,
-          account.from,
-        )
+        const existingRequest = find(rootState.friends.incomingRequests, {
+          requestId: account.from,
+        })
 
         if (!existingRequest) {
           commit(
