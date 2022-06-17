@@ -323,6 +323,7 @@ describe('misc', () => {
       profilePicture: 'profilePicture2',
       state: 'DISCONNECTED',
       textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+      activity: ConversationActivity.NOT_TYPING,
     })
   })
   test.skip('actions.default.addParticipant no peer id', () => {
