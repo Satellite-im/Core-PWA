@@ -12,9 +12,9 @@ export interface SelectOption {
 
 export default Vue.extend({
   props: {
-    // eslint-disable-next-line vue/require-default-prop
     value: {
       type: String,
+      required: true,
     },
     label: {
       type: String,
@@ -91,12 +91,10 @@ export default Vue.extend({
               // Assign the previous option to nextItem
               nextItem = this.$refs.options[selectedItemIndex - 1]
             }
-          } else {
-            // If there's an option below the selected one
-            // eslint-disable-next-line no-lonely-if
-            if (selectedItemIndex + 1 <= this.options.length) {
-              nextItem = this.$refs.options[selectedItemIndex + 1]
-            }
+          }
+          // If there's an option below the selected one
+          else if (selectedItemIndex + 1 <= this.options.length) {
+            nextItem = this.$refs.options[selectedItemIndex + 1]
           }
 
           if (nextItem) {
