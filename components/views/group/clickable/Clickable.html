@@ -1,8 +1,7 @@
 <div
   class="group"
-  v-bind:class="{ 'is-selected' : isSelected}"
+  :class="{ 'is-selected' : isSelected}"
   @contextmenu="contextMenu"
-  v-on:click="navigateToGroup(group.id)"
 >
   <GroupIcon :group="group" />
   <div class="group-info">
