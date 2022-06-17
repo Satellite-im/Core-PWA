@@ -18,10 +18,6 @@ export default Vue.extend({
       default: '',
     },
     /**
-     * Should we include the aside menu toggle icon
-     */
-    toggleable: Boolean,
-    /**
      * Callable method or function emitted when the menu is toggled
      */
     toggle: {
