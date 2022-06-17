@@ -21,7 +21,6 @@ cp .env.example .env
 
 Currently, the only environment variable you need is a [Textile](https://www.textile.io) API key.
 
-
 ## Running Locally
 
 To start running locally complete the Environment setup and then run `yarn dev`.
