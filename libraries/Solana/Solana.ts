@@ -82,6 +82,30 @@ export function sleep(ms: number): Promise<void> {
 }
 
 /**
+ * Utility function to retry a promise
+ * @param fn promise function to retry
+ * @param retries number of retries
+ * @param delay time in ms to wait after each failure
+ * @returns a promise that resolves with result of input fn
+ */
+
+export const retry = async <T>(
+  fn: () => Promise<T>,
+  retries: number = 3,
+  delay: number = 2000,
+): Promise<T> => {
+  try {
+    return await fn()
+  } catch (e) {
+    if (!retries) {
+      throw e
+    }
+    await sleep(delay)
+    return await retry(fn, retries - 1, delay)
+  }
+}
+
+/**
  * Utility function to convert a string into a fixed length buffer
  * @param stringToConvert string to be converted
  * @param length fixed length of the final buffer
