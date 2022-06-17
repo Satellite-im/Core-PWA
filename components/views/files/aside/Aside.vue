@@ -38,16 +38,17 @@ export default Vue.extend({
           route: FileAsideRouteEnum.RECENT,
           icon: FileIconsEnum.CLOCK,
         },
-        {
-          text: this.$t('pages.files.aside.deleted'),
-          route: FileAsideRouteEnum.DELETED,
-          icon: FileIconsEnum.TRASH,
-        },
-        {
-          text: this.$t('pages.files.aside.favorited'),
-          route: FileAsideRouteEnum.FAVORITED,
-          icon: FileIconsEnum.HEART,
-        },
+        // remove for demo
+        // {
+        //   text: this.$t('pages.files.aside.deleted'),
+        //   route: FileAsideRouteEnum.DELETED,
+        //   icon: FileIconsEnum.TRASH,
+        // },
+        // {
+        //   text: this.$t('pages.files.aside.favorited'),
+        //   route: FileAsideRouteEnum.FAVORITED,
+        //   icon: FileIconsEnum.HEART,
+        // },
       ]
     },
     sharedItemsOptions(): SimpleItem[] {
