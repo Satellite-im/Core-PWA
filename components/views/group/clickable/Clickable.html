@@ -2,6 +2,7 @@
   class="group"
   :class="{ 'is-selected' : isSelected}"
   @contextmenu="contextMenu"
+  v-on:click="navigateToGroup(group.id)"
 >
   <GroupIcon :group="group" />
   <div class="group-info">
