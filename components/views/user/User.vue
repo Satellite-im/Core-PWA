@@ -106,19 +106,6 @@ export default Vue.extend({
       return this.user.state === 'online'
     },
   },
-  mounted() {
-    Array.from(
-      (this.$refs.subtitle as HTMLElement).getElementsByClassName(
-        'spoiler-container',
-      ),
-    ).forEach((spoiler) => {
-      spoiler.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        spoiler.classList.add('spoiler-open')
-      })
-    })
-  },
   beforeDestroy() {
     // ensure the user can't click context menu options after a friend has been removed
     this.$store.commit('ui/toggleContextMenu', false)
