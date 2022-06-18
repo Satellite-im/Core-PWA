@@ -1,6 +1,6 @@
 <div id="typing-badge-container">
   <div id="typing-loader" />
   <div id="text-container">
-    <TypographyText :text="text" :size="6" />
+    <TypographyText :text="decodeURIComponent(text)" :size="6" />
   </div>
 </div>
