@@ -12,6 +12,10 @@ const InitialTextileState = (): TextileState => ({
     blockNsfw: true,
     flipVideo: true,
   },
+  fileSystem: {
+    totalSize: 0,
+    percentageUsed: 0,
+  },
 })
 
 export default InitialTextileState

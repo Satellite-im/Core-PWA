@@ -62,8 +62,13 @@ export default {
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
     await $TextileManager.init(config)
+    commit('setFileSystem', {
+      totalSize: $FileSystem.totalSize,
+      percentageUsed: $FileSystem.percentStorageUsed,
+    })
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
@@ -1142,7 +1147,7 @@ export default {
   /**
    * @description export filesystem index to textile bucket and update threaddb version
    */
-  async exportFileSystem({ dispatch }: ActionsArguments<TextileState>) {
+  async exportFileSystem({ dispatch, commit }: ActionsArguments<TextileState>) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
     const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
@@ -1153,6 +1158,10 @@ export default {
     await $TextileManager.personalBucket.updateIndex($FileSystem.export)
     dispatch('updateUserThreadData', {
       filesVersion: $FileSystem.version,
+    })
+    commit('setFileSystem', {
+      totalSize: $FileSystem.totalSize,
+      percentageUsed: $FileSystem.percentStorageUsed,
     })
   },
 
