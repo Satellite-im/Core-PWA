@@ -1,23 +1,18 @@
-<div id="group-invite" class="group-invite" v-if="modal.isOpen">
+<div id="group-invite" class="group-invite">
   <TypographySubtitle :size="6" :text="$t('pages.chat.group_invite')" />
   <TypographyText :text="$t('pages.chat.group_invite_description')" />
-  <InteractablesInput
-    size="small"
-    input-kind="text"
-    type="dark"
-    :placeholder="$t('pages.files.browse.search')"
-    class="search"
-    v-model="recipient"
+  <InteractablesUserPicker
+    v-model="recipients"
+    :exclude="groupMembers"
+    address-lookup
   />
   <small v-if="error" class="error has-text-danger error">{{error}}</small>
-  <div v-if="recipient" class="submit-container">
-    <InteractablesButton
-      type="primary"
-      size="small"
-      :text="$t('pages.chat.add_member')"
-      class="create-server-btn"
-      :action="confirm"
-      :loading="isLoading"
-    />
-  </div>
+  <InteractablesButton
+    :type="recipients.length ? 'primary' : 'dark'"
+    size="small"
+    :text="$t('pages.chat.add_member')"
+    :action="confirm"
+    :loading="isLoading"
+    full-width
+  />
 </div>
