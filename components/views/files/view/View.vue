@@ -11,7 +11,6 @@ import {
   LinkIcon,
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
-import { Fil } from '~/libraries/Files/Fil'
 
 export default Vue.extend({
   components: {
@@ -22,14 +21,9 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  data() {
-    return {
-      file: undefined as Fil | undefined,
-    }
-  },
   computed: {
     ...mapState({
-      filePreview: (state) => (state as RootState).ui.filePreview,
+      file: (state) => (state as RootState).ui.filePreview,
       fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
       blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
@@ -39,9 +33,6 @@ export default Vue.extend({
         ? this.fileDownloadList.includes(this.file.name)
         : false
     },
-  },
-  beforeMount() {
-    this.file = this.filePreview
   },
   methods: {
     /**
@@ -61,7 +52,7 @@ export default Vue.extend({
           this.file.id,
           this.file.extension === fileExt
             ? this.file.name
-            : (this.file.name += `.${this.file.extension}`),
+            : `${this.file.name}.${this.file.extension}`,
           this.file.size,
         )
         this.$store.commit('ui/removeFileDownload', this.file.name)
