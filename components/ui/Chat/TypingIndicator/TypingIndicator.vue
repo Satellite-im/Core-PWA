@@ -10,7 +10,7 @@ export default Vue.extend({
     text(): string {
       return this.$tc('messaging.typing', this.typingParticipants.length, {
         user: this.typingParticipants
-          .map((p: ConversationParticipant) => p.name)
+          .map((p: ConversationParticipant) => encodeURIComponent(p.name))
           .join(', '),
       })
     },
