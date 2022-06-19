@@ -8,6 +8,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters('conversation', ['typingParticipants']),
     text(): string {
+      console.log(this.typingParticipants)
       return this.$tc('messaging.typing', this.typingParticipants.length, {
         user: this.typingParticipants
           .map((p: ConversationParticipant) => encodeURIComponent(p.name))
