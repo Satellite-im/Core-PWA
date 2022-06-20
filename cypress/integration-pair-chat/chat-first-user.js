@@ -97,7 +97,10 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   it('When the user clicks the video button camera should be disabled until the user enables it again', () => {
-    // Click on call video button and validate that video-stream is visible
+    // Click on call video button initially
+    cy.get('[data-cy=call-video]').click()
+
+    // Click on call video button again and validate that video-stream is visible
     cy.get('[data-cy=call-video]').click()
     cy.get('[data-cy=video-stream]')
       .should('be.visible')
@@ -385,6 +388,6 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]').should('be.visible')
 
     //Wait until remote side closes the browser tab and call should be finished on both sides
-    cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
+    cy.get('[data-cy=mediastream]', { timeout: 90000 }).should('not.exist')
   })
 })
