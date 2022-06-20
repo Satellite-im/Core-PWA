@@ -1,29 +1,20 @@
-<div class="emoji-reactions" v-if="reactions">
-  <div v-for="reaction in reactions">
-    <div v-if="hovering === reaction.emoji" class="reactors">
-      <div class="reactors-emoji">{{reaction.emoji}}</div>
-      <div class="reactors-list">
-        <span class="reactor">{{getReactorsList(reaction.reactors)}}</span>
-      </div>
-    </div>
-    <div
-      :class="didIReact(reaction) ? 'emoji-reaction emoji-reacted' : 'emoji-reaction'"
+<div class="message-reactions" v-if="reactions">
+  <template v-for="reaction in reactions">
+    <button
+      class="reaction-button"
+      :class="{reacted : didIReact(reaction)}"
       @click="quickReaction(reaction.emoji)"
       data-cy="reaction-to-message"
-      @mouseenter="toggleReactors(reaction.emoji)"
-      @mouseleave="toggleReactors(null)"
     >
+      <div class="reaction-details">
+        <div class="reactors-emoji">{{reaction.emoji}}</div>
+        <div>{{getReactorsList(reaction.reactors)}}</div>
+      </div>
       <span data-cy="emoji-reaction-value">{{reaction.emoji}}</span>
       <span data-cy="emoji-reaction-count">{{reaction.reactors.length}}</span>
-      <div></div>
-    </div>
-  </div>
-  <div class="react-button" @click="emojiReaction">
-    <smile-icon
-      size="1x"
-      v-if="reactions.length"
-      class="emoji-icon"
-      @click="emojiReaction"
-    />
-  </div>
+    </button>
+  </template>
+  <button class="add-reaction" @click="emojiReaction">
+    <smile-icon size="1x" v-if="reactions.length" />
+  </button>
 </div>

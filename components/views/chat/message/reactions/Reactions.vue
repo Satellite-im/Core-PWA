@@ -1,10 +1,9 @@
 <template src="./Reactions.html"></template>
 <script lang="ts">
-// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { SmileIcon } from 'satellite-lucide-icons'
-import { Group, UIReply, UIMessage } from '~/types/messaging'
+import { Group, UIReply, UIMessage, UIReaction } from '~/types/messaging'
 import { getUsernameFromState } from '~/utilities/Messaging'
 
 export default Vue.extend({
@@ -34,11 +33,6 @@ export default Vue.extend({
       type: Object as PropType<Group>,
       default: () => {},
     },
-  },
-  data() {
-    return {
-      hovering: false,
-    }
   },
   computed: {
     ...mapState(['accounts']),
@@ -94,22 +88,13 @@ export default Vue.extend({
       })
     },
     /**
-     * @method toggleReactors DocsTODO
-     * @description
-     * @param emoji
-     * @example
-     */
-    toggleReactors(emoji: any) {
-      this.$data.hovering = emoji
-    },
-    /**
      * @method didIReact DocsTODO
      * @description
      * @param reaction
      * @returns
      * @example
      */
-    didIReact(reaction: any) {
+    didIReact(reaction: UIReaction) {
       return reaction.reactors.includes(this.accounts.details.textilePubkey)
     },
     getReactorsList(reactors: string[], limit = 3) {
@@ -118,7 +103,7 @@ export default Vue.extend({
         .slice(0, limit)
         .reduce(
           (reactorsList, reactorPublickey, i) =>
-            `${reactorsList}${i === 0 ? '' : ','}${getUsernameFromState(
+            `${reactorsList}${i === 0 ? '' : ', '}${getUsernameFromState(
               reactorPublickey,
               this.$store.state,
             )}`,
