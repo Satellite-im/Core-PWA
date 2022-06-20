@@ -70,10 +70,9 @@ describe('prerequisites returns', () => {
   test('finished init', () => {
     const state = { ...initialRootState }
     state.accounts.active = 'accountAddress'
-    state.textile.initialized = true
-    state.webrtc.initialized = false
+    state.webrtc.initialized = true
 
     const result = getters.allPrerequisitesReady(state)
-    expect(result).toBeFalsy()
+    expect(result).toBeTruthy()
   })
 })
