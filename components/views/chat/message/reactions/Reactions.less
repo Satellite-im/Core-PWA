@@ -4,7 +4,8 @@
   gap: @xlight-spacing;
   margin: @light-spacing 0;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     .add-reaction {
       display: flex;
     }
@@ -26,7 +27,8 @@
       &:extend(.glow-flair);
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       .reaction-details {
         display: flex;
       }

@@ -14,7 +14,11 @@
       <span data-cy="emoji-reaction-count">{{reaction.reactors.length}}</span>
     </button>
   </template>
-  <button class="add-reaction" @click="emojiReaction">
+  <button
+    class="add-reaction"
+    @click="emojiReaction"
+    v-tooltip.top="$t('pages.chat.add_reaction')"
+  >
     <smile-icon size="1x" v-if="reactions.length" />
   </button>
 </div>

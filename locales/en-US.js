@@ -543,6 +543,7 @@ export default {
         loading: 'Loading ...',
         no_more: 'No more data.',
       },
+      add_reaction: 'Add reaction',
     },
     newMessage: {
       new_message: 'New Message',
