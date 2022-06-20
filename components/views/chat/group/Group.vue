@@ -31,7 +31,7 @@ export default Vue.extend({
       return (
         this.groupMember?.name ||
         this.friend?.name ||
-        this.accounts.details?.name
+        this.$t('user.loading.loading_displayname').toString()
       )
     },
     badge(): string {
