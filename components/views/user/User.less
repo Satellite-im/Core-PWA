@@ -40,13 +40,18 @@
       display: inline-block;
       min-width: 0;
       font-size: @micro-text-size;
-      line-height: 1.4;
+      line-height: 1.2;
       text-overflow: ellipsis;
       overflow: hidden;
       font-size: @mini-text-size;
       color: @text-muted;
       font-family: @secondary-font;
       pointer-events: none;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;  
+
     }
 
     flex: 1;
