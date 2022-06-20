@@ -152,7 +152,7 @@ export interface Adapter {
     from: PublicKey,
     to: PublicKey,
   ): Promise<{ request: PublicKey; first: PublicKey; second: PublicKey }>
-  getFriendsPayer(): Promise<Keypair>
+  getFriendsPayer(): Promise<Account>
   getAccountStatus(accountKey: PublicKey): Promise<FriendStatus>
   makeFriendRequest(
     request: PublicKey,

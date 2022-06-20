@@ -146,8 +146,10 @@ export default class PhantomUser extends EventEmitter {
     ).blockhash
 
     tx.feePayer = payer
-    const signed = await $PhantomWalletAdapter?.signTransaction(tx)
-    const sent = await $PhantomWalletAdapter?.sendTransaction(
+
+    const signed = await $PhantomWalletAdapter.signTransaction(tx)
+    window.console.log(signed)
+    const sent = await $PhantomWalletAdapter.sendTransaction(
       signed,
       this._getPhantomManager()._getConnection(),
     )

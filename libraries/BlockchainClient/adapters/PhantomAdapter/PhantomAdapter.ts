@@ -83,7 +83,7 @@ export default class PhantomAdapter implements Adapter {
   // here we don't need the mnemonic, since this function only triggers the wallet connection
   async getAccountFromMnemonic(_mnemonic?: string): Promise<Account | null> {
     try {
-      this.$PhantomManager.initWallet()
+      await this.$PhantomManager.initWallet()
       const account: Account = {
         address: this.$PhantomManager.getwalletPublicKey().toBase58(),
         publicKey: this.$PhantomManager.getwalletPublicKey(),
@@ -129,7 +129,12 @@ export default class PhantomAdapter implements Adapter {
   }
 
   async getUserInfo(_address: string): Promise<User | null> {
-    return await this._getPhantomUser().getUserInfo(_address)
+    try {
+      const e = await this._getPhantomUser().getUserInfo(_address)
+      return e
+    } catch (e) {
+      return null
+    }
   }
 
   async getUsersInfo(_addresses: string[]): Promise<User[]> {
@@ -170,8 +175,10 @@ export default class PhantomAdapter implements Adapter {
     return this._getPhantomFriend().computeAccountKeys(_from, _to)
   }
 
-  getFriendsPayer(): Promise<Keypair> {
-    throw new Error('Method not implemented.')
+  async getFriendsPayer(): Promise<Account> {
+    const account = await this.getActiveAccount()
+    if (!account) throw new Error('No account found')
+    return account
   }
 
   getAccountStatus(_accountKey: PublicKey): Promise<FriendStatus> {

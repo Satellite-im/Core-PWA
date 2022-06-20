@@ -20,6 +20,7 @@ import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import BlockchainClient from '~/libraries/BlockchainClient'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/PhantomAdapter/PhantomAdapter'
+import { Account } from '~/libraries/BlockchainClient/interfaces'
 
 export default {
   /**
@@ -103,6 +104,7 @@ export default {
 
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     $BlockchainClient.setAdapter(new SolanaAdapter())
+    await commit('setAdapter', 'Solana')
     const $Crypto: Crypto = Vue.prototype.$Crypto
 
     await $BlockchainClient.initRandom()
@@ -164,7 +166,7 @@ export default {
   }: ActionsArguments<AccountsState>) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
-    if (new PhantomWalletAdapter().connected) {
+    if (state.adapter === 'Solana') {
       $BlockchainClient.setAdapter(new SolanaAdapter())
       window.console.log('Using Solana adapter')
     } else {
@@ -190,7 +192,6 @@ export default {
     commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
     const userInfo = await $BlockchainClient.getCurrentUserInfo()
-
     if (userInfo === null) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
@@ -339,22 +340,21 @@ export default {
    */
   async initializeEncryptionEngine(
     _: ActionsArguments<AccountsState>,
-    userAccount: Keypair,
+    userAccount: Account,
   ) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto
-    await $Crypto.init(userAccount)
+    $Crypto.init(userAccount)
   },
   async startup(
     { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
-    payerAccount: Keypair,
+    payerAccount: Account,
   ) {
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const { initialized: textileInitialized } = rootState.textile
 
     commit('accounts/setUserPeerId', $Peer2Peer.id, { root: true })
-
     db.initializeSearchIndexes()
 
     const { pin } = state
@@ -366,7 +366,6 @@ export default {
 
     // needed the public key
     if (payerAccount.publicKey) {
-      window.console.log()
       dispatch(
         'webrtc/initialize',
         {
@@ -381,7 +380,6 @@ export default {
         },
       )
     }
-
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
   async loadTextileAndRelated(
@@ -417,6 +415,11 @@ export default {
   async connectPhantom({ commit, state }: ActionsArguments<AccountsState>) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     $BlockchainClient.setAdapter(new PhantomAdapter())
+
+    await commit('setAdapter', 'Phantom')
+
+    const $Crypto: Crypto = Vue.prototype.$Crypto
+
     const { pin } = state
 
     if (!pin) {
@@ -426,6 +429,17 @@ export default {
     if ($BlockchainClient.getConnectionStatus()) {
       window.console.log('Connected to Phantom')
     }
+
+    const userWallet: Account = await $BlockchainClient.account
+    userWallet.mnemonic = 'this is a mnemonic fake just for test and mokup'
+    await commit('setPhrase', userWallet.mnemonic)
+
+    const encryptedPhrase = await $Crypto.encryptWithPassword(
+      userWallet.mnemonic,
+      pin,
+    )
+
+    commit('setEncryptedPhrase', encryptedPhrase)
   },
 }
 

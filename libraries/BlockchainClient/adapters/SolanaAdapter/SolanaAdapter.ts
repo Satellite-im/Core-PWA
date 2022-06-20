@@ -209,8 +209,8 @@ export default class SolanaAdapter implements Adapter {
     return await this.friendsProgram.computeAccountKeys(from, to)
   }
 
-  async getFriendsPayer(): Promise<Keypair> {
-    return this.friendsProgram.getPayer()
+  async getFriendsPayer(): Promise<Account> {
+    return accountFromKeyapair(this.friendsProgram.getPayer())
   }
 
   async getAccountStatus(accountKey: PublicKey): Promise<FriendStatus> {

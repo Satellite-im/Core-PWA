@@ -1,5 +1,6 @@
 import { Keypair } from '@solana/web3.js'
 import Crypto from '~/libraries/Crypto/Crypto'
+import { accountFromKeyapair } from '~/libraries/BlockchainClient/adapters/SolanaAdapter/utils'
 import { Invitation } from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram.types'
 
 export default class GroupCrypto {
@@ -7,7 +8,7 @@ export default class GroupCrypto {
 
   constructor(keyPair: Keypair) {
     this.crypto = new Crypto()
-    this.crypto.init(keyPair)
+    this.crypto.init(accountFromKeyapair(keyPair))
   }
 
   generateEncryptionKey() {

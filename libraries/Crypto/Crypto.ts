@@ -1,6 +1,7 @@
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import ed2curve from 'ed2curve'
 import { sharedKey, signMessage } from 'curve25519-js'
+import { Account } from '../BlockchainClient/interfaces'
 import { HashableData } from '~/types/crypto/crypto'
 
 const ivLen = 16 // the IV is always 16 bytes
@@ -13,14 +14,17 @@ export default class Crypto {
   /**
    * @method init
    * @description Initializes the object using a specific private key
-   * @param keypair The keypair that is used to compute ECDH
+   * @param Account The ACCOUNT that is used to compute ECDH
    */
-  init(keypair: Keypair) {
-    const publicKey = ed2curve.convertPublicKey(keypair.publicKey.toBytes())
-    const secretKey = ed2curve.convertSecretKey(keypair.secretKey)
+  init(Account: Account) {
+    const publicKey = ed2curve.convertPublicKey(Account.publicKey.toBytes())
+    if (!Account.secretKey) {
+      throw new Error('No secret key provided')
+    }
+    const secretKey = ed2curve.convertSecretKey(Account.secretKey)
 
     if (!publicKey || !secretKey) {
-      throw new Error('Impossible to convert keypair')
+      throw new Error('Impossible to convert Account')
     }
 
     this.signingKey = {

@@ -65,8 +65,8 @@ export default class BlockchainClient {
 
   /**
    * @method getPayerAccount
-   * Returns the main account as a KeyPair object
-   * @returns {KeyPair}
+   * Returns the main account as a Account object
+   * @returns {Account}
    * @throws {Error} if account is not initialized
    * */
   get payerAccount(): Account {
@@ -279,7 +279,7 @@ export default class BlockchainClient {
    * Retrieve the active account from Solana wallet
    * @returns the payer account
    */
-  async getFriendsPayer(): Promise<Keypair> {
+  async getFriendsPayer(): Promise<Account> {
     return this._getAdapter().getFriendsPayer()
   }
 

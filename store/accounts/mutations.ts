@@ -79,6 +79,9 @@ const mutations = {
   setLastVisited(state: AccountsState, lastVisited: string) {
     state.lastVisited = lastVisited
   },
+  setAdapter(state: AccountsState, adapter: string) {
+    state.adapter = adapter
+  },
 }
 
 export default mutations

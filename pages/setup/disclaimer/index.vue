@@ -20,7 +20,7 @@ export default Vue.extend({
     },
     async connectPhantom() {
       await this.$store.dispatch('accounts/connectPhantom')
-      this.$router.push('/auth/register')
+      this.$router.replace('/')
     },
   },
 })

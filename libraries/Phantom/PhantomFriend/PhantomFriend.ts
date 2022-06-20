@@ -420,12 +420,21 @@ export default class PhantomFriends extends EventEmitter {
 
     const statusAndToKey = base58(Buffer.from([status, ...payer.toBytes()]))
 
+    try {
+      const incomingTemp = await program.account.friendRequest.all([
+        {
+          memcmp: { offset: 32 + 8, bytes: statusAndToKey },
+        },
+      ])
+    } catch (e) {
+      window.console.log(e)
+    }
+
     const incomingTemp = await program.account.friendRequest.all([
       {
         memcmp: { offset: 32 + 8, bytes: statusAndToKey },
       },
     ])
-
     const incoming = incomingTemp.map(this._parseAccount)
     return incoming
   }
