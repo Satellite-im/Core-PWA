@@ -28,11 +28,10 @@ export default Vue.extend({
     ...mapGetters('friends', ['findFriendByKey']),
     ...mapGetters('settings', ['getTimestamp']),
     username(): string | undefined {
-      return (
-        this.groupMember?.name ||
-        this.friend?.name ||
-        this.$t('user.loading.loading_displayname').toString()
-      )
+      return this.groupMember
+        ? this.groupMember.name ||
+            this.$t('user.loading.loading_displayname').toString()
+        : this.friend?.name || this.accounts.details?.name
     },
     badge(): string {
       return ''
