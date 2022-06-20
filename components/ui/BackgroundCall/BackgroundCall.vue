@@ -2,16 +2,21 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   computed: {
-    ...mapState(['conversation', 'friends']),
-    ...mapState('webrtc', ['elapsedTime', 'activeCall']),
+    ...mapState({
+      showSettings: (state) => (state as RootState).ui.showSettings,
+      friends: (state) => (state as RootState).friends.all,
+      elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
+      activeCall: (state) => (state as RootState).webrtc.activeCall,
+    }),
     caller(): Friend | undefined {
-      return this.friends.all.find(
-        (f: Friend) => f.peerId === this.activeCall?.callId,
+      return this.friends.find(
+        (f: Friend) => f.peerId === this.activeCall?.peerId,
       )
     },
   },
@@ -25,6 +30,10 @@ export default Vue.extend({
         // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
         this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
+      }
+
+      if (this.showSettings) {
+        this.$store.commit('ui/toggleSettings', { show: false })
       }
 
       this.$store.dispatch('conversation/setConversation', {
