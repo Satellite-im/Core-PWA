@@ -6,7 +6,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair B')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const longMessage = faker.lorem.words(250) // generate random sentence
+const longMessage = faker.lorem.words(150) // generate random sentence
 
 describe('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat Pair B (second account)', () => {
@@ -35,6 +35,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   it('Receive Incoming Video Call', () => {
     //Answer remote videocall
     cy.get('[data-cy=incoming-call]', { timeout: 180000 }).should('be.visible')
+    cy.wait(5000) //Wait 5 seconds before answering to validate calling status on the other user
     cy.get('[data-cy=incoming-call-accept]').click()
 
     //Wait until all validations from other user are completed
@@ -150,7 +151,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   })
 
   it('When closing tab should end a phone call', () => {
-    cy.get('[data-cy=incoming-call]', { timeout: 60000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')
 

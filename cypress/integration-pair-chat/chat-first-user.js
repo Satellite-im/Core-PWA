@@ -27,14 +27,20 @@ describe('Chat features with two accounts at the same time - First User', () => 
   //Start of videocall tests
   it('Call to User B', () => {
     //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]')
-      .click()
-      .then(() => {
-        cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('be.visible')
-      })
+    cy.get('[data-cy=toolbar-enable-audio]').click()
+  })
+
+  it.skip('Voice/Video Calling - when receiving a call, should appear an indication waiting for another user to accept', () => {
+    //Remote user should have a class calling indicating that its being called
+    cy.get('[data-cy=remote-video]')
+      .find('[data-cy=media-user-circle]')
+      .should('have.class', 'calling')
   })
 
   it('If user A calls user B doing voice call, video call should be deactivated', () => {
+    //Videocall should be displayed on both sides
+    cy.get('[data-cy=mediastream]', { timeout: 30000 }).should('be.visible')
+
     //Validate that video stream from local user is not visible since call started as voice call
     cy.get('[data-cy=local-video]')
       .find('[data-cy=video-stream]')
@@ -44,13 +50,6 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=video-stream]')
       .should('not.exist')
-  })
-
-  it('Voice/Video Calling - when receiving a call, should appear an indication waiting for another user to accept', () => {
-    //Remote user should have a class calling indicating that its being called
-    cy.get('[data-cy=remote-video]')
-      .find('[data-cy=media-user-circle]')
-      .should('have.class', 'calling')
   })
 
   it('User should be able to scroll on messages when call modal is open', () => {
@@ -97,23 +96,18 @@ describe('Chat features with two accounts at the same time - First User', () => 
     )
   })
 
-  it('Duration call appears on the call on the top left', () => {
-    // Live indicator is displayed while on call
-    cy.get('[data-cy=elapsed-time]').should('be.visible').and('contain', 'Live')
-  })
-
   it('When the user clicks the video button camera should be disabled until the user enables it again', () => {
+    // Click on call video button again and validate that video-stream is muted
+    cy.get('[data-cy=call-video]').click()
+    cy.get('[data-cy=video-muted').should('be.visible')
+    cy.get('[data-cy=video-stream]').should('not.exist')
+
     // Click on call video button and validate that video-stream is visible
     cy.get('[data-cy=call-video]').click()
     cy.get('[data-cy=video-stream]')
       .should('be.visible')
       .and('have.class', 'loaded')
     cy.get('[data-cy=video-unmuted').should('be.visible')
-
-    // Click on call video button again and validate that video-stream is muted
-    cy.get('[data-cy=call-video]').click()
-    cy.get('[data-cy=video-muted').should('be.visible')
-    cy.get('[data-cy=video-stream]').should('not.exist')
   })
 
   it('Should appear an indication when the user is muted on the call', () => {
@@ -178,6 +172,11 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=muted-indicator]', { timeout: 60000 })
       .should('be.visible')
+  })
+
+  it('Duration call appears on the call on the top left', () => {
+    // Live indicator is displayed while on call
+    cy.get('[data-cy=elapsed-time]').should('be.visible').and('contain', 'Live')
   })
 
   it('Current user can mute audio from remote user - Audio indicator will be red', () => {
@@ -381,8 +380,8 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   it('Call again to User B for a third time', () => {
-    //Wait 30 seconds until user reconnects again
-    cy.wait(60000)
+    //Wait 90 seconds until user reconnects again
+    cy.wait(90000)
 
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]').click()
