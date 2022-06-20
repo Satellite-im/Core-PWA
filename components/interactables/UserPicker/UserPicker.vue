@@ -13,6 +13,10 @@ export default Vue.extend({
       type: Array as PropType<String[]>,
       default: () => [],
     },
+    height: {
+      type: String,
+      default: () => 'auto',
+    },
   },
   data: () => ({
     selected: [] as Friend[],

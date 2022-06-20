@@ -1,15 +1,23 @@
 .user-picker {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: @light-spacing;
+  min-height: 0;
 
-  .chips {
+  > #simple-scrollbar {
+    height: 100%;
+    flex-basis: fit-content;
+    flex-grow: 1;
+    flex-shrink: 0;
+    max-height: 100px;
+  }
+
+  .chips-wrapper {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: @xlight-spacing;
-    font-family: @primary-font;
-    font-weight: bold;
   }
 
   .empty-results-text {
@@ -19,6 +27,7 @@
   }
 
   .scroll-wrapper {
-    height: 220px;
+    overflow: hidden;
+    flex-grow: 2;
   }
 }
