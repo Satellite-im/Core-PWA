@@ -117,7 +117,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .find('[data-cy=muted-indicator]')
       .should('be.visible')
 
-    //Click on call audio again to unmute audio
+    //Click on call audio to unmute audio
     cy.get('[data-cy=call-audio]').click()
     cy.get('[data-cy=local-video]')
       .find('[data-cy=muted-indicator]')
@@ -379,14 +379,12 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 
-  it('Call again to User B for a third time', () => {
-    //Wait 90 seconds until user reconnects again
-    cy.wait(90000)
+  it('When closing tab should end a phone call', () => {
+    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call-accept]').click()
+    cy.get('[data-cy=mediastream]').should('be.visible')
 
-    //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]').click()
-
-    //Wait 30 seconds and browser tab will be closed automatically when spec finishes running
-    cy.wait(30000)
+    //Wait until remote side closes the browser tab and call should be finished on both sides
+    cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 })

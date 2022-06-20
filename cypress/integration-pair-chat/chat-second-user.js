@@ -6,7 +6,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair B')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const longMessage = faker.lorem.words(150) // generate random sentence
+const longMessage = faker.lorem.words(50) // generate random sentence
 
 describe('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat Pair B (second account)', () => {
@@ -150,12 +150,14 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.get('[data-cy=toggle-sidebar]').click()
   })
 
-  it('When closing tab should end a phone call', () => {
-    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
-    cy.get('[data-cy=incoming-call-accept]').click()
-    cy.get('[data-cy=mediastream]').should('be.visible')
+  it('Call again to User A for a third time', () => {
+    //Wait 30 seconds until user reconnects again
+    cy.wait(30000)
 
-    //Wait until remote side closes the browser tab and call should be finished on both sides
-    cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]').click()
+
+    //Wait 30 seconds and browser tab will be closed automatically when spec finishes running
+    cy.wait(30000)
   })
 })
