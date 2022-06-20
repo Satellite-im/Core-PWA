@@ -265,4 +265,16 @@ describe('init', () => {
       finished: false,
     })
   })
+  it('should setUserThreadData', () => {
+    const localState = InitialTextileState()
+    const argument = {
+      _id: 'Corrupti similique doloribus sed similique. Est esse eveniet impedit soluta dignissimos. Facere aut voluptatibus. Itaque recusandae occaecati.\n \rArchitecto cum modi dolor ut aut. Et iusto pariatur quia ratione quos vero nihil. Atque optio dolorum vitae incidunt molestiae. Explicabo odio iste consectetur totam dolore aut nihil fuga velit.\n \rQuidem maiores inventore laborum facere est quibusdam ea. Ut ullam illum sed consequatur odio vel deserunt est. Non et officiis quod illo voluptates quos repudiandae. Aperiam ipsam autem in rem odit laudantium quasi et adipisci. Dolorem delectus facilis non enim eaque atque cupiditate.',
+      consentToScan: false,
+      blockNsfw: true,
+      flipVideo: true,
+    }
+    inst.setUserThreadData(localState, argument)
+
+    expect(localState.userThread).toMatchObject(argument)
+  })
 })
