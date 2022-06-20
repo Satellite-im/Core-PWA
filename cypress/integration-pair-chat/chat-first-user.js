@@ -97,17 +97,17 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   it('When the user clicks the video button camera should be disabled until the user enables it again', () => {
-    // Click on call video button again and validate that video-stream is muted
-    cy.get('[data-cy=call-video]').click()
-    cy.get('[data-cy=video-muted').should('be.visible')
-    cy.get('[data-cy=video-stream]').should('not.exist')
-
     // Click on call video button and validate that video-stream is visible
     cy.get('[data-cy=call-video]').click()
     cy.get('[data-cy=video-stream]')
       .should('be.visible')
       .and('have.class', 'loaded')
     cy.get('[data-cy=video-unmuted').should('be.visible')
+
+    // Click on call video button again and validate that video-stream is muted
+    cy.get('[data-cy=call-video]').click()
+    cy.get('[data-cy=video-muted').should('be.visible')
+    cy.get('[data-cy=video-stream]').should('not.exist')
   })
 
   it('Should appear an indication when the user is muted on the call', () => {
