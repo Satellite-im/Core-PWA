@@ -9,14 +9,11 @@
   <div class="user-info">
     <TypographyTitle :size="6" data-cy="sidebar-user-name" :text="user.name" />
     <div
-      v-if="!lastMessageLoading"
+      v-if="lastMessage"
       v-html="wrapEmoji(markdownToHtml(lastMessage))"
       :class="`subtitle ${containsOnlyEmoji(lastMessage) ? 'bigmoji' : ''}`"
       ref="subtitle"
     />
-    <div v-else data-cy="loading-indicator" class="user-zoop">
-      <UiLoadersLoadingBar />
-    </div>
   </div>
   <div class="user-chat-details" v-if="!lastMessageLoading">
     <TypographyText :size="6" :text="timestamp" v-if="hasMessaged" />

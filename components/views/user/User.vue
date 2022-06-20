@@ -79,9 +79,15 @@ export default Vue.extend({
       return this.user.lastMessageLoading
     },
     lastMessage(): string {
-      return this.hasMessaged
-        ? this.getDescriptionFromMessage(this.user?.lastMessage)
-        : (this.$t('messaging.say_hi') as string)
+      if (!this.lastMessageLoading && this.hasMessaged) {
+        return this.getDescriptionFromMessage(this.user?.lastMessage)
+      }
+      // get message from conversation if it does not exist in friend
+      const conversation = this.getConversation(this.user.address)
+      if (conversation?.lastMessage) {
+        return this.getDescriptionFromMessage(conversation.lastMessage)
+      }
+      return this.$t('messaging.say_hi') as string
     },
     src(): string {
       const hash = this.user?.profilePicture
