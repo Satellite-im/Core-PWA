@@ -51,7 +51,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.get('[data-cy=sidebar-mic-muted]').should('be.visible')
   })
 
-  it('Enable camera', () => {
+  it('Enable camera', { retries: 1 }, () => {
     //Activate local camera
     cy.get('[data-cy=call-video]').click()
 

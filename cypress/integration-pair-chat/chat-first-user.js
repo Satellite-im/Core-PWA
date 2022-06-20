@@ -20,8 +20,8 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   //Is typing indicator is displayed
-  it('Validate that is typing message is displayed', () => {
-    cy.contains('typing', { timeout: 60000 }).should('be.visible')
+  it('Validate that is typing message is displayed', { retries: 1 }, () => {
+    cy.contains('typing', { timeout: 30000 }).should('be.visible')
   })
 
   //Start of videocall tests
@@ -96,22 +96,29 @@ describe('Chat features with two accounts at the same time - First User', () => 
     )
   })
 
-  it('When the user clicks the video button camera should be disabled until the user enables it again', () => {
-    // Click on call video button initially
-    cy.get('[data-cy=call-video]').click()
+  it(
+    'When the user clicks the video button camera should be enabled',
+    { retries: 1 },
+    () => {
+      // Click on call video button and validate that video-stream is visible
+      cy.get('[data-cy=call-video]').click()
+      cy.get('[data-cy=video-stream]')
+        .should('be.visible')
+        .and('have.class', 'loaded')
+      cy.get('[data-cy=video-unmuted').should('be.visible')
+    },
+  )
 
-    // Click on call video button again and validate that video-stream is visible
-    cy.get('[data-cy=call-video]').click()
-    cy.get('[data-cy=video-stream]')
-      .should('be.visible')
-      .and('have.class', 'loaded')
-    cy.get('[data-cy=video-unmuted').should('be.visible')
-
-    // Click on call video button again and validate that video-stream is muted
-    cy.get('[data-cy=call-video]').click()
-    cy.get('[data-cy=video-muted').should('be.visible')
-    cy.get('[data-cy=video-stream]').should('not.exist')
-  })
+  it(
+    'When the user clicks the video button camera should be disabled until the user enables it again',
+    { retries: 1 },
+    () => {
+      // Click on call video button again and validate that video-stream is muted
+      cy.get('[data-cy=call-video]').click()
+      cy.get('[data-cy=video-muted').should('be.visible')
+      cy.get('[data-cy=video-stream]').should('not.exist')
+    },
+  )
 
   it('Should appear an indication when the user is muted on the call', () => {
     //Click on call audio to mute audio
@@ -388,6 +395,6 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]').should('be.visible')
 
     //Wait until remote side closes the browser tab and call should be finished on both sides
-    cy.get('[data-cy=mediastream]', { timeout: 90000 }).should('not.exist')
+    cy.get('[data-cy=mediastream]', { timeout: 180000 }).should('not.exist')
   })
 })
