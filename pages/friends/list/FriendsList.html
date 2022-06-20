@@ -17,19 +17,21 @@
             :value="$t('friends.requests')"
           />
         </div>
-        <FriendsFriend
-          v-for="friend in friends.incomingRequests"
-          v-if="friend.userInfo"
-          :friend="{
-              name: friend.userInfo.name,
-              address: friend.from,
-              state: 'offline',
-              status: friend.userInfo.status,
-              request: friend
-            }"
-          :key="friend.from"
-          request
-        />
+        <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
+          <FriendsFriend
+            v-for="friend in friends.incomingRequests"
+            v-if="friend.userInfo"
+            :friend="{
+                name: friend.userInfo.name,
+                address: friend.from,
+                state: 'offline',
+                status: friend.userInfo.status,
+                request: friend
+              }"
+            :key="friend.from"
+            request
+          />
+        </UiSimpleScroll>
       </template>
       <!-- Outgoing Requests -->
       <UiLoadersFriend
