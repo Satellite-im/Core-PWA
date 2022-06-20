@@ -1,31 +1,49 @@
-<template src="./Invite.html" />
+<template src="./Invite.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapState } from 'vuex'
+import Vue, { PropType } from 'vue'
+import { Friend } from '~/types/ui/friends'
+import { Group } from '~/store/groups/types'
 
 export default Vue.extend({
   name: 'GroupInvite',
+  props: {
+    group: {
+      type: Object as PropType<Group>,
+      required: true,
+    },
+  },
   data() {
     return {
+      recipients: [] as Friend[],
       isLoading: false,
       recipient: '',
       error: '',
     }
   },
-  computed: mapState({
-    modal: (state) => state.ui.modals.groupInvite,
-  }),
+  computed: {
+    groupMembers(): string[] {
+      return this.group.members.map((p) => p.address)
+    },
+  },
   methods: {
     async confirm() {
+      if (!this.recipients.length) {
+        return
+      }
       try {
         this.error = ''
         this.isLoading = true
 
-        await this.$store.dispatch('groups/sendGroupInvite', {
-          group: this.modal.group,
-          recipient: this.recipient,
-        })
+        await Promise.all(
+          this.recipients.map(
+            async (recipient) =>
+              await this.$store.dispatch('groups/sendGroupInvite', {
+                group: this.group,
+                recipient: recipient.address,
+              }),
+          ),
+        )
 
         this.$store.commit('ui/toggleModal', {
           name: 'groupInvite',
