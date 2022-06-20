@@ -36,6 +36,10 @@ export interface TextileState {
     }
   }
   userThread: UserThreadData
+  fileSystem: {
+    totalSize: number
+    percentageUsed: number
+  }
 }
 
 export enum TextileError {

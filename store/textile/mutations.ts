@@ -199,6 +199,9 @@ const mutations = {
   setUserThreadData(state: TextileState, data: UserThreadData) {
     state.userThread = data
   },
+  setFileSystem(state: TextileState, data: TextileState['fileSystem']) {
+    state.fileSystem = data
+  },
 }
 
 export default mutations
