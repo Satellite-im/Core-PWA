@@ -36,10 +36,6 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    small: {
-      type: Boolean,
-      default: false,
-    },
   },
   data: () => ({
     listboxHidden: true,

@@ -8,6 +8,9 @@ import { Realm } from '~/types/ui/core'
 export default Vue.extend({
   name: 'NetworkSettings',
   layout: 'settings',
+  data: () => ({
+    network: 'testnet',
+  }),
   computed: {
     ...mapState(['settings']),
     realms() {
