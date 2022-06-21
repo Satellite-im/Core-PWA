@@ -2,7 +2,6 @@
   <InteractablesAsideMenu
     :menu-content="sidebarLayout"
     :title="title"
-    :toggleable="toggleable"
     :toggle="toggle"
     :active="ui.settingsRoute"
     custom
@@ -17,7 +16,6 @@ import { SettingsRoutes } from '~/store/ui/types'
 
 export default Vue.extend({
   props: {
-    toggleable: Boolean,
     toggle: {
       type: Function,
       default: () => {},
