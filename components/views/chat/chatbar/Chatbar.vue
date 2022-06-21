@@ -288,6 +288,15 @@ export default Vue.extend({
       this.$refs.editable?.handleTextFromOutside(text)
     },
     /**
+     * @method handleFocus
+     * @description Set chatbar focus
+     */
+    handleFocus(e: Event) {
+      if (e && !this.ui.chatbarFocus) {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }
+    },
+    /**
      * @method sendFiles
      * @description Sends action to Upload the file to textile.
      */

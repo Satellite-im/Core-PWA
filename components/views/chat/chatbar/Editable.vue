@@ -293,7 +293,7 @@ export default Vue.extend({
      */
     onFocus(e: Event) {
       document.addEventListener('selectionchange', this.onSelectionChange)
-      this.$emit('focus', e)
+      this.$emit('onFocus', e)
     },
     /**
      * @method onBlur
