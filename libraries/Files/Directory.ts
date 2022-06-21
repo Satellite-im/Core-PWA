@@ -152,7 +152,7 @@ export class Directory extends Item {
 
   /**
    * @method removeAllChildren
-   * @description remove all in case if import remote file system
+   * @description remove all current items before importing from a remote source
    */
   removeAllChildren() {
     this._children.clear()

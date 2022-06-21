@@ -6,6 +6,7 @@ import { mapState, mapGetters } from 'vuex'
 import { SaveIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import { Directory } from '~/libraries/Files/Directory'
+import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
 
 export default Vue.extend({
   components: {
@@ -69,7 +70,16 @@ export default Vue.extend({
         return
       }
       this.closeModal()
-      await this.$store.dispatch('textile/exportFileSystem')
+
+      try {
+        await this.$store.dispatch('textile/exportFileSystem')
+      } catch (e: any) {
+        // if out of date, sync
+        if (e.message === FileSystemErrors.NON_FF) {
+          await this.$store.dispatch('textile/syncFileSystem')
+          this.$toast.error(this.$t('pages.files.errors.out_of_date') as string)
+        }
+      }
     },
   },
 })

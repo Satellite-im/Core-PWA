@@ -1204,7 +1204,7 @@ export default {
       { root: true },
     )
     await $TextileManager.personalBucket.updateIndex($FileSystem.export)
-    await dispatch('updateUserThreadData', {
+    dispatch('updateUserThreadData', {
       filesVersion: $FileSystem.version,
     })
     commit('setFileSystem', {
@@ -1261,7 +1261,7 @@ export default {
     const $UserInfoManager: UserInfoManager =
       Vue.prototype.$TextileManager?.userInfoManager
     const $FileSystem: TextileFileSystem = Vue.prototype.$FileSystem
-    const callback = async (update?: Update<UserThreadData>) => {
+    const callback = (update?: Update<UserThreadData>) => {
       if (!update || !update.instance) return
       commit('setUserThreadData', update.instance)
       // if local file system is out of date (remote instance made an update)
