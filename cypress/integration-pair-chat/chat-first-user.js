@@ -6,7 +6,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair A')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-let urlToValidate = 'https://www.satellite.im'
+let urlToValidate = 'https://www.google.com'
 
 describe('Chat features with two accounts at the same time - First User', () => {
   it('Load account from Chat Pair A (first account)', () => {
@@ -78,14 +78,10 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
   })
 
-  it(
-    'Opening a link while in a call should direct you to another browser tab',
-    { retries: 1 },
-    () => {
-      //Click on URL that was just sent
-      cy.validateURLOnClick(urlToValidate)
-    },
-  )
+  it('Opening a link while in a call should direct you to another browser tab', () => {
+    //Click on URL that was just sent
+    cy.validateURLOnClick(urlToValidate)
+  })
 
   it('Video boxes should adjust to size when the user enters fullscreen', () => {
     // Click on full screen and validate that videocall is on fullscreen mode
