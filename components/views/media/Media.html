@@ -8,6 +8,7 @@
   <div id="media" ref="media">
     <MediaUser
       id="local_video"
+      data-cy="local-video"
       @dblclick="handleDoubleClick('local_video')"
       :user="localParticipant"
       :isLocal="true"
@@ -16,6 +17,7 @@
     <div v-for="participant in remoteParticipants" v-if="participant">
       <MediaUser
         :id="`remote_video_${ participant.peerId }`"
+        data-cy="remote-video"
         @dblclick="handleDoubleClick('remote_video')"
         :user="participant"
         :calling="!participant"

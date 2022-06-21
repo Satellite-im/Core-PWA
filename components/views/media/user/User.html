@@ -1,6 +1,6 @@
 <div v-if="call" class="user">
   <div class="indicators">
-    <div class="indicator" v-if="muted.audio">
+    <div class="indicator" data-cy="muted-indicator" v-if="muted.audio">
       <mic-off-icon />
     </div>
   </div>
@@ -8,6 +8,7 @@
   <div v-if="screenStream" class="video-stream-container">
     <video
       class="video-stream screen-stream"
+      data-cy="screen-stream"
       :src-object.prop="screenStream"
       playsinline
       :id="`${isLocal ? 'local' : 'remote'}-screen-${user.address}`"
@@ -17,6 +18,7 @@
   <div v-else-if="videoStream" class="video-stream-container">
     <video
       class="video-stream"
+      data-cy="video-stream"
       :class="{flip: flipVideo && isLocal}"
       :src-object.prop="videoStream"
       playsinline
@@ -29,6 +31,7 @@
       :type="src ? 'image' : 'random'"
       :seed="user.address"
       :size="$device.isMobile ? 36 : 65"
+      data-cy="media-user-circle"
       :class="{calling: audioStream}"
       :source="src"
       color="transparent"

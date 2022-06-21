@@ -1,4 +1,8 @@
-<div id="media-settings" v-tooltip.right="$t('controls.not_available')">
+<div
+  id="media-settings"
+  data-cy="media-settings"
+  v-tooltip.right="$t('controls.not_available')"
+>
   <ul id="settings-menu" v-if="menuOpen" ref="menu" v-click-outside="hideMenu">
     <li class="settings-item">
       <div class="item-header" @click="switchMenuItem">
