@@ -1,6 +1,5 @@
-import { ChatState } from './types'
+import { ChatState, ChatFileUpload } from './types'
 import * as module from '~/store/chat/mutations'
-import { UploadDropItemType } from '~/types/files/file'
 
 describe('module.default.setChatReply', () => {
   test('0', () => {
@@ -216,24 +215,9 @@ describe('misc', () => {
     { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
     { replyId: '12345', value: false },
   ]
-  const object3: UploadDropItemType[] = []
+  const object3: ChatFileUpload[] = []
   const state = { replies: object, chatTexts: object2, files: object3 }
 
-  test('module.default.addFile with empty files array', () => {
-    const obj = {
-      file: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-      address: 'address1',
-    }
-    module.default.addFile(state, obj)
-    expect(state.files[obj.address]).toEqual([obj.file])
-  })
   test('module.default.addFile with empty files array', () => {
     const obj = {
       file: {
@@ -248,44 +232,6 @@ describe('misc', () => {
     }
     module.default.addFile(state, obj)
     expect(state.files).toMatchSnapshot()
-  })
-  test('module.default.setFiles', () => {
-    const state = { replies: object, chatTexts: object2, files: object3 }
-    const obj = {
-      files: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-
-      address: 'address1',
-    }
-
-    module.default.setFiles(state, obj)
-    expect(state.files[obj.address]).toEqual(obj.files)
-  })
-  test('module.default.deleteFiles', () => {
-    const state = { replies: object, chatTexts: object2, files: object3 }
-    const obj = {
-      files: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-
-      address: 'address1',
-    }
-
-    module.default.setFiles(state, obj)
-    expect(state.files[obj.address]).toEqual(obj.files)
-    module.default.deleteFiles(state, obj.address)
-    expect(state.files).not.toEqual(obj.files)
   })
 })
 
@@ -1039,8 +985,6 @@ describe('misc', () => {
     chatTexts: [],
     files: {},
     countError: false,
-    alertNsfw: false,
-    containsNsfw: false,
     currentChat: {
       direction: 'TOP',
       hasNextPage: true,
@@ -1062,24 +1006,6 @@ describe('misc', () => {
     module.default.setCountError(localState, argument)
 
     expect(localState.countError).toEqual(argument)
-  })
-
-  test('module.setAlertNsfw', () => {
-    const argument = true
-    const localState = { ...InitialChatState }
-
-    module.default.setAlertNsfw(localState, argument)
-
-    expect(localState.alertNsfw).toEqual(argument)
-  })
-
-  test('module.setContainsNsfw', () => {
-    const argument = true
-    const localState = { ...InitialChatState }
-
-    module.default.setContainsNsfw(localState, argument)
-
-    expect(localState.containsNsfw).toEqual(argument)
   })
 
   test('module.setCurrentChat', () => {

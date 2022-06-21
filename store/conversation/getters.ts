@@ -3,7 +3,10 @@ import {
   ConversationConnection,
   ConversationParticipant,
   ConversationState,
-} from './types'
+} from '~/store/conversation/types'
+import { RootState } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
+import { Group } from '~/store/groups/types'
 
 const getters = {
   /**
@@ -36,6 +39,28 @@ const getters = {
     return getters.otherParticipants.filter(
       (participant) => participant.activity === ConversationActivity.TYPING,
     )
+  },
+  /**
+   * @method isGroup
+   * @description is current recipient group
+   */
+  isGroup(state: ConversationState) {
+    return state.type === 'group'
+  },
+  /**
+   * @method recipient
+   * @description current recipient full info
+   */
+  recipient: (
+    state: ConversationState,
+    getters: any,
+    rootState: RootState,
+  ): Friend | Group | undefined => {
+    return getters.isGroup
+      ? rootState.groups.all.find((group: Group) => group.id === state.id)
+      : rootState.friends.all.find(
+          (friend: Friend) => friend.peerId === state.id,
+        )
   },
 }
 
