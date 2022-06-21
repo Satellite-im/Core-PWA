@@ -101,7 +101,6 @@ Object {
   "theme": Object {
     "base": Object {
       "class": "",
-      "name": "default",
       "text": "Default",
       "value": "default",
     },

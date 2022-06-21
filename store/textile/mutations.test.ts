@@ -207,63 +207,12 @@ describe('init', () => {
       messageLoading: false,
     })
   })
-  it('should clearUploadProgress', () => {
-    const localState = InitialTextileState()
-    localState.uploadProgress = {
-      'file.jpeg': {
-        progress: 42,
-        finished: false,
-        name: 'file.jpeg',
-      },
-    }
-    inst.clearUploadProgress(localState)
-
-    expect(localState.uploadProgress).toMatchObject({})
-  })
-  it('should setUploadingFileProgress to 100', () => {
-    const localState = InitialTextileState()
-    localState.uploadProgress = {
-      'file.jpeg': {
-        progress: 42,
-        finished: false,
-        name: 'file.jpeg',
-      },
-    }
-    const newFileProgressState = {
-      progress: 100,
-      name: 'file.jpeg',
-    }
-    inst.setUploadingFileProgress(localState, newFileProgressState)
-
-    expect(localState.uploadProgress[newFileProgressState.name]).toMatchObject({
-      finished: true,
-    })
-  })
   it('should setActiveConversation to a specific address', () => {
     const localState = InitialTextileState()
     const testAddress = '0xadress'
     inst.setActiveConversation(localState, testAddress)
 
     expect(localState.activeConversation).toBe(testAddress)
-  })
-  it('should setUploadingFileProgress to 90', () => {
-    const localState = InitialTextileState()
-    localState.uploadProgress = {
-      'file.jpeg': {
-        progress: 42,
-        finished: false,
-        name: 'file.jpeg',
-      },
-    }
-    const newFileProgressState = {
-      progress: 90,
-      name: 'file.jpeg',
-    }
-    inst.setUploadingFileProgress(localState, newFileProgressState)
-
-    expect(localState.uploadProgress[newFileProgressState.name]).toMatchObject({
-      finished: false,
-    })
   })
   it('should setUserThreadData', () => {
     const localState = InitialTextileState()

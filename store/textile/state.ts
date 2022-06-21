@@ -6,7 +6,6 @@ const InitialTextileState = (): TextileState => ({
   conversationLoading: false,
   messageLoading: false,
   activeConversation: '',
-  uploadProgress: {},
   userThread: {
     consentToScan: false,
     blockNsfw: true,

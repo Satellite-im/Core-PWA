@@ -1,94 +1,64 @@
-.is-full-width {
-  &:extend(.full-width);
-  select {
-    &:extend(.full-width);
+.listbox {
+  display: flex;
+  flex-direction: column;
+  .listbox-label {
+    font-family: @secondary-font;
+    font-size: 12px;
+    text-transform: uppercase;
+    padding-bottom: @xlight-spacing;
+    display: inline-block;
+  }
+
+  .list-container {
+    width: fit-content;
   }
 }
 
-.is-primary {
-  .custom-select {
-    .selected {
-      &::after,
-      &::before {
-        border-color: @secondary-text;
-      }
-      border: none;
-      outline: none;
-    }
-  }
-}
-
-.custom-select {
-  .selected {
-    height: @select-height;
-    line-height: @select-height;
-    border-radius: 4rem;
-    padding-left: @normal-spacing;
-    padding-right: @normal-spacing * 2;
-    cursor: pointer;
-    &:extend(.no-select);
-    max-width: @full;
-  }
-  .items {
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
-    &:extend(.blur);
-    min-width: 8rem;
-    position: absolute;
-    display: none;
-    color: #fff;
-    overflow: hidden;
-    max-width: @full;
-    left: 0;
-    right: 0;
-
-    &:extend(.second-layer);
-    margin-top: @light-spacing;
-    .option {
-      height: @normal-spacing * 2;
-      line-height: @normal-spacing * 2;
-      padding: 0 @light-spacing;
-      cursor: pointer;
-      max-width: @full;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      &:extend(.no-select);
-      &[disabled] {
-        opacity: 0.5;
-      }
-      &:hover {
-        &:extend(.background-semitransparent-lighter);
-      }
-    }
-  }
-  &.open {
-    .items {
-      display: block;
-    }
-  }
-  &.up {
-    .items {
-      bottom: 30px;
-    }
-  }
-  &.down {
-    .items {
-      top: 30px;
-    }
-  }
-  position: relative;
-  height: @select-height;
+button,
+select {
+  min-width: 150px;
+  font-size: 0.75rem;
   text-align: left;
-  outline: none;
+  position: relative;
+  border-radius: 4rem;
+  padding: @light-spacing 2.5rem @light-spacing @normal-spacing;
+
+  color: @white;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>')
+    no-repeat right 13px center @flair-color;
+  box-shadow: 0 5px 14px -5px @flair-color;
+  border: none;
+
+  &:extend(.ellipsis);
+  &:disabled {
+    box-shadow: 0 5px 14px -5px @gray;
+    background-color: @gray;
+    cursor: not-allowed;
+  }
 }
 
-.disabled {
-  .custom-select {
-    .selected {
-      box-shadow: 0 5px 14px -5px @gray;
-      background: @gray;
-    }
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+ul {
+  min-width: 150px;
+  max-height: 325px;
+  overflow-y: auto;
+  position: absolute;
+  margin-top: @xlight-spacing;
+  margin-top: @xlight-spacing;
+  &:extend(.background-dark-gradient);
+  &:extend(.fifth-layer);
+}
+li {
+  display: block;
+  padding: @light-spacing @xlarge-spacing @light-spacing @normal-spacing;
+  position: relative;
+  &:focus,
+  &:hover,
+  &[aria-selected='true'] {
+    &:extend(.background-semitransparent-lighter);
   }
 }

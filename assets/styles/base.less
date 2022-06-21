@@ -30,6 +30,20 @@ body {
 *:active {
   outline: none;
 }
+* {
+  &::-webkit-scrollbar {
+    width: @scroll-bar-size;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: @flair-color;
+    &:extend(.round-corners);
+  }
+  scrollbar-width: thin;
+  scrollbar-color: @flair-color transparent;
+}
 
 code {
   &:extend(.background-semitransparent-lighter);
