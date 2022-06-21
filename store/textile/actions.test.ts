@@ -204,14 +204,6 @@ describe('actions.default.initialize', () => {
   })
 })
 
-describe('actions.default.clearUploadStatus', () => {
-  test('', () => {
-    const commit = jest.fn()
-    actions.default.clearUploadStatus({ commit })
-    expect(commit).toHaveBeenCalledWith('clearUploadProgress', {})
-  })
-})
-
 describe('actions.default.subscribeToSentbox', () => {
   test('Mailbox Manager does not exist', async () => {
     try {

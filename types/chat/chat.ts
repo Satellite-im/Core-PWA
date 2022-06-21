@@ -1,15 +1,5 @@
 import { MessageGroup } from '~/types/messaging'
 
-export type ReplyObj = {
-  replyId: string
-  value: boolean
-}
-
-export type ChatTextObj = {
-  userId: string
-  value: string
-}
-
 export enum ScrollDirections {
   TOP = 'TOP',
   BOTTOM = 'BOTTOM',

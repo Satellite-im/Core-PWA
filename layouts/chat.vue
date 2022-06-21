@@ -80,7 +80,7 @@
             </UiChatScroll>-->
             <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
-            <Chatbar ref="chatbar" :recipient="recipient" />
+            <Chatbar ref="chatbar" />
           </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
@@ -113,8 +113,6 @@ import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
 import { FlairColor, SettingsRoutes } from '~/store/ui/types'
-import type { Friend } from '~/types/ui/friends'
-import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
@@ -181,20 +179,10 @@ export default Vue.extend({
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     ...mapGetters('textile', ['getInitialized']),
+    ...mapGetters('conversation', ['recipient']),
     DataStateType: () => DataStateType,
     selectedGroup(): string {
       return this.$route.params.id // TODO: change with groupid - AP-400
-    },
-    recipient(): Friend | Group {
-      const recipient =
-        this.conversation.type === 'group'
-          ? this.groups.all.find(
-              (group: Group) => group.id === this.conversation.id,
-            )
-          : this.friends.all.find(
-              (friend: Friend) => friend.peerId === this.conversation.id,
-            )
-      return recipient
     },
     flairColor(): FlairColor {
       return this.ui.theme.flair.value
