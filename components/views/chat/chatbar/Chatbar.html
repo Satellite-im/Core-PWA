@@ -26,7 +26,6 @@
       :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
-      @onFocus="handleFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />

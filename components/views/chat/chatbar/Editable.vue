@@ -293,7 +293,7 @@ export default Vue.extend({
      */
     onFocus(e: Event) {
       document.addEventListener('selectionchange', this.onSelectionChange)
-      this.$emit('onFocus', e)
+      this.$store.dispatch('ui/setChatbarFocus')
     },
     /**
      * @method onBlur
