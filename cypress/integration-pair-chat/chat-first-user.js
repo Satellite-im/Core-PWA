@@ -78,7 +78,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
   })
 
-  it('Opening a link while in a call should direct you to another browser tab', () => {
+  it('Opening a link while in a call should direct you to another browser tab', { retries : 1 }, () => {
     //Click on URL that was just sent
     cy.validateURLOnClick(urlToValidate)
   })
