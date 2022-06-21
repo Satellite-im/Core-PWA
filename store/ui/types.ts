@@ -12,9 +12,23 @@ export enum ThemeNames {
 }
 
 export type Theme = {
-  name: ThemeNames
+  text: string
+  value: ThemeNames
   class: string
 }
+
+export const Themes = [
+  {
+    text: 'Default',
+    value: ThemeNames.DEFAULT,
+    class: '',
+  },
+  {
+    text: 'Moonless Night',
+    value: ThemeNames.MOONLESS,
+    class: 'moonless_night',
+  },
+]
 
 export const FlairColors: any = {
   SATELLITE: ['#2761fd', '#286CFE', '39, 97, 253'],
@@ -71,21 +85,6 @@ export const Flairs = [
   {
     text: 'Void',
     value: FlairColors.VOID,
-  },
-]
-
-export const Themes = [
-  {
-    text: 'Default',
-    name: ThemeNames.DEFAULT,
-    value: ThemeNames.DEFAULT,
-    class: '',
-  },
-  {
-    text: 'Moonless Night',
-    name: ThemeNames.MOONLESS,
-    value: ThemeNames.MOONLESS,
-    class: 'moonless_night',
   },
 ]
 
