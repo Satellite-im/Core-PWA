@@ -10,18 +10,16 @@
           <div class="form-group">
             <label> {{$t('media.settings.bitrate')}} </label>
             <InteractablesSelect
-              :options="Bitrates"
               v-model="bitrate"
-              size="small"
+              :options="Bitrates"
               class="form-control"
             />
           </div>
           <div class="form-group">
             <label>{{$t('media.settings.sample_size')}}</label>
             <InteractablesSelect
-              :options="SampleSizes"
               v-model="sampleSize"
-              size="small"
+              :options="SampleSizes"
               class="form-control"
             />
           </div>
