@@ -114,6 +114,7 @@ export const Config = {
     searchCharLimit: 256,
     groupNameMinLength: 3,
     groupNameMaxLength: 64,
+    uploadMaxLength: 8, // 8 files at a time
   },
   account: {
     minLength: 5,

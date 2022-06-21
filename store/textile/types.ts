@@ -28,14 +28,11 @@ export interface TextileState {
   conversations: Conversation
   conversationLoading: boolean
   messageLoading: boolean
-  uploadProgress: {
-    [key: string]: {
-      progress: number
-      finished: boolean
-      name: string
-    }
-  }
   userThread: UserThreadData
+  fileSystem: {
+    totalSize: number
+    percentageUsed: number
+  }
 }
 
 export enum TextileError {

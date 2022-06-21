@@ -11,12 +11,11 @@
 
   <div class="columns is-desktop">
     <div class="column">
-      <TypographyLabel :text="$t('pages.settings.network.network')" />
-      <br />
       <InteractablesSelect
-        size="small"
+        v-model="network"
+        :label="$t('pages.settings.network.network')"
         :options="[{ text: 'Testnet', value: 'testnet' }]"
-        selected="testnet"
+        show-label
       />
     </div>
   </div>

@@ -162,42 +162,11 @@ const mutations = {
   setMessageLoading(state: TextileState, { loading }: { loading: boolean }) {
     state.messageLoading = loading
   },
-  clearUploadProgress(state: TextileState) {
-    state.uploadProgress = {}
-  },
-  setUploadingFileProgress(
-    state: TextileState,
-    {
-      progress,
-      name,
-    }: {
-      progress: number
-      name: string
-    },
-  ) {
-    if (progress !== 100) {
-      state.uploadProgress = {
-        ...state.uploadProgress,
-        [name]: {
-          progress,
-          finished: false,
-          name,
-        },
-      }
-    }
-    if (progress === 100) {
-      state.uploadProgress = {
-        ...state.uploadProgress,
-        [name]: {
-          progress,
-          finished: true,
-          name,
-        },
-      }
-    }
-  },
   setUserThreadData(state: TextileState, data: UserThreadData) {
     state.userThread = data
+  },
+  setFileSystem(state: TextileState, data: TextileState['fileSystem']) {
+    state.fileSystem = data
   },
 }
 

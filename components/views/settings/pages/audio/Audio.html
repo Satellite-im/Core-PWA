@@ -33,11 +33,7 @@
       :title="$t('pages.settings.audio.sources.input.title')"
       :text="$t('pages.settings.audio.sources.input.subtitle')"
     >
-      <InteractablesSelect
-        v-model="isAudioInput"
-        :options="audioInputs"
-        size="small"
-      />
+      <InteractablesSelect v-model="isAudioInput" :options="audioInputs" />
     </SettingsUnit>
     <!-- Audio Out -->
     <SettingsUnit
@@ -48,7 +44,6 @@
         v-if="browserAllowsAudioOut"
         v-model="isAudioOutput"
         :options="audioOutputs"
-        size="small"
       />
       <TypographyError
         v-if="!browserAllowsAudioOut"
@@ -92,21 +87,13 @@
         :title="$t('pages.settings.audio.bitrate.title')"
         :text="$t('pages.settings.audio.bitrate.subtitle')"
       >
-        <InteractablesSelect
-          :options="Bitrates"
-          size="small"
-          v-model="isBitrate"
-        />
+        <InteractablesSelect :options="Bitrates" v-model="isBitrate" />
       </SettingsUnit>
       <SettingsUnit
         :title="$t('pages.settings.audio.sampleSize.title')"
         :text="$t('pages.settings.audio.sampleSize.subtitle')"
       >
-        <InteractablesSelect
-          :options="SampleSizes"
-          size="small"
-          v-model="isSampleSize"
-        />
+        <InteractablesSelect :options="SampleSizes" v-model="isSampleSize" />
       </SettingsUnit>
     </div>
 
@@ -155,11 +142,7 @@
         />
       </span>
       <span v-if="userHasGivenVideoAccess">
-        <InteractablesSelect
-          v-model="isVideoInput"
-          :options="videoInputs"
-          size="small"
-        />
+        <InteractablesSelect v-model="isVideoInput" :options="videoInputs" />
       </span>
 
       <!-- Permission Denied Block -->
@@ -195,11 +178,7 @@
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
     >
-      <InteractablesSelect
-        v-model="isCaptureMouse"
-        :options="captureMouses"
-        size="small"
-      />
+      <InteractablesSelect v-model="isCaptureMouse" :options="captureMouses" />
     </SettingsUnit>
   </div>
 

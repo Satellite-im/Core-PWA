@@ -1,21 +1,21 @@
 <template src="./Aside.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { SimpleItem } from '~/types/ui/sidebar'
 import { FileAsideRouteEnum, FileIconsEnum } from '~/libraries/Enums/enums'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  data() {
-    return {
-      progress: this.$FileSystem.percentStorageUsed as number,
-    }
-  },
   computed: {
+    ...mapState({
+      fileSystem: (state) => (state as RootState).textile.fileSystem,
+    }),
     /**
      * @description total size of all uploaded files
      */
     totalSize(): string {
-      return this.$filesize(this.$FileSystem.totalSize)
+      return this.$filesize(this.fileSystem.totalSize)
     },
     /**
      * @description storage space (free tier is 4GB)
@@ -24,7 +24,7 @@ export default Vue.extend({
       return this.$filesize(this.$Config.personalFilesLimit)
     },
     sizeColor(): string {
-      return this.progress > 90 ? 'red' : 'green'
+      return this.fileSystem.percentageUsed > 90 ? 'red' : 'green'
     },
     quickAccessOptions(): SimpleItem[] {
       return [
@@ -64,11 +64,6 @@ export default Vue.extend({
           icon: FileIconsEnum.LINK,
         },
       ]
-    },
-  },
-  watch: {
-    totalSize() {
-      this.progress = this.$FileSystem.percentStorageUsed
     },
   },
 })
