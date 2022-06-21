@@ -1,9 +1,5 @@
 <div id="media-heading">
-  <TypographyTag
-    v-if="elapsedTimeLabel"
-    data-cy="elapsed-time"
-    :text="elapsedTimeLabel"
-  />
+  <TypographyTag v-if="elapsedTime" :text="`${$t('ui.live')} ${elapsedTime}`" />
   <div class="spacer"></div>
   <transition name="media-fullscreen" mode="out-in">
     <div
@@ -12,13 +8,13 @@
       @click="toggleFullscreen"
     >
       <minimize-icon
-        data-cy="exit-fullscreen"
         v-if="ui.fullscreen"
+        data-cy="exit-fullscreen"
         size="1.2x"
       />
       <maximize-icon
+        v-else
         data-cy="go-fullscreen"
-        v-else="ui.fullscreen"
         size="1.2x"
       />
     </div>

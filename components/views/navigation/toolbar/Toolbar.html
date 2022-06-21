@@ -69,7 +69,7 @@
       />
     </div>
     <!-- <div
-      :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      :class="`control-button ${!enableRTC || webrtc.BackgroundCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
       v-tooltip.bottom="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       v-if="recipient"
