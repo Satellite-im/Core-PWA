@@ -69,12 +69,7 @@ export default Vue.extend({
         return
       }
       this.closeModal()
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
       await this.$store.dispatch('textile/exportFileSystem')
-      this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },
 })

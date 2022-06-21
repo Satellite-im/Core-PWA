@@ -10,6 +10,7 @@ const InitialTextileState = (): TextileState => ({
     consentToScan: false,
     blockNsfw: true,
     flipVideo: true,
+    filesVersion: 1,
   },
   fileSystem: {
     totalSize: 0,

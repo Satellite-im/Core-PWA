@@ -58,13 +58,7 @@
     :text="filesUploadStatus"
     :size="6"
   />
-  <div class="error-container" v-if="errors.length">
-    <alert-triangle-icon size="1.3x" />
-    <div>
-      <TypographyError v-for="error in errors" :key="error" :text="error" />
-    </div>
-    <x-icon size="1.3x" class="close" @click="errors=[]" />
-  </div>
+  <slot></slot>
   <div class="switcher-container">
     <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
     <FilesViewSwitcher :changeView="changeView" />

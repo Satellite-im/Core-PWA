@@ -13,8 +13,22 @@
       <FilesControls
         ref="controls"
         :changeView="changeView"
-        @forceRender="forceRender"
-      />
+        @addError="(e) => errors.push(e)"
+        @clearErrors="errors=[]"
+        @export="exportFileSystem"
+      >
+        <div class="error-container" v-if="errors.length">
+          <alert-triangle-icon size="1.3x" />
+          <div>
+            <TypographyError
+              v-for="error in errors"
+              :key="error"
+              :text="error"
+            />
+          </div>
+          <x-icon size="1.3x" class="close" @click="errors=[]" />
+        </div>
+      </FilesControls>
       <UiLoadersGenericContent :count="3" v-if="!getInitialized" />
       <TypographyText
         v-else-if="!directory.length"

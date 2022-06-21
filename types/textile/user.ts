@@ -5,5 +5,5 @@ export interface UserThreadData {
   consentUpdated?: number
   blockNsfw: boolean
   flipVideo: boolean
-  filesVersion?: number
+  filesVersion: number
 }

@@ -34,32 +34,18 @@ export class PersonalBucket extends Bucket {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
     try {
-      const data = []
-      for await (const bytes of this._buckets.pullPath(
-        this._key,
-        Config.textile.bucketIndex,
-      )) {
-        data.push(bytes)
-      }
-      this._index = JSON.parse(
-        await new Blob(data, {
-          type: 'application/json',
-        }).text(),
-      )
-      const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-      await $FileSystem.import(this._index)
+      await this.import()
       Vue.prototype.$Logger.log('File System', 'Initialized')
     } catch (e) {
-      Vue.prototype.$Logger.log('File System', 'index not found')
-      // if the user has not uploaded anything, they do not have a files
-      // index which can cause this console message
+      // if the user has not uploaded anything, they do not have a files index
+      Vue.prototype.$Logger.log('File System', 'Index not found')
     }
   }
 
   /**
    * @method updateIndex
    * @param index PersonalBucketIndex
-   * @description sets file system import data
+   * @description sets file system index after a files operation (push, rename, delete)
    */
   async updateIndex(index: PersonalBucketIndex) {
     if (!this._buckets || !this._key) {
@@ -73,5 +59,39 @@ export class PersonalBucket extends Bucket {
       { root: this._root },
     )
     this._root = res.root
+  }
+
+  /**
+   * @method import
+   * @description resets file system and import data based on remote index
+   */
+  async import() {
+    if (!this._buckets || !this._key) {
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
+    }
+    const data = []
+    for await (const bytes of this._buckets.pullPath(
+      this._key,
+      Config.textile.bucketIndex,
+    )) {
+      data.push(bytes)
+    }
+    this._index = JSON.parse(
+      await new Blob(data, {
+        type: 'application/json',
+      }).text(),
+    )
+    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
+    await $FileSystem.import(this._index)
+  }
+
+  /**
+   * @description  set root so future pushes aren't rejected.
+   */
+  async updateRoot() {
+    if (!this._buckets || !this._key) {
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
+    }
+    this._root = await this._buckets.root(this._key)
   }
 }

@@ -16,4 +16,7 @@ export enum FileSystemErrors {
   // user facing - Fil
   FILE_SIZE = 'pages.files.errors.file_size',
   LIMIT = 'pages.files.errors.storage_limit',
+
+  // textile bucket errors. pushpath does not return an error code, need to use string
+  NON_FF = 'update is non-fast-forward',
 }

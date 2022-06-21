@@ -156,6 +156,7 @@ export default {
         upload: 'Uploading {0}',
         delete: 'Deleting {0}',
         index: 'Updating remote index',
+        remote: 'Updating based on remote changes',
       },
       controls: {
         new_file: 'New File',
@@ -201,6 +202,7 @@ export default {
         enable_consent:
           'Please consent to file scanning in your privacy settings',
         lost: 'Cannot find file, please try again later',
+        out_of_date: 'Your files index was out of date, try again',
       },
     },
     unlock: {

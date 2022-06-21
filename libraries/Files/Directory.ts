@@ -149,4 +149,12 @@ export class Directory extends Item {
 
     return !this.hasChild(childName)
   }
+
+  /**
+   * @method removeAllChildren
+   * @description remove all in case if import remote file system
+   */
+  removeAllChildren() {
+    this._children.clear()
+  }
 }

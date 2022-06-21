@@ -37,6 +37,7 @@ import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
 import { MessageGroup } from '~/types/messaging'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -58,7 +59,7 @@ export default {
    * @param config Textile configuration (id, pass, wallet)
    */
   async initialize(
-    { commit, dispatch }: ActionsArguments<TextileState>,
+    { commit, dispatch, state }: ActionsArguments<TextileState>,
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -76,11 +77,7 @@ export default {
 
     const record = await $TextileManager.userInfoManager?.getUserRecord()
     if (!record) {
-      await dispatch('updateUserThreadData', {
-        consentToScan: false,
-        blockNsfw: true,
-        flipVideo: true,
-      })
+      await dispatch('updateUserThreadData', state.userThread)
       return textilePublicKey
     }
     /* Log CSAM Consent Data for future ticket as Hogan requested */
@@ -1201,14 +1198,20 @@ export default {
       throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
     }
 
+    commit(
+      'ui/setFilesUploadStatus',
+      this.$i18n.t('pages.files.status.index'),
+      { root: true },
+    )
     await $TextileManager.personalBucket.updateIndex($FileSystem.export)
-    dispatch('updateUserThreadData', {
+    await dispatch('updateUserThreadData', {
       filesVersion: $FileSystem.version,
     })
     commit('setFileSystem', {
       totalSize: $FileSystem.totalSize,
       percentageUsed: $FileSystem.percentStorageUsed,
     })
+    commit('ui/setFilesUploadStatus', '', { root: true })
   },
 
   /**
@@ -1252,21 +1255,19 @@ export default {
    */
   async listenToThread({
     commit,
-    rootState,
+    state,
     dispatch,
   }: ActionsArguments<TextileState>) {
     const $UserInfoManager: UserInfoManager =
       Vue.prototype.$TextileManager?.userInfoManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-    const callback = (update?: Update<UserThreadData>) => {
+    const $FileSystem: TextileFileSystem = Vue.prototype.$FileSystem
+    const callback = async (update?: Update<UserThreadData>) => {
       if (!update || !update.instance) return
-      if (
-        update.instance.filesVersion &&
-        rootState.textile.userThread.filesVersion !== $FileSystem.version
-      ) {
-        // todo - update file system AP-1477
+      commit('setUserThreadData', update.instance)
+      // if local file system is out of date (remote instance made an update)
+      if (state.userThread.filesVersion !== $FileSystem.version) {
+        // dispatch('syncFileSystem')
       }
-      commit('textile/setUserThreadData', update.instance, { root: true })
     }
     await dispatch('textile/subscribeToMailbox', {}, { root: true })
     $UserInfoManager.textile.client.listen(
@@ -1274,5 +1275,30 @@ export default {
       [],
       callback,
     )
+  },
+
+  /**
+   * @description update local filesystem to match latest remote changes
+   * called if your local is out of date when you do a files operation
+   */
+  async syncFileSystem({ commit }: ActionsArguments<TextileState>) {
+    commit(
+      'ui/setFilesUploadStatus',
+      this.$i18n.t('pages.files.status.remote'),
+      {
+        root: true,
+      },
+    )
+    const $FileSystem: TextileFileSystem = Vue.prototype.$FileSystem
+    // clear local data before importing
+    $FileSystem.goBackToDirectory('root')
+    $FileSystem.root.removeAllChildren()
+    await $FileSystem.bucket.updateRoot()
+    await $FileSystem.bucket.import()
+    commit('setFileSystem', {
+      totalSize: $FileSystem.totalSize,
+      percentageUsed: $FileSystem.percentStorageUsed,
+    })
+    commit('ui/setFilesUploadStatus', '', { root: true })
   },
 }

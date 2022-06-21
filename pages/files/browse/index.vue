@@ -2,25 +2,37 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
+import { AlertTriangleIcon, XIcon } from 'satellite-lucide-icons'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FileSort } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
+import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
 
 export default Vue.extend({
   name: 'Files',
+  components: {
+    AlertTriangleIcon,
+    XIcon,
+  },
   layout: 'files',
   data() {
     return {
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       fileSystem: this.$FileSystem as FilSystem,
+      errors: [] as Array<string | TranslateResult>,
     }
   },
   computed: {
+    ...mapState({
+      filesUploadStatus: (state) => (state as RootState).ui.filesUploadStatus,
+    }),
     ...mapGetters('textile', ['getInitialized']),
     sort: {
       set(value: FileSort) {
@@ -57,6 +69,11 @@ export default Vue.extend({
         }
       },
     },
+    filesUploadStatus(val) {
+      if (!val) {
+        this.forceRender()
+      }
+    },
   },
   methods: {
     /**
@@ -88,16 +105,15 @@ export default Vue.extend({
      */
     async like(item: Item) {
       item.toggleLiked()
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
-      await this.$store.dispatch('textile/exportFileSystem')
-      item.liked
-        ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
-        : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      this.$store.commit('ui/setFilesUploadStatus', '')
-      this.forceRender()
+      await this.exportFileSystem(() => {
+        this.$toast.show(
+          this.$t(
+            item.liked
+              ? 'pages.files.add_favorite'
+              : 'pages.files.remove_favorite',
+          ) as string,
+        )
+      })
     },
     /**
      * @method remove
@@ -105,22 +121,24 @@ export default Vue.extend({
      * @param {Item} item
      */
     async remove(item: Item) {
-      if (item instanceof Fil) {
-        this.$store.commit(
-          'ui/setFilesUploadStatus',
-          this.$t('pages.files.status.delete', [item.name]),
-        )
-        await this.$FileSystem.removeFile(item.id)
-      }
-      this.$FileSystem.removeChild(item.name, item.parent)
       this.$store.commit(
         'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
+        this.$t('pages.files.status.delete', [item.name]),
       )
-      await this.$store.dispatch('textile/exportFileSystem')
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      this.forceRender()
+      if (item instanceof Fil) {
+        try {
+          await this.$FileSystem.removeFile(item.id)
+        } catch (e: any) {
+          // sync if out of date || file cant be found
+          if (e.message === FileSystemErrors.NON_FF || e.code === 2) {
+            await this.$store.dispatch('textile/syncFileSystem')
+            this.errors.push(this.$t('pages.files.errors.out_of_date'))
+          }
+          return
+        }
+      }
+      this.$FileSystem.removeChild(item.name, item.parent)
+      this.exportFileSystem()
     },
     /**
      * @method share
@@ -139,6 +157,26 @@ export default Vue.extend({
         this.sort.category === category
           ? { category: this.sort.category, asc: !this.sort.asc }
           : { category, asc: true }
+    },
+
+    /**
+     * @method exportFileSystem
+     * @description attempt to export. if your fs is out of date, sync
+     * @param {Function} callback if export was successful
+     */
+    async exportFileSystem(callback?: Function) {
+      try {
+        await this.$store.dispatch('textile/exportFileSystem')
+      } catch (e: any) {
+        // if out of date, sync
+        if (e.message === FileSystemErrors.NON_FF) {
+          await this.$store.dispatch('textile/syncFileSystem')
+          this.errors.push(this.$t('pages.files.errors.out_of_date'))
+        }
+        return
+      }
+      if (callback) callback()
+      this.errors = []
     },
     /**
      * @method forceRender

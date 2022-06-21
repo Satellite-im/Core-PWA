@@ -2,13 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { TranslateResult } from 'vue-i18n'
-import {
-  FolderPlusIcon,
-  FilePlusIcon,
-  AlertTriangleIcon,
-  XIcon,
-} from 'satellite-lucide-icons'
+import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
@@ -18,8 +12,6 @@ export default Vue.extend({
   components: {
     FolderPlusIcon,
     FilePlusIcon,
-    AlertTriangleIcon,
-    XIcon,
   },
   // todo - best practice would be emitting rather than passing function as a prop - AP-639
   props: {
@@ -34,7 +26,6 @@ export default Vue.extend({
   data() {
     return {
       text: '' as string,
-      errors: [] as Array<string | TranslateResult>,
     }
   },
   computed: {
@@ -81,23 +72,15 @@ export default Vue.extend({
      * @description Add new folder to fileSystem
      */
     async addFolder() {
-      this.errors = []
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
+      this.$emit('clearErrors')
       try {
         this.$FileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
-        this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setFilesUploadStatus', '')
+        this.$emit('addError', this.$t(e?.message))
         return
       }
       this.text = ''
-      await this.$store.dispatch('textile/exportFileSystem')
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      this.$emit('forceRender')
+      this.$emit('export')
     },
 
     handleInput(event: any) {
@@ -106,12 +89,12 @@ export default Vue.extend({
 
     /**
      * @method handleFile
-     * @description remove nsfw files then upload to filesystem
+     * @description validate files and prepare for upload
      * @param {File[]} originalFiles files to upload
      * @example <input @change="handleFile" />
      */
     async handleFile(originalFiles: File[]) {
-      this.errors = []
+      this.$emit('clearErrors')
       this.$store.commit(
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.prepare'),
@@ -125,7 +108,7 @@ export default Vue.extend({
         ) > this.$Config.personalFilesLimit
       ) {
         this.$store.commit('ui/setFilesUploadStatus', '')
-        this.errors.push(this.$t('pages.files.errors.storage_limit'))
+        this.$emit('addError', this.$t('pages.files.errors.storage_limit'))
         return
       }
       // todo - move validation inside of file constructor
@@ -180,32 +163,25 @@ export default Vue.extend({
             this.setProgress,
           )
         } catch (e: any) {
-          this.errors.push(e?.message ?? '')
+          this.$emit('addError', e.message)
+          this.$store.commit('ui/setFilesUploadStatus', '')
+          return
         }
       }
 
       // only update index if files have been updated
       if (files.length) {
-        this.$store.commit(
-          'ui/setFilesUploadStatus',
-          this.$t('pages.files.status.index'),
-        )
-        await this.$store.dispatch('textile/exportFileSystem')
+        this.$emit('export')
       }
-
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      // re-render so new files show up
-      this.$emit('forceRender')
 
       if (originalFiles.length !== invalidNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.invalid'))
+        this.$emit('addError', this.$t('pages.files.errors.invalid'))
       }
       if (invalidNameResults.length !== emptyFileResults.length) {
-        this.errors.push(this.$t('pages.files.errors.file_size'))
+        this.$emit('addError', this.$t('pages.files.errors.file_size'))
       }
       if (emptyFileResults.length !== sameNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.duplicate_name'))
+        this.$emit('addError', this.$t('pages.files.errors.duplicate_name'))
       }
     },
     /**
