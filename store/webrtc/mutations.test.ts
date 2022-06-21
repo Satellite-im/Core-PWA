@@ -91,6 +91,15 @@ describe('Mutate WebRTC by setting', () => {
     })
   })
 
+  it('should initialize with default value for parameters', () => {
+    const localStateForUnitTest = { ...state }
+    inst.setInitialized(localStateForUnitTest)
+
+    expect(localStateForUnitTest).toMatchObject({
+      webrtc: { initialized: true },
+    })
+  })
+
   it('should set incoming call', () => {
     const localStateForUnitTest = { ...state }
     inst.setIncomingCall(localStateForUnitTest, '0x0')
@@ -133,6 +142,49 @@ describe('Mutate WebRTC by setting', () => {
         audio: true,
         video: true,
         screen: true,
+      },
+    })
+  })
+
+  it('should set streamMuted without peerId', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: null,
+      audio: true,
+      video: true,
+      screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest).not.toMatchObject({
+      streamMuted: {
+        id: {
+          audio: true,
+          video: true,
+          screen: true,
+        },
+      },
+    })
+  })
+
+  it('should set streamMuted without peerId and with default arguments', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: null,
+      // Commented out because we want to test if default values will come in.
+      // audio: true,
+      // video: true,
+      // screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest).not.toMatchObject({
+      streamMuted: {
+        id: {
+          audio: true,
+          video: true,
+          screen: true,
+        },
       },
     })
   })
