@@ -1,6 +1,7 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { PersonalBucket } from '../remote/textile/PersonalBucket'
+import { SharedBucket } from '../remote/textile/SharedBucket'
 import { DIRECTORY_TYPE } from '../types/directory'
 import { FILESYSTEM_TYPE, PersonalBucketIndex } from '../types/filesystem'
 
@@ -45,6 +46,20 @@ describe('Test FileSystem Directory', () => {
 
     expect(bucket.index).toStrictEqual({
       type: FILESYSTEM_TYPE.DEFAULT,
+      version: 1,
+      content: [],
+    })
+  })
+  it('get uninitialized index for shared bucket', () => {
+    const initializationData = {
+      identity: 'Identity',
+      client: 'Client',
+      users: 'Users',
+      wallet: 'SolanaWallet',
+    }
+    const bucket = new SharedBucket(initializationData)
+
+    expect(bucket.index).toStrictEqual({
       version: 1,
       content: [],
     })
