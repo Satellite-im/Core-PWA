@@ -11,20 +11,21 @@
       :loading="isLoading"
       loadingText=""
     >
-      <video-icon v-if="!videoMuted" size="1.2x" />
-      <video-off-icon v-else size="1.2x" />
+      <video-icon data-cy="video-unmuted" v-if="!videoMuted" size="1.2x" />
+      <video-off-icon data-cy="video-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')">
     <InteractablesButton
       :type="audioMuted ? 'danger' : 'dark'"
       size="small"
+      data-cy="call-audio"
       :action="() => toggleMute('audio')"
       :loading="isLoading"
       loadingText=""
     >
-      <mic-icon v-if="!audioMuted" size="1.2x" />
-      <mic-off-icon v-else size="1.2x" />
+      <mic-icon data-cy="audio-unmuted" v-if="!audioMuted" size="1.2x" />
+      <mic-off-icon data-cy="audio-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div
@@ -33,18 +34,24 @@
     <InteractablesButton
       :type="screenMuted ? 'danger' : 'dark'"
       size="small"
+      data-cy="call-screen-share"
       :action="() => toggleMute('screen')"
       :loading="isLoading"
       loadingText=""
     >
-      <screen-share-icon v-if="!screenMuted" size="1.2x" />
-      <screen-share-off-icon v-else size="1.2x" />
+      <screen-share-icon
+        data-cy="screen-unmuted"
+        v-if="!screenMuted"
+        size="1.2x"
+      />
+      <screen-share-off-icon data-cy="screen-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div data-cy="call-hangup" v-tooltip.top="$t('controls.hang_up')">
+  <div v-tooltip.top="$t('controls.hang_up')">
     <InteractablesButton
       class="right"
       type="danger"
+      data-cy="call-hangup"
       size="small"
       :action="() => hangUp()"
     >

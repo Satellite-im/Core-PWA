@@ -49,7 +49,11 @@
     >
       <template #placeholder>
         <div class="conversation-loader">
-          <UiLoadersSpinner class="conversation-loader-spinner" spinning />
+          <UiLoadersSpinner
+            data-cy="message-loading"
+            class="conversation-loader-spinner"
+            spinning
+          />
           {{ $t('pages.chat.infinite_scroll.loading') }}
         </div>
       </template>

@@ -65,6 +65,7 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
     .should('be.visible')
     .trigger('input')
     .type(pin, { log: false }, { force: true })
+  cy.get('[data-cy=switch-button]').click() //store PIN
   cy.get('[data-cy=submit-input]').click()
   cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
   cy.get('[data-cy=add-passphrase]')
