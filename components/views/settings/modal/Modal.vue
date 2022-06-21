@@ -43,9 +43,6 @@ export default Vue.extend({
       })
     },
   },
-  mounted() {
-    this.showSidebar(this.$device.isMobile)
-  },
   methods: {
     /**
      * Opens and closes the left hand sidebar
