@@ -17,7 +17,7 @@
   <div v-else-if="videoStream" class="video-stream-container">
     <video
       class="video-stream"
-      :class="{flip: flipVideo}"
+      :class="{flip: flipVideo && isLocal}"
       :src-object.prop="videoStream"
       playsinline
       :id="`${isLocal ? 'local' : 'remote'}-video-${user.address}`"
