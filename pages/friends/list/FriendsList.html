@@ -45,19 +45,21 @@
             :value="$t('friends.outgoing')"
           />
         </div>
-        <FriendsFriend
-          v-for="friend in alphaSortedOutgoing"
-          v-if="friend.userInfo"
-          :friend="{
-              name: friend.userInfo.name,
-              address: friend.to,
-              state: 'offline',
-              status: friend.userInfo.status,
-              request: friend
-            }"
-          :key="friend.to"
-          outgoing
-        />
+        <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
+          <FriendsFriend
+            v-for="friend in alphaSortedOutgoing"
+            v-if="friend.userInfo"
+            :friend="{
+                name: friend.userInfo.name,
+                address: friend.to,
+                state: 'offline',
+                status: friend.userInfo.status,
+                request: friend
+              }"
+            :key="friend.to"
+            outgoing
+          />
+        </UiSimpleScroll>
       </template>
     </div>
 
