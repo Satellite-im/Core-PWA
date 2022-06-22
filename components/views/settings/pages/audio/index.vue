@@ -8,22 +8,12 @@ import {
   Bitrates,
   SampleSizes,
 } from '~/components/views/settings/pages/audio/options'
-import {
-  PermissionRequestOptions,
-  UserPermissions,
-} from '~/components/mixins/UserPermissions'
+import { UserPermissions } from '~/components/mixins/UserPermissions'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
 
 declare module 'vue/types/vue' {
-  // 3. Declare augmentation for Vue
   interface Vue {
-    setupDefaults: () => void
-    getUserPermissions: () => Promise<any>
-    requestUserPermissions: (key: PermissionRequestOptions) => Promise<any>
-    getMicLevel: (stream: MediaStream) => void
-    setupMicMeter: (stream: MediaStream) => void
-    hasConstraint: (prop: string) => Boolean
     setConstraint: (prop: string, value: any) => void
   }
 }
