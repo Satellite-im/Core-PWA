@@ -2298,7 +2298,6 @@ describe('mutations', () => {
     showSidebar: true,
     showSearchResult: false,
     showSettings: false,
-    showMedia: false,
     settingsSideBar: true,
     settingsRoute: 'personalize',
     quickProfile: false,
@@ -2534,11 +2533,7 @@ describe('mutations', () => {
     mutations.default.showSidebar(localizedState, true)
     expect(localizedState.showSidebar).toBeTruthy()
   })
-  test('showMedia', () => {
-    const localizedState = { ...initialState }
-    mutations.default.showMedia(localizedState, true)
-    expect(localizedState.showMedia).toBeTruthy()
-  })
+
   test('setContextMenuValues', () => {
     const localizedState = { ...initialState }
     mutations.default.setContextMenuValues(localizedState, true)
@@ -3480,7 +3475,6 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -3623,7 +3617,7 @@ describe('mutations', () => {
       notifications: [],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -3798,7 +3792,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -3950,7 +3944,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -4095,7 +4089,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -4239,7 +4233,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,

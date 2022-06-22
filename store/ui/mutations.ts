@@ -29,9 +29,6 @@ export default {
   showSidebar(state: UIState, enabled: boolean) {
     state.showSidebar = enabled
   },
-  showMedia(state: UIState, show: boolean) {
-    state.showMedia = show
-  },
   setContextMenuValues(state: UIState, values: any) {
     state.contextMenuValues = values
   },

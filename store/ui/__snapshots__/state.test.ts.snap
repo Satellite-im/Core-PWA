@@ -90,7 +90,6 @@ Object {
   },
   "settingsRoute": "personalize",
   "settingsSideBar": true,
-  "showMedia": false,
   "showOlderMessagesInfo": false,
   "showPinned": false,
   "showSearchResult": false,

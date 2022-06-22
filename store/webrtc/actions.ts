@@ -463,7 +463,6 @@ const webRTCActions = {
           type,
         })
       }
-      commit('ui/showMedia', true, { root: true })
       dispatch('sounds/playSound', Sounds.CALL, { root: true })
     }
     call.on('INCOMING_CALL', onCallIncoming)
@@ -471,7 +470,6 @@ const webRTCActions = {
     function onCallOutgoing({ peerId }: { peerId: string }) {
       commit('setIncomingCall', undefined)
       commit('setActiveCall', { callId, peerId })
-      commit('ui/showMedia', true, { root: true })
       dispatch('sounds/playSound', Sounds.CALL, { root: true })
     }
     call.on('OUTGOING_CALL', onCallOutgoing)
@@ -491,7 +489,6 @@ const webRTCActions = {
 
     function onCallHangup() {
       commit('updateCreatedAt', 0)
-      commit('ui/showMedia', false, { root: true })
       commit('conversation/setCalling', false, { root: true })
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)

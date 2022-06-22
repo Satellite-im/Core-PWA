@@ -48,9 +48,6 @@ export default Vue.extend({
         dark: this.theme === 'dark',
       }
     },
-    isMediaOpen() {
-      return this.$store.state.ui.showMedia
-    },
   },
   watch: {
     // Once a new message is sent

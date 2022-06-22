@@ -14,7 +14,6 @@ const InitialUIState = (): UIState => ({
   notifications: [],
   showSearchResult: false,
   showSettings: false,
-  showMedia: false,
   settingsSideBar: true,
   settingsRoute: SettingsRoutes.PERSONALIZE,
   quickProfile: false,
