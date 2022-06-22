@@ -98,7 +98,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   it(
     'When the user clicks the video button camera should be enabled',
-    { retries: 1 },
+    { retries: 2 },
     () => {
       // Click on call video button and validate that video-stream is visible
       cy.get('[data-cy=call-video]').click()

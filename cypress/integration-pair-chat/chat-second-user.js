@@ -119,9 +119,6 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     //Deny incoming videocall
     cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-deny]').click()
-
-    //Wait 30 seconds before calling User A again
-    cy.wait(30000)
   })
 
   it('Call to User A for a second time', () => {
