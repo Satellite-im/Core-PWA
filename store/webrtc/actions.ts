@@ -14,6 +14,7 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import Logger from '~/utilities/Logger'
+import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 
 const announceFrequency = 5000
 
@@ -536,11 +537,20 @@ const webRTCActions = {
       if (!kind) {
         return
       }
+      let muted = false
+      if (kind === 'audio') {
+        muted = rootState.audio.muted
+      } else if (kind === 'video') {
+        muted = rootState.video.disabled
+      }
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted: false,
+        muted: !muted,
       })
+      if (!muted) {
+        call.mute({ peerId: localId, kind })
+      }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
 
@@ -706,6 +716,15 @@ const webRTCActions = {
     const $Logger: Logger = Vue.prototype.$Logger
     const loggerPrefix = 'webrtc/call - '
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
+
+    // check permission for audio call
+    try {
+      await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      })
+    } catch (e) {
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
+    }
 
     const activeConversation = rootState.conversation
     if (!activeConversation.id) {

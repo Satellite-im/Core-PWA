@@ -9,7 +9,7 @@ export default {
    * @description Toggles mute for outgoing audio
    * @example @click="toggleMute"
    */
-  toggleMute({
+  async toggleMute({
     state,
     commit,
     dispatch,
@@ -17,8 +17,6 @@ export default {
   }: ActionsArguments<AudioState>) {
     const { activeCall } = rootState.webrtc
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
-
-    commit('toggleMute')
 
     dispatch('sounds/playSound', state.muted ? Sounds.MUTE : Sounds.UNMUTE, {
       root: true,
@@ -28,11 +26,13 @@ export default {
       return
     }
 
-    if (state.muted) {
-      call.mute({ kind: 'audio' })
+    if (!state.muted) {
+      await call.mute({ kind: 'audio' })
+      commit('setMute', true)
       return
     }
-    call.unmute({ kind: 'audio' })
+    await call.unmute({ kind: 'audio' })
+    commit('setMute', false)
   },
   /**
    * @method toggleDeafen

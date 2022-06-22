@@ -808,12 +808,14 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     const stream = this.streams[peerId]?.[kind]
+
     if (!stream) {
       return
     }
 
     const track: MediaStreamTrack =
       kind === 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
+
     track.enabled = true
 
     if (peerId !== this.localId) {
