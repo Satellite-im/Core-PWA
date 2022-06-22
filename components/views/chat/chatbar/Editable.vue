@@ -73,7 +73,6 @@ export default Vue.extend({
     return {
       currentPosition: 0,
       currentRange: null as Range | null,
-      focused: false,
     }
   },
   watch: {
@@ -113,7 +112,7 @@ export default Vue.extend({
       this.$nextTick(() => {
         if (!this.$refs?.editable) return
         const messageBox = this.$refs?.editable as HTMLElement
-        if (this.$data.focused) {
+        if (this.focus) {
           Cursor.setCurrentCursorPosition(this.value.length, messageBox)
         }
       })
@@ -124,7 +123,6 @@ export default Vue.extend({
      */
     focusChatbar() {
       this.$store.dispatch('ui/setChatbarFocus')
-      this.$data.focused = true
     },
     /**
      * @method blurChatbar
@@ -132,7 +130,6 @@ export default Vue.extend({
      */
     blurChatbar() {
       this.$refs.editable?.blur()
-      this.$data.focused = false
       this.$store.dispatch('ui/toggleChatbarFocus', false)
     },
     /**
