@@ -12,6 +12,7 @@
   .file-list {
     display: flex;
     gap: @normal-spacing;
-    &:extend(.horizontal-scroll);
+    overflow-x: auto;
+    padding-bottom: @light-spacing;
   }
 }
