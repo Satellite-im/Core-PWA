@@ -2,7 +2,7 @@ import { Query, ThreadID, Update } from '@textile/hub'
 import { notificationSchema } from '~/libraries/Textile/schema'
 import { TextileInitializationData } from '~/types/textile/manager'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
-
+import { Notifications } from '~/utilities/Notifications'
 const CollectionName = 'notification'
 
 export class NotificationManager {
@@ -114,6 +114,15 @@ export class NotificationManager {
       this.threadId,
       CollectionName,
       Query.where('_id').eq(notificationId[0]),
+    )
+    const makeNotificationMessage = `New message from ${payload.from}`
+
+    const browserNotification = new Notifications()
+    await browserNotification.sendNotifications(
+      payload.type,
+      payload.title,
+      payload.imageHash,
+      makeNotificationMessage,
     )
     return notification[0]
   }

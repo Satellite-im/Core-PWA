@@ -29,6 +29,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+
 import { SmartphoneIcon } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
 
