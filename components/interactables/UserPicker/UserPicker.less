@@ -5,29 +5,26 @@
   gap: @light-spacing;
   min-height: 0;
 
-  > #simple-scrollbar {
-    height: 100%;
+  .chips {
     flex-basis: fit-content;
-    flex-grow: 1;
     flex-shrink: 0;
-    max-height: 100px;
-  }
-
-  .chips-wrapper {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: @xlight-spacing;
+    max-height: 100px;
+    overflow: auto;
+  }
+
+  .users {
+    flex-shrink: 1;
+    flex-grow: 1;
+    overflow: auto;
   }
 
   .empty-results-text {
     text-align: center;
     color: @gray;
     margin: @light-spacing;
-  }
-
-  .scroll-wrapper {
-    overflow: hidden;
-    flex-grow: 2;
   }
 }

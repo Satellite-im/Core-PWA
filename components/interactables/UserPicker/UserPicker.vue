@@ -15,7 +15,7 @@ export default Vue.extend({
     },
     height: {
       type: String,
-      default: () => 'auto',
+      default: () => undefined,
     },
   },
   data: () => ({
