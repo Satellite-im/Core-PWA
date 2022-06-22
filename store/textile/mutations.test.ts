@@ -226,4 +226,14 @@ describe('init', () => {
 
     expect(localState.userThread).toMatchObject(argument)
   })
+  it('should setFileSystem', () => {
+    const localState = InitialTextileState()
+    const argument = {
+      totalSize: 10,
+      percentageUsed: 10,
+    }
+    inst.setFileSystem(localState, argument)
+
+    expect(localState.fileSystem).toMatchObject(argument)
+  })
 })
