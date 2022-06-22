@@ -78,9 +78,6 @@ export default Vue.extend({
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
-      if (!this.focus) {
-        this.focusChatbar()
-      }
     },
     focus(value) {
       if (value) {
@@ -101,7 +98,9 @@ export default Vue.extend({
 
     if (this.focus) {
       this.focusChatbar()
+      return
     }
+    this.blurChatbar()
   },
   methods: {
     /**
@@ -160,7 +159,9 @@ export default Vue.extend({
         })
       })
       messageBox.innerHTML = rows.join('')
-      Cursor.setCurrentCursorPosition(pos, messageBox)
+      if (this.focus) {
+        Cursor.setCurrentCursorPosition(pos, messageBox)
+      }
     },
     /**
      * @method handleTextFromOutside
