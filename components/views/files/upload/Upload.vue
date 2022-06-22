@@ -8,7 +8,7 @@ import {
   shouldFileSizeBeFixed,
   getOriginalSizeFromDataUrl,
   getSizeFromAspectRatio,
-} from '~/utilities/ImageSize
+} from '~/utilities/ImageSize'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import createThumbnail from '~/utilities/Thumbnail'
@@ -130,7 +130,10 @@ export default Vue.extend({
           const fileAsDataURL = window.URL.createObjectURL(file.file)
           const originalSize = await getOriginalSizeFromDataUrl(fileAsDataURL)
 
-          payload.file = {...payload.file, ...getSizeFromAspectRatio(originalSize)}
+          payload.file = {
+            ...payload.file,
+            ...getSizeFromAspectRatio(originalSize),
+          }
         }
 
         this.$store.commit('chat/addFile', payload)
