@@ -152,8 +152,7 @@ describe('Create Account Validations', () => {
     },
   )
 
-  it.skip(
-    //skipped due to bug AP-1630
+  it(
     'Create account with valid image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
