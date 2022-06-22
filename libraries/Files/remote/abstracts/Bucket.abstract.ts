@@ -147,4 +147,14 @@ export abstract class Bucket implements RFM {
       this._root = res.root
     }
   }
+
+  /**
+   * @description  set root so future pushes aren't rejected.
+   */
+  async updateRoot() {
+    if (!this._buckets || !this._key) {
+      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
+    }
+    this._root = await this._buckets.root(this._key)
+  }
 }
