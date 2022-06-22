@@ -507,23 +507,14 @@ const webRTCActions = {
       kind?: string | undefined
     }) {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
-      let muted = false
-      if (kind === 'audio') {
-        muted = rootState.audio.muted
-      } else if (kind === 'video') {
-        muted = rootState.video.disabled
+      if (!kind) {
+        return
       }
       commit('setMuted', {
         peerId: $Peer2Peer.id,
         kind,
-        muted:
-          kind === 'audio' ? rootState.audio.muted : rootState.video.disabled,
+        muted: false,
       })
-      if (kind === 'audio' && rootState.audio.muted) {
-        call.mute({ peerId: localId, kind: 'audio' })
-      } else if (kind === 'video' && rootState.video.disabled) {
-        call.mute({ peerId: localId, kind: 'video' })
-      }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
 
@@ -545,9 +536,6 @@ const webRTCActions = {
         kind,
         muted: false,
       })
-      if (rootState.audio.muted) {
-        call.mute({ peerId: localId, kind: 'audio' })
-      }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
