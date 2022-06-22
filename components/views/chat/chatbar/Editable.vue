@@ -17,8 +17,7 @@
       @keyup="handleInputKeyup"
       @paste="handleInputPaste"
       @drop="handleDrop"
-      @focus="onFocus"
-      @blur="onBlur"
+      @click="focusChatbar"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -79,14 +78,19 @@ export default Vue.extend({
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
+      if (!this.focus) {
+        this.focusChatbar()
+      }
     },
     focus(value) {
       if (value) {
         this.focusInput()
+        return
       }
+      this.blurChatbar()
     },
     enabled(value) {
-      if (value) {
+      if (value && this.focus) {
         this.focusInput()
       }
     },
@@ -94,8 +98,7 @@ export default Vue.extend({
   mounted() {
     // Handle initial value
     this.handleNewValue(this.value)
-    // Then focus
-    this.focusInput()
+    this.focusChatbar()
   },
   methods: {
     /**
@@ -108,6 +111,23 @@ export default Vue.extend({
         const messageBox = this.$refs?.editable as HTMLElement
         Cursor.setCurrentCursorPosition(this.value.length, messageBox)
       })
+    },
+    /**
+     * @method focusChatbar
+     * @description focuses the input
+     */
+    focusChatbar() {
+      this.$store.dispatch('ui/setChatbarFocus')
+    },
+    /**
+     * @method blurChatbar
+     * @description blurs the input
+     */
+    blurChatbar() {
+      if (this.$refs.editable) {
+        this.$refs.editable.blur()
+      }
+      this.$store.dispatch('ui/toggleChatbarFocus', false)
     },
     /**
      * @method buildChatbarRow
@@ -285,24 +305,6 @@ export default Vue.extend({
       const messageBox = this.$refs?.editable as HTMLElement
       this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       this.currentRange = getCurrentRange()
-    },
-    /**
-     * @method onFocus
-     * @description Handles the focus event and emits same event to parent
-     * @param {Event} e The focus event
-     */
-    onFocus(e: Event) {
-      document.addEventListener('selectionchange', this.onSelectionChange)
-      this.$store.dispatch('ui/setChatbarFocus')
-    },
-    /**
-     * @method onBlur
-     * @description Handles the blur event and emits same event to parent
-     * @param {Event} e The blur event
-     */
-    onBlur(e: Event) {
-      document.removeEventListener('selectionchange', this.onSelectionChange)
-      this.$emit('blur', e)
     },
   },
 })
