@@ -417,12 +417,10 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
-  cy.get('.file-item', { timeout: 30000 }).should('exist')
-  cy.get('.file-info > .title').should('contain', filename)
-  cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
-  cy.get('.thumbnail').should('exist')
+  cy.get('[data-cy=file-item]', { timeout: 60000 }).should('exist')
+  cy.get('[data-cy=file-item-filename]').should('contain', filename)
   cy.get('[data-cy=send-message]').click() //sending image message
-  cy.get('.thumbnail', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
 })
 
 Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
@@ -434,15 +432,14 @@ Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
 
 // Chat - Send Files Commands
 
-Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
+Cypress.Commands.add('chatFeaturesSendFile', (filePath, filename) => {
   cy.get('#quick-upload').selectFile(filePath, {
     force: true,
   })
-  cy.get('.file-item').should('exist')
-  cy.get('.file-info > .title').should('contain', 'test-file.txt')
-  cy.get('.preview', { timeout: 180000 }).should('exist')
-  cy.get('[data-cy=send-message]').click() //sending file message
-  cy.get('.preview', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-item]', { timeout: 30000 }).should('exist')
+  cy.get('[data-cy=file-item-filename]').should('contain', filename)
+  cy.get('[data-cy=send-message]').click() //sending image message
+  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
 })
 
 // Chat - Context Menu Commands
@@ -515,27 +512,24 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   }
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-loading]', { timeout: 180000 }).should('not.exist')
+  cy.get('[data-cy=chat-message]', { timeout: 180000 }).last().should('exist')
 })
 
 // Chat - Hover on Icon Commands
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
-  cy.get(locator)
-    .should('be.visible')
-    .should('have.attr', 'data-tooltip', expectedMessage)
-    .should('have.class', 'grayscaled')
-    .realHover()
-  cy.get('.tooltip-container').should('be.visible')
+  cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
+  cy.get(locator).realHover()
+  cy.wait(1000)
+  cy.contains(expectedMessage).should('be.visible')
+  cy.wait(1000)
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
-  cy.get(locator)
-    .should('be.visible')
-    .should('have.attr', 'data-tooltip', expectedMessage)
-    .should('not.have.class', 'grayscaled')
-    .realHover()
-  cy.get('.tooltip-container').should('be.visible')
+  cy.get(locator).should('be.visible').realHover()
+  cy.wait(1000)
+  cy.contains(expectedMessage).should('be.visible')
+  cy.wait(1000)
 })
 
 // Chat - URL Commands

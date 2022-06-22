@@ -7,11 +7,9 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Chat Toolbar Tests', () => {
-  //skipped due to all these works manually but
-  //Cypress is failing, probably because we refactored the tooltips - AP-1668
+describe('Chat Toolbar Tests', () => {
   it(
-    'Chat - Toolbar - Validate audio icon is displayed',
+    'Chat - Toolbar - Load Account for Testing Scenarios',
     { retries: 2 },
     () => {
       //Import account
@@ -20,50 +18,37 @@ describe.skip('Chat Toolbar Tests', () => {
       //Ensure messages are displayed before starting
       cy.validateChatPageIsLoaded()
       cy.goToConversation('cypress friend')
-      cy.hoverOnActiveIcon(
-        '[data-cy=toolbar-enable-audio]',
-        'Offline calling unavailable',
-      )
     },
   )
 
-  it('Chat - Toolbar - Validate video icon is displayed', () => {
+  it('Chat - Toolbar - Audio icon is active', () => {
+    //Start validations
     cy.hoverOnActiveIcon(
       '[data-cy=toolbar-enable-audio]',
       'Offline calling unavailable',
     )
   })
 
-  it('Chat - Toolbar - Alerts icon shows Coming Soon', () => {
-    cy.get('[data-cy=toolbar-alerts]').should('be.visible')
-    cy.hoverOnComingSoonIcon(
-      '[data-cy=toolbar-alerts] > .tooltip-container',
-      'Alerts\nComing Soon',
-    )
+  it('Chat - Toolbar - Alerts icon is active', () => {
+    cy.hoverOnActiveIcon('[data-cy=toolbar-alerts]', 'Alerts')
   })
 
   it('Chat - Toolbar - Archived Messages icon shows Coming Soon', () => {
-    cy.get('[data-cy=toolbar-archived-messages]').should('be.visible')
     cy.hoverOnComingSoonIcon(
-      '[data-cy=toolbar-archived-messages] > .tooltip-container',
-      'Archived Messages\nComing Soon',
+      '[data-cy=toolbar-archived-messages]',
+      'Archived Messages Coming Soon',
     )
   })
 
-  it('Chat - Toolbar - Validate new group icon is displayed', () => {
-    cy.hoverOnActiveIcon('[data-cy=toolbar-new-group]', 'New Group')
-  })
-
-  it('Chat - Toolbar - Marketplace icon is displayed', () => {
-    cy.hoverOnActiveIcon('[data-cy=toolbar-marketplace]', 'Marketplace')
+  it('Chat - Toolbar - Marketplace icon shows Coming Soon', () => {
+    cy.hoverOnComingSoonIcon(
+      '[data-cy=toolbar-marketplace]',
+      'Marketplace Coming soon',
+    )
   })
 
   it('Chat - Toolbar - Wallet icon shows Coming Soon', () => {
-    cy.get('[data-cy=toolbar-wallet]').should('be.visible')
-    cy.hoverOnComingSoonIcon(
-      '[data-cy=toolbar-wallet] > .tooltip-container',
-      'Wallet\nComing Soon',
-    )
+    cy.hoverOnComingSoonIcon('[data-cy=toolbar-wallet]', 'Wallet Coming Soon')
   })
 
   it('Chat - Marketplace - Coming Soon modal content is correct', () => {
