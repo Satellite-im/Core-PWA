@@ -101,7 +101,7 @@ describe('Chat features with two accounts', () => {
   })
 
   it('Send file to user B', () => {
-    cy.chatFeaturesSendFile(fileLocalPath)
+    cy.chatFeaturesSendFile(fileLocalPath, 'test-file.txt')
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()

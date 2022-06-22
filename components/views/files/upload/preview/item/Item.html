@@ -1,4 +1,4 @@
-<div class="file-item">
+<div class="file-item" data-cy="file-item">
   <button
     class="close"
     :class="{disabled: messageLoading}"
@@ -17,7 +17,12 @@
     <file-icon size="3x" class="control-icon" />
   </div>
   <div>
-    <TypographyText :size="6" :text="item.file.name" class="ellipsis" />
+    <TypographyText
+      :size="6"
+      :text="item.file.name"
+      data-cy="file-item-filename"
+      class="ellipsis"
+    />
     <div v-if="item.progress > 0 && item.progress <= 100">
       <UiProgress :progress="item.progress" />
       <TypographySubtitle :text="`${item.progress}% Uploaded...`" />
