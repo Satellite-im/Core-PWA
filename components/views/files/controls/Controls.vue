@@ -6,6 +6,7 @@ import { FolderPlusIcon, FilePlusIcon } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -163,9 +164,12 @@ export default Vue.extend({
             this.setProgress,
           )
         } catch (e: any) {
-          this.$emit('addError', e.message)
-          this.$store.commit('ui/setFilesUploadStatus', '')
-          return
+          // if out of date, sync
+          if (e.message === FileSystemErrors.NON_FF) {
+            await this.$store.dispatch('textile/syncFileSystem')
+            this.$emit('addError', this.$t('pages.files.errors.out_of_date'))
+            return
+          }
         }
       }
 

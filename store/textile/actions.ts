@@ -1266,7 +1266,7 @@ export default {
       commit('setUserThreadData', update.instance)
       // if local file system is out of date (remote instance made an update)
       if (state.userThread.filesVersion !== $FileSystem.version) {
-        // dispatch('syncFileSystem')
+        dispatch('syncFileSystem')
       }
     }
     await dispatch('textile/subscribeToMailbox', {}, { root: true })

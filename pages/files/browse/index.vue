@@ -165,6 +165,7 @@ export default Vue.extend({
      * @param {Function} callback if export was successful
      */
     async exportFileSystem(callback?: Function) {
+      this.errors = []
       try {
         await this.$store.dispatch('textile/exportFileSystem')
       } catch (e: any) {
@@ -176,7 +177,6 @@ export default Vue.extend({
         return
       }
       if (callback) callback()
-      this.errors = []
     },
     /**
      * @method forceRender
