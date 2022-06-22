@@ -4,7 +4,7 @@
 
   .image-container {
     &:extend(.flex-centered);
-  
+
     .is-image {
       cursor: pointer;
       width: @full;
@@ -12,11 +12,11 @@
       object-fit: cover;
       &:extend(.round-corners);
       &:extend(.no-select);
-  
+
       &.hidden {
         visibility: hidden;
       }
-  
+
       &.visible {
         visibility: visible;
       }
@@ -24,17 +24,19 @@
   }
 
   &-placeholder {
-    text-align: center;
-    max-width: 200px;
+    width: 200px;
     &:extend(.no-select);
     pointer-events: none;
+
     &-img {
-      padding: @normal-spacing;
+      width: @full;
+      height: 250px;
     }
     &-caption {
       color: @secondary-text;
       font-family: @primary-font;
       font-size: @mini-text-size;
+      text-align: center;
     }
   }
 }

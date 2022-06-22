@@ -23,7 +23,7 @@
     </div>
     <img
       class="is-image"
-      :class="`${(image.nsfw && blockNsfw) && 'blur-image'} ${ loading ? 'hidden' : 'visible'}`"
+      :class="`${(image.nsfw && blockNsfw) ? 'blur-image' : ''} ${ loading ? 'hidden' : 'visible'}`"
       :src="image.url"
       @click="clickHandler"
       @error="onImageError"
