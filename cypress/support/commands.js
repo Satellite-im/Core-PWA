@@ -512,7 +512,9 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   }
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=chat-message]', { timeout: 180000 }).last().should('exist')
+  cy.get('[data-cy=message-container]', { timeout: 180000 })
+    .last()
+    .should('be.visible')
 })
 
 // Chat - Hover on Icon Commands
@@ -520,16 +522,12 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
   cy.get(locator).realHover()
-  cy.wait(1000)
   cy.contains(expectedMessage).should('be.visible')
-  cy.wait(1000)
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').realHover()
-  cy.wait(1000)
   cy.contains(expectedMessage).should('be.visible')
-  cy.wait(1000)
 })
 
 // Chat - URL Commands

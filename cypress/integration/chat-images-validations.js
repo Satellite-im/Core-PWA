@@ -14,7 +14,7 @@ const path = require('path')
 
 describe('Chat - Sending Images Tests', () => {
   const downloadsFolder = Cypress.config('downloadsFolder')
-  it('PNG image is sent successfully on chat', { retries: 2 }, () => {
+  it('Load account for test chat images scenarios', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)
 
@@ -23,36 +23,46 @@ describe('Chat - Sending Images Tests', () => {
 
     //Validate message is sent
     cy.goToConversation('cypress friend')
-
-    //Send PNG Image
-    // cy.chatFeaturesSendImage(pngImagePath, 'logo.png')
-    // cy.goToLastImageOnChat(90000) // first image sent takes more time
   })
 
-  it.skip('JPG image is sent successfully on chat', () => {
+  it('PNG image is sent successfully on chat', () => {
+    //Send PNG Image
+    cy.chatFeaturesSendImage(pngImagePath, 'logo.png')
+    cy.goToLastImageOnChat(90000) // first image sent takes more time
+  })
+
+  it('JPG image is sent successfully on chat', () => {
     //Send JPG Image
     cy.chatFeaturesSendImage(jpgImagePath, 'jpeg-test.jpg')
     cy.goToLastImageOnChat(30000)
   })
 
-  it.skip('Save Image from Chat', () => {
+  it('Save Image from Chat', () => {
     // Go to last image (jpeg), right click and select on context menu Save Image
     cy.goToLastImageOnChat(30000).as('lastImage')
     cy.selectContextMenuOption('@lastImage', 'Save Image')
     // Assert image was downloaded in downloads folder with the same name
-    const downloadedFile = path.join(downloadsFolder, 'download.jpeg')
+    const downloadedFile = path.join(downloadsFolder, 'jpeg-test.jpg')
     cy.readFile(downloadedFile, { timeout: 15000 }).should('exist')
   })
 
-  it.skip('GIF image is sent successfully on chat', () => {
+  it('GIF image is sent successfully on chat', () => {
     //Send GIF Image
     cy.chatFeaturesSendImage(gifImagePath, 'gif-test.gif')
     cy.goToLastImageOnChat()
   })
 
-  it.skip('Invalid image is not sent successfully on chat', () => {
-    //Send Invalid Image
+  it('Invalid image is not sent successfully on chat', () => {
+    //Send Invalid Image and validate that image placeholder is visible instead of image
+    //Ensure that Image failed to load text is displayed
     cy.chatFeaturesSendImage(invalidImagePath, 'incorrect-image.png')
-    cy.goToLastImageOnChat()
-  }) //skipped due to DOM issue - AP-1665
+    cy.get('[data-cy=chat-image-placeholder]')
+      .last()
+      .scrollIntoView()
+      .should('be.visible')
+    cy.get('[data-cy=image-placeholder-caption]').should(
+      'contain',
+      'Image failed to load',
+    )
+  })
 })

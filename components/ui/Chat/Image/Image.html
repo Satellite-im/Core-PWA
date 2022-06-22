@@ -2,10 +2,14 @@
   <figure class="image-placeholder" v-if="usePlaceholder">
     <img
       class="image-placeholder-img"
+      data-cy="chat-image-placeholder"
       :src="placeholderSrc"
       :alt="placeholderText"
     />
-    <figcaption class="image-placeholder-caption">
+    <figcaption
+      class="image-placeholder-caption"
+      data-cy="image-placeholder-caption"
+    >
       {{placeholderText}}
     </figcaption>
   </figure>
