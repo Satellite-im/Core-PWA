@@ -1117,7 +1117,7 @@ export default {
    * @returns  search result object
    */
   async searchConversations(
-    {}: ActionsArguments<TextileState>,
+    { state }: ActionsArguments<TextileState>,
     {
       query,
       page,
@@ -1151,6 +1151,7 @@ export default {
       {
         fuzzy: 0.3,
         fields,
+        filter: (result) => result.conversation === state.activeConversation,
       },
     )
 
