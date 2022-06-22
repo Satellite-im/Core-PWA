@@ -672,6 +672,7 @@ export default {
     },
     loading: {
       loading_account: 'Aligning satellites to retrieve your account...',
+      loading_displayname: '...',
     },
   },
   friends: {
