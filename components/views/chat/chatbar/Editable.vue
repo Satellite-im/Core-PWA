@@ -3,6 +3,7 @@
     scroll-mode="vertical"
     scroll-show="scroll"
     container-class="editable-container"
+    @click="focusChatbar"
   >
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
@@ -17,7 +18,6 @@
       @keyup="handleInputKeyup"
       @paste="handleInputPaste"
       @drop="handleDrop"
-      @click="focusChatbar"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -73,6 +73,7 @@ export default Vue.extend({
     return {
       currentPosition: 0,
       currentRange: null as Range | null,
+      focused: false,
     }
   },
   watch: {
@@ -98,7 +99,10 @@ export default Vue.extend({
   mounted() {
     // Handle initial value
     this.handleNewValue(this.value)
-    this.focusChatbar()
+
+    if (this.focus) {
+      this.focusChatbar()
+    }
   },
   methods: {
     /**
@@ -109,7 +113,9 @@ export default Vue.extend({
       this.$nextTick(() => {
         if (!this.$refs?.editable) return
         const messageBox = this.$refs?.editable as HTMLElement
-        Cursor.setCurrentCursorPosition(this.value.length, messageBox)
+        if (this.$data.focused) {
+          Cursor.setCurrentCursorPosition(this.value.length, messageBox)
+        }
       })
     },
     /**
@@ -118,15 +124,15 @@ export default Vue.extend({
      */
     focusChatbar() {
       this.$store.dispatch('ui/setChatbarFocus')
+      this.$data.focused = true
     },
     /**
      * @method blurChatbar
      * @description blurs the input
      */
     blurChatbar() {
-      if (this.$refs.editable) {
-        this.$refs.editable.blur()
-      }
+      this.$refs.editable?.blur()
+      this.$data.focused = false
       this.$store.dispatch('ui/toggleChatbarFocus', false)
     },
     /**
