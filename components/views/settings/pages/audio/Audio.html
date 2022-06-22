@@ -33,7 +33,11 @@
       :title="$t('pages.settings.audio.sources.input.title')"
       :text="$t('pages.settings.audio.sources.input.subtitle')"
     >
-      <InteractablesSelect v-model="isAudioInput" :options="audioInputs" />
+      <InteractablesSelect
+        v-model="isAudioInput"
+        :options="audioInputs"
+        :label="$t('pages.settings.audio.sources.input.title')"
+      />
     </SettingsUnit>
     <!-- Audio Out -->
     <SettingsUnit
@@ -44,6 +48,7 @@
         v-if="browserAllowsAudioOut"
         v-model="isAudioOutput"
         :options="audioOutputs"
+        :label="$t('pages.settings.audio.sources.output.title')"
       />
       <TypographyError
         v-if="!browserAllowsAudioOut"
@@ -87,13 +92,21 @@
         :title="$t('pages.settings.audio.bitrate.title')"
         :text="$t('pages.settings.audio.bitrate.subtitle')"
       >
-        <InteractablesSelect :options="Bitrates" v-model="isBitrate" />
+        <InteractablesSelect
+          :options="Bitrates"
+          v-model="isBitrate"
+          :label="$t('pages.settings.audio.bitrate.title')"
+        />
       </SettingsUnit>
       <SettingsUnit
         :title="$t('pages.settings.audio.sampleSize.title')"
         :text="$t('pages.settings.audio.sampleSize.subtitle')"
       >
-        <InteractablesSelect :options="SampleSizes" v-model="isSampleSize" />
+        <InteractablesSelect
+          :options="SampleSizes"
+          v-model="isSampleSize"
+          :label="$t('pages.settings.audio.sampleSize.title')"
+        />
       </SettingsUnit>
     </div>
 
@@ -132,18 +145,20 @@
       :text="$t('pages.settings.video.sources.input.subtitle')"
     >
       <!-- Ask for permissions block -->
-      <span v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess">
-        <InteractablesButton
-          :text="$t('pages.settings.audio.sources.permissionButtonText')"
-          size="small"
-          type="primary"
-          :disabled="!hasWebcam"
-          :action="enableVideo"
-        />
-      </span>
-      <span v-if="userHasGivenVideoAccess">
-        <InteractablesSelect v-model="isVideoInput" :options="videoInputs" />
-      </span>
+      <InteractablesButton
+        v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess"
+        :text="$t('pages.settings.audio.sources.permissionButtonText')"
+        size="small"
+        type="primary"
+        :disabled="!hasWebcam"
+        :action="enableVideo"
+      />
+      <InteractablesSelect
+        v-if="userHasGivenVideoAccess"
+        v-model="isVideoInput"
+        :options="videoInputs"
+        :label="$t('pages.settings.video.sources.input.title')"
+      />
 
       <!-- Permission Denied Block -->
       <span v-if="userDeniedVideoAccess">
@@ -178,7 +193,11 @@
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
     >
-      <InteractablesSelect v-model="isCaptureMouse" :options="captureMouses" />
+      <InteractablesSelect
+        v-model="isCaptureMouse"
+        :options="captureMouses"
+        label="$t('pages.settings.screen.captureMouse.title')"
+      />
     </SettingsUnit>
   </div>
 
