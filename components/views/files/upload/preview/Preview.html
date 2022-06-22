@@ -5,14 +5,12 @@
   @touchstart="handleTouchPreview"
   @touchend="handleTouchPreview"
 >
-  <UiSimpleScroll scrollMode="horizontal" scrollShow="scroll">
-    <div class="file-list">
-      <FilesUploadPreviewItem
-        v-for="(item, index) in getFiles"
-        :item="item"
-        :key="index"
-        @removeUploadItem="removeUploadItem(index)"
-      />
-    </div>
-  </UiSimpleScroll>
+  <div class="file-list">
+    <FilesUploadPreviewItem
+      v-for="(item, index) in getFiles"
+      :item="item"
+      :key="index"
+      @removeUploadItem="removeUploadItem(index)"
+    />
+  </div>
 </div>

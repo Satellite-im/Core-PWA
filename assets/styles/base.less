@@ -32,13 +32,15 @@ body {
 }
 * {
   &::-webkit-scrollbar {
+    // set height and width for vertical & horizontal scroll bars
     width: @scroll-bar-size;
+    height: @scroll-bar-size;
   }
   &::-webkit-scrollbar-track {
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: @flair-color;
+    background-color: @flair-color;
     &:extend(.round-corners);
   }
   scrollbar-width: thin;

@@ -48,12 +48,7 @@
 }
 
 // Scrollbars
-@scrollbar-width: 5px;
-@scrollbar-width-mobile: 3px;
 @scroll-bar-size: 5px;
-
-// Form Elements
-@select-height: 2.5em;
 
 // Borders
 @light-border: 1px solid rgba(105, 128, 167, 0.05);
@@ -80,4 +75,9 @@
   white-space: nowrap;
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
+}
+
+.horizontal-scroll {
+  overflow-x: auto;
+  padding-bottom: @light-spacing;
 }
