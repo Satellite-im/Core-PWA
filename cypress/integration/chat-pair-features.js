@@ -215,13 +215,13 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert timestamp is displayed when user A sends a message', () => {
+  it('Assert timestamp is displayed when user A sends a message', () => {
     cy.get('[data-cy=chat-timestamp]')
       .last()
       .invoke('text')
       .then(($text) => {
         expect($text).to.contain('now')
-      }) //skipped due to bug - AP-1662
+      })
   })
 
   it.skip('Add reactions to text message in chat', () => {
