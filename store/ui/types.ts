@@ -166,7 +166,6 @@ export interface UIState {
   contextMenuPosition: object
   quickProfilePosition: object
   showSettings: boolean
-  showMedia: boolean
   settingsSideBar: boolean
   settingsRoute: SettingsRoutes
   showSidebarUsers: boolean
