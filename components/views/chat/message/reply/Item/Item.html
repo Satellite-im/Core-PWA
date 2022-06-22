@@ -35,12 +35,14 @@
           v-else-if="reply.replyType === 'file'"
           :data="reply.payload"
         />
-        <MessageActions
-          hideReply
-          :emojiReaction="(event) => $emit('emoji-reaction', event,  reply.id)"
-        />
+        <!--  Hide emojies on thread https://satellite-im.atlassian.net/browse/AP-1824-->
+        <!--        <MessageActions-->
+        <!--          hideReply-->
+        <!--          :emojiReaction="(event) => $emit('emoji-reaction', event,  reply.id)"-->
+        <!--        />-->
       </div>
     </div>
   </div>
-  <MessageReactions :message="message" :group="group" :reply="reply" />
+  <!--  Hide emojies on thread https://satellite-im.atlassian.net/browse/AP-1824-->
+  <!--  <MessageReactions :message="message" :group="group" :reply="reply" />-->
 </div>
