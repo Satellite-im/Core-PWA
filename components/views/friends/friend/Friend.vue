@@ -10,6 +10,8 @@ import {
   CircleIcon,
   SmartphoneIcon,
 } from 'satellite-lucide-icons'
+import { mapState, mapGetters } from 'vuex'
+
 import { ContextMenuItem } from '~/store/ui/types'
 import { Friend } from '~/types/ui/friends'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
@@ -55,6 +57,8 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapGetters('friends', ['friendExists']),
+    ...mapState(['accounts']),
     src(): string {
       const hash =
         this.friend?.photoHash ||
@@ -64,6 +68,12 @@ export default Vue.extend({
     },
     contextMenuValues(): ContextMenuItem[] {
       return [{ text: this.$t('context.remove'), func: this.removeFriend }]
+    },
+    showStatus(): boolean {
+      return (
+        this.friendExists(this.$props.friend.address) ||
+        this.$props.friend.address === this.accounts.active
+      )
     },
   },
   beforeDestroy() {

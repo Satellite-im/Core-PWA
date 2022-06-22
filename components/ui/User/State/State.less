@@ -10,18 +10,13 @@
     --circle-radius: 10px;
   }
 
-  &.has-status {
-    .circle {
-      mask: radial-gradient(
-          circle calc(var(--circle-radius) + var(--border-width)) at 86% 86%,
-          #0000 98%,
-          #000
-        )
-        100% 100%/100% 100% no-repeat;
-    }
-  }
-
   .circle {
+    mask: radial-gradient(
+        circle calc(var(--circle-radius) + var(--border-width)) at 86% 86%,
+        #0000 98%,
+        #000
+      )
+      100% 100%/100% 100% no-repeat;
     overflow: hidden;
   }
 
