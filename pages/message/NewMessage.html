@@ -9,7 +9,8 @@
       :class="friends.length ? 'font-primary' : 'font-muted'"
       @click="confirm"
     >
-      <pencil-icon />
+      <pencil-icon v-if="!isLoading" />
+      <UiLoadersSpinner v-else spinning class="spinner" />
     </a>
   </div>
   <InteractablesUserPicker v-model="friends" />
