@@ -577,10 +577,8 @@ const webRTCActions = {
     function onCallDestroy() {
       if (rootState.webrtc.incomingCall !== undefined) {
         const callerInfo = rootState.friends.all.find((friend) => {
-          console.log(friend)
-          return friend.account.from === state.originator
+          return friend.peerId === rootState.webrtc.incomingCall?.peerId
         })
-        console.log(callerInfo, rootState.webrtc)
         dispatch(
           'ui/sendNotification',
           {
