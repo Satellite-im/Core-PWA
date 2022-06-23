@@ -47,7 +47,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it.skip('Create account with non-NSFW after attempting to load a NSFW image', () => {
+  it('Create account with non-NSFW after attempting to load a NSFW image', () => {
     //Creating pin
     cy.createAccountPINscreen(randomPIN)
 
@@ -62,7 +62,7 @@ describe('Create Account Validations', () => {
     //Attempting to add NSFW image and validating error message is displayed
     cy.createAccountAddImage(filepathNsfw)
     cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
-      'have.text',
+      'contain',
       'Unable to upload file/s due to NSFW status',
     )
 
@@ -79,7 +79,7 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it.skip(
+  it(
     'Create account successfully without image after attempting to add a NSFW picture',
     { retries: 2 },
     () => {
@@ -98,7 +98,7 @@ describe('Create Account Validations', () => {
       //Attempting to add NSFW image and validating error message is displayed
       cy.createAccountAddImage(filepathNsfw)
       cy.get('[data-cy=error-message]', { timeout: 30000 }).should(
-        'have.text',
+        'contain',
         'Unable to upload file/s due to NSFW status',
       )
 
@@ -116,7 +116,7 @@ describe('Create Account Validations', () => {
     },
   )
 
-  it.skip(
+  it(
     'Create account without image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
@@ -134,7 +134,7 @@ describe('Create Account Validations', () => {
       //Attempting to add an invalid image and validating error message is displayed
       cy.createAccountAddImage(invalidImagePath)
       cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
-        'have.text',
+        'contain',
         'Please upload a valid image type such as JPG, PNG or SVG',
       )
 
@@ -170,7 +170,7 @@ describe('Create Account Validations', () => {
       //Attempting to add an invalid image and validating error message is displayed
       cy.createAccountAddImage(invalidImagePath)
       cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
-        'have.text',
+        'contain',
         'Please upload a valid image type such as JPG, PNG or SVG',
       )
 
