@@ -66,6 +66,7 @@
             <InteractablesSelect
               v-model="selectValue"
               size="small"
+              type="primary"
               :options="[
                 { text: 'Option 1', value: 1 },
                 { text: 'Option 2', value: 2 },
@@ -75,6 +76,7 @@
             <InteractablesSelect
               v-model="selectValue"
               size="normal"
+              type="primary"
               :options="[
                 { text: 'Option 1', value: 1 },
                 { text: 'Option 2', value: 2 },
@@ -84,6 +86,7 @@
             <br />
             <InteractablesSelect
               v-model="selectValue"
+              type="primary"
               full-width
               :options="[
                 { text: 'Option 1', value: 1 },
