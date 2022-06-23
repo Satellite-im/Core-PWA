@@ -3,7 +3,6 @@
     scroll-mode="vertical"
     scroll-show="scroll"
     container-class="editable-container"
-    @click="focusChatbar"
   >
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
@@ -18,6 +17,9 @@
       @keyup="handleInputKeyup"
       @paste="handleInputPaste"
       @drop="handleDrop"
+      @focus="onFocus"
+      @blur="onBlur"
+      @click="focusInput"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -82,25 +84,13 @@ export default Vue.extend({
     focus(value) {
       if (value) {
         this.focusInput()
-        return
       }
-      this.blurChatbar()
     },
     enabled(value) {
       if (value && this.focus) {
         this.focusInput()
       }
     },
-  },
-  mounted() {
-    // Handle initial value
-    this.handleNewValue(this.value)
-
-    if (this.focus) {
-      this.focusChatbar()
-      return
-    }
-    this.blurChatbar()
   },
   methods: {
     /**
@@ -111,25 +101,12 @@ export default Vue.extend({
       this.$nextTick(() => {
         if (!this.$refs?.editable) return
         const messageBox = this.$refs?.editable as HTMLElement
-        if (this.focus) {
-          Cursor.setCurrentCursorPosition(this.value.length, messageBox)
-        }
+        Cursor.setCurrentCursorPosition(this.value.length, messageBox)
       })
-    },
-    /**
-     * @method focusChatbar
-     * @description focuses the input
-     */
-    focusChatbar() {
-      this.$store.dispatch('ui/setChatbarFocus')
-    },
-    /**
-     * @method blurChatbar
-     * @description blurs the input
-     */
-    blurChatbar() {
-      this.$refs.editable?.blur()
-      this.$store.dispatch('ui/toggleChatbarFocus', false)
+
+      if (!this.focus) {
+        this.$store.dispatch('ui/toggleChatbarFocus', false)
+      }
     },
     /**
      * @method buildChatbarRow
@@ -159,9 +136,7 @@ export default Vue.extend({
         })
       })
       messageBox.innerHTML = rows.join('')
-      if (this.focus) {
-        Cursor.setCurrentCursorPosition(pos, messageBox)
-      }
+      Cursor.setCurrentCursorPosition(pos, messageBox)
     },
     /**
      * @method handleTextFromOutside
@@ -309,6 +284,24 @@ export default Vue.extend({
       const messageBox = this.$refs?.editable as HTMLElement
       this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       this.currentRange = getCurrentRange()
+    },
+    /**
+     * @method onFocus
+     * @description Handles the focus event and emits same event to parent
+     * @param {Event} e The focus event
+     */
+    onFocus(e: Event) {
+      document.addEventListener('selectionchange', this.onSelectionChange)
+      this.$emit('focus', e)
+    },
+    /**
+     * @method onBlur
+     * @description Handles the blur event and emits same event to parent
+     * @param {Event} e The blur event
+     */
+    onBlur(e: Event) {
+      document.removeEventListener('selectionchange', this.onSelectionChange)
+      this.$emit('blur', e)
     },
   },
 })
