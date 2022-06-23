@@ -1,9 +1,5 @@
 <template>
-  <UiSimpleScroll
-    scroll-mode="vertical"
-    scroll-show="scroll"
-    container-class="editable-container"
-  >
+  <div class="editable-container">
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
@@ -24,7 +20,7 @@
         <span><br /></span>
       </div>
     </div>
-  </UiSimpleScroll>
+  </div>
 </template>
 
 <script lang="ts">
@@ -329,6 +325,8 @@ export default Vue.extend({
   width: 100%;
   font-size: @mini-text-size;
   font-family: @secondary-font;
+  overflow-y: overlay;
+  padding-right: @xlight-spacing;
 
   .placeholder {
     color: @text-muted;

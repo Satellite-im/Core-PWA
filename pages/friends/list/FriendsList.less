@@ -9,7 +9,7 @@
 #friends {
   width: @full;
   height: @full;
-  overflow: hidden;
+  overflow-y: overlay;
   padding: 3.5em 0;
   box-sizing: border-box;
   @media only screen and (max-width: @mobile-breakpoint) {
@@ -24,22 +24,7 @@
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-
-    .is-half {
-      width: @half;
-    }
   }
-}
-
-#friends-list {
-  width: @full;
-  height: @full;
-  overflow: hidden;
-}
-
-.scrolling {
-  height: @full;
-  min-height: @full;
 }
 .loading-container {
   text-align: center;

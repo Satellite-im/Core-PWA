@@ -21,6 +21,26 @@
   align-items: center;
   button {
     display: flex;
+    flex-direction: column;
+    height: @full;
+    pointer-events: auto;
+    box-sizing: border-box;
+    padding-left: @light-spacing;
+    padding-top: @normal-spacing;
+    overflow-y: overlay;
+
+    #simple-scrollbar {
+      height: auto;
+    }
+  }
+  #list-container {
+    height: fit-content;
+    position: relative;
+    pointer-events: auto;
+  }
+
+  .slimbar-spinner {
+    width: 40px;
     height: 40px;
     width: 40px;
     align-items: center;
@@ -35,12 +55,31 @@
   }
 }
 
-.slimbar-spinner {
-  width: 40px;
-  height: 40px;
-  margin-top: 24px;
-  display: flex;
+.servers {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  #list-container {
+    display: inline-flex;
+    align-items: center;
+  }
+  .circle {
+    position: relative;
+  }
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+}
+
+.unreads {
+  position: relative;
+  .unread {
+    margin: 0 @light-spacing;
+  }
+}
+
+.server,
+.unreads {
+  // width: 50px;
+
+  &:extend(.first-layer);
 }

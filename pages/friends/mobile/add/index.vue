@@ -1,22 +1,16 @@
 <template>
   <div id="friends-add" v-scroll-lock="true" class="hidden-scroll">
-    <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
-      <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
-      <div class="columns">
-        <div class="column top-bar">
-          <arrow-left-icon
-            size="1.2x"
-            class="icon-button toggle-sidebar"
-            full-width
-            @click="goBack"
-          />
-          <TypographyTitle :text="$t('friends.add')" :size="5" />
-        </div>
-        <div class="column is-half-desktop">
-          <FriendsAdd />
-        </div>
-      </div>
-    </UiSimpleScroll>
+    <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
+    <div class="top-bar">
+      <arrow-left-icon
+        size="1.2x"
+        class="icon-button toggle-sidebar"
+        full-width
+        @click="goBack"
+      />
+      <TypographyTitle :text="$t('friends.add')" :size="5" />
+    </div>
+    <FriendsAdd />
   </div>
 </template>
 

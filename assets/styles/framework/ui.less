@@ -48,7 +48,41 @@
 }
 
 // Scrollbars
-@scroll-bar-size: 5px;
+@scroll-bar-size: 6px;
+@scroll-hover-size: 10px;
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // only show if inside scroll container
+  &:hover,
+  &:focus-within {
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      display: block;
+
+      // set height and width for vertical & horizontal scroll bars
+      width: @scroll-bar-size;
+      height: @scroll-bar-size;
+      &:hover {
+        width: @scroll-hover-size;
+        height: @scroll-hover-size;
+      }
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: @flair-color;
+      &:extend(.round-corners);
+    }
+    scrollbar-color: @flair-color transparent;
+  }
+}
 
 // Borders
 @light-border: 1px solid rgba(105, 128, 167, 0.05);

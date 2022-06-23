@@ -47,7 +47,7 @@
       full-width
       class="search-input"
     />
-    <div class="scrolling hidden-scroll friends">
+    <div class="friends">
       <div v-if="isNoFriends" class="no-friend">
         <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
         <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
@@ -60,31 +60,28 @@
           <user-plus-icon size="1.2x" />
         </InteractablesButton>
       </div>
-      <UiSimpleScroll v-else scroll-mode="vertical" scroll-show="scroll">
-        <div class="columns friends-list">
-          <div class="column is-half-desktop">
-            <!-- Friends List -->
-            <div v-if="dataState.friends !== DataStateType.Loading">
-              <div v-for="(value, key) in filteredList" :key="key">
-                <span class="alpha-divider">{{ key }}</span>
-                <FriendsFriend
-                  v-for="friend in value"
-                  :key="friend.address"
-                  :friend="friend"
-                />
-              </div>
-              <div
-                v-if="dataState.friends === DataStateType.Updating"
-                class="loading-container"
-              >
-                <UiLoadersUpdating />
-              </div>
-            </div>
-            <div v-else>
-              <UiLoadersFriend :count="5" />
-            </div>
-          </div></div
-      ></UiSimpleScroll>
+      <div class="friends-list">
+        <!-- Friends List -->
+        <div v-if="dataState.friends !== DataStateType.Loading">
+          <div v-for="(value, key) in filteredList" :key="key">
+            <span class="alpha-divider">{{ key }}</span>
+            <FriendsFriend
+              v-for="friend in value"
+              :key="friend.address"
+              :friend="friend"
+            />
+          </div>
+          <div
+            v-if="dataState.friends === DataStateType.Updating"
+            class="loading-container"
+          >
+            <UiLoadersUpdating />
+          </div>
+        </div>
+        <div v-else>
+          <UiLoadersFriend :count="5" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -200,10 +197,6 @@ export default Vue.extend({
   font-family: @primary-font;
 }
 
-.scrolling {
-  height: calc(100% - @sidebar-inner-offset);
-  min-height: calc(100% - @sidebar-inner-offset);
-}
 .loading-container {
   text-align: center;
 }
@@ -214,6 +207,7 @@ export default Vue.extend({
 
 #friends-list {
   height: calc(var(--app-height) - @sidebar-inner-offset);
+  overflow-y: overlay;
   .top-bar {
     flex-flow: row;
     display: flex;

@@ -16,31 +16,9 @@
 .auto-scroll {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: overlay;
   height: 100%;
   padding: 0 @normal-spacing;
-
-  /* Custom Scroll for Firefox */
-  scrollbar-width: thin;
-
-  /* Scroll Width */
-  &::-webkit-scrollbar {
-    width: 5px;
-    &:hover {
-      width: 11px;
-    }
-  }
-
-  /* Scroll Track */
-  &::-webkit-scrollbar-track {
-    &:extend(.round-corners);
-  }
-
-  /* Scroll Handle */
-  &::-webkit-scrollbar-thumb {
-    &:extend(.round-corners);
-  }
 
   .chat-scroll-content {
     display: flex;

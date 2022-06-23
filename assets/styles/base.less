@@ -30,22 +30,6 @@ body {
 *:active {
   outline: none;
 }
-* {
-  &::-webkit-scrollbar {
-    // set height and width for vertical & horizontal scroll bars
-    width: @scroll-bar-size;
-    height: @scroll-bar-size;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: @flair-color;
-    &:extend(.round-corners);
-  }
-  scrollbar-width: thin;
-  scrollbar-color: @flair-color transparent;
-}
 
 code {
   &:extend(.background-semitransparent-lighter);
@@ -494,25 +478,9 @@ button {
   }
 }
 
-//Scrollbar
-.auto-scroll {
-  &::-webkit-scrollbar-thumb {
-    &:extend(.background-flair);
-  }
-
-  scrollbar-color: @flair-color transparent;
-}
-
-.hidden-scroll {
-  overflow-y: auto;
-  position: relative;
-
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-    scrollbar-width: none;
-  }
+// Swiper
+.sidebar-container.swiper-slide.swiper-slide-active {
+  transform: none;
 }
 
 //Media

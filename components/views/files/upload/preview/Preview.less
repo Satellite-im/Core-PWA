@@ -5,6 +5,7 @@
   &:extend(.background-semitransparent-light);
   border-bottom-color: rgba(87, 101, 116, 0.3);
   border-radius: @corner-rounding @corner-rounding 0 0;
+  overflow-x: overlay;
 
   &.no-round {
     border-radius: 0;
@@ -12,7 +13,6 @@
   .file-list {
     display: flex;
     gap: @normal-spacing;
-    overflow-x: auto;
     padding-bottom: @light-spacing;
   }
 }

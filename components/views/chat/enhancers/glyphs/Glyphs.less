@@ -19,25 +19,7 @@
   }
   .virtual-list {
     height: 325px;
-    overflow-y: auto;
+    overflow-y: overlay;
     padding-bottom: 80px;
-
-    &::-webkit-scrollbar {
-      width: 5px;
-      &:hover {
-        width: 11px;
-      }
-    }
-
-    /* Scroll Track */
-    &::-webkit-scrollbar-track {
-      &:extend(.round-corners);
-    }
-
-    /* Scroll Handle */
-    &::-webkit-scrollbar-thumb {
-      background-color: @flair-color;
-      &:extend(.round-corners);
-    }
   }
 }

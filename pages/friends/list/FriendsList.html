@@ -2,7 +2,7 @@
   <FriendsMobileList v-if="$device.isMobile" />
   <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
   <div class="columns" v-else>
-    <div class="column is-half">
+    <div class="column">
       <!-- Friends Add -->
       <FriendsAdd />
       <!-- Friend Requests -->
@@ -58,50 +58,41 @@
         />
       </template>
     </div>
-
-    <UiSimpleScroll
-      scrollMode="vertical"
-      scrollShow="scroll"
-      containerClass="is-half"
-    >
-      <div class="friend-column">
-        <!-- Friends List -->
-        <div v-if="dataState.friends === DataStateType.Loading">
-          <UiLoadersFriend :count="5" />
-        </div>
-        <div v-else>
-          <div v-for="(value, key) in alphaSortedFriends" :key="key">
-            <span class="alpha-divider">{{ key }}</span>
-            <FriendsFriend
-              v-for="friend in value"
-              :friend="friend"
-              :key="friend.address"
-            />
-          </div>
-          <div
-            class="loading-container"
-            v-if="dataState.friends === DataStateType.Updating"
-          >
-            <UiLoadersUpdating />
-          </div>
-        </div>
-        <div
-          v-if="Object.entries($mock.blocked).length && featureReadyToShow"
-          class="padded_divider"
-        >
-          <TypographyHorizontalRuleText
-            plaintext
-            :value="$t('friends.blocked_friends')"
+    <div class="column">
+      <!-- Friends List -->
+      <div v-if="dataState.friends === DataStateType.Loading">
+        <UiLoadersFriend :count="5" />
+      </div>
+      <div v-else>
+        <div v-for="(value, key) in alphaSortedFriends" :key="key">
+          <span class="alpha-divider">{{ key }}</span>
+          <FriendsFriend
+            v-for="friend in value"
+            :friend="friend"
+            :key="friend.address"
           />
         </div>
-        <FriendsFriend
-          v-for="friend in $mock.blocked"
-          v-if="featureReadyToShow"
-          :friend="friend"
-          :key="friend.address"
-          blocked
+        <UiLoadersUpdating
+          v-if="dataState.friends === DataStateType.Updating"
+          class="loading-container"
         />
       </div>
-    </UiSimpleScroll>
+      <div
+        v-if="Object.entries($mock.blocked).length && featureReadyToShow"
+        class="padded_divider"
+      >
+        <TypographyHorizontalRuleText
+          plaintext
+          :value="$t('friends.blocked_friends')"
+        />
+      </div>
+      <FriendsFriend
+        v-for="friend in $mock.blocked"
+        v-if="featureReadyToShow"
+        :friend="friend"
+        :key="friend.address"
+        blocked
+      />
+    </div>
   </div>
 </div>
