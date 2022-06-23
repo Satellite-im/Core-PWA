@@ -3,15 +3,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
-import { Group, GroupMember } from '~/store/groups/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ConversationParticipant } from '~/store/conversation/types'
-
-const p2p = Peer2Peer.getInstance()
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
@@ -61,11 +56,12 @@ export default Vue.extend({
         : this.users.slice(0, this.maxViewableUsers)
     },
     localParticipant() {
-      return { ...this.accounts.details, peerId: p2p.id }
+      return { ...this.accounts.details, peerId: iridium.connector?.peerId }
     },
     remoteParticipants() {
       return this.conversation.participants.filter(
-        (participant: ConversationParticipant) => participant.peerId !== p2p.id,
+        (participant: ConversationParticipant) =>
+          participant.peerId !== iridium.connector?.peerId,
       )
     },
     activeCall() {

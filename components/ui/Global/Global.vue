@@ -5,11 +5,9 @@ import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Friend } from '~/types/ui/friends'
-
-const p2p = Peer2Peer.getInstance()
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -73,7 +71,7 @@ export default Vue.extend({
      */
     async acceptCall(kinds: TrackKind[]) {
       this.$store.commit('webrtc/setStreamMuted', {
-        peerId: p2p.id,
+        peerId: iridium.connector?.peerId,
         audio: true,
         video: true,
         screen: true,

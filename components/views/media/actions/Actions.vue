@@ -15,9 +15,8 @@ import {
 
 import { mapState } from 'vuex'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { RootState } from '~/types/store/store'
-const p2p = Peer2Peer.getInstance()
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -47,7 +46,10 @@ export default Vue.extend({
       return this.video.disabled
     },
     screenMuted(): boolean {
-      return p2p.id && this.webrtc.streamMuted[p2p.id]?.screen
+      return (
+        iridium.connector?.peerId &&
+        this.webrtc.streamMuted[iridium.connector?.peerId]?.screen
+      )
     },
   },
   methods: {
@@ -66,7 +68,7 @@ export default Vue.extend({
         } else {
           this.$store.dispatch(
             'webrtc/toggleMute',
-            { kind, peerId: p2p.id },
+            { kind, peerId: iridium.connector?.peerId },
             { root: true },
           )
         }

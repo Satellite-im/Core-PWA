@@ -13,11 +13,10 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
 import { PeerMutedState } from '~/store/webrtc/types'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
-const p2p = Peer2Peer.getInstance()
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -47,7 +46,10 @@ export default Vue.extend({
       return this.inCall ? this.video.disabled : false
     },
     screenMuted(): boolean {
-      return p2p.id && this.webrtc.streamMuted[p2p.id]?.screen
+      return (
+        iridium.connector?.peerId &&
+        this.webrtc.streamMuted[iridium.connector?.peerId]?.screen
+      )
     },
     inCall(): boolean {
       return this.webrtc.activeCall !== undefined
