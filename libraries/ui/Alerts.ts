@@ -13,6 +13,12 @@ export enum AlertType {
   APPLICATION_NOTIFICATION = 'applicationNotification',
   MISCELLANEOUS = 'miscellaneous',
 }
+export enum AlertTitle {
+  FRIEND_REQUEST = 'New Friend Request',
+  DIRECT_MESSAGE = 'New Direct Message',
+  GROUP_MESSAGE = 'New Group Message',
+  MISSED_CALL = 'New Missed Call',
+}
 
 export enum AlertState {
   READ = 'READ',

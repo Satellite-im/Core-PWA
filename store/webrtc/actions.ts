@@ -13,7 +13,7 @@ import { Peer2Peer, PrivateKeyInfo } from '~/libraries/WebRTC/Libp2p'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 import { Friend } from '~/types/ui/friends'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { AlertType } from '~/libraries/ui/Alerts'
+import { AlertTitle, AlertType } from '~/libraries/ui/Alerts'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -577,8 +577,10 @@ const webRTCActions = {
     function onCallDestroy() {
       if (rootState.webrtc.incomingCall !== undefined) {
         const callerInfo = rootState.friends.all.find((friend) => {
+          console.log(friend)
           return friend.account.from === state.originator
         })
+        console.log(callerInfo, rootState.webrtc)
         dispatch(
           'ui/sendNotification',
           {
@@ -586,7 +588,7 @@ const webRTCActions = {
             from: callerInfo?.name,
             fromAddress: callerInfo?.address,
             imageHash: callerInfo?.profilePicture,
-            title: `Notification`,
+            title: AlertTitle.MISSED_CALL,
             type: AlertType.MISSED_CALL,
           },
           { root: true },

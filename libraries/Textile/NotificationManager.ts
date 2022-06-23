@@ -130,11 +130,15 @@ export class NotificationManager {
         makeNotificationMessage = `New message in ${payload.groupName} from ${payload.from}`
         break
       }
+      case AlertType.FRIEND_REQUEST: {
+        makeNotificationMessage = `New friend request from ${payload.from}`
+        break
+      }
     }
 
     const browserNotification = new Notifications()
     await browserNotification.sendNotifications(
-      payload.type,
+      '',
       payload.title,
       payload.imageHash,
       makeNotificationMessage,

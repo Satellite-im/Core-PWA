@@ -25,7 +25,7 @@ import {
   UISearchResultData,
   MatchTypesEnum,
 } from '~/types/search/search'
-import { AlertType } from '~/libraries/ui/Alerts'
+import { AlertTitle, AlertType } from '~/libraries/ui/Alerts'
 import { ActionsArguments, RootState } from '~/types/store/store'
 import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
@@ -233,7 +233,7 @@ export default {
           message: 'New DM',
           from: sender.name,
           fromAddress: sender.address,
-          title: `Notification`,
+          title: AlertTitle.DIRECT_MESSAGE,
           imageHash: sender.profilePicture,
           type: AlertType.DIRECT_MESSAGE,
         },
@@ -751,7 +751,7 @@ export default {
             message: 'New DM',
             from: userInfo?.name,
             fromAddress: urlMatch,
-            title: `Notification`,
+            title: AlertTitle.GROUP_MESSAGE,
             groupName: group?.name,
             groupId,
             id: uuidv4(),
