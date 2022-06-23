@@ -909,8 +909,6 @@ export default {
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
       })
-
-      dispatch('storeInMessage', { address: groupId, message })
     } catch (e) {
       Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
     } finally {
