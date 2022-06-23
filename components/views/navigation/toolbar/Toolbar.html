@@ -20,7 +20,12 @@
     />
   </div>
   <div class="controls">
-    <div class="toggle-alerts" data-cy="toolbar-alerts">
+    <div
+      class="toggle-alerts"
+      data-cy="toolbar-alerts"
+      @click="toggleAlerts"
+      v-tooltip.bottom="$t('pages.chat.alerts')"
+    >
       <UiCircle
         v-if="allUnseenNotifications.length"
         class="notification-alert"
