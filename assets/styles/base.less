@@ -200,6 +200,10 @@ a.link {
 }
 
 // Buttons
+button {
+  cursor: pointer;
+  &:extend(.font-primary);
+}
 .button {
   border: none;
   &.active {
@@ -485,11 +489,6 @@ a.link {
   }
 }
 
-// Swiper
-.sidebar-container.swiper-slide.swiper-slide-active {
-  transform: none;
-}
-
 //Scrollbar
 .auto-scroll {
   &::-webkit-scrollbar-thumb {
@@ -676,14 +675,6 @@ a.link {
 }
 .info-toggle {
   &:extend(.font-flair);
-}
-
-//Reactions
-.emoji-reactions {
-  .emoji-reaction.emoji-reacted {
-    &:extend(.background-flair-gradient);
-    &:extend(.glow-flair);
-  }
 }
 
 //Message
