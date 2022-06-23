@@ -9,6 +9,7 @@ import InitialDataState from '~/store/dataState/state'
 import InitialFriendsState from '~/store/friends/state'
 import InitialGroupsState from '~/store/groups/state'
 import InitialMediaState from '~/store/media/state'
+import InitialMetaState from '~/store/meta/state'
 import InitialSettingsState from '~/store/settings/state'
 import InitialSoundsState from '~/store/sounds/state'
 import InitialTextileState from '~/store/textile/state'
@@ -37,6 +38,9 @@ export const initialRootState: RootState = {
   },
   groups: {
     ...InitialGroupsState(),
+  },
+  meta: {
+    ...InitialMetaState(),
   },
   media: {
     ...InitialMediaState(),

@@ -12,6 +12,7 @@ import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
 import { MediaState } from '~/store/media/types'
+import { MetaState } from '~/store/meta/types'
 import { SoundsState } from '~/store/sounds/types'
 
 export interface RootState {
@@ -23,6 +24,7 @@ export interface RootState {
   friends: FriendsState
   groups: GroupsState
   media: MediaState
+  meta: MetaState
   settings: SettingsState
   sounds: SoundsState
   ui: UIState
