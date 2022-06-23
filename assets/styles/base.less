@@ -359,9 +359,13 @@ button {
 }
 
 .is-primary {
+  &.select {
+    box-sizing: border-box;
+  }
   .custom-select {
     font-family: @secondary-font;
     &:extend(.font-primary);
+
     .selected {
       &:extend(.background-flair-gradient);
       &:extend(.glow-flair);
