@@ -156,6 +156,15 @@ export default {
       ]
     }
 
+    // Since this is async, we have to check that we are still in the chat, if
+    // the user has navigated to a different chat, we can just return early so
+    // we don't update the state with old information (prevents the toolbar
+    // from showing the wrong participant info when navigating between
+    // different conversations rapidly)
+    if (rootState.conversation.id !== friend.peerId) {
+      return
+    }
+
     // store latest data in indexeddb
     const messages = conversation.map((c) => ({ ...c, conversation: address }))
     const dbData: DexieConversation = {
@@ -776,6 +785,15 @@ export default {
       group,
       query,
     })
+
+    // Since this is async, we have to check that we are still in the chat, if
+    // the user has navigated to a different chat, we can just return early so
+    // we don't update the state with old information (prevents the toolbar
+    // from showing the wrong participant info when navigating between
+    // different conversations rapidly)
+    if (rootState.conversation.id !== groupId) {
+      return
+    }
 
     if (setActive) {
       dispatch(
