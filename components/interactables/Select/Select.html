@@ -33,7 +33,6 @@
       @keydown="checkShow"
       ref="button"
     >
-<<<<<<< HEAD
       {{ value ? selectedOptionLabel : placeholder }}
     </button>
     <ul
@@ -58,23 +57,5 @@
         {{ option.text }}
       </li>
     </ul>
-=======
-      {{ getSelectLabel }}
-    </div>
-    <div class="items">
-      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
-        <div
-          v-for="(option, i) of options"
-          :key="i"
-          :disabled="option.disabled"
-          @click="change(option)"
-          class="option"
-          :style="colorSupport ? 'background:' + renderBgGradient(option) : ''"
-        >
-          <span data-cy="custom-select-option-text">{{ option.text }}</span>
-        </div>
-      </UiSimpleScroll>
-    </div>
->>>>>>> e4c2445a (fix(settings-modal): reverted changes)
   </div>
 </div>
