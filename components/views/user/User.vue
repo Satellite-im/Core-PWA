@@ -173,7 +173,7 @@ export default Vue.extend({
       }
 
       this.$store.dispatch('conversation/setConversation', {
-        id: this.user.address,
+        id: this.user.peerId,
         type: 'friend',
         participants: [this.user],
         calling: false,
