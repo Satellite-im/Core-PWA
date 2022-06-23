@@ -30,6 +30,11 @@ export default Vue.extend({
       default: '',
       required: false,
     },
+    invisibleScrollbar: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   watch: {
     scrollTopOnChange: {
