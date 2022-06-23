@@ -46,12 +46,16 @@ const webRTCActions = {
     await $Peer2Peer.node?.relay?.start()
 
     $Peer2Peer.on('peer:discovery', ({ peerId }) => {
+      const $Logger: Logger = Vue.prototype.$Logger
+      const loggerPrefix = 'webrtc/peer:discovery - '
+
       const connectedFriend = rootState.friends.all.find(
         (friend) => friend.peerId === peerId.toB58String(),
       )
 
       if (!connectedFriend) return
 
+      $Logger.log(loggerPrefix, `discovered peer: ${peerId.toB58String()}`)
       dispatch(
         'friends/setFriendState',
         {
@@ -64,11 +68,17 @@ const webRTCActions = {
     })
 
     $Peer2Peer.on('peer:connect', ({ peerId }) => {
+      const $Logger: Logger = Vue.prototype.$Logger
+      const loggerPrefix = 'webrtc/peer:connect - '
       const connectedParticipant = rootState.conversation.participants.find(
         (participant: ConversationParticipant) =>
           participant.peerId === peerId.toB58String(),
       )
       if (connectedParticipant) {
+        $Logger.log(
+          loggerPrefix,
+          `connected participant: ${peerId.toB58String()}`,
+        )
         commit(
           'conversation/updateParticipant',
           {
@@ -82,6 +92,7 @@ const webRTCActions = {
         (friend) => friend.peerId === peerId.toB58String(),
       )
       if (!connectedFriend) return
+      $Logger.log(loggerPrefix, `connected friend: ${peerId.toB58String()}`)
       dispatch(
         'friends/setFriendState',
         {
@@ -95,6 +106,10 @@ const webRTCActions = {
 
     $Peer2Peer.on('peer:call', async ({ payload, peerId }) => {
       // update conversation participants with peers from call announcement
+      const $Logger: Logger = Vue.prototype.$Logger
+      const loggerPrefix = 'webrtc/peer:call - '
+      $Logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
+
       if (payload.peers) {
         payload.peers.forEach((peer) => {
           if (
@@ -115,16 +130,19 @@ const webRTCActions = {
       }
 
       if (!payload.callId || payload.callId === $Peer2Peer.id) {
+        $Logger.log(loggerPrefix, `invalid callId`)
         return
       }
 
       const call = $WebRTC.getCall(payload.callId)
       if (!call) {
+        $Logger.log(loggerPrefix, `create a call...`)
         dispatch('createCall', payload)
         return
       }
 
       if (rootState.webrtc.activeCall?.callId !== call.callId) {
+        $Logger.log(loggerPrefix, `No active call with call id: ${call.callId}`)
         return
       }
 
@@ -133,16 +151,23 @@ const webRTCActions = {
         !call.peerConnected[peerIdStr] &&
         !call.peerDialingDisabled[peerIdStr]
       ) {
+        $Logger.log(loggerPrefix, `initiate a call...`)
         await call.initiateCall(peerIdStr)
       }
     })
 
     $Peer2Peer.on('peer:disconnect', ({ peerId }) => {
+      const $Logger: Logger = Vue.prototype.$Logger
+      const loggerPrefix = 'webrtc/peer:disconnect - '
+
       const disconnectedParticipant = rootState.conversation.participants.find(
         (participant: ConversationParticipant) =>
           participant.peerId === peerId.toB58String(),
       )
       if (disconnectedParticipant) {
+        $Logger.log(loggerPrefix, 'disconnected participant: ', {
+          peerId: peerId.toB58String(),
+        })
         commit(
           'conversation/updateParticipant',
           {
@@ -157,6 +182,9 @@ const webRTCActions = {
         (friend) => friend.peerId === peerId.toB58String(),
       )
       if (disconnectedFriend) {
+        $Logger.log(loggerPrefix, 'disconnected friend: ', {
+          peerId: peerId.toB58String(),
+        })
         dispatch(
           'friends/setFriendState',
           {
@@ -389,9 +417,10 @@ const webRTCActions = {
     },
   ) {
     const $Logger: Logger = Vue.prototype.$Logger
+    const loggerPrefix = 'webrtc/createCall - '
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
-    $Logger.log('webrtc: creating call', callId + ' ' + peerIds)
+    $Logger.log(loggerPrefix, `callId: ${callId}, peerIds: ${peerIds}`)
 
     if (!$WebRTC.initialized && state.originator) {
       $WebRTC.init(state.originator)
@@ -435,7 +464,7 @@ const webRTCActions = {
     )
 
     if (!call) {
-      $Logger.log('webrtc/createCall', 'call invalid')
+      $Logger.log(loggerPrefix, 'call not found')
       return
     }
 
@@ -675,6 +704,7 @@ const webRTCActions = {
     { kinds }: { kinds: TrackKind[] },
   ) {
     const $Logger: Logger = Vue.prototype.$Logger
+    const loggerPrefix = 'webrtc/call - '
     const $Peer2Peer: Peer2Peer = Peer2Peer.getInstance()
 
     const activeConversation = rootState.conversation
@@ -690,18 +720,20 @@ const webRTCActions = {
       .map((p) => p.peerId)
       .filter(Boolean)
     if (peerIds.length === 0) {
-      $Logger.log('webrtc', `call - conversation has no participants`)
+      $Logger.log(loggerPrefix, `conversation has no participants`)
       return
     }
 
     const callId = activeConversation.id
     if (!callId) {
-      $Logger.log('webrtc', `call - callId not found: ${callId}`)
+      $Logger.log(loggerPrefix, `callId not found: ${callId}`)
       return
     }
 
     if (!$WebRTC.calls.has(callId)) {
-      $Logger.log('webrtc', `call - call not found: ${callId}, creating...`)
+      $Logger.log(loggerPrefix, `call not found, creating a call...`, {
+        callId,
+      })
       await dispatch('createCall', {
         callId,
         peerIds,
@@ -711,7 +743,7 @@ const webRTCActions = {
 
     const call = $WebRTC.getCall(callId)
     if (!call) {
-      $Logger.log('webrtc', `call - call not ready: ${callId}`)
+      $Logger.log(loggerPrefix, `call not ready: ${callId}`)
       return
     }
 
