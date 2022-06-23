@@ -88,6 +88,9 @@ export default Vue.extend({
         }
       },
     },
+    page() {
+      if (this.$refs.results) (this.$refs.results as HTMLElement).scrollTop = 0
+    },
   },
   mounted() {
     this.fetchResult()

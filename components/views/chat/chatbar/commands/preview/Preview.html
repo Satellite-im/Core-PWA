@@ -1,23 +1,21 @@
 <div id="command-preview" v-if="hasCommand">
   <TypographySubtitle :size="6" text="Commands" />
-  <div id="commands" class="hidden-scroll" v-scroll-lock="true">
-    <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
-      <div
-        v-for="command in commands"
-        class="command"
-        v-on:click="completeCommand(command)"
-      >
-        <span class="tag args">
-          /{{ command.name }}
-          <span v-if="command.args.length">
-            &nbsp;
-            <span v-for="arg in command.args">
-              &lt;{{ arg.name }} , {{ arg.options }}&gt;</span
-            >
-          </span>
+  <div id="commands" v-scroll-lock="true">
+    <div
+      v-for="command in commands"
+      class="command"
+      v-on:click="completeCommand(command)"
+    >
+      <span class="tag args">
+        /{{ command.name }}
+        <span v-if="command.args.length">
+          &nbsp;
+          <span v-for="arg in command.args">
+            &lt;{{ arg.name }} , {{ arg.options }}&gt;</span
+          >
         </span>
-        - <span class="command-desc">{{ command.description }}</span>
-      </div>
-    </UiSimpleScroll>
+      </span>
+      - <span class="command-desc">{{ command.description }}</span>
+    </div>
   </div>
 </div>

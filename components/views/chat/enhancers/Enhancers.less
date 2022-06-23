@@ -4,10 +4,8 @@
     flex: 1;
     &:extend(.full-width);
     height: calc(@full - 52px);
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow-y: overlay;
+    padding: @light-spacing;
   }
   .navbar {
     &:extend(.full-width);
@@ -50,8 +48,6 @@
 
 .emoji-picker {
   font-family: 'Montserrat', sans-serif;
-  &:extend(.full-width);
-  padding: 1rem;
   box-sizing: border-box;
   border-radius: 0.5rem;
 }

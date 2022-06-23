@@ -1,4 +1,8 @@
 .aside-menu {
+  padding: @xlarge-spacing;
+  position: relative;
+  -webkit-user-drag: none;
+  &:extend(.no-select);
   .menu-list {
     a {
       -webkit-user-drag: none;
@@ -13,11 +17,6 @@
     right: 2rem;
     top: 2.4rem;
   }
-
-  padding: @xlarge-spacing;
-  position: relative;
-  -webkit-user-drag: none;
-  &:extend(.no-select);
 
   @media only screen and (max-width: @mobile-breakpoint) {
     padding-top: @xlarge-spacing + @large-spacing;

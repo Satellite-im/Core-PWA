@@ -76,19 +76,13 @@
       @toggleOrder="toggleOrderBy"
     />
     <div class="search-result-content">
-      <UiSimpleScroll
-        :scrollTopOnChange="page"
-        scrollMode="vertical"
-        scrollShow="scroll"
-      >
-        <div class="search-result-inner">
-          <SearchResultItem
-            v-for="item, i in result.data"
-            :data="item"
-            :key="i"
-          />
-        </div>
-      </UiSimpleScroll>
+      <div class="search-result-inner" ref="results">
+        <SearchResultItem
+          v-for="item, i in result.data"
+          :data="item"
+          :key="i"
+        />
+      </div>
     </div>
     <paginate
       v-if="result.totalRows > queryOptions.perPage"
