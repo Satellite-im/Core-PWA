@@ -145,6 +145,15 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method hideKeyboard
+     * @description hide virtual keyboard on mobile
+     */
+    hideKeyboard() {
+      if (this.$device.isMobile) {
+        document.activeElement.blur()
+      }
+    },
+    /**
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
