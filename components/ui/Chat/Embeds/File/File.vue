@@ -15,11 +15,6 @@ export default Vue.extend({
       type: Object as PropType<FileMessagePayload>,
       required: true,
     },
-    size: {
-      type: Object as PropType<{ width: number; height: number }>,
-      default: () => {},
-      required: false,
-    },
   },
   computed: {
     getFileSize(): string {
