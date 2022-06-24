@@ -2,11 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
-import {
-  getGlyphSource,
-  getOriginalSizeFromDataUrl,
-  getSizeFromAspectRatio,
-} from '~/utilities/ImageSize'
+import { getGlyphSource, getSizeFromAspectRatio } from '~/utilities/ImageSize'
 import { Glyph } from '~/types/ui/glyph'
 import loadImg from '~/assets/img/glyphLoader.webp'
 
@@ -68,16 +64,18 @@ export default Vue.extend({
         return
       }
 
-      const originalSize = await getOriginalSizeFromDataUrl(
+      const glyphBlob = await fetch(
         getGlyphSource({ source: this.src, sizeType }),
-      )
+      ).then((image) => image.blob())
+
+      const size = await getSizeFromAspectRatio(glyphBlob)
 
       if (id) {
         this.$store.dispatch('textile/sendGroupGlyphMessage', {
           groupID: id,
           src: this.src,
           pack: this.pack.name,
-          ...getSizeFromAspectRatio(originalSize),
+          ...size,
           sizeType,
         })
       } else {
@@ -85,7 +83,7 @@ export default Vue.extend({
           to: activeFriend?.textilePubkey,
           src: this.src,
           pack: this.pack.name,
-          ...getSizeFromAspectRatio(originalSize),
+          ...size,
           sizeType,
         })
       }

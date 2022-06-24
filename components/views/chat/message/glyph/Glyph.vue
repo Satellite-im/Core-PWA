@@ -1,22 +1,19 @@
 <template src="./Glyph.html" />
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+
 import { getGlyphSource } from '~/utilities/ImageSize'
 
 export default Vue.extend({
   props: {
-    source: {
-      type: String,
-      default: '',
+    message: {
+      type: Object as PropType<any>,
+      required: true,
     },
     pack: {
       type: String,
       default: '',
-    },
-    size: {
-      type: Object as PropType<{ width: number; height: number }>,
-      required: true,
     },
     sizeType: {
       type: String,
@@ -31,7 +28,10 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui']),
     getSource() {
-      return getGlyphSource({ source: this.source, sizeType: this.sizeType })
+      return getGlyphSource({
+        source: this.message.src,
+        sizeType: this.sizeType,
+      })
     },
   },
   methods: {

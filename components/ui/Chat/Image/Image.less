@@ -3,7 +3,33 @@
   border-radius: @corner-rounding;
 
   .image-container {
+    overflow: hidden;
     &:extend(.flex-centered);
+
+    .image-loader {
+      width: @full;
+      height: @full;
+      position: relative;
+      overflow: hidden;
+      background: rgba(36, 40, 57, 0.5);
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -150px;
+        top: 0;
+        height: @full;
+        width: 75%;
+        background: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(34, 44, 63, 0.5) 50%,
+          transparent 100%
+        );
+        animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+    }
 
     .is-image {
       cursor: pointer;
@@ -12,13 +38,10 @@
       object-fit: cover;
       &:extend(.round-corners);
       &:extend(.no-select);
+      visibility: visible;
 
       &.hidden {
         visibility: hidden;
-      }
-
-      &.visible {
-        visibility: visible;
       }
     }
   }
