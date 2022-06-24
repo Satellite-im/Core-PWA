@@ -48,39 +48,40 @@
 }
 
 // Scrollbars
-@scroll-bar-size: 6px;
-@scroll-hover-size: 10px;
+@scroll-bar: 6px;
 * {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
   &::-webkit-scrollbar {
-    display: none;
+    width: @scroll-bar;
+    height: @scroll-bar;
   }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    transition: all @animation-speed ease;
+  }
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
 
-  // only show if inside scroll container
   &:hover,
   &:focus-within {
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-    scrollbar-width: thin;
-    &::-webkit-scrollbar {
-      display: block;
-
-      // set height and width for vertical & horizontal scroll bars
-      width: @scroll-bar-size;
-      height: @scroll-bar-size;
-      &:hover {
-        width: @scroll-hover-size;
-        height: @scroll-hover-size;
-      }
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
     &::-webkit-scrollbar-thumb {
       background-color: @flair-color;
       &:extend(.round-corners);
     }
+    -ms-overflow-style: -ms-autohiding-scrollbar;
     scrollbar-color: @flair-color transparent;
+  }
+}
+
+.hidden-scroll {
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+    scrollbar-width: none;
   }
 }
 

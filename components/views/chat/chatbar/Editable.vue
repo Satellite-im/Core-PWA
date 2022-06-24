@@ -325,7 +325,7 @@ export default Vue.extend({
   width: 100%;
   font-size: @mini-text-size;
   font-family: @secondary-font;
-  overflow-y: overlay;
+  overflow-y: scroll;
   padding-right: @xlight-spacing;
 
   .placeholder {

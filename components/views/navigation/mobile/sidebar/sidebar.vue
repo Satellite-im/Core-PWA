@@ -81,14 +81,6 @@
         </InteractablesButton>
       </div>
 
-      <Slimbar
-        v-if="$device.isMobile && featureReadyToShow"
-        :servers="$mock.servers"
-        :unreads="$mock.unreads"
-        :open-modal="toggleModal"
-        horizontal
-      />
-
       <FriendsQuick v-if="ui.modals.quickchat" v-click-outside="toggleModal" />
       <div
         v-if="ui.showSidebarUsers"
