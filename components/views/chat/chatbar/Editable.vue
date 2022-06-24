@@ -92,6 +92,11 @@ export default Vue.extend({
       }
     },
   },
+  mounted() {
+    window.addEventListener('resize', () => {
+      this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
+    })
+  },
   methods: {
     /**
      * @method focusInput
@@ -100,13 +105,9 @@ export default Vue.extend({
     focusInput() {
       this.$nextTick(() => {
         if (!this.$refs?.editable) return
-        const messageBox = this.$refs?.editable as HTMLElement
+        const messageBox = this.$refs.editable as HTMLElement
         Cursor.setCurrentCursorPosition(this.value.length, messageBox)
       })
-
-      if (!this.focus) {
-        this.$store.dispatch('ui/toggleChatbarFocus', false)
-      }
     },
     /**
      * @method buildChatbarRow
