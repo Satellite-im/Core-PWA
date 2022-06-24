@@ -207,7 +207,6 @@ export default Vue.extend({
 
 #friends-list {
   height: calc(var(--app-height) - @sidebar-inner-offset);
-  overflow-y: scroll;
   .top-bar {
     flex-flow: row;
     display: flex;

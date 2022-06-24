@@ -421,16 +421,6 @@ export default Vue.extend({
     }
   }
 
-  .scrolling {
-    padding: 0 @normal-spacing;
-    .ps {
-      padding-right: @normal-spacing * 1.5;
-      right: -@normal-spacing;
-      left: 0;
-      width: calc(@full + @normal-spacing);
-    }
-  }
-
   .loading-container {
     display: inline-flex;
     justify-content: center;

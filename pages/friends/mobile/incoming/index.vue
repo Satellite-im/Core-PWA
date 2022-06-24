@@ -19,68 +19,58 @@
       full-width
       class="search-input"
     />
-    <div class="scrolling hidden-scroll friends">
-      <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
-        <div class="columns friends-list">
-          <div class="column is-half-desktop">
-            <!-- Friend Requests -->
-            <div class="typography-container">
-              <TypographyText
-                size="6"
-                plaintext
-                :text="$t('friends.received')"
-              />
-            </div>
-            <UiLoadersFriend
-              v-if="dataState.friends === DataStateType.Loading"
-              :count="1"
-            />
-            <template v-else-if="searchIncomingFriends.length">
-              <FriendsFriend
-                v-for="friend in searchIncomingFriends"
-                :key="friend.from"
-                :friend="{
-                  name: friend.userInfo.name,
-                  address: friend.from,
-                  state: 'offline',
-                  status: friend.userInfo.status,
-                  request: friend,
-                }"
-                request
-              />
-            </template>
-            <div v-else>
-              <TypographyText
-                size="6"
-                plaintext
-                :text="$t('friends.no_friend_request')"
-              />
-            </div>
-            <!-- Outgoing Requests -->
-            <UiLoadersFriend
-              v-if="dataState.friends === DataStateType.Loading"
-              :count="1"
-            />
-            <template v-else-if="searchOutgoingFriends.length">
-              <div class="typography-container">
-                <TypographyText size="6" plaintext :text="$t('friends.sent')" />
-              </div>
-              <FriendsFriend
-                v-for="friend in searchOutgoingFriends"
-                :key="friend.to"
-                :friend="{
-                  name: friend.userInfo.name,
-                  address: friend.to,
-                  state: 'offline',
-                  status: friend.userInfo.status,
-                  request: friend,
-                }"
-                outgoing
-              />
-            </template>
-          </div>
+    <div class="incoming-container">
+      <!-- Friend Requests -->
+      <div class="typography-container">
+        <TypographyText size="6" plaintext :text="$t('friends.received')" />
+      </div>
+      <UiLoadersFriend
+        v-if="dataState.friends === DataStateType.Loading"
+        :count="1"
+      />
+      <template v-else-if="searchIncomingFriends.length">
+        <FriendsFriend
+          v-for="friend in searchIncomingFriends"
+          :key="friend.from"
+          :friend="{
+            name: friend.userInfo.name,
+            address: friend.from,
+            state: 'offline',
+            status: friend.userInfo.status,
+            request: friend,
+          }"
+          request
+        />
+      </template>
+      <div v-else>
+        <TypographyText
+          size="6"
+          plaintext
+          :text="$t('friends.no_friend_request')"
+        />
+      </div>
+      <!-- Outgoing Requests -->
+      <UiLoadersFriend
+        v-if="dataState.friends === DataStateType.Loading"
+        :count="1"
+      />
+      <template v-else-if="searchOutgoingFriends.length">
+        <div class="typography-container">
+          <TypographyText size="6" plaintext :text="$t('friends.sent')" />
         </div>
-      </UiSimpleScroll>
+        <FriendsFriend
+          v-for="friend in searchOutgoingFriends"
+          :key="friend.to"
+          :friend="{
+            name: friend.userInfo.name,
+            address: friend.to,
+            state: 'offline',
+            status: friend.userInfo.status,
+            request: friend,
+          }"
+          outgoing
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -237,6 +227,10 @@ export default Vue.extend({
     .filler {
       flex: 1;
     }
+  }
+
+  .incoming-container {
+    overflow-y: scroll;
   }
 
   .typography-container {

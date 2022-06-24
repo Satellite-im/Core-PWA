@@ -1,5 +1,5 @@
 <template>
-  <div id="friends-add" v-scroll-lock="true" class="hidden-scroll">
+  <div id="friends-add">
     <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
     <div class="top-bar">
       <arrow-left-icon
@@ -88,10 +88,6 @@ export default Vue.extend({
   font-family: @primary-font;
 }
 
-.scrolling {
-  height: @full;
-  min-height: @full;
-}
 .loading-container {
   text-align: center;
 }
@@ -102,6 +98,7 @@ export default Vue.extend({
 
 #friends-add {
   margin-top: @normal-spacing;
+  overflow-y: scroll;
   .top-bar {
     flex-flow: row;
     display: flex;
