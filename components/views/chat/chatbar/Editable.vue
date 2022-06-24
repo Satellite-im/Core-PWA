@@ -92,11 +92,6 @@ export default Vue.extend({
       }
     },
   },
-  mounted() {
-    window.addEventListener('resize', () => {
-      this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
-    })
-  },
   methods: {
     /**
      * @method focusInput
