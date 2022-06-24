@@ -2,7 +2,7 @@
   id="simple-scrollbar"
   ref="simplescrollbar"
   v-scroll-lock="true"
-  :class="[{'scrollbar-always-visible': scrollShow === 'always' , 'scrollbar-vertical': scrollMode === 'vertical', 'scrollbar-horizontal': scrollMode === 'horizontal', 'invisible-scrollbar': invisibleScrollbar}, containerClass]"
+  :class="[{'scrollbar-always-visible': scrollShow === 'always' , 'scrollbar-vertical': scrollMode === 'vertical', 'scrollbar-horizontal': scrollMode === 'horizontal'}, containerClass]"
   v-if="Object.keys(this.$slots).length !== 0"
 >
   <div class="wrapper">
