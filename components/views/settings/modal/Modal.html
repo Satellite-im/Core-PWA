@@ -27,7 +27,10 @@
             class="menu-toggle"
           />
           <SettingsBreadcrumbs />
-          <InteractablesClose :action="closeModal" />
+          <InteractablesClose
+            data-cy="settings-close-button"
+            :action="closeModal"
+          />
           <SettingsPagesPersonalize
             v-if="this.ui.settingsRoute === SettingsRoutes.PERSONALIZE"
           />

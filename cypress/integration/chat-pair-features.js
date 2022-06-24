@@ -18,7 +18,7 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
-let glyphURL, imageURL, fileURL
+let glyphURL, imageURL, fileURL, messageTimestamp
 
 describe('Chat features with two accounts', () => {
   it(
@@ -35,8 +35,16 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it.skip('Send message to user B', () => {
+  it('Send message to user B', () => {
+    //Send message
     cy.chatFeaturesSendMessage(randomMessage)
+
+    // Obtain timestamp from chat message
+    cy.getTimestamp().then((value) => {
+      messageTimestamp = value
+    })
+
+    //Go to last chat message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -52,7 +60,7 @@ describe('Chat features with two accounts', () => {
       .should('have.text', '😄')
   })
 
-  it.skip('Context Menu Options - Text Message', () => {
+  it('Context Menu Options - Text Message', () => {
     let optionsMessage = ['Add Reaction', 'Reply', 'Copy Message']
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
@@ -132,7 +140,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it.skip('Assert message received from user A', () => {
+  it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
@@ -141,7 +149,7 @@ describe('Chat features with two accounts', () => {
       .should('exist')
   })
 
-  it.skip('Message not sent by same user cannot be edited', () => {
+  it('Message not sent by same user cannot be edited', () => {
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -149,7 +157,7 @@ describe('Chat features with two accounts', () => {
     cy.validateOptionNotInContextMenu('@lastmessage', 'Edit')
   })
 
-  it.skip('User should be able to reply a message', () => {
+  it('User should be able to reply a message', () => {
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -157,7 +165,7 @@ describe('Chat features with two accounts', () => {
     cy.chatFeaturesReplyMessage('Chat User A', '@lastmessage', textReply)
   })
 
-  it.skip('Reply to message shows as collapsed first', () => {
+  it('Reply to message shows as collapsed first', () => {
     //reply path
     cy.getReply(randomMessage)
     cy.get('@reply-preview')
@@ -165,7 +173,7 @@ describe('Chat features with two accounts', () => {
       .should('contain', 'Reply from Chat User B')
   })
 
-  it.skip('Reply to message is displayed by clicking on it', () => {
+  it('Reply to message is displayed by clicking on it', () => {
     cy.getReply(randomMessage)
     cy.get('@reply-preview').click()
     cy.get('[data-cy=reply-message]').should('have.text', textReply)
@@ -174,21 +182,21 @@ describe('Chat features with two accounts', () => {
       .should('contain', 'Collapse')
   })
 
-  it.skip('Reply to message is not displayed when clicking on Collapse', () => {
+  it('Reply to message is not displayed when clicking on Collapse', () => {
     cy.get('[data-cy=reply-close]').scrollIntoView().click()
     cy.get('[data-cy=reply-message]').should('not.exist')
     cy.getReply(randomMessage)
     cy.get('@reply-preview').should('exist').scrollIntoView()
   })
 
-  it.skip('Assert emoji received from user A', () => {
+  it('Assert emoji received from user A', () => {
     cy.get('[data-cy=chat-message] > span')
       .last()
       .scrollIntoView()
       .should('have.text', '😄')
   })
 
-  it.skip('Assert glyph received from user A', () => {
+  it('Assert glyph received from user A', () => {
     cy.goToLastGlyphOnChat()
       .invoke('attr', 'src')
       .then((glyphSecondAccountSrc) => {
@@ -196,7 +204,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert image received from user A', () => {
+  it('Assert image received from user A', () => {
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
       .then((imageSecondAccountSrc) => {
@@ -204,7 +212,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert file received from user A', () => {
+  it('Assert file received from user A', () => {
     cy.get('[data-cy=chat-file]')
       .last()
       .scrollIntoView()
@@ -220,11 +228,11 @@ describe('Chat features with two accounts', () => {
       .last()
       .invoke('text')
       .then(($text) => {
-        expect($text).to.contain('now')
+        expect($text).to.contain(messageTimestamp)
       })
   })
 
-  it.skip('Add reactions to text message in chat', () => {
+  it('Add reactions to text message in chat', () => {
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -233,26 +241,34 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@messageToReact', '😄')
   })
 
-  it.skip('Add reactions to image in chat', () => {
+  it('Add reactions to image in chat', () => {
     cy.get('[data-cy=chat-image]').last().as('imageToReact')
     cy.reactToChatElement('@imageToReact', '[title="smile"]')
     cy.validateChatReaction('@imageToReact', '😄')
   })
 
-  it.skip('Add reactions to file in chat', () => {
+  it('Add reactions to file in chat', () => {
     cy.get('[data-cy=chat-file]').last().as('fileToReact')
     cy.reactToChatElement('@fileToReact', '[title="smile"]')
     cy.validateChatReaction('@fileToReact', '😄')
   })
 
-  it.skip('Add reactions to glyph in chat', () => {
+  it('Add reactions to glyph in chat', () => {
     cy.get('[data-cy=chat-glyph]').last().as('glyphToReact')
     cy.reactToChatElement('@glyphToReact', '[title="smile"]')
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
   it('Assert timestamp immediately after sending message', () => {
+    //Send chat message
     cy.chatFeaturesSendMessage(randomMessage)
+
+    // Obtain timestamp from last chat message
+    cy.getTimestamp().then((value) => {
+      messageTimestamp = value
+    })
+
+    //Go to last chat message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)
       .last()
@@ -266,31 +282,12 @@ describe('Chat features with two accounts', () => {
         cy.getAttached($timestamp)
           .invoke('text')
           .then(($text) => {
-            expect($text).to.contain('now')
+            expect($text).to.contain(messageTimestamp)
           })
       })
   })
 
-  it.skip('Assert timestamp one minute after sending message', () => {
-    //Wait for 60 seconds
-    cy.wait(60000)
-
-    //Assert timestamp text after a minute has passed
-    //Assert timestamp text immediately
-    cy.get('[data-cy=chat-timestamp]')
-      .last()
-      .then(($timestamp) => {
-        cy.getAttached($timestamp)
-          .invoke('text')
-          .then(($text) => {
-            let regexTimestamp = '((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))'
-            expect($text).to.match(regexTimestamp)
-          }) //skipped due to  ''CypressError: `match` requires its argument be a `RegExp`.
-        // You passed: `((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))`'' - AP-1666
-      })
-  })
-
-  it.skip(
+  it(
     'User should be able to reply without first clicking into the chat bar - Chat User C',
     { retries: 2 },
     () => {
@@ -329,7 +326,7 @@ describe('Chat features with two accounts', () => {
     },
   )
 
-  it.skip('React to other users reaction - Execute validation', () => {
+  it('React to other users reaction - Execute validation', () => {
     //Find the last reaction message
     cy.get('[data-cy=chat-message]')
       .contains(randomMessage)

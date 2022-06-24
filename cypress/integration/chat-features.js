@@ -113,8 +113,8 @@ describe('Chat Features Tests', () => {
   it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
     // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
     cy.hoverOnComingSoonIcon(
-      '#chatbar-controls > span > .tooltip-container',
-      'Send Money\nComing Soon',
+      '#chatbar-controls > span',
+      'Send Money Coming Soon',
     )
   })
 

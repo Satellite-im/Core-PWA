@@ -22,7 +22,7 @@ data.allDevices.forEach((item) => {
     },
     () => {
       Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
-      it(`Create Account on ${item.description}`, () => {
+      it(`Create Account on ${item.description}`, { retries: 2 }, () => {
         cy.createAccountPINscreen(randomPIN, false, false, true)
 
         //Create or Import account selection screen
@@ -56,14 +56,7 @@ data.allDevices.forEach((item) => {
         cy.goToConversation('cypress friend', true)
       })
 
-      it.skip(`Chat Features - Send Messages on ${item.description}`, () => {
-        // Click to hamburger button to display chat if app wrap is open (chat not displayed)
-        cy.get('#app-wrap').then(($appWrap) => {
-          if ($appWrap.hasClass('is-open')) {
-            cy.get('[data-cy=hamburger-button]').click()
-          }
-        })
-
+      it(`Chat Features - Send Messages on ${item.description}`, () => {
         //Validate message and emojis are sent
         cy.chatFeaturesSendMessage(randomMessage)
       })
@@ -74,6 +67,34 @@ data.allDevices.forEach((item) => {
 
       it.skip(`Chat Features - Edit Messages on ${item.description}`, () => {
         cy.chatFeaturesEditMessage(randomMessage, randomNumber)
+      })
+
+      it(`Glyphs Modal on ${item.description}`, () => {
+        //Go to last glyph and click on glyphs modal
+        cy.goToLastGlyphOnChat().click()
+        cy.validateGlyphsModal()
+      })
+
+      it(`Glyphs Modal - Coming Soon on ${item.description}`, () => {
+        //Coming soon modal
+        cy.contains('View Glyph Pack').click()
+        cy.get('[data-cy=modal-cta]').should('be.visible')
+        cy.closeModal('[data-cy=modal-cta]')
+      })
+
+      it(`Glyphs Pack Screen can be dismissed on ${item.description}`, () => {
+        //Glyph Pack Screen can be dismissed
+        cy.goToLastGlyphOnChat().click()
+        cy.get('[data-cy=glyphs-modal]').should('be.visible')
+        cy.closeModal('[data-cy=glyphs-modal]')
+      })
+
+      it(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
+        //Glyph Selection - Coming Soon Modal
+        cy.get('#glyph-toggle').click()
+        cy.get('[data-cy=glyphs-marketplace]').click()
+        cy.get('[data-cy=modal-cta]').should('be.visible')
+        cy.closeModal('[data-cy=modal-cta]')
       })
 
       it(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
@@ -90,56 +111,34 @@ data.allDevices.forEach((item) => {
         cy.closeModal('[data-cy=modal-cta]')
       })
 
-      it.skip(`Glyphs Modal on ${item.description}`, () => {
-        //Go to last glyph and click on glyphs modal
-        //skipped due to bug
-        cy.goToLastGlyphOnChat().click()
-        cy.validateGlyphsModal()
-      })
-
-      it.skip(`Glyphs Modal - Coming Soon on ${item.description}`, () => {
-        //Coming soon modal
-        //skipped due to bug
-        cy.contains('View Glyph Pack').click()
-        cy.get('[data-cy=modal-cta]').should('be.visible')
-        cy.closeModal('[data-cy=modal-cta]')
-      })
-
-      it.skip(`Glyphs Pack Screen can be dismissed on ${item.description}`, () => {
-        //Glyph Pack Screen can be dismissed
-        //skipped due to bug
-        cy.goToLastGlyphOnChat().click()
-        cy.get('[data-cy=glyphs-modal]').should('be.visible')
-        cy.closeModal('[data-cy=glyphs-modal]')
-      })
-
-      it(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
-        //Glyph Selection - Coming Soon Modal
-        cy.goToConversation('cypress friend', true)
-        cy.get('#glyph-toggle').click()
-        cy.get('[data-cy=glyphs-marketplace]').click()
-        cy.get('[data-cy=modal-cta]').should('be.visible')
-        cy.closeModal('[data-cy=modal-cta]')
-      })
-
-      it.skip(`Swipe on Settings Screen on ${item.description}`, () => {
-        //Swipe on Settings Screen
-        cy.get('[data-cy=toggle-sidebar]').click() //Show main screen again
+      it(`Swipe on Settings Screen on ${item.description}`, () => {
+        // From the chat screen, swipe to the right to return to main screen
+        cy.get('body').realSwipe('toRight')
         cy.get('#mobile-nav').should('be.visible')
-        cy.get('[data-cy=mobile-nav-settings]').click() //Click on settings
-        cy.contains('Settings').should('be.visible')
-        cy.get('#settings').realSwipe('toRight') // Swipe to the right, to go back to the left part of the screen
+
+        //Go to settings screen
+        cy.get('[data-cy=mobile-nav-settings]').click()
+
+        //Validate that left part of Settings screen is displayed on mobile initially
         cy.contains('Personalize').should('be.visible')
-        cy.get('#settings').realSwipe('toLeft') // Swipe to the left, to go to the right part of the screen
+
+        // Swipe to the left, to go to the right part of the screen
+        cy.get('#settings').realSwipe('toLeft')
+
+        //Validate that right part of Settings screen is displayed after doing the swipe
         cy.contains('Settings').should('be.visible')
-        cy.get('.close-button').click()
+
+        //Close settings screen
+        cy.get('[data-cy=settings-close-button]').click()
       })
 
-      it.skip(`Swipe on Chat Screen on ${item.description}`, () => {
-        //Swipe on Chat screen to Main screen
-        cy.goToConversation('cypress friend', true)
+      it(`Swipe on Chat Screen on ${item.description}`, () => {
+        // Return to chat screen, doing a swipe from main screen
+        cy.get('body').realSwipe('toLeft')
         cy.get('[data-cy=editable-input]').should('be.visible')
-        cy.get('body').realSwipe('toRight') // Swipe to the right, to return to main page
+
+        // From the chat screen, swipe to the right to return to main screen
+        cy.get('body').realSwipe('toRight')
         cy.get('#mobile-nav').should('be.visible')
       })
 
