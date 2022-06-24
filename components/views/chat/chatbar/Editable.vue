@@ -19,7 +19,6 @@
       @drop="handleDrop"
       @focus="onFocus"
       @blur="onBlur"
-      @click="focusInput"
     >
       <div class="chat-row-content">
         <span><br /></span>
@@ -87,10 +86,16 @@ export default Vue.extend({
       }
     },
     enabled(value) {
-      if (value && this.focus) {
+      if (value) {
         this.focusInput()
       }
     },
+  },
+  mounted() {
+    // Handle initial value
+    this.handleNewValue(this.value)
+    // Then focus
+    this.focusInput()
   },
   methods: {
     /**

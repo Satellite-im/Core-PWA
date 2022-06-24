@@ -198,10 +198,6 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
-      if (this.$device.isMobile) {
-        this.$store.dispatch('ui/toggleChatbarFocus', false)
-      }
-
       if (!this.recipient) {
         return
       }
