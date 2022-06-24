@@ -69,6 +69,9 @@
     &::-webkit-scrollbar-thumb {
       background-color: @flair-color;
       &:extend(.round-corners);
+      &:hover {
+        background-color: rgba(var(--flair-color-rgb), 0.75);
+      }
     }
     -ms-overflow-style: -ms-autohiding-scrollbar;
     scrollbar-color: @flair-color transparent;
@@ -76,12 +79,10 @@
 }
 
 .hidden-scroll {
-  overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
-    scrollbar-width: none;
   }
 }
 
