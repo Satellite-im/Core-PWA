@@ -148,7 +148,7 @@ export default Vue.extend({
      * @method blurChatbar
      * @description blur chatbar
      */
-    blurChatbar(e) {
+    blurChatbar() {
       document.activeElement?.blur()
     },
     /**
