@@ -228,7 +228,6 @@ export function convertTimestampToDate(
 ) {
   if (timestamp > 0) {
     const secondsDif = dayjs().diff(timestamp, 'second')
-    console.log(1, secondsDif)
 
     if (secondsDif < 30) {
       return chatTranslations.now
