@@ -1,5 +1,6 @@
 import { Fil } from '../Fil'
 import { FILE_TYPE } from '../types/file'
+import { FileSystemErrors } from '../errors/Errors'
 
 describe('Test FileSystem File', () => {
   const mockFileData = {
@@ -44,5 +45,50 @@ describe('Test FileSystem File', () => {
     })
     file.file = testFile
     expect(file.file).toEqual(testFile)
+  })
+  it('Returns error for LEADING_DOT file name', () => {
+    const mockFileData = {
+      name: '.',
+      id: '0x0bef',
+      size: 455,
+      description: 'Test file description',
+    }
+
+    try {
+      const file = new Fil(mockFileData)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', FileSystemErrors.LEADING_DOT)
+    }
+  })
+  it('Returns error for INVALID file name', () => {
+    const mockFileData = {
+      name: ':',
+      id: '0x0bef',
+      size: 455,
+      description: 'Test file description',
+    }
+
+    try {
+      const file = new Fil(mockFileData)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', FileSystemErrors.INVALID)
+    }
+  })
+  it('Returns error for NO_EMPTY_STRING file name', () => {
+    const mockFileData = {
+      name: ' ',
+      id: '0x0bef',
+      size: 455,
+      description: 'Test file description',
+    }
+
+    try {
+      const file = new Fil(mockFileData)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', FileSystemErrors.NO_EMPTY_STRING)
+    }
   })
 })
