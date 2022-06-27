@@ -27,11 +27,19 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    getSource() {
+    getSource(): string {
       return getGlyphSource({
-        source: this.message.src,
-        sizeType: this.sizeType,
+        source: this.message.src ?? this.message,
+        sizeType: this.sizeType ?? this.$Config.chat.glyphDimensions.base.type,
       })
+    },
+    dimensions(): { width: number; height: number } {
+      return {
+        width:
+          this.message.width ?? this.$Config.chat.glyphDimensions.base.width,
+        height:
+          this.message.height ?? this.$Config.chat.glyphDimensions.base.height,
+      }
     },
   },
   methods: {

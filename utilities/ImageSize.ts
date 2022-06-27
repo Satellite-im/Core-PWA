@@ -8,7 +8,7 @@ export const getGlyphSource = ({
   source: string
   sizeType: string
 }): string => {
-  if (source.includes('/$1/')) {
+  if (source?.includes('/$1/')) {
     return source.replace('$1', sizeType)
   }
   return source
