@@ -12,12 +12,13 @@
   .file-icon {
     margin: 0;
     font-size: @xl-icon-size;
+    flex-shrink: 0;
   }
 
   .file-info {
-    align-items: flex-start;
     display: flex;
     flex-direction: column;
+    &:extend(.ellipsis);
     .subtitle {
       &:extend(.font-secondary);
       &:extend(.ellipsis);
@@ -29,6 +30,7 @@
     }
     .is-text {
       &:extend(.font-muted);
+      &:extend(.ellipsis);
       margin: 0;
       font-family: @primary-font;
       font-size: @mini-text-size;
@@ -36,6 +38,7 @@
     }
   }
   .button {
+    flex-shrink: 0;
     margin-left: auto;
     &:hover {
       &:extend(.font-secondary);
