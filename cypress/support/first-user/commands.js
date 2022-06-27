@@ -91,10 +91,10 @@ Cypress.Commands.add('validateURLOnClick', (expectedURL) => {
 // Chat - Page Load Commands
 
 Cypress.Commands.add('validateChatPageIsLoaded', () => {
-  cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
+  cy.get('[data-cy=user-name]', { timeout: 120000 }).should('exist')
 })
 
-Cypress.Commands.add('goToConversation', () => {
+Cypress.Commands.add('goToConversation', (user) => {
   cy.get('#app-wrap').then(($appWrap) => {
     if (!$appWrap.hasClass('is-open')) {
       cy.get('[data-cy=toggle-sidebar]').click()
@@ -103,12 +103,28 @@ Cypress.Commands.add('goToConversation', () => {
 
   //Find the friend and click on the message button associated
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
-  cy.getAttached('[data-cy=sidebar-user-name]').click()
+    .contains(user)
+    .click()
+
+  //Navigate through several pages before going to conversation
+  //As a workaround for the issue of message containers taking a lot of time to be loaded
+  cy.workaroundChatLoad(user)
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=chat-message]', { timeout: 180000 })
+  cy.get('[data-cy=message-container]', { timeout: 120000 })
     .last()
     .should('be.visible')
+})
+
+Cypress.Commands.add('workaroundChatLoad', (user) => {
+  //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
+  cy.get('[data-cy=sidebar-files]').click() //Go to files page
+  cy.get('[data-cy=sidebar-friends]').click() //Go to friends page
+  cy.get('[data-cy=sidebar-files]').click() // Return to files page
+  //Click on the conversation again
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+    .contains(user)
+    .click()
 })
 
 // Paste Command

@@ -216,22 +216,30 @@ Cypress.Commands.add(
 
 //Import Account Commands
 
-Cypress.Commands.add('importAccount', (pin, recoverySeed, isMobile = false) => {
-  cy.clearDatabase()
-  cy.visitRootPage(isMobile)
-  cy.url().should('contain', '#/auth/unlock')
-  cy.get('[data-cy=add-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type(pin, { log: false }, { force: true })
-  cy.get('[data-cy=submit-input]').click()
-  cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
-  cy.get('[data-cy=add-passphrase]')
-    .should('be.visible')
-    .trigger('input')
-    .type(recoverySeed, { log: false }, { force: true })
-  cy.contains('Recover Account').click()
-})
+Cypress.Commands.add(
+  'importAccount',
+  (pin, recoverySeed, isMobile = false, savePin = false) => {
+    cy.clearDatabase()
+    cy.visitRootPage(isMobile)
+    cy.url().should('contain', '#/auth/unlock')
+    cy.get('[data-cy=add-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(pin, { log: false }, { force: true })
+    if (savePin === true) {
+      cy.get('[data-cy=switch-button]').click().should('have.class', 'enabled')
+    } else {
+      cy.get('[data-cy=switch-button]').should('not.have.class', 'enabled')
+    }
+    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
+    cy.get('[data-cy=add-passphrase]')
+      .should('be.visible')
+      .trigger('input')
+      .type(recoverySeed, { log: false }, { force: true })
+    cy.contains('Recover Account').click()
+  },
+)
 
 Cypress.Commands.add(
   'importAccountPINscreen',
@@ -305,7 +313,7 @@ Cypress.Commands.add(
       'not.exist',
     )
     // Assert message
-    if ((assertMessage = true)) {
+    if (assertMessage) {
       cy.contains(message, { timeout: 30000 })
         .last()
         .scrollIntoView()
@@ -486,9 +494,9 @@ Cypress.Commands.add('clickOutside', () => {
 
 Cypress.Commands.add('validateChatPageIsLoaded', (isMobile = false) => {
   if (isMobile === false) {
-    cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
+    cy.get('[data-cy=user-name]', { timeout: 120000 }).should('exist')
   } else if (isMobile === true) {
-    cy.get('#mobile-nav', { timeout: 420000 }).should('exist')
+    cy.get('#mobile-nav', { timeout: 120000 }).should('exist')
   }
 })
 
@@ -511,10 +519,28 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
     cy.get('[data-cy=hamburger-button]').click()
   }
 
+  //Navigate through several pages before going to conversation
+  //As a workaround for the issue of message containers taking a lot of time to be loaded
+  cy.workaroundChatLoad(user)
+
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-container]', { timeout: 180000 })
+  cy.get('[data-cy=message-container]', { timeout: 120000 })
     .last()
     .should('be.visible')
+})
+
+Cypress.Commands.add('workaroundChatLoad', (user) => {
+  //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
+
+  cy.get('[data-cy=toggle-sidebar]').click() //Click on toggle sidebar to display sidebar menu
+  cy.get('[data-cy=sidebar-files]').click() //Go to files page
+  cy.get('[data-cy=sidebar-friends]').click() //Go to friends page
+  cy.get('[data-cy=sidebar-files]').click() // Return to files page
+  //Click on the conversation again
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+    .contains(user)
+    .click()
+  cy.get('[data-cy=hamburger-button]').click() // Hide sidebar if not on mobile browser
 })
 
 // Chat - Hover on Icon Commands
@@ -757,12 +783,13 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
   } else if (markdown === '~~') {
     cy.get('del').last().should('have.text', text)
   } else if (markdown === '||') {
-    cy.get('.spoiler')
+    cy.get('.spoiler-container')
       .last()
       .should('not.have.class', 'spoiler-open')
       .click() // Assert that after clicking the spoiler, text is displayed
       .should('have.class', 'spoiler-open')
-      .and('have.text', text)
+      .find('.spoiler')
+      .should('have.text', text)
   }
 })
 

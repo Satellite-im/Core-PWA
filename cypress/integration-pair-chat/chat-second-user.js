@@ -9,7 +9,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 const longMessage = faker.lorem.words(50) // generate random sentence
 
 describe('Chat features with two accounts at the same time - Second User', () => {
-  it('Load account from Chat Pair B (second account)', () => {
+  it('Load account from Chat Pair B (second account)', { retries: 2 }, () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeed)
 
@@ -18,9 +18,6 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Open a chat conversation
     cy.goToConversation('Chat Pair A')
-
-    //Click on toggle sidebar to display sidebar
-    cy.get('[data-cy=toggle-sidebar]').click()
   })
 
   it('Type a long message in chat bar without sending it', () => {
@@ -142,9 +139,6 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Go to conversation
     cy.goToConversation('Chat Pair A')
-
-    //Click on toggle sidebar to display sidebar
-    cy.get('[data-cy=toggle-sidebar]').click()
   })
 
   it('Call again to User A for a third time', () => {

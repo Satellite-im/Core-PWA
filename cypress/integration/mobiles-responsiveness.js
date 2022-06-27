@@ -22,7 +22,7 @@ data.allDevices.forEach((item) => {
     },
     () => {
       Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
-      it(`Create Account on ${item.description}`, { retries: 2 }, () => {
+      it.only(`Create Account on ${item.description}`, { retries: 2 }, () => {
         cy.createAccountPINscreen(randomPIN, false, false, true)
 
         //Create or Import account selection screen
@@ -48,7 +48,7 @@ data.allDevices.forEach((item) => {
       })
 
       it(`Import Account on ${item.description}`, { retries: 2 }, () => {
-        cy.importAccount(randomPIN, recoverySeed, true)
+        cy.importAccount(randomPIN, recoverySeed, true, true)
         //Validate profile name displayed
         cy.validateChatPageIsLoaded(true)
 
@@ -142,7 +142,7 @@ data.allDevices.forEach((item) => {
         cy.get('#mobile-nav').should('be.visible')
       })
 
-      it(`Release Notes Screen on ${item.description}`, () => {
+      it.only(`Release Notes Screen on ${item.description}`, () => {
         cy.visitRootPage()
         cy.releaseNotesScreenValidation()
       })
