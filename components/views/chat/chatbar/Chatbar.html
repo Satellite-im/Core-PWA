@@ -1,4 +1,4 @@
-<div id="chatbar" ref="chatbar">
+<div id="chatbar" ref="chatbar" v-click-outside="blurChatbar">
   <Enhancers @click="handleChatTextFromOutside" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
@@ -22,7 +22,6 @@
     <ChatbarEditable
       ref="editable"
       v-model="text"
-      v-click-outside="blurChatbar"
       :placeholder="$t('ui.talk')"
       :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
