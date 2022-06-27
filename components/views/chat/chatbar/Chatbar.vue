@@ -145,13 +145,11 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method hideKeyboard
-     * @description hide virtual keyboard on mobile
+     * @method blurChatbar
+     * @description blur chatbar
      */
-    hideKeyboard() {
-      if (this.$device.isMobile) {
-        document.activeElement.blur()
-      }
+    blurChatbar() {
+      document.activeElement?.blur()
     },
     /**
      * @method throttleTyping

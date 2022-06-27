@@ -22,7 +22,7 @@
     <ChatbarEditable
       ref="editable"
       v-model="text"
-      v-click-outside="hideKeyboard"
+      v-click-outside="blurChatbar"
       :placeholder="$t('ui.talk')"
       :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
