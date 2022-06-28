@@ -23,6 +23,7 @@
   .toggle-alerts {
     cursor: pointer;
     user-select: none;
+    position: relative;
   }
 
   .controls {
@@ -40,10 +41,6 @@
       cursor: pointer;
       font-size: @small-icon-size;
       &:extend(.filter-glow);
-
-      &:nth-child(2) {
-        margin-right: @normal-spacing;
-      }
     }
     .disabled {
       &:extend(.font-muted);

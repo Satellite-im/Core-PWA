@@ -1,4 +1,8 @@
 <div id="alerts">
+  <div class="header">
+    <flask-conical-icon size="0.85x" />
+    <TypographySubtitle :size="6" :text="$t('pages.chat.alerts')" />
+  </div>
   <template v-if="notifications.length">
     <InteractablesButton
       size="small"
