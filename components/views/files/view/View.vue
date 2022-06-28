@@ -34,6 +34,9 @@ export default Vue.extend({
         : false
     },
   },
+  mounted() {
+    this.$refs.modal.focus()
+  },
   methods: {
     /**
      * @method download
@@ -60,10 +63,18 @@ export default Vue.extend({
     },
     /**
      * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @description copy link to clipboard
      */
-    share() {
-      this.$emit('share', this.file)
+    async share() {
+      this.$toast.show(this.$t('todo - share') as string)
+    },
+    /**
+     * @method closeFilePreview
+     * @description Close File Preview
+     * @example
+     */
+    close() {
+      this.$store.commit('ui/setFilePreview', undefined)
     },
   },
 })
