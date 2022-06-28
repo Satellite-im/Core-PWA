@@ -37,8 +37,13 @@ export const getSizeFromAspectRatio = async (
 ): Promise<{
   width: number
   height: number
-} | void> => {
-  if (await isEmbeddableImage(file)) {
+}> => {
+  const buffer = new Uint8Array(await file.slice(0, 256).arrayBuffer())
+  const decodedFile = new TextDecoder().decode(buffer)
+
+  const isFileSvg = decodedFile.includes('xmlns="http://www.w3.org/2000/svg"')
+
+  if ((await isEmbeddableImage(file)) && !isFileSvg) {
     const { width, height } = await getOriginalSizeFromDataUrl(file)
 
     if (
@@ -68,5 +73,11 @@ export const getSizeFromAspectRatio = async (
     }
 
     return { width, height }
+  }
+
+  // if the file is an svg, due do the fact that currently this type result in a placeholder in chat, return fixed dimensions
+  return {
+    width: Config.chat.imageDimensions.placeholder.width,
+    height: Config.chat.imageDimensions.placeholder.height,
   }
 }

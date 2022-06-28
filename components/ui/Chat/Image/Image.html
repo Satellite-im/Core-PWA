@@ -1,5 +1,9 @@
 <div class="image">
-  <figure class="image-placeholder" v-if="usePlaceholder">
+  <figure
+    class="image-placeholder"
+    :style="{ width: `${image.width}px`, height: `${image.height}px` }"
+    v-if="usePlaceholder"
+  >
     <img
       class="image-placeholder-img"
       data-cy="chat-image-placeholder"

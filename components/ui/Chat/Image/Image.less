@@ -48,14 +48,15 @@
   }
 
   &-placeholder {
-    width: 200px;
+    flex-direction: column;
+    &:extend(.flex-centered);
     &:extend(.no-select);
     pointer-events: none;
 
     &-img {
-      width: @full;
-      height: 250px;
+      width: 90%;
     }
+
     &-caption {
       color: @secondary-text;
       font-family: @primary-font;
