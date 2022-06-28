@@ -5,9 +5,9 @@
   gap: @light-spacing;
 
   top: 45px;
-  left: -8px;
+  left: 0;
   max-height: 50vh;
-  width: 27rem;
+  width: 25rem;
   padding: @light-spacing @xlight-spacing;
   cursor: default;
   overflow-y: scroll;
@@ -28,5 +28,12 @@
   button {
     flex-shrink: 0;
     width: fit-content;
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #alerts {
+    top: @toolbar-height;
+    width: 100%;
   }
 }

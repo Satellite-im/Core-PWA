@@ -39,8 +39,15 @@
         @click="toggleAlerts"
         v-tooltip.bottom="$t('pages.chat.alerts')"
       />
-      <ToolbarAlerts v-if="showAlerts" v-click-outside="toggleAlerts" />
+      <ToolbarAlerts
+        v-if="showAlerts && $device.isDesktop"
+        v-click-outside="toggleAlerts"
+      />
     </div>
+    <ToolbarAlerts
+      v-if="showAlerts && !$device.isDesktop"
+      v-click-outside="toggleAlerts"
+    />
     <div
       :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       v-tooltip.bottom="callTooltipText"

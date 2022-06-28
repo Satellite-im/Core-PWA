@@ -76,13 +76,6 @@
       &:extend(.ellipsis);
     }
   }
-
-  .alerts-floating-container {
-    &:extend(.fourth-layer);
-    &.side-open {
-      margin-right: 1.2rem;
-    }
-  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -118,11 +111,6 @@
         height: 18px;
       }
     }
-  }
-  .alerts-floating-container {
-    top: calc(@toolbar-height - @light-spacing);
-    right: @light-spacing !important;
-    left: @light-spacing !important;
   }
 }
 
