@@ -170,6 +170,14 @@ export const Config = {
       {
         urls: 'stun:stun.services.mozilla.com',
       },
+      {
+        urls: 'stun:stun.satellite.im:3478',
+      },
+      {
+        urls: 'turn:turn.satellite.im:3478',
+        username: process.env.TURN_NAME,
+        credential: process.env.TURN_PASS,
+      },
     ],
     constraints: {
       audio: true,
