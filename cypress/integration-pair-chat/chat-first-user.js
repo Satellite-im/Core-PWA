@@ -389,7 +389,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 
-  it('When closing tab should end a phone call', () => {
+  it.skip('When closing tab should end a phone call', () => {
     cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')
