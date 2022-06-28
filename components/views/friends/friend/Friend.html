@@ -1,11 +1,11 @@
 <div class="friend" data-cy="friend">
-  <UiUserState v-if="showStatus" :user="friend" :src="src" />
   <UiCircle
-    v-else
+    v-if="send"
     :type="src ? 'image' : 'random'"
     :seed="friend.address"
     :source="src"
   />
+  <UiUserState v-else :user="friend" :src="src" />
   <div class="description">
     <TypographySubtitle :size="6" :text="friend.name" data-cy="friend-name" />
     <TypographyText :text="friend.status" />
