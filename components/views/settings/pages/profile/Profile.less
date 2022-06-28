@@ -28,19 +28,25 @@
 }
 
 .profile-layout {
+  &:extend(.full-width);
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
 .profile-left {
   flex-shrink: 0;
   width: 300px;
-  padding: @normal-spacing;
+  padding: 0 @normal-spacing;
   margin-top: -200px;
 }
 
 .profile-right {
+  &:extend(.half-width);
+  min-width: 250px;
   flex-grow: 1;
+  flex-shrink: 3;
   margin-top: @xlarge-spacing;
 }
 

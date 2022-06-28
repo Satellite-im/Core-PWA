@@ -15,7 +15,7 @@ export default Vue.extend({
 
 <style scoped lang="less">
 img {
-  height: 330px;
+  height: 300px;
   width: 100%;
   object-fit: cover;
   border-radius: 0 @corner-rounding;
