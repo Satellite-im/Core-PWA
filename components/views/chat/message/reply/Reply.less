@@ -1,4 +1,10 @@
 .replies-container {
+  margin: @light-spacing 0;
+  padding: @xlight-spacing @light-spacing;
+  word-break: break-word;
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
   .reply-preview {
     padding: 0.25rem;
     cursor: pointer;
@@ -22,13 +28,6 @@
     font-family: @secondary-font;
     &:extend(.font-secondary);
   }
-
-  &:extend(.bordered);
-  &:extend(.round-corners);
-  padding: (@light-spacing / 2) @light-spacing;
-  margin-top: @light-spacing;
-  margin-bottom: @light-spacing;
-  &:extend(.background-semitransparent-light);
 }
 .is-chatbar-reply {
   .glyph {
