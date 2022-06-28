@@ -63,7 +63,6 @@ export default Vue.extend({
       if (this.$route.params.address === this.user.address) {
         if (this.$device.isMobile) {
           this.$store.commit('ui/showSidebar', false)
-          this.$store.dispatch('ui/toggleChatbarFocus', false)
         } else {
           this.$store.dispatch('ui/setChatbarFocus')
         }
