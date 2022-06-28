@@ -11,6 +11,10 @@
       <div class="username">{{ data.user.name }}</div>
       <div class="timestamp">{{ timestamp }}</div>
     </div>
-    <div class="msg" data-cy="chat-search-result-text">{{ data.payload }}</div>
+    <div
+      class="msg"
+      data-cy="chat-search-result-text"
+      v-html="markdownToHtml(data.payload)"
+    />
   </div>
 </div>

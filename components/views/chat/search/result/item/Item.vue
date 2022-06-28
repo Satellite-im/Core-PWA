@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
+import { toHTML } from '~/libraries/ui/Markdown'
 import { SearchResultItem } from '~/types/search/search'
 
 export default Vue.extend({
@@ -33,6 +34,11 @@ export default Vue.extend({
         })}`
       }
       return this.getTimestamp({ time: this.data.at, full: true })
+    },
+  },
+  methods: {
+    markdownToHtml(text: string) {
+      return toHTML(text, { liveTyping: false })
     },
   },
 })
