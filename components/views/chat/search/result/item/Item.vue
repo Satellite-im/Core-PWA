@@ -4,12 +4,12 @@
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
 import { toHTML } from '~/libraries/ui/Markdown'
-import { SearchResultItem } from '~/types/search/search'
+import { UISearchResultData } from '~/types/search/search'
 
 export default Vue.extend({
   props: {
     data: {
-      type: Object as PropType<SearchResultItem>,
+      type: Object as PropType<UISearchResultData>,
       required: true,
     },
   },
@@ -35,10 +35,8 @@ export default Vue.extend({
       }
       return this.getTimestamp({ time: this.data.at, full: true })
     },
-  },
-  methods: {
-    markdownToHtml(text: string) {
-      return toHTML(text, { liveTyping: false })
+    htmlPayload(): any {
+      return toHTML(this.data.payload, { liveTyping: false })
     },
   },
 })
