@@ -17,7 +17,7 @@
   <UiLoadersLoadingBar v-else-if="searching" />
   <FriendsFriend
     v-else-if="user"
-    :user="user"
+    :friend="user"
     @requestSent="onFriendRequestSent"
     send
   />

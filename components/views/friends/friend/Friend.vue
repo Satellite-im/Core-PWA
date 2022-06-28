@@ -59,7 +59,7 @@ export default Vue.extend({
   methods: {
     async createFriendRequest() {
       this.loading = true
-      await iridium.friends?.createFriendRequest(this.user.id, 'pending')
+      await iridium.friends?.createFriendRequest(this.user.did, 'pending')
       this.loading = false
     },
     async acceptFriendRequest() {
@@ -67,21 +67,21 @@ export default Vue.extend({
     },
     async rejectFriendRequest() {
       this.loading = true
-      await iridium.friends?.updateFriendRequest(this.user.id, 'rejected')
+      await iridium.friends?.updateFriendRequest(this.user.did, 'rejected')
       this.loading = false
     },
     async removeFriend() {
       this.loading = true
-      await iridium.friends?.removeFriend(this.user.id)
+      await iridium.friends?.removeFriend(this.user.did)
       this.loading = false
     },
     async cancelRequest() {
       this.loading = true
-      await iridium.friends?.rejectFriendRequest(this.user.id)
+      await iridium.friends?.rejectFriendRequest(this.user.did)
       this.loading = false
     },
     sendMessageRequest() {
-      this.$router.push(`/chat/direct/${this.user.id}`)
+      this.$router.push(`/chat/direct/${this.user.did}`)
     },
   },
 })

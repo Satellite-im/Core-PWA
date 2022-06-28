@@ -21,7 +21,7 @@ export default Vue.extend({
       this.data.loading = false
     }
 
-    iridium.friends?.on('friendRequestChange', async () => {
+    iridium.friends?.on('request/changed', async () => {
       this.data.friends = { ...(await iridium.friends?.get('/')) }
     })
   },

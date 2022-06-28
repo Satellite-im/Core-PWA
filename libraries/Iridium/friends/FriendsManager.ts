@@ -207,7 +207,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
     console.info('calling set', friendId, request)
     await this.set(`/requests/${friendId}`, request)
-    this.emit('friendRequestChange', request)
+    this.emit('request/changed', request)
 
     if (existing.status === status) {
       return
