@@ -9,7 +9,7 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 let urlToValidate = 'https://www.google.com'
 
 describe('Chat features with two accounts at the same time - First User', () => {
-  it('Load account from Chat Pair A (first account)', () => {
+  it('Load account from Chat Pair A (first account)', { retries: 2 }, () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeed)
     //Validate Chat Screen is loaded
@@ -389,7 +389,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 
-  it('When closing tab should end a phone call', () => {
+  it.skip('When closing tab should end a phone call', () => {
     cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')

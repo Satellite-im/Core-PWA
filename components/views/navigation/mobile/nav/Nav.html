@@ -1,5 +1,5 @@
 <div id="mobile-nav">
-  <div>
+  <div data-cy="mobile-nav-home">
     <home-icon size="1x" @click="navigateToHome" />
   </div>
   <div
@@ -11,7 +11,10 @@
   <div data-cy="mobile-nav-marketplace">
     <shopping-bag-icon size="1x" @click="toggleModal" />
   </div>
-  <div :class="`${$route.path.includes('/friends') ? 'active' : ''}`">
+  <div
+    :class="`${$route.path.includes('/friends') ? 'active' : ''}`"
+    data-cy="mobile-nav-friends"
+  >
     <users-icon size="1x" @click="navigateToFriend" />
   </div>
   <div
