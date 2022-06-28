@@ -68,7 +68,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
             },
           )
           iridium.followPeer(peerId.toString())
-          await iridium.ipfs.swarm.connect(peerId)
+          // await iridium.ipfs.swarm.connect(peerId)
         }
       })
     }
@@ -96,7 +96,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
             },
           )
           iridium.followPeer(peerId.toString())
-          await iridium.ipfs.swarm.connect(peerId)
+          // await iridium.ipfs.swarm.connect(peerId)
           // remind remote user about the request
           logger.info(
             'iridium/friends/init',
@@ -143,7 +143,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       user,
       status,
     })
-    await this.updateFriendRequest(did, status, user)
+    const existing = this.state.requests?.[did]
+    await this.updateFriendRequest(
+      did,
+      status,
+      user,
+      existing?.incoming || true,
+    )
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
@@ -174,7 +180,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   hasRequest(id: string) {
-    return !!this.state.requests?.[id]
+    return (
+      this.state.requests?.[id] &&
+      this.state.requests?.[id].status !== 'rejected'
+    )
   }
 
   getRequest(id: string) {
@@ -197,15 +206,16 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     friendId: string,
     status: FriendRequestStatus,
     user?: User,
+    incoming: boolean | undefined = undefined,
   ) {
     const existing = (await this.getRequest(friendId)) || {}
     const request = {
       ...existing,
       user: user || existing?.user || null,
       status,
+      incoming: incoming === undefined ? existing?.incoming || false : incoming,
       at: Date.now(),
     }
-    console.info('calling set', friendId, request)
     await this.set(`/requests/${friendId}`, request)
     this.emit('request/changed', request)
 
@@ -213,14 +223,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       return
     }
     // update the remote user with our details
-
-    console.info('configuring payload')
     const payload: any = {
       status,
       to: friendId,
       at: Date.now(),
     }
-    console.info('getting profile')
     const profile = await this.iridium.profile?.get('/')
     payload.user = {
       did: this.iridium.connector?.id,
@@ -246,9 +253,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     if (this.hasRequest(friendId)) {
+      console.info('createFriendRequest, hasRequest', friendId)
       throw new Error(`already have friend request for ${friendId}`)
     }
 
+    console.info('createFriendRequest, update', friendId)
     return this.updateFriendRequest(friendId, status, user)
   }
 

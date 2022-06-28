@@ -16,8 +16,8 @@
   <TypographyError v-if="error" :text="$t(error)" />
   <UiLoadersLoadingBar v-else-if="searching" />
   <FriendsFriend
-    v-else-if="user"
-    :friend="user"
+    v-else-if="user && user.did"
+    :user="user"
     @requestSent="onFriendRequestSent"
     send
   />

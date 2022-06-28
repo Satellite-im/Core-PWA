@@ -22,8 +22,9 @@
           </div>
           <FriendsFriend
             v-for="[did, request] in Object.entries(data.friends.requests)"
-            :user="request && request.user || {
-              id: did,
+            v-if="request.status !== 'rejected'"
+            :user="user || {
+              did,
               name: did,
               status: 'offline'
             }"
@@ -42,7 +43,7 @@
             v-for="[did, user] in Object.entries(data.friends.details)"
             :key="did"
           >
-            <FriendsFriend :user="user" :key="did" />
+            <FriendsFriend v-if="user" :user="user" :key="did" />
           </div>
         </div>
         <div class="loading-container" v-if="data.loading">

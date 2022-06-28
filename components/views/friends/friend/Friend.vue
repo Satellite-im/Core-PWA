@@ -30,8 +30,9 @@ export default Vue.extend({
       required: true,
     },
     request: {
-      type: Object as PropType<FriendRequest>,
-      required: true,
+      type: Object as PropType<FriendRequest | null>,
+      required: false,
+      default: null,
     },
     blocked: {
       type: Boolean,
@@ -51,6 +52,9 @@ export default Vue.extend({
     },
     contextMenuValues(): ContextMenuItem[] {
       return [{ text: this.$t('context.remove'), func: this.removeFriend }]
+    },
+    requestIncoming() {
+      return this.request && this.request.to === iridium.connector?.id
     },
   },
   beforeDestroy() {

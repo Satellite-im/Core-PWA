@@ -2,15 +2,11 @@
   <UiUserState :user="user" :src="src" />
   <div class="description">
     <TypographySubtitle :size="6" :text="user.name" data-cy="friend-name" />
-    <TypographyText :text="user.status" />
+    <TypographyText :text="user.status || 'offline'" />
   </div>
   <div class="spacer"></div>
-  <div
-    class="controls"
-    v-if="request && request.status === 'request' && request.incoming"
-  >
+  <div class="controls" v-if="request && request.incoming">
     <InteractablesButton
-      v-if="request.status !== 'rejected'"
       type="success"
       size="small"
       v-tooltip.bottom="$t('friends.accept')"
@@ -21,7 +17,6 @@
       <check-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
-      v-if="request.status !== 'accepted'"
       type="danger"
       size="small"
       v-tooltip.bottom="$t('friends.decline')"
@@ -41,10 +36,7 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
-  <div
-    class="controls"
-    v-else-if="request && request.status === 'request' && !request.incoming"
-  >
+  <div class="controls" v-else-if="request && !request.incoming">
     <InteractablesButton
       type="danger"
       size="small"
