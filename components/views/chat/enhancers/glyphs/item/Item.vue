@@ -58,6 +58,8 @@ export default Vue.extend({
     async sendGlyph() {
       const { id, address } = this.$route.params
       const activeFriend = this.findFriendByAddress(address)
+
+      // At the moment is hard coded but in the future the size type should be dynamic to let the user choose the size of the glyph
       const sizeType = 'small'
 
       if (!activeFriend && !id) {
