@@ -1,32 +1,32 @@
+import { dataRecovery } from '../fixtures/test-data-accounts.json'
+
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
+const recoverySeed =
+  dataRecovery.accounts
+    .filter((item) => item.description === 'Only Text')
+    .map((item) => item.recoverySeed) + '{enter}'
 const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
-describe.skip('Privacy Settings Page - Toggles Tests', () => {
-  // skipped due to textile taking 45s
-  it('Privacy Page - Validate existing toggles', () => {
+describe('Privacy Settings Page - Toggles Tests', () => {
+  it('Privacy Page - Import account for testing', { retries: 2 }, () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
 
-    //Adding pin to continue to toggles switches screen
-    cy.createAccountPINscreen(randomPIN)
+    //Import account
+    cy.importAccount(randomPIN, recoverySeed)
 
-    //Create or Import account selection screen
-    cy.createAccountSecondScreen()
-
-    //Recovery Seed Screen
-    cy.createAccountRecoverySeed()
-
-    //Username and Status Input
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput(randomName, randomStatus)
-
-    //Click on button, validate buffering screen and that user is redirected to friends/list
-    cy.createAccountSubmit()
+    //Ensure messages are displayed before starting
     cy.validateChatPageIsLoaded()
+
     //Going to Settings and Privacy screen
     cy.get('[data-cy=settings]', { timeout: 30000 }).click()
+  })
+
+  it('Validate existing toggles', () => {
+    //Setting a viewport visible for all toggles
+    cy.viewport(1200, 1200)
 
     //Click on 'Privacy'
     cy.contains('Privacy').click()
@@ -37,7 +37,9 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
       'Choose which features to enable to best suit your privacy preferences.',
     ).should('be.visible')
 
-    cy.contains('Register Username Publicly').should('be.visible')
+    cy.contains('Register Username Publicly', { timeout: 45000 }).should(
+      'be.visible',
+    )
     cy.contains(
       'Publicly associate your account ID with a human readable username. Anyone can see this association.',
     ).should('be.visible')
@@ -66,19 +68,6 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
     cy.contains('If selected, NSFW content will be obscured.').should(
       'be.visible',
     )
-  })
-
-  it('Privacy Page - Default values after account creation', () => {
-    //Setting a viewport visible for all toggles
-    cy.viewport(1200, 1200)
-
-    //Validate default values for toggles are selected after creating an account
-    cy.privacyToggleValidateValue('Register Username Publicly', false)
-    cy.privacyToggleValidateValue('Store Account Pin', false)
-    cy.privacyToggleValidateValue('Enable External Embeds', true)
-    cy.privacyToggleValidateValue('Display Current Activity', true)
-    cy.privacyToggleValidateValue('Consent to File Scanning', false)
-    cy.privacyToggleValidateValue('Block NSFW content', true)
   })
 
   it('Privacy Page - Verify register publicly toggle is locked and disabled', () => {
@@ -128,7 +117,7 @@ describe.skip('Privacy Settings Page - Toggles Tests', () => {
     })
 
     //Close modal
-    cy.get('.close-button').click()
+    cy.closeModal('.modal-card-body')
   })
 
   it('Privacy page - Validate that last values selected were saved correcty', () => {
