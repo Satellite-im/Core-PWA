@@ -1,29 +1,32 @@
 <div class="friend" data-cy="friend">
-  <UiUserState :user="friend" :src="src" />
+  <UiUserState :user="user" :src="src" />
   <div class="description">
-    <TypographySubtitle :size="6" :text="friend.name" data-cy="friend-name" />
-    <TypographyText :text="friend.status" />
+    <TypographySubtitle :size="6" :text="user.name" data-cy="friend-name" />
+    <TypographyText :text="user.status" />
   </div>
   <div class="spacer"></div>
-  <div class="controls" v-if="request">
+  <div
+    class="controls"
+    v-if="request && request.status === 'request' && request.incoming"
+  >
     <InteractablesButton
-      v-if="loading !== 'decline'"
+      v-if="request.status !== 'rejected'"
       type="success"
       size="small"
       v-tooltip.bottom="$t('friends.accept')"
-      :loading="loading === 'accept'"
+      :loading="loading"
       :disabled="loadCheck"
       :action="acceptFriendRequest"
     >
       <check-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
-      v-if="loading !== 'accept'"
+      v-if="request.status !== 'accepted'"
       type="danger"
       size="small"
       v-tooltip.bottom="$t('friends.decline')"
-      :loading="loading === 'decline'"
-      :action="declineFriendRequest"
+      :loading="loading"
+      :action="rejectFriendRequest"
     >
       <x-icon size="1x" />
     </InteractablesButton>
@@ -38,23 +41,15 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
-  <div class="controls" v-else-if="send">
-    <InteractablesButton
-      type="primary"
-      size="small"
-      v-tooltip.bottom="$t('friends.send')"
-      :loading="loading === 'sending'"
-      :action="createFriendRequest"
-    >
-      <check-icon size="1x" />
-    </InteractablesButton>
-  </div>
-  <div class="controls" v-else-if="outgoing">
+  <div
+    class="controls"
+    v-else-if="request && request.status === 'request' && !request.incoming"
+  >
     <InteractablesButton
       type="danger"
       size="small"
       v-tooltip.bottom="$t('friends.cancel')"
-      :loading="loading === 'options'"
+      :loading="loading"
       :action="cancelRequest"
     >
       <x-icon size="1x" />
@@ -62,7 +57,7 @@
   </div>
   <div class="controls" v-else>
     <InteractablesButton
-      v-if="loading !== 'options'"
+      v-if="loading"
       type="primary"
       size="small"
       data-cy="friend-send-message"
@@ -75,7 +70,7 @@
       type="primary"
       size="small"
       v-tooltip.bottom="$t('friends.options')"
-      :loading="loading === 'options'"
+      :loading="loading"
       :action="contextMenu"
     >
       <more-vertical-icon size="1x" />

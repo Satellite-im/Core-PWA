@@ -1,6 +1,5 @@
 <template src="./Friend.html"></template>
 <script lang="ts">
-import { PublicKey } from '@solana/web3.js'
 import Vue, { PropType } from 'vue'
 import {
   XIcon,
@@ -11,10 +10,9 @@ import {
   SmartphoneIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
-import { Friend } from '~/types/ui/friends'
+import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { AddFriendEnum } from '~/libraries/Enums/enums'
-import { Config } from '~/config'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -27,23 +25,15 @@ export default Vue.extend({
   },
   mixins: [ContextMenu],
   props: {
-    friend: {
-      type: Object as PropType<Friend>,
+    user: {
+      type: Object as PropType<User>,
       required: true,
     },
     request: {
-      type: Boolean,
-      default: false,
+      type: Object as PropType<FriendRequest>,
+      required: true,
     },
     blocked: {
-      type: Boolean,
-      default: false,
-    },
-    send: {
-      type: Boolean,
-      default: false,
-    },
-    outgoing: {
       type: Boolean,
       default: false,
     },
@@ -51,15 +41,12 @@ export default Vue.extend({
   data() {
     return {
       loadCheck: false,
-      loading: '' as AddFriendEnum,
+      loading: false,
     }
   },
   computed: {
     src(): string {
-      const hash =
-        this.friend?.photoHash ||
-        this.friend?.profilePicture ||
-        this.friend?.request?.userInfo?.photoHash
+      const hash = this.user?.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
@@ -71,78 +58,30 @@ export default Vue.extend({
   },
   methods: {
     async createFriendRequest() {
-      this.loading = AddFriendEnum.SENDING
-      try {
-        await this.$store.dispatch('friends/createFriendRequest', {
-          friendToKey: new PublicKey(this.friend.account.accountId),
-        })
-        this.$emit('requestSent', '')
-      } catch (e: any) {
-        this.$emit('requestSent', e.message)
-      } finally {
-        this.loading = AddFriendEnum.EMPTY
-      }
+      this.loading = true
+      await iridium.friends?.createFriendRequest(this.user.id, 'pending')
+      this.loading = false
     },
     async acceptFriendRequest() {
-      this.loading = AddFriendEnum.ACCEPT
-      this.loadCheck = true
-      try {
-        await this.$store.dispatch('friends/acceptFriendRequest', {
-          friendRequest: this.friend.request,
-        })
-        const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
-        this.$store.commit('textile/setConversation', {
-          address: this.friend.address,
-          messages: [],
-          limit: query.limit,
-          skip: query.skip,
-        })
-      } catch (e: any) {
-        this.loadCheck = false
-        this.$toast.error(this.$t('errors.friends.request_not_found') as string)
-      } finally {
-        this.loadCheck = false
-        this.loading = AddFriendEnum.EMPTY
-      }
+      this.loading = true
     },
-    async declineFriendRequest() {
-      this.loading = AddFriendEnum.DECLINE
-      try {
-        await this.$store.dispatch(
-          'friends/denyFriendRequest',
-          this.friend.request,
-        )
-      } catch (e) {
-      } finally {
-        this.loading = AddFriendEnum.EMPTY
-      }
+    async rejectFriendRequest() {
+      this.loading = true
+      await iridium.friends?.updateFriendRequest(this.user.id, 'rejected')
+      this.loading = false
     },
     async removeFriend() {
-      this.loading = AddFriendEnum.OPTIONS
-      try {
-        await this.$store.dispatch('friends/removeFriend', this.friend)
-      } catch (e) {
-        this.$toast.success(
-          this.$t('errors.friends.friend_not_removed') as string,
-        )
-      } finally {
-        this.loading = AddFriendEnum.EMPTY
-      }
+      this.loading = true
+      await iridium.friends?.removeFriend(this.user.id)
+      this.loading = false
     },
     async cancelRequest() {
-      this.loading = AddFriendEnum.OPTIONS
-      try {
-        await this.$store.dispatch(
-          'friends/removeFriendRequest',
-          this.friend.request,
-        )
-      } catch (e) {
-      } finally {
-        this.loading = AddFriendEnum.EMPTY
-      }
+      this.loading = true
+      await iridium.friends?.rejectFriendRequest(this.user.id)
+      this.loading = false
     },
     sendMessageRequest() {
-      this.$router.push(`/chat/direct/${this.friend.address}`)
+      this.$router.push(`/chat/direct/${this.user.id}`)
     },
   },
 })

@@ -2,8 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
-import { DataStateType } from '~/store/dataState/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 type Route = 'active' | 'requests' | 'blocked' | 'add'
 export default Vue.extend({
@@ -12,46 +11,16 @@ export default Vue.extend({
   data() {
     return {
       route: 'active',
-      featureReadyToShow: false,
+      data: { friends: null, loading: true },
     }
   },
-  computed: {
-    DataStateType: () => DataStateType,
-    ...mapState(['friends', 'dataState']),
-    ...mapGetters('friends', ['alphaSortedFriends', 'alphaSortedOutgoing']),
-  },
-  watch: {
-    '$route.query'() {
-      this.initRoute()
-    },
-  },
-  mounted() {
-    this.initRoute()
-  },
-  methods: {
-    /**
-     * @method setRoute DocsTODO
-     * @description
-     * @param route
-     * @example
-     */
-    setRoute(route: Route) {
-      this.$router.replace({ path: this.$route.path, query: { tab: route } })
-    },
-    /**
-     * @method initRoute DocsTODO
-     * @description
-     * @param
-     * @example
-     */
-    initRoute() {
-      const query = this.$route.query
-      if (query && query.tab) {
-        this.$data.route = query.tab
-        return
-      }
-      this.$data.route = 'active'
-    },
+  async mounted() {
+    if (iridium.ready) {
+      const friends = await iridium.friends?.get('/')
+      console.info('friends loaded', friends)
+      this.data.friends = friends
+      this.data.loading = false
+    }
   },
 })
 </script>

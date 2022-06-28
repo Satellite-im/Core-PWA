@@ -247,7 +247,7 @@ const webRTCActions = {
     setInterval(() => {
       if (rootState.conversation) {
         rootState.conversation.participants
-          .filter((p) => p.peerId && p.peerId !== iridium.connector?.id)
+          .filter((p) => p.peerId && p.peerId !== iridium.connector?.peerId)
           .forEach((p) => {
             iridium.connector.send(
               {
@@ -381,7 +381,7 @@ const webRTCActions = {
           name: rootState.accounts.details?.name as string,
         })
     }
-    const usedCallId = callId === iridium.connector?.id ? peerId : callId
+    const usedCallId = callId === iridium.connector?.peerId ? peerId : callId
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
@@ -468,12 +468,12 @@ const webRTCActions = {
         muted = rootState.video.disabled
       }
       commit('setMuted', {
-        peerId: iridium.connector?.id,
+        peerId: iridium.connector?.peerId,
         kind,
         muted,
       })
       if (rootState.audio.muted) {
-        call.mute({ peerId: iridium.connector?.id, kind: 'audio' })
+        call.mute({ peerId: iridium.connector?.peerId, kind: 'audio' })
       }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
@@ -497,7 +497,7 @@ const webRTCActions = {
         muted: false,
       })
       if (rootState.audio.muted) {
-        call.mute({ peerId: iridium.connector?.id, kind: 'audio' })
+        call.mute({ peerId: iridium.connector?.peerId, kind: 'audio' })
       }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
@@ -566,7 +566,7 @@ const webRTCActions = {
     }) {
       $Logger.log('webrtc', `local track removed: ${kind}#${track.id}`)
       commit('setMuted', {
-        peerId: iridium.connector?.id,
+        peerId: iridium.connector?.peerId,
         kind,
         muted: true,
       })
@@ -684,7 +684,7 @@ const webRTCActions = {
     }
 
     commit('setStreamMuted', {
-      peerId: iridium.connector?.id,
+      peerId: iridium.connector?.peerId,
       audio: !kinds.includes('audio'),
       video: !kinds.includes('video'),
       screen: !kinds.includes('screen'),

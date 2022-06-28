@@ -1,3 +1,4 @@
+import Emitter from '@satellite-im/iridium/src/emitter'
 import { Iridium } from '@satellite-im/iridium/dist/index.browser'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
@@ -7,7 +8,7 @@ import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
 
-export class IridiumManager {
+export class IridiumManager extends Emitter {
   ready: boolean = false
   connector?: Iridium
   profile?: ProfileManager
@@ -29,7 +30,19 @@ export class IridiumManager {
     }
 
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
-    this.connector = await Iridium.fromSeed(seed)
+    this.connector = await Iridium.fromSeed(seed, {
+      logger,
+      config: {
+        syncNodes: [
+          {
+            label: 'Satellite.im Sync Node',
+            peerId: '12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
+            multiaddr:
+              '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
+          },
+        ],
+      },
+    })
 
     logger.log('iridium/manager', 'connector initialized', {
       id: this.connector.id,
@@ -40,15 +53,10 @@ export class IridiumManager {
     await this.connector.start()
 
     // check for existing root document
-    await this.connector.get('/').catch(() => {
-      // we don't have a recoverable root document, so create one
-      logger.log('iridium/manager', 'creating root document')
-      return this.connector.set('/')
-    })
-
-    const doc = (await this.connector.get('/')) || {}
+    let doc = (await this.connector.get('/')) || {}
     if (!doc.id) {
-      Object.assign(doc, {
+      logger.log('iridium/manager', 'creating new root document', doc)
+      doc = {
         id: this.connector.id,
         profile: { name: 'guest' },
         groups: {},
@@ -57,13 +65,12 @@ export class IridiumManager {
         files: {},
         settings: {},
         indexes: {},
-      })
+      }
+    } else {
+      logger.log('iridium/manager', 'loaded root document', doc)
     }
     doc.seen = Date.now()
-    await this.connector.set('/', doc, {
-      encrypt: { recipients: [this.connector.id] },
-    })
-    logger.log('iridium/manager', 'loaded root document', doc)
+    await this.connector.set('/', doc)
 
     logger.log('iridium/manager', 'initializing profile')
     this.profile = new ProfileManager(this)
@@ -75,6 +82,7 @@ export class IridiumManager {
     this.chat = new ChatManager(this)
 
     logger.log('iridium/manager', 'ready')
+    await this.friends.init()
     this.ready = true
   }
 }

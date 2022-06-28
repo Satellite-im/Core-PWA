@@ -8,7 +8,7 @@
     <UiCircle
       data-cy="satellite-circle-profile"
       :type="src ? 'image' : 'random'"
-      :seed="user.address"
+      :seed="user.id"
       :size="size"
       :source="src"
       @click="clickHandler"

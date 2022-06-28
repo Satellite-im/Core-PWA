@@ -9,7 +9,7 @@
     >
       <div
         :class="
-          isNoFriends && isChatPage
+          friendsListEmpty && isChatPage
             ? 'sidebar-search full-width'
             : 'sidebar-search'
         "
@@ -30,7 +30,7 @@
           />
         </UiComingSoon>
         <menu-icon
-          v-if="!(isNoFriends && isChatPage)"
+          v-if="!(friendsListEmpty && isChatPage)"
           class="toggle-sidebar"
           size="1.2x"
           full-width
@@ -113,7 +113,7 @@
               :is-typing="ui.isTyping.address === user.address"
             />
           </div>
-          <div v-else-if="isNoFriends" class="no-friends">
+          <div v-else-if="friendsListEmpty" class="no-friends">
             <TypographyTitle
               :text="$t('pages.chat.no_friends_yet')"
               :size="6"
@@ -149,7 +149,7 @@
       </div>
       <div class="new-chat-container">
         <InteractablesButton
-          v-if="!isNoFriends"
+          v-if="!friendsListEmpty"
           class="new-chat"
           type="primary"
           :action="gotoNewMessage"
@@ -173,10 +173,11 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
+import iridium from '~/libraries/Iridium/IridiumManager'
 import { DataStateType } from '~/store/dataState/types'
-import { Group } from '~/types/ui/core'
 import { User } from '~/types/ui/user'
 import { Conversation } from '~/store/textile/types'
+import Group from '~/libraries/Iridium/groups/Group'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -217,11 +218,12 @@ export default Vue.extend({
   data() {
     return {
       featureReadyToShow: false,
+      friends: null,
     }
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'dataState', 'media', 'friends', 'textile']),
+    ...mapState(['ui', 'media', 'friends']),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers
@@ -230,11 +232,11 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebarUsers', value)
       },
     },
-    isNoFriends() {
-      return (
-        this.dataState.friends !== this.DataStateType.Loading &&
-        !this.users.length
-      )
+    friendsListEmpty() {
+      return !this.friends?.list?.length
+    },
+    friendRequestsEmpty() {
+      return !Object.keys(this.friends?.requests).length
     },
     isChatPage() {
       return this.$route.name?.includes('chat-direct')
@@ -248,6 +250,11 @@ export default Vue.extend({
       deep: true,
       immediate: true,
     },
+  },
+  async mounted() {
+    if (!this.friends) {
+      this.friends = await iridium.friends?.get('')
+    }
   },
   methods: {
     toggleModal() {

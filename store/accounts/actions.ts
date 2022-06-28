@@ -145,10 +145,9 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
+    console.info('loadAccount')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-
     const mnemonic = state.phrase
-
     if (mnemonic === '') {
       throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
     }
@@ -160,8 +159,19 @@ export default {
     }
 
     const payerAccount = $BlockchainClient.payerAccount
-
     commit('setActiveAccount', payerAccount?.publicKey.toBase58())
+
+    if (!iridium.ready) {
+      const { pin } = state
+      await dispatch(
+        'iridium/initialize',
+        {
+          pass: pin,
+          wallet: $BlockchainClient.account,
+        },
+        { root: true },
+      )
+    }
 
     const userInfo = await iridium.profile?.get('/')
     if (!userInfo?.id) {
@@ -169,7 +179,6 @@ export default {
     }
 
     dispatch('initializeEncryptionEngine', payerAccount)
-
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
@@ -211,53 +220,39 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
 
-    // const balance = await $BlockchainClient.getBalance()
-    // if (balance === 0) {
-    //   commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
-    //   await $BlockchainClient.requestAirdrop()
-    // }
-
-    const payerAccount = await $BlockchainClient.payerAccount
-    if (!payerAccount) {
+    const walletAccount = await $BlockchainClient.payerAccount
+    if (!walletAccount) {
       commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const userInfo = await iridium.profile?.get('/')
+    const userInfo = await iridium.profile?.get()
     if (userInfo?.id) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       throw new Error(AccountsError.USER_ALREADY_REGISTERED)
     }
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
-    if (!iridium.ready) {
-      const { pin } = state
-      await dispatch(
-        'iridium/initialize',
-        {
-          pass: pin,
-          wallet: $BlockchainClient.account,
-        },
-        { root: true },
-      )
-    }
 
     const imagePath = await uploadPicture(userData.image)
-    await iridium.profile?.set('/', {
+    const profile = {
+      id: iridium.connector.id,
+      peerId: iridium.connector.peerId,
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
-    })
+    }
+    await iridium.profile?.set('/', profile)
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)
-    dispatch('initializeEncryptionEngine', payerAccount)
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
       photoHash: imagePath,
-      address: payerAccount.publicKey.toBase58(),
+      address: walletAccount.publicKey.toBase58(),
     })
-    dispatch('startup', payerAccount)
+    dispatch('initializeEncryptionEngine', walletAccount)
+    dispatch('startup', walletAccount)
   },
 
   /**

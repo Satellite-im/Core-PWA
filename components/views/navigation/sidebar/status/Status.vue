@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   computed: {
@@ -11,14 +12,16 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
     }),
     src(): string {
-      const hash = this.accounts.details.profilePicture
+      const hash = this.accounts.details?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
   methods: {
     copyId() {
-      navigator.clipboard.writeText(this.accounts.active)
-      this.$toast.show(this.$t('ui.copied') as string)
+      if (iridium.connector) {
+        navigator.clipboard.writeText(iridium.connector?.id)
+        this.$toast.show(this.$t('ui.copied') as string)
+      }
     },
   },
 })
