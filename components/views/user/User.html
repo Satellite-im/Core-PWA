@@ -15,7 +15,7 @@
       ref="subtitle"
     />
   </div>
-  <div class="user-chat-details" v-if="!lastMessageLoading">
+  <div class="user-chat-details">
     <TypographyText :size="6" :text="timestamp" v-if="hasMessaged" />
     <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" />
   </div>

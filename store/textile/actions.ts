@@ -109,19 +109,15 @@ export default {
     )
   },
   async fetchFriendLastMessage(
-    { state, commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    {
+      state,
+      commit,
+      rootState,
+      dispatch,
+      getters,
+    }: ActionsArguments<TextileState>,
     { friend }: { friend: Friend },
   ) {
-    commit(
-      'friends/setLastMessageLoading',
-      {
-        friend,
-      },
-      {
-        root: true,
-      },
-    )
-
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
     if (!$TextileManager.mailboxManager?.isInitialized()) {
@@ -143,16 +139,21 @@ export default {
       lastMessage = messages[messages.length - 1]
     }
 
-    commit(
-      'friends/setLastMessage',
-      {
-        friend,
-        lastMessage,
-      },
-      {
-        root: true,
-      },
-    )
+    const conversation = getters.getConversation(friend.address)
+
+    if (!conversation) {
+      commit('setConversation', {
+        address: friend.address,
+        messages: [],
+        limit: Config.chat.defaultMessageLimit,
+        skip: 0,
+      })
+    }
+
+    commit('setConversationLastMessage', {
+      conversationId: friend.address,
+      lastMessage,
+    })
   },
   /**
    * @description Fetches messages that comes from a specific user
@@ -286,16 +287,6 @@ export default {
       message,
     }: { address: string; sender: string; message: Message },
   ) {
-    // set up last message to friend
-    const friend = rootState.friends.all.find((fr) => fr.address === address)
-    if (friend && message) {
-      commit(
-        'friends/setLastMessage',
-        { friend, lastMessage: message },
-        { root: true },
-      )
-    }
-
     const isActiveConversation = state.activeConversation === address
 
     let oldGroupedMessages: MessageGroup = []

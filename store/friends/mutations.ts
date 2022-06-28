@@ -1,7 +1,6 @@
 import { Conversation } from '../textile/types'
 import { FriendsState } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
-import { Message } from '~/types/textile/mailbox'
 
 const mutations = {
   setIncomingRequests(
@@ -105,25 +104,6 @@ const mutations = {
         return user
       })
       .sort((user1, user2) => user2.lastUpdate - user1.lastUpdate)
-  },
-  setLastMessage(
-    state: FriendsState,
-    { friend, lastMessage }: { friend: Friend; lastMessage: Message | null },
-  ) {
-    state.all = state.all.map((fr) => {
-      if (fr.address === friend.address) {
-        return { ...fr, lastMessage, lastMessageLoading: false }
-      }
-      return fr
-    })
-  },
-  setLastMessageLoading(state: FriendsState, { friend }: { friend: Friend }) {
-    state.all = state.all.map((fr) => {
-      if (fr.address === friend.address) {
-        return { ...fr, lastMessageLoading: true }
-      }
-      return fr
-    })
   },
 }
 

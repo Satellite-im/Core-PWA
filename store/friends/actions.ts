@@ -177,8 +177,6 @@ export default {
       state: 'offline',
       unreadCount: 0,
       peerId: peerId.toB58String(),
-      lastMessage: null,
-      lastMessageLoading: true,
     }
 
     if (!friendExists) {

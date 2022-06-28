@@ -53,7 +53,7 @@ export default Vue.extend({
       conversations: (state) => (state as RootState).textile?.conversations,
       activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
-    ...mapGetters('textile', ['getConversation']),
+    ...mapGetters('textile', ['getConversationLastMessage']),
     ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
       return this.enableRTC
@@ -73,21 +73,14 @@ export default Vue.extend({
           ]
     },
     hasMessaged(): boolean {
-      return !!this.user?.lastMessage
-    },
-    lastMessageLoading(): boolean {
-      return this.user.lastMessageLoading
+      return !!this.getConversationLastMessage(this.user.address)
     },
     lastMessage(): string {
-      if (!this.lastMessageLoading && this.hasMessaged) {
-        return this.getDescriptionFromMessage(this.user?.lastMessage)
+      const lastMessage = this.getConversationLastMessage(this.user.address)
+      if (!lastMessage) {
+        return this.$t('messaging.say_hi') as string
       }
-      // get message from conversation if it does not exist in friend
-      const conversation = this.getConversation(this.user.address)
-      if (conversation?.lastMessage) {
-        return this.getDescriptionFromMessage(conversation.lastMessage)
-      }
-      return this.$t('messaging.say_hi') as string
+      return this.getDescriptionFromMessage(lastMessage)
     },
     src(): string {
       const hash = this.user?.profilePicture

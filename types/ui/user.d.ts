@@ -1,6 +1,5 @@
 import { FriendMetadata } from '../textile/metadata'
 import { BadgeType } from './badge'
-import { Message } from '~/types/textile/mailbox'
 
 export type UserState = 'online' | 'idle' | 'offline' | 'mobile'
 
@@ -19,8 +18,6 @@ export type User = {
   lastUpdate: number
   metadata?: FriendMetadata
   streams?: Map<string, MediaStream>
-  lastMessage: Message | null
-  lastMessageLoading: boolean
 }
 
 export interface UserRegistrationData {
