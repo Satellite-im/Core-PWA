@@ -223,7 +223,7 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it('Assert timestamp is displayed when user A sends a message', () => {
+  it.skip('Assert timestamp is displayed when user A sends a message', () => {
     cy.get('[data-cy=chat-timestamp]')
       .last()
       .invoke('text')
@@ -259,7 +259,7 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
-  it('Assert timestamp immediately after sending message', () => {
+  it.skip('Assert timestamp immediately after sending message', () => {
     //Send chat message
     cy.chatFeaturesSendMessage(randomMessage)
 
