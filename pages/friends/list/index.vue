@@ -17,10 +17,13 @@ export default Vue.extend({
   async mounted() {
     if (iridium.ready) {
       const friends = await iridium.friends?.get('/')
-      console.info('friends loaded', friends)
-      this.data.friends = friends
+      this.data.friends = { ...friends }
       this.data.loading = false
     }
+
+    iridium.friends?.on('friendRequestChange', async () => {
+      this.data.friends = { ...(await iridium.friends?.get('/')) }
+    })
   },
 })
 </script>

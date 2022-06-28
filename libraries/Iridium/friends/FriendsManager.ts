@@ -201,18 +201,26 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const existing = (await this.getRequest(friendId)) || {}
     const request = {
       ...existing,
-      user: user || existing?.user,
+      user: user || existing?.user || null,
       status,
       at: Date.now(),
     }
-    await this.set(`requests/${friendId}`, request)
+    console.info('calling set', friendId, request)
+    await this.set(`/requests/${friendId}`, request)
+    this.emit('friendRequestChange', request)
 
+    if (existing.status === status) {
+      return
+    }
     // update the remote user with our details
+
+    console.info('configuring payload')
     const payload: any = {
       status,
       to: friendId,
       at: Date.now(),
     }
+    console.info('getting profile')
     const profile = await this.iridium.profile?.get('/')
     payload.user = {
       did: this.iridium.connector?.id,
