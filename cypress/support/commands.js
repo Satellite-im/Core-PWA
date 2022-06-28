@@ -526,7 +526,7 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   //Wait until conversation is fully loaded
   cy.get('[data-cy=message-container]', { timeout: 120000 })
     .last()
-    .should('be.visible')
+    .should('exist')
 })
 
 Cypress.Commands.add('workaroundChatLoad', (user) => {
