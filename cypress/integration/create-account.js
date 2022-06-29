@@ -6,7 +6,7 @@ const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe('Create Account Validations', () => {
+describe.skip('Create Account Validations', () => {
   it('Create Account', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)

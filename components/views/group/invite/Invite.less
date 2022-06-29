@@ -7,6 +7,7 @@
   top: @toolbar-height;
   padding: @light-spacing @light-spacing;
   right: calc(18rem + 7rem);
+  max-height: 500px;
   &:extend(.first-layer);
   &:extend(.background-semitransparent-dark);
   &:extend(.blur);
@@ -18,10 +19,8 @@
     font-size: @text-size;
   }
 
-  .submit-container {
-    display: flex;
-    justify-content: flex-end;
-    &:extend(.full-width);
+  .button {
+    flex-shrink: 0;
   }
 
   &--compact {

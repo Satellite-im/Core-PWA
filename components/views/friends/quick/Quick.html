@@ -3,7 +3,7 @@
     <TypographySubtitle :size="6" :text="$t('pages.chat.new_chat')" />
     <TypographyText :text="$t('pages.chat.new_chat_description')" />
   </div>
-  <InteractablesUserPicker v-model="friends" />
+  <InteractablesUserPicker v-model="friends" height="220px" />
   <template v-if="friends.length > 1">
     <InteractablesInput
       v-model="name"
