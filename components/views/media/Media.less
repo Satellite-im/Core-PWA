@@ -1,16 +1,24 @@
 #mediastream {
-  position: absolute;
   &:extend(.second-layer);
-  top: @toolbar-height;
   height: auto;
-  max-height: 25.5rem;
+  max-height: calc(100vh - 300px);
+  min-height: 280px;
   &:extend(.full-width);
   &:extend(.background-semitransparent-dark);
   &:extend(.blur);
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
   &:extend(.round-corners);
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+
+  .wrapper {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+  }
 
   #media {
     position: relative;
