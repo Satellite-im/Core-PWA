@@ -1,6 +1,7 @@
 <div id="media-heading">
   <TypographyTag
     v-if="elapsedTime"
+    data-cy="elapsed-time"
     :text="$t('ui.live', {
     time: elapsedTime
   })"
