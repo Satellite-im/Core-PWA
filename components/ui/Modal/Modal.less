@@ -10,11 +10,10 @@
 
 .modal-background {
   &:extend(.blur-less);
-  background: transparent !important;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .modal-card-body {
-  &:extend(.bordered);
   &:extend(.round-corners);
   font-weight: normal !important;
   font-size: @text-size;
@@ -31,12 +30,14 @@
 
 .modal-card {
   width: fit-content;
+  box-shadow: @ui-shadow;
 }
 
-.modal {
+.modal-container {
   &:extend(.sixth-layer);
-  position: absolute;
+  position: fixed;
 }
+
 .close {
   position: absolute;
   right: @large-spacing;
@@ -49,6 +50,7 @@
 
   &:extend(.first-layer);
 }
+
 .label {
   padding: 0 !important;
 }
@@ -90,5 +92,29 @@
     &:extend(.first-layer);
     background: transparent !important;
     backdrop-filter: @light-blur;
+  }
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  &,
+  .modal-background,
+  .modal-card {
+    transition: all @animation-speed-slow ease;
+  }
+}
+
+.modal-enter,
+.modal-leave-to {
+  .modal-background {
+    background-color: transparent !important;
+    backdrop-filter: blur(0px) !important;
+  }
+
+  .modal-card {
+    opacity: 0 !important;
+    transform: perspective(400px) rotateX(2deg) !important;
+    transform-origin: 50% 200%;
+    filter: @light-blur !important;
   }
 }
