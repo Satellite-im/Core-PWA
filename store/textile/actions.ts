@@ -1158,8 +1158,9 @@ export default {
       await db.initializeSearchIndexes()
     }
 
+    // add both spoiler and regular version of query string
     const result: UISearchResultData[] = db.search.conversationMessages.search(
-      `${queryString}${
+      `${queryString} ||${queryString}||${
         startDate && endDate
           ? ` AND at >= ${startDate} AND at <= ${endDate}`
           : ''
