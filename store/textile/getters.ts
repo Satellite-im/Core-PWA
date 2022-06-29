@@ -15,9 +15,6 @@ const getters = {
   getConversationLastMessage:
     (state: TextileState, getters: any) => (address: string) => {
       const conversation = getters.getConversation(address)
-      if (!conversation) {
-        return null
-      }
       return conversation?.lastMessage || null
     },
 }
