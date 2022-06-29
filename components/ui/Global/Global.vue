@@ -21,7 +21,7 @@ export default Vue.extend({
   name: 'Global',
   computed: {
     ...mapState(['ui', 'media', 'webrtc', 'conversation']),
-    ...mapGetters('webrtc', ['isBackgroundCall']),
+    ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     ModalWindows: () => ModalWindows,
   },
   mounted() {
