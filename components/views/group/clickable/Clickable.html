@@ -1,12 +1,20 @@
 <div
   class="group"
-  :class="{ 'is-selected' : isSelected}"
+  :class="{ 'is-selected' : isSelected }"
   @contextmenu="contextMenu"
-  v-on:click="navigateToGroup(group.id)"
+  @click="navigateToGroup"
 >
   <GroupIcon :group="group" />
   <div class="group-info">
     <TypographyTitle :size="6" :text="group.name" />
-    <TypographySubtitle :size="6" :text="`Members: ${group.members.length}`" />
+    <div
+      v-html="wrapEmoji(markdownToHtml(lastMessage))"
+      :class="`subtitle ${containsOnlyEmoji(lastMessage) ? 'bigmoji' : ''}`"
+      ref="subtitle"
+    />
+  </div>
+  <div class="group-chat-details">
+    <TypographyText :size="6" :text="timestamp" v-if="hasMessaged" />
+    <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" />
   </div>
 </div>
