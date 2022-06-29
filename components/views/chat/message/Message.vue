@@ -5,12 +5,8 @@ import { mapState, mapGetters } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { Config } from '~/config'
 import { UIMessage, Group } from '~/types/messaging'
-import {
-  refreshTimestampInterval,
-  convertTimestampToDate,
-} from '~/utilities/Messaging'
+
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage, ModalWindows } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
@@ -52,12 +48,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      disData: 'DataFromTheProperty',
-      timestampRefreshInterval: null,
-      timestamp: convertTimestampToDate(
-        this.$t('friends.details'),
-        this.$props.message.at,
-      ),
       blob: undefined as Blob | undefined,
       pngBlob: undefined as Blob | undefined,
     }
@@ -67,16 +57,17 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       textile: (state) => (state as RootState).textile,
       accounts: (state) => (state as RootState).accounts,
-      isGroup: (state) => (state as RootState).conversation.type === 'group',
     }),
-    ...mapGetters('friends', ['findFriendByAddress']),
+    ...mapGetters({
+      findFriendByAddress: 'friends/findFriendByAddress',
+      getFiles: 'chat/getFiles',
+      isGroup: 'conversation/isGroup',
+    }),
     hasReactions(): boolean {
-      return (
-        this.$props.message.reactions && this.$props.message.reactions.length
-      )
+      return this.message.reactions && this.message.reactions.length
     },
     messageEdit(): boolean {
-      return this.ui.editMessage.id === this.$props.message.id
+      return this.ui.editMessage.id === this.message.id
     },
     contextMenuValues(): ContextMenuItem[] {
       const mainList = [
@@ -88,7 +79,7 @@ export default Vue.extend({
       ]
       if (this.message.type === 'text') {
         // if your own text message
-        if (this.accounts.details.textilePubkey === this.$props.message.from) {
+        if (this.accounts.details?.textilePubkey === this.message.from) {
           return [
             ...mainList,
             { text: this.$t('context.copy_msg'), func: this.copyMessage },
@@ -123,22 +114,7 @@ export default Vue.extend({
       return mainList
     },
   },
-  created() {
-    const setTimestamp = (timePassed: number) => {
-      this.$data.timestamp = convertTimestampToDate(
-        this.$t('friends.details'),
-        timePassed,
-      )
-    }
-
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.$props.message.at,
-      setTimestamp,
-      Config.chat.timestampUpdateInterval,
-    )
-  },
   beforeDestroy() {
-    clearInterval(this.$data.timestampRefreshInterval)
     this.cancelMessage()
   },
   async mounted() {
@@ -185,7 +161,7 @@ export default Vue.extend({
      * @description copy contents of message. Will only be called if text message
      */
     copyMessage() {
-      this.$envinfo.navigator.clipboard.writeText(this.message.payload)
+      navigator.clipboard.writeText(this.message.payload)
     },
     /**
      * @method copyImage
@@ -195,7 +171,7 @@ export default Vue.extend({
       if (this.blob?.type !== 'image/png') {
         this.pngBlob = await this.toPng()
       }
-      await this.$envinfo.navigator.clipboard.write([
+      await navigator.clipboard.write([
         new ClipboardItem({
           'image/png': this.pngBlob || this.blob,
         }),
@@ -241,7 +217,7 @@ export default Vue.extend({
         return
       }
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      const { id, type, payload, to, from } = this.$props.message
+      const { id, type, payload, to, from } = this.message
       let finalPayload = payload
       if (['image', 'video', 'audio', 'file'].includes(type)) {
         finalPayload = `*${this.$t('conversation.multimedia')}*`
@@ -251,8 +227,8 @@ export default Vue.extend({
       this.$store.commit('ui/setReplyChatbarContent', {
         id,
         payload: finalPayload,
-        from: this.$props.from,
-        messageID: this.$props.message.id,
+        from: this.from,
+        messageID: this.message.id,
         to: to === myTextilePublicKey ? from : to,
       })
       this.$store.dispatch('ui/setChatbarFocus')
@@ -270,12 +246,12 @@ export default Vue.extend({
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
+        groupID: this.group.id,
+        messageID: this.message.id,
         to:
-          this.$props.message.to === myTextilePublicKey
-            ? this.$props.message.from
-            : this.$props.message.to,
+          this.message.to === myTextilePublicKey
+            ? this.message.from
+            : this.message.to,
       })
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
@@ -294,12 +270,12 @@ export default Vue.extend({
      * Commit store mutation in order to notify the edit status
      */
     editMessage() {
-      const { id, payload, type, from } = this.$props.message
+      const { id, payload, type, from } = this.message
       if (type === 'text' && from === this.accounts.details.textilePubkey) {
         this.$store.commit('ui/setEditMessage', {
           id,
           payload,
-          from: this.$props.group.id,
+          from: this.group.id,
         })
       }
     },
@@ -311,15 +287,15 @@ export default Vue.extend({
       this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: message,
-        from: this.$props.group.id,
+        from: this.group.id,
       })
       this.$store.commit('ui/saveEditMessage', {
-        id: this.$props.message.id,
+        id: this.message.id,
         payload: message,
-        from: this.$props.group.id,
+        from: this.group.id,
       })
 
-      if (message !== this.$props.message.payload) {
+      if (message !== this.message.payload) {
         const { address } = this.$route.params
         const recipient = this.findFriendByAddress(address)
 
@@ -327,13 +303,13 @@ export default Vue.extend({
           this.$store.dispatch('textile/editTextMessage', {
             to: this.$store.state.friends.activeConversation.target
               .textilePubkey,
-            original: this.$props.message,
+            original: this.message,
             text: message,
           })
         }
         this.$store.dispatch('textile/editTextMessage', {
           to: recipient?.textilePubkey,
-          original: this.$props.message,
+          original: this.message,
           text: message,
         })
       }
@@ -342,13 +318,13 @@ export default Vue.extend({
       this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: '',
-        from: this.$props.group.id,
+        from: this.group.id,
       })
 
       this.$store.commit('ui/saveEditMessage', {
-        id: this.$props.message.id,
+        id: this.message.id,
         payload: 'message',
-        from: this.$props.group.id,
+        from: this.group.id,
       })
     },
     async getImageBlob(imageSrc: string) {
