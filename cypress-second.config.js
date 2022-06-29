@@ -8,7 +8,6 @@ module.exports = defineConfig({
   watchForFileChanges: false,
   videosFolder: 'cypress/videos-chat-pair/second-user',
   screenshotsFolder: 'cypress/screenshots-chat-pair/second-user',
-  $schema: 'https://on.cypress.io/cypress.schema.json',
   e2e: {
     baseUrl: 'http://localhost:3000',
     specPattern: 'cypress/integration-pair-chat/**/chat-second-user.js',
