@@ -55,10 +55,13 @@
     pointer-events: none;
 
     &-img {
-      width: 90%;
+      flex: 1;
+      height: auto;
+      min-height: 0;
     }
 
     &-caption {
+      flex: 0 1 auto;
       color: @secondary-text;
       font-family: @primary-font;
       font-size: @mini-text-size;
