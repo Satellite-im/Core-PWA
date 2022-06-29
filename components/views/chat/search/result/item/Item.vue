@@ -39,6 +39,19 @@ export default Vue.extend({
       return toHTML(this.data.payload, { liveTyping: false })
     },
   },
+  mounted() {
+    Array.from(
+      (this.$refs.result as HTMLElement).getElementsByClassName(
+        'spoiler-container',
+      ),
+    ).forEach((spoiler) => {
+      spoiler.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        spoiler.classList.add('spoiler-open')
+      })
+    })
+  },
 })
 </script>
 <style scoped lang="less" src="./Item.less" />
