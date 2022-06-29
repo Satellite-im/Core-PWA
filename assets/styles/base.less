@@ -31,6 +31,45 @@ body {
   outline: none;
 }
 
+// Scrollbars
+* {
+  &::-webkit-scrollbar {
+    width: @scroll-bar;
+    height: @scroll-bar;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    transition: all @animation-speed ease;
+  }
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+
+  &:hover,
+  &:focus-within {
+    &::-webkit-scrollbar-thumb {
+      background-color: @flair-color;
+      &:extend(.round-corners);
+      &:hover {
+        background: @semitransparent-white-gradient;
+        background-color: @flair-color;
+      }
+    }
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    scrollbar-color: @flair-color transparent;
+  }
+}
+
+.hidden-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 code {
   &:extend(.background-semitransparent-lighter);
   &:extend(.font-flair);
