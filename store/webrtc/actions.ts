@@ -537,7 +537,7 @@ const webRTCActions = {
       if (!kind) {
         return
       }
-      let muted = false
+      let muted = true
       if (kind === 'audio') {
         muted = rootState.audio.muted
       } else if (kind === 'video') {
@@ -548,9 +548,6 @@ const webRTCActions = {
         kind,
         muted: !muted,
       })
-      if (!muted) {
-        call.mute({ peerId: localId, kind })
-      }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
 

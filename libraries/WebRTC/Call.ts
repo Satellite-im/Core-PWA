@@ -425,6 +425,16 @@ export class Call extends Emitter<CallEventListeners> {
     const screenTrack = screenStream.getVideoTracks()[0]
     screenTrack.enabled = true
 
+    this.screenStreams[this.localId] = screenStream.id
+    this.streams[this.localId].screen = screenStream
+    this.tracks[this.localId].add(screenTrack)
+
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: screenTrack,
+      kind: 'screen',
+      stream: screenStream,
+    })
+
     await Promise.all(
       Object.values(this.peers).map(async (peer) => {
         await this.p2p.sendMessage(
@@ -443,16 +453,6 @@ export class Call extends Emitter<CallEventListeners> {
         } catch (_) {}
       }),
     )
-
-    this.screenStreams[this.localId] = screenStream.id
-    this.streams[this.localId].screen = screenStream
-    this.tracks[this.localId].add(screenTrack)
-
-    this.emit('LOCAL_TRACK_CREATED', {
-      track: screenTrack,
-      kind: 'screen',
-      stream: screenStream,
-    })
   }
 
   /**
