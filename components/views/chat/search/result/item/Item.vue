@@ -39,18 +39,31 @@ export default Vue.extend({
       return toHTML(this.data.payload, { liveTyping: false })
     },
   },
+  watch: {
+    data: {
+      handler() {
+        this.$nextTick(() => this.addSpoilerClick())
+      },
+      deep: true,
+    },
+  },
   mounted() {
-    Array.from(
-      (this.$refs.result as HTMLElement).getElementsByClassName(
-        'spoiler-container',
-      ),
-    ).forEach((spoiler) => {
-      spoiler.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        spoiler.classList.add('spoiler-open')
+    this.addSpoilerClick()
+  },
+  methods: {
+    addSpoilerClick() {
+      Array.from(
+        (this.$refs.result as HTMLElement).getElementsByClassName(
+          'spoiler-container',
+        ),
+      ).forEach((spoiler) => {
+        spoiler.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          spoiler.classList.add('spoiler-open')
+        })
       })
-    })
+    },
   },
 })
 </script>
