@@ -27,4 +27,5 @@ declare module '@nuxt/types' {
 
 Vue.prototype.$dayjs = dayjs
 
+// need to export for tests
 export { dayjs as extendedDayjs }

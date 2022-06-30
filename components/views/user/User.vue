@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
@@ -43,6 +44,7 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
+      refreshTimestamp: 0 as number,
     }
   },
   computed: {
@@ -54,7 +56,7 @@ export default Vue.extend({
       activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
     ...mapGetters('textile', ['getConversation']),
-    ...mapGetters('settings', ['getTimestamp']),
+    ...mapGetters('settings', ['getTimestamp', 'getDate']),
     contextMenuValues(): ContextMenuItem[] {
       return this.enableRTC
         ? [
@@ -97,10 +99,26 @@ export default Vue.extend({
       }
       return '99+'
     },
-    timestamp(): string {
-      return this.getTimestamp({
-        time: this.conversations[this.user.address]?.lastUpdate,
-      })
+    /**
+     * @description return localized timestamp
+     * @returns {string} formatted time
+     * "hh:mm AM/PM" between 1 minutes and a day
+     * "yesterday" the day before
+     * "2d" 2 days before
+     * "MM/DD/YYYY" > 2 days before
+     */
+    timestamp(): string | TranslateResult {
+      if (this.$dayjs().isSame(this.user.lastUpdate, 'day')) {
+        return this.getTimestamp({ time: this.user.lastUpdate })
+      }
+      const daysDiff = this.$dayjs().diff(this.user.lastUpdate, 'day')
+      if (daysDiff <= 1) {
+        return this.$t('time.yesterday')
+      }
+      if (daysDiff <= 2) {
+        return '2d'
+      }
+      return this.getDate(this.user.lastUpdate)
     },
     enableRTC(): boolean {
       return this.user.state === 'online'
