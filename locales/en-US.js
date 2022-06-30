@@ -38,6 +38,7 @@ export default {
     offline: '{name} is not connected',
   },
   time: {
+    now: 'now',
     today: 'today',
     yesterday: 'yesterday',
   },

@@ -44,7 +44,7 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
-      refreshTimestamp: 0 as number,
+      timestamp: '' as string | TranslateResult,
     }
   },
   computed: {
@@ -99,29 +99,16 @@ export default Vue.extend({
       }
       return '99+'
     },
-    /**
-     * @description return localized timestamp
-     * @returns {string} formatted time
-     * "hh:mm AM/PM" between 1 minutes and a day
-     * "yesterday" the day before
-     * "2d" 2 days before
-     * "MM/DD/YYYY" > 2 days before
-     */
-    timestamp(): string | TranslateResult {
-      if (this.$dayjs().isSame(this.user.lastUpdate, 'day')) {
-        return this.getTimestamp({ time: this.user.lastUpdate })
-      }
-      const daysDiff = this.$dayjs().diff(this.user.lastUpdate, 'day')
-      if (daysDiff <= 1) {
-        return this.$t('time.yesterday')
-      }
-      if (daysDiff <= 2) {
-        return '2d'
-      }
-      return this.getDate(this.user.lastUpdate)
-    },
     enableRTC(): boolean {
       return this.user.state === 'online'
+    },
+  },
+  watch: {
+    user: {
+      handler() {
+        this.timestamp = this.setTimestamp()
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -136,6 +123,7 @@ export default Vue.extend({
         spoiler.classList.add('spoiler-open')
       })
     })
+    this.timestamp = this.setTimestamp()
   },
   beforeDestroy() {
     // ensure the user can't click context menu options after a friend has been removed
@@ -242,6 +230,32 @@ export default Vue.extend({
      */
     containsOnlyEmoji(str: string): boolean {
       return str.match(this.$Config.regex.isEmoji) !== null
+    },
+    /**
+     * @description set timestamp
+     * "now" for less than 30 sec
+     * "hh:mm AM/PM" between 1 minutes and a day
+     * "yesterday" the day before
+     * "2d" 2 days before
+     * "MM/DD/YYYY" > 2 days before
+     */
+    setTimestamp(): string | TranslateResult {
+      // using 15 because settimeout isn't perfect
+      if (this.$dayjs().diff(this.user.lastUpdate, 'second') <= 15) {
+        setTimeout(() => (this.timestamp = this.setTimestamp()), 30000)
+        return this.$t('time.now')
+      }
+      if (this.$dayjs().isSame(this.user.lastUpdate, 'day')) {
+        return this.getTimestamp({ time: this.user.lastUpdate })
+      }
+      const daysDiff = this.$dayjs().diff(this.user.lastUpdate, 'day')
+      if (daysDiff <= 1) {
+        return this.$t('time.yesterday')
+      }
+      if (daysDiff <= 2) {
+        return '2d'
+      }
+      return this.getDate(this.user.lastUpdate)
     },
   },
 })
