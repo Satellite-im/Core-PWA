@@ -21,7 +21,7 @@ describe('Chat Features Tests', () => {
 
     // Validate message is sent
     cy.goToConversation('Only Text Friend')
-    // cy.chatFeaturesSendMessage(randomMessage)
+    cy.chatFeaturesSendMessage(randomMessage)
   })
 
   it('Chat - Send Emoji on chat', () => {
@@ -43,7 +43,7 @@ describe('Chat Features Tests', () => {
       .should('contain', '(edited)')
   })
 
-  it.skip('Chat - Copy paste text', () => {
+  it('Chat - Copy paste text', () => {
     // Allowing Chrome Browser to have read and write access to clipboard
     cy.wrap(
       Cypress.automation('remote:debugger:protocol', {
@@ -52,7 +52,7 @@ describe('Chat Features Tests', () => {
           permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'],
           //make the permission trigger by allowing the current origin only
           origin: window.location.origin,
-        }, //skipped due to bug - AP-1659
+        },
       }),
     )
 
@@ -83,6 +83,7 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=editable-input]').should('have.text', randomMessage)
   })
 
+  //Skipped because it needs rework - AP-1324
   it.skip('Chat - Copy paste images', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
 
@@ -148,6 +149,7 @@ describe('Chat Features Tests', () => {
     cy.get('[data-cy=hamburger-button]').click()
   })
 
+  //Following two tests are skipped because Profile Screen is not visible now
   it.skip('Chat - Add a note to user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'add')
   })

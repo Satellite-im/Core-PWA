@@ -1,6 +1,7 @@
 import 'cypress-file-upload'
 import 'cypress-localstorage-commands'
 import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
+import { date } from 'fp-ts'
 
 addMatchImageSnapshotCommand({
   customSnapshotsDir: '/cypress/snapshots',
@@ -206,9 +207,9 @@ Cypress.Commands.add(
       .find('[data-cy=switch-button]')
       .then(($btn) => {
         if (expectedValue === true) {
-          cy.wrap($btn).should('have.class', 'enabled')
+          cy.wrap($btn, { timeout: 30000 }).should('have.class', 'enabled')
         } else {
-          cy.wrap($btn).should('not.have.class', 'enabled')
+          cy.wrap($btn, { timeout: 30000 }).should('not.have.class', 'enabled')
         }
       })
   },
@@ -517,11 +518,11 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   // Hide sidebar if not on mobile browser
   if (isMobile === false) {
     cy.get('[data-cy=hamburger-button]').click()
-  }
 
-  //Navigate through several pages before going to conversation
-  //As a workaround for the issue of message containers taking a lot of time to be loaded
-  cy.workaroundChatLoad(user)
+    //Navigate through several pages before going to conversation
+    //As a workaround for the issue of message containers taking a lot of time to be loaded
+    cy.workaroundChatLoad(user)
+  }
 
   //Wait until conversation is fully loaded
   cy.get('[data-cy=message-container]', { timeout: 120000 })
@@ -721,9 +722,9 @@ Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
   cy.get('[data-cy=files-table]').should('be.visible')
   //Assert on file or folder icon depending on parameters
   if (type === 'file') {
-    cy.get('[data-cy=file-icon]').as('itemLocator')
+    cy.get('[data-cy=file-icon]').first().as('itemLocator')
   } else {
-    cy.get('[data-cy=folder-icon]').as('itemLocator')
+    cy.get('[data-cy=folder-icon]').first().as('itemLocator')
   }
   //Get the file/folder with same name from parameters and click on options
   cy.get('@itemLocator')
@@ -795,8 +796,13 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
 
 //Chat - Get Time
 
-Cypress.Commands.add('getTimestamp', () => {
-  let date = new Date()
+Cypress.Commands.add('getTimestamp', (value = 'now') => {
+  let date
+  if (value === 'now') {
+    date = new Date()
+  } else if (value === 'past') {
+    date = new Date(Date.now() - 60000)
+  }
   let hours = date.getHours()
   let minutes = date.getMinutes()
   let ampm = hours >= 12 ? ' PM' : ' AM'

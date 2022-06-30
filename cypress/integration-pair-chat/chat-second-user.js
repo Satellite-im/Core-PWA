@@ -79,7 +79,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.wait(30000)
   })
 
-  it.skip('Enable screenshare', () => {
+  it('Enable screenshare', () => {
     //Enable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -94,7 +94,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.wait(30000)
   })
 
-  it.skip('Disable screenshare', () => {
+  it('Disable screenshare', () => {
     //Disable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -112,13 +112,12 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.get('[data-cy=mediastream]', { timeout: 240000 }).should('not.exist')
   })
 
-  it('User can deny an incoming call', () => {
-    //Deny incoming videocall
-    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
-    cy.get('[data-cy=incoming-call-deny]').click()
+  it('Call to User B for a second time', () => {
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]').click()
   })
 
-  it('Call to User A for a second time', () => {
+  it('Call to User A for a third time', () => {
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]')
       .click()
@@ -141,9 +140,11 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.goToConversation('Chat Pair A')
   })
 
-  it('Call again to User A for a third time', () => {
+  it('Call again to User A for a fourth time', () => {
     //Wait 30 seconds until user reconnects again
-    cy.wait(30000)
+    cy.contains('Chat Pair A is online', { timeout: 60000 }).should(
+      'be.visible',
+    )
 
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]').click()

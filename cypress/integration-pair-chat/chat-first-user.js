@@ -30,7 +30,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=toolbar-enable-audio]').click()
   })
 
-  it.skip('Voice/Video Calling - when receiving a call, should appear an indication waiting for another user to accept', () => {
+  it('Voice/Video Calling - when receiving a call, should appear an indication waiting for another user to accept', () => {
     //Remote user should have a class calling indicating that its being called
     cy.get('[data-cy=remote-video]')
       .find('[data-cy=media-user-circle]')
@@ -262,7 +262,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
       .should('not.exist')
   })
 
-  it.skip('Current user can screen share - Screen will be displayed instead of camera', () => {
+  it('Current user can screen share - Screen will be displayed instead of camera', () => {
     //Enable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -276,7 +276,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=screen-unmuted]').should('be.visible')
   })
 
-  it.skip('Current user can stop screen share - Screen will not be displayed now', () => {
+  it('Current user can stop screen share - Screen will not be displayed now', () => {
     //Stop sharing screen
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -289,18 +289,18 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=screen-muted]').should('be.visible')
   })
 
-  it.skip('Remote screen share - User can see remote screen instead of remote camera', () => {
+  it('Remote screen share - User can see remote screen instead of remote camera', () => {
     // Remote Screenshare is loaded
     cy.get('[data-cy=remote-video]')
-      .find('[data-cy=screen-stream]', { timeout: 30000 })
+      .find('[data-cy=screen-stream]', { timeout: 45000 })
       .should('be.visible')
       .and('have.class', 'loaded')
   })
 
-  it.skip('Remote screen share stopped - User will stop seeing the remote screen', () => {
+  it('Remote screen share stopped - User will stop seeing the remote screen', () => {
     // Remote Screenshare is removed
     cy.get('[data-cy=remote-video]')
-      .find('[data-cy=screen-stream]', { timeout: 30000 })
+      .find('[data-cy=screen-stream]', { timeout: 45000 })
       .should('not.exist')
   })
 
@@ -371,12 +371,10 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=elapsed-time]').should('not.exist')
   })
 
-  it('Call to User B for a second time', () => {
-    //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]').click()
-
-    //Wait 10 seconds until other user denies the call
-    cy.wait(10000)
+  it('User can deny an incoming call', () => {
+    //Deny incoming videocall
+    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
+    cy.get('[data-cy=incoming-call-deny]').click()
   })
 
   it('Refreshing tab should end call', () => {
@@ -389,7 +387,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=mediastream]', { timeout: 60000 }).should('not.exist')
   })
 
-  it.skip('When closing tab should end a phone call', () => {
+  it('When closing tab should end a phone call', () => {
     cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
     cy.get('[data-cy=incoming-call-accept]').click()
     cy.get('[data-cy=mediastream]').should('be.visible')

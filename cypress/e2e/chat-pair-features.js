@@ -18,7 +18,7 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
-let glyphURL, imageURL, fileURL, messageTimestamp
+let glyphURL, imageURL, fileURL, messageTimestamp, messageTimestampPast
 
 describe('Chat features with two accounts', () => {
   it(
@@ -39,9 +39,12 @@ describe('Chat features with two accounts', () => {
     //Send message
     cy.chatFeaturesSendMessage(randomMessage)
 
-    // Obtain timestamp from chat message
-    cy.getTimestamp().then((value) => {
+    // Obtain timestamps from chat message
+    cy.getTimestamp('now').then((value) => {
       messageTimestamp = value
+    })
+    cy.getTimestamp('past').then((value) => {
+      messageTimestampPast = value
     })
 
     //Go to last chat message
@@ -223,12 +226,12 @@ describe('Chat features with two accounts', () => {
       })
   })
 
-  it.skip('Assert timestamp is displayed when user A sends a message', () => {
+  it('Assert timestamp is displayed when user A sends a message', () => {
     cy.get('[data-cy=chat-timestamp]')
       .last()
       .invoke('text')
       .then(($text) => {
-        expect($text).to.contain(messageTimestamp)
+        expect($text).to.be.oneOf([messageTimestamp, messageTimestampPast])
       })
   })
 
@@ -259,13 +262,16 @@ describe('Chat features with two accounts', () => {
     cy.validateChatReaction('@glyphToReact', '😄')
   })
 
-  it.skip('Assert timestamp immediately after sending message', () => {
+  it('Assert timestamp immediately after sending message', () => {
     //Send chat message
     cy.chatFeaturesSendMessage(randomMessage)
 
-    // Obtain timestamp from last chat message
-    cy.getTimestamp().then((value) => {
+    // Obtain timestamps from chat message
+    cy.getTimestamp('now').then((value) => {
       messageTimestamp = value
+    })
+    cy.getTimestamp('past').then((value) => {
+      messageTimestampPast = value
     })
 
     //Go to last chat message
@@ -282,7 +288,7 @@ describe('Chat features with two accounts', () => {
         cy.getAttached($timestamp)
           .invoke('text')
           .then(($text) => {
-            expect($text).to.contain(messageTimestamp)
+            expect($text).to.be.oneOf([messageTimestamp, messageTimestampPast])
           })
       })
   })

@@ -8,7 +8,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Files Features Tests', () => {
+describe('Files Features Tests', () => {
   it('Chat - Files - Rename Folder', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
