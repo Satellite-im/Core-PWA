@@ -15,7 +15,7 @@
 
 .modal-card-body {
   &:extend(.round-corners);
-  font-weight: normal !important;
+  font-weight: normal;
   font-size: @text-size;
   width: fit-content;
   text-align: left;
@@ -52,7 +52,7 @@
 }
 
 .label {
-  padding: 0 !important;
+  padding: 0;
 }
 
 .modal-card {
@@ -90,7 +90,7 @@
     position: absolute;
 
     &:extend(.first-layer);
-    background: transparent !important;
+    background: transparent;
     backdrop-filter: @light-blur;
   }
 }
@@ -107,14 +107,14 @@
 .modal-enter,
 .modal-leave-to {
   .modal-background {
-    background-color: transparent !important;
-    backdrop-filter: blur(0px) !important;
+    background-color: transparent;
+    backdrop-filter: blur(0px);
   }
 
   .modal-card {
-    opacity: 0 !important;
-    transform: perspective(400px) rotateX(2deg) !important;
+    opacity: 0;
+    transform: perspective(400px) rotateX(2deg);
     transform-origin: 50% 200%;
-    filter: @light-blur !important;
+    filter: @light-blur;
   }
 }
