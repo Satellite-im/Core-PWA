@@ -25,10 +25,6 @@ export default Vue.extend({
     Unread,
   },
   props: {
-    horizontal: {
-      type: Boolean,
-      default: false,
-    },
     servers: {
       type: Array,
       default() {
