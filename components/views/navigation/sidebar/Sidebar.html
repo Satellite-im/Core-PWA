@@ -95,26 +95,26 @@
       v-scroll-lock="true"
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <UiLoadersAddress v-if="friends" :count="4" inverted />
-        <div v-else-if="friends.list && friends.list.length">
+        <!-- <UiLoadersAddress v-if="friends" :count="4" inverted /> -->
+        <div v-if="friends.list && friends.list.length">
           <UiInlineNotification
             v-if="ui.unreadMessage.length"
             :text="$t('messaging.new_messages')"
           />
-          <div v-for="thing in usersAndGroups">
+          <div v-for="friend in friends.details">
             <User
-              v-if="!thing.admin"
-              :key="thing.address"
-              :user="thing"
-              :isTyping="ui.isTyping.address === thing.address"
-              :isSelected="thing.address === $route.params.address"
+              v-if="friend"
+              :key="friend.did"
+              :user="friend"
+              :isTyping="ui.isTyping.address === friend.did"
+              :isSelected="friend.did === $route.params.address"
             />
-            <GroupClickable
+            <!-- <GroupClickable
               v-else
               :group="thing"
               :key="thing.id"
               :isSelected="thing.id === $route.params.id"
-            />
+            /> -->
           </div>
         </div>
         <div
