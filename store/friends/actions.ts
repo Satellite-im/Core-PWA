@@ -304,6 +304,7 @@ export default {
   subscribeToFriendsEvents({
     dispatch,
     commit,
+    getters,
     rootState,
   }: ActionsArguments<FriendsState>) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -331,9 +332,15 @@ export default {
 
     $BlockchainClient.addFriendEventListener(
       FriendsEvents.NEW_FRIEND,
-      (account) => {
+      async (account) => {
         if (!account) return
-        dispatch('fetchFriendDetails', account)
+        await dispatch('fetchFriendDetails', account)
+        const friend = getters.findFriendByAddress(account.to)
+        await dispatch(
+          'textile/fetchFriendLastMessage',
+          { friend },
+          { root: true },
+        )
       },
     )
 
@@ -447,7 +454,7 @@ export default {
    * @example
    */
   async acceptFriendRequest(
-    { commit, dispatch }: ActionsArguments<FriendsState>,
+    { commit, dispatch, getters }: ActionsArguments<FriendsState>,
     { friendRequest }: AcceptFriendRequestArguments,
   ) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -488,7 +495,14 @@ export default {
         await dispatch('textile/subscribeToMailbox', {}, { root: true })
         // Request has been successfully accepted
         // fetch the friend details
-        dispatch('fetchFriendDetails', account)
+        await dispatch('fetchFriendDetails', account)
+
+        const friend = getters.findFriendByAddress(account.from)
+        await dispatch(
+          'textile/fetchFriendLastMessage',
+          { friend },
+          { root: true },
+        )
 
         break
       }

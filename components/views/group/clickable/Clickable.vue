@@ -26,14 +26,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
       textilePubkey: (state) =>
         (state as RootState).accounts?.details?.textilePubkey ?? '',
-      conversations: (state) => (state as RootState).textile?.conversations,
-      activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
-    ...mapGetters('textile', ['getConversation']),
     ...mapGetters('settings', ['getTimestamp']),
+    ...mapGetters('textile', ['getConversationLastMessage']),
     contextMenuValues(): ContextMenuItem[] {
       return [
         { text: this.$t('context.send'), func: this.navigateToGroup },
@@ -43,29 +40,18 @@ export default Vue.extend({
       ]
     },
     hasMessaged(): boolean {
-      const lastMessage = this.getConversation(this.group.id)?.lastMessage
-      return !!lastMessage
+      return !!this.getConversationLastMessage(this.group.id)
     },
     lastMessage(): string {
-      const conversation = this.getConversation(this.group.id)
-      const lastMessage = conversation?.lastMessage
-
-      return lastMessage
-        ? this.getDescriptionFromMessage(lastMessage)
-        : (this.$t('messaging.say_hi') as string)
+      const lastMessage = this.getConversationLastMessage(this.group.id)
+      if (!lastMessage) {
+        return this.$t('messaging.say_hi') as string
+      }
+      return this.getDescriptionFromMessage(lastMessage)
     },
-    // unreadMessageCount(): string {
-    //   if (!this.user.unreadCount) {
-    //     return ''
-    //   }
-    //   if (this.user.unreadCount < 100) {
-    //     return this.user.unreadCount.toString()
-    //   }
-    //   return '99+'
-    // },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.conversations[this.group.id]?.lastUpdate,
+        time: this.group.lastUpdate,
       })
     },
   },
@@ -80,8 +66,7 @@ export default Vue.extend({
     /**
      * @method navigateToGroup
      * @description Navigates to a groups page by pushing "/chat/groups/" + groups address to router
-     * @param address The groups address you'd like to route to
-     * @example v-on:click="navigateToGroup(group.address)"
+     * @example v-on:click="navigateToGroup()"
      */
     navigateToGroup() {
       if (this.$device.isMobile) {
@@ -125,7 +110,7 @@ export default Vue.extend({
     /**
      * @method markdownToHtml
      * @description convert text markdown to html
-     * @param str String to convert
+     * @param text String to convert
      */
     markdownToHtml(text: string) {
       return toHTML(text, { liveTyping: false })

@@ -37,6 +37,7 @@ import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
 import { MessageGroup } from '~/types/messaging'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import { Friend } from '~/types/ui/friends'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -86,7 +87,137 @@ export default {
     /* Log CSAM Consent Data for future ticket as Hogan requested */
     Vue.prototype.$Logger.log('CSAM Consent Data', 'CSAM', record)
     commit('setUserThreadData', record)
+
+    await dispatch('fetchFriendsLastMessage')
+    await dispatch('fetchGroupsLastMessage')
+
     return textilePublicKey
+  },
+  async fetchGroupsLastMessage({
+    rootState,
+    dispatch,
+  }: ActionsArguments<TextileState>) {
+    const groups = rootState.groups.all
+
+    if (!groups.length) {
+      return
+    }
+
+    await Promise.all(
+      groups.map((group: Group) =>
+        dispatch('fetchGroupLastMessage', { group }),
+      ),
+    )
+  },
+  async fetchFriendsLastMessage({
+    rootState,
+    dispatch,
+  }: ActionsArguments<TextileState>) {
+    const friends = rootState.friends.all
+
+    if (!friends.length) {
+      return
+    }
+
+    await Promise.all(
+      friends.map((friend: Friend) =>
+        dispatch('fetchFriendLastMessage', { friend }),
+      ),
+    )
+  },
+  async fetchGroupLastMessage(
+    {
+      state,
+      commit,
+      rootState,
+      dispatch,
+      getters,
+    }: ActionsArguments<TextileState>,
+    { group }: { group: Group },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.groupChatManager?.isInitialized()) {
+      throw new Error(TextileError.EDIT_HOT_KEY_ERROR)
+    }
+
+    const $GroupChatManager: GroupChatManager = $TextileManager.groupChatManager
+
+    const query = { limit: 1, skip: 0 }
+
+    const messages = await $GroupChatManager.getConversation({
+      group,
+      query,
+    })
+
+    let lastMessage = null
+
+    if (messages && messages.length) {
+      lastMessage = messages[messages.length - 1]
+    }
+
+    const conversation = getters.getConversation(group.id)
+
+    if (!conversation) {
+      commit('setConversation', {
+        address: group.id,
+        messages: [],
+        limit: Config.chat.defaultMessageLimit,
+        skip: 0,
+      })
+    }
+
+    commit('setConversationLastMessage', {
+      conversationId: group.id,
+      lastMessage,
+    })
+  },
+  async fetchFriendLastMessage(
+    {
+      state,
+      commit,
+      rootState,
+      dispatch,
+      getters,
+    }: ActionsArguments<TextileState>,
+    { friend }: { friend: Friend },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.mailboxManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_FOUND)
+    }
+
+    const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
+
+    const query = { limit: 1, skip: 0 }
+
+    const messages = await $MailboxManager.getConversation({
+      friendIdentifier: friend.textilePubkey,
+      query,
+    })
+
+    let lastMessage = null
+
+    if (messages && messages.length) {
+      lastMessage = messages[messages.length - 1]
+    }
+
+    const conversation = getters.getConversation(friend.address)
+
+    if (!conversation) {
+      commit('setConversation', {
+        address: friend.address,
+        messages: [],
+        limit: Config.chat.defaultMessageLimit,
+        skip: 0,
+      })
+    }
+
+    commit('setConversationLastMessage', {
+      conversationId: friend.address,
+      lastMessage,
+    })
   },
   /**
    * @description Fetches messages that comes from a specific user

@@ -1,7 +1,7 @@
 import { Conversation, TextileState } from './types'
 import { MessageRouteEnum } from '~/libraries/Enums/enums'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
-import { Message } from '~/types/textile/mailbox'
+import { Message, MessageTrackerValues } from '~/types/textile/mailbox'
 import { groupMessages, updateMessageTracker } from '~/utilities/Messaging'
 import { UserThreadData } from '~/types/textile/user'
 
@@ -167,6 +167,17 @@ const mutations = {
   },
   setFileSystem(state: TextileState, data: TextileState['fileSystem']) {
     state.fileSystem = data
+  },
+  setConversationLastMessage(
+    state: TextileState,
+    {
+      conversationId,
+      lastMessage,
+    }: { conversationId: string; lastMessage: MessageTrackerValues | null },
+  ) {
+    const conversations = { ...state.conversations }
+    conversations[conversationId].lastMessage = lastMessage
+    state.conversations = conversations
   },
 }
 

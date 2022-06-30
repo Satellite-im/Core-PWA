@@ -47,13 +47,14 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
       textilePubkey: (state) =>
         (state as RootState).accounts?.details?.textilePubkey ?? '',
-      conversations: (state) => (state as RootState).textile?.conversations,
       activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
-    ...mapGetters('textile', ['getConversation']),
+    ...mapGetters('textile', [
+      'getConversationLastMessage',
+      'getConversationLastUpdate',
+    ]),
     ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
       return this.enableRTC
@@ -73,16 +74,14 @@ export default Vue.extend({
           ]
     },
     hasMessaged(): boolean {
-      const lastMessage = this.getConversation(this.user.address)?.lastMessage
-      return !!lastMessage
+      return !!this.getConversationLastMessage(this.user.address)
     },
     lastMessage(): string {
-      const conversation = this.getConversation(this.user.address)
-      const lastMessage = conversation?.lastMessage
-
-      return lastMessage
-        ? this.getDescriptionFromMessage(lastMessage)
-        : (this.$t('messaging.say_hi') as string)
+      const lastMessage = this.getConversationLastMessage(this.user.address)
+      if (!lastMessage) {
+        return this.$t('messaging.say_hi') as string
+      }
+      return this.getDescriptionFromMessage(lastMessage)
     },
     src(): string {
       const hash = this.user?.profilePicture
@@ -99,25 +98,12 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.conversations[this.user.address]?.lastUpdate,
+        time: this.user.lastUpdate,
       })
     },
     enableRTC(): boolean {
       return this.user.state === 'online'
     },
-  },
-  mounted() {
-    Array.from(
-      (this.$refs.subtitle as HTMLElement).getElementsByClassName(
-        'spoiler-container',
-      ),
-    ).forEach((spoiler) => {
-      spoiler.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        spoiler.classList.add('spoiler-open')
-      })
-    })
   },
   beforeDestroy() {
     // ensure the user can't click context menu options after a friend has been removed
@@ -201,7 +187,7 @@ export default Vue.extend({
     /**
      * @method markdownToHtml
      * @description convert text markdown to html
-     * @param str String to convert
+     * @param text String to convert
      */
     markdownToHtml(text: string) {
       return toHTML(text, { liveTyping: false })
