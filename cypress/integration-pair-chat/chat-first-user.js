@@ -32,7 +32,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   it('Voice/Video Calling - when receiving a call, should appear an indication waiting for another user to accept', () => {
     //Remote user should have a class calling indicating that its being called
-    cy.get('[data-cy=remote-video]')
+    cy.get('[data-cy=local-video]')
       .find('[data-cy=media-user-circle]')
       .should('have.class', 'calling')
   })
