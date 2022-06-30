@@ -127,9 +127,7 @@ export default Vue.extend({
     this.setTimestamp()
   },
   beforeDestroy() {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId)
-    }
+    this.clearTimeoutId()
     // ensure the user can't click context menu options after a friend has been removed
     this.$store.commit('ui/toggleContextMenu', false)
   },
@@ -246,6 +244,7 @@ export default Vue.extend({
     setTimestamp() {
       // set now, update timestamp after 30s
       if (this.$dayjs().diff(this.user.lastUpdate, 'second') < 30) {
+        this.clearTimeoutId()
         this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
         this.timestamp = this.$t('time.now')
         return
@@ -260,11 +259,17 @@ export default Vue.extend({
         this.timestamp = this.getDate(this.user.lastUpdate)
       }
       const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
+      this.clearTimeoutId()
       // update timestamp at midnight tonight
       this.timeoutId = setTimeout(
         () => this.setTimestamp(),
         midnight - Date.now(),
       )
+    },
+    clearTimeoutId() {
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId)
+      }
     },
   },
 })
