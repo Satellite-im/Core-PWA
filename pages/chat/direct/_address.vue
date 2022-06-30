@@ -95,5 +95,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="less" src="./Direct.less"></style>

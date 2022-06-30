@@ -52,5 +52,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="less" src="./Group.less"></style>
