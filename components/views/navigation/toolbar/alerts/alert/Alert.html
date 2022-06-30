@@ -2,7 +2,7 @@
   <UiCircle
     :type="alertImage ? 'image' : 'random'"
     :source="alertImage"
-    :data-cy="alertImage ? 'satellite-circle-profile' : 'circle-without-picture'"
+    :data-cy="{'circle-without-picture' : !alertImage}"
   />
   <div class="info-container">
     <div class="head">
