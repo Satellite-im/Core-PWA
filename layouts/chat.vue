@@ -121,9 +121,13 @@ import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
 import { FlairColor, SettingsRoutes } from '~/store/ui/types'
-import type { Friend } from '~/types/ui/friends'
-import { Group } from '~/store/groups/types'
+// import type { Friend } from '~/types/ui/friends'
+import type { Friend } from '~/libraries/Iridium/friends/types'
+import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
+// import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
+
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -195,15 +199,26 @@ export default Vue.extend({
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient(): Friend | Group {
-      const recipient =
-        this.conversation.type === 'group'
-          ? this.groups.all.find(
-              (group: Group) => group.id === this.conversation.id,
-            )
-          : this.friends.all.find(
-              (friend: Friend) => friend.peerId === this.conversation.id,
-            )
+      const recipient = iridium.friends?.getFriend(this.conversation.id)
+      if (!recipient) {
+        return {}
+      }
       return recipient
+
+      // const recipient = iridium.friends?.state.details.find(
+      //   (friend: Friend) => friend.did === this.conversation.id,
+      // )
+      // console.log('debug: | recipient | recipient', recipient)
+
+      // const recipient =
+      //   this.conversation.type === 'group'
+      //     ? this.groups.all.find(
+      //         (group: Group) => group.id === this.conversation.id,
+      //       )
+      //     : this.friends.all.find(
+      //         (friend: Friend) => friend.peerId === this.conversation.id,
+      //       )
+      // return recipient
     },
     flairColor(): FlairColor {
       return this.ui.theme.flair.value

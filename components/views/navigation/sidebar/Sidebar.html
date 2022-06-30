@@ -107,7 +107,7 @@
               :key="friend.did"
               :user="friend"
               :isTyping="ui.isTyping.address === friend.did"
-              :isSelected="friend.did === $route.params.address"
+              :isSelected="friend.did === $route.params.did"
             />
             <!-- <GroupClickable
               v-else
@@ -133,7 +133,7 @@
             <user-plus-icon size="1.2x" />
           </InteractablesButton>
         </div>
-        <UiLoadersAddress v-else :count="4" inverted />
+        <!-- <UiLoadersAddress v-else :count="4" inverted /> -->
       </UiScroll>
     </div>
   </div>

@@ -22,7 +22,8 @@ import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
-import { Friend } from '~/types/ui/friends'
+// import { Friend } from '~/types/ui/friends'
+import type { Friend } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -106,7 +107,7 @@ export default Vue.extend({
         )
         return names.join(', ')
       }
-      return (this.recipient as Friend).status
+      return (this.recipient as Friend).status || 'offline'
     },
     callTooltipText(): string {
       if (this.isGroup) {

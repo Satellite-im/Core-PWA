@@ -72,11 +72,11 @@ export default Vue.extend({
           ]
     },
     hasMessaged(): boolean {
-      const lastMessage = this.getConversation(this.user.address)?.lastMessage
+      const lastMessage = this.getConversation(this.user.did)?.lastMessage
       return !!lastMessage
     },
     lastMessage(): string {
-      const conversation = this.getConversation(this.user.address)
+      const conversation = this.getConversation(this.user.did)
       const lastMessage = conversation?.lastMessage
 
       return lastMessage
@@ -98,7 +98,7 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.conversations[this.user.address]?.lastUpdate,
+        time: this.conversations[this.user.did]?.lastUpdate,
       })
     },
   },
@@ -148,18 +148,18 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      if (this.user.address === this.$route.params.address) {
+      if (this.user.did === this.$route.params.did) {
         this.$store.dispatch('ui/setChatbarFocus')
         return
       }
 
       this.$store.dispatch('conversation/setConversation', {
-        id: this.user.address,
+        id: this.user.did,
         type: 'friend',
         participants: [this.user],
         calling: false,
       })
-      this.$router.push(`/chat/direct/${this.user.address}`)
+      this.$router.push(`/chat/direct/${this.user.did}`)
     },
     handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)
