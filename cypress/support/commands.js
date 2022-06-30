@@ -540,7 +540,9 @@ Cypress.Commands.add('workaroundChatLoad', (user) => {
   //Click on the conversation again
   cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
-    .click()
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
   cy.get('[data-cy=hamburger-button]').click() // Hide sidebar if not on mobile browser
 })
 
