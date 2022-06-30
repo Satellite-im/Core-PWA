@@ -30,19 +30,34 @@ body {
 *:active {
   outline: none;
 }
+
 * {
   &::-webkit-scrollbar {
     width: @scroll-bar-size;
+
+    :hover {
+      &::-webkit-scrollbar-thumb {
+        background: @flair-color;
+        &:extend(.round-corners);
+      }
+      scrollbar-width: thin;
+      scrollbar-color: @flair-color transparent;
+    }
   }
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-  &::-webkit-scrollbar-thumb {
-    background: @flair-color;
-    &:extend(.round-corners);
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  * {
+    &::-webkit-scrollbar-thumb {
+      background: @flair-color;
+      &:extend(.round-corners);
+    }
+    scrollbar-width: thin;
+    scrollbar-color: @flair-color transparent;
   }
-  scrollbar-width: thin;
-  scrollbar-color: @flair-color transparent;
 }
 
 code {
