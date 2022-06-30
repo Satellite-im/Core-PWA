@@ -110,18 +110,6 @@ export default {
     // @ts-ignore
     state.modals.errorNetwork = { isOpen: modal.state, action: modal.action }
   },
-  hideModals(state: UIState) {
-    const modals = { ...state.modals }
-    for (const key in modals) {
-      const modalName = key as ModalWindows
-      if (typeof modals[modalName] === 'boolean') {
-        modals[modalName] = false
-      } else if (typeof modals[modalName] === 'object') {
-        modals[modalName].isOpen = false
-      }
-    }
-    state.modals = modals
-  },
   setGlyphModalPack(state: UIState, pack: string) {
     state.glyphModalPack = pack
   },

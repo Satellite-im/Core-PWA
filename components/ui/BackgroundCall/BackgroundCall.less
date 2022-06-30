@@ -1,14 +1,12 @@
 .background-call {
   &:extend(.background-flair);
   &:extend(.font-secondary);
+  &:extend(.absolute-coverage);
   border-radius: 0 0 @corner-rounding @corner-rounding;
   height: @background-call-height;
   z-index: @fifth-layer-zindex;
   font-size: @micro-text-size;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  bottom: auto;
   text-align: center;
   box-shadow: 0px 0px 30px rgba(var(--flair-color-rgb), 0.35),
     0px 0px 20px rgba(var(--flair-color-rgb), 0.4);
