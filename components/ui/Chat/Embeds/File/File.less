@@ -3,11 +3,11 @@
   &:extend(.bordered);
   &:extend(.round-corners);
   &:extend(.more-pad-sides);
-  &:extend(.inline-flex-justify-center);
+  display: flex;
   align-items: center;
   gap: @normal-spacing;
   margin: @light-spacing 0;
-  width: 400px;
+  max-width: 400px;
 
   .file-icon {
     margin: 0;
@@ -16,13 +16,11 @@
   }
 
   .file-info {
-    display: flex;
-    flex-direction: column;
     &:extend(.ellipsis);
+    flex-grow: 1;
     .subtitle {
       &:extend(.font-secondary);
       &:extend(.ellipsis);
-      max-width: 250px;
 
       margin: 0;
       font-weight: bold;
@@ -39,7 +37,6 @@
   }
   .button {
     flex-shrink: 0;
-    margin-left: auto;
     &:hover {
       &:extend(.font-secondary);
     }
@@ -48,17 +45,7 @@
 
 @media only screen and (max-width: @mobile-small-breakpoint) {
   .embedded-file {
-    width: @full;
-    .file-info {
-      .subtitle {
-        max-width: 170px;
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: @mobile-candybar-breakpoint) {
-  .embedded-file {
+    min-width: unset;
     padding: @light-spacing;
     justify-content: space-between;
     .file-icon {

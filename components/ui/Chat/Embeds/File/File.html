@@ -4,7 +4,7 @@
     <file-icon size="1x" class="file-icon" />
     <div class="file-info">
       <TypographySubtitle :size="6" :text="`${file.name}`" />
-      <TypographyText :text="`${getFileSize} - ${file.type}`" />
+      <TypographyText :text="fileDescription" />
     </div>
     <a @click="download" class="button is-primary" data-cy="chat-file">
       <download-icon size="1x" class="download" />

@@ -59,3 +59,16 @@
     }
   }
 }
+
+@media only screen and (max-width: @mobile-small-breakpoint) {
+  .group-same {
+    display: block;
+    &:focus,
+    &:hover {
+      margin-left: 3.25rem;
+      .timestamp {
+        display: none;
+      }
+    }
+  }
+}
