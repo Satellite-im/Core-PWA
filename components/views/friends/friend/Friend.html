@@ -1,6 +1,6 @@
 <div class="friend" data-cy="friend">
   <UiCircle
-    v-if="send"
+    v-if="send || outgoing || request"
     :type="src ? 'image' : 'random'"
     :seed="friend.address"
     :source="src"
