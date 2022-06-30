@@ -5,7 +5,10 @@
     <TypographyText :text="user.status || 'offline'" />
   </div>
   <div class="spacer"></div>
-  <div class="controls" v-if="request && request.incoming">
+  <div
+    class="controls"
+    v-if="request && request.incoming && request.status === 'pending'"
+  >
     <InteractablesButton
       type="success"
       size="small"
@@ -36,7 +39,10 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
-  <div class="controls" v-else-if="request && !request.incoming">
+  <div
+    class="controls"
+    v-else-if="request && !request.incoming && request.status === 'pending'"
+  >
     <InteractablesButton
       type="danger"
       size="small"

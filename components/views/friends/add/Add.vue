@@ -33,16 +33,16 @@ export default Vue.extend({
     _searchFriend: debounce(async function (this: any) {
       if (!this.friendId.length) {
         this.error = ''
-        this.friend = null
+        this.user = null
         this.searching = false
         return
       }
       await this.searchFriend()
-      this.error = this.$t('friends.invalid_id') as string
       this.searching = false
     }, 500),
     async searchFriend() {
       this.user = null
+      this.error = ''
       this.searching = true
       const friendId = this.friendId.trim()
       if (friendId === iridium.connector?.id) {
@@ -53,7 +53,6 @@ export default Vue.extend({
       if (hasFriend) {
         this.error = this.$t('friends.already_friend') as string
       }
-      this.error = ''
 
       try {
         const request = await iridium.friends?.createFriendRequest(

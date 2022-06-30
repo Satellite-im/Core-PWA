@@ -21,13 +21,12 @@
             />
           </div>
           <FriendsFriend
-            v-for="[did, request] in Object.entries(data.friends.requests)"
-            v-if="request.status !== 'rejected'"
-            :user="user || {
-              did,
-              name: did,
-              status: 'offline'
-            }"
+            v-for="[did, request] in
+          Object.entries(data.friends.requests)"
+            v-if="request.status ===
+          'pending' && request.user"
+            :user='user || { did, name: request.user.name, status:
+          "offline" }'
             :request="request"
             :key="request.from"
           />

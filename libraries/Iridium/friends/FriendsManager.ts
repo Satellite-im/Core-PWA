@@ -107,6 +107,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         }
       })
     }
+    this.emit('ready', {})
   }
 
   async stop() {
@@ -144,12 +145,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       status,
     })
     const existing = this.state.requests?.[did]
-    await this.updateFriendRequest(
-      did,
-      status,
-      user,
-      existing?.incoming || true,
-    )
+    const incoming = status === 'pending' && !existing
+    await this.updateFriendRequest(did, status, user, incoming)
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
@@ -160,6 +157,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   set(path: string, payload: any, options: IridiumSetOptions = {}) {
+    logger.info('iridium/friends', 'path and paylaod', {
+      path,
+      payload,
+    })
     return this.iridium.connector?.set(
       `/friends${path === '/' ? '' : path}`,
       payload,
@@ -219,6 +220,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.set(`/requests/${friendId}`, request)
     this.emit('request/changed', request)
 
+    if (user && status === 'accepted' && !this.isFriend(friendId)) {
+      await this.addFriend(user)
+    }
     if (existing.status === status) {
       return
     }
@@ -243,6 +247,22 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     return request
   }
 
+  async addFriend(user: User) {
+    if (this.isFriend(user.did)) {
+      throw new Error(`already friends with ${user.did}`)
+    }
+    if (!this.state.list) {
+      this.state.list = []
+    }
+    if (!this.state.details) {
+      this.state.details = {}
+    }
+    this.state.list.push(user.did)
+    this.state.details[user.did] = user
+    await this.set(`/details/${user.did}`, user)
+    return this.set('/list', this.state.list)
+  }
+
   async createFriendRequest(
     friendId: string,
     status: FriendRequestStatus = 'pending',
@@ -257,7 +277,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       throw new Error(`already have friend request for ${friendId}`)
     }
 
-    console.info('createFriendRequest, update', friendId)
     return this.updateFriendRequest(friendId, status, user)
   }
 

@@ -224,14 +224,14 @@ export default Vue.extend({
   computed: {
     DataStateType: () => DataStateType,
     ...mapState(['ui', 'media', 'friends']),
-    toggleView: {
-      get() {
-        return this.ui.showSidebarUsers
-      },
-      set(value: Boolean) {
-        this.$store.commit('ui/showSidebarUsers', value)
-      },
-    },
+    // toggleView: {
+    //   get() {
+    //     return this.ui.showSidebarUsers
+    //   },
+    //   set(value: Boolean) {
+    //     this.$store.commit('ui/showSidebarUsers', value)
+    //   },
+    // },
     friendsListEmpty() {
       return !this.friends?.list?.length
     },

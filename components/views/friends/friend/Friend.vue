@@ -68,10 +68,12 @@ export default Vue.extend({
     },
     async acceptFriendRequest() {
       this.loading = true
+      await iridium.friends?.acceptFriendRequest(this.user.did)
+      this.loading = false
     },
     async rejectFriendRequest() {
       this.loading = true
-      await iridium.friends?.updateFriendRequest(this.user.did, 'rejected')
+      await iridium.friends?.rejectFriendRequest(this.user.did)
       this.loading = false
     },
     async removeFriend() {

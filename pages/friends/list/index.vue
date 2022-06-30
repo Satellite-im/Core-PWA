@@ -11,19 +11,15 @@ export default Vue.extend({
   data() {
     return {
       route: 'active',
-      data: { friends: null, loading: true },
+      data: {
+        loading: true,
+        friends: iridium.friends?.state,
+      },
     }
   },
   async mounted() {
-    if (iridium.ready) {
-      const friends = await iridium.friends?.get('/')
-      this.data.friends = { ...friends }
-      this.data.loading = false
-    }
-
-    iridium.friends?.on('request/changed', async () => {
-      this.data.friends = { ...(await iridium.friends?.get('/')) }
-    })
+    this.data.loading = false
+    iridium.friends?.on('request/changed', () => this.$forceUpdate())
   },
 })
 </script>
