@@ -45,6 +45,7 @@ export default Vue.extend({
       existConversation: false,
       isLoading: false,
       timestamp: '' as string | TranslateResult,
+      timeoutId: undefined as NodeJS.Timeout | undefined,
     }
   },
   computed: {
@@ -106,7 +107,7 @@ export default Vue.extend({
   watch: {
     user: {
       handler() {
-        this.timestamp = this.setTimestamp()
+        this.setTimestamp()
       },
       deep: true,
     },
@@ -123,9 +124,12 @@ export default Vue.extend({
         spoiler.classList.add('spoiler-open')
       })
     })
-    this.timestamp = this.setTimestamp()
+    this.setTimestamp()
   },
   beforeDestroy() {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId)
+    }
     // ensure the user can't click context menu options after a friend has been removed
     this.$store.commit('ui/toggleContextMenu', false)
   },
@@ -234,28 +238,33 @@ export default Vue.extend({
     /**
      * @description set timestamp
      * "now" for less than 30 sec
-     * "hh:mm AM/PM" between 1 minutes and a day
+     * "hh:mm AM/PM" between 31 sec and a day
      * "yesterday" the day before
      * "2d" 2 days before
      * "MM/DD/YYYY" > 2 days before
      */
-    setTimestamp(): string | TranslateResult {
-      // using 15 because settimeout isn't perfect
-      if (this.$dayjs().diff(this.user.lastUpdate, 'second') <= 15) {
-        setTimeout(() => (this.timestamp = this.setTimestamp()), 30000)
-        return this.$t('time.now')
+    setTimestamp() {
+      // set now, update timestamp after 30s
+      if (this.$dayjs().diff(this.user.lastUpdate, 'second') < 30) {
+        this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
+        this.timestamp = this.$t('time.now')
+        return
       }
       if (this.$dayjs().isSame(this.user.lastUpdate, 'day')) {
-        return this.getTimestamp({ time: this.user.lastUpdate })
+        this.timestamp = this.getTimestamp({ time: this.user.lastUpdate })
+      } else if (this.$dayjs().diff(this.user.lastUpdate, 'day') <= 1) {
+        this.timestamp = this.$t('time.yesterday')
+      } else if (this.$dayjs().diff(this.user.lastUpdate, 'day') <= 2) {
+        this.timestamp = '2 d'
+      } else {
+        this.timestamp = this.getDate(this.user.lastUpdate)
       }
-      const daysDiff = this.$dayjs().diff(this.user.lastUpdate, 'day')
-      if (daysDiff <= 1) {
-        return this.$t('time.yesterday')
-      }
-      if (daysDiff <= 2) {
-        return '2d'
-      }
-      return this.getDate(this.user.lastUpdate)
+      const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
+      // update timestamp at midnight tonight
+      this.timeoutId = setTimeout(
+        () => this.setTimestamp(),
+        midnight - Date.now(),
+      )
     },
   },
 })
