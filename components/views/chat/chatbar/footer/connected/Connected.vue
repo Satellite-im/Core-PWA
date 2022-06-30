@@ -32,11 +32,15 @@ export default Vue.extend({
         )
       }
       // if group
-      return this.$tc('ui.online', this.onlineParticipants.length, {
-        name: this.onlineParticipants
-          .map((p: ConversationParticipant) => p.name)
-          .join(', '),
-      })
+      if (this.otherParticipants.length > 1) {
+        return this.$tc('ui.online', this.onlineParticipants.length, {
+          name: this.onlineParticipants
+            .map((p: ConversationParticipant) => p.name)
+            .join(', '),
+        })
+      }
+
+      return ''
     },
     /**
      * @method connectedStatus
