@@ -35,14 +35,6 @@ export default class PhantomAdapter implements Adapter {
     throw new Error('Method not implemented.')
   }
 
-  initUserProgram(): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
-  initUserProgram(): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
   _getPhantomUser(): PhantomUser {
     if (!this.phantomUser) {
       if (this.$PhantomManager.getAdapter().connected) {
