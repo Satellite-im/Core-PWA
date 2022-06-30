@@ -32,7 +32,6 @@
   padding: @light-spacing;
   gap: @light-spacing;
 
-  &:extend(.first-layer);
   .indicator {
     position: relative;
     display: flex;
@@ -40,23 +39,14 @@
     justify-content: center;
     width: @indicator-size;
     height: @indicator-size;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 100%;
-      background-color: @foreground-alt;
-      opacity: 0.5;
-      box-shadow: -2px 2px 30px rgba(18, 18, 22, 0.45),
-        0px 1px 2px rgba(43, 43, 59, 0.65);
-    }
+    opacity: 0.5;
+    border-radius: 100%;
+    background-color: @foreground-alt;
+    box-shadow: -2px 2px 30px rgba(18, 18, 22, 0.45),
+      0px 1px 2px rgba(43, 43, 59, 0.65);
 
     svg {
-      &:extend(.color-text-muted);
+      color: @white;
       width: 16px;
       height: 16px;
     }
@@ -68,8 +58,6 @@
     position: absolute;
     top: calc(@half - 38.5px);
     left: calc(@half - 32.5px);
-
-    &:extend(.first-layer);
   }
 
   .calling {
@@ -78,7 +66,6 @@
     animation: pulse 2s infinite;
   }
   .tag {
-    &:extend(.first-layer);
     &:extend(.ellipsis);
 
     display: inline-block;
