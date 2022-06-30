@@ -65,9 +65,9 @@ export default Vue.extend({
      * @method share
      * @description copy link to clipboard
      */
-    async share() {
-      this.$toast.show(this.$t('todo - share') as string)
-    },
+    // async share() {
+    //   this.$toast.show(this.$t('todo - share') as string)
+    // },
     /**
      * @method closeFilePreview
      * @description Close File Preview
