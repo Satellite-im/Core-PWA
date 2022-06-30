@@ -36,6 +36,8 @@ export default Vue.extend({
         this.$store.commit('ui/toggleSettings', { show: false })
       }
 
+      this.$store.commit('ui/hideModals')
+
       this.$store.dispatch('conversation/setConversation', {
         id: this.caller.peerId,
         type: 'friend',

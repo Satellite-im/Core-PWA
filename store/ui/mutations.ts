@@ -3,6 +3,7 @@ import {
   EnhancerInfo,
   FileSort,
   Flair,
+  ModalWindows,
   Position,
   RecentGlyph,
   SettingsRoutes,
@@ -15,6 +16,7 @@ import { FileMessage } from '~/types/textile/mailbox'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Fil } from '~/libraries/Files/Fil'
+import modal from '~/components/views/settings/modal/Modal.vue'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -107,6 +109,18 @@ export default {
   ) {
     // @ts-ignore
     state.modals.errorNetwork = { isOpen: modal.state, action: modal.action }
+  },
+  hideModals(state: UIState) {
+    const modals = { ...state.modals }
+    for (const key in modals) {
+      const modalName = key as ModalWindows
+      if (typeof modals[modalName] === 'boolean') {
+        modals[modalName] = false
+      } else if (typeof modals[modalName] === 'object') {
+        modals[modalName].isOpen = false
+      }
+    }
+    state.modals = modals
   },
   setGlyphModalPack(state: UIState, pack: string) {
     state.glyphModalPack = pack
