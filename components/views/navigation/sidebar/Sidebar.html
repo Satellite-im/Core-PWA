@@ -96,7 +96,7 @@
     >
       <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
         <!-- <UiLoadersAddress v-if="friends" :count="4" inverted /> -->
-        <div v-if="friends.list && friends.list.length">
+        <div v-if="friends.details">
           <UiInlineNotification
             v-if="ui.unreadMessage.length"
             :text="$t('messaging.new_messages')"
@@ -118,7 +118,7 @@
           </div>
         </div>
         <div
-          v-else-if="friends && !friends.list.length"
+          v-else-if="friends && friends.list && !friends.list.length"
           class="mascot-container"
         >
           <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />

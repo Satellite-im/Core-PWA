@@ -37,7 +37,7 @@
         <div v-if="data.loading">
           <UiLoadersFriend :count="5" />
         </div>
-        <div v-else-if="data.friends.details">
+        <div v-else-if="data.friends && data.friends.details">
           <div
             v-for="[did, user] in Object.entries(data.friends.details)"
             :key="did"
