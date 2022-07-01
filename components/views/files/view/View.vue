@@ -45,7 +45,7 @@ export default Vue.extend({
      * also takes a bit to get started for large files, this adds loading indicator
      */
     async download() {
-      // assign varaible in case the user closes modal and removes store value before download is finished
+      // assign variable in case the user closes modal and removes store value before download is finished
       const file = this.file
       if (file) {
         this.$store.commit('ui/addFileDownload', file.name)
