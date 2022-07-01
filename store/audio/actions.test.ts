@@ -188,23 +188,7 @@ describe('actions.default.toggleMute', () => {
     audio: initialAudioState(),
   }
 
-  test('Should mute audio', () => {
-    const commit = jest.fn()
-    const dispatch = jest.fn()
-    const state: AudioState = {
-      ...initialAudioState(),
-      muted: true,
-    }
-    const rootState = { ...initialRootState }
-    actions.default.toggleMute({ state, commit, dispatch, rootState })
-    // expect(commit).toHaveBeenCalledWith('toggleMute')
-    // expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
-    //   root: true,
-    // })
-    // expect(muteMock).toHaveBeenCalledWith({ kind: 'audio' })
-  })
-
-  test('Should unmute audio', () => {
+  test('Should unmute audio', async () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
     const state: AudioState = {
@@ -212,12 +196,51 @@ describe('actions.default.toggleMute', () => {
       muted: false,
     }
     const rootState = { ...initialRootState }
-    actions.default.toggleMute({ state, commit, dispatch, rootState })
-    // expect(commit).toHaveBeenCalledWith('toggleMute')
-    // expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
-    //   root: true,
-    // })
-    // expect(unmuteMock).toHaveBeenCalledWith({ kind: 'audio' })
+    await actions.default.toggleMute({ state, commit, dispatch, rootState })
+    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
+      root: true,
+    })
+    expect(muteMock).toHaveBeenCalledWith({ kind: 'audio' })
+    expect(commit).toHaveBeenCalledWith('setMute', true)
+  })
+
+  test('Should mute audio', async () => {
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+    const state: AudioState = {
+      ...initialAudioState(),
+      muted: true,
+    }
+    const rootState = { ...initialRootState }
+    await actions.default.toggleMute({ state, commit, dispatch, rootState })
+    expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
+      root: true,
+    })
+    expect(unmuteMock).toHaveBeenCalledWith({ kind: 'audio' })
+    expect(commit).toHaveBeenCalledWith('setMute', false)
+  })
+
+  test('Should mute audio but no activeCall', async () => {
+    const commit = jest.fn()
+    const dispatch = jest.fn()
+    const state: AudioState = {
+      ...initialAudioState(),
+      muted: true,
+    }
+    const rootState = {
+      ...initialRootState,
+      webrtc: {
+        activeCall: false,
+      },
+    }
+    $WebRTC.getCall.mockReturnValue(false)
+    const result = await actions.default.toggleMute({
+      state,
+      commit,
+      dispatch,
+      rootState,
+    })
+    expect(result).toBeUndefined()
   })
 })
 

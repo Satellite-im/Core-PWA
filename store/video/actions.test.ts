@@ -186,30 +186,47 @@ describe('', () => {
       disabled: true,
     },
   }
-  test('Should mute video', () => {
+  test('Should mute video', async () => {
     const commit = jest.fn()
-    const dispatch = jest.fn()
     const state = {
       disabled: true,
     }
     const rootState = { ...initialRootState }
 
-    module.default.toggleMute({ state, commit, dispatch, rootState })
-    // expect(commit).toHaveBeenCalledWith('toggleCamera')
-    // expect(muteMock).toHaveBeenCalledWith({ kind: 'video' })
+    module.default.toggleMute({ state, commit, rootState })
+    expect(unmuteMock).toHaveBeenCalledWith({ kind: 'video' })
   })
 
-  test('Should unmute video', () => {
+  test('Should unmute video', async () => {
     const commit = jest.fn()
-    const dispatch = jest.fn()
     const state = {
       disabled: false,
     }
 
     const rootState = { ...initialRootState }
 
-    module.default.toggleMute({ state, commit, dispatch, rootState })
-    // expect(commit).toHaveBeenCalledWith('toggleCamera')
-    // expect(unmuteMock).toHaveBeenCalledWith({ kind: 'video' })
+    module.default.toggleMute({ state, commit, rootState })
+    expect(muteMock).toHaveBeenCalledWith({ kind: 'video' })
+  })
+
+  test('Should unmute video', async () => {
+    const commit = jest.fn()
+    const state = {
+      disabled: false,
+    }
+
+    const rootState = {
+      ...initialRootState,
+      webrtc: {
+        activeCall: false,
+      },
+    }
+    $WebRTC.getCall.mockReturnValue(false)
+    const result = await module.default.toggleMute({
+      state,
+      commit,
+      rootState,
+    })
+    expect(result).toBeUndefined()
   })
 })
