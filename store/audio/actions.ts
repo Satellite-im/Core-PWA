@@ -23,6 +23,7 @@ export default {
     })
 
     if (!call) {
+      commit('toggleMute')
       return
     }
 
