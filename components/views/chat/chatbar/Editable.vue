@@ -105,7 +105,7 @@ export default Vue.extend({
     focusInput() {
       this.$nextTick(() => {
         if (!this.$refs?.editable) return
-        const messageBox = this.$refs?.editable as HTMLElement
+        const messageBox = this.$refs.editable as HTMLElement
         Cursor.setCurrentCursorPosition(this.value.length, messageBox)
       })
     },
