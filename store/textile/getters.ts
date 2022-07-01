@@ -20,7 +20,7 @@ const getters = {
   getConversationLastUpdate:
     (state: TextileState, getters: any) => (address: string) => {
       const conversation = getters.getConversation(address)
-      return conversation?.lastUpdate || null
+      return conversation?.lastUpdate || 0
     },
 }
 

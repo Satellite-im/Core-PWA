@@ -98,7 +98,7 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.user.lastUpdate,
+        time: this.getConversationLastUpdate(this.user.address),
       })
     },
     enableRTC(): boolean {

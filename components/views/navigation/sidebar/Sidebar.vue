@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import {
   UsersIcon,
   UserPlusIcon,
@@ -18,6 +18,8 @@ import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
+import { Friend } from '~/types/ui/friends'
+import { Group } from '~/store/groups/types'
 
 export default Vue.extend({
   components: {
@@ -55,9 +57,10 @@ export default Vue.extend({
       conversations: (state) =>
         (state as RootState).textile.conversations || [],
     }),
-    usersAndGroups() {
+    ...mapGetters('textile', ['getConversationLastUpdate']),
+    usersAndGroups(): Array<Friend | Group> {
       const combined = [...this.friends.all, ...this.groups.all]
-      return combined.sort((a, b) => b.lastUpdate - a.lastUpdate)
+      return combined.sort(this.sortFriendsAndGroups)
     },
   },
   watch: {
@@ -90,6 +93,14 @@ export default Vue.extend({
       } else {
         this.$router.push({ path: '/friends/list' })
       }
+    },
+    sortFriendsAndGroups(a: Friend | Group, b: Friend | Group) {
+      const aId = a?.admin ? a.id : a.address
+      const bId = b?.admin ? b.id : b.address
+      return (
+        this.getConversationLastUpdate(bId) -
+        this.getConversationLastUpdate(aId)
+      )
     },
     sortUserList(conversations: Conversation) {
       this.$store.commit('friends/sortFriends', conversations)

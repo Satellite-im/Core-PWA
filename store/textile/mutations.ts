@@ -57,6 +57,8 @@ const mutations = {
       tracked.reactions,
     )
 
+    const lastMessage = msgValues[msgValues.length - 1]
+
     state.conversations = {
       ...state.conversations,
       [address]: {
@@ -66,8 +68,8 @@ const mutations = {
         reactions: tracked.reactions,
         groupedMessages,
         lastInbound: initialValues.lastInbound, // the last time a message was received by any member of conversation, EXCEPT account owner
-        lastUpdate: initialValues.lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
-        lastMessage: msgValues[msgValues.length - 1],
+        lastUpdate: lastMessage?.at || initialValues.lastUpdate, // the last time a message was received by any member of conversation, INCLUDING account owner
+        lastMessage: lastMessage || null,
         limit,
         skip,
         end,
@@ -177,6 +179,7 @@ const mutations = {
   ) {
     const conversations = { ...state.conversations }
     conversations[conversationId].lastMessage = lastMessage
+    conversations[conversationId].lastUpdate = lastMessage?.at || 0
     state.conversations = conversations
   },
 }

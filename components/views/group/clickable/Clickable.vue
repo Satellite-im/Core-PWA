@@ -30,7 +30,10 @@ export default Vue.extend({
         (state as RootState).accounts?.details?.textilePubkey ?? '',
     }),
     ...mapGetters('settings', ['getTimestamp']),
-    ...mapGetters('textile', ['getConversationLastMessage']),
+    ...mapGetters('textile', [
+      'getConversationLastMessage',
+      'getConversationLastUpdate',
+    ]),
     contextMenuValues(): ContextMenuItem[] {
       return [
         { text: this.$t('context.send'), func: this.navigateToGroup },
@@ -51,7 +54,7 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.group.lastUpdate,
+        time: this.getConversationLastUpdate(this.group.id),
       })
     },
   },

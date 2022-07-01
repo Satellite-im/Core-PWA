@@ -282,8 +282,8 @@ export default {
       // use textileMessages as primary source. this way, edited messages will use the newest version
       const ids = new Set(textileMessages.map((d) => d.id))
       conversation = [
-        ...textileMessages,
         ...dbMessages.filter((d) => !ids.has(d.id)),
+        ...textileMessages,
       ]
     }
 
@@ -951,7 +951,7 @@ export default {
     commit('setConversation', {
       type: 'group',
       address: groupId,
-      messages: conversation,
+      messages: conversation.reverse(),
       limit: query.limit,
       skip: query.skip,
       active: setActive,
