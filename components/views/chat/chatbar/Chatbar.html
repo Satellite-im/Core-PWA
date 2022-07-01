@@ -32,7 +32,7 @@
     <ChatbarControls
       id="chatbar-controls"
       :sendMessage="sendMessage"
-      :disabled="!recipient"
+      :disabled="!recipient || charlimit"
     />
   </div>
   <ChatbarFooter :text="text" :charlimit="charlimit" />

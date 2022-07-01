@@ -20,12 +20,7 @@
     />
   </div>
   <div class="controls">
-    <div
-      class="toggle-alerts"
-      data-cy="toolbar-alerts"
-      @click="toggleAlerts"
-      v-tooltip.bottom="$t('pages.chat.alerts')"
-    >
+    <div class="toggle-alerts" data-cy="toolbar-alerts">
       <UiCircle
         v-if="allUnseenNotifications.length"
         class="notification-alert"
@@ -33,6 +28,7 @@
         color="red"
         type="icon"
         :data="allUnseenNotifications.length"
+        @click="toggleAlerts"
       >
         {{allUnseenNotifications.length}}
       </UiCircle>
@@ -40,21 +36,18 @@
         size="1x"
         :class="`control-icon ${showAlerts ? 'primary' : ''}`"
         color="primary"
+        @click="toggleAlerts"
+        v-tooltip.bottom="$t('pages.chat.alerts')"
+      />
+      <ToolbarAlerts
+        v-if="showAlerts && $device.isDesktop"
+        v-click-outside="toggleAlerts"
       />
     </div>
-
-    <UiFloatingContainer
-      v-if="showAlerts"
-      :offsets="showSidebar ? [4.2] : [4.2, 2.3]"
-      heading="Alerts"
-      :width="25"
-      :height="25"
-      :class="`alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
-      :customStyles="$device.isMobile"
-      :toggleMethod="() => $data.showAlerts = false"
-    >
-      <ToolbarAlerts />
-    </UiFloatingContainer>
+    <ToolbarAlerts
+      v-if="showAlerts && !$device.isDesktop"
+      v-click-outside="toggleAlerts"
+    />
     <div
       :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       v-tooltip.bottom="callTooltipText"

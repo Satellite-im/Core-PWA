@@ -3,12 +3,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
-import { SearchResultItem } from '~/types/search/search'
+import { toHTML } from '~/libraries/ui/Markdown'
+import { UISearchResultData } from '~/types/search/search'
 
 export default Vue.extend({
   props: {
     data: {
-      type: Object as PropType<SearchResultItem>,
+      type: Object as PropType<UISearchResultData>,
       required: true,
     },
   },
@@ -33,6 +34,35 @@ export default Vue.extend({
         })}`
       }
       return this.getTimestamp({ time: this.data.at, full: true })
+    },
+    htmlPayload(): any {
+      return toHTML(this.data.payload, { liveTyping: false })
+    },
+  },
+  watch: {
+    data: {
+      handler() {
+        this.$nextTick(() => this.addSpoilerClick())
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.addSpoilerClick()
+  },
+  methods: {
+    addSpoilerClick() {
+      Array.from(
+        (this.$refs.result as HTMLElement).getElementsByClassName(
+          'spoiler-container',
+        ),
+      ).forEach((spoiler) => {
+        spoiler.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          spoiler.classList.add('spoiler-open')
+        })
+      })
     },
   },
 })

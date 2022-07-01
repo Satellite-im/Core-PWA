@@ -587,6 +587,9 @@ button {
     .send-message-btn {
       &:extend(.font-flair);
     }
+    [disabled] {
+      color: grey;
+    }
   }
 
   .chat-label {
@@ -700,15 +703,6 @@ button {
 }
 
 // ------------- Ui Elements-------------
-
-// Chatbar
-#chatbar {
-  .chatbar-controls {
-    .send-message-btn {
-      &:extend(.color-flair);
-    }
-  }
-}
 
 .is-chatbar-reply {
   &:extend(.background-flair);
