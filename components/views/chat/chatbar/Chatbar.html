@@ -1,4 +1,4 @@
-<div id="chatbar" ref="chatbar">
+<div id="chatbar" ref="chatbar" v-click-outside="blurChatbar">
   <Enhancers @click="handleChatTextFromOutside" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
