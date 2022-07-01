@@ -47,13 +47,14 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
       textilePubkey: (state) =>
         (state as RootState).accounts?.details?.textilePubkey ?? '',
-      conversations: (state) => (state as RootState).textile?.conversations,
       activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
-    ...mapGetters('textile', ['getConversationLastMessage']),
+    ...mapGetters('textile', [
+      'getConversationLastMessage',
+      'getConversationLastUpdate',
+    ]),
     ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
       return this.enableRTC
@@ -97,7 +98,7 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.conversations[this.user.address]?.lastUpdate,
+        time: this.getConversationLastUpdate(this.user.address),
       })
     },
     enableRTC(): boolean {

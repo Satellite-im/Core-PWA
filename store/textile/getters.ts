@@ -17,6 +17,11 @@ const getters = {
       const conversation = getters.getConversation(address)
       return conversation?.lastMessage || null
     },
+  getConversationLastUpdate:
+    (state: TextileState, getters: any) => (address: string) => {
+      const conversation = getters.getConversation(address)
+      return conversation?.lastUpdate || 0
+    },
 }
 
 export default getters
