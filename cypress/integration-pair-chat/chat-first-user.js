@@ -19,6 +19,12 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.goToConversation('Chat Pair B')
   })
 
+  it('Wait until Chat Pair B account is online to start', () => {
+    cy.contains('Chat Pair B is online', { timeout: 300000 }).should(
+      'be.visible',
+    )
+  })
+
   //Is typing indicator is displayed
   it('Validate that is typing message is displayed', { retries: 1 }, () => {
     cy.contains('typing', { timeout: 30000 }).should('be.visible')
@@ -358,8 +364,8 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   // Call Finished tests
   it('Finish videocall', () => {
-    //Wait 30 seconds before finishing the call
-    cy.wait(30000)
+    //Wait 15 seconds before finishing the call
+    cy.wait(15000)
     cy.get('[data-cy=call-hangup]').click()
   })
 

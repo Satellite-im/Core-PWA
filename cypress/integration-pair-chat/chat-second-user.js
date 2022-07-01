@@ -20,6 +20,12 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.goToConversation('Chat Pair A')
   })
 
+  it('Wait until Chat Pair A account is online to start', () => {
+    cy.contains('Chat Pair A is online', { timeout: 300000 }).should(
+      'be.visible',
+    )
+  })
+
   it('Type a long message in chat bar without sending it', () => {
     //Type a long message
     cy.get('[data-cy=editable-input]')
@@ -141,8 +147,8 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   })
 
   it('Call again to User A for a fourth time', () => {
-    //Wait 30 seconds until user reconnects again
-    cy.contains('Chat Pair A is online', { timeout: 60000 }).should(
+    //Wait until Chat Pair A is online again
+    cy.contains('Chat Pair A is online', { timeout: 90000 }).should(
       'be.visible',
     )
 

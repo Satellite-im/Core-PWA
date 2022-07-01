@@ -534,9 +534,9 @@ Cypress.Commands.add('workaroundChatLoad', (user) => {
   //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
 
   cy.get('[data-cy=toggle-sidebar]').click() //Click on toggle sidebar to display sidebar menu
-  cy.get('[data-cy=sidebar-files]').click() //Go to files page
-  cy.get('[data-cy=sidebar-friends]').click() //Go to friends page
-  cy.get('[data-cy=sidebar-files]').click() // Return to files page
+  cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
+  cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
+  cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
   //Click on the conversation again
   cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
