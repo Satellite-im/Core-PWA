@@ -245,10 +245,6 @@ export default Vue.extend({
         element?.classList.add('full-video')
       }
     },
-    resize(newHeight: string) {
-      const mediaStream = this.$refs.mediastream as HTMLElement
-      mediaStream.style.flexBasis = newHeight
-    },
   },
 })
 </script>

@@ -4,47 +4,40 @@
   ref="mediastream"
   v-if="isActiveCall"
 >
-  <div class="wrapper">
-    <MediaHeading />
-    <div id="media" ref="media">
-      <MediaUser
-        id="local_video"
-        data-cy="local-video"
-        @dblclick="handleDoubleClick('local_video')"
-        :user="localParticipant"
-        :isLocal="true"
-      />
-
-      <div v-for="participant in remoteParticipants" v-if="participant">
-        <MediaUser
-          :id="`remote_video_${ participant.peerId }`"
-          data-cy="remote-video"
-          @dblclick="handleDoubleClick('remote_video')"
-          :user="participant"
-          :calling="!participant"
-          :isLocal="false"
-        />
-      </div>
-
-      <div
-        v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
-        class="more-user"
-        v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
-      >
-        ...
-      </div>
-    </div>
-    <MediaActionsVolume
-      :volume="audio.volume"
-      isPopup
-      @volumeControlValueChange="volumeControlValueChange"
+  <MediaHeading />
+  <div id="media" ref="media">
+    <MediaUser
+      id="local_video"
+      data-cy="local-video"
+      @dblclick="handleDoubleClick('local_video')"
+      :user="localParticipant"
+      :isLocal="true"
     />
-    <MediaActionsSettings />
-    <MediaActions />
+
+    <div v-for="participant in remoteParticipants" v-if="participant">
+      <MediaUser
+        :id="`remote_video_${ participant.peerId }`"
+        data-cy="remote-video"
+        @dblclick="handleDoubleClick('remote_video')"
+        :user="participant"
+        :calling="!participant"
+        :isLocal="false"
+      />
+    </div>
+
+    <div
+      v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
+      class="more-user"
+      v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
+    >
+      ...
+    </div>
   </div>
-  <InteractablesDragBar
-    side="bottom"
-    @resize="resize"
-    overlay
+  <MediaActionsVolume
+    :volume="audio.volume"
+    isPopup
+    @volumeControlValueChange="volumeControlValueChange"
   />
+  <MediaActionsSettings />
+  <MediaActions />
 </div>
