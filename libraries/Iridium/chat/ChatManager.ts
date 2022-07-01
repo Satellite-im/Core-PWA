@@ -127,6 +127,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return conversation
   }
 
+  // async getMessage() {
+  //   const message = await this.iridium.connector?.get(
+  //     `/chat/conversation/message`,
+  //   )
+  //   return message
+  // }
+
   /**
    * @method subscribeToConversation
    * @description Adds a watcher to conversation activity
@@ -173,6 +180,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(ChatError.MESSAGE_NOT_SENT)
     }
     const messageCID = messageID.toString()
+    console.log('debug: | ChatManager | sendMessage | messageCID', messageCID)
     await this.iridium.connector.set(
       `/chat/conversation/messages`,
       conversation.messages,

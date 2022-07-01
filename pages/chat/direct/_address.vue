@@ -14,7 +14,21 @@ import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
   name: 'DirectMessages',
   layout: 'chat',
+  data() {
+    return {
+      messages: [],
+    }
+  },
   computed: {
+    // messages() {
+    //   const { address } = this.$route.params
+    //   const value = []
+    //   iridium.chat?.subscribeToConversation(address, (event) => {
+    //     value.push(event)
+    //   })
+    //   console.log('new message', value)
+    //   return value
+    // },
     DataStateType: () => DataStateType,
     ...mapState({
       friendsDS: () => iridium.friends?.state,
@@ -27,6 +41,7 @@ export default Vue.extend({
     ...mapGetters('friends', ['findFriendByAddress']),
     groupedMessages() {
       const { address } = this.$route.params
+
       const conversation = this.$typedStore.state.textile.conversations[address]
       if (!conversation) return []
       const { messages, replies, reactions } = conversation
@@ -36,7 +51,7 @@ export default Vue.extend({
     // friend() {
     //   const { address } = this.$route.params
     //   console.log('debug: | friend | address', address)
-    //   return {}
+    //   return address
     // },
   },
   watch: {
@@ -52,12 +67,12 @@ export default Vue.extend({
       handler(nextValue) {
         if (nextValue) {
           const { address } = this.$route.params
-          if (address && this.friend) {
-            // this.$store.dispatch('textile/fetchMessages', {
-            //   address,
-            //   setActive: true,
-            // })
-          }
+          // if (address) {
+          // this.$store.dispatch('textile/fetchMessages', {
+          //   address,
+          //   setActive: true,
+          // })
+          // }
         }
       },
       immediate: true,
@@ -82,6 +97,17 @@ export default Vue.extend({
     //   immediate: true,
     // },
   },
+  // async updated() {
+  //   const message = await iridium.chat.getMessage()
+  //   console.log('debug: | updated | message', message)
+  // },
+  // mounted() {
+  //   const { address } = this.$route.params
+  //   iridium.chat?.subscribeToConversation(address, async (event) => {
+  //     const messages = await iridium.chat.getMessage()
+  //     this.messages = [messages]
+  //   })
+  // },
 })
 </script>
 

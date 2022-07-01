@@ -1,6 +1,11 @@
 <div id="conversation">
-  <UiLoadersMessage :count="3" v-if="loading" />
-  <div class="group" v-for="group in messages" v-else>
+  <!-- <UiLoadersMessage :count="3" v-if="loading" /> -->
+  <div class="group" v-for="message of messages">
+    <div v-if="message.type === 'direct'">
+      <p>{{message}}</p>
+    </div>
+  </div>
+  <!-- <div class="group" v-for="group in messages" v-else>
     <div v-if="group.type === 'group'">
       <Group :group="group" :key="group.id" :groupId="groupId" />
     </div>
@@ -13,5 +18,5 @@
   </div>
   <div v-if="textile.messageLoading" data-cy="loading-indicator" class="zoop">
     <UiLoadersLoadingBar />
-  </div>
+  </div> -->
 </div>

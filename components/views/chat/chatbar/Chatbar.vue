@@ -9,7 +9,9 @@ import Upload from '../../files/upload/Upload.vue'
 import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
 
 import { parseCommand, commands } from '~/libraries/ui/Commands'
-import { Friend } from '~/types/ui/friends'
+// import { Friend } from '~/types/ui/friends'
+import type { Friend } from '~/libraries/Iridium/friends/types'
+import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
@@ -17,9 +19,9 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
-import { Group } from '~/types/messaging'
+// import { Group } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
-
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     TerminalIcon,
@@ -120,7 +122,7 @@ export default Vue.extend({
       set(value: string) {
         this.$store.dispatch('ui/setChatbarContent', {
           content: value,
-          userId: this.recipient?.address,
+          userId: this.recipient?.did,
         })
       },
     },
@@ -131,7 +133,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    'recipient.address': {
+    'recipient.did': {
       handler(value) {
         const findItem = this.chat.chatTexts.find(
           (item: any) => item.userId === value,
@@ -160,7 +162,7 @@ export default Vue.extend({
         mutation.type === 'chat/setFiles'
       ) {
         if (this.recipient) {
-          this.files = this.getFiles(this.recipient?.address)
+          this.files = this.getFiles(this.recipient?.did)
         }
       }
 
@@ -253,7 +255,7 @@ export default Vue.extend({
       this.text = ''
       if (
         this.ui.replyChatbarContent.from &&
-        !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.id)
+        !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
       ) {
         this.$store.dispatch('textile/sendReplyMessage', {
           to: (this.recipient as Friend).textilePubkey,
@@ -266,7 +268,7 @@ export default Vue.extend({
 
       if (
         RegExp(this.$Config.regex.uuidv4).test(
-          (this.recipient as Group)?.id?.split('|')[1],
+          (this.recipient as Group)?.did?.split('|')[1],
         )
       ) {
         if (this.ui.replyChatbarContent.from) {
@@ -284,10 +286,25 @@ export default Vue.extend({
           message: value,
         })
       } else {
-        this.$store.dispatch('textile/sendTextMessage', {
-          to: (this.recipient as Friend).textilePubkey,
-          text: value,
+        // sendMessage to friend
+
+        // await iridium.chat?.sendMessage(this.recipient.address, value)
+        const profile = await iridium.profile?.get()
+        await iridium.chat?.sendMessage(this.recipient?.did, {
+          from: profile.did,
+          type: 'direct',
+          body: value,
+          conversation: value,
+          at: Date.now(),
         })
+
+        await iridium.on(`conversation/${this.recipient?.did}`, (event) => {
+          console.log('event....', event)
+        })
+        // this.$store.dispatch('textile/sendTextMessage', {
+        //   to: (this.recipient as Friend).textilePubkey,
+        //   text: value,
+        // })
       }
       this.nsfwUploadError = false
     },
