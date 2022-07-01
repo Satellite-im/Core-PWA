@@ -34,6 +34,9 @@ export default Vue.extend({
         : false
     },
   },
+  mounted() {
+    this.$refs.modal.focus()
+  },
   methods: {
     /**
      * @method download
@@ -42,28 +45,38 @@ export default Vue.extend({
      * also takes a bit to get started for large files, this adds loading indicator
      */
     async download() {
-      if (this.file) {
-        this.$store.commit('ui/addFileDownload', this.file.name)
-        const fileExt = this.file.name
-          .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+      // assign variable in case the user closes modal and removes store value before download is finished
+      const file = this.file
+      if (file) {
+        this.$store.commit('ui/addFileDownload', file.name)
+        const fileExt = file.name
+          .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
           .toLowerCase()
 
         await this.$TextileManager.personalBucket?.pullFile(
-          this.file.id,
-          this.file.extension === fileExt
-            ? this.file.name
-            : `${this.file.name}.${this.file.extension}`,
-          this.file.size,
+          file.id,
+          file.extension === fileExt
+            ? file.name
+            : `${file.name}.${file.extension}`,
+          file.size,
         )
-        this.$store.commit('ui/removeFileDownload', this.file.name)
+        this.$store.commit('ui/removeFileDownload', file.name)
       }
     },
     /**
      * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @description copy link to clipboard
      */
-    share() {
-      this.$emit('share', this.file)
+    // async share() {
+    //   this.$toast.show(this.$t('todo - share') as string)
+    // },
+    /**
+     * @method closeFilePreview
+     * @description Close File Preview
+     * @example
+     */
+    close() {
+      this.$store.commit('ui/setFilePreview', undefined)
     },
   },
 })

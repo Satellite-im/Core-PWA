@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
@@ -49,12 +49,7 @@ export default Vue.extend({
       'webrtc',
       'conversation',
     ]),
-    isActiveCall() {
-      return (
-        this.webrtc.activeCall &&
-        this.webrtc.activeCall.peerId === this.conversation.id
-      )
-    },
+    ...mapGetters('webrtc', ['isActiveCall']),
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)

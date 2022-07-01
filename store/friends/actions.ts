@@ -568,7 +568,7 @@ export default {
    * @example
    */
   async removeFriend(
-    { commit }: ActionsArguments<FriendsState>,
+    { commit, dispatch, rootState }: ActionsArguments<FriendsState>,
     friend: Friend,
   ) {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -582,6 +582,11 @@ export default {
     const { account, address } = friend
 
     await $BlockchainClient.removeFriend(new PublicKey(account.accountId))
+
+    // destroy active call if it was with removed friend
+    if (friend.peerId === rootState.webrtc.activeCall?.peerId) {
+      dispatch('webrtc/hangUp', null, { root: true })
+    }
 
     commit('removeFriend', address)
 
