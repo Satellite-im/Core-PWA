@@ -1,7 +1,7 @@
 <template src="./Global.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
@@ -21,7 +21,14 @@ export default Vue.extend({
   name: 'Global',
   computed: {
     ...mapState(['ui', 'media', 'webrtc', 'conversation']),
+    ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     ModalWindows: () => ModalWindows,
+    showBackgroundCall(): boolean {
+      if (!this.$device.isMobile) {
+        return this.isBackgroundCall
+      }
+      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
+    },
   },
   mounted() {
     // This determines if we should show the

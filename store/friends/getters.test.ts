@@ -403,7 +403,7 @@ describe('', () => {
   test('module.default.matchesActiveCall', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const localRootState: RootState = { ...initialRootState }
-    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.activeCall?.peerId,) is true
+    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.BackgroundCall?.peerId,) is true
     const result = module.default.matchesActiveCall(
       // We have to call the function this way because of how it was declared in ./getters.ts
       localState,
@@ -440,7 +440,7 @@ describe('', () => {
   test('module.default.matchesSomeActiveCall', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const localRootState: RootState = { ...initialRootState }
-    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.activeCall?.peerId,) is true
+    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.BackgroundCall?.peerId,) is true
     const result = module.default.matchesSomeActiveCall(
       // We have to call the function this way because of how it was declared in ./getters.ts
       localState,

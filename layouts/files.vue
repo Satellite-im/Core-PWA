@@ -1,15 +1,17 @@
 <template>
   <div
     id="app-wrap"
-    :class="`${showSidebar ? 'is-open' : 'is-collapsed'} ${
-      $store.state.ui.theme.base.class
-    }`"
+    :class="[
+      $store.state.ui.theme.base.class,
+      showSidebar ? 'is-open' : 'is-collapsed',
+    ]"
   >
     <div
       id="app"
       :class="[
         showSidebar ? 'is-open' : 'is-collapsed',
         $device.isMobile ? 'mobile-app' : 'desktop',
+        isBackgroundCall ? 'has-background-call' : '',
       ]"
     >
       <UiGlobal />
@@ -109,6 +111,7 @@ export default Vue.extend({
     }),
     ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
     ...mapGetters('textile', ['getInitialized']),
+    ...mapGetters('webrtc', ['isBackgroundCall']),
     flairColor(): string {
       return this.$store.state.ui.theme.flair.value
     },

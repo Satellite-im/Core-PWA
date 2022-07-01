@@ -145,6 +145,12 @@ export default Vue.extend({
       }
     },
     sendMessageRequest() {
+      this.$store.dispatch('conversation/setConversation', {
+        id: this.friend.peerId,
+        type: 'friend',
+        participants: [this.friend],
+        calling: false,
+      })
       this.$router.push(`/chat/direct/${this.friend.address}`)
     },
   },

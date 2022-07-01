@@ -21,6 +21,8 @@ export interface WebRTCState {
     type: 'group' | 'friend'
   }
   createdAt: number
+  elapsedTime: string
+  interval: ReturnType<typeof setInterval> | null
 }
 
 export enum WebRTCError {

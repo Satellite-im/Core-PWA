@@ -32,10 +32,11 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    live: 'Live',
+    live: 'Live {time}',
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
+    background_call: 'You are currently in a call with',
   },
   wallet: {
     wallet: 'Wallet',
