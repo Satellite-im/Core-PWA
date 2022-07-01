@@ -2,7 +2,7 @@
   <!-- <UiLoadersMessage :count="3" v-if="loading" /> -->
   <div class="group" v-for="message of messages">
     <div v-if="message.type === 'direct'">
-      <p>{{message}}</p>
+      <p>{{message.body}}</p>
     </div>
   </div>
   <!-- <div class="group" v-for="group in messages" v-else>

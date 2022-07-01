@@ -3,7 +3,7 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
-import { MessageGroup } from '~/types/messaging'
+import type { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   props: {
@@ -12,7 +12,7 @@ export default Vue.extend({
       default: false,
     },
     messages: {
-      type: Array as PropType<MessageGroup>,
+      type: Array,
       default: () => [],
     },
     groupId: {

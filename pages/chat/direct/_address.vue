@@ -86,6 +86,15 @@ export default Vue.extend({
     //   immediate: true,
     // },
   },
+  async mounted() {
+    await iridium.chat.subscribeToConversation(
+      this.$route.params.address,
+      async (event) => {
+        const message = await iridium.connector.load(event.message)
+        this.messages.push(message)
+      },
+    )
+  },
 })
 </script>
 
