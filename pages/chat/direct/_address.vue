@@ -19,15 +19,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    // messages() {
-    //   const { address } = this.$route.params
-    //   const value = []
-    //   iridium.chat?.subscribeToConversation(address, (event) => {
-    //     value.push(event)
-    //   })
-    //   console.log('new message', value)
-    //   return value
-    // },
     DataStateType: () => DataStateType,
     ...mapState({
       friendsDS: () => iridium.friends?.state,
