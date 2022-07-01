@@ -43,22 +43,18 @@
   </template>
   <UiHorizontalRule />
   <div class="circle-group">
-    <UiCircle
-      type="icon"
-      :size="40"
+    <button
       v-tooltip.right="$t('servers.new_server')"
       @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
-      <plus-icon size="1x" />
-    </UiCircle>
-    <UiCircle
-      type="icon"
-      :size="40"
+      <plus-icon size="1.8x" />
+    </button>
+    <button
       data-cy="settings"
       v-tooltip.right="$t('pages.settings.settings')"
       @click="$store.commit('ui/toggleSettings', { show: true })"
     >
-      <settings-icon size="1x" />
-    </UiCircle>
+      <settings-icon size="1.8x" />
+    </button>
   </div>
 </div>
