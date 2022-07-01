@@ -9,15 +9,19 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Chat Search Tests', () => {
-  it('Chat - Load account and send message on chat', { retries: 2 }, () => {
+  it('Chat - Search - Load account for testing', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     // Validate profile name displayed
     cy.validateChatPageIsLoaded()
 
-    // Validate message is sent
+    // Go to chat
     cy.goToConversation('Only Text Friend')
+  })
+
+  it('Chat - Search - Send message on chat', () => {
+    // Validate message is sent
     cy.chatFeaturesSendMessage(randomMessage)
   })
 

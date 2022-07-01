@@ -40,8 +40,8 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('Message with more than 2048 chars - Message will not be sent', () => {
-    // Attempt to send the message by clicking on send button
-    cy.get('[data-cy=send-message]').click()
+    // Attempt to send the message and ensure that send message button is disabled
+    cy.get('[data-cy=send-message]').should('have.attr', 'disabled')
 
     // Message will not be send and editable input will keep the previous message
     cy.get('[data-cy=editable-input]', { timeout: 30000 }).should(

@@ -99,11 +99,20 @@ describe('Privacy Settings Page - Toggles Tests', () => {
         }
       }
     })
+
+    //Close modal
+    cy.closeModal('.modal-card-body')
   })
 
   it('Privacy page - Verify all non-locked toggles can be switched to disabled', () => {
     //Setting a viewport visible for all toggles
     cy.viewport(1200, 1200)
+
+    //Going to Settings and Privacy screen
+    cy.get('[data-cy=settings]', { timeout: 30000 }).click()
+
+    //Click on 'Privacy'
+    cy.contains('Privacy').click()
 
     //Switch all non-locked switched to disabled
     cy.get('[data-cy=switch-button]').each(($btn, index, $List) => {
@@ -137,5 +146,8 @@ describe('Privacy Settings Page - Toggles Tests', () => {
     cy.privacyToggleValidateValue('Display Current Activity', false)
     cy.privacyToggleValidateValue('Consent to File Scanning', false)
     cy.privacyToggleValidateValue('Block NSFW content', false)
+
+    //Close modal
+    cy.closeModal('.modal-card-body')
   })
 })
