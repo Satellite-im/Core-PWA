@@ -1,7 +1,11 @@
 <div class="friend" data-cy="friend">
   <UiUserState :user="user" :src="src" />
   <div class="description">
-    <TypographySubtitle :size="6" :text="user.name" data-cy="friend-name" />
+    <TypographySubtitle
+      :size="6"
+      :text="user.name || user.did"
+      data-cy="friend-name"
+    />
     <TypographyText :text="user.status || 'offline'" />
   </div>
   <div class="spacer"></div>

@@ -298,9 +298,6 @@ export default Vue.extend({
           at: Date.now(),
         })
 
-        await iridium.on(`conversation/${this.recipient?.did}`, (event) => {
-          console.log('event....', event)
-        })
         // this.$store.dispatch('textile/sendTextMessage', {
         //   to: (this.recipient as Friend).textilePubkey,
         //   text: value,

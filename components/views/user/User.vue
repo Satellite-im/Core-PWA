@@ -8,13 +8,13 @@ import VueMarkdown from 'vue-markdown'
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { User } from '~/types/ui/user'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
-import iridium from '~/libraries/iridium/IridiumManager'
+import type { User } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     VueMarkdown,
@@ -154,16 +154,10 @@ export default Vue.extend({
       }
 
       const profile = await iridium.profile?.get()
-      await iridium.chat?.createConversation(
-        this.user.did,
-        this.user.name,
-        'direct',
-        [this.user.did, profile.did],
-      )
-
-      // await iridium.on(`conversation/${this.user.did}`, (event) => {
-      //   console.log('conversation created!..', event)
-      // })
+      await iridium.chat?.createConversation(this.user?.name, 'direct', [
+        this.user?.did,
+        profile.did,
+      ])
 
       // this.$store.dispatch('conversation/setConversation', {
       //   id: this.user.did,

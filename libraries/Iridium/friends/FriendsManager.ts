@@ -212,7 +212,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const existing = (await this.getRequest(friendId)) || {}
     const request = {
       ...existing,
-      user: user || existing?.user || null,
+      user: user || existing?.user || {},
       status,
       incoming: incoming === undefined ? existing?.incoming || false : incoming,
       at: Date.now(),
@@ -232,7 +232,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       to: friendId,
       at: Date.now(),
     }
-    const profile = await this.iridium.profile?.get('/')
+    const profile = await this.iridium.profile?.get()
     payload.user = {
       did: this.iridium.connector?.id,
       peerId: this.iridium.connector?.peerId,

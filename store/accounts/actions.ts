@@ -236,13 +236,13 @@ export default {
 
     const imagePath = await uploadPicture(userData.image)
     const profile = {
-      id: iridium.connector.id,
+      did: iridium.connector.id,
       peerId: iridium.connector.peerId,
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
-    await iridium.profile?.set('/', profile)
+    await iridium.profile?.set('', profile)
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)
     commit('setUserDetails', {

@@ -199,7 +199,7 @@ export default Vue.extend({
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient(): Friend | Group {
-      const recipient = iridium.friends?.getFriend(this.conversation.id)
+      const recipient = iridium.friends?.getFriend(this.$route.params.address)
       if (!recipient) {
         return {}
       }

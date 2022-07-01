@@ -20,15 +20,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    // messages() {
-    //   const { address } = this.$route.params
-    //   const value = []
-    //   iridium.chat?.subscribeToConversation(address, (event) => {
-    //     value.push(event)
-    //   })
-    //   console.log('new message', value)
-    //   return value
-    // },
     DataStateType: () => DataStateType,
     ...mapState({
       friendsDS: () => iridium.friends?.state,
@@ -50,14 +41,12 @@ export default Vue.extend({
     // Get the active friend
     // friend() {
     //   const { address } = this.$route.params
-    //   console.log('debug: | friend | address', address)
     //   return address
     // },
   },
   watch: {
     // friend(friend: Friend | undefined) {
     //   const { address } = this.$route.params
-    //   console.log('debug: | friend | address', address)
     //   // If the friend is not found, redirect to the friends screen
     //   // if (address && !friend) {
     //   //   this.$router.replace('/friends/list')
@@ -97,17 +86,6 @@ export default Vue.extend({
     //   immediate: true,
     // },
   },
-  // async updated() {
-  //   const message = await iridium.chat.getMessage()
-  //   console.log('debug: | updated | message', message)
-  // },
-  // mounted() {
-  //   const { address } = this.$route.params
-  //   iridium.chat?.subscribeToConversation(address, async (event) => {
-  //     const messages = await iridium.chat.getMessage()
-  //     this.messages = [messages]
-  //   })
-  // },
 })
 </script>
 
