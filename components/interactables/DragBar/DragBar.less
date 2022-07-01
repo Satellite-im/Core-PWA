@@ -8,10 +8,18 @@
   transition: background-color @animation-speed ease;
 
   &.drag-bar-overlay {
-    &.side-top { margin-bottom: -@dragbar-thickness; }
-    &.side-left { margin-right: -@dragbar-thickness; }
-    &.side-right { margin-left: -@dragbar-thickness; }
-    &.side-bottom { margin-top: -@dragbar-thickness; }
+    &.side-top {
+      margin-bottom: -@dragbar-thickness;
+    }
+    &.side-left {
+      margin-right: -@dragbar-thickness;
+    }
+    &.side-right {
+      margin-left: -@dragbar-thickness;
+    }
+    &.side-bottom {
+      margin-top: -@dragbar-thickness;
+    }
   }
 
   &:hover {
@@ -44,7 +52,7 @@
     transition: opacity @animation-speed ease;
   }
 
-  &.side-left, 
+  &.side-left,
   &.side-right {
     width: @dragbar-thickness;
     cursor: ew-resize;
