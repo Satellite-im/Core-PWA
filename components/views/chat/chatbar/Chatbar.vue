@@ -15,10 +15,10 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
-import { RootState } from '~/types/store/store'
 import { ChatText } from '~/store/chat/types'
+// import { Group } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-
 export default Vue.extend({
   components: {
     TerminalIcon,
