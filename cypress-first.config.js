@@ -7,6 +7,8 @@ module.exports = defineConfig({
   pageLoadTimeout: 120000,
   watchForFileChanges: false,
   videosFolder: 'cypress/videos-chat-pair/first-user',
+  waitForAnimations: false,
+  animationDistanceThreshold: 50,
   screenshotsFolder: 'cypress/screenshots-chat-pair/first-user',
   e2e: {
     baseUrl: 'http://localhost:3000',

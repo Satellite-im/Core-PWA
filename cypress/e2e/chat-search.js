@@ -8,7 +8,8 @@ const recoverySeed =
     .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe('Chat Search Tests', () => {
+describe.skip('Chat Search Tests', () => {
+  //Skipping search tests due to a bug on chat searchbar not triggering input
   it('Chat - Search - Load account for testing', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
