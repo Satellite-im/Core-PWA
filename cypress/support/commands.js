@@ -535,11 +535,8 @@ Cypress.Commands.add('workaroundChatLoad', (user) => {
 
   cy.get('[data-cy=toggle-sidebar]').click() //Click on toggle sidebar to display sidebar menu
   cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
-  cy.url().should('include', 'files')
   cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
-  cy.url().should('include', 'friends')
   cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
-  cy.url().should('include', 'files')
   //Click on the conversation again
   cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
