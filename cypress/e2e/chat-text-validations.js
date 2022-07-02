@@ -54,7 +54,7 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.validateCharlimit(expectedMessage, true)
 
     //Attempt to send message again now by pressing ENTER key
-    cy.get('[data-cy=editable-input]').trigger('input').type('{enter}')
+    cy.get('[data-cy=editable-input]').type('{enter}')
 
     // Message will not be send and editable input will keep the previous message
     cy.get('[data-cy=editable-input]', { timeout: 30000 }).should(
@@ -66,7 +66,7 @@ describe('Chat Text and Sending Links Validations', () => {
     cy.validateCharlimit(expectedMessage, true)
 
     // Clear editable input for next tests
-    cy.get('[data-cy=editable-input]').trigger('input').clear()
+    cy.get('[data-cy=editable-input]').clear()
   })
 
   it('Attempt to send empty message with a space', () => {

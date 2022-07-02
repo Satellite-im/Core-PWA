@@ -19,9 +19,12 @@ describe('Files Features Tests', () => {
     // Validate message is sent
     cy.goToConversation('Only Text Friend')
 
-    //Click on toggle button and then on files
-    cy.get('[data-cy=toggle-sidebar]').click()
-
+    //Click on toggle-sidebar only if app is collapsed
+    cy.get('#app-wrap').then(($appWrap) => {
+      if ($appWrap.hasClass('is-collapsed')) {
+        cy.get('[data-cy=toggle-sidebar]').click()
+      }
+    })
     //Open files screen and rename existing folder
     cy.openFilesScreen()
     cy.renameFileOrFolder('test-folder-' + randomNumber, 'folder')
