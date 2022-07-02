@@ -6,7 +6,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair B')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const longMessage = faker.lorem.words(50) // generate random sentence
+const longMessage = faker.lorem.words(100) // generate random sentence
 
 describe('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat Pair B (second account)', { retries: 2 }, () => {
