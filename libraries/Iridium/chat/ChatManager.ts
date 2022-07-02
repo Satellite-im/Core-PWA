@@ -2,11 +2,10 @@ import {
   IridiumPeerMessage,
   IridiumPubsubEvent,
   Iridium,
-  Emitter,
-  EmitterCallback,
-} from '@satellite-im/iridium/'
+} from '@satellite-im/iridium/dist/index.browser'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
+import { EmitterCallback, Emitter } from '@satellite-im/iridium/src/emitter'
 import {
   Conversation,
   ConversationMessage,
@@ -140,13 +139,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return conversation
   }
 
-  // async getMessage() {
-  //   const message = await this.iridium.connector?.get(
-  //     `/chat/conversation/message`,
-  //   )
-  //   return message
-  // }
-
   /**
    * @method subscribeToConversation
    * @description Adds a watcher to conversation activity
@@ -194,7 +186,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(ChatError.MESSAGE_NOT_SENT)
     }
     const messageCID = messageID.toString()
-    console.log('debug: | ChatManager | sendMessage | messageCID', messageCID)
     await this.iridium.connector.set(
       `/chat/conversation/${id}/messages`,
       conversation.messages,
