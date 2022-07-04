@@ -8,9 +8,6 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 describe('Verify passphrase does not get stored in localstorage', () => {
-  before(() => {
-    cy.clearDatabase()
-  })
   it('Passphrase in localstorage does not exist before creating account', () => {
     cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {
@@ -20,7 +17,7 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it.skip('Create Account and validate localstorage values are as expected', () => {
-    // skipped due to test needs to be updated - AP-1669
+    //Skipped because we are going to ask if it is needed to store the passphrase or not in localstorage
     // Create Account process executed
     cy.createAccount(randomPIN)
 
@@ -34,7 +31,6 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it('Passphrase in localstorage does not exist before importing an account', () => {
-    cy.clearDatabase()
     cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {
         cy.validatePassphraseLocalStorage()
@@ -43,8 +39,8 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it.skip('Import Account and verify passphrase is not saved in localstorage', () => {
-    // skipped due to test needs to be updated - AP-1669
     // Import Account process executed
+    //Skipped because we are going to ask if it is needed to store the passphrase or not in localstorage
     cy.importAccount(randomPIN, recoverySeed)
 
     //Wait until main page is loaded after importing account
@@ -57,15 +53,24 @@ describe('Verify passphrase does not get stored in localstorage', () => {
   })
 
   it('Logout user on /unlock page', () => {
+    //Enter a random PIN
+    cy.createAccountPINscreen(randomPIN)
+
+    //Click on Create Account and then on I Saved It
+    cy.createAccountSecondScreen()
+    cy.createAccountRecoverySeed()
+
+    //Ensure that User Input Screen is displayed and go to root page again
+    cy.validateUserInputIsDisplayed()
     cy.visit('/')
-    cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
-    cy.get('[data-cy=submit-input]').click()
-    cy.get('[data-cy=create-account-button]').click()
-    cy.contains('I Saved It').click()
-    cy.visit('/')
+
+    //Not you? Create or import an account text is displayed and user clicks on it
     cy.contains('Not you? Create or import an account').click()
+
+    //Now user is prompted to start again creating the pin
     cy.contains('Not you? Create or import an account', {
       timeout: 30000,
     }).should('not.exist')
+    cy.contains('Choose Your Pin').should('be.visible')
   })
 })

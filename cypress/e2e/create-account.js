@@ -6,8 +6,8 @@ const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe.skip('Create Account Validations', () => {
-  it('Create Account', () => {
+describe('Create Account Validations', () => {
+  it('Create Account', { retries: 2 }, () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
@@ -47,42 +47,47 @@ describe.skip('Create Account Validations', () => {
     cy.createAccountSubmit()
   })
 
-  it('Create account with non-NSFW after attempting to load a NSFW image', () => {
-    //Creating pin
-    cy.createAccountPINscreen(randomPIN)
-
-    //Clicking on buttons to continue to user data screen
-    cy.createAccountSecondScreen()
-    cy.createAccountRecoverySeed()
-
-    //Adding random data in user input fields
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput(randomName, randomStatus)
-
-    //Attempting to add NSFW image and validating error message is displayed
-    cy.createAccountAddImage(filepathNsfw)
-    cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
-      'contain',
-      'Unable to upload file/s due to NSFW status',
-    )
-
-    //Now adding a non-NSFW image and validating user can pass to next step
-    cy.createAccountAddImage(filepathCorrect)
-    cy.get('[data-cy=cropper-container]', { timeout: 60000 })
-      .should('be.visible')
-      .then(() => {
-        cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
-      })
-    cy.get('[data-cy=error-message]').should('not.exist')
-
-    //Finishing Account Creation
-    cy.createAccountSubmit()
-  })
-
   it(
+    'Create account with non-NSFW after attempting to load a NSFW image',
+    { retries: 2 },
+    () => {
+      //Creating pin
+      cy.createAccountPINscreen(randomPIN)
+
+      //Clicking on buttons to continue to user data screen
+      cy.createAccountSecondScreen()
+      cy.createAccountRecoverySeed()
+
+      //Adding random data in user input fields
+      cy.validateUserInputIsDisplayed()
+      cy.createAccountUserInput(randomName, randomStatus)
+
+      //Attempting to add NSFW image and validating error message is displayed
+      cy.createAccountAddImage(filepathNsfw)
+      cy.get('[data-cy=error-message]', { timeout: 60000 }).should(
+        'contain',
+        'Unable to upload file/s due to NSFW status',
+      )
+
+      //Now adding a non-NSFW image and validating user can pass to next step
+      cy.createAccountAddImage(filepathCorrect)
+      cy.get('[data-cy=cropper-container]', { timeout: 60000 })
+        .should('be.visible')
+        .then(() => {
+          cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
+        })
+      cy.get('[data-cy=error-message]').should('not.exist')
+
+      //Finishing Account Creation
+      cy.createAccountSubmit()
+    },
+  )
+
+  it.skip(
     'Create account successfully without image after attempting to add a NSFW picture',
     { retries: 2 },
     () => {
+      //Skipped due to solana issues
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 
@@ -116,10 +121,11 @@ describe.skip('Create Account Validations', () => {
     },
   )
 
-  it(
+  it.skip(
     'Create account without image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
+      //Skipped due to solana issues
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 
@@ -156,6 +162,7 @@ describe.skip('Create Account Validations', () => {
     'Create account with valid image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
+      //Skipped due to solana issues
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 

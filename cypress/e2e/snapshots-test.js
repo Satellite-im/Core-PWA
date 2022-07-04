@@ -10,6 +10,7 @@ const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 
 describe.skip('Snapshots Testing', () => {
+  //Skipping snapshots tests because cursor behavior makes tests to fail
   //Import account and snapshot on each screen
   it('Import account - PIN screen', () => {
     cy.importAccountPINscreen(randomPIN, false, true, false)
@@ -36,35 +37,25 @@ describe.skip('Snapshots Testing', () => {
     cy.contains('Recover Account').click()
   })
 
-  it('Import account - Buffering screen', () => {
-    cy.contains('Linking Satellites...').should('be.visible')
-    cy.snapshotTestContains(
-      'Aligning satellites to retrieve your account',
-      60000,
-    )
-  })
-
   it('Import account - Main Screen Loaded', () => {
-    cy.contains('Snap QA', { timeout: 180000 })
+    cy.validateChatPageIsLoaded()
     cy.get('body').realClick({ position: 'topLeft' })
     cy.snapshotTestContains('Snap QA')
   })
 
   it('Import account - Go to files', () => {
-    cy.get('.sidebar-nav > .is-dark > #custom-cursor-area').click()
-    cy.snapshotTestGet('.switcher-container > .is-text', 'Files')
+    cy.get('[data-cy=sidebar-files]').click()
+    cy.snapshotTestContains('Quick Access')
   })
 
   it('Import account - Go to friends', () => {
-    cy.get(
-      '[style="position: relative;"] > .sidebar-full-btn > #custom-cursor-area',
-    ).click()
+    cy.get('[data-cy=sidebar-friends]').click()
     cy.snapshotTestContains('Add Friend')
   })
 
   it('Import account - Go to a chat', () => {
-    cy.get('[data-tooltip="Message"]').first().click()
-    cy.snapshotTestContains('connected', 60000)
+    cy.goToConversation('Snap Friend')
+    cy.snapshotTestContains('connected')
   })
 
   it('Import account - Click on emojis', () => {
@@ -73,22 +64,19 @@ describe.skip('Snapshots Testing', () => {
       '.navbar > .button-group > .active > #custom-cursor-area',
       'Emoji',
     )
-  })
-
-  it('Import account - Click on glyphs', () => {
     cy.get('#emoji-toggle').click()
-    cy.get('#glyph-toggle').click()
-    cy.snapshotTestGet('.pack-list > .is-text', 'Try using some glyphs')
-    cy.get('#glyph-toggle').click()
   })
 
   it('Import account - Settings - General - Personalize', () => {
-    // Go to each settings option and snapshot each
-    cy.get('[data-tooltip="Settings"] > .is-rounded > svg').click()
+    //Click on toggle-sidebar
+    cy.get('[data-cy=toggle-sidebar]').click()
+    // Go to settings
+    cy.get('[data-cy=settings]', { timeout: 30000 }).click()
     cy.snapshotTestContains('Personalize Satellite')
   })
 
-  it('Import account - Settings - General - Profile', () => {
+  it.skip('Import account - Settings - General - Profile', () => {
+    // Skipped because Profile section is a feature to be implemented yet
     cy.openSettingsMenuOption('Profile')
     cy.get('.title').should('contain', 'Profile')
     cy.snapshotTestContains('Profile')
@@ -115,13 +103,13 @@ describe.skip('Snapshots Testing', () => {
     cy.snapshotTestContains('Privacy Settings')
   })
 
-  it('Import account - Settings - Realms & Security - Realms', () => {
+  it('Import account - Settings - Realms', () => {
     cy.openSettingsMenuOption('Realms')
     cy.get('.column > .title').should('contain', 'Realms')
     cy.snapshotTestContains('Realms')
   })
 
-  it('Import account - Settings - Realms & Security - Storage', () => {
+  it('Import account - Settings - Storage', () => {
     cy.openSettingsMenuOption('Storage')
     cy.get('.column > .title').should('contain', 'Storage')
     cy.snapshotTestContains('Storage')
@@ -136,7 +124,6 @@ describe.skip('Snapshots Testing', () => {
   it('Import account - Settings - Developer - App Info', () => {
     cy.openSettingsMenuOption('App Info')
     cy.snapshotTestContains('Application Info')
-    cy.get('.ps-container > .close-button').click()
   })
 
   it('Create Account - PIN screen', () => {
@@ -149,7 +136,8 @@ describe.skip('Snapshots Testing', () => {
     cy.createAccountSecondScreen()
   })
 
-  it('Create Account - User Input Screen', () => {
+  it.skip('Create Account - User Input Screen', () => {
+    //Skipped because account creation fails due to Solana issues
     //Recovery Seed Screen then User Input Snapshot
     cy.createAccountRecoverySeed().then(() => {
       cy.validateUserInputIsDisplayed()
@@ -158,15 +146,5 @@ describe.skip('Snapshots Testing', () => {
         30000,
       )
     })
-  })
-
-  it('Create Account - Buffering screen after submission', () => {
-    //User input fill and finishing account creation
-    cy.createAccountUserInput(randomName, randomStatus)
-    cy.createAccountSubmit()
-    cy.snapshotTestContains(
-      'Aligning satellites to retrieve your account...',
-      20000,
-    )
   })
 })

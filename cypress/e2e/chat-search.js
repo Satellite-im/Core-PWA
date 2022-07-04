@@ -8,17 +8,21 @@ const recoverySeed =
     .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe.skip('Chat Features Tests', () => {
-  // skipped due to bug - AP-1686
-  it('Chat - Send message on chat', { retries: 2 }, () => {
+describe.skip('Chat Search Tests', () => {
+  //Skipping search tests due to a bug on chat searchbar not triggering input
+  it('Chat - Search - Load account for testing', { retries: 2 }, () => {
     // Import account
     cy.importAccount(randomPIN, recoverySeed)
 
     // Validate profile name displayed
     cy.validateChatPageIsLoaded()
 
-    // Validate message is sent
+    // Go to chat
     cy.goToConversation('Only Text Friend')
+  })
+
+  it('Chat - Search - Send message on chat', () => {
+    // Validate message is sent
     cy.chatFeaturesSendMessage(randomMessage)
   })
 
@@ -35,6 +39,10 @@ describe.skip('Chat Features Tests', () => {
     //Assert results and close search modal
     cy.assertFirstMatchOnSearch(randomMessage)
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
+  })
+
+  it('Chat - Search - Send emoji on chat', () => {
+    cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
   it('Chat - Search - Emoji - Exact match', () => {

@@ -29,7 +29,7 @@ describe('Create Account - Negative Tests', () => {
     cy.contains('Enter a username of at least 5 characters, up to 32')
   })
 
-  it.skip('Try to create account with NSFW image', () => {
+  it('Try to create account with NSFW image', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
@@ -46,13 +46,13 @@ describe('Create Account - Negative Tests', () => {
     //Attempting to add NSFW image and validating error message is displayed
     cy.createAccountAddImage(filepathNsfw)
     cy.get('[data-cy=error-message]', { timeout: 30000 }).should(
-      'have.text',
+      'contain',
       'Unable to upload file/s due to NSFW status',
     )
   })
 
-  it.skip('Logout user on /unlock page', () => {
-    // skipped due to textile/solana issues
+  it.skip('Logout user on /unlock page', { retries: 2 }, () => {
+    //Skipped due to solana issues
     cy.visit('/')
     cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
     cy.get('[data-cy=submit-input]').click()

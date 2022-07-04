@@ -22,7 +22,7 @@ data.allDevices.forEach((item) => {
     },
     () => {
       Cypress.config('pageLoadTimeout', 180000) //adding more time for pageLoadTimeout only for this spec
-      it.only(`Create Account on ${item.description}`, { retries: 2 }, () => {
+      it(`Create Account on ${item.description}`, { retries: 2 }, () => {
         cy.createAccountPINscreen(randomPIN, false, false, true)
 
         //Create or Import account selection screen
@@ -47,7 +47,8 @@ data.allDevices.forEach((item) => {
         cy.createAccountSubmit()
       })
 
-      it(`Import Account on ${item.description}`, { retries: 2 }, () => {
+      it.skip(`Import Account on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         cy.importAccount(randomPIN, recoverySeed, true, true)
         //Validate profile name displayed
         cy.validateChatPageIsLoaded(true)
@@ -56,40 +57,47 @@ data.allDevices.forEach((item) => {
         cy.goToConversation('cypress friend', true)
       })
 
-      it(`Chat Features - Send Messages on ${item.description}`, () => {
+      it.skip(`Chat Features - Send Messages on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         //Validate message and emojis are sent
         cy.chatFeaturesSendMessage(randomMessage)
       })
 
-      it(`Chat Features - Send Emoji on ${item.description}`, () => {
+      it.skip(`Chat Features - Send Emoji on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
       })
 
       it.skip(`Chat Features - Edit Messages on ${item.description}`, () => {
+        //Skipped because Edit Messages features is not implemented yet
         cy.chatFeaturesEditMessage(randomMessage, randomNumber)
       })
 
-      it(`Glyphs Modal on ${item.description}`, () => {
+      it.skip(`Glyphs Modal on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         //Go to last glyph and click on glyphs modal
         cy.goToLastGlyphOnChat().click()
         cy.validateGlyphsModal()
       })
 
-      it(`Glyphs Modal - Coming Soon on ${item.description}`, () => {
+      it.skip(`Glyphs Modal - Coming Soon on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         //Coming soon modal
         cy.contains('View Glyph Pack').click()
         cy.get('[data-cy=modal-cta]').should('be.visible')
         cy.closeModal('[data-cy=modal-cta]')
       })
 
-      it(`Glyphs Pack Screen can be dismissed on ${item.description}`, () => {
+      it.skip(`Glyphs Pack Screen can be dismissed on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         //Glyph Pack Screen can be dismissed
         cy.goToLastGlyphOnChat().click()
         cy.get('[data-cy=glyphs-modal]').should('be.visible')
         cy.closeModal('[data-cy=glyphs-modal]')
       })
 
-      it(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
+      it.skip(`Glyphs Selection - Coming Soon Modal on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         //Glyph Selection - Coming Soon Modal
         cy.get('#glyph-toggle').click()
         cy.get('[data-cy=glyphs-marketplace]').click()
@@ -97,21 +105,25 @@ data.allDevices.forEach((item) => {
         cy.closeModal('[data-cy=modal-cta]')
       })
 
-      it(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
+      it.skip(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         cy.get('[data-cy=toggle-sidebar]').click() // return to main screen
         cy.get('[data-cy=mobile-nav-marketplace]').click() // go to Marketplace icon
         cy.validateComingSoonModal()
       })
 
-      it(`Marketplace - Coming Soon Modal URL on ${item.description}`, () => {
+      it.skip(`Marketplace - Coming Soon Modal URL on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         cy.validateURLComingSoonModal()
       })
 
-      it(`Marketplace - Coming Soon Modal can be dismissed on ${item.description}`, () => {
+      it.skip(`Marketplace - Coming Soon Modal can be dismissed on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         cy.closeModal('[data-cy=modal-cta]')
       })
 
-      it(`Swipe on Settings Screen on ${item.description}`, () => {
+      it.skip(`Swipe on Settings Screen on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         // From the chat screen, swipe to the right to return to main screen
         cy.get('body').realSwipe('toRight')
         cy.get('#mobile-nav').should('be.visible')
@@ -132,7 +144,8 @@ data.allDevices.forEach((item) => {
         cy.get('[data-cy=settings-close-button]').click()
       })
 
-      it(`Swipe on Chat Screen on ${item.description}`, () => {
+      it.skip(`Swipe on Chat Screen on ${item.description}`, () => {
+        //Skipped because chat conversation does not finish loading on mobile
         // Return to chat screen, doing a swipe from main screen
         cy.get('body').realSwipe('toLeft')
         cy.get('[data-cy=editable-input]').should('be.visible')
@@ -142,7 +155,7 @@ data.allDevices.forEach((item) => {
         cy.get('#mobile-nav').should('be.visible')
       })
 
-      it.only(`Release Notes Screen on ${item.description}`, () => {
+      it(`Release Notes Screen on ${item.description}`, () => {
         cy.visitRootPage()
         cy.releaseNotesScreenValidation()
       })
