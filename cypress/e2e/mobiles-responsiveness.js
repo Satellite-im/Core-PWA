@@ -70,7 +70,7 @@ data.allDevices.forEach((item) => {
 
       it.skip(`Chat Features - Edit Messages on ${item.description}`, () => {
         //Skipped because Edit Messages features is not implemented yet
-        y.chatFeaturesEditMessage(randomMessage, randomNumber)
+        cy.chatFeaturesEditMessage(randomMessage, randomNumber)
       })
 
       it.skip(`Glyphs Modal on ${item.description}`, () => {
