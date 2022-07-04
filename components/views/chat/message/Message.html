@@ -11,20 +11,6 @@
       <archive-icon size="0.85x" />
       Archived
     </div>
-    <div v-if="hideActions" class="inline-meta">
-      <div class="sat-icon-container satellite-icon-helper">
-        <UiCircle
-          type="random"
-          :seed="$mock.users.filter(u => u.name === from)[0].address"
-          :size="23"
-        />
-      </div>
-      <UiUserName
-        :username="from"
-        :badge="$mock.users.filter(u => u.name === from)[0].badge"
-      />
-      <TypographyText :text="timestamp" />
-    </div>
     <MessageActions
       v-if="!hideActions && !messageEdit"
       :setReplyChatbarContent="setReplyChatbarContent"

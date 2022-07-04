@@ -6,7 +6,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Chat Pair B')
     .map((item) => item.recoverySeed) + '{enter}'
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const longMessage = faker.lorem.words(50) // generate random sentence
+const longMessage = faker.lorem.words(100) // generate random sentence
 
 describe('Chat features with two accounts at the same time - Second User', () => {
   it('Load account from Chat Pair B (second account)', { retries: 2 }, () => {
@@ -18,6 +18,12 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Open a chat conversation
     cy.goToConversation('Chat Pair A')
+  })
+
+  it('Wait until Chat Pair A account is online to start', () => {
+    cy.contains('Chat Pair A is online', { timeout: 300000 }).should(
+      'be.visible',
+    )
   })
 
   it('Type a long message in chat bar without sending it', () => {
@@ -79,7 +85,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.wait(30000)
   })
 
-  it.skip('Enable screenshare', () => {
+  it('Enable screenshare', () => {
     //Enable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -94,7 +100,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.wait(30000)
   })
 
-  it.skip('Disable screenshare', () => {
+  it('Disable screenshare', () => {
     //Disable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
@@ -112,13 +118,12 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.get('[data-cy=mediastream]', { timeout: 240000 }).should('not.exist')
   })
 
-  it('User can deny an incoming call', () => {
-    //Deny incoming videocall
-    cy.get('[data-cy=incoming-call]', { timeout: 90000 }).should('be.visible')
-    cy.get('[data-cy=incoming-call-deny]').click()
+  it('Call to User B for a second time', () => {
+    //Start videocall
+    cy.get('[data-cy=toolbar-enable-audio]').click()
   })
 
-  it('Call to User A for a second time', () => {
+  it('Call to User A for a third time', () => {
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]')
       .click()
@@ -141,9 +146,11 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.goToConversation('Chat Pair A')
   })
 
-  it('Call again to User A for a third time', () => {
-    //Wait 30 seconds until user reconnects again
-    cy.wait(30000)
+  it('Call again to User A for a fourth time', () => {
+    //Wait until Chat Pair A is online again
+    cy.contains('Chat Pair A is online', { timeout: 90000 }).should(
+      'be.visible',
+    )
 
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]').click()

@@ -145,6 +145,13 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @method blurChatbar
+     * @description blur chatbar
+     */
+    blurChatbar() {
+      document.activeElement?.blur()
+    },
+    /**
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */

@@ -1,10 +1,4 @@
 <div v-if="call" class="user">
-  <div class="indicators">
-    <div class="indicator" data-cy="muted-indicator" v-if="muted.audio">
-      <mic-off-icon />
-    </div>
-  </div>
-
   <div v-if="screenStream" class="video-stream-container">
     <video
       class="video-stream screen-stream"
@@ -49,5 +43,11 @@
       :src-object.prop="audioStream"
       autoplay
     />
+  </div>
+
+  <div class="indicators">
+    <div class="indicator" data-cy="muted-indicator" v-if="muted.audio">
+      <mic-off-icon />
+    </div>
   </div>
 </div>

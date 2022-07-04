@@ -201,7 +201,10 @@ a.link {
 
 // Buttons
 button {
+  padding: 0;
+  border: none;
   cursor: pointer;
+  background: transparent;
   &:extend(.font-primary);
 }
 .button {
@@ -584,6 +587,9 @@ button {
     .send-message-btn {
       &:extend(.font-flair);
     }
+    [disabled] {
+      color: grey;
+    }
   }
 
   .chat-label {
@@ -697,15 +703,6 @@ button {
 }
 
 // ------------- Ui Elements-------------
-
-// Chatbar
-#chatbar {
-  .chatbar-controls {
-    .send-message-btn {
-      &:extend(.color-flair);
-    }
-  }
-}
 
 .is-chatbar-reply {
   &:extend(.background-flair);

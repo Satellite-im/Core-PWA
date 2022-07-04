@@ -91,7 +91,9 @@ Cypress.Commands.add('goToConversation', (user) => {
   //Find the friend and click on the message button associated
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
-    .click()
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
 
   //Navigate through several pages before going to conversation
   //As a workaround for the issue of message containers taking a lot of time to be loaded
@@ -105,13 +107,15 @@ Cypress.Commands.add('goToConversation', (user) => {
 
 Cypress.Commands.add('workaroundChatLoad', (user) => {
   //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
-  cy.get('[data-cy=sidebar-files]').click() //Go to files page
-  cy.get('[data-cy=sidebar-friends]').click() //Go to friends page
-  cy.get('[data-cy=sidebar-files]').click() // Return to files page
+  cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
+  cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
+  cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
   //Click on the conversation again
   cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
     .contains(user)
-    .click()
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
 })
 
 // Get element attached to DOM

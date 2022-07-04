@@ -1,18 +1,22 @@
 <template>
   <div
     id="app-wrap"
-    :class="`${$store.state.ui.theme.base.class}
-    ${showSidebar ? 'is-open' : 'is-collapsed chat-page'} ${
-      asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
-    } ${selectedGroup ? 'active-group' : null}`"
+    :class="[
+      $store.state.ui.theme.base.class,
+      showSidebar ? 'is-open' : 'is-collapsed chat-page',
+      asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside',
+      selectedGroup ? 'active-group' : null,
+    ]"
   >
     <div
       id="app"
-      :class="`${showSidebar ? 'is-open' : 'is-collapsed'} ${
-        asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside'
-      } ${selectedGroup ? 'group' : 'direct'} ${
-        $device.isMobile ? 'mobile-app' : 'desktop'
-      }`"
+      :class="[
+        showSidebar ? 'is-open' : 'is-collapsed',
+        asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside',
+        selectedGroup ? 'group' : 'direct',
+        $device.isMobile ? 'mobile-app' : 'desktop',
+        isBackgroundCall ? 'has-background-call' : '',
+      ]"
     >
       <UiGlobal />
       <swiper
@@ -181,6 +185,7 @@ export default Vue.extend({
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('conversation', ['recipient']),
+    ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     DataStateType: () => DataStateType,
     selectedGroup(): string {
       return this.$route.params.id // TODO: change with groupid - AP-400
@@ -195,12 +200,6 @@ export default Vue.extend({
       return (
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.friends.all.length
-      )
-    },
-    isActiveCall() {
-      return (
-        this.webrtc.activeCall &&
-        this.webrtc.activeCall.callId === this.conversation.id
       )
     },
   },
@@ -225,6 +224,7 @@ export default Vue.extend({
     this.$store.commit('ui/setShowOlderMessagesInfo', false)
     // reset active conversation on chat leave
     this.$store.commit('textile/setActiveConversation', '')
+    this.$store.commit('conversation/resetConversation')
   },
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)

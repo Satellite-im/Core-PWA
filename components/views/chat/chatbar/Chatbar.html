@@ -1,4 +1,4 @@
-<div id="chatbar" ref="chatbar">
+<div id="chatbar" ref="chatbar" v-click-outside="blurChatbar">
   <Enhancers @click="handleChatTextFromOutside" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
@@ -32,7 +32,7 @@
     <ChatbarControls
       id="chatbar-controls"
       :sendMessage="sendMessage"
-      :disabled="!recipient"
+      :disabled="!recipient || charlimit"
     />
   </div>
   <ChatbarFooter :text="text" :charlimit="charlimit" />

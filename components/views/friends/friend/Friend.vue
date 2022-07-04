@@ -57,7 +57,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('friends', ['friendExists']),
     ...mapState(['accounts']),
     src(): string {
       const hash =
@@ -68,12 +67,6 @@ export default Vue.extend({
     },
     contextMenuValues(): ContextMenuItem[] {
       return [{ text: this.$t('context.remove'), func: this.removeFriend }]
-    },
-    showStatus(): boolean {
-      return (
-        this.friendExists(this.$props.friend.address) ||
-        this.$props.friend.address === this.accounts.active
-      )
     },
   },
   beforeDestroy() {
@@ -152,6 +145,12 @@ export default Vue.extend({
       }
     },
     sendMessageRequest() {
+      this.$store.dispatch('conversation/setConversation', {
+        id: this.friend.peerId,
+        type: 'friend',
+        participants: [this.friend],
+        calling: false,
+      })
       this.$router.push(`/chat/direct/${this.friend.address}`)
     },
   },

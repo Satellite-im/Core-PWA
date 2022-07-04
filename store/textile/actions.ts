@@ -176,7 +176,10 @@ export default {
     // add the messages to the search index
     db.search.conversationMessages.upsertAll(messages)
 
-    if (setActive) {
+    // set active conversation only if we still on the chat
+    const isChatRoute = !!this.$router.currentRoute.params?.address
+
+    if (setActive && isChatRoute) {
       commit('setActiveConversation', friend.address)
       if (friend.peerId) {
         commit(

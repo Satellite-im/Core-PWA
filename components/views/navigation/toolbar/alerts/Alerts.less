@@ -1,7 +1,39 @@
 #alerts {
-  transition: all @animation-speed ease;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: @light-spacing;
+
+  top: 45px;
+  left: 0;
+  max-height: 50vh;
+  width: 25rem;
+  padding: @light-spacing @xlight-spacing;
+  cursor: default;
+  overflow-y: scroll;
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.bordered);
+  &:extend(.blur);
+
+  .header {
+    .subtitle {
+      font-size: @micro-text-size !important;
+      font-family: @primary-font;
+    }
+    font-size: @micro-text-size !important;
+    font-family: @primary-font;
+  }
+
+  button {
+    flex-shrink: 0;
+    width: fit-content;
+  }
 }
-.alerts-clear-button {
-  margin-bottom: 5px;
-  box-shadow: none !important;
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #alerts {
+    top: @toolbar-height;
+    width: 100%;
+  }
 }
