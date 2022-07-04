@@ -8,7 +8,8 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { Friend } from '~/types/ui/friends'
-import BlockchainClient from '~/libraries/BlockchainClient'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   components: {
@@ -18,9 +19,10 @@ export default Vue.extend({
   data() {
     return {
       error: '',
-      accountID: '',
+      friendId: '',
       searching: false,
-      friend: null as Friend | null,
+      request: null as FriendRequest | null,
+      user: null as User | null,
     }
   },
   computed: {
@@ -34,58 +36,43 @@ export default Vue.extend({
   },
   mounted() {
     if (this.$route.params && this.$route.params.id) {
-      this.$data.accountID = this.$route.params.id
+      this.$data.friendId = this.$route.params.id
       this._searchFriend()
     }
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
-      if (!this.accountID.length) {
+      if (!this.friendId.length) {
         this.error = ''
         this.friend = null
         this.searching = false
         return
       }
-      if (this.accountID.length >= 40) {
+      if (this.friendId.length >= 40) {
         return await this.searchFriend()
       }
       this.error = this.$t('friends.invalid_id') as string
       this.searching = false
     }, 500),
     async searchFriend() {
-      this.friend = null
+      this.user = null
+      this.error = ''
       this.searching = true
-      const accountID = this.accountID.trim()
-      if (accountID === this.myAccountID) {
+      const friendId = this.friendId.trim()
+      if (friendId === iridium.connector?.id) {
         this.error = this.$t('friends.self_add') as string
         return
       }
-      if (
-        this.allFriends.some((f: Friend) => f?.account?.accountId === accountID)
-      ) {
+      const hasFriend = iridium.friends?.isFriend(friendId)
+      if (hasFriend) {
         this.error = this.$t('friends.already_friend') as string
-        return
       }
-      this.error = ''
+
       try {
-        const $BlockchainClient: BlockchainClient =
-          BlockchainClient.getInstance()
-
-        const friend = await $BlockchainClient.getUserInfo(accountID)
-
-        if (!friend) {
-          this.error = this.$t('friends.not_found') as string
-          return
-        }
-        // TODO : fix when all information are available - AP-398
-        this.friend = {
-          ...friend,
-          state: 'offline',
-          // @ts-ignore
-          account: {
-            accountId: this.accountID,
-          },
-          address: this.accountID,
+        this.user = {
+          did: friendId,
+          name: friendId,
+          status: 'offline',
         }
       } catch (error) {
         this.error = this.$t('friends.invalid_id') as string
@@ -98,8 +85,9 @@ export default Vue.extend({
         this.error = error
         return
       }
-      this.friend = null
-      this.accountID = ''
+      this.request = null
+      this.user = null
+      this.friendId = ''
       // @ts-ignore
       const input = this.$refs.input.$refs.input as HTMLInputElement
       input.value = ''

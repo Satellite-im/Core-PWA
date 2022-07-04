@@ -237,6 +237,17 @@ export default defineNuxtConfig({
     babel: {
       plugins: ['lodash'],
       compact: true,
+      presets({ isServer }, [preset, options]) {
+        options.targets = isServer
+          ? { node: 'current' }
+          : {
+              browsers: [
+                'last 1 chrome version',
+                'last 1 firefox version',
+                'last 1 safari version',
+              ],
+            }
+      },
     },
   },
   publicRuntimeConfig: {

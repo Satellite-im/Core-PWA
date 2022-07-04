@@ -4,12 +4,11 @@
   <UiSpacer :height="10" />
   <!-- max size of solana public key is 44 https://docs.solana.com/cli/transfer-tokens#receive-tokens -->
   <InteractablesInput
-    v-model="accountID"
+    v-model="friendId"
     class="search-container"
     type="primary"
     size="small"
     :placeholder="$t('friends.search_placeholder')"
-    :maxLength="44"
     @update="_searchFriend"
     ref="input"
     autofocus
@@ -17,8 +16,8 @@
   <TypographyError v-if="error" :text="$t(error)" />
   <UiLoadersLoadingBar v-else-if="searching" />
   <FriendsFriend
-    v-else-if="friend"
-    :friend="friend"
+    v-else-if="user"
+    :friend="user"
     @requestSent="onFriendRequestSent"
     send
   />

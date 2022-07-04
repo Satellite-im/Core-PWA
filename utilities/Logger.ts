@@ -1,7 +1,16 @@
-export enum LogLevel {
-  PROD = 'PROD',
-  DEV = 'DEV',
+/* eslint-disable no-console */
+
+const colors = {
+  debug: ['#2ecc71', '#2ecc71', 'white'],
+  info: ['#1abc9c', '#1abc9c', 'white'],
+  log: ['#34495e', '#3498db', 'white'],
+  prod: ['#34495e', '#3498db', 'white'],
+  warn: ['#f1c40f', '#f1c40f', 'white'],
+  error: ['#e74c3c', '#e74c3c', 'white'],
 }
+
+export type LogLevel = 'debug' | 'info' | 'log' | 'prod' | 'warn' | 'error'
+export type LogLevelEnum = keyof typeof colors
 
 /**
  * @class
@@ -9,10 +18,14 @@ export enum LogLevel {
  * DO NOT use normal logging, the use of this class will make it easier to enable / disable different log levels.
  */
 export default class Logger {
-  debug: boolean
+  public level: string
 
-  constructor(debug: boolean) {
-    this.debug = debug
+  constructor(
+    level: LogLevelEnum = process.env.NODE_ENV === 'production'
+      ? 'prod'
+      : 'debug',
+  ) {
+    this.level = level
   }
 
   /**
@@ -24,15 +37,24 @@ export default class Logger {
    * @param level to log to, anything below prod will not be shown unless debug is enabled in the config.
    * @returns Blob stripped of EXIF data
    */
-  private _log(tag: string, desc: string, data: object, level: LogLevel) {
-    const hasData: boolean = Object.keys(data).length >= 1
-    if (level === LogLevel.PROD || this.debug) {
-      console[hasData ? 'groupCollapsed' : 'log'](
-        `%c${tag}%c${desc}`,
-        'color:white; background: #34495e; border-radius: 2px 0 0 2px; padding: 0.1rem 0.5rem; border-right: none;',
-        'color:white; background: #3498db; border-radius: 0 2px 2px 0; padding: 0.1rem 0.5rem; border-left: none;',
-      )
-      if (hasData) console.log(data)
+  private _log(
+    tag: string,
+    desc: string,
+    data: object,
+    level: LogLevelEnum = 'log',
+  ) {
+    if (level < this.level) {
+      return
+    }
+    const hasData = Object.keys(data).length >= 1
+
+    ;(hasData ? console.groupCollapsed : console.log)(
+      `%c${tag}%c${desc}`,
+      `color:${colors[level][2]};background:${colors[level][0]};border-radius:2px 0 0 2px;padding:0.1rem 0.5rem;border-right:none;`,
+      `color:${colors[level][2]};background:${colors[level][1]};border-radius:0 2px 2px 0;padding: 0.1rem 0.5rem;border-left: none;`,
+    )
+    if (hasData) {
+      console.log(data)
       console.groupEnd()
     }
   }
@@ -50,8 +72,28 @@ export default class Logger {
     tag: string,
     desc: string,
     data: object = {},
-    level: LogLevel = LogLevel.PROD,
+    level: LogLevelEnum = 'prod',
   ) {
     this._log(tag, desc, data, level)
+  }
+
+  info(tag: string, desc: string, data: object = {}) {
+    this._log(tag, desc, data, 'info')
+  }
+
+  warn(tag: string, desc: string, data: object = {}) {
+    this._log(tag, desc, data, 'warn')
+  }
+
+  error(tag: string, desc: string, data: object = {}) {
+    this._log(tag, desc, data, 'error')
+  }
+
+  debug(tag: string, desc: string, data: object = {}) {
+    this._log(tag, desc, data, 'debug')
+  }
+
+  prod(tag: string, desc: string, data: object = {}) {
+    this._log(tag, desc, data, 'prod')
   }
 }

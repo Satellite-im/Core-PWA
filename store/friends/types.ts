@@ -21,7 +21,7 @@ export enum FriendsError {
 }
 
 export interface CreateFriendRequestArguments {
-  friendToKey: PublicKey
+  friendToKey: string
 }
 export interface AcceptFriendRequestArguments {
   friendRequest: IncomingRequest

@@ -1,6 +1,7 @@
 import { Keypair, PublicKey } from '@solana/web3.js'
 import ed2curve from 'ed2curve'
 import { sharedKey, signMessage } from 'curve25519-js'
+import * as ed from '@noble/ed25519'
 import { HashableData } from '~/types/crypto/crypto'
 
 const ivLen = 16 // the IV is always 16 bytes
@@ -27,6 +28,10 @@ export default class Crypto {
       publicKey,
       secretKey,
     }
+  }
+
+  static getPublicKey(privateKey: Uint8Array) {
+    return ed.getPublicKey(privateKey)
   }
 
   /**
@@ -59,7 +64,7 @@ export default class Crypto {
    * @param sharedSecret previously computed ECDH shared secret
    * @returns the AES CryptoKey
    */
-  aesKeyFromSharedSecret(sharedSecret: string): Promise<CryptoKey> {
+  static aesKeyFromSharedSecret(sharedSecret: string): Promise<CryptoKey> {
     // Alternatively compute the aes key and cache it
     const buffered = Uint8Array.from(Buffer.from(sharedSecret, 'hex'))
 
@@ -78,13 +83,22 @@ export default class Crypto {
    * @param data input data to be hashed
    * @returns hex encoding of the computed hash
    */
-  async hash(data: HashableData) {
-    const digest = await crypto.subtle.digest(
+  static async hash(data: HashableData): Promise<string> {
+    return Buffer.from(await Crypto.sha256(data)).toString('hex')
+  }
+
+  /**
+   * @method hash
+   * @description Hashes the given input using SHA-256 algorithm
+   * @param data input data to be hashed
+   * @returns hex encoding of the computed hash
+   */
+  static async sha256(data: HashableData): Promise<Uint8Array> {
+    const buffer = await crypto.subtle.digest(
       'SHA-256',
       typeof data === 'string' ? Buffer.from(data) : data,
     )
-
-    return Buffer.from(digest).toString('hex')
+    return new Uint8Array(buffer)
   }
 
   /**
@@ -113,11 +127,11 @@ export default class Crypto {
     // Check if the shared secret has been properly generated
     if (!sharedSecret) throw new Error('Impossible to generate shared secret')
 
-    const hashedSecret = await this.hash(sharedSecret)
+    const hashedSecret = await Crypto.hash(sharedSecret)
 
     this.hashedSecrets[recipientAddress] = hashedSecret
 
-    const aesKey = await this.aesKeyFromSharedSecret(sharedSecret)
+    const aesKey = await Crypto.aesKeyFromSharedSecret(sharedSecret)
 
     // Cache the aesKey to avoid further unnecessary computations
     this.aesKeys[recipientAddress] = aesKey
@@ -133,7 +147,7 @@ export default class Crypto {
    * @param data encrypted data converted in Uint8Array
    * @returns concatenated Uint8Array
    */
-  joinIvAndData(iv: Uint8Array, data: Uint8Array) {
+  static joinIvAndData(iv: Uint8Array, data: Uint8Array) {
     const buf = new Uint8Array(iv.length + data.length)
     Array.prototype.forEach.call(iv, function (byte, i) {
       buf[i] = byte
@@ -151,7 +165,7 @@ export default class Crypto {
    * @param buf concatenated iv and encrypted data
    * @returns an object containing separated values for iv and the data
    */
-  separateIvFromData(buf: Uint8Array) {
+  static separateIvFromData(buf: Uint8Array) {
     const iv = new Uint8Array(ivLen)
     const data = new Uint8Array(buf.length - ivLen)
     Array.prototype.forEach.call(buf, function (byte, i) {
@@ -172,7 +186,7 @@ export default class Crypto {
    * @param key AES key for the encryption
    * @returns base64 encrypted string
    */
-  async encrypt(data: string, key: CryptoKey): Promise<string> {
+  static async encrypt(data: string, key: CryptoKey): Promise<string> {
     const encodedText = new TextEncoder().encode(data)
 
     const iv = window.crypto.getRandomValues(new Uint8Array(ivLen))
@@ -186,7 +200,7 @@ export default class Crypto {
       encodedText,
     )
 
-    const uintArray = this.joinIvAndData(iv, new Uint8Array(encryptedData))
+    const uintArray = Crypto.joinIvAndData(iv, new Uint8Array(encryptedData))
 
     return Buffer.from(uintArray).toString('base64')
   }
@@ -199,10 +213,13 @@ export default class Crypto {
    * @param key AES key for the encryption
    * @returns decrypted string (clear text)
    */
-  async decrypt(encryptedString: string, key: CryptoKey): Promise<string> {
+  static async decrypt(
+    encryptedString: string,
+    key: CryptoKey,
+  ): Promise<string> {
     const encodedText = new Uint8Array(Buffer.from(encryptedString, 'base64'))
 
-    const { iv, data } = this.separateIvFromData(encodedText)
+    const { iv, data } = Crypto.separateIvFromData(encodedText)
 
     const decryptedData = await window.crypto.subtle.decrypt(
       {
@@ -235,7 +252,7 @@ export default class Crypto {
         'Encryption engine for this recipient has not yet been initialized',
       )
 
-    return this.encrypt(data, aesKey)
+    return Crypto.encrypt(data, aesKey)
   }
 
   /**
@@ -257,7 +274,7 @@ export default class Crypto {
         'Encryption engine for this sender has not yet been initialized',
       )
 
-    return this.decrypt(data, aesKey)
+    return Crypto.decrypt(data, aesKey)
   }
 
   /**
@@ -291,15 +308,15 @@ export default class Crypto {
    * @example
    *   const plaintext = await Crypto.decryptWithPassword(ciphertext, 'pw');
    */
-  async decryptWithPassword(
+  static async decryptWithPassword(
     encryptedString: string,
     password: string,
   ): Promise<string | null> {
     const pwUtf8 = new TextEncoder().encode(password) // encode password as UTF-8
-    const pwHash = await this.hash(pwUtf8) // hash the password
-    const aesKey = await this.aesKeyFromSharedSecret(pwHash)
+    const pwHash = await Crypto.hash(pwUtf8) // hash the password
+    const aesKey = await Crypto.aesKeyFromSharedSecret(pwHash)
 
-    return this.decrypt(encryptedString, aesKey)
+    return Crypto.decrypt(encryptedString, aesKey)
   }
 
   /**
@@ -313,23 +330,19 @@ export default class Crypto {
    * @example
    *   const encryptedText = await Crypto.encryptWithPassword('my secret text', 'pw');
    */
-  async encryptWithPassword(
+  static async encryptWithPassword(
     plaintext: string,
     password: string,
   ): Promise<string> {
     const pwUtf8 = new TextEncoder().encode(password) // encode password as UTF-8
-    const pwHash = await this.hash(pwUtf8)
-
-    const aesKey = await this.aesKeyFromSharedSecret(pwHash)
-
-    return this.encrypt(plaintext, aesKey)
+    const pwHash = await Crypto.hash(pwUtf8)
+    const aesKey = await Crypto.aesKeyFromSharedSecret(pwHash)
+    return Crypto.encrypt(plaintext, aesKey)
   }
 
-  signMessageWithKey(privateKey: Uint8Array, message: string) {
+  static signMessageWithKey(privateKey: Uint8Array, message: string) {
     const utf8Message = new TextEncoder().encode(message)
-
     const secretKey = ed2curve.convertSecretKey(privateKey)
-
     return signMessage(secretKey, utf8Message, undefined)
   }
 
@@ -337,12 +350,15 @@ export default class Crypto {
     if (!this.signingKey) {
       return null
     }
-
-    return this.signMessageWithKey(this.signingKey.secretKey, message)
+    return Crypto.signMessageWithKey(this.signingKey.secretKey, message)
   }
 
-  getRandomString(length: number): string {
+  static getRandomString(length: number): string {
     const decoder = new TextDecoder('ascii')
     return decoder.decode(window.crypto.getRandomValues(new Uint8Array(length)))
+  }
+
+  static getRandomSeed(length: number = 32): Uint8Array {
+    return window.crypto.getRandomValues(new Uint8Array(length))
   }
 }

@@ -1,6 +1,5 @@
 <template src="./Friend.html"></template>
 <script lang="ts">
-import { PublicKey } from '@solana/web3.js'
 import Vue, { PropType } from 'vue'
 import {
   XIcon,
@@ -10,13 +9,13 @@ import {
   CircleIcon,
   SmartphoneIcon,
 } from 'satellite-lucide-icons'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 import { ContextMenuItem } from '~/store/ui/types'
-import { Friend } from '~/types/ui/friends'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { AddFriendEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
+import { User } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   components: {
@@ -30,7 +29,7 @@ export default Vue.extend({
   mixins: [ContextMenu],
   props: {
     friend: {
-      type: Object as PropType<Friend>,
+      type: Object as PropType<User>,
       required: true,
     },
     request: {
@@ -59,10 +58,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['accounts']),
     src(): string {
-      const hash =
-        this.friend?.photoHash ||
-        this.friend?.profilePicture ||
-        this.friend?.request?.userInfo?.photoHash
+      const hash = this.friend?.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
@@ -77,7 +73,7 @@ export default Vue.extend({
       this.loading = AddFriendEnum.SENDING
       try {
         await this.$store.dispatch('friends/createFriendRequest', {
-          friendToKey: new PublicKey(this.friend.account.accountId),
+          friendToKey: this.friend.did,
         })
         this.$emit('requestSent', '')
       } catch (e: any) {
@@ -91,11 +87,11 @@ export default Vue.extend({
       this.loadCheck = true
       try {
         await this.$store.dispatch('friends/acceptFriendRequest', {
-          friendRequest: this.friend.request,
+          friendRequest: this.friend.did,
         })
         const query = { limit: Config.chat.defaultMessageLimit, skip: 0 }
         this.$store.commit('textile/setConversation', {
-          address: this.friend.address,
+          address: this.friend.did,
           messages: [],
           limit: query.limit,
           skip: query.skip,
@@ -111,10 +107,7 @@ export default Vue.extend({
     async declineFriendRequest() {
       this.loading = AddFriendEnum.DECLINE
       try {
-        await this.$store.dispatch(
-          'friends/denyFriendRequest',
-          this.friend.request,
-        )
+        await this.$store.dispatch('friends/denyFriendRequest', this.friend.did)
       } catch (e) {
       } finally {
         this.loading = AddFriendEnum.EMPTY
@@ -137,7 +130,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch(
           'friends/removeFriendRequest',
-          this.friend.request,
+          this.friend.did,
         )
       } catch (e) {
       } finally {
@@ -151,7 +144,7 @@ export default Vue.extend({
         participants: [this.friend],
         calling: false,
       })
-      this.$router.push(`/chat/direct/${this.friend.address}`)
+      this.$router.push(`/chat/direct/${this.friend.did}`)
     },
   },
 })
