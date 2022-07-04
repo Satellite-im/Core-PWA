@@ -4,9 +4,6 @@ on:
   pull_request:
     types: [synchronize, opened, reopened, edited, closed]
 
-env:
-  BASE_BRANCH: ${{ github.base_ref }}
-
 jobs:       
   add-labels:
     runs-on: ubuntu-latest
