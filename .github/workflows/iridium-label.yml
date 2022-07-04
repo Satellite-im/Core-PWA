@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: add labels
         uses: actions-ecosystem/action-add-labels@v1
-        if: env.BASE_BRANCH != 'iridium-dev'
+        if: env.BASE_BRANCH = 'iridium-dev'
         with:
           github_token: ${{ github.token }}
           labels: iridium
