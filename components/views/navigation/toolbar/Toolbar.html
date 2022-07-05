@@ -23,7 +23,6 @@
     <div
       class="toggle-alerts"
       data-cy="toolbar-alerts"
-      @click="toggleAlerts"
       v-tooltip.bottom="$t('pages.chat.alerts')"
     >
       <UiCircle
@@ -42,7 +41,6 @@
         :class="`control-icon ${showAlerts ? 'primary' : ''}`"
         color="primary"
         @click="toggleAlerts"
-        v-tooltip.bottom="$t('pages.chat.alerts')"
       />
       <ToolbarAlerts
         v-if="showAlerts && $device.isDesktop"
