@@ -3,7 +3,7 @@
     class="status"
     :class="connectedStatus"
     size="1x"
-    v-if="participantsText.length"
+    v-if="participantsText.length && !conversationLoading"
   />
   <TypographyText :text="participantsText" data-cy="user-connected" :size="6" />
 </div>

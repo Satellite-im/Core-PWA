@@ -14,6 +14,8 @@ export default Vue.extend({
   computed: {
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
+      conversationLoading: (state) =>
+        (state as RootState).textile.conversationLoading,
     }),
     ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
     /**
@@ -21,6 +23,9 @@ export default Vue.extend({
      * @description builds translated string for online/offline status
      */
     participantsText(): string {
+      if (this.conversationLoading) {
+        return ''
+      }
       // if DM with single person
       if (this.otherParticipants.length === 1) {
         return this.$tc(
