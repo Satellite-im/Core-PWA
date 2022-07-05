@@ -5,9 +5,7 @@ import QrcodeVue from 'qrcode.vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { debounce } from 'lodash'
-import { Friend } from '~/types/ui/friends'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
 
@@ -25,15 +23,6 @@ export default Vue.extend({
       user: null as User | null,
     }
   },
-  computed: {
-    ...mapState({
-      myAccountID: (state) => (state as RootState).accounts.active,
-      allFriends: (state) => (state as RootState).friends.all,
-    }),
-    friendInviteUrl(): string {
-      return `${location.origin}/#/friends/list/${this.myAccountID}`
-    },
-  },
   mounted() {
     if (this.$route.params && this.$route.params.id) {
       this.$data.friendId = this.$route.params.id
@@ -44,14 +33,11 @@ export default Vue.extend({
     _searchFriend: debounce(async function (this: any) {
       if (!this.friendId.length) {
         this.error = ''
-        this.friend = null
+        this.user = null
         this.searching = false
         return
       }
-      if (this.friendId.length >= 40) {
-        return await this.searchFriend()
-      }
-      this.error = this.$t('friends.invalid_id') as string
+      await this.searchFriend()
       this.searching = false
     }, 500),
     async searchFriend() {
@@ -68,15 +54,33 @@ export default Vue.extend({
         this.error = this.$t('friends.already_friend') as string
       }
 
-      try {
-        this.user = {
-          did: friendId,
-          name: friendId,
-          status: 'offline',
-        }
-      } catch (error) {
-        this.error = this.$t('friends.invalid_id') as string
+      this.user = {
+        did: friendId,
+        name: friendId,
+        status: 'offline',
       }
+
+      // this.request = {
+      // user: {
+      //   did: friendId,
+      //   name: friendId,
+      //   status: 'offline',
+      // },
+      //   incoming: false,
+      //   status: 'pending',
+      //   at: Date.now(),
+      // }
+
+      //  try {
+      //   const request = await iridium.friends?.createFriendRequest(
+      //     friendId,
+      //     'pending',
+      //   )
+
+      //   this.request = request
+      // } catch (error) {
+      //   this.error = this.$t('friends.invalid_id') as string
+      // }
 
       this.searching = false
     },

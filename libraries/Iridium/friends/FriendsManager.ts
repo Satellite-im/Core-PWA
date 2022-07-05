@@ -130,7 +130,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   private async onFriendActivity(
     message: IridiumPeerMessage<IridiumFriendEvent>,
   ) {
-    console.log('ON friend activity')
     const { from, payload } = message
     const { to, at, status, user } = payload
     if (to !== this.iridium.connector?.id) return
@@ -214,7 +213,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     user?: User,
     incoming: boolean | undefined = undefined,
   ) {
-    console.log('Update FRiend request')
     const existing = (await this.getRequest(friendId)) || {}
     const request = {
       ...existing,
@@ -279,7 +277,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     if (this.hasRequest(friendId)) {
-      console.info('createFriendRequest, hasRequest', friendId)
       throw new Error(`already have friend request for ${friendId}`)
     }
 
@@ -302,5 +299,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const list = this.state?.list?.filter((f) => f !== friendId)
     await this.set('/list', list)
     await this.set(`/details/${friendId}`, undefined)
+  }
+
+  isRequest(data: object): data is FriendRequest {
+    return Object.hasOwn(data, 'user')
   }
 }

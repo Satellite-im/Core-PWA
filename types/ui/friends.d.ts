@@ -20,6 +20,10 @@ export interface IncomingRequest extends FriendRequest {
   account: FriendAccount
 }
 
+export interface OutgoingRequest extends FriendRequest {
+  to: string
+}
+
 export interface Friend extends EncryptedFriend {
   publicKey: string
   typingState: 'TYPING' | 'NOT_TYPING'
@@ -37,8 +41,4 @@ export interface Friend extends EncryptedFriend {
   peerId?: string
   call?: Call
   status: string
-}
-
-export interface OutgoingRequest extends FriendRequest {
-  to: string
 }

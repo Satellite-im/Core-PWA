@@ -33,6 +33,7 @@ export class IridiumManager extends Emitter {
     this.connector = await Iridium.fromSeed(seed, {
       logger,
       config: {
+        // repo: Date.now().toString(),
         syncNodes: Config.iridium.syncNodes,
       },
     })

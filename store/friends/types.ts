@@ -20,11 +20,8 @@ export enum FriendsError {
   TEXTILE_NOT_INITIALIZED = 'errors.friends.textile_not_initialized',
 }
 
-export interface CreateFriendRequestArguments {
-  friendToKey: string
-}
-export interface AcceptFriendRequestArguments {
-  friendRequest: IncomingRequest
+export interface FriendRequestArguments {
+  did: string
 }
 
 /**

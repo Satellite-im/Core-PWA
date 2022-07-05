@@ -8,14 +8,13 @@ import VueMarkdown from 'vue-markdown'
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { User } from '~/types/ui/user'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
-import { TrackKind } from '~/libraries/WebRTC/types'
-
+import type { User } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     VueMarkdown,
@@ -43,6 +42,7 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
+      timestampRefreshInterval: null,
     }
   },
   computed: {
@@ -51,16 +51,15 @@ export default Vue.extend({
       textilePubkey: (state) =>
         (state as RootState).accounts?.details?.textilePubkey ?? '',
       conversations: (state) => (state as RootState).textile?.conversations,
-      activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
     ...mapGetters('textile', ['getConversation']),
     ...mapGetters('settings', ['getTimestamp']),
     contextMenuValues(): ContextMenuItem[] {
-      return this.enableRTC
+      return this.user.state === 'online'
         ? [
             { text: this.$t('context.send'), func: this.navigateToUser },
-            { text: this.$t('context.voice'), func: this.handleCall },
-            // { text: this.$t('context.video'), func: this.testFunc },
+            { text: this.$t('context.voice'), func: this.testFunc },
+            { text: this.$t('context.video'), func: this.testFunc },
             // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
             // { text: this.$t('context.profile'), func: this.handleShowProfile },
             { text: this.$t('context.remove'), func: this.removeUser },
@@ -73,11 +72,11 @@ export default Vue.extend({
           ]
     },
     hasMessaged(): boolean {
-      const lastMessage = this.getConversation(this.user.address)?.lastMessage
+      const lastMessage = this.getConversation(this.user.did)?.lastMessage
       return !!lastMessage
     },
     lastMessage(): string {
-      const conversation = this.getConversation(this.user.address)
+      const conversation = this.getConversation(this.user.did)
       const lastMessage = conversation?.lastMessage
 
       return lastMessage
@@ -99,11 +98,8 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.conversations[this.user.address]?.lastUpdate,
+        time: this.conversations[this.user.did]?.lastUpdate,
       })
-    },
-    enableRTC(): boolean {
-      return this.user.state === 'online'
     },
   },
   mounted() {
@@ -120,24 +116,12 @@ export default Vue.extend({
     })
   },
   beforeDestroy() {
-    // ensure the user can't click context menu options after a friend has been removed
+    clearInterval(this.$data.timestampRefreshInterval)
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
-    async call(kinds: TrackKind[]) {
-      if (!this.enableRTC) {
-        return
-      }
-      await this.$store.dispatch('webrtc/call', {
-        kinds,
-      })
-    },
-    handleCall() {
-      if (!this.enableRTC || this.activeCall) {
-        return
-      }
-      this.navigateToUser()
-      this.call(['audio'])
+    testFunc() {
+      this.$Logger.log('User Context', 'Test func')
     },
     async removeUser() {
       this.isLoading = true
@@ -157,28 +141,33 @@ export default Vue.extend({
      * Pretty sure this is just a placeholder for what will be the actual function?
      * @example ---
      */
-    navigateToUser() {
+    async navigateToUser() {
       if (this.$device.isMobile) {
         // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
         this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
-        this.$store.dispatch('ui/toggleChatbarFocus', false)
       }
 
-      if (this.user.address === this.$route.params.address) {
-        if (!this.$device.isMobile) {
-          this.$store.dispatch('ui/setChatbarFocus')
-        }
+      if (this.user.did === this.$route.params.did) {
+        this.$store.dispatch('ui/setChatbarFocus')
         return
       }
 
-      this.$store.dispatch('conversation/setConversation', {
-        id: this.user.peerId,
-        type: 'friend',
-        participants: [this.user],
-        calling: false,
-      })
-      this.$router.push(`/chat/direct/${this.user.address}`)
+      if (!this.user?.name) return
+
+      const profile = await iridium.profile?.get()
+      await iridium.chat?.createConversation(this.user.name, 'direct', [
+        this.user?.did,
+        profile.did,
+      ])
+
+      // this.$store.dispatch('conversation/setConversation', {
+      //   id: this.user.did,
+      //   type: 'friend',
+      //   participants: [this.user],
+      //   calling: false,
+      // })
+      this.$router.push(`/chat/direct/${this.user.did}`)
     },
     handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)
@@ -193,6 +182,10 @@ export default Vue.extend({
         case MessagingTypesEnum.GLYPH:
           return this.$t(`messaging.user_sent.${sender}`, {
             msgType: message.type,
+          }) as string
+        case MessagingTypesEnum.IMAGE:
+          return this.$t(`messaging.user_sent_image.${sender}`, {
+            msgType: 'image',
           }) as string
         default:
           return this.$t(`messaging.user_sent_something.${sender}`) as string

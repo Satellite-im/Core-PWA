@@ -95,19 +95,20 @@ export default Vue.extend({
     setRoute(route: string) {
       this.route = route
     },
-    // todo: confirm that this works once you can view profiles of non-friends
+    // TODO: confirm that this works once you can view profiles of non-friends
+    // TODO: update for Iridium
     async createFriendRequest() {
-      this.loading = AddFriendEnum.SENDING
-      try {
-        await this.$store.dispatch('friends/createFriendRequest', {
-          friendToKey: new PublicKey(this.ui.userProfile.address),
-        })
-        this.$toast.show(this.$t('friends.request_sent') as string)
-      } catch (e: any) {
-        this.$toast.show(this.$t(e.message) as string)
-      } finally {
-        this.loading = AddFriendEnum.EMPTY
-      }
+      // this.loading = AddFriendEnum.SENDING
+      // try {
+      //   await this.$store.dispatch('friends/createFriendRequest', {
+      //     friendToKey: new PublicKey(this.ui.userProfile.address),
+      //   })
+      //   this.$toast.show(this.$t('friends.request_sent') as string)
+      // } catch (e: any) {
+      //   this.$toast.show(this.$t(e.message) as string)
+      // } finally {
+      //   this.loading = AddFriendEnum.EMPTY
+      // }
     },
   },
 })

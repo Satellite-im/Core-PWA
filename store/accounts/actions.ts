@@ -174,8 +174,11 @@ export default {
     //   { root: true },
     // )
 
-    const userInfo = await iridium.profile?.get('/')
-    if (!userInfo?.id) {
+    await iridium.profile?.load()
+
+    const userInfo = await iridium.profile?.get('')
+
+    if (!userInfo?.did) {
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 

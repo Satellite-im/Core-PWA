@@ -18,6 +18,8 @@ import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   components: {
@@ -45,29 +47,22 @@ export default Vue.extend({
     },
   },
   computed: {
+    incomingRequests: () =>
+      Object.values(iridium.friends?.state.requests || {}).filter(
+        (r: FriendRequest) => r.incoming,
+      ) || [],
     DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,
       dataState: (state) => (state as RootState).dataState,
       media: (state) => (state as RootState).media,
-      friends: (state) => (state as RootState).friends,
-      groups: (state) => (state as RootState).groups,
-      conversations: (state) =>
-        (state as RootState).textile.conversations || [],
+      friends: () => iridium.friends?.state,
+      groups: () => iridium.groups?.state,
+      conversations: () => ({}),
     }),
-    usersAndGroups() {
-      const combined = [...this.friends.all, ...this.groups.all]
-      return combined.sort((a, b) => b.lastUpdate - a.lastUpdate)
-    },
   },
-  watch: {
-    conversations: {
-      handler(newValue) {
-        this.sortUserList(newValue)
-      },
-      deep: true,
-      immediate: true,
-    },
+  async mounted() {
+    iridium.friends?.on('request/changed', () => this.$forceUpdate())
   },
   methods: {
     toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {

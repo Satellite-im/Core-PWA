@@ -26,6 +26,7 @@ const commonProperties = [
   'textile.messageLoading',
   'accounts.initialized',
   'friends.all',
+  'friends',
   'webrtc.activeStream',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',

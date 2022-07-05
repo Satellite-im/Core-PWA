@@ -27,21 +27,21 @@
     </div>
     <div class="sidebar-nav">
       <InteractablesButton
-        :inactive="$route.path.includes('/friends/list') ? false : true"
+        :inactive="!$route.path.includes('/friends/list')"
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
         :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
         size="small"
-        :action="() => { friends.incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
+        :action="() => { incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="friends.incomingRequests.length && dataState.friends === DataStateType.Ready"
+        v-if="incomingRequests.length"
         :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
       >
-        {{friends.incomingRequests.length}}
+        {{incomingRequests.length}}
       </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files') ? false : true"
@@ -69,29 +69,29 @@
           :count="4"
           inverted
         />
-        <template v-else-if="friends.all && friends.all.length">
+        <template v-else-if="friends && Object.values(friends.details).length">
           <UiInlineNotification
             v-if="ui.unreadMessage.length"
             :text="$t('messaging.new_messages')"
           />
-          <div v-for="thing in usersAndGroups">
+          <div v-for="friend in friends.details">
             <User
-              v-if="!thing.admin"
-              :key="thing.address"
-              :user="thing"
-              :isTyping="ui.isTyping.address === thing.address"
-              :isSelected="thing.address === $route.params.address"
+              v-if="friend"
+              :key="friend.did"
+              :user="friend"
+              :isTyping="ui.isTyping.address === friend.did"
+              :isSelected="friend.did === $route.params.did"
             />
-            <GroupClickable
+            <!-- <GroupClickable
               v-else
               :group="thing"
               :key="thing.id"
               :isSelected="thing.id === $route.params.id"
-            />
+            /> -->
           </div>
         </template>
         <div
-          v-else-if="dataState.friends !== DataStateType.Loading && !friends.all.length"
+          v-else-if="dataState.friends !== DataStateType.Loading && !Object.values(friends.details).length"
           class="mascot-container"
         >
           <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />

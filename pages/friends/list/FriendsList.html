@@ -5,12 +5,11 @@
     <div class="column is-half">
       <!-- Friends Add -->
       <FriendsAdd />
-      <!-- Friend Requests -->
-      <UiLoadersFriend
-        :count="1"
-        v-if="dataState.friends === DataStateType.Loading"
-      />
-      <template v-else-if="friends.incomingRequests.length">
+      <!-- Incoming Requests -->
+      <UiLoadersFriend :count="1" v-if="data.loading" />
+      <template
+        v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
+      >
         <div class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
@@ -18,25 +17,21 @@
           />
         </div>
         <FriendsFriend
-          v-for="friend in friends.incomingRequests"
-          v-if="friend.userInfo"
-          :friend="{
-              name: friend.userInfo.name,
-              address: friend.from,
-              state: 'offline',
-              status: friend.userInfo.status,
-              request: friend
-            }"
-          :key="friend.from"
-          request
+          v-for="[did, request] in
+          incomingRequests"
+          v-if="request.status ===
+          'pending' && request.user"
+          :user='request.user || { did, name: request.user.name, status:
+          "offline" }'
+          :request="request"
+          :key="request.from"
         />
       </template>
       <!-- Outgoing Requests -->
-      <UiLoadersFriend
-        :count="1"
-        v-if="dataState.friends === DataStateType.Loading"
-      />
-      <template v-else-if="friends.outgoingRequests.length">
+      <UiLoadersFriend :count="1" v-if="data.loading" />
+      <template
+        v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
+      >
         <div class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
@@ -44,17 +39,14 @@
           />
         </div>
         <FriendsFriend
-          v-for="friend in alphaSortedOutgoing"
-          v-if="friend.userInfo"
-          :friend="{
-              name: friend.userInfo.name,
-              address: friend.to,
-              state: 'offline',
-              status: friend.userInfo.status,
-              request: friend
-            }"
-          :key="friend.to"
-          outgoing
+          v-for="[did, request] in
+          outgoingRequests"
+          v-if="request.status ===
+          'pending' && request.user"
+          :user='request.user || { did, name: request.user.name, status:
+          "offline" }'
+          :request="request"
+          :key="request.from"
         />
       </template>
     </div>
@@ -66,41 +58,31 @@
     >
       <div class="friend-column">
         <!-- Friends List -->
-        <div v-if="dataState.friends === DataStateType.Loading">
+        <div v-if="data.loading">
           <UiLoadersFriend :count="5" />
         </div>
-        <div v-else>
-          <div v-for="(value, key) in alphaSortedFriends" :key="key">
-            <span class="alpha-divider">{{ key }}</span>
-            <FriendsFriend
-              v-for="friend in value"
-              :friend="friend"
-              :key="friend.address"
-            />
-          </div>
+        <div v-else-if="data.friends && data.friends.details">
           <div
-            class="loading-container"
-            v-if="dataState.friends === DataStateType.Updating"
+            v-for="[did, user] in Object.entries(data.friends.details)"
+            :key="did"
           >
-            <UiLoadersUpdating />
+            <FriendsFriend v-if="user" :user="user" :key="did" />
           </div>
+        </div>
+        <div class="loading-container" v-if="data.loading">
+          <UiLoadersUpdating />
         </div>
         <div
-          v-if="Object.entries($mock.blocked).length && featureReadyToShow"
+          v-else-if="data.friends && data.friends.blocked"
           class="padded_divider"
         >
-          <TypographyHorizontalRuleText
-            plaintext
-            :value="$t('friends.blocked_friends')"
+          <FriendsFriend
+            v-for="(user, did) in data.friends.blocked"
+            :user="user"
+            :key="did"
+            blocked
           />
         </div>
-        <FriendsFriend
-          v-for="friend in $mock.blocked"
-          v-if="featureReadyToShow"
-          :friend="friend"
-          :key="friend.address"
-          blocked
-        />
       </div>
     </UiSimpleScroll>
   </div>
