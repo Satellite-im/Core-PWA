@@ -353,18 +353,6 @@ exports[`mutations.setStored 4 1`] = `undefined`;
 
 exports[`mutations.setStored 5 1`] = `undefined`;
 
-exports[`mutations.sortFriends 0 1`] = `undefined`;
-
-exports[`mutations.sortFriends 1 1`] = `undefined`;
-
-exports[`mutations.sortFriends 2 1`] = `undefined`;
-
-exports[`mutations.sortFriends 3 1`] = `undefined`;
-
-exports[`mutations.sortFriends 4 1`] = `undefined`;
-
-exports[`mutations.sortFriends 5 1`] = `undefined`;
-
 exports[`mutations.updateFriend 0 1`] = `undefined`;
 
 exports[`mutations.updateFriend 1 1`] = `undefined`;
