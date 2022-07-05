@@ -1,4 +1,4 @@
-import { Emitter } from '@satellite-im/iridium/src/emitter'
+import { Emitter } from '@satellite-im/iridium'
 import { IridiumManager } from '../IridiumManager'
 import { Profile } from './types'
 

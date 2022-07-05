@@ -1,4 +1,4 @@
-import { Iridium, Emitter } from '@satellite-im/iridium/dist/index.browser'
+import { Iridium, Emitter } from '@satellite-im/iridium'
 import type { IridiumMessage } from '@satellite-im/iridium/src/types'
 import * as json from 'multiformats/codecs/json'
 import { IridiumManager } from '../IridiumManager'

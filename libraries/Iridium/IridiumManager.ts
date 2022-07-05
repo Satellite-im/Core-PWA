@@ -1,4 +1,4 @@
-import { Iridium, Emitter } from '@satellite-im/iridium/dist/index.browser'
+import { Iridium, Emitter } from '@satellite-im/iridium'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import GroupManager from '~/libraries/Iridium/groups/GroupManager'

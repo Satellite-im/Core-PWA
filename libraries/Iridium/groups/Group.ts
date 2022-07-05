@@ -1,4 +1,4 @@
-import { Emitter } from '@satellite-im/iridium/src/emitter'
+import { Emitter } from '@satellite-im/iridium'
 import type {
   IridiumMessage,
   IridiumChannelEvent,

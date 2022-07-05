@@ -1,5 +1,4 @@
-import Iridium from '@satellite-im/iridium/dist/index.browser'
-import { Emitter } from '@satellite-im/iridium/src/emitter'
+import { Iridium, Emitter } from '@satellite-im/iridium'
 import type {
   IridiumPeerMessage,
   IridiumGetOptions,
