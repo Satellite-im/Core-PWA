@@ -60,8 +60,12 @@ export default Vue.extend({
       groups: () => iridium.groups?.state,
       conversations: () => ({}),
     }),
+    friendsDetails() {
+      return iridium.friends?.state.details || {}
+    },
   },
   async mounted() {
+    await iridium.friends?.fetch()
     iridium.friends?.on('request/changed', () => this.$forceUpdate())
   },
   methods: {

@@ -69,12 +69,12 @@
           :count="4"
           inverted
         />
-        <template v-else-if="friends && Object.values(friends.details).length">
+        <template v-else-if="friends && Object.values(friendsDetails).length">
           <UiInlineNotification
             v-if="ui.unreadMessage.length"
             :text="$t('messaging.new_messages')"
           />
-          <div v-for="friend in friends.details">
+          <div v-for="friend in friendsDetails">
             <User
               v-if="friend"
               :key="friend.did"
@@ -91,7 +91,7 @@
           </div>
         </template>
         <div
-          v-else-if="dataState.friends !== DataStateType.Loading && !Object.values(friends.details).length"
+          v-else-if="dataState.friends !== DataStateType.Loading && !Object.values(friendsDetails).length"
           class="mascot-container"
         >
           <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
