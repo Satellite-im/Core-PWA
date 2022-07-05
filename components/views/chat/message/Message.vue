@@ -231,7 +231,9 @@ export default Vue.extend({
         messageID: this.message.id,
         to: to === myTextilePublicKey ? from : to,
       })
-      this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
+      setTimeout(() => {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }, 100)
     },
     /**
      * @method emojiReaction DocsTODO
