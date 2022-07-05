@@ -23,13 +23,13 @@ export default Vue.extend({
       const msgTimestamp = this.$dayjs(this.data.at)
       // if today
       if (this.$dayjs().isSame(msgTimestamp, 'day')) {
-        return `${this.$t('search.result.today')} ${this.getTimestamp({
+        return `${this.$t('time.today')} ${this.getTimestamp({
           time: this.data.at,
         })}`
       }
       // if yesterday
       if (this.$dayjs().diff(msgTimestamp, 'day') <= 1) {
-        return `${this.$t('search.result.yesterday')} ${this.getTimestamp({
+        return `${this.$t('time.yesterday')} ${this.getTimestamp({
           time: this.data.at,
         })}`
       }
