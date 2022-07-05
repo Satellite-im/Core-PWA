@@ -14,7 +14,8 @@ import {
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { FileType } from '~/libraries/Enums/enums'
+
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 
 export default Vue.extend({
@@ -101,7 +102,7 @@ export default Vue.extend({
         isMimeEmbeddableImage(this.message.payload.type)
       ) {
         // remove copy from GIF because it copies a still png version
-        if (this.message.payload.type === FILE_TYPE.GIF) {
+        if (this.message.payload.type === FileType.GIF) {
           return [
             ...mainList,
             { text: this.$t('context.save_img'), func: this.saveImage },

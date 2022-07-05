@@ -1,4 +1,4 @@
-import * as module from './actions'
+import actions from './actions'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { RegistrationStatus } from '~/store/accounts/types'
 import {
@@ -181,7 +181,7 @@ describe('', () => {
       disabled: true,
     }
     const rootState = { ...initialRootState }
-    module.default.toggleMute({ state, commit, dispatch, rootState })
+    actions.toggleMute({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
     expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.UNMUTE, {
       root: true,
@@ -194,7 +194,7 @@ describe('', () => {
       disabled: false,
     }
     const rootState = { ...initialRootState }
-    module.default.toggleMute({ state, commit, dispatch, rootState })
+    actions.toggleMute({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
     expect(dispatch).toHaveBeenCalledWith('sounds/playSound', Sounds.MUTE, {
       root: true,
@@ -214,7 +214,7 @@ describe('', () => {
       //   mute: jest.fn(),
       //   unmute: jest.fn(),
     }
-    module.default.toggle({ state, commit, dispatch, rootState })
+    actions.toggle({ state, commit, dispatch, rootState })
     expect(commit).toHaveBeenCalledWith('setDisabled', !state.disabled)
     // Unsuccessful mock here for WebRTC's Call function.
     // expect(rootState.webrtc.activeCall).toHaveBeenCalledWith({

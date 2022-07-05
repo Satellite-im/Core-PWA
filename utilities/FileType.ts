@@ -1,5 +1,5 @@
 import { filetypemime } from 'magic-bytes.js'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { FileType } from '~/libraries/Enums/enums'
 
 /**
  * @function mimeType
@@ -13,7 +13,7 @@ export async function mimeType(file: Blob): Promise<string> {
   // svg byte check returns xml, so we need to manually check
   const decodedFile = new TextDecoder().decode(buffer)
   if (decodedFile.includes('xmlns="http://www.w3.org/2000/svg"')) {
-    return FILE_TYPE.SVG
+    return FileType.SVG
   }
   return filetypemime(buffer as any)[0]
 }
@@ -33,12 +33,12 @@ export async function isEmbeddableImage(file: Blob): Promise<boolean> {
     return true
   }
   const valid: string[] = [
-    FILE_TYPE.APNG,
-    FILE_TYPE.AVIF,
-    FILE_TYPE.GIF,
-    FILE_TYPE.JPG,
-    FILE_TYPE.PNG,
-    FILE_TYPE.WEBP,
+    FileType.APNG,
+    FileType.AVIF,
+    FileType.GIF,
+    FileType.JPG,
+    FileType.PNG,
+    FileType.WEBP,
   ]
   return valid.includes(filetypemime(buffer as any)[0])
 }
@@ -51,7 +51,7 @@ export async function isEmbeddableImage(file: Blob): Promise<boolean> {
  * @example application/zip => true, image/png => false
  */
 export function isMimeArchive(type: string): boolean {
-  const valid: string[] = [FILE_TYPE.RAR, FILE_TYPE.ZIP, FILE_TYPE.SZIP]
+  const valid: string[] = [FileType.RAR, FileType.ZIP, FileType.SZIP]
   return valid.includes(type)
 }
 
@@ -64,13 +64,13 @@ export function isMimeArchive(type: string): boolean {
  */
 export function isMimeEmbeddableImage(type: string): boolean {
   const valid: string[] = [
-    FILE_TYPE.APNG,
-    FILE_TYPE.AVIF,
-    FILE_TYPE.GIF,
-    FILE_TYPE.JPG,
-    FILE_TYPE.PNG,
-    FILE_TYPE.WEBP,
-    FILE_TYPE.SVG,
+    FileType.APNG,
+    FileType.AVIF,
+    FileType.GIF,
+    FileType.JPG,
+    FileType.PNG,
+    FileType.WEBP,
+    FileType.SVG,
   ]
   return valid.includes(type)
 }
@@ -84,6 +84,6 @@ export function isMimeEmbeddableImage(type: string): boolean {
  */
 export async function isHeic(file: Blob): Promise<boolean> {
   const buffer = new Uint8Array(await file.slice(0, 100).arrayBuffer())
-  const valid: string[] = [FILE_TYPE.HEIC, FILE_TYPE.HEIF]
+  const valid: string[] = [FileType.HEIC, FileType.HEIF]
   return valid.includes(filetypemime(buffer as any)[0])
 }

@@ -87,13 +87,13 @@ export default class TextileManager {
     // await all the managers to be initialized
     await Promise.all([
       this.mailboxManager.init(),
-      this.sharedBucket.init({
-        name: Config.textile.sharedBucket,
-      }),
-      this.personalBucket.init({
-        name: Config.textile.personalBucket,
-        encrypted: true,
-      }),
+      // this.sharedBucket.init({
+      //   name: Config.textile.sharedBucket,
+      // }),
+      // this.personalBucket.init({
+      //   name: Config.textile.personalBucket,
+      //   encrypted: true,
+      // }),
       this.groupChatManager.init(),
       this.metadataManager.init(),
       this.userInfoManager.init(),

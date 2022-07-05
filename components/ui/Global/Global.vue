@@ -129,22 +129,6 @@ export default Vue.extend({
       this.$store.commit('ui/fullscreen', false)
       this.$store.dispatch('webrtc/hangUp')
     },
-    /**
-     * @method share
-     * @description copy link to clipboard
-     * @param {Item} item
-     */
-    async share(item: Item) {
-      this.$toast.show(this.$t('todo - share') as string)
-    },
-    /**
-     * @method closeFilePreview
-     * @description Close File Preview
-     * @example
-     */
-    closeFilePreview() {
-      this.$store.commit('ui/setFilePreview', undefined)
-    },
   },
 })
 </script>

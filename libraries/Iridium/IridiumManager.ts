@@ -7,6 +7,7 @@ import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
 import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
+import FilesManager from '~/libraries/Iridium/files/FilesManager'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
@@ -15,6 +16,7 @@ export class IridiumManager extends Emitter {
   groups?: GroupManager
   chat?: ChatManager
   friends?: FriendsManager
+  files?: FilesManager
 
   /**
    * @method
@@ -80,6 +82,8 @@ export class IridiumManager extends Emitter {
     this.groups = new GroupManager(this)
     logger.log('iridium/manager', 'initializing chat')
     this.chat = new ChatManager(this)
+    logger.log('iridium/manager', 'initializing files')
+    this.files = new FilesManager(this)
 
     logger.log('iridium/manager', 'ready')
     await this.friends.init()

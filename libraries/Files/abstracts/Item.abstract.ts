@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { Directory } from '../Directory'
 import { FileSystemErrors } from '../errors/Errors'
 import { ItemInterface } from '../interface/Item.interface'
-import { DIRECTORY_TYPE } from '../types/directory'
-import { FILE_TYPE } from '../types/file'
+import { FileType, DirectoryType } from '~/libraries/Enums/enums'
+
 import { Config } from '~/config'
 
 export abstract class Item implements ItemInterface {
@@ -13,7 +13,7 @@ export abstract class Item implements ItemInterface {
   private _liked: boolean = false
   private _shared: boolean = false
   private _modified: number
-  private _type: FILE_TYPE | DIRECTORY_TYPE
+  private _type: FileType | DirectoryType
   abstract modified: number
   abstract size: number
 
@@ -36,7 +36,7 @@ export abstract class Item implements ItemInterface {
     liked?: boolean
     parent?: Directory
     modified?: number
-    type?: FILE_TYPE | DIRECTORY_TYPE
+    type?: FileType | DirectoryType
   }) {
     if (this.constructor.name === 'Item')
       throw new Error(FileSystemErrors.ITEM_ABSTRACT_ONLY)
@@ -52,8 +52,8 @@ export abstract class Item implements ItemInterface {
     this._type =
       type ||
       (this.constructor.name === 'Fil'
-        ? FILE_TYPE.GENERIC
-        : DIRECTORY_TYPE.DEFAULT)
+        ? FileType.GENERIC
+        : DirectoryType.DEFAULT)
   }
 
   /**
@@ -112,7 +112,7 @@ export abstract class Item implements ItemInterface {
    * @getter type
    * @returns file type in plain text
    */
-  get type(): FILE_TYPE | DIRECTORY_TYPE {
+  get type(): FileType | DirectoryType {
     return this._type
   }
 
@@ -149,7 +149,7 @@ export abstract class Item implements ItemInterface {
   private validateParent(parent: Directory | null): boolean {
     // In the future we may want shared directory types and more
     return (
-      parent !== null && (parent as Directory).type === DIRECTORY_TYPE.DEFAULT
+      parent !== null && (parent as Directory).type === DirectoryType.DEFAULT
     )
   }
 

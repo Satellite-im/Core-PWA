@@ -4,7 +4,7 @@ import { Config } from '~/config'
 import { Fil } from '~/libraries/Files/Fil'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
-import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
+import { DirectoryType } from '~/libraries/Enums/enums'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import * as actions from '~/store/textile/actions'
 import * as Logger from '~/utilities/Logger'
@@ -31,7 +31,7 @@ describe('actions.default.initialize', () => {
         name: 'dir',
         liked: false,
         shared: false,
-        type: DIRECTORY_TYPE.DEFAULT,
+        type: DirectoryType.DEFAULT,
       }
 
       const file = new Fil(mockFileData)
@@ -88,7 +88,7 @@ describe('actions.default.initialize', () => {
         name: 'dir4',
         liked: false,
         shared: false,
-        type: DIRECTORY_TYPE.DEFAULT,
+        type: DirectoryType.DEFAULT,
       }
 
       const file = new Fil(mockFileData)
@@ -150,7 +150,7 @@ describe('actions.default.initialize', () => {
         name: 'dir1',
         liked: false,
         shared: false,
-        type: DIRECTORY_TYPE.DEFAULT,
+        type: DirectoryType.DEFAULT,
       }
 
       const file = new Fil(mockFileData)

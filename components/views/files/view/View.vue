@@ -11,7 +11,7 @@ import {
   LinkIcon,
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
-import { Fil } from '~/libraries/Files/Fil'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -22,14 +22,9 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  data() {
-    return {
-      file: undefined as Fil | undefined,
-    }
-  },
   computed: {
     ...mapState({
-      filePreview: (state) => (state as RootState).ui.filePreview,
+      file: (state) => (state as RootState).ui.filePreview,
       fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
       blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
@@ -40,8 +35,8 @@ export default Vue.extend({
         : false
     },
   },
-  beforeMount() {
-    this.file = this.filePreview
+  mounted() {
+    if (this.$refs.modal) (this.$refs.modal as HTMLElement).focus()
   },
   methods: {
     /**
@@ -51,28 +46,28 @@ export default Vue.extend({
      * also takes a bit to get started for large files, this adds loading indicator
      */
     async download() {
-      if (this.file) {
-        this.$store.commit('ui/addFileDownload', this.file.name)
-        const fileExt = this.file.name
-          .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
-          .toLowerCase()
-
-        await this.$TextileManager.personalBucket?.pullFile(
-          this.file.id,
-          this.file.extension === fileExt
-            ? this.file.name
-            : (this.file.name += `.${this.file.extension}`),
-          this.file.size,
-        )
-        this.$store.commit('ui/removeFileDownload', this.file.name)
+      // assign variable in case the user closes modal and removes store value before download is finished
+      const file = this.file
+      if (file) {
+        this.$store.commit('ui/addFileDownload', file.name)
+        await iridium.files?.download(file)
+        this.$store.commit('ui/removeFileDownload', file.name)
       }
     },
     /**
      * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @description copy link to clipboard
      */
-    share() {
-      this.$emit('share', this.file)
+    // async share() {
+    //   this.$toast.show(this.$t('todo - share') as string)
+    // },
+    /**
+     * @method closeFilePreview
+     * @description Close File Preview
+     * @example
+     */
+    close() {
+      this.$store.commit('ui/setFilePreview', undefined)
     },
   },
 })

@@ -1,7 +1,7 @@
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemErrors } from './errors/Errors'
 
-import { FILE_TYPE } from './types/file'
+import { FileType } from '~/libraries/Enums/enums'
 
 export class Fil extends Item {
   private _description: string = ''
@@ -35,7 +35,7 @@ export class Fil extends Item {
     shared?: boolean
     modified?: number
     description?: string
-    type?: FILE_TYPE
+    type?: FileType
     thumbnail?: string
     extension?: string
     nsfw: boolean
@@ -74,7 +74,7 @@ export class Fil extends Item {
       liked: this.liked,
       shared: this.shared,
       description: this.description,
-      type: this.type as FILE_TYPE,
+      type: this.type as FileType,
       thumbnail: this.thumbnail,
       extension: this.extension,
       nsfw: this._nsfw,

@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import Vue from 'vue'
 import skaler from 'skaler'
 import { FilSystem } from './FilSystem'
-import { FILE_TYPE } from './types/file'
 import { PersonalBucket } from './remote/textile/PersonalBucket'
+import { FileType } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
 import { mimeType, isHeic, isMimeEmbeddableImage } from '~/utilities/FileType'
@@ -30,14 +30,14 @@ export class TextileFileSystem extends FilSystem {
     const id = uuidv4()
     await this.bucket.pushFile(file, id, progressCallback)
     // read magic byte type, use metadata as backup
-    const byteType = (await mimeType(file)) as FILE_TYPE
+    const byteType = (await mimeType(file)) as FileType
     const type = byteType || file.type
 
     this.createFile({
       id,
       name: file.name,
       size: file.size,
-      type: Object.values(FILE_TYPE).includes(type) ? type : FILE_TYPE.GENERIC,
+      type: Object.values(FileType).includes(type) ? type : FileType.GENERIC,
       thumbnail: await this._createThumbnail(file, byteType),
       nsfw,
     })
@@ -60,7 +60,7 @@ export class TextileFileSystem extends FilSystem {
    */
   private async _createThumbnail(
     file: File,
-    type: FILE_TYPE,
+    type: FileType,
   ): Promise<string | undefined> {
     if (await isHeic(file)) {
       const buffer = new Uint8Array(await file.arrayBuffer())
@@ -83,7 +83,7 @@ export class TextileFileSystem extends FilSystem {
       return
     }
     // svg cannot be used with skaler, set thumbnail based on full size
-    if (type === FILE_TYPE.SVG) {
+    if (type === FileType.SVG) {
       return blobToBase64(file)
     }
     if (await this._tooLarge(file)) {

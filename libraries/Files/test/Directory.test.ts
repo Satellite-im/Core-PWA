@@ -1,9 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { Directory } from '../Directory'
 import { Fil } from '../Fil'
-import { DIRECTORY_TYPE } from '../types/directory'
 import { FileSystemErrors } from '../errors/Errors'
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileSortEnum, DirectoryType } from '~/libraries/Enums/enums'
 
 Date.now = jest.fn(() => 1645617999076)
 const dateNow = Date.now()
@@ -24,7 +23,7 @@ describe('Test FileSystem Directory', () => {
     name: 'Test Directory',
     liked: false,
     shared: false,
-    type: DIRECTORY_TYPE.DEFAULT,
+    type: DirectoryType.DEFAULT,
   }
 
   const file = new Fil(mockFileData)
@@ -85,7 +84,7 @@ describe('Test FileSystem Directory', () => {
       name: 'Test Directory',
       liked: false,
       shared: false,
-      type: DIRECTORY_TYPE.DEFAULT,
+      type: DirectoryType.DEFAULT,
       modified: 1647250139467,
     }
     const directoryTwo = new Directory(mockDirTwo)

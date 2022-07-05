@@ -14,6 +14,8 @@ import {
   FileSortEnum,
   FileIconsEnum,
   FileAsideRouteEnum,
+  FileType,
+  DirectoryType,
 } from '~/libraries/Enums/types/files'
 import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 
@@ -34,4 +36,6 @@ export {
   FileSortEnum,
   FileIconsEnum,
   FileAsideRouteEnum,
+  FileType,
+  DirectoryType,
 }

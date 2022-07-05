@@ -23,7 +23,6 @@
       :text="$t('pages.files.controls.new_file')"
       size="small"
       :action="addFile"
-      :loading="isFilesIndexLoading"
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
@@ -34,7 +33,6 @@
       type="primary"
       :action="addFolder"
       :placeholder="$t('pages.files.controls.name_folder')"
-      :loading="isFilesIndexLoading"
     >
       <folder-plus-icon size="1.3x" />
     </InteractablesInputGroup>
@@ -43,7 +41,7 @@
       type="file"
       @click="resetFileUpload"
       @change="handleInput"
-      style="width: 0; height: 0"
+      style="display: none"
       multiple
     />
   </div>

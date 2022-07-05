@@ -2,7 +2,7 @@ import { isEqual } from 'lodash'
 import { Item } from './abstracts/Item.abstract'
 import { FileSystemErrors } from './errors/Errors'
 import { Fil } from './Fil'
-import { DIRECTORY_TYPE } from './types/directory'
+import { DirectoryType } from '~/libraries/Enums/enums'
 
 export class Directory extends Item {
   private _children = new Map()
@@ -25,7 +25,7 @@ export class Directory extends Item {
     liked?: boolean
     shared?: boolean
     modified?: number
-    type?: DIRECTORY_TYPE
+    type?: DirectoryType
   }) {
     super({
       id,
@@ -75,7 +75,7 @@ export class Directory extends Item {
       name: `${this.name} copy`,
       liked: this.liked,
       shared: this.shared,
-      type: this.type as DIRECTORY_TYPE,
+      type: this.type as DirectoryType,
     })
 
     this.content.forEach((item) => {

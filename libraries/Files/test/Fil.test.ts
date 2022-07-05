@@ -1,5 +1,5 @@
 import { Fil } from '../Fil'
-import { FILE_TYPE } from '../types/file'
+import { FileType } from '~/libraries/Enums/enums'
 
 describe('Test FileSystem File', () => {
   const mockFileData = {
@@ -15,8 +15,8 @@ describe('Test FileSystem File', () => {
     expect(file.name).toEqual(mockFileData.name))
   it(`Correctly returns a file description (${mockFileData.description})`, () =>
     expect(file.description).toEqual(mockFileData.description))
-  it(`Correctly returns a file type (${FILE_TYPE.GENERIC})`, () =>
-    expect(file.type).toEqual(FILE_TYPE.GENERIC))
+  it(`Correctly returns a file type (${FileType.GENERIC})`, () =>
+    expect(file.type).toEqual(FileType.GENERIC))
   it(`Correctly returns a file id (${mockFileData.id})`, () =>
     expect(file.id).toEqual(mockFileData.id))
   it(`Correctly returns a file size (${mockFileData.size})`, () =>

@@ -141,6 +141,7 @@
     "fp-ts": "^2.11.8",
     "husky": ">=6",
     "io-ts": "^2.2.16",
+    "ipfs-core-types": "^0.11.1",
     "jest": "^27.5.1",
     "jest-canvas-mock": "^2.3.1",
     "jest-fetch-mock": "^3.0.3",

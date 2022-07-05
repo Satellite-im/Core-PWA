@@ -1,5 +1,5 @@
 import { Fil } from '~/libraries/Files/Fil'
-import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
+import { DirectoryType } from '~/libraries/Enums/enums'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
@@ -3105,7 +3105,7 @@ describe('mutations', () => {
       name: 'Test Directory',
       liked: false,
       shared: false,
-      type: DIRECTORY_TYPE.DEFAULT,
+      type: DirectoryType.DEFAULT,
     }
     mutations.default.setRenameItem(localizedState, mockDirectoryData)
     expect(localizedState.renameItem).toBe(mockDirectoryData)

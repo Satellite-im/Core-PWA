@@ -1,8 +1,8 @@
 import { Fil } from '../Fil'
 import { FilSystem } from '../FilSystem'
 import { PersonalBucket } from '../remote/textile/PersonalBucket'
-import { DIRECTORY_TYPE } from '../types/directory'
-import { FILESYSTEM_TYPE, PersonalBucketIndex } from '../types/filesystem'
+import { PersonalBucketIndex } from '../types/filesystem'
+import { DirectoryType } from '~/libraries/Enums/enums'
 
 const mockFileData = {
   name: 'TestFile.png',
@@ -15,25 +15,13 @@ const mockDirectoryData = {
   name: 'dir',
   liked: false,
   shared: false,
-  type: DIRECTORY_TYPE.DEFAULT,
+  type: DirectoryType.DEFAULT,
 }
 
 const file = new Fil(mockFileData)
 const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
 
 describe('Test FileSystem Directory', () => {
-  it('export file system and update version number', () => {
-    const fs = new FilSystem()
-
-    fs.addChild(file)
-    fs.createDirectory(mockDirectoryData)
-    fs.openDirectory('dir')
-    fs.addChild(file2)
-
-    const ex: PersonalBucketIndex = fs.export
-
-    expect(ex.version + 1).toEqual(fs.export.version)
-  })
   it('get uninitialized index', () => {
     const initializationData = {
       identity: 'Identity',
@@ -44,7 +32,6 @@ describe('Test FileSystem Directory', () => {
     const bucket = new PersonalBucket(initializationData)
 
     expect(bucket.index).toStrictEqual({
-      type: FILESYSTEM_TYPE.DEFAULT,
       version: 1,
       content: [],
     })

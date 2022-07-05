@@ -1,33 +1,20 @@
 import { matchSorter } from 'match-sorter'
-import { FileSortEnum } from '../Enums/enums'
 import { Directory } from './Directory'
-import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
-import {
-  PersonalBucketIndex,
-  ExportItem,
-  FILESYSTEM_TYPE,
-  ExportFile,
-  ExportDirectory,
-} from './types/filesystem'
-import { FILE_TYPE } from './types/file'
 import { Config } from '~/config'
 import { FileSort } from '~/store/ui/types'
+import { FileType, FileSortEnum, DirectoryType } from '~/libraries/Enums/enums'
+import {
+  ExportDirectory,
+  ExportFile,
+  ExportItem,
+} from '~/libraries/Iridium/files/types'
 
 export class FilSystem {
   private _self = new Directory({ name: 'root' })
   private _currentDirectory = this._self
   private _currentDirectoryPath = [this._currentDirectory] // as stack
-  private _version: number = 1
-
-  /**
-   * @getter version
-   * @returns {number} current version
-   */
-  get version(): number {
-    return this._version
-  }
 
   /**
    * @getter currentDirectory
@@ -95,16 +82,12 @@ export class FilSystem {
 
   /**
    * @getter export
-   * @returns {PersonalBucketIndex} returns exported filesystem object
+   * @returns {ExportItem[]} returns exported filesystem object
    */
-  get export(): PersonalBucketIndex {
-    return {
-      type: FILESYSTEM_TYPE.DEFAULT,
-      version: ++this._version,
-      content: this.root.content.map((item) => {
-        return this.exportChildren(item)
-      }),
-    }
+  get export(): ExportItem[] {
+    return this.root.content.map((item) => {
+      return this.exportChildren(item)
+    })
   }
 
   /**
@@ -245,11 +228,10 @@ export class FilSystem {
    * @param {PersonalBucketIndex} fs
    * @description sets global file system based on parameter. will be fetched from Bucket
    */
-  public async import(fs: PersonalBucketIndex) {
-    for (const item of fs.content) {
+  public async import(content: ExportItem[]) {
+    for (const item of content) {
       await this.importChildren(item)
     }
-    this._version = fs.version
   }
 
   /**
@@ -258,7 +240,7 @@ export class FilSystem {
    * @description recursively adds files and directories from JSON export
    */
   public async importChildren(item: ExportItem) {
-    if ((Object.values(FILE_TYPE) as string[]).includes(item.type)) {
+    if ((Object.values(FileType) as string[]).includes(item.type)) {
       const {
         id,
         name,
@@ -271,7 +253,7 @@ export class FilSystem {
         extension,
         nsfw,
       } = item as ExportFile
-      const type = item.type as FILE_TYPE
+      const type = item.type as FileType
       this.createFile({
         id,
         name,
@@ -286,10 +268,10 @@ export class FilSystem {
         nsfw,
       })
     }
-    if ((Object.values(DIRECTORY_TYPE) as string[]).includes(item.type)) {
+    if ((Object.values(DirectoryType) as string[]).includes(item.type)) {
       const { id, name, liked, shared, children, modified } =
         item as ExportDirectory
-      const type = item.type as DIRECTORY_TYPE
+      const type = item.type as DirectoryType
       this.createDirectory({ id, name, liked, shared, type, modified })
       this.openDirectory(name)
       for (const item of children) {
@@ -323,7 +305,7 @@ export class FilSystem {
     liked?: boolean
     shared?: boolean
     description?: string
-    type?: FILE_TYPE
+    type?: FileType
     modified?: number
     thumbnail?: string
     extension?: string
@@ -349,7 +331,7 @@ export class FilSystem {
   /**
    * @method createDirectory
    * @argument {string} dirName name of the new directory to create
-   * @argument {type} DIRECTORY_TYPE Default for now
+   * @argument {type} DirectoryType Default for now
    * @returns {Directory | null} Returns the new directory if successfully created, else null
    */
   public createDirectory({
@@ -364,7 +346,7 @@ export class FilSystem {
     name: string
     liked?: boolean
     shared?: boolean
-    type?: DIRECTORY_TYPE
+    type?: DirectoryType
     modified?: number
   }): Directory | null {
     const newDir = new Directory({ id, name, liked, shared, type, modified })
@@ -688,3 +670,6 @@ export class FilSystem {
     return null
   }
 }
+
+const instance = new FilSystem()
+export default instance

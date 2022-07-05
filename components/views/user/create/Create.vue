@@ -6,8 +6,7 @@ import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
 import blobToBase64 from '~/utilities/BlobToBase64'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
-import { PlatformTypeEnum } from '~/libraries/Enums/enums'
+import { FileType, PlatformTypeEnum } from '~/libraries/Enums/enums'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -49,15 +48,15 @@ export default Vue.extend({
       return this.$envinfo.currentPlatform === PlatformTypeEnum.IOS
         ? 'image/*'
         : [
-            FILE_TYPE.APNG,
-            FILE_TYPE.AVIF,
-            FILE_TYPE.GIF,
-            FILE_TYPE.JPG,
-            FILE_TYPE.PNG,
-            FILE_TYPE.WEBP,
-            FILE_TYPE.SVG,
-            FILE_TYPE.HEIC,
-            FILE_TYPE.HEIF,
+            FileType.APNG,
+            FileType.AVIF,
+            FileType.GIF,
+            FileType.JPG,
+            FileType.PNG,
+            FileType.WEBP,
+            FileType.SVG,
+            FileType.HEIC,
+            FileType.HEIF,
           ].join(',')
     },
   },

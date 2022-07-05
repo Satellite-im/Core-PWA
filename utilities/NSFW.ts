@@ -2,7 +2,8 @@ import * as nsfwjs from 'nsfwjs'
 import skaler from 'skaler'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { DirectoryType, FileType } from '~/libraries/Enums/enums'
+
 import { mimeType } from '~/utilities/FileType'
 
 /**
@@ -12,20 +13,20 @@ import { mimeType } from '~/utilities/FileType'
  * @returns {Promise} nsfw status
  */
 export default async function isNSFW(file: File): Promise<boolean> {
-  const vidTypes = [FILE_TYPE.MP4, FILE_TYPE.MOV, FILE_TYPE.WEBM, FILE_TYPE.OGV]
+  const vidTypes = [FileType.MP4, FileType.MOV, FileType.WEBM, FileType.OGV]
   const imgTypes = [
-    FILE_TYPE.APNG,
-    FILE_TYPE.AVIF,
-    FILE_TYPE.GIF,
-    FILE_TYPE.JPG,
-    FILE_TYPE.PNG,
-    FILE_TYPE.SVG,
-    FILE_TYPE.WEBP,
+    FileType.APNG,
+    FileType.AVIF,
+    FileType.GIF,
+    FileType.JPG,
+    FileType.PNG,
+    FileType.SVG,
+    FileType.WEBP,
   ]
   const mime = await mimeType(file)
 
   // if unscannable/unembeddable type
-  if (![...vidTypes, ...imgTypes].includes(mime as FILE_TYPE)) {
+  if (![...vidTypes, ...imgTypes].includes(mime as FileType)) {
     return false
   }
 

@@ -6,9 +6,9 @@ import { mapGetters } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
-import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FileSort } from '~/store/ui/types'
+import fileSystem from '~/libraries/Files/FilSystem'
 
 export default Vue.extend({
   name: 'Files',
@@ -17,7 +17,7 @@ export default Vue.extend({
     return {
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
-      fileSystem: this.$FileSystem as FilSystem,
+      fileSystem,
     }
   },
   computed: {

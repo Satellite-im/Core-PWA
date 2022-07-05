@@ -12,6 +12,7 @@ import {
 import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+import fileSystem from '~/libraries/Files/FilSystem'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -51,19 +52,19 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
-        return
-      }
+      // if (!this.consentToScan) {
+      //   this.$toast.error(
+      //     this.$t('pages.files.errors.enable_consent') as string,
+      //     {
+      //       duration: 3000,
+      //     },
+      //   )
+      //   this.$store.commit('ui/toggleSettings', {
+      //     show: true,
+      //     defaultRoute: SettingsRoutes.PRIVACY,
+      //   })
+      //   return
+      // }
       if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
     },
 
@@ -87,14 +88,14 @@ export default Vue.extend({
         this.$t('pages.files.status.index'),
       )
       try {
-        this.$FileSystem.createDirectory({ name: this.text })
+        fileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
         this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
-      await this.$store.dispatch('textile/exportFileSystem')
+      // await this.$store.dispatch('textile/exportFileSystem')
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       this.$emit('forceRender')
@@ -174,11 +175,7 @@ export default Vue.extend({
             'ui/setFilesUploadStatus',
             this.$t('pages.files.status.upload', [file.file.name]),
           )
-          await this.$FileSystem.uploadFile(
-            file.file,
-            file.nsfw,
-            this.setProgress,
-          )
+          await this.$store.dispatch('iridium/uploadFile', file)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -190,7 +187,7 @@ export default Vue.extend({
           'ui/setFilesUploadStatus',
           this.$t('pages.files.status.index'),
         )
-        await this.$store.dispatch('textile/exportFileSystem')
+        // await this.$store.dispatch('textile/exportFileSystem')
       }
 
       this.$store.commit('ui/setFilesUploadStatus', '')
