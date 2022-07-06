@@ -34,7 +34,7 @@
       :text="$t('pages.settings.audio.sources.input.subtitle')"
     >
       <InteractablesSelect
-        v-model="isAudioInput"
+        v-model="selectedAudioInput"
         :options="audioInputs"
         :label="$t('pages.settings.audio.sources.input.title')"
       />
@@ -46,7 +46,7 @@
     >
       <InteractablesSelect
         v-if="browserAllowsAudioOut"
-        v-model="isAudioOutput"
+        v-model="selectedAudioOutput"
         :options="audioOutputs"
         :label="$t('pages.settings.audio.sources.output.title')"
       />

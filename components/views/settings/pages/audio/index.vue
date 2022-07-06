@@ -100,7 +100,7 @@ export default Vue.extend({
         return this.settings.sampleSize
       },
     },
-    isAudioInput: {
+    selectedAudioInput: {
       set(state) {
         this.$store.commit('settings/audioInput', state)
       },
@@ -108,7 +108,7 @@ export default Vue.extend({
         return this.settings.audioInput
       },
     },
-    isAudioOutput: {
+    selectedAudioOutput: {
       set(state) {
         this.$store.commit('settings/audioOutput', state)
         this.setConstraint('volume', state)
@@ -268,10 +268,11 @@ export default Vue.extend({
 
         // Setting defaults on mount if one isn't already present in local storage
         if (!this.settings.audioInput) {
-          this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
+          this.selectedAudioInput = permissionsObject.devices.audioIn[0]?.value // chrome, ffx, and safari all support the audioIn object
         }
         if (!this.settings.audioOutput) {
-          this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+          this.selectedAudioOutput =
+            permissionsObject.devices.audioOut[0]?.value
         }
 
         if (!this.$data.stream) {
@@ -287,14 +288,15 @@ export default Vue.extend({
         this.$data.userHasGivenVideoAccess =
           permissionsObject.permissions.webcam
         if (!this.settings.videoInput) {
-          this.isVideoInput = permissionsObject.devices.videoIn[0].value
+          this.isVideoInput = permissionsObject.devices.videoIn[0]?.value
         }
       }
 
       if (permissionsObject.browser !== 'Chrome') {
         this.$data.browserAllowsAudioOut = false
       } else if (!this.settings.audioOutput) {
-        this.isAudioOutput = permissionsObject.devices.audioOut[0]?.value || ''
+        this.selectedAudioOutput =
+          permissionsObject.devices.audioOut[0]?.value || ''
       }
     },
     /**
