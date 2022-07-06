@@ -15,6 +15,7 @@ export default Vue.extend({
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
       conversationLoading: (state) =>
+        !(state as RootState).textile.initialized ||
         (state as RootState).textile.conversationLoading,
     }),
     ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),

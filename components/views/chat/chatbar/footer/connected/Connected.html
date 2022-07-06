@@ -1,9 +1,4 @@
-<div class="is-connected">
-  <circle-icon
-    class="status"
-    :class="connectedStatus"
-    size="1x"
-    v-if="participantsText.length && !conversationLoading"
-  />
+<div class="is-connected" v-if="!conversationLoading">
+  <circle-icon class="status" :class="connectedStatus" size="1x" />
   <TypographyText :text="participantsText" data-cy="user-connected" :size="6" />
 </div>
