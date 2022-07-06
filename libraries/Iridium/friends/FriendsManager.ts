@@ -120,7 +120,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const did = Iridium.peerIdToDID(from)
     const request = await this.getRequest(did).catch(() => undefined)
     if (!request && status === 'pending') {
-      await this.requestCreate(did, true)
+      await this.requestCreate(did, true, user)
     } else if (request) {
       request.status = status
       await this.requestSave(did, request, true)
@@ -187,7 +187,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     return this.iridium.connector?.broadcast(`/friends/announce`, event)
   }
 
-  async requestCreate(remotePeerDID: string, incoming = false) {
+  async requestCreate(remotePeerDID: string, incoming = false, user: User) {
     if (this.isFriend(remotePeerDID)) {
       logger.error('iridium/friends', 'already a friend', { remotePeerDID })
       throw new Error(FriendsError.FRIEND_EXISTS)
@@ -201,7 +201,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       incoming,
     })
     const request: FriendRequest = {
-      user: { did: remotePeerDID, name: remotePeerDID },
+      user: user || { did: remotePeerDID, name: remotePeerDID },
       status: 'pending',
       incoming,
       at: Date.now(),
@@ -221,6 +221,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.set(`/requests/${remotePeerDID}`, request)
     if (!incoming) {
       await this.requestSend(remotePeerDID)
+    }
+    const { user, status } = request
+    if (user && status === 'accepted') {
+      await this.add(user)
     }
     this.emit('request/changed', request) // TODO: separate event for create?
     return request
@@ -283,18 +287,23 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   async add(user: User) {
-    if (!this.iridium.connector) {
-      throw new Error(FriendsError.NETWORK_ERROR)
-    }
-    if (this.isFriend(user.did)) {
-      throw new Error(`already friends with ${user.did}`)
-    }
     if (!this.state.list) {
       this.state.list = []
     }
     if (!this.state.details) {
       this.state.details = {}
     }
+
+    if (!this.iridium.connector) {
+      throw new Error(FriendsError.NETWORK_ERROR)
+    }
+    if (
+      this.isFriend(user.did) &&
+      this.state.details[user.did].name === user.name
+    ) {
+      throw new Error(`already friends with ${user.did}`)
+    }
+
     this.state.list.push(user.did)
     this.state.details[user.did] = user
     const pid = user.peerId || (await Iridium.DIDToPeerId(user.did))
