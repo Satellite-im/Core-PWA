@@ -23,6 +23,11 @@ export default Vue.extend({
     isEmbeddable(): boolean {
       return isMimeEmbeddableImage(this.file.type)
     },
+    fileDescription(): string {
+      return this.file.type
+        ? `${this.getFileSize} - ${this.file.type}`
+        : this.getFileSize
+    },
   },
   methods: {
     download() {
