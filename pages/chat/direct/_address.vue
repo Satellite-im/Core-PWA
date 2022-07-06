@@ -16,6 +16,7 @@ export default Vue.extend({
   data() {
     return {
       messages: [],
+      replies: [],
     }
   },
   computed: {
