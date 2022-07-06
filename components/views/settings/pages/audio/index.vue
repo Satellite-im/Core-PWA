@@ -247,7 +247,6 @@ export default Vue.extend({
      */
     async setupDefaults() {
       const permissionsObject: any = await this.getUserPermissions()
-      console.log('permissionsObject', permissionsObject)
 
       // Toggles the show/hide on the button to request permissions
       this.$data.userHasGivenAudioAccess =
