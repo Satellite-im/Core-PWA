@@ -17,6 +17,7 @@ export default Vue.extend({
   data() {
     return {
       messages: [],
+      replies: [],
     }
   },
   computed: {
@@ -39,10 +40,10 @@ export default Vue.extend({
       return groupMessages(messages, replies, reactions)
     },
     // Get the active friend
-    // friend() {
-    //   const { address } = this.$route.params
-    //   return address
-    // },
+    friend() {
+      const { address } = this.$route.params
+      return address
+    },
   },
   watch: {
     // friend(friend: Friend | undefined) {
@@ -87,13 +88,12 @@ export default Vue.extend({
     // },
   },
   async mounted() {
-    await iridium.chat.subscribeToConversation(
-      this.$route.params.address,
-      async (event) => {
+    if (this.friend) {
+      await iridium.chat.subscribeToConversation(this.friend, async (event) => {
         const message = await iridium.connector.load(event.message)
         this.messages.push(message)
-      },
-    )
+      })
+    }
   },
 })
 </script>

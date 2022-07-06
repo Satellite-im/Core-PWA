@@ -172,6 +172,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @param message Message to be sent
    */
   async sendMessage(id: string, message: ConversationMessage) {
+    console.log('debug: | ChatManager | sendMessage | id', id)
     if (!this.iridium.connector) return
     const conversation = await this.getConversation(id)
     if (!conversation) {
@@ -186,21 +187,26 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     const messageCID = messageID.toString()
     await this.iridium.connector.set(
-      `/chat/conversation/messages`,
+      `/chat/conversation/${id}/messages`,
       conversation.messages,
     )
     await this.iridium.connector.set(
-      `/chat/conversation/message/${messageCID}`,
+      `/chat/conversation/${id}/message/${messageCID}`,
       message,
     )
     await this.iridium.connector.broadcast(`/chat/conversation/${id}`, {
       action: 'message',
       message: messageCID,
     })
+    await this.iridium.connector.send(conversation, {
+      to: await Promise.all(
+        conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+      ),
+    })
     this.emit(`conversation/${id}`, {
       action: 'message',
       message: messageCID,
-      from: this.iridium.connector.did,
+      from: this.iridium.connector.id,
     })
   }
 }

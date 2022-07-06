@@ -219,9 +219,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
     await this.set(`/requests/${friendId}`, request)
     this.emit('request/changed', request)
-
+    const usr = user || existing.user || { did: friendId, name: friendId }
     if (user && status === 'accepted' && !this.isFriend(friendId)) {
-      await this.addFriend(user)
+      await this.addFriend(usr)
     }
     if (existing.status === status) {
       return
@@ -259,6 +259,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
     this.state.list.push(user.did)
     this.state.details[user.did] = user
+    await this.iridium.connector.followPeer(user.peerId)
     await this.set(`/details/${user.did}`, user)
     return this.set('/list', this.state.list)
   }
@@ -281,6 +282,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   async acceptFriendRequest(friendId: string) {
+    console.log('accepting a request...', friendId)
     return this.updateFriendRequest(friendId, 'accepted')
   }
 

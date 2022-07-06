@@ -289,9 +289,8 @@ export default Vue.extend({
         // sendMessage to friend
 
         // await iridium.chat?.sendMessage(this.recipient.address, value)
-        const profile = await iridium.profile?.get()
         await iridium.chat?.sendMessage(this.recipient?.did, {
-          from: profile.did,
+          from: iridium.connector.id,
           type: 'direct',
           body: value,
           conversation: value,

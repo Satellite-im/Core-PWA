@@ -153,10 +153,9 @@ export default Vue.extend({
         return
       }
 
-      const profile = await iridium.profile?.get()
       await iridium.chat?.createConversation(this.user?.name, 'direct', [
         this.user?.did,
-        profile.did,
+        iridium.connector.id,
       ])
 
       // this.$store.dispatch('conversation/setConversation', {
