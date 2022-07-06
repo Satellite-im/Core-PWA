@@ -54,10 +54,16 @@ export default Vue.extend({
         this.error = this.$t('friends.already_friend') as string
       }
 
-      this.user = {
-        did: friendId,
-        name: friendId,
-        status: 'offline',
+      try {
+        const request = await iridium.friends?.requestCreate(friendId)
+        this.user = {
+          did: friendId,
+          name: friendId,
+          status: 'offline',
+        }
+        this.request = request
+      } catch (error) {
+        this.error = this.$t('friends.invalid_id') as string
       }
 
       this.searching = false
