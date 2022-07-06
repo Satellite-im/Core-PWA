@@ -1,5 +1,5 @@
 <template>
-  <div id="friends-list" v-scroll-lock="true">
+  <div id="friends-list">
     <div class="top-bar">
       <menu-icon
         size="1.2x"
@@ -103,7 +103,6 @@ import { RootState } from '~/types/store/store'
 import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
-  name: 'FriendsList',
   components: {
     MenuIcon,
     UserPlusIcon,

@@ -1,5 +1,5 @@
 <template>
-  <div id="friends-incoming-list" v-scroll-lock="true">
+  <div id="friends-incoming-list">
     <div class="top-bar">
       <arrow-left-icon
         size="1.2x"
@@ -91,7 +91,6 @@ declare module 'vue/types/vue' {
   }
 }
 export default Vue.extend({
-  name: 'FriendsList',
   components: {
     ArrowLeftIcon,
   },
@@ -206,9 +205,10 @@ export default Vue.extend({
 }
 
 #friends-incoming-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   margin-top: @normal-spacing;
-  height: calc(var(--app-height) - @sidebar-inner-offset);
-  width: 100%;
   .top-bar {
     flex-flow: row;
     display: flex;
