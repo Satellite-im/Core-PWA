@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
@@ -42,7 +43,8 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
-      timestampRefreshInterval: null,
+      timestamp: '' as string | TranslateResult,
+      timeoutId: undefined as NodeJS.Timeout | undefined,
     }
   },
   computed: {
@@ -53,7 +55,7 @@ export default Vue.extend({
       conversations: (state) => (state as RootState).textile?.conversations,
     }),
     ...mapGetters('textile', ['getConversation']),
-    ...mapGetters('settings', ['getTimestamp']),
+    ...mapGetters('settings', ['getTimestamp', 'getDate']),
     contextMenuValues(): ContextMenuItem[] {
       return this.user.state === 'online'
         ? [
@@ -96,12 +98,15 @@ export default Vue.extend({
       }
       return '99+'
     },
-    timestamp(): string {
-      return this.getTimestamp({
-        time: this.conversations[this.user.did]?.lastUpdate,
-      })
-    },
   },
+  // watch: {
+  //   user: {
+  //     handler() {
+  //       this.setTimestamp()
+  //     },
+  //     deep: true,
+  //   },
+  // },
   mounted() {
     Array.from(
       (this.$refs.subtitle as HTMLElement).getElementsByClassName(
@@ -114,9 +119,10 @@ export default Vue.extend({
         spoiler.classList.add('spoiler-open')
       })
     })
+    // this.setTimestamp()
   },
   beforeDestroy() {
-    clearInterval(this.$data.timestampRefreshInterval)
+    // this.clearTimeoutId()
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
@@ -183,10 +189,6 @@ export default Vue.extend({
           return this.$t(`messaging.user_sent.${sender}`, {
             msgType: message.type,
           }) as string
-        case MessagingTypesEnum.IMAGE:
-          return this.$t(`messaging.user_sent_image.${sender}`, {
-            msgType: 'image',
-          }) as string
         default:
           return this.$t(`messaging.user_sent_something.${sender}`) as string
       }
@@ -218,6 +220,44 @@ export default Vue.extend({
     containsOnlyEmoji(str: string): boolean {
       return str.match(this.$Config.regex.isEmoji) !== null
     },
+    // /**
+    //  * @description set timestamp
+    //  * "now" for less than 30 sec
+    //  * "hh:mm AM/PM" between 31 sec and a day
+    //  * "yesterday" the day before
+    //  * "2d" 2 days before
+    //  * "MM/DD/YYYY" > 2 days before
+    //  */
+    // setTimestamp() {
+    //   // set now, update timestamp after 30s
+    //   if (this.$dayjs().diff(this.user.lastUpdate, 'second') < 30) {
+    //     this.clearTimeoutId()
+    //     this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
+    //     this.timestamp = this.$t('time.now')
+    //     return
+    //   }
+    //   if (this.$dayjs().isSame(this.user.lastUpdate, 'day')) {
+    //     this.timestamp = this.getTimestamp({ time: this.user.lastUpdate })
+    //   } else if (this.$dayjs().diff(this.user.lastUpdate, 'day') <= 1) {
+    //     this.timestamp = this.$t('time.yesterday')
+    //   } else if (this.$dayjs().diff(this.user.lastUpdate, 'day') <= 2) {
+    //     this.timestamp = '2 d'
+    //   } else {
+    //     this.timestamp = this.getDate(this.user.lastUpdate)
+    //   }
+    //   const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
+    //   this.clearTimeoutId()
+    //   // update timestamp at midnight tonight
+    //   this.timeoutId = setTimeout(
+    //     () => this.setTimestamp(),
+    //     midnight - Date.now(),
+    //   )
+    // },
+    // clearTimeoutId() {
+    //   if (this.timeoutId) {
+    //     clearTimeout(this.timeoutId)
+    //   }
+    // },
   },
 })
 </script>

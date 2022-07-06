@@ -38,6 +38,11 @@ export default {
     offline: '{name} is not connected',
     background_call: 'You are currently in a call with',
   },
+  time: {
+    now: 'now',
+    today: 'today',
+    yesterday: 'yesterday',
+  },
   wallet: {
     wallet: 'Wallet',
     send_money: 'Send Money',
@@ -637,8 +642,6 @@ export default {
       users: 'Users',
       conversations: 'Conversations',
       select_date: 'Select Date',
-      today: 'today',
-      yesterday: 'yesterday',
     },
   },
   media: {
@@ -710,12 +713,6 @@ export default {
     message: 'Message',
     options: 'Options',
     cancel: 'Cancel request',
-    details: {
-      now: 'now',
-      yesterday: 'yesterday',
-      days_short: 'd',
-      no_message: 'no message',
-    },
   },
   market_place: {
     title: 'Marketplace\nComing soon',
