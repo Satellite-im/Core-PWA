@@ -268,10 +268,10 @@ export default Vue.extend({
 
         // Setting defaults on mount if one isn't already present in local storage
         if (!this.settings.audioInput) {
-          this.isAudioInput = permissionsObject.devices.audioIn[0].value // chrome, ffx, and safari all support the audioIn object
+          this.isAudioInput = permissionsObject.devices.audioIn[0]?.value // chrome, ffx, and safari all support the audioIn object
         }
         if (!this.settings.audioOutput) {
-          this.isAudioOutput = permissionsObject.devices.audioOut[0].value
+          this.isAudioOutput = permissionsObject.devices.audioOut[0]?.value
         }
 
         if (!this.$data.stream) {
@@ -287,7 +287,7 @@ export default Vue.extend({
         this.$data.userHasGivenVideoAccess =
           permissionsObject.permissions.webcam
         if (!this.settings.videoInput) {
-          this.isVideoInput = permissionsObject.devices.videoIn[0].value
+          this.isVideoInput = permissionsObject.devices.videoIn[0]?.value
         }
       }
 
