@@ -1,4 +1,3 @@
-PagePage
 <template src="./Page.html"></template>
 
 <script lang="ts">
