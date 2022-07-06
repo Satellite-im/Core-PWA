@@ -1,22 +1,22 @@
-<div id="network-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle :size="6" :text="$t('pages.settings.network.title')" />
       <TypographySubtitle
         :size="6"
         :text="$t('pages.settings.network.subtitle')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <InteractablesSelect
         v-model="network"
         :label="$t('pages.settings.network.network')"
         :options="[{ text: 'Testnet', value: 'testnet' }]"
         show-label
       />
-    </div>
-  </div>
-</div>
+    </SettingsUnit>
+  </SettingsSection>
+</SettingsPage>
