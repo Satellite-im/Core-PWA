@@ -55,10 +55,7 @@ export default Vue.extend({
       }
 
       try {
-        const request = await iridium.friends?.createFriendRequest(
-          friendId,
-          'pending',
-        )
+        const request = await iridium.friends?.requestCreate(friendId)
         this.user = {
           did: friendId,
           name: friendId,

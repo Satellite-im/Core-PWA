@@ -6,7 +6,13 @@ import type {
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
 import type { IridiumManager } from '../IridiumManager'
-import { Friend, FriendRequest, FriendRequestStatus, User } from './types'
+import {
+  Friend,
+  FriendRequest,
+  FriendRequestStatus,
+  FriendsError,
+  User,
+} from './types'
 import logger from '~/plugins/local/logger'
 
 export type IridiumFriendEvent = {
@@ -81,29 +87,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       )
       Object.entries(this.state.requests).forEach(async ([did, request]) => {
         if (request.status === 'pending' && !request.incoming) {
-          logger.info(
-            'iridium/friends/init',
-            'connecting to requested friend',
-            { did, request },
-          )
-          const peerId = await Iridium.DIDToPeerId(did)
-          logger.info(
-            'iridium/friends',
-            'registering friendly peerId with iridium',
-            {
-              did,
-              peerId,
-            },
-          )
-          iridium.followPeer(peerId.toString())
-          // await iridium.ipfs.swarm.connect(peerId)
-          // remind remote user about the request
-          logger.info(
-            'iridium/friends/init',
-            'reminding potential friend of pending request',
-            { did, request },
-          )
-          await this.updateFriendRequest(did, 'pending')
+          await this.requestSend(did)
         }
       })
     }
@@ -128,29 +112,29 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   ) {
     const { from, payload } = message
     const { to, at, status, user } = payload
+    // if (Date.now() - at > 1000 * 60 * 60) {
+    //   logger.warn('iridium/friends', 'ignoring old friend activity')
+    //   return
+    // }
     if (to !== this.iridium.connector?.id) return
     const did = Iridium.peerIdToDID(from)
-    if (!['pending', 'accepted', 'rejected'].includes(status)) {
-      logger.warn('iridium/friends', 'invalid friend request status', {
-        from,
-        did,
-        status,
-      })
-      return
+    const request = await this.getRequest(did).catch(() => undefined)
+    if (!request && status === 'pending') {
+      await this.requestCreate(did, true)
+    } else if (request) {
+      request.status = status
+      await this.requestSave(did, request, true)
     }
-    logger.info('iridium/friends', 'received friend request', {
-      did,
-      from,
-      user,
-      status,
-    })
-    const existing = this.state.requests?.[did]
-    const incoming = status === 'pending' && !existing
-    await this.updateFriendRequest(did, status, user, incoming)
+    if (request && user) {
+      await this.requestSetUserData(did, user)
+    }
   }
 
-  get(path: string, options: IridiumGetOptions = {}) {
-    return this.iridium.connector?.get(
+  get<T = any>(path: string, options: IridiumGetOptions = {}): Promise<T> {
+    if (!this.iridium.connector) {
+      throw new Error(FriendsError.NETWORK_ERROR)
+    }
+    return this.iridium.connector?.get<T>(
       `/friends${path === '/' ? '' : path}`,
       options,
     )
@@ -187,8 +171,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     )
   }
 
-  getRequest(id: string) {
-    return this.get(`/requests/${id}`)
+  getRequest(id: string): Promise<FriendRequest> {
+    return this.get<FriendRequest>(`/requests/${id}`)
   }
 
   async send(event: IridiumFriendEvent) {
@@ -203,51 +187,105 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     return this.iridium.connector?.broadcast(`/friends/announce`, event)
   }
 
-  async updateFriendRequest(
-    friendId: string,
-    status: FriendRequestStatus,
-    user?: User,
-    incoming: boolean | undefined = undefined,
-  ) {
-    const existing = (await this.getRequest(friendId)) || {}
-    const request = {
-      ...existing,
-      user: user || existing?.user || {},
-      status,
-      incoming: incoming === undefined ? existing?.incoming || false : incoming,
-      at: Date.now(),
+  async requestCreate(remotePeerDID: string, incoming = false) {
+    if (this.isFriend(remotePeerDID)) {
+      logger.error('iridium/friends', 'already a friend', { remotePeerDID })
+      throw new Error(FriendsError.FRIEND_EXISTS)
     }
-    await this.set(`/requests/${friendId}`, request)
-    this.emit('request/changed', request)
-    const usr = user || existing.user || { did: friendId, name: friendId }
-    if (user && status === 'accepted' && !this.isFriend(friendId)) {
-      await this.addFriend(usr)
+    if (this.hasRequest(remotePeerDID)) {
+      logger.error('iridium/friends', 'request already exists')
+      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
     }
-    if (existing.status === status) {
-      return
-    }
-    // update the remote user with our details
-    const payload: any = {
-      status,
-      to: friendId,
-      at: Date.now(),
-    }
-    const profile = await this.iridium.profile?.get()
-    payload.user = {
-      did: this.iridium.connector?.id,
-      peerId: this.iridium.connector?.peerId,
-      name: profile.name,
-      photoHash: profile.photoHash,
-    }
-    logger.info('iridium/friends', 'sending friend request update', {
-      friendId,
-      payload,
+    logger.info('iridium/friends', 'creating friend request', {
+      remotePeerDID,
+      incoming,
     })
-    await this.send(payload)
+    const request: FriendRequest = {
+      user: { did: remotePeerDID, name: remotePeerDID },
+      status: 'pending',
+      incoming,
+      at: Date.now(),
+    }
+    return this.requestSave(remotePeerDID, request, incoming)
+  }
+
+  async requestSave(
+    remotePeerDID: string,
+    request: FriendRequest,
+    incoming = false,
+  ) {
+    logger.info('iridium/friends', 'saving friend request', {
+      remotePeerDID,
+      request,
+    })
+    await this.set(`/requests/${remotePeerDID}`, request)
+    if (!incoming) {
+      await this.requestSend(remotePeerDID)
+    }
+    this.emit('request/changed', request) // TODO: separate event for create?
     return request
   }
 
-  async addFriend(user: User) {
+  async requestSend(remotePeerDID: string) {
+    if (!this.iridium.connector) {
+      throw new Error(FriendsError.NETWORK_ERROR)
+    }
+    const request = await this.getRequest(remotePeerDID)
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+    const profile = await this.iridium.profile?.get()
+    if (!profile) {
+      throw new Error(FriendsError.NETWORK_ERROR)
+    }
+    const payload = {
+      to: remotePeerDID,
+      ...request,
+      user: {
+        did: this.iridium.connector.id,
+        peerId: this.iridium.connector.peerId,
+        name: profile.name,
+        photoHash: profile.photoHash,
+      },
+    }
+    logger.info('iridium/friends', 'sending friend request', {
+      remotePeerDID,
+      payload,
+    })
+    return this.send(payload)
+  }
+
+  async requestSetUserData(remotePeerDID: string, user: User) {
+    const request = await this.getRequest(remotePeerDID)
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+    request.user = user
+    return this.requestSave(remotePeerDID, request, true)
+  }
+
+  async requestReject(remotePeerDID: string, incoming = false) {
+    const request = await this.getRequest(remotePeerDID)
+    if (!request || request.status !== 'pending') {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+    request.status = 'rejected'
+    return this.requestSave(remotePeerDID, request, incoming)
+  }
+
+  async requestAccept(remotePeerDID: string, incoming = false) {
+    const request = await this.getRequest(remotePeerDID)
+    if (!request || request.status !== 'pending') {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+    request.status = 'accepted'
+    return this.requestSave(remotePeerDID, request, incoming)
+  }
+
+  async add(user: User) {
+    if (!this.iridium.connector) {
+      throw new Error(FriendsError.NETWORK_ERROR)
+    }
     if (this.isFriend(user.did)) {
       throw new Error(`already friends with ${user.did}`)
     }
@@ -259,38 +297,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
     this.state.list.push(user.did)
     this.state.details[user.did] = user
-    await this.iridium.connector.followPeer(user.peerId)
+    const pid = user.peerId || (await Iridium.DIDToPeerId(user.did))
+    await this.iridium.connector.followPeer(pid.toString())
     await this.set(`/details/${user.did}`, user)
     return this.set('/list', this.state.list)
   }
 
-  async createFriendRequest(
-    friendId: string,
-    status: FriendRequestStatus = 'pending',
-    user?: User,
-  ) {
-    if (this.isFriend(friendId)) {
-      throw new Error(`already friends with ${friendId}`)
-    }
-
-    if (this.hasRequest(friendId)) {
-      console.info('createFriendRequest, hasRequest', friendId)
-      throw new Error(`already have friend request for ${friendId}`)
-    }
-
-    return this.updateFriendRequest(friendId, status, user)
-  }
-
-  async acceptFriendRequest(friendId: string) {
-    console.log('accepting a request...', friendId)
-    return this.updateFriendRequest(friendId, 'accepted')
-  }
-
-  async rejectFriendRequest(friendId: string) {
-    return this.updateFriendRequest(friendId, 'rejected')
-  }
-
-  async removeFriend(friendId: string) {
+  async remove(friendId: string) {
     const friend = await this.getFriend(friendId)
     if (!friend) {
       throw new Error('friend not found')
