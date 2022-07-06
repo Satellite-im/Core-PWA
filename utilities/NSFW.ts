@@ -3,15 +3,16 @@ import skaler from 'skaler'
 import { Config } from '~/config'
 import { EnvInfo } from '~/utilities/EnvInfo'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
-import { mimeType } from '~/utilities/FileType'
+import { isHeic, mimeType } from '~/utilities/FileType'
+const convert = require('heic-convert')
 
 /**
  * @method isNSFW
  * @description Checks if an image is NSFW using nsfwjs
- * @param {File} file File object to be scanned
- * @returns {Promise} nsfw status
+ * @param {Blob} file File object to be scanned
+ * @returns {Promise<boolean>} nsfw status
  */
-export default async function isNSFW(file: File): Promise<boolean> {
+export default async function isNSFW(file: Blob): Promise<boolean> {
   const vidTypes = [FILE_TYPE.MP4, FILE_TYPE.MOV, FILE_TYPE.WEBM, FILE_TYPE.OGV]
   const imgTypes = [
     FILE_TYPE.APNG,
@@ -21,12 +22,26 @@ export default async function isNSFW(file: File): Promise<boolean> {
     FILE_TYPE.PNG,
     FILE_TYPE.SVG,
     FILE_TYPE.WEBP,
+    FILE_TYPE.HEIC,
   ]
   const mime = await mimeType(file)
 
   // if unscannable/unembeddable type
   if (![...vidTypes, ...imgTypes].includes(mime as FILE_TYPE)) {
     return false
+  }
+
+  // if heic, need to convert to jpeg for the scan
+  if (await isHeic(file)) {
+    const buffer = new Uint8Array(await file.arrayBuffer())
+    const outputBuffer = await convert({
+      buffer,
+      format: 'JPEG',
+      quality: 1,
+    })
+    file = new Blob([outputBuffer.buffer], {
+      type: 'image/jpeg',
+    })
   }
 
   let predictions: nsfwjs.predictionType[]

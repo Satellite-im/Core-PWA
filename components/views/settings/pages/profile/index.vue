@@ -64,7 +64,6 @@ export default Vue.extend({
             FILE_TYPE.WEBP,
             FILE_TYPE.SVG,
             FILE_TYPE.HEIC,
-            FILE_TYPE.HEIF,
           ].join(',')
     },
   },

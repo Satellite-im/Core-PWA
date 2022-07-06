@@ -5,8 +5,8 @@ import {
   FILESYSTEM_TYPE,
   PersonalBucketIndex,
 } from '~/libraries/Files/types/filesystem'
-import { FilSystem } from '~/libraries/Files/FilSystem'
 import { TextileError } from '~/store/textile/types'
+import fileSystem from '~/libraries/Files/FilSystem'
 
 export class PersonalBucket extends Bucket {
   private _index: PersonalBucketIndex = {
@@ -46,8 +46,8 @@ export class PersonalBucket extends Bucket {
           type: 'application/json',
         }).text(),
       )
-      const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-      await $FileSystem.import(this._index)
+
+      await fileSystem.import(this._index)
       Vue.prototype.$Logger.log('File System', 'Initialized')
     } catch (e) {
       Vue.prototype.$Logger.log('File System', 'index not found')

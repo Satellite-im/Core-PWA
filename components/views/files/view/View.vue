@@ -11,6 +11,7 @@ import {
   LinkIcon,
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -35,7 +36,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.$refs.modal.focus()
+    if (this.$refs.modal) (this.$refs.modal as HTMLElement).focus()
   },
   methods: {
     /**
@@ -53,7 +54,7 @@ export default Vue.extend({
           .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
           .toLowerCase()
 
-        await this.$TextileManager.personalBucket?.pullFile(
+        await iridium.files?.download(
           file.id,
           file.extension === fileExt
             ? file.name

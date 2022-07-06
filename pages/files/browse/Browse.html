@@ -15,9 +15,8 @@
         :changeView="changeView"
         @forceRender="forceRender"
       />
-      <UiLoadersGenericContent :count="3" v-if="!getInitialized" />
       <TypographyText
-        v-else-if="!directory.length"
+        v-if="!directory.length"
         :text="$t('pages.files.empty')"
       />
       <FilesList

@@ -62,13 +62,8 @@ export default {
     config: TextileConfig,
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
 
     await $TextileManager.init(config)
-    commit('setFileSystem', {
-      totalSize: $FileSystem.totalSize,
-      percentageUsed: $FileSystem.percentStorageUsed,
-    })
 
     const textilePublicKey = $TextileManager.getIdentityPublicKey()
 
@@ -1194,27 +1189,6 @@ export default {
   },
 
   /**
-   * @description export filesystem index to textile bucket and update threaddb version
-   */
-  async exportFileSystem({ dispatch, commit }: ActionsArguments<TextileState>) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-
-    if (!$TextileManager.personalBucket) {
-      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
-    }
-
-    await $TextileManager.personalBucket.updateIndex($FileSystem.export)
-    dispatch('updateUserThreadData', {
-      filesVersion: $FileSystem.version,
-    })
-    commit('setFileSystem', {
-      totalSize: $FileSystem.totalSize,
-      percentageUsed: $FileSystem.percentStorageUsed,
-    })
-  },
-
-  /**
    * @description update threaddb record, then reflect the update in store.
    * do not await threaddb work so the toggle switch is smooth
    */
@@ -1247,35 +1221,6 @@ export default {
         flipVideo,
         filesVersion,
       }),
-    )
-  },
-
-  /**
-   * @description listen for user data thread changes and update store accordingly
-   */
-  async listenToThread({
-    commit,
-    rootState,
-    dispatch,
-  }: ActionsArguments<TextileState>) {
-    const $UserInfoManager: UserInfoManager =
-      Vue.prototype.$TextileManager?.userInfoManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-    const callback = (update?: Update<UserThreadData>) => {
-      if (!update || !update.instance) return
-      if (
-        update.instance.filesVersion &&
-        rootState.textile.userThread.filesVersion !== $FileSystem.version
-      ) {
-        // todo - update file system AP-1477
-      }
-      commit('textile/setUserThreadData', update.instance, { root: true })
-    }
-    await dispatch('textile/subscribeToMailbox', {}, { root: true })
-    $UserInfoManager.textile.client.listen(
-      $UserInfoManager.threadID,
-      [],
-      callback,
     )
   },
 }

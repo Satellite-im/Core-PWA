@@ -688,3 +688,6 @@ export class FilSystem {
     return null
   }
 }
+
+const instance = new FilSystem()
+export default instance

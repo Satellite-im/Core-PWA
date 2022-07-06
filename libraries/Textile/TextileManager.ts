@@ -84,18 +84,9 @@ export default class TextileManager {
     this.userInfoManager = new UserInfoManager(textile)
     this.notificationManager = new NotificationManager(textile)
 
-    // we ran into bugs initializing both buckets in parallel. doing sharedBucket first because it will be fast
-    await this.sharedBucket.init({
-      name: Config.textile.sharedBucket,
-    })
-
     // await the rest of the managers
     await Promise.all([
       this.mailboxManager.init(),
-      this.personalBucket.init({
-        name: Config.textile.personalBucket,
-        encrypted: true,
-      }),
       this.groupChatManager.init(),
       this.metadataManager.init(),
       this.userInfoManager.init(),

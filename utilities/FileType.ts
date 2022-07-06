@@ -84,6 +84,5 @@ export function isMimeEmbeddableImage(type: string): boolean {
  */
 export async function isHeic(file: Blob): Promise<boolean> {
   const buffer = new Uint8Array(await file.slice(0, 100).arrayBuffer())
-  const valid: string[] = [FILE_TYPE.HEIC, FILE_TYPE.HEIF]
-  return valid.includes(filetypemime(buffer as any)[0])
+  return FILE_TYPE.HEIC === filetypemime(buffer as any)[0]
 }

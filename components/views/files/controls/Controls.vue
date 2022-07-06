@@ -9,10 +9,10 @@ import {
   AlertTriangleIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-const convert = require('heic-convert')
+import fileSystem from '~/libraries/Files/FilSystem'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -51,19 +51,20 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
-        return
-      }
+      // comment until we have the settings store figured out. some will need to be remote across instances, some should be local only
+      // if (!this.consentToScan) {
+      //   this.$toast.error(
+      //     this.$t('pages.files.errors.enable_consent') as string,
+      //     {
+      //       duration: 3000,
+      //     },
+      //   )
+      //   this.$store.commit('ui/toggleSettings', {
+      //     show: true,
+      //     defaultRoute: SettingsRoutes.PRIVACY,
+      //   })
+      //   return
+      // }
       if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
     },
 
@@ -87,14 +88,14 @@ export default Vue.extend({
         this.$t('pages.files.status.index'),
       )
       try {
-        this.$FileSystem.createDirectory({ name: this.text })
+        fileSystem.createDirectory({ name: this.text })
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
         this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
-      await this.$store.dispatch('textile/exportFileSystem')
+      // await this.$store.dispatch('textile/exportFileSystem')
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       this.$emit('forceRender')
@@ -121,7 +122,7 @@ export default Vue.extend({
       if (
         originalFiles.reduce(
           (total, curr) => total + curr.size,
-          this.$FileSystem.totalSize,
+          fileSystem.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
         this.$store.commit('ui/setFilesUploadStatus', '')
@@ -137,48 +138,17 @@ export default Vue.extend({
         (file) => !(file.size === 0),
       )
       // filter out files with the same name as another file
-      const sameNameResults: File[] = emptyFileResults.filter((file) => {
-        return !this.$FileSystem.currentDirectory.hasChild(file.name)
+      const files: File[] = emptyFileResults.filter((file) => {
+        return !fileSystem.currentDirectory.hasChild(file.name)
       })
-      const files: { file: File; nsfw: boolean }[] = await Promise.all(
-        sameNameResults.map(async (file: File) => {
-          // convert heic to jpg for scan. return original heic if sfw
-          if (await isHeic(file)) {
-            const buffer = new Uint8Array(await file.arrayBuffer())
-            const outputBuffer = await convert({
-              buffer,
-              format: 'JPEG',
-              quality: 1,
-            })
-            const fileJpg = new File([outputBuffer.buffer], file.name, {
-              type: 'image/jpeg',
-            })
-            return { file, nsfw: await this.$Security.isNSFW(fileJpg) }
-          }
-
-          let nsfw
-          try {
-            nsfw = await this.$Security.isNSFW(file)
-          } catch (e: any) {
-            this.$Logger.log('Upload', e)
-            nsfw = true
-          }
-
-          return { file, nsfw }
-        }),
-      )
 
       for (const file of files) {
         try {
           this.$store.commit(
             'ui/setFilesUploadStatus',
-            this.$t('pages.files.status.upload', [file.file.name]),
+            this.$t('pages.files.status.upload', [file.name]),
           )
-          await this.$FileSystem.uploadFile(
-            file.file,
-            file.nsfw,
-            this.setProgress,
-          )
+          await iridium.files?.personalUpload(file)
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
@@ -190,7 +160,7 @@ export default Vue.extend({
           'ui/setFilesUploadStatus',
           this.$t('pages.files.status.index'),
         )
-        await this.$store.dispatch('textile/exportFileSystem')
+        // await this.$store.dispatch('textile/exportFileSystem')
       }
 
       this.$store.commit('ui/setFilesUploadStatus', '')
@@ -204,7 +174,7 @@ export default Vue.extend({
       if (invalidNameResults.length !== emptyFileResults.length) {
         this.errors.push(this.$t('pages.files.errors.file_size'))
       }
-      if (emptyFileResults.length !== sameNameResults.length) {
+      if (emptyFileResults.length !== files.length) {
         this.errors.push(this.$t('pages.files.errors.duplicate_name'))
       }
     },

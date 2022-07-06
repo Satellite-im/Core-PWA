@@ -6,6 +6,7 @@ import { mapState, mapGetters } from 'vuex'
 import { SaveIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import { Directory } from '~/libraries/Files/Directory'
+import fileSystem from '~/libraries/Files/FilSystem'
 
 export default Vue.extend({
   components: {
@@ -63,7 +64,7 @@ export default Vue.extend({
      */
     async rename() {
       try {
-        this.$FileSystem.renameChild(this.currentName, this.text, this.parent)
+        fileSystem.renameChild(this.currentName, this.text, this.parent)
       } catch (e: any) {
         this.error = this.$t(e?.message) as string
         return
@@ -73,7 +74,7 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      await this.$store.dispatch('textile/exportFileSystem')
+      // await this.$store.dispatch('textile/exportFileSystem')
       this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },
