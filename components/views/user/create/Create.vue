@@ -5,20 +5,19 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
-import blobToBase64 from '~/utilities/BlobToBase64'
+import { blobToBase64 } from '~/utilities/BlobManip'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 const convert = require('heic-convert')
 
 export default Vue.extend({
-  name: 'CreateUser',
   data() {
     return {
       showCropper: false,
       croppedImage: '',
       imageUrl: '',
       name: '',
-      error: '',
+      error: [] as string[],
       status: '',
       isLoading: false,
     }
@@ -28,9 +27,8 @@ export default Vue.extend({
       accountAddress: (state) => (state as RootState).accounts.active,
     }),
     /**
-     * @method accountValidLength
-     * @description If the account isn't the length specified in the config, this returns False, true if correct length
-     * @example this.accountValidLength
+     * @method isInvalidName
+     * @description returns boolean based on current name input
      */
     isInvalidName(): boolean {
       return (
@@ -38,6 +36,13 @@ export default Vue.extend({
         this.name.trim().length < this.$Config.account.minLength ||
         this.name.trim().length > this.$Config.account.maxLength
       )
+    },
+    /**
+     * @method isInvalidStatus
+     * @description returns boolean based on current status input
+     */
+    isInvalidStatus(): boolean {
+      return this.status.trim().length > this.$Config.account.statusMaxLength
     },
     /**
      * @method acceptableImageFormats
@@ -57,7 +62,6 @@ export default Vue.extend({
             FILE_TYPE.WEBP,
             FILE_TYPE.SVG,
             FILE_TYPE.HEIC,
-            FILE_TYPE.HEIF,
           ].join(',')
     },
   },
@@ -77,7 +81,7 @@ export default Vue.extend({
      * @example
      */
     async selectImage(e: Event) {
-      this.error = ''
+      this.error = []
       this.isLoading = true
       const target = e.target as HTMLInputElement
 
@@ -92,7 +96,7 @@ export default Vue.extend({
 
       // stop upload if picture is too large for nsfw scan
       if (file.size > this.$Config.nsfwPictureLimit) {
-        this.error = this.$t('errors.accounts.file_too_large') as string
+        this.error.push(this.$t('errors.accounts.file_too_large') as string)
         this.isLoading = false
         return
       }
@@ -112,7 +116,7 @@ export default Vue.extend({
 
       // if invalid file type, prevent upload. this needs to be added since safari mobile doesn't fully support <input> accept
       if (!(await isEmbeddableImage(file))) {
-        this.error = this.$t('errors.accounts.invalid_file') as string
+        this.error.push(this.$t('errors.accounts.invalid_file') as string)
         this.resetFileInput()
         this.isLoading = false
         return
@@ -121,14 +125,14 @@ export default Vue.extend({
       // if nsfw, prevent upload
       try {
         if (await this.$Security.isNSFW(file)) {
-          this.error = this.$t('errors.chat.contains_nsfw') as string
+          this.error.push(this.$t('errors.chat.contains_nsfw') as string)
           this.resetFileInput()
           this.isLoading = false
           return
         }
       } catch (e: any) {
         this.$Logger.log('error', 'file upload error', e)
-        this.error = this.$t('errors.accounts.invalid_file') as string
+        this.error.push(this.$t('errors.accounts.invalid_file') as string)
         this.resetFileInput()
         this.isLoading = false
         return
@@ -170,22 +174,34 @@ export default Vue.extend({
      */
     confirm(e: Event) {
       e.preventDefault()
+      this.error = []
       if (this.isLoading) {
         return
       }
       if (this.isInvalidName) {
-        this.error = this.$t('user.registration.username_error', {
-          min: this.$Config.account.minLength,
-          max: this.$Config.account.maxLength,
-        }) as string
+        this.error.push(
+          this.$t('user.registration.username_error', {
+            min: this.$Config.account.minLength,
+            max: this.$Config.account.maxLength,
+          }) as string,
+        )
+      }
+      // additional client side validation in case the user inspected and changed maxlength constraint
+      if (this.isInvalidStatus) {
+        this.error.push(
+          this.$t('user.registration.status_error', {
+            max: this.$Config.account.statusMaxLength,
+          }) as string,
+        )
+      }
+      if (this.error.length) {
         return
       }
-      this.error = ''
 
       this.$emit('confirm', {
-        username: this.name,
+        username: this.name.trim(),
         photoHash: this.croppedImage,
-        status: this.status,
+        status: this.status.trim(),
       })
     },
   },

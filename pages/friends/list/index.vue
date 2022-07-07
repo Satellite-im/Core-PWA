@@ -17,6 +17,20 @@ export default Vue.extend({
       },
     }
   },
+  computed: {
+    incomingRequests() {
+      if (!iridium.friends?.state.requests) return []
+      return Object.entries(iridium.friends?.state.requests).filter(
+        ([_key, request]) => request.incoming && request.status === 'pending',
+      )
+    },
+    outgoingRequests() {
+      if (!iridium.friends?.state.requests) return []
+      return Object.entries(iridium.friends?.state.requests).filter(
+        ([_key, request]) => !request.incoming && request.status === 'pending',
+      )
+    },
+  },
   async mounted() {
     this.data.loading = false
     iridium.friends?.on('request/changed', () => this.$forceUpdate())

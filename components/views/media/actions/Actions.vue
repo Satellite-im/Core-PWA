@@ -59,12 +59,13 @@ export default Vue.extend({
      * @example
      */
     toggleMute(kind: WebRTCEnum) {
+      // TODO: isLoading needs to be kind specific, currently all 3 kinds show loading icon if any of them is loading.
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
-          this.$store.dispatch('audio/toggleMute', undefined, { root: true })
+          this.$store.dispatch('audio/toggleMute')
         } else if (kind === WebRTCEnum.VIDEO) {
-          this.$store.dispatch('video/toggleMute', undefined, { root: true })
+          this.$store.dispatch('video/toggleMute')
         } else {
           this.$store.dispatch(
             'webrtc/toggleMute',

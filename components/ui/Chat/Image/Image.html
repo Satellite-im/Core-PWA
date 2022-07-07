@@ -2,20 +2,25 @@
   <figure class="image-placeholder" v-if="usePlaceholder">
     <img
       class="image-placeholder-img"
+      data-cy="chat-image-placeholder"
       :src="placeholderSrc"
       :alt="placeholderText"
     />
-    <figcaption class="image-placeholder-caption">
+    <figcaption
+      class="image-placeholder-caption"
+      data-cy="image-placeholder-caption"
+    >
       {{placeholderText}}
     </figcaption>
   </figure>
-  <img
-    v-else
-    class="is-image"
-    data-cy="chat-image"
-    :class="full ? 'is-full-image' : 'is-normal-image'"
-    :src="image.url"
-    @click="clickHandler"
-    @error="onImageError"
-  />
+  <div v-else class="image-container">
+    <img
+      class="is-image"
+      :class="{'blur-image' : image.nsfw && blockNsfw}"
+      :src="image.url"
+      @click="clickHandler"
+      @error="onImageError"
+      data-cy="chat-image"
+    />
+  </div>
 </div>

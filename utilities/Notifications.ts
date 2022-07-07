@@ -1,6 +1,7 @@
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 const isSupported = (): boolean =>
   'Notification' in window &&
@@ -10,7 +11,7 @@ const isSupported = (): boolean =>
 export const Notifications = class Notifications {
   currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
-  sendNotification: any = this.sendNotifications
+  $Config: typeof Config = Config
 
   constructor() {
     const envinfo = new EnvInfo()
@@ -117,12 +118,14 @@ export const Notifications = class Notifications {
    * @description
    * @param type
    * @param titleText
+   * @param image
    * @param message
    * @example
    */
   async sendNotifications(
     type: string,
     titleText: string,
+    image: string,
     message: string,
   ): Promise<void> {
     if (
@@ -130,11 +133,36 @@ export const Notifications = class Notifications {
       this.currentPlatform === PlatformTypeEnum.ELECTRON
     ) {
       // browser notification api
-      await new Notification(type, {
-        tag: titleText,
+      await new Notification(`${type} ${titleText}`, {
+        tag: String(new Date().getTime()),
         body: message,
+        icon: `${this.$Config.textile.browser}/ipfs/${image}`,
+        badge: `${this.$Config.textile.browser}/ipfs/${image}`,
       })
     }
+    // if (this.currentPlatform === PlatformTypeEnum.WEB) {
+    //   await LocalNotifications.schedule({
+    //     notifications: [
+    //       {
+    //         title: `${type} ${titleText}`,
+    //         body: message,
+    //         id: new Date().getTime(),
+    //         schedule: {
+    //           at: new Date(new Date().getTime() + 1000),
+    //           allowWhileIdle: true,
+    //         },
+    //         actionTypeId: 'CHAT_MESSAGE',
+    //         extra: null,
+    //         attachments: [
+    //           {
+    //             id: 'face',
+    //             url: `${this.$Config.textile.browser}/ipfs/${image}`,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   })
+    // }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       await LocalNotifications.schedule({

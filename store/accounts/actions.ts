@@ -55,8 +55,6 @@ export default {
       throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
     const computedPinHash = await Crypto.hash(pin)
 
     if (computedPinHash !== pinHash) {
@@ -149,19 +147,21 @@ export default {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const mnemonic = state.phrase
     if (mnemonic === '') {
+      console.info('empty mnemonic')
       throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
     }
 
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
     if (!$BlockchainClient.isPayerInitialized) {
+      console.info('payer not initialized')
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
     const payerAccount = $BlockchainClient.payerAccount
-    commit('setActiveAccount', payerAccount?.publicKey.toBase58())
 
     if (!iridium.ready) {
+      console.info('initializing iridium')
       const { pin } = state
       await dispatch(
         'iridium/initialize',
@@ -173,17 +173,21 @@ export default {
       )
     }
 
-    const userInfo = await iridium.profile?.get('/')
-    if (!userInfo?.id) {
+    commit('setActiveAccount', iridium.connector?.id)
+    console.info('fetching user info')
+    const userInfo = await iridium.profile?.get()
+    if (!userInfo?.did) {
+      console.info('user not registered', userInfo)
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 
+    console.info('user registered, dispatching')
     dispatch('initializeEncryptionEngine', payerAccount)
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
     })
-
+    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     dispatch('startup', payerAccount)
   },
   /**
@@ -236,13 +240,13 @@ export default {
 
     const imagePath = await uploadPicture(userData.image)
     const profile = {
-      id: iridium.connector.id,
-      peerId: iridium.connector.peerId,
+      did: iridium.connector?.id,
+      peerId: iridium.connector?.peerId,
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
-    await iridium.profile?.set('/', profile)
+    await iridium.profile?.set('', profile)
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)
     commit('setUserDetails', {

@@ -1,7 +1,11 @@
 import { PublicKey } from '@solana/web3.js'
-import { createFromPubKey } from 'peer-id'
 import { keys } from 'libp2p-crypto'
-import { ConversationParticipant, ConversationState } from './types'
+import { createFromPubKey } from 'peer-id'
+import {
+  ConversationActivity,
+  ConversationParticipant,
+  ConversationState,
+} from './types'
 import { ActionsArguments } from '~/types/store/store'
 
 const actions = {
@@ -11,8 +15,8 @@ const actions = {
    * @example
    * store.dispatch('conversation/initialize');
    */
-  initialize(state: ActionsArguments<ConversationState>) {
-    state.commit('setConversation', {
+  initialize({ commit }: ActionsArguments<ConversationState>) {
+    commit('setConversation', {
       id: '',
       type: 'friend',
       calling: false,
@@ -26,7 +30,7 @@ const actions = {
    * store.dispatch('conversation/setConversation', conversation);
    */
   setConversation(
-    state: ActionsArguments<ConversationState>,
+    { commit }: ActionsArguments<ConversationState>,
     payload: {
       id: string
       type: 'friend' | 'group'
@@ -34,7 +38,7 @@ const actions = {
       participants: Array<ConversationParticipant>
     },
   ) {
-    state.commit('setConversation', payload)
+    commit('setConversation', payload)
   },
   /**
    * @method setCalling
@@ -42,8 +46,11 @@ const actions = {
    * @example
    * store.dispatch('conversation/setCalling', true);
    */
-  setCalling(state: ActionsArguments<ConversationState>, calling: boolean) {
-    state.commit('setCalling', calling)
+  setCalling(
+    { commit }: ActionsArguments<ConversationState>,
+    calling: boolean,
+  ) {
+    commit('setCalling', calling)
   },
   /**
    * @method addParticipant
@@ -80,6 +87,7 @@ const actions = {
           : 'DISCONNECTED'
         : participant?.state || 'DISCONNECTED',
       profilePicture: participant?.profilePicture,
+      activity: ConversationActivity.NOT_TYPING,
     }
 
     commit(

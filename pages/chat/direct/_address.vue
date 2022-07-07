@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { groupMessages } from '~/utilities/Messaging'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { DataStateType } from '~/store/dataState/types'
 import { RootState } from '~/types/store/store'
@@ -14,6 +13,12 @@ import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
   name: 'DirectMessages',
   layout: 'chat',
+  data() {
+    return {
+      messages: [],
+      replies: [],
+    }
+  },
   computed: {
     DataStateType: () => DataStateType,
     ...mapState({
@@ -23,26 +28,24 @@ export default Vue.extend({
           (r: FriendRequest) => r.incoming,
         ).length,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('friends', ['findFriendByAddress']),
     groupedMessages() {
       const { address } = this.$route.params
+
       const conversation = this.$typedStore.state.textile.conversations[address]
       if (!conversation) return []
       const { messages, replies, reactions } = conversation
       return groupMessages(messages, replies, reactions)
     },
     // Get the active friend
-    // friend() {
-    //   const { address } = this.$route.params
-    //   console.log('debug: | friend | address', address)
-    //   return {}
-    // },
+    friend() {
+      const { address } = this.$route.params
+      return address
+    },
   },
   watch: {
     // friend(friend: Friend | undefined) {
     //   const { address } = this.$route.params
-    //   console.log('debug: | friend | address', address)
     //   // If the friend is not found, redirect to the friends screen
     //   // if (address && !friend) {
     //   //   this.$router.replace('/friends/list')
@@ -52,12 +55,12 @@ export default Vue.extend({
       handler(nextValue) {
         if (nextValue) {
           const { address } = this.$route.params
-          if (address && this.friend) {
-            // this.$store.dispatch('textile/fetchMessages', {
-            //   address,
-            //   setActive: true,
-            // })
-          }
+          // if (address) {
+          // this.$store.dispatch('textile/fetchMessages', {
+          //   address,
+          //   setActive: true,
+          // })
+          // }
         }
       },
       immediate: true,
@@ -81,6 +84,14 @@ export default Vue.extend({
     //   },
     //   immediate: true,
     // },
+  },
+  async mounted() {
+    if (this.friend) {
+      await iridium.chat.subscribeToConversation(this.friend, async (event) => {
+        const message = await iridium.connector.load(event.message)
+        this.messages.push(message)
+      })
+    }
   },
 })
 </script>

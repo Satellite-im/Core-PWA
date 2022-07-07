@@ -1,9 +1,12 @@
 import {
-  Emitter,
   IridiumPeerMessage,
   IridiumPubsubEvent,
-} from '@satellite-im/iridium/dist/index.browser'
-import type { EmitterCallback } from '@satellite-im/iridium/src/emitter'
+  Iridium,
+  Emitter,
+  EmitterCallback,
+} from '@satellite-im/iridium/'
+// Iridium import above has static function called hash, use to hash this user id and the name of the chat
+
 import {
   Conversation,
   ConversationMessage,
@@ -34,7 +37,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async init() {
     await this.fetch()
-
     await Promise.all(
       this.state.conversations.map(async (conversationId) => {
         this.iridium.connector?.on(
@@ -52,7 +54,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async fetch() {
-    this.state = await this.iridium.connector?.get('/chat')
+    this.state = (await this.iridium.connector?.get('/chat')) || {
+      conversations: [],
+      conversation: {},
+    }
   }
 
   async onConversationMessage(
@@ -84,11 +89,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async createConversation(
-    id: string,
     name: string,
     type: 'group' | 'direct',
     participants: string[],
   ) {
+    const id =
+      type === 'direct'
+        ? participants.find((p) => p !== this.iridium.connector.id)
+        : await Iridium.hash({ name, origin: this.iridium.connector.id })
     if (this.state.conversations.includes(id)) {
       throw new Error(ChatError.CONVERSATION_EXISTS)
     }
@@ -103,8 +111,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       updatedAt: Date.now(),
     }
     await this.iridium.connector?.set(`/chat/conversation/${id}`, conversation)
+    await this.iridium.connector?.set(`/chat/conversations`, [
+      ...this.state.conversations,
+      id,
+    ])
     this.state.conversation[id] = conversation
     this.emit(`conversation/${id}`, conversation)
+    this.emit(`conversations`, this.state.conversations)
   }
 
   /**
@@ -160,6 +173,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @param message Message to be sent
    */
   async sendMessage(id: string, message: ConversationMessage) {
+    console.log('debug: | ChatManager | sendMessage | id', id)
     if (!this.iridium.connector) return
     const conversation = await this.getConversation(id)
     if (!conversation) {
@@ -174,21 +188,26 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     const messageCID = messageID.toString()
     await this.iridium.connector.set(
-      `/chat/conversation/messages`,
+      `/chat/conversation/${id}/messages`,
       conversation.messages,
     )
     await this.iridium.connector.set(
-      `/chat/conversation/message/${messageCID}`,
+      `/chat/conversation/${id}/message/${messageCID}`,
       message,
     )
     await this.iridium.connector.broadcast(`/chat/conversation/${id}`, {
       action: 'message',
       message: messageCID,
     })
+    await this.iridium.connector.send(conversation, {
+      to: await Promise.all(
+        conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+      ),
+    })
     this.emit(`conversation/${id}`, {
       action: 'message',
       message: messageCID,
-      from: this.iridium.connector.did,
+      from: this.iridium.connector.id,
     })
   }
 }

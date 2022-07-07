@@ -1,4 +1,4 @@
-<div id="view-file">
+<div id="view-file" @keydown.esc="close" tabindex="1" ref="modal">
   <div class="file-nav">
     <div class="file-info">
       <TypographyTitle :text="file.name" :size="6" />
@@ -12,14 +12,14 @@
         class="control disabled"
         spinning
       />
-      <a
+      <button
         v-else
         @click="download"
         v-tooltip.bottom="$t('controls.download')"
         class="control"
       >
         <download-icon size="1x" />
-      </a>
+      </button>
       <!-- 
       <a
         v-tooltip.bottom="$t('controls.share_link')"
@@ -29,13 +29,13 @@
       >
         <link-icon size="1x" />
       </a> -->
-      <div
-        v-tooltip.bottom="$t('ui.close')"
-        @click="$emit('close')"
+      <button
         class="control control--close"
+        v-tooltip.bottom="$t('ui.close')"
+        @click="close"
       >
         <x-icon size="1x" />
-      </div>
+      </button>
     </div>
   </div>
   <div v-if="file.thumbnail" class="image-container">
@@ -46,9 +46,9 @@
   </div>
   <div v-else class="no-preview">
     <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
-    <a v-else @click="download" v-tooltip.top="$t('controls.download')">
+    <button v-else @click="download" v-tooltip.top="$t('controls.download')">
       <download-icon size="1x" class="file-icon" />
-    </a>
+    </button>
     <TypographyTitle :size="4" :text="file.name" />
     <TypographySubtitle :size="6" :text="file.type" />
     <TypographySubtitle :text="$filesize(file.size)" :size="6" />

@@ -1,16 +1,16 @@
-<div id="accounts-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle :size="6" :text="$t('pages.settings.accounts.title')" />
       <TypographySubtitle
         :size="6"
         :text="$t('pages.settings.accounts.subtitle')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.accounts.active')" />
       <InteractablesInputGroup
         readonly
@@ -20,20 +20,18 @@
       >
         <clipboard-icon size="1x" />
       </InteractablesInputGroup>
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <!-- <div class="columns is-desktop">
-    <div class="column">
+  <!-- <SettingsSection>
+    <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
       <InteractablesInput readonly type="primary" :text="accounts.gasPrice" />
-    </div>
-  </div> -->
+    </SettingsUnit>
+  </SettingsSection> -->
 
-  <UiSpacer :height="20" />
-
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.accounts.devices')"
@@ -42,13 +40,11 @@
         :size="6"
         :text="$t('pages.settings.accounts.no_devices')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <UiSpacer :height="20" />
-
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.profile.phrase.title')"
@@ -79,6 +75,6 @@
           :number="i + 1"
         />
       </div>
-    </div>
-  </div>
-</div>
+    </SettingsUnit>
+  </SettingsSection>
+</SettingsPage>

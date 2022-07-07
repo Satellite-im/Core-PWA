@@ -9246,7 +9246,6 @@ FilSystem {
     "_shared": false,
     "_type": "DEFAULT",
   },
-  "_version": 1,
 }
 `;
 

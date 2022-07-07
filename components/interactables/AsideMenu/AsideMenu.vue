@@ -18,10 +18,6 @@ export default Vue.extend({
       default: '',
     },
     /**
-     * Should we include the aside menu toggle icon
-     */
-    toggleable: Boolean,
-    /**
      * Callable method or function emitted when the menu is toggled
      */
     toggle: {
@@ -49,6 +45,21 @@ export default Vue.extend({
     customAction: {
       type: Function,
       default: () => () => {},
+    },
+  },
+  mounted() {
+    if (this.$device.isMobile) {
+      this.$store.commit('ui/setSettingsRoute', '')
+    }
+  },
+  methods: {
+    /**
+     * @method closeModal DocsTODO
+     * @description
+     * @example
+     */
+    closeModal() {
+      this.$store.commit('ui/toggleSettings', { show: false })
     },
   },
 })

@@ -51,7 +51,6 @@ Object {
     "callToAction": false,
     "changelog": false,
     "createServer": false,
-    "creategroup": false,
     "crop": false,
     "error": false,
     "errorNetwork": Object {
@@ -91,7 +90,6 @@ Object {
   },
   "settingsRoute": "personalize",
   "settingsSideBar": true,
-  "showMedia": false,
   "showOlderMessagesInfo": false,
   "showPinned": false,
   "showSearchResult": false,
@@ -102,7 +100,6 @@ Object {
   "theme": Object {
     "base": Object {
       "class": "",
-      "name": "default",
       "text": "Default",
       "value": "default",
     },

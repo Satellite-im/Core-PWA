@@ -38,6 +38,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    isPreview: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -63,27 +67,27 @@ export default Vue.extend({
   methods: {
     async createFriendRequest() {
       this.loading = true
-      await iridium.friends?.createFriendRequest(this.user.did, 'pending')
+      await iridium.friends?.requestCreate(this.user.did)
       this.loading = false
     },
     async acceptFriendRequest() {
       this.loading = true
-      await iridium.friends?.acceptFriendRequest(this.user.did)
+      await iridium.friends?.requestAccept(this.user.did)
       this.loading = false
     },
     async rejectFriendRequest() {
       this.loading = true
-      await iridium.friends?.rejectFriendRequest(this.user.did)
+      await iridium.friends?.requestReject(this.user.did)
       this.loading = false
     },
     async removeFriend() {
       this.loading = true
-      await iridium.friends?.removeFriend(this.user.did)
+      await iridium.friends?.remove(this.user.did)
       this.loading = false
     },
     async cancelRequest() {
       this.loading = true
-      await iridium.friends?.rejectFriendRequest(this.user.did)
+      await iridium.friends?.requestReject(this.user.did)
       this.loading = false
     },
     sendMessageRequest() {

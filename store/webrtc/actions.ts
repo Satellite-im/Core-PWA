@@ -1,18 +1,20 @@
-import Vue from 'vue'
 import type { SignalData } from 'simple-peer'
-import { ConversationParticipant } from '../conversation/types'
+import Vue from 'vue'
+import {
+  ConversationActivity,
+  ConversationParticipant,
+} from '../conversation/types'
 import { WebRTCState } from './types'
 
-import { ActionsArguments } from '~/types/store/store'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import Logger from '~/utilities/Logger'
-import { TrackKind } from '~/libraries/WebRTC/types'
 import { Config } from '~/config'
-import { PropCommonEnum } from '~/libraries/Enums/enums'
-import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-import { Friend } from '~/types/ui/friends'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { TrackKind } from '~/libraries/WebRTC/types'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { ActionsArguments } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
+import Logger from '~/utilities/Logger'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -30,14 +32,56 @@ const webRTCActions = {
     commit('setIncomingCall', undefined)
     commit('setActiveCall', undefined)
     commit('conversation/setCalling', false, { root: true })
+    iridium.connector.on('peer:discovery', ({ peerId }: { peerId: string }) => {
+      const $Logger: Logger = Vue.prototype.$Logger
+      const loggerPrefix = 'webrtc/peer:discovery - '
+
+      const connectedFriend = rootState.friends.all.find(
+        (friend) => friend.peerId === peerId.toB58String(),
+      )
+
+      if (!connectedFriend) return
+
+      $Logger.log(loggerPrefix, `discovered peer: ${peerId.toB58String()}`)
+      dispatch(
+        'friends/setFriendState',
+        {
+          address: connectedFriend.address,
+          state: 'online',
+        },
+        { root: true },
+      )
+      dispatch('textile/subscribeToMailbox', {}, { root: true })
+    })
 
     iridium.connector.on(
       'peer:connect',
       ({ peerId, did }: { peerId: string; did: string }) => {
+        const $Logger: Logger = Vue.prototype.$Logger
+        const loggerPrefix = 'webrtc/peer:connect - '
+        const connectedParticipant = rootState.conversation.participants.find(
+          (participant: ConversationParticipant) =>
+            participant.peerId === peerId.toB58String(),
+        )
+        if (connectedParticipant) {
+          $Logger.log(
+            loggerPrefix,
+            `connected participant: ${peerId.toB58String()}`,
+          )
+          commit(
+            'conversation/updateParticipant',
+            {
+              peerId: connectedParticipant.peerId,
+              state: 'CONNECTED',
+            },
+            { root: true },
+          )
+        }
         const connectedFriend = rootState.friends.all.find(
-          (friend) => friend.peerId === peerId,
+          (friend) => friend.peerId === peerId.toB58String(),
         )
         if (!connectedFriend) return
+        $Logger.log(loggerPrefix, `connected friend: ${peerId.toB58String()}`)
         dispatch(
           'friends/setFriendState',
           {
@@ -62,8 +106,15 @@ const webRTCActions = {
         payload: any
       }) => {
         // update conversation participants with peers from call announcement
+        const $Logger: Logger = Vue.prototype.$Logger
+        const loggerPrefix = 'webrtc/peer:call - '
+        $Logger.log(
+          loggerPrefix,
+          `incoming call with callId: ${payload.callId}`,
+        )
+
         if (payload.peers) {
-          payload.peers.forEach((peer: { id: string; name: string }) => {
+          payload.peers.forEach((peer) => {
             if (
               rootState.conversation.participants.find(
                 (p) => p.peerId === peer.id,
@@ -81,22 +132,33 @@ const webRTCActions = {
           })
         }
 
-        if (!payload.callId || payload.callId === iridium.connector?.id) {
+        if (!payload.callId || payload.callId === did) {
+          $Logger.log(loggerPrefix, `invalid callId`)
           return
         }
 
         const call = $WebRTC.getCall(payload.callId)
         if (!call) {
+          $Logger.log(loggerPrefix, `create a call...`)
           dispatch('createCall', payload)
           return
         }
 
         if (rootState.webrtc.activeCall?.callId !== call.callId) {
+          $Logger.log(
+            loggerPrefix,
+            `No active call with call id: ${call.callId}`,
+          )
           return
         }
 
-        if (!call.peerConnected[peerId] && !call.peerDialingDisabled[peerId]) {
-          await call.initiateCall(peerId)
+        const peerIdStr = peerId.toB58String()
+        if (
+          !call.peerConnected[peerIdStr] &&
+          !call.peerDialingDisabled[peerIdStr]
+        ) {
+          $Logger.log(loggerPrefix, `initiate a call...`)
+          await call.initiateCall(peerIdStr)
         }
       },
     )
@@ -104,12 +166,18 @@ const webRTCActions = {
     iridium.connector.on(
       'peer:disconnect',
       ({ peerId, did }: { peerId: string; did: string }) => {
+        const $Logger: Logger = Vue.prototype.$Logger
+        const loggerPrefix = 'webrtc/peer:disconnect - '
+
         const disconnectedParticipant =
           rootState.conversation.participants.find(
             (participant: ConversationParticipant) =>
-              participant.peerId === peerId,
+              participant.peerId === peerId.toB58String(),
           )
         if (disconnectedParticipant) {
+          $Logger.log(loggerPrefix, 'disconnected participant: ', {
+            peerId: peerId.toB58String(),
+          })
           commit(
             'conversation/updateParticipant',
             {
@@ -121,9 +189,12 @@ const webRTCActions = {
         }
 
         const disconnectedFriend = rootState.friends.all.find(
-          (friend) => friend.peerId === peerId,
+          (friend) => friend.peerId === peerId.toB58String(),
         )
         if (disconnectedFriend) {
+          $Logger.log(loggerPrefix, 'disconnected friend: ', {
+            peerId: peerId.toB58String(),
+          })
           dispatch(
             'friends/setFriendState',
             {
@@ -134,10 +205,11 @@ const webRTCActions = {
           )
         }
 
+        const peerHash = peerId.toB58String()
         $WebRTC.calls.forEach((call) => {
-          if (call.peers[peerId]) {
-            call.destroyPeer(peerId)
-            delete call.peers[peerId]
+          if (call.peers[peerHash]) {
+            call.destroyPeer(peerHash)
+            delete call.peers[peerHash]
           }
         })
       },
@@ -145,14 +217,12 @@ const webRTCActions = {
 
     const timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
     iridium.connector?.on('peer:typing', ({ peerId }: { peerId: string }) => {
-      const typingFriend = rootState.friends.all.find(
-        (friend) => friend.peerId === peerId,
-      )
-      if (!typingFriend) return
-
       commit(
-        'friends/setTyping',
-        { id: typingFriend.address, typingState: PropCommonEnum.TYPING },
+        'conversation/updateParticipant',
+        {
+          peerId: peerId.toB58String(),
+          activity: ConversationActivity.TYPING,
+        },
         { root: true },
       )
 
@@ -161,8 +231,11 @@ const webRTCActions = {
 
       timeoutMap[peerId] = setTimeout(() => {
         commit(
-          'friends/setTyping',
-          { id: typingFriend.address, typingState: PropCommonEnum.NOT_TYPING },
+          'conversation/updateParticipant',
+          {
+            peerId: peerId.toB58String(),
+            activity: ConversationActivity.NOT_TYPING,
+          },
           { root: true },
         )
       }, Config.chat.typingInputThrottle * 3)
@@ -175,7 +248,7 @@ const webRTCActions = {
       ({ peerId, payload }: { peerId: string; payload: any }) => {
         const requestParticipant = rootState.conversation.participants.find(
           (p) =>
-            p.peerId === peerId ||
+            p.peerId === peerId.toB58String() ||
             (payload.address && p.address === payload.address),
         )
         if (requestParticipant) {
@@ -191,7 +264,7 @@ const webRTCActions = {
           )
         }
         const requestFriend = rootState.friends.all.find(
-          (friend) => friend.peerId === peerId,
+          (friend) => friend.peerId === peerId.toB58String(),
         )
         if (!requestFriend || requestFriend.state === 'online') return
         dispatch(
@@ -215,6 +288,7 @@ const webRTCActions = {
         peerId: string
         payload: any
       }) => {
+        const peerIdStr = peerId.toB58String()
         commit('setMuted', {
           peerId,
           kind,
@@ -234,6 +308,7 @@ const webRTCActions = {
         peerId: string
         payload: any
       }) => {
+        const peerIdStr = peerId.toB58String()
         commit('setMuted', {
           peerId,
           kind,

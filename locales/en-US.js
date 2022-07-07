@@ -7,7 +7,8 @@ export default {
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
     group_call: 'Group Call\nComing Soon',
-    sidebar_search: 'Friends and Group search\ncoming soon',
+    sidebar_search: 'Friends and Group Search\nComing Soon',
+    group_chat_search: 'Group Chat Search\nComing Soon',
   },
   global: {
     name: 'Satellite.im',
@@ -26,14 +27,21 @@ export default {
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
     emotes: 'Emoji',
+    coming_soon: 'Coming Soon',
     glyphs: 'Glyphs',
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    live: 'Live',
+    live: 'Live {time}',
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
+    background_call: 'You are currently in a call with',
+  },
+  time: {
+    now: 'now',
+    today: 'today',
+    yesterday: 'yesterday',
   },
   wallet: {
     wallet: 'Wallet',
@@ -74,10 +82,6 @@ export default {
       me: 'you sent a {msgType}',
       user: '{user} sent you a {msgType}',
     },
-    user_sent_image: {
-      me: 'you sent an {msgType}',
-      user: 'user sent you an {msgType}',
-    },
     user_sent_something: {
       me: 'you sent something',
       user: 'user sent you something',
@@ -117,7 +121,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Edit\nComing soon',
+    edit: 'Coming Soon',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -187,7 +191,6 @@ export default {
       },
       upload: {
         close: 'Close',
-        scanning_image: 'Scanning Image...',
         send: 'Send',
         cancel: 'Cancel',
       },
@@ -542,6 +545,11 @@ export default {
       new_group_name: 'Add a group name here...',
       older_messages: 'You are viewing older messages',
       recent_messages: 'Go to most recent messages',
+      infinite_scroll: {
+        loading: 'Loading ...',
+        no_more: 'No more data.',
+      },
+      add_reaction: 'Add reaction',
     },
     newMessage: {
       new_message: 'New Message',
@@ -560,6 +568,7 @@ export default {
       select_friends: 'Invite your friends to this server',
       server_name_error: 'Server name must be at least 5 characters.',
       select_friends_placeholder: 'Search friends...',
+      user_picker_empty: 'No friends found',
     },
   },
   conversation: {
@@ -596,8 +605,6 @@ export default {
     },
     chat: {
       drop_file_count: 'Sorry, you can only upload 8 files at a time',
-      unable_preview: 'Unable to preview file',
-      upload_blocked: 'Upload Blocked',
       contains_nsfw: 'Unable to upload file/s due to NSFW status',
       empty_message_error:
         'Message must contain at least one non-space character',
@@ -635,8 +642,6 @@ export default {
       users: 'Users',
       conversations: 'Conversations',
       select_date: 'Select Date',
-      today: 'today',
-      yesterday: 'yesterday',
     },
   },
   media: {
@@ -661,6 +666,7 @@ export default {
         'Enter a username of at least {min} characters, up to {max}',
       status: 'Status',
       status_placeholder: 'Ready for launch...',
+      status_error: 'Status cannot exceed {max} characters',
       reg_status: {
         unknown: 'Not registered',
         in_progress: "We're transporting your data to the Realm...",
@@ -671,6 +677,7 @@ export default {
     },
     loading: {
       loading_account: 'Aligning satellites to retrieve your account...',
+      loading_displayname: '...',
     },
   },
   friends: {
@@ -706,12 +713,6 @@ export default {
     message: 'Message',
     options: 'Options',
     cancel: 'Cancel request',
-    details: {
-      now: 'now',
-      yesterday: 'yesterday',
-      days_short: 'd',
-      no_message: 'no message',
-    },
   },
   market_place: {
     title: 'Marketplace\nComing soon',
@@ -781,7 +782,7 @@ export default {
     delete: 'Delete',
     // friends
     send: 'Send Message',
-    voice: 'Voice Call',
+    voice: 'Start Call',
     video: 'Video Call',
     remove: 'Remove Friend',
     profile: 'Profile',

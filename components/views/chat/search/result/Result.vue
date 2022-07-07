@@ -2,9 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState, mapGetters } from 'vuex'
 import VuejsPaginate from 'vuejs-paginate'
 import { CalendarIcon } from 'satellite-lucide-icons'
-import { mapState } from 'vuex'
 import SearchUtil from '~/components/views/chat/search/SearchUtil'
 import {
   SearchOrderType,
@@ -47,6 +47,8 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['dataState', 'friends', 'accounts']),
+    ...mapGetters('conversation', ['otherParticipants']),
+
     DataStateType: () => DataStateType,
     isLoading: {
       set(state: DataStateType) {
@@ -124,7 +126,7 @@ export default Vue.extend({
       this.isLoading = DataStateType.Loading
       this.queryOptions = {
         ...this.queryOptions,
-        accounts: [...this.friends.all, this.accounts.details],
+        accounts: [...this.otherParticipants, this.accounts.details],
         queryString: this.searchQuery,
       }
       // currently only fetch payload matches, can be refactored later
@@ -139,11 +141,6 @@ export default Vue.extend({
     async handleClickPaginate(pageNum: number) {
       this.page = pageNum
       await this.fetchResult()
-      if (!this.$refs.scrollRef) {
-        return
-      }
-      const scrollEl = this.$refs.scrollRef as Vue
-      scrollEl.$el.scrollTop = 0
     },
     onChange(value: any) {
       this.queryOptions = {

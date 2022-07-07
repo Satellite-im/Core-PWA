@@ -207,38 +207,6 @@ describe('init', () => {
       messageLoading: false,
     })
   })
-  it('should clearUploadProgress', () => {
-    const localState = InitialTextileState()
-    localState.uploadProgress = {
-      'file.jpeg': {
-        progress: 42,
-        finished: false,
-        name: 'file.jpeg',
-      },
-    }
-    inst.clearUploadProgress(localState)
-
-    expect(localState.uploadProgress).toMatchObject({})
-  })
-  it('should setUploadingFileProgress to 100', () => {
-    const localState = InitialTextileState()
-    localState.uploadProgress = {
-      'file.jpeg': {
-        progress: 42,
-        finished: false,
-        name: 'file.jpeg',
-      },
-    }
-    const newFileProgressState = {
-      progress: 100,
-      name: 'file.jpeg',
-    }
-    inst.setUploadingFileProgress(localState, newFileProgressState)
-
-    expect(localState.uploadProgress[newFileProgressState.name]).toMatchObject({
-      finished: true,
-    })
-  })
   it('should setActiveConversation to a specific address', () => {
     const localState = InitialTextileState()
     const testAddress = '0xadress'
@@ -246,23 +214,26 @@ describe('init', () => {
 
     expect(localState.activeConversation).toBe(testAddress)
   })
-  it('should setUploadingFileProgress to 90', () => {
+  it('should setUserThreadData', () => {
     const localState = InitialTextileState()
-    localState.uploadProgress = {
-      'file.jpeg': {
-        progress: 42,
-        finished: false,
-        name: 'file.jpeg',
-      },
+    const argument = {
+      _id: 'Corrupti similique doloribus sed similique. Est esse eveniet impedit soluta dignissimos. Facere aut voluptatibus. Itaque recusandae occaecati.\n \rArchitecto cum modi dolor ut aut. Et iusto pariatur quia ratione quos vero nihil. Atque optio dolorum vitae incidunt molestiae. Explicabo odio iste consectetur totam dolore aut nihil fuga velit.\n \rQuidem maiores inventore laborum facere est quibusdam ea. Ut ullam illum sed consequatur odio vel deserunt est. Non et officiis quod illo voluptates quos repudiandae. Aperiam ipsam autem in rem odit laudantium quasi et adipisci. Dolorem delectus facilis non enim eaque atque cupiditate.',
+      consentToScan: false,
+      blockNsfw: true,
+      flipVideo: true,
     }
-    const newFileProgressState = {
-      progress: 90,
-      name: 'file.jpeg',
-    }
-    inst.setUploadingFileProgress(localState, newFileProgressState)
+    inst.setUserThreadData(localState, argument)
 
-    expect(localState.uploadProgress[newFileProgressState.name]).toMatchObject({
-      finished: false,
-    })
+    expect(localState.userThread).toMatchObject(argument)
+  })
+  it('should setFileSystem', () => {
+    const localState = InitialTextileState()
+    const argument = {
+      totalSize: 10,
+      percentageUsed: 10,
+    }
+    inst.setFileSystem(localState, argument)
+
+    expect(localState.fileSystem).toMatchObject(argument)
   })
 })

@@ -10,9 +10,9 @@ describe('init', () => {
   })
 
   it('should return the isFilesIndexLoading property of the initial state', () => {
-    // const result: any = inst.isFilesIndexLoading(InitialUIState())
-    // expect(result).toBeFalsy()
-    // expect(result).toMatchSnapshot()
+    const result: any = inst.isFilesIndexLoading(InitialUIState(), {}, {}, [])
+    expect(result).toBeTruthy()
+    expect(result).toMatchSnapshot()
   })
 
   it('should return the showSidebar property of the initial state', () => {
@@ -376,7 +376,6 @@ describe('init', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,

@@ -78,6 +78,7 @@ const fileMessagePayload = t.type({
     size: t.number,
     type: t.string,
     id: t.string,
+    nsfw: t.boolean,
   }),
 })
 

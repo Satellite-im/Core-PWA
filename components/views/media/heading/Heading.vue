@@ -10,21 +10,9 @@ export default Vue.extend({
     MaximizeIcon,
     MinimizeIcon,
   },
-  data() {
-    return {
-      elapsedTimeLabel: '',
-      timer: undefined as NodeJS.Timeout | undefined,
-    }
-  },
   computed: {
-    ...mapState(['ui', 'webrtc']),
-  },
-  mounted() {
-    this.$store.commit('ui/fullscreen', false)
-    this.setTimer()
-  },
-  beforeDestroy() {
-    this.clearTimer()
+    ...mapState(['ui']),
+    ...mapState('webrtc', ['elapsedTime']),
   },
   methods: {
     /**
@@ -41,25 +29,6 @@ export default Vue.extend({
           element?.classList.remove('full-video')
         }
       }
-    },
-    elapsedTime(start: number): void {
-      if (!this.webrtc.activeCall || !start) {
-        return
-      }
-      const duration = this.$dayjs.duration(Date.now() - start)
-      const hours = duration.hours()
-      this.elapsedTimeLabel = `${this.$t('ui.live')} ${
-        hours > 0 ? `${hours}:` : ''
-      }${duration.format('mm:ss')}`
-    },
-    setTimer() {
-      this.elapsedTime(this.webrtc.createdAt)
-      this.timer = setInterval(() => {
-        this.elapsedTime(this.webrtc.createdAt)
-      }, 1000)
-    },
-    clearTimer() {
-      clearInterval(this.timer)
     },
   },
 })

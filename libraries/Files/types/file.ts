@@ -72,8 +72,7 @@ export enum FILE_TYPE {
 
   // image - non-embeddable
   BMP = 'image/bmp',
-  HEIC = 'image/heic', // non-embeddable, but we convert as needed
-  HEIF = 'image/heif', // non-embeddable, but we convert as needed
+  HEIC = 'image/heif', // non-embeddable, but we convert as needed
   ICO = 'image/vnd.microsoft.icon',
   TIFF = 'image/tiff',
 

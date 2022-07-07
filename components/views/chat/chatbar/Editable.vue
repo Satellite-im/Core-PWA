@@ -1,8 +1,8 @@
 <template>
-  <UiScroll
-    vertical-scroll
-    scrollbar-visibility="scroll"
-    class="editable-container"
+  <UiSimpleScroll
+    scroll-mode="vertical"
+    scroll-show="scroll"
+    container-class="editable-container"
   >
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
@@ -24,7 +24,7 @@
         <span><br /></span>
       </div>
     </div>
-  </UiScroll>
+  </UiSimpleScroll>
 </template>
 
 <script lang="ts">
@@ -105,7 +105,7 @@ export default Vue.extend({
     focusInput() {
       this.$nextTick(() => {
         if (!this.$refs?.editable) return
-        const messageBox = this.$refs?.editable as HTMLElement
+        const messageBox = this.$refs.editable as HTMLElement
         Cursor.setCurrentCursorPosition(this.value.length, messageBox)
       })
     },
@@ -324,10 +324,11 @@ export default Vue.extend({
     }
   }
 }
-
 .editable-container {
   position: relative;
   width: 100%;
+  font-size: @mini-text-size;
+  font-family: @secondary-font;
 
   .placeholder {
     color: @text-muted;
@@ -340,23 +341,20 @@ export default Vue.extend({
     &:extend(.background-layer);
     &:extend(.no-select);
   }
-
   .editable-input {
     width: 100%;
     display: inline-block;
     overflow-wrap: break-word;
     word-break: break-word;
     white-space: break-spaces !important;
-
     .chat-row-content {
+      padding-right: 5px;
       .emoji {
         font-style: initial;
       }
-
       .md-symbol {
         color: @gray;
       }
-
       .md-lang {
         color: @green;
       }

@@ -30,21 +30,19 @@
       min-width: 0;
       font-size: @title-text;
       font-weight: bolder;
-      line-height: 1.6;
+      line-height: 1.25;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
     .subtitle {
-      height: 30px;
-      display: inline-block;
-      min-width: 0;
-      font-size: @micro-text-size;
-      line-height: 1.4;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      font-size: @micro-text-size;
+      height: @mini-text-size * 1.2 * 2;
+      line-height: 1.2;
+      font-size: @mini-text-size;
       color: @text-muted;
+      font-family: @secondary-font;
+      pointer-events: none;
+      .multiline-ellipsis(2);
     }
 
     flex: 1;

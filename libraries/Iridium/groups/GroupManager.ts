@@ -1,10 +1,10 @@
-import { Iridium, Emitter } from '@satellite-im/iridium/dist/index.browser'
+import { Iridium, Emitter } from '@satellite-im/iridium'
 import type { IridiumMessage } from '@satellite-im/iridium/src/types'
 import * as json from 'multiformats/codecs/json'
-import logger from '~/plugins/local/logger'
 import { IridiumManager } from '../IridiumManager'
 import Group from './Group'
 import { GroupConfig, GroupData, GroupsError } from './types'
+import logger from '~/plugins/local/logger'
 
 export default class GroupManager extends Emitter<IridiumMessage> {
   groupIds?: string[]

@@ -3,6 +3,20 @@ import { Commitment, clusterApiUrl } from '@solana/web3.js'
 
 export const Config = {
   debug: true,
+  iridium: {
+    relayId: process.env.NUXT_ENV_IRIDIUM_LOCAL_RELAY,
+    syncNodes: [
+      {
+        label: 'Satellite.im Sync Node',
+        peerId:
+          process.env.NUXT_ENV_IRIDIUM_SYNC_PEER_ID ||
+          '12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
+        multiaddr:
+          process.env.NUXT_ENV_IRIDIUM_SYNC_ADDR ||
+          '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
+      },
+    ],
+  },
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
@@ -114,10 +128,12 @@ export const Config = {
     searchCharLimit: 256,
     groupNameMinLength: 3,
     groupNameMaxLength: 64,
+    uploadMaxLength: 8, // 8 files at a time
   },
   account: {
     minLength: 5,
     maxLength: 32,
+    statusMaxLength: 128,
   },
   profile: {
     noteMaxChars: 256,

@@ -84,16 +84,9 @@ export default class TextileManager {
     this.userInfoManager = new UserInfoManager(textile)
     this.notificationManager = new NotificationManager(textile)
 
-    // await all the managers to be initialized
+    // await the rest of the managers
     await Promise.all([
       this.mailboxManager.init(),
-      this.sharedBucket.init({
-        name: Config.textile.sharedBucket,
-      }),
-      this.personalBucket.init({
-        name: Config.textile.personalBucket,
-        encrypted: true,
-      }),
       this.groupChatManager.init(),
       this.metadataManager.init(),
       this.userInfoManager.init(),

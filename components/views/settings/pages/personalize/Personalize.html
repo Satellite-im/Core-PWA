@@ -1,6 +1,6 @@
-<div id="personalize-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.personalize.title')"
@@ -9,40 +9,40 @@
         :size="6"
         :text="$t('pages.settings.personalize.subtitle')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyLabel :text="$t('pages.settings.personalize.theme')" />
-      <br />
-      <InteractablesSelect v-model="theme" size="small" :options="themes" />
-    </div>
-  </div>
-
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyLabel :text="$t('pages.settings.personalize.flair')" />
-      <br />
+  <SettingsSection>
+    <SettingsUnit>
       <InteractablesSelect
-        :disabled="theme === ThemeNames.DEFAULT"
+        v-model="theme"
+        :options="themes"
+        :label="$t('pages.settings.personalize.theme')"
+        show-label
+      />
+    </SettingsUnit>
+  </SettingsSection>
+
+  <SettingsSection>
+    <SettingsUnit>
+      <InteractablesSelect
         v-model="flair"
-        size="small"
-        :options="flairs"
-        colorSupport
+        :options="flairOptions"
+        :label="$t('pages.settings.personalize.flair')"
+        :disabled="theme === ThemeNames.DEFAULT"
+        show-label
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyLabel :text="$t('pages.settings.personalize.language')" />
-      <br />
+  <SettingsSection>
+    <SettingsUnit>
       <InteractablesSelect
-        size="small"
+        v-model="language"
         :options="[{ text: 'English (USA)', value: 'en_US' }]"
-        selected="en_US"
+        :label="$t('pages.settings.personalize.language')"
+        show-label
       />
-    </div>
-  </div>
-</div>
+    </SettingsUnit>
+  </SettingsSection>
+</SettingsPage>

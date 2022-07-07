@@ -148,7 +148,6 @@ const initialState = {
   showSidebar: true,
   showSearchResult: false,
   showSettings: false,
-  showMedia: false,
   settingsSideBar: true,
   settingsRoute: 'personalize',
   quickProfile: false,

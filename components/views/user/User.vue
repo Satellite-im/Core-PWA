@@ -3,18 +3,19 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
 
 import { SmartphoneIcon, CircleIcon } from 'satellite-lucide-icons'
 
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { User } from '~/types/ui/user'
 import { Message, TextMessage } from '~/types/textile/mailbox'
 import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
-
+import type { User } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     VueMarkdown,
@@ -42,7 +43,8 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
-      timestampRefreshInterval: null,
+      timestamp: '' as string | TranslateResult,
+      timeoutId: undefined as NodeJS.Timeout | undefined,
     }
   },
   computed: {
@@ -53,7 +55,7 @@ export default Vue.extend({
       conversations: (state) => (state as RootState).textile?.conversations,
     }),
     ...mapGetters('textile', ['getConversation']),
-    ...mapGetters('settings', ['getTimestamp']),
+    ...mapGetters('settings', ['getTimestamp', 'getDate']),
     contextMenuValues(): ContextMenuItem[] {
       return this.user.state === 'online'
         ? [
@@ -72,11 +74,11 @@ export default Vue.extend({
           ]
     },
     hasMessaged(): boolean {
-      const lastMessage = this.getConversation(this.user.address)?.lastMessage
+      const lastMessage = this.getConversation(this.user.did)?.lastMessage
       return !!lastMessage
     },
     lastMessage(): string {
-      const conversation = this.getConversation(this.user.address)
+      const conversation = this.getConversation(this.user.did)
       const lastMessage = conversation?.lastMessage
 
       return lastMessage
@@ -98,10 +100,18 @@ export default Vue.extend({
     },
     timestamp(): string {
       return this.getTimestamp({
-        time: this.conversations[this.user.address]?.lastUpdate,
+        time: this.conversations[this.user.did]?.lastUpdate,
       })
     },
   },
+  // watch: {
+  //   user: {
+  //     handler() {
+  //       this.setTimestamp()
+  //     },
+  //     deep: true,
+  //   },
+  // },
   mounted() {
     Array.from(
       (this.$refs.subtitle as HTMLElement).getElementsByClassName(
@@ -114,9 +124,10 @@ export default Vue.extend({
         spoiler.classList.add('spoiler-open')
       })
     })
+    // this.setTimestamp()
   },
   beforeDestroy() {
-    clearInterval(this.$data.timestampRefreshInterval)
+    // this.clearTimeoutId()
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
@@ -141,25 +152,30 @@ export default Vue.extend({
      * Pretty sure this is just a placeholder for what will be the actual function?
      * @example ---
      */
-    navigateToUser() {
+    async navigateToUser() {
       if (this.$device.isMobile) {
         // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
         this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
       }
 
-      if (this.user.address === this.$route.params.address) {
+      if (this.user.did === this.$route.params.did) {
         this.$store.dispatch('ui/setChatbarFocus')
         return
       }
 
-      this.$store.dispatch('conversation/setConversation', {
-        id: this.user.address,
-        type: 'friend',
-        participants: [this.user],
-        calling: false,
-      })
-      this.$router.push(`/chat/direct/${this.user.address}`)
+      await iridium.chat?.createConversation(this.user?.name, 'direct', [
+        this.user?.did,
+        iridium.connector.id,
+      ])
+
+      // this.$store.dispatch('conversation/setConversation', {
+      //   id: this.user.did,
+      //   type: 'friend',
+      //   participants: [this.user],
+      //   calling: false,
+      // })
+      this.$router.push(`/chat/direct/${this.user.did}`)
     },
     handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)
@@ -174,10 +190,6 @@ export default Vue.extend({
         case MessagingTypesEnum.GLYPH:
           return this.$t(`messaging.user_sent.${sender}`, {
             msgType: message.type,
-          }) as string
-        case MessagingTypesEnum.IMAGE:
-          return this.$t(`messaging.user_sent_image.${sender}`, {
-            msgType: 'image',
           }) as string
         default:
           return this.$t(`messaging.user_sent_something.${sender}`) as string
@@ -210,6 +222,44 @@ export default Vue.extend({
     containsOnlyEmoji(str: string): boolean {
       return str.match(this.$Config.regex.isEmoji) !== null
     },
+    // /**
+    //  * @description set timestamp
+    //  * "now" for less than 30 sec
+    //  * "hh:mm AM/PM" between 31 sec and a day
+    //  * "yesterday" the day before
+    //  * "2d" 2 days before
+    //  * "MM/DD/YYYY" > 2 days before
+    //  */
+    // setTimestamp() {
+    //   // set now, update timestamp after 30s
+    //   if (this.$dayjs().diff(this.user.lastUpdate, 'second') < 30) {
+    //     this.clearTimeoutId()
+    //     this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
+    //     this.timestamp = this.$t('time.now')
+    //     return
+    //   }
+    //   if (this.$dayjs().isSame(this.user.lastUpdate, 'day')) {
+    //     this.timestamp = this.getTimestamp({ time: this.user.lastUpdate })
+    //   } else if (this.$dayjs().diff(this.user.lastUpdate, 'day') <= 1) {
+    //     this.timestamp = this.$t('time.yesterday')
+    //   } else if (this.$dayjs().diff(this.user.lastUpdate, 'day') <= 2) {
+    //     this.timestamp = '2 d'
+    //   } else {
+    //     this.timestamp = this.getDate(this.user.lastUpdate)
+    //   }
+    //   const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
+    //   this.clearTimeoutId()
+    //   // update timestamp at midnight tonight
+    //   this.timeoutId = setTimeout(
+    //     () => this.setTimestamp(),
+    //     midnight - Date.now(),
+    //   )
+    // },
+    // clearTimeoutId() {
+    //   if (this.timeoutId) {
+    //     clearTimeout(this.timeoutId)
+    //   }
+    // },
   },
 })
 </script>

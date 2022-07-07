@@ -26,11 +26,13 @@ const commonProperties = [
   'textile.messageLoading',
   'accounts.initialized',
   'friends.all',
+  'friends',
   'webrtc.activeStream',
   'webrtc.incomingCall',
   'ui.replyChatbarContent',
   'ui.editMessage',
   'chat.files',
+  'chat.countError',
   'groups.inviteSubscription',
   'groups.groupSubscriptions',
   'ui.modals',
@@ -39,6 +41,7 @@ const commonProperties = [
   'ui.filesUploadStatus',
   'ui.fileDownloadList',
   'textile.userThread',
+  'conversation.participants',
 ]
 
 const propertiesNoStorePin = [

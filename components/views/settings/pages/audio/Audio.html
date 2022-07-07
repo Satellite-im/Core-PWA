@@ -1,15 +1,17 @@
-<div id="audio-settings">
+<SettingsPage>
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.audio.title')"
   />
   <!--Audio Sources-->
   <!-- Requires user permissions to see in most browsers -->
-  <div class="columns is-desktop">
+  <SettingsSection
+    v-if="!userHasGivenAudioAccess"
+  >
     <SettingsUnit
-      v-if="!userHasGivenAudioAccess && !userDeniedAudioAccess"
       :title="$t('pages.settings.audio.sources.title')"
       :text="$t('pages.settings.audio.sources.subtitle')"
+      v-if="!userDeniedAudioAccess"
     >
       <!-- Ask for permissions block -->
       <InteractablesButton
@@ -22,21 +24,21 @@
 
     <!-- Permission Denied Block -->
     <TypographyError
-      v-if="userDeniedAudioAccess"
+      v-else
       :text="$t('pages.settings.audio.sources.permissionDeniedMessage')"
     />
-  </div>
+  </SettingsSection>
   <!-- Permission Granted Block -->
-  <div v-if="userHasGivenAudioAccess" class="columns is-desktop">
+  <SettingsSection v-if="userHasGivenAudioAccess">
     <!-- Audio In -->
     <SettingsUnit
       :title="$t('pages.settings.audio.sources.input.title')"
       :text="$t('pages.settings.audio.sources.input.subtitle')"
     >
       <InteractablesSelect
-        v-model="isAudioInput"
+        v-model="selectedAudioInput"
         :options="audioInputs"
-        size="small"
+        :label="$t('pages.settings.audio.sources.input.title')"
       />
     </SettingsUnit>
     <!-- Audio Out -->
@@ -46,19 +48,19 @@
     >
       <InteractablesSelect
         v-if="browserAllowsAudioOut"
-        v-model="isAudioOutput"
+        v-model="selectedAudioOutput"
         :options="audioOutputs"
-        size="small"
+        :label="$t('pages.settings.audio.sources.output.title')"
       />
       <TypographyError
         v-if="!browserAllowsAudioOut"
         :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
       />
     </SettingsUnit>
-  </div>
+  </SettingsSection>
 
   <!--Audio Bitrate & Sample-->
-  <div class="columns is-desktop">
+  <SettingsSection>
     <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
       <br />
       <div class="meter-container">
@@ -83,19 +85,19 @@
         @volumeControlValueChange="volumeControlValueChange"
       />
     </SettingsUnit>
-  </div>
+  </SettingsSection>
 
   <!--Audio Bitrate & Sample-->
   <UiComingSoon :areaCover="true" :hide="true">
-    <div class="columns is-desktop">
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.bitrate.title')"
         :text="$t('pages.settings.audio.bitrate.subtitle')"
       >
         <InteractablesSelect
           :options="Bitrates"
-          size="small"
           v-model="isBitrate"
+          :label="$t('pages.settings.audio.bitrate.title')"
         />
       </SettingsUnit>
       <SettingsUnit
@@ -104,14 +106,14 @@
       >
         <InteractablesSelect
           :options="SampleSizes"
-          size="small"
           v-model="isSampleSize"
+          :label="$t('pages.settings.audio.sampleSize.title')"
         />
       </SettingsUnit>
-    </div>
+    </SettingsSection>
 
     <!--Echo Cancellation & Noise Suppression-->
-    <div class="columns is-desktop">
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.echo.title')"
         :text="$t('pages.settings.audio.echo.subtitle')"
@@ -130,7 +132,7 @@
           :isEnabled="settings.noiseSuppression"
         />
       </SettingsUnit>
-    </div>
+    </SettingsSection>
   </UiComingSoon>
   <!-- Video -->
   <TypographyHorizontalRuleText
@@ -139,28 +141,26 @@
   />
 
   <!--Video Input Source -->
-  <div class="columns is-desktop">
+  <SettingsSection>
     <SettingsUnit
       :title="$t('pages.settings.video.sources.input.title')"
       :text="$t('pages.settings.video.sources.input.subtitle')"
     >
       <!-- Ask for permissions block -->
-      <span v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess">
-        <InteractablesButton
-          :text="$t('pages.settings.audio.sources.permissionButtonText')"
-          size="small"
-          type="primary"
-          :disabled="!hasWebcam"
-          :action="enableVideo"
-        />
-      </span>
-      <span v-if="userHasGivenVideoAccess">
-        <InteractablesSelect
-          v-model="isVideoInput"
-          :options="videoInputs"
-          size="small"
-        />
-      </span>
+      <InteractablesButton
+        v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess"
+        :text="$t('pages.settings.audio.sources.permissionButtonText')"
+        size="small"
+        type="primary"
+        :disabled="!hasWebcam"
+        :action="enableVideo"
+      />
+      <InteractablesSelect
+        v-if="userHasGivenVideoAccess"
+        v-model="isVideoInput"
+        :options="videoInputs"
+        :label="$t('pages.settings.video.sources.input.title')"
+      />
 
       <!-- Permission Denied Block -->
       <span v-if="userDeniedVideoAccess">
@@ -180,7 +180,7 @@
       />
     </SettingsUnit>
     <UiLoadersGenericContent class="column unit" :count="1" v-else />
-  </div>
+  </SettingsSection>
 
   <!-- Screen Share -->
   <TypographyHorizontalRuleText
@@ -190,7 +190,7 @@
   />
 
   <!-- Capture Mouse -->
-  <div class="columns is-desktop" v-if="featureReadyToShow">
+  <SettingsSection v-if="featureReadyToShow">
     <SettingsUnit
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
@@ -198,10 +198,10 @@
       <InteractablesSelect
         v-model="isCaptureMouse"
         :options="captureMouses"
-        size="small"
+        label="$t('pages.settings.screen.captureMouse.title')"
       />
     </SettingsUnit>
-  </div>
+  </SettingsSection>
 
   <!-- Notification Sounds -->
   <TypographyHorizontalRuleText
@@ -210,4 +210,4 @@
   />
   <SettingsPagesAudioSounds />
   <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
-</div>
+</SettingsPage>

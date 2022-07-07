@@ -1,4 +1,4 @@
-import { Emitter } from '@satellite-im/iridium/src/emitter'
+import { Emitter } from '@satellite-im/iridium'
 import type {
   IridiumMessage,
   IridiumChannelEvent,
@@ -93,7 +93,7 @@ export default class Group extends Emitter<IridiumMessage> {
     if (!options.store.encrypt) {
       options.store.encrypt = {}
     }
-    options.store.encrypt.recipients = this.state?.members
+    options.store.encrypt.recipients = this.state?.members // TODO: to be fixed
     return this.iridium.connector?.set(
       `/groups/${this.id}/${key}`,
       payload,

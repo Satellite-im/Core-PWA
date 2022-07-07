@@ -12,9 +12,23 @@ export enum ThemeNames {
 }
 
 export type Theme = {
-  name: ThemeNames
+  text: string
+  value: ThemeNames
   class: string
 }
+
+export const Themes = [
+  {
+    text: 'Default',
+    value: ThemeNames.DEFAULT,
+    class: '',
+  },
+  {
+    text: 'Moonless Night',
+    value: ThemeNames.MOONLESS,
+    class: 'moonless_night',
+  },
+]
 
 export const FlairColors: any = {
   SATELLITE: ['#2761fd', '#286CFE', '39, 97, 253'],
@@ -74,21 +88,6 @@ export const Flairs = [
   },
 ]
 
-export const Themes = [
-  {
-    text: 'Default',
-    name: ThemeNames.DEFAULT,
-    value: ThemeNames.DEFAULT,
-    class: '',
-  },
-  {
-    text: 'Moonless Night',
-    name: ThemeNames.MOONLESS,
-    value: ThemeNames.MOONLESS,
-    class: 'moonless_night',
-  },
-]
-
 export enum GlyphMarketViewStatus {
   HOME = 'home',
   SHOP_ALL = 'shop_all',
@@ -109,7 +108,6 @@ export enum ModalWindows {
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
   CROP = 'crop',
-  CREATE_GROUP = 'creategroup',
 }
 
 export interface EnhancerInfo {
@@ -168,7 +166,6 @@ export interface UIState {
   contextMenuPosition: object
   quickProfilePosition: object
   showSettings: boolean
-  showMedia: boolean
   settingsSideBar: boolean
   settingsRoute: SettingsRoutes
   showSidebarUsers: boolean

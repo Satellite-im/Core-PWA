@@ -1,0 +1,41 @@
+.checkbox {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid @gray;
+  border-radius: @corner-rounding;
+  transition: all @animation-speed ease;
+
+  svg,
+  input {
+    position: absolute;
+  }
+
+  svg {
+    transition: all @animation-speed ease;
+    opacity: 0;
+    transform: scale(0.5);
+    stroke: @white;
+    width: 16px;
+    height: 16px;
+  }
+
+  &.checked {
+    border-color: @flair-color;
+    background-color: @flair-color;
+    &:extend(.glow-flair);
+
+    svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  input {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+  }
+}

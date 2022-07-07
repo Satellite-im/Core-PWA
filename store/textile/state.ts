@@ -6,11 +6,14 @@ const InitialTextileState = (): TextileState => ({
   conversationLoading: false,
   messageLoading: false,
   activeConversation: '',
-  uploadProgress: {},
   userThread: {
     consentToScan: false,
     blockNsfw: true,
     flipVideo: true,
+  },
+  fileSystem: {
+    totalSize: 0,
+    percentageUsed: 0,
   },
 })
 

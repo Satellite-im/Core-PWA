@@ -5,9 +5,10 @@
     <!--      v-if="!isGroup"-->
     <!--      class="circle"-->
     <!--      :user="recipient"-->
+    <!--      :src="src"-->
     <!--      :clickHandler="openProfile"-->
     <!--    />-->
-    <UiUserState v-if="!isGroup" class="circle" :user="recipient" />
+    <UiUserState v-if="!isGroup" class="circle" :user="recipient" :src="src" />
     <GroupIcon v-else :group="recipient" />
   </div>
   <div class="user-info">
@@ -19,11 +20,7 @@
     />
   </div>
   <div class="controls">
-    <div
-      class="toggle-alerts"
-      @click="toggleAlerts"
-      v-tooltip.bottom="$t('pages.chat.alerts')"
-    >
+    <div class="toggle-alerts" data-cy="toolbar-alerts">
       <UiCircle
         v-if="allUnseenNotifications.length"
         class="notification-alert"
@@ -31,6 +28,7 @@
         color="red"
         type="icon"
         :data="allUnseenNotifications.length"
+        @click="toggleAlerts"
       >
         {{allUnseenNotifications.length}}
       </UiCircle>
@@ -38,21 +36,18 @@
         size="1x"
         :class="`control-icon ${showAlerts ? 'primary' : ''}`"
         color="primary"
+        @click="toggleAlerts"
+        v-tooltip.bottom="$t('pages.chat.alerts')"
+      />
+      <ToolbarAlerts
+        v-if="showAlerts && $device.isDesktop"
+        v-click-outside="toggleAlerts"
       />
     </div>
-
-    <UiFloatingContainer
-      v-if="showAlerts"
-      :offsets="showSidebar ? [4.2] : [4.2, 2.3]"
-      heading="Alerts"
-      :width="25"
-      :height="25"
-      :class="`alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
-      :customStyles="$device.isMobile"
-      :toggleMethod="() => $data.showAlerts = false"
-    >
-      <ToolbarAlerts />
-    </UiFloatingContainer>
+    <ToolbarAlerts
+      v-if="showAlerts && !$device.isDesktop"
+      v-click-outside="toggleAlerts"
+    />
     <div
       :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
       v-tooltip.bottom="callTooltipText"
@@ -67,7 +62,7 @@
       />
     </div>
     <!-- <div
-      :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      :class="`control-button ${!enableRTC || webrtc.BackgroundCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
       v-tooltip.bottom="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
       v-if="recipient"
@@ -92,24 +87,18 @@
       </div>
     </UiComingSoon>
     <div
-      v-if="!isGroup"
-      class="control-button"
-      data-cy="toolbar-new-group"
-      v-tooltip.bottom="$t('pages.chat.new_group')"
-      @click="toggleModal('creategroup')"
-    >
-      <users-icon size="1x" class="control-icon" />
-    </div>
-    <div
-      v-else
+      v-if="isGroup"
       class="control-button"
       v-tooltip.bottom="$t('pages.chat.add_member')"
       @click="groupInvite"
     >
       <user-plus-icon size="1x" class="control-icon" />
     </div>
-    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
-    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
+    <GroupInvite
+      v-if="modals.groupInvite.isOpen"
+      v-click-outside="()=>toggleModal('groupInvite')"
+      :group="recipient"
+    />
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
     <UiComingSoon
@@ -137,13 +126,28 @@
     </UiComingSoon>
 
     <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <SearchInput
-      v-if="!$device.isMobile"
-      @search="handleSearch"
-      @change="handleChange"
-      :placeholder="$t('search.search')"
-      :searchRecommend="searchRecommend"
-    />
+    <template v-if="!$device.isMobile">
+      <UiComingSoon
+        v-if="isGroup"
+        :tooltipText="$t('coming_soon.group_chat_search')"
+        horizontal
+        tooltip-position="bottom"
+      >
+        <SearchInput
+          @search="handleSearch"
+          @change="handleChange"
+          :placeholder="$t('search.search')"
+          :searchRecommend="searchRecommend"
+        />
+      </UiComingSoon>
+      <SearchInput
+        v-else
+        @search="handleSearch"
+        @change="handleChange"
+        :placeholder="$t('search.search')"
+        :searchRecommend="searchRecommend"
+      />
+    </template>
     <SearchResult
       v-if="!$device.isMobile && searchQuery"
       :searchQuery="searchQuery"

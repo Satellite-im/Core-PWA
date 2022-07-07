@@ -1,16 +1,19 @@
 <template>
   <div
     id="app-wrap"
-    :class="`${sidebar ? 'is-open' : 'is-collapsed'} ${
-      $store.state.ui.theme.base.class
-    }`"
+    :class="[
+      $store.state.ui.theme.base.class,
+      sidebar ? 'is-open' : 'is-collapsed',
+    ]"
   >
     <div
       id="app"
-      :class="`${$store.state.ui.theme.base.class}
-      ${sidebar ? 'is-open' : 'is-collapsed'} ${
-        $device.isMobile ? 'mobile-app' : 'desktop'
-      }`"
+      :class="[
+        $store.state.ui.theme.base.class,
+        sidebar ? 'is-open' : 'is-collapsed',
+        $device.isMobile ? 'mobile-app' : 'desktop',
+        isBackgroundCall ? 'has-background-call' : '',
+      ]"
     >
       <UiGlobal />
 
@@ -78,7 +81,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
@@ -115,6 +118,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'media']),
+    ...mapGetters('webrtc', ['isBackgroundCall']),
     swiper() {
       return this.$refs.swiper.$swiper
     },

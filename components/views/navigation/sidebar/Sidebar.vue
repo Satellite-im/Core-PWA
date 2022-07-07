@@ -49,7 +49,7 @@ export default Vue.extend({
     incomingRequests: () =>
       Object.values(iridium.friends?.state.requests || {}).filter(
         (r: FriendRequest) => r.incoming,
-      ),
+      ) || [],
     DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,

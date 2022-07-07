@@ -6,8 +6,6 @@ import { mapState } from 'vuex'
 
 import { ChevronDownIcon } from 'satellite-lucide-icons'
 
-import { User } from '~/types/ui/user'
-
 export default Vue.extend({
   name: 'Scroll',
   components: {
@@ -34,15 +32,6 @@ export default Vue.extend({
       default: false,
       required: false,
     },
-    user: {
-      type: Object as PropType<User>,
-      default: () => ({
-        name: '',
-        address: '',
-        status: '',
-      }),
-      required: true,
-    },
   },
   data() {
     return {
@@ -58,9 +47,6 @@ export default Vue.extend({
         'auto-scroll': this.autoScroll,
         dark: this.theme === 'dark',
       }
-    },
-    isMediaOpen() {
-      return this.$store.state.ui.showMedia
     },
   },
   watch: {
@@ -95,16 +81,8 @@ export default Vue.extend({
       if (this.$el && this.autoScroll) {
         this.$nextTick(() => {
           this.$el.scrollTop = this.$el.scrollHeight
+          this.$store.commit('ui/setIsScrollOver', false)
         })
-      }
-    },
-    /**
-     * @method hideKeyboard
-     * @description hide virtual keyboard on mobile
-     */
-    hideKeyboard() {
-      if (this.$device.isMobile) {
-        document.activeElement.blur()
       }
     },
     /**

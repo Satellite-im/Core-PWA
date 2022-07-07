@@ -42,6 +42,7 @@ export default Vue.extend({
     },
   },
   mounted() {
+    console.info('index mounted')
     // Handle the case that the wallet is not found
     if (this.accounts.encryptedPhrase === '') {
       this.$router.replace('/setup/disclaimer')
@@ -55,7 +56,7 @@ export default Vue.extend({
   methods: {
     eventuallyRedirect() {
       if (this.accounts.lastVisited === this.$route.path) {
-        this.$router.replace('/chat/direct')
+        this.$router.replace('/friends/list')
         return
       }
 
@@ -63,6 +64,8 @@ export default Vue.extend({
       if (matcher.matched.length > 0) {
         this.$router.replace(this.accounts.lastVisited)
       }
+
+      this.$router.replace('/friends/list')
     },
     /**
      * @method loadAccount

@@ -5,9 +5,12 @@ Object {
   "activeConversation": "",
   "conversationLoading": false,
   "conversations": Object {},
+  "fileSystem": Object {
+    "percentageUsed": 0,
+    "totalSize": 0,
+  },
   "initialized": false,
   "messageLoading": false,
-  "uploadProgress": Object {},
   "userThread": Object {
     "blockNsfw": true,
     "consentToScan": false,

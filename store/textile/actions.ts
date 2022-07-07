@@ -2,7 +2,11 @@ import Vue from 'vue'
 import { Update } from '@textile/hub-threads-client'
 import { v4 as uuidv4 } from 'uuid'
 import { TextileError, TextileState } from './types'
-import { MessageRouteEnum, PropCommonEnum } from '~/libraries/Enums/enums'
+import {
+  MessageRouteEnum,
+  MessagingTypesEnum,
+  PropCommonEnum,
+} from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { FilSystem } from '~/libraries/Files/FilSystem'
 import {
@@ -17,7 +21,7 @@ import { MailboxManager } from '~/libraries/Textile/MailboxManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { AccountsError } from '~/store/accounts/types'
 import { Group } from '~/store/groups/types'
-import { UploadDropItemType } from '~/types/files/file'
+import { ChatFileUpload } from '~/store/chat/types'
 import {
   QueryOptions,
   SearchOrderType,
@@ -31,7 +35,7 @@ import { MailboxSubscriptionType, Message } from '~/types/textile/mailbox'
 import { TextileConfig } from '~/types/textile/manager'
 import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
+import { MessageGroup } from '~/types/messaging'
 import BlockchainClient from '~/libraries/BlockchainClient'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
@@ -125,6 +129,15 @@ export default {
       ]
     }
 
+    // Since this is async, we have to check that we are still in the chat, if
+    // the user has navigated to a different chat, we can just return early so
+    // we don't update the state with old information (prevents the toolbar
+    // from showing the wrong participant info when navigating between
+    // different conversations rapidly)
+    if (rootState.conversation.id !== friend.peerId) {
+      return
+    }
+
     // store latest data in indexeddb
     const messages = conversation.map((c) => ({ ...c, conversation: address }))
     const dbData: DexieConversation = {
@@ -136,7 +149,10 @@ export default {
     // add the messages to the search index
     db.search.conversationMessages.upsertAll(messages)
 
-    if (setActive) {
+    // set active conversation only if we still on the chat
+    const isChatRoute = !!this.$router.currentRoute.params?.address
+
+    if (setActive && isChatRoute) {
       commit('setActiveConversation', friend.address)
       if (friend.peerId) {
         commit(
@@ -169,13 +185,91 @@ export default {
     // TODO: only for testing
     dispatch('subscribeToMailbox')
   },
+  addMessageToConversation(
+    { state, commit, rootState, dispatch }: ActionsArguments<TextileState>,
+    {
+      address,
+      sender,
+      message,
+    }: { address: string; sender: string; message: Message },
+  ) {
+    const isActiveConversation = state.activeConversation === address
+
+    let oldGroupedMessages: MessageGroup = []
+
+    if (isActiveConversation) {
+      oldGroupedMessages = state.conversations[address].groupedMessages
+    }
+
+    commit('addMessageToConversation', {
+      address,
+      sender,
+      message,
+    })
+
+    if (isActiveConversation) {
+      const { messages, isScrollOver, lastLoadedMessageId, offset } =
+        rootState.chat.currentChat
+
+      let messageId: string = ''
+
+      if (message.type === MessagingTypesEnum.REACTION) {
+        messageId = message.reactedTo
+      } else if (message.type === MessagingTypesEnum.REPLY) {
+        messageId = message.repliedTo
+      } else {
+        messageId = message.id
+      }
+
+      const newGroupedMessages = state.conversations[address].groupedMessages
+
+      const isExistMessageIndex = messages.findIndex(
+        (m: Message) => m.id === messageId,
+      )
+
+      // update existed message
+      if (isExistMessageIndex !== -1) {
+        const newMessages = [...messages]
+        newMessages[isExistMessageIndex] = newGroupedMessages.find(
+          (message) => message.id === messageId,
+        )
+        commit(
+          'chat/setCurrentChat',
+          {
+            messages: newMessages,
+          },
+          { root: true },
+        )
+        return
+      }
+
+      // add new messages
+      const diffGroupedMessages =
+        newGroupedMessages.length - oldGroupedMessages.length
+
+      if (diffGroupedMessages) {
+        const newMessages = newGroupedMessages.slice(oldGroupedMessages.length)
+
+        commit(
+          'chat/setCurrentChat',
+          {
+            messages: messages.concat(newMessages),
+            lastLoadedMessageId: !isScrollOver
+              ? newMessages[newMessages.length - 1].id
+              : lastLoadedMessageId,
+            offset: offset - diffGroupedMessages,
+          },
+          { root: true },
+        )
+      }
+    }
+  },
   /**
    * @description Subscribes to the user mailbox, if not already subscribed, and eventually
    * updates messages in the active chat
    * @param param0 Action Arguments
    */
   async subscribeToMailbox({
-    commit,
     rootState,
     dispatch,
   }: ActionsArguments<TextileState>) {
@@ -193,6 +287,7 @@ export default {
     if (MailboxManager.isSubscribed(MailboxSubscriptionType.inbox)) {
       return
     }
+
     MailboxManager.listenToInboxMessages((message) => {
       if (!message) {
         return
@@ -204,7 +299,8 @@ export default {
       if (!sender) {
         return
       }
-      commit('addMessageToConversation', {
+
+      dispatch('addMessageToConversation', {
         address: sender.address,
         sender: MessageRouteEnum.INBOUND,
         message,
@@ -217,7 +313,7 @@ export default {
           from: sender.name,
           fromAddress: sender.address,
           title: `Notification`,
-          image: sender.photoHash,
+          imageHash: sender.profilePicture,
           type: AlertType.DIRECT_MESSAGE,
         },
         { root: true },
@@ -281,7 +377,7 @@ export default {
       },
     )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -289,18 +385,25 @@ export default {
     dispatch('storeMessage', { address: friend.address, message: result })
     commit('setMessageLoading', { loading: false })
   },
-  clearUploadStatus({ commit }: ActionsArguments<TextileState>) {
-    commit('clearUploadProgress', {})
-  },
   /**
    * @description Sends a File message to a given friend
    * @param param0 Action Arguments
-   * @param param1 an object containing the recipient address (textile public key),
-   * file: UploadDropItemType to be sent users bucket for textile
+   * @param param1 address, file to upload, address and index for updating upload progress in store
+   * file: ChatFileUpload to be sent users bucket for textile
    */
   async sendFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { to, file }: { to: string; file: UploadDropItemType },
+    {
+      to,
+      file,
+      address,
+      index,
+    }: {
+      to: string
+      file: ChatFileUpload
+      address: string
+      index: number
+    },
   ) {
     commit('setMessageLoading', { loading: true })
     document.body.style.cursor = PropCommonEnum.WAIT
@@ -310,10 +413,15 @@ export default {
       file.file,
       id,
       (progress: number) => {
-        commit('setUploadingFileProgress', {
-          progress: Math.floor((progress / file.file.size) * 100),
-          name: file.file.name,
-        })
+        commit(
+          'chat/setFileProgress',
+          {
+            address,
+            index,
+            progress: Math.floor((progress / file.file.size) * 100),
+          },
+          { root: true },
+        )
       },
     )
     /* If already canceled */
@@ -334,12 +442,13 @@ export default {
             name: file.file.name,
             size: file.file.size,
             type: file.file.type,
+            nsfw: file.nsfw,
           },
           type: 'file',
         },
       )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
@@ -383,7 +492,7 @@ export default {
         type: 'reaction',
       },
     )
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -444,7 +553,7 @@ export default {
       },
     )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -481,7 +590,7 @@ export default {
       editingAt: Date.now(),
     } as Message
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: editingMessage,
@@ -494,7 +603,7 @@ export default {
     })
 
     if (result) {
-      commit('addMessageToConversation', {
+      dispatch('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
@@ -504,7 +613,7 @@ export default {
         message: result,
       })
     } else {
-      commit('addMessageToConversation', {
+      dispatch('addMessageToConversation', {
         address: friend.address,
         sender: MessageRouteEnum.OUTBOUND,
         message: original,
@@ -551,7 +660,7 @@ export default {
       },
     )
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: friend.address,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -653,6 +762,15 @@ export default {
       query,
     })
 
+    // Since this is async, we have to check that we are still in the chat, if
+    // the user has navigated to a different chat, we can just return early so
+    // we don't update the state with old information (prevents the toolbar
+    // from showing the wrong participant info when navigating between
+    // different conversations rapidly)
+    if (rootState.conversation.id !== groupId) {
+      return
+    }
+
     if (setActive) {
       dispatch(
         'conversation/setConversation',
@@ -719,7 +837,8 @@ export default {
       if (!message) {
         return
       }
-      commit('addMessageToConversation', {
+
+      dispatch('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.INBOUND,
         message,
@@ -738,7 +857,7 @@ export default {
             groupId,
             id: uuidv4(),
             groupURL: message.to,
-            image: userInfo?.photoHash,
+            imageHash: userInfo?.photoHash,
             type: AlertType.GROUP_MESSAGE,
           },
           { root: true },
@@ -779,13 +898,11 @@ export default {
           Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
         })
 
-      commit('addMessageToConversation', {
+      dispatch('addMessageToConversation', {
         address: groupId,
         sender: MessageRouteEnum.OUTBOUND,
         message: result,
       })
-
-      dispatch('storeInMessage', { address: groupId, message })
     } catch (e) {
       Vue.prototype.$Logger.log('textile/sendGroupMessage: error', e)
     } finally {
@@ -825,7 +942,7 @@ export default {
       type: 'glyph',
     })
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -837,12 +954,22 @@ export default {
   /**
    * @description Sends a File message to a given group
    * @param param0 Action Arguments
-   * @param param1 an object containing the recipient address (textile public key),
-   * file: UploadDropItemType to be sent users bucket for textile
+   * @param param1 address, file to upload, address and index for updating upload progress in store
+   * file: ChatFileUpload to be sent users bucket for textile
    */
   async sendGroupFileMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { groupID, file }: { groupID: string; file: UploadDropItemType },
+    {
+      groupID,
+      file,
+      address,
+      index,
+    }: {
+      groupID: string
+      file: ChatFileUpload
+      address: string
+      index: number
+    },
   ) {
     document.body.style.cursor = PropCommonEnum.WAIT
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -852,10 +979,15 @@ export default {
       file.file,
       id,
       (progress: number) => {
-        commit('setUploadingFileProgress', {
-          progress: Math.floor((progress / file.file.size) * 100),
-          name: file.file.name,
-        })
+        commit(
+          'chat/setFileProgress',
+          {
+            address,
+            index,
+            progress: Math.floor((progress / file.file.size) * 100),
+          },
+          { root: true },
+        )
       },
     )
 
@@ -868,11 +1000,12 @@ export default {
           name: file.file.name,
           size: file.file.size,
           type: file.file.type,
+          nsfw: file.nsfw,
         },
         type: 'file',
       })
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: groupID,
       sender: MessageRouteEnum.OUTBOUND,
       message: sendFileResult,
@@ -930,7 +1063,7 @@ export default {
       replyType,
     })
 
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: to,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -962,7 +1095,7 @@ export default {
       reactedTo: reactTo,
       type: 'reaction',
     })
-    commit('addMessageToConversation', {
+    dispatch('addMessageToConversation', {
       address: to,
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
@@ -976,7 +1109,7 @@ export default {
    * @returns  search result object
    */
   async searchConversations(
-    {}: ActionsArguments<TextileState>,
+    { state }: ActionsArguments<TextileState>,
     {
       query,
       page,
@@ -1010,6 +1143,7 @@ export default {
       {
         fuzzy: 0.3,
         fields,
+        filter: (result) => result.conversation === state.activeConversation,
       },
     )
 
@@ -1030,23 +1164,6 @@ export default {
       )
     }
     return { data: data.slice(skip, perPage * page), totalRows: result?.length }
-  },
-
-  /**
-   * @description export filesystem index to textile bucket and update threaddb version
-   */
-  async exportFileSystem({ dispatch }: ActionsArguments<TextileState>) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-
-    if (!$TextileManager.personalBucket) {
-      throw new Error(TextileError.BUCKET_NOT_INITIALIZED)
-    }
-
-    await $TextileManager.personalBucket.updateIndex($FileSystem.export)
-    dispatch('updateUserThreadData', {
-      filesVersion: $FileSystem.version,
-    })
   },
 
   /**
@@ -1082,35 +1199,6 @@ export default {
         flipVideo,
         filesVersion,
       }),
-    )
-  },
-
-  /**
-   * @description listen for user data thread changes and update store accordingly
-   */
-  async listenToThread({
-    commit,
-    rootState,
-    dispatch,
-  }: ActionsArguments<TextileState>) {
-    const $UserInfoManager: UserInfoManager =
-      Vue.prototype.$TextileManager?.userInfoManager
-    const $FileSystem: FilSystem = Vue.prototype.$FileSystem
-    const callback = (update?: Update<UserThreadData>) => {
-      if (!update || !update.instance) return
-      if (
-        update.instance.filesVersion &&
-        rootState.textile.userThread.filesVersion !== $FileSystem.version
-      ) {
-        // todo - update file system AP-1477
-      }
-      commit('textile/setUserThreadData', update.instance, { root: true })
-    }
-    await dispatch('textile/subscribeToMailbox', {}, { root: true })
-    $UserInfoManager.textile.client.listen(
-      $UserInfoManager.threadID,
-      [],
-      callback,
     )
   },
 }

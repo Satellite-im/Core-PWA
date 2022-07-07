@@ -55,6 +55,8 @@ Object {
 }
 `;
 
+exports[`update message tracker convertTimestampToDate 1`] = `"L"`;
+
 exports[`update message tracker updateMessageTracker file 1`] = `
 Object {
   "messages": Object {

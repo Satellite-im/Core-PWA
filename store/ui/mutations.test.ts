@@ -2298,7 +2298,6 @@ describe('mutations', () => {
     showSidebar: true,
     showSearchResult: false,
     showSettings: false,
-    showMedia: false,
     settingsSideBar: true,
     settingsRoute: 'personalize',
     quickProfile: false,
@@ -2534,11 +2533,7 @@ describe('mutations', () => {
     mutations.default.showSidebar(localizedState, true)
     expect(localizedState.showSidebar).toBeTruthy()
   })
-  test('showMedia', () => {
-    const localizedState = { ...initialState }
-    mutations.default.showMedia(localizedState, true)
-    expect(localizedState.showMedia).toBeTruthy()
-  })
+
   test('setContextMenuValues', () => {
     const localizedState = { ...initialState }
     mutations.default.setContextMenuValues(localizedState, true)
@@ -3480,7 +3475,6 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -3623,7 +3617,7 @@ describe('mutations', () => {
       notifications: [],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -3798,7 +3792,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -3920,6 +3914,151 @@ describe('mutations', () => {
       },
     ])
   })
+  test('update group notifications', () => {
+    // previously they are unread
+    const localizedState = {
+      contextMenuStatus: false,
+      showSidebarUsers: true,
+      showSidebar: true,
+      notifications: [
+        {
+          _id: '01g2y9d6499169rzs5etrff48w',
+          _mod: 1652431427721842400,
+          at: 1652431426842,
+          content: { description: 'New DM', title: 'Notification' },
+          from: 'Andre2',
+          id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+          state: 'UNREAD',
+          type: 'Direct Message',
+        },
+        {
+          _id: '01g2ya7w44h4c5mm4bgyedkrvy',
+          _mod: 1652432302212590600,
+          at: 1652432301322,
+          content: { description: 'New DM', title: 'Notification' },
+          from: 'Andre2',
+          id: '62fceb8d-60a5-4434-92e8-c07f52f9e8e6',
+          state: 'UNREAD',
+          type: 'Group Message',
+        },
+      ],
+      showSearchResult: false,
+      showSettings: false,
+
+      settingsSideBar: true,
+      settingsRoute: 'personalize',
+      quickProfile: false,
+      userProfile: {},
+      contextMenuValues: [],
+      contextMenuPosition: {
+        x: 0,
+        y: 0,
+      },
+      quickProfilePosition: {
+        x: 0,
+        y: 0,
+      },
+      modals: {
+        callToAction: false,
+        changelog: false,
+        createServer: false,
+        creategroup: false,
+        crop: false,
+        error: false,
+        glyph: false,
+      },
+      groupInvite: {
+        isOpen: false,
+        marketplace: false,
+        newfolder: false,
+        quickchat: false,
+        renameFile: false,
+        userProfile: false,
+        wallet: false,
+        walletMini: false,
+        glyphModalPack: '',
+        chatbarContent: '',
+      },
+      replyChatbarContent: {
+        from: '',
+        id: '',
+        payload: '',
+        chatbarFocus: false,
+        fullscreen: false,
+        showPinned: false,
+      },
+      enhancers: {
+        containerWidth: 0,
+        defaultHeight: '30rem',
+        defaultWidth: '24rem',
+        floating: false,
+        position: [0, 0],
+        route: 'emotes',
+        show: false,
+        messages: [],
+        unreadMessage: 0,
+        isScrollOver: false,
+        showOlderMessagesInfo: false,
+        isTyping: false,
+        isReacted: false,
+        activeChannel: undefined,
+      },
+      settingReaction: {
+        groupID: null,
+        messageID: null,
+        status: false,
+        hoveredGlyphInfo: undefined,
+      },
+      glyphMarketplaceView: {
+        shopId: null,
+        view: 'home',
+      },
+      editMessage: {
+        from: '',
+        id: '',
+        payload: '',
+        mostEmojiUsed: [],
+        recentGlyphs: [],
+      },
+      theme: {},
+      base: {
+        class: '',
+        name: 'default',
+        text: 'Default',
+        value: 'default',
+      },
+      flair: {
+        text: 'Satellite',
+        value: '#2761fd',
+        filesUploadStatus: '',
+        renameItem: undefined,
+        filePreview: undefined,
+        fileDownloadList: [],
+        chatImageOverlay: undefined,
+      },
+      fileSort: {
+        asc: true,
+        category: 'modified',
+      },
+      swiperSlideIndex: 0,
+    }
+    mutations.default.updateGroupNotifications(localizedState)
+    expect(localizedState.notifications).toEqual([
+      {
+        _id: '01g2y9d6499169rzs5etrff48w',
+        _mod: 1652431427721842400,
+        at: 1652431426842,
+        content: {
+          description: 'New DM',
+          title: 'Notification',
+        },
+        from: 'Andre2',
+        id: '69c1ad1d-37e9-4ff5-b929-de5509512a11',
+        state: 'UNREAD',
+        type: 'Direct Message',
+      },
+    ])
+  })
   test('remove specified notification', () => {
     // previously they are unread
     const localizedState = {
@@ -3950,7 +4089,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
@@ -4094,7 +4233,7 @@ describe('mutations', () => {
       ],
       showSearchResult: false,
       showSettings: false,
-      showMedia: false,
+
       settingsSideBar: true,
       settingsRoute: 'personalize',
       quickProfile: false,
