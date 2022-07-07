@@ -4,30 +4,19 @@ import { Directory } from './Directory'
 import { DIRECTORY_TYPE } from './types/directory'
 import { Fil } from './Fil'
 import { Item } from './abstracts/Item.abstract'
-import {
-  PersonalBucketIndex,
-  ExportItem,
-  FILESYSTEM_TYPE,
-  ExportFile,
-  ExportDirectory,
-} from './types/filesystem'
 import { FILE_TYPE } from './types/file'
 import { Config } from '~/config'
 import { FileSort } from '~/store/ui/types'
+import {
+  ExportItem,
+  ExportFile,
+  ExportDirectory,
+} from '~/libraries/Iridium/files/types'
 
 export class FilSystem {
   private _self = new Directory({ name: 'root' })
   private _currentDirectory = this._self
   private _currentDirectoryPath = [this._currentDirectory] // as stack
-  private _version: number = 1
-
-  /**
-   * @getter version
-   * @returns {number} current version
-   */
-  get version(): number {
-    return this._version
-  }
 
   /**
    * @getter currentDirectory
@@ -97,14 +86,10 @@ export class FilSystem {
    * @getter export
    * @returns {PersonalBucketIndex} returns exported filesystem object
    */
-  get export(): PersonalBucketIndex {
-    return {
-      type: FILESYSTEM_TYPE.DEFAULT,
-      version: ++this._version,
-      content: this.root.content.map((item) => {
-        return this.exportChildren(item)
-      }),
-    }
+  get export(): Array<ExportItem> {
+    return this.root.content.map((item) => {
+      return this.exportChildren(item)
+    })
   }
 
   /**
@@ -245,11 +230,10 @@ export class FilSystem {
    * @param {PersonalBucketIndex} fs
    * @description sets global file system based on parameter. will be fetched from Bucket
    */
-  public async import(fs: PersonalBucketIndex) {
-    for (const item of fs.content) {
+  public async import(content: ExportItem[]) {
+    for (const item of content) {
       await this.importChildren(item)
     }
-    this._version = fs.version
   }
 
   /**
@@ -328,7 +312,7 @@ export class FilSystem {
     thumbnail?: string
     extension?: string
     nsfw: boolean
-  }): Fil | null {
+  }): Fil {
     const newFile = new Fil({
       id,
       name,
@@ -342,8 +326,8 @@ export class FilSystem {
       extension,
       nsfw,
     })
-    const inserted = this.addChild(newFile)
-    return inserted ? newFile : null
+    this.addChild(newFile)
+    return newFile
   }
 
   /**
@@ -432,7 +416,7 @@ export class FilSystem {
   public renameChild(
     currentName: string,
     newName: string,
-    parentDir?: Directory | null,
+    parentDir?: Directory,
   ): Item | null {
     const item = this.getChild(currentName, parentDir)
     if (!item) {

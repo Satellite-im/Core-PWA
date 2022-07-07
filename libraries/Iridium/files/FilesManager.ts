@@ -9,12 +9,11 @@ import type { AddOptions } from 'ipfs-core-types/root'
 import { createWriteStream } from 'streamsaver'
 import type { IridiumManager } from '../IridiumManager'
 import logger from '~/plugins/local/logger'
-import { FileUpdate } from '~/libraries/Iridium/files/types'
+import { FileUpdate, ExportItem } from '~/libraries/Iridium/files/types'
 import fileSystem from '~/libraries/Files/FilSystem'
-import { ExportItem } from '~/libraries/Files/types/filesystem'
 import isNSFW from '~/utilities/NSFW'
 import createThumbnail from '~/utilities/Thumbnail'
-import blobToBase64 from '~/utilities/BlobToBase64'
+import { blobToStream, blobToBase64 } from '~/utilities/BlobManip'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export type IridiumFilesEvent = {
@@ -23,9 +22,7 @@ export type IridiumFilesEvent = {
   type: FileUpdate
 }
 
-export type IridiumFriendPubsub = IridiumPeerMessage<IridiumFilesEvent>
-
-export default class FilesManager extends Emitter<IridiumFriendPubsub> {
+export default class FilesManager extends Emitter {
   public readonly iridium: IridiumManager
   public lastUpdated: number = 0 // local, will be used to update the delta after remote operations
   public state: {
@@ -44,37 +41,32 @@ export default class FilesManager extends Emitter<IridiumFriendPubsub> {
 
     const iridium = this.iridium.connector
     logger.log('iridium/files', 'initializing')
-    const pubsub = await iridium.ipfs.pubsub.ls()
-    logger.info('iridium/files', 'pubsub', pubsub)
     await this.fetch()
     logger.log('iridium/files', 'files state loaded', this.state)
-    logger.info('iridium/files', 'subscribing to announce topic')
     await iridium.subscribe('/files/announce')
     this.iridium.connector?.on(
       '/files/announce',
       this.onFilesActivity.bind(this),
     )
-    logger.log('iridium/files', 'listening for friend activity', this.state)
 
-    // if (this.state.content) {
-    //   await fileSystem.import(this.state.content)
-    // }
+    if (this.state.content) {
+      await fileSystem.import(this.state.content)
+    }
 
     this.emit('ready', {})
   }
 
-  async stop() {
-    await this.iridium.connector?.unsubscribe(`/friends/announce`)
-  }
-
   async fetch() {
-    this.state = await this.get('/')
+    this.state = (await this.iridium.connector?.get('/files')) || {
+      content: [],
+    }
     this.lastUpdated = Date.now()
   }
 
   private async onFilesActivity(
     message: IridiumPeerMessage<IridiumFilesEvent>,
   ) {
+    console.log('files activity')
     const { payload } = message
     const { at, item, type } = payload
     logger.info('iridium/files', type, {
@@ -84,11 +76,8 @@ export default class FilesManager extends Emitter<IridiumFriendPubsub> {
     // update local if remote change. compare local lastUpdated to incoming `at` (timestamp)
   }
 
-  get(path: string, options: IridiumGetOptions = {}) {
-    return this.iridium.connector?.get(
-      `/files${path === '/' ? '' : path}`,
-      options,
-    )
+  get(path: string = '', options: IridiumGetOptions = {}) {
+    return this.iridium.connector?.get(`/files${path}`, options)
   }
 
   set(path: string, payload: any, options: IridiumSetOptions = {}) {
@@ -104,58 +93,63 @@ export default class FilesManager extends Emitter<IridiumFriendPubsub> {
   }
 
   broadcast(event: IridiumFilesEvent) {
-    return this.iridium.connector?.broadcast(`/files/announce`, event)
+    return this.iridium.connector?.broadcast('/files/announce', event)
   }
 
-  public async personalUpload(file: File) {
+  async personalUpload(file: File) {
     const nsfw = await isNSFW(file)
     const res = await this.upload({ file })
-    const thumbnail = await createThumbnail(file, 400)
+    const thumbnailBlob = await createThumbnail(file, 400)
 
-    fileSystem.createFile({
+    const {
+      id,
+      name,
+      liked,
+      shared,
+      type,
+      modified,
+      size,
+      description,
+      extension,
+      thumbnail,
+    } = fileSystem.createFile({
       id: res?.path,
       name: file.name,
       size: file.size,
       type: Object.values(FILE_TYPE).includes(file.type as FILE_TYPE)
         ? (file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: thumbnail ? await blobToBase64(thumbnail) : '',
+      thumbnail: thumbnailBlob ? await blobToBase64(thumbnailBlob) : '',
       nsfw,
     })
+    // this.broadcast({
+    //   at: Date.now(),
+    //   item: {
+    //     id,
+    //     name,
+    //     liked,
+    //     shared,
+    //     type,
+    //     modified,
+    //     size,
+    //     description,
+    //     extension,
+    //     thumbnail,
+    //     nsfw,
+    //   },
+    //   type: 'upload',
+    // })
   }
 
-  private async upload({
-    file,
-    options,
-  }: {
-    file: File
-    options?: AddOptions
-  }) {
-    return await (this.iridium.connector?.ipfs as IPFS).add(file, options)
+  exportFs() {
+    this.set('/content', fileSystem.export)
   }
 
-  // not yet implemented. switch upload to stream based rather than using a blob
-  private getStream(file: File) {
-    // @ts-ignore
-    const reader = file.stream().getReader()
-    const stream = new ReadableStream({
-      start(controller) {
-        function push() {
-          return reader
-            .read()
-            .then(({ done, value }: { done: boolean; value: Uint8Array }) => {
-              if (done) {
-                controller.close()
-                return
-              }
-              controller.enqueue(value)
-              push()
-            })
-        }
-        push()
-      },
-    })
-    return stream
+  async upload({ file, options }: { file: File; options?: AddOptions }) {
+    return await (this.iridium.connector?.ipfs as IPFS).add(
+      blobToStream(file),
+      options,
+    )
   }
 
   /**

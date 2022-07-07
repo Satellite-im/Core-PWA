@@ -95,7 +95,7 @@ export default Vue.extend({
         return
       }
       this.text = ''
-      // await this.$store.dispatch('textile/exportFileSystem')
+      iridium.files?.exportFs()
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       this.$emit('forceRender')
@@ -160,7 +160,7 @@ export default Vue.extend({
           'ui/setFilesUploadStatus',
           this.$t('pages.files.status.index'),
         )
-        // await this.$store.dispatch('textile/exportFileSystem')
+        iridium.files?.exportFs()
       }
 
       this.$store.commit('ui/setFilesUploadStatus', '')

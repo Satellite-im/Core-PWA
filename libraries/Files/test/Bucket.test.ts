@@ -23,18 +23,6 @@ const file = new Fil(mockFileData)
 const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })
 
 describe('Test FileSystem Directory', () => {
-  it('export file system and update version number', () => {
-    const fs = new FilSystem()
-
-    fs.addChild(file)
-    fs.createDirectory(mockDirectoryData)
-    fs.openDirectory('dir')
-    fs.addChild(file2)
-
-    const ex: PersonalBucketIndex = fs.export
-
-    expect(ex.version + 1).toEqual(fs.export.version)
-  })
   it('get uninitialized index', () => {
     const initializationData = {
       identity: 'Identity',

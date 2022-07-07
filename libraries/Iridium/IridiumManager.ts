@@ -82,6 +82,7 @@ export class IridiumManager extends Emitter {
     logger.log('iridium/manager', 'ready')
     await this.friends.init()
     await this.chat.init()
+    await this.files.init()
     this.ready = true
   }
 }
