@@ -1,5 +1,4 @@
-import Emitter from '@satellite-im/iridium/src/emitter'
-import { Iridium } from '@satellite-im/iridium/dist/index.browser'
+import { Iridium, Emitter } from '@satellite-im/iridium'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import GroupManager from '~/libraries/Iridium/groups/GroupManager'
@@ -7,6 +6,8 @@ import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
 import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
+import { Config } from '~/config'
+import FilesManager from '~/libraries/Iridium/files/FilesManager'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
@@ -15,6 +16,7 @@ export class IridiumManager extends Emitter {
   groups?: GroupManager
   chat?: ChatManager
   friends?: FriendsManager
+  files?: FilesManager
 
   /**
    * @method
@@ -33,14 +35,7 @@ export class IridiumManager extends Emitter {
     this.connector = await Iridium.fromSeed(seed, {
       logger,
       config: {
-        syncNodes: [
-          {
-            label: 'Satellite.im Sync Node',
-            peerId: '12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-            multiaddr:
-              '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-          },
-        ],
+        syncNodes: Config.iridium.syncNodes,
       },
     })
 
@@ -80,10 +75,13 @@ export class IridiumManager extends Emitter {
     this.groups = new GroupManager(this)
     logger.log('iridium/manager', 'initializing chat')
     this.chat = new ChatManager(this)
+    logger.log('iridium/manager', 'initializing files')
+    this.files = new FilesManager(this)
 
     logger.log('iridium/manager', 'ready')
     await this.friends.init()
     await this.chat.init()
+    await this.files.init()
     this.ready = true
   }
 }

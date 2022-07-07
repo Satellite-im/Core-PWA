@@ -1,13 +1,9 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
-
-import Upload from '../../files/upload/Upload.vue'
-import FilePreview from '../../files/upload/filePreview/FilePreview.vue'
-
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 // import { Friend } from '~/types/ui/friends'
 import type { Friend } from '~/libraries/Iridium/friends/types'
@@ -19,31 +15,20 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
-// import { Group } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
+import { ChatText } from '~/store/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+
 export default Vue.extend({
   components: {
     TerminalIcon,
-    Upload,
-    FilePreview,
-  },
-  props: {
-    recipient: {
-      type: Object as PropType<Friend | Group>,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      showEmojiPicker: false,
-      nsfwUploadError: false,
-      files: [] as Array<UploadDropItemType>,
-    }
   },
   computed: {
-    ...mapGetters('chat', ['getFiles']),
-    ...mapGetters('friends', ['getActiveFriend']),
+    ...mapGetters({
+      recipient: 'conversation/recipient',
+      getFiles: 'chat/getFiles',
+      isGroup: 'conversation/isGroup',
+    }),
     ...mapState({
       ui: (state) => (state as RootState).ui,
       friends: (state) => (state as RootState).friends,
@@ -103,6 +88,14 @@ export default Vue.extend({
       // return currentCommand && isArgsValid(currentCommand, currentArgs)
       return false
     },
+    isSharpCorners(): boolean {
+      return (
+        Boolean(this.getFiles?.length) ||
+        Boolean(this.ui.replyChatbarContent.id) ||
+        this.commandPreview ||
+        this.chat.countError
+      )
+    },
     text: {
       /**
        * @method get
@@ -136,7 +129,7 @@ export default Vue.extend({
     'recipient.did': {
       handler(value) {
         const findItem = this.chat.chatTexts.find(
-          (item: any) => item.userId === value,
+          (item: ChatText) => item.userId === value,
         )
         const message = findItem ? findItem.value : ''
         this.$refs.editable?.resetHistory()
@@ -150,47 +143,23 @@ export default Vue.extend({
         if (this.$device.isDesktop) {
           this.$store.dispatch('ui/setChatbarFocus')
         }
-
-        this.onRecipientChangeResetUploadState(value)
       },
     },
   },
-  created() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (
-        mutation.type === 'chat/addFile' ||
-        mutation.type === 'chat/setFiles'
-      ) {
-        if (this.recipient) {
-          this.files = this.getFiles(this.recipient?.did)
-        }
-      }
-
-      if (mutation.type === 'chat/deleteFiles') {
-        if (this.recipient) {
-          this.files = []
-        }
-      }
-    })
-  },
   methods: {
     /**
-     * @method typingNotifHandler
-     * @description Wraps the event handler for dispatching typing notifications
-     * TODO: Right now this is hard coded to the WebRTC Data method, in the future this should be
-     * agnostic and the method should be passed to chatbar so we can support group, and direct messages.
+     * @method blurChatbar
+     * @description blur chatbar
      */
-    typingNotifHandler(
-      state: PropCommonEnum.TYPING | PropCommonEnum.NOT_TYPING,
-    ) {
-      // TODO use conversation participants
+    blurChatbar() {
+      document.activeElement?.blur()
     },
     /**
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
     throttleTyping: throttle(function (ctx) {
-      ctx.typingNotifHandler(PropCommonEnum.TYPING)
+      ctx.$store.dispatch('webrtc/sendTyping')
     }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart
@@ -242,8 +211,10 @@ export default Vue.extend({
       if (!this.recipient) {
         return
       }
-      // @ts-ignore
-      await this.$refs['file-upload']?.sendMessage()
+      // keep recipient in case user changes chats quickly after send
+      const recipient = this.recipient
+      // if there are any files attached to this chat, send
+      await this.sendFiles()
       // return if input is empty or over max length
       if (
         this.text.length > this.$Config.chat.maxChars ||
@@ -258,7 +229,7 @@ export default Vue.extend({
         !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
       ) {
         this.$store.dispatch('textile/sendReplyMessage', {
-          to: (this.recipient as Friend).textilePubkey,
+          to: (recipient as Friend).textilePubkey,
           text: value,
           replyTo: this.ui.replyChatbarContent.messageID,
           replyType: MessagingTypesEnum.TEXT,
@@ -273,7 +244,7 @@ export default Vue.extend({
       ) {
         if (this.ui.replyChatbarContent.from) {
           this.$store.dispatch('textile/sendGroupReplyMessage', {
-            to: (this.recipient as Group).id,
+            to: (recipient as Group).id,
             text: value,
             replyTo: this.ui.replyChatbarContent.messageID,
             replyType: MessagingTypesEnum.TEXT,
@@ -282,7 +253,7 @@ export default Vue.extend({
           return
         }
         this.$store.dispatch('textile/sendGroupMessage', {
-          groupId: (this.recipient as Group).id,
+          groupId: (recipient as Group).id,
           message: value,
         })
       } else {
@@ -295,6 +266,7 @@ export default Vue.extend({
           body: value,
           conversation: value,
           at: Date.now(),
+          attachments: [],
         })
 
         // this.$store.dispatch('textile/sendTextMessage', {
@@ -302,7 +274,6 @@ export default Vue.extend({
         //   text: value,
         // })
       }
-      this.nsfwUploadError = false
     },
     /**
      * @method handlePaste
@@ -323,40 +294,61 @@ export default Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: Array<object>, e: Event) {
-      const arrOfFiles: File[] = [...items]
+      const files: File[] = [...items]
         .filter((f: any) => {
           return f.kind !== MessagingTypesEnum.STRING
         })
         .map((f: any) => f.getAsFile())
-      if (arrOfFiles.length) {
+      if (files.length) {
         e.preventDefault()
-        const handleFileExpectEvent = { target: { files: [...arrOfFiles] } }
+        const handleFileExpectEvent = { target: { files } }
         // @ts-ignore
-        this.$refs['file-upload']?.handleFile(handleFileExpectEvent)
+        this.$refs.upload?.handleFile(handleFileExpectEvent)
       }
     },
     handleChatTextFromOutside(text: string) {
       this.$refs.editable?.handleTextFromOutside(text)
     },
     /**
-     * @method cancelUpload
-     * @description Cancels file upload by setting file and url in local data to false
-     * TODO: Clear input field, this currently breaks when you upload the same file after cancelling //AP-401
-     * @example @click="cancelUpload"
+     * @method sendFiles
+     * @description Sends action to Upload the file to textile.
      */
-    onCancelUpload() {
+    async sendFiles() {
+      // keep recipient in case user changes chats
+      const recipient = this.recipient
+      for (const [index, file] of this.getFiles.entries()) {
+        if (this.isGroup) {
+          await this.$store
+            .dispatch('textile/sendGroupFileMessage', {
+              groupID: (recipient as Group)?.id,
+              file,
+              address: recipient.address,
+              index,
+            })
+            .catch((error) => {
+              if (error) {
+                this.$Logger.log('file send error', error)
+                document.body.style.cursor = PropCommonEnum.DEFAULT
+              }
+            })
+        } else {
+          await this.$store
+            .dispatch('textile/sendFileMessage', {
+              to: (recipient as Friend)?.textilePubkey,
+              file,
+              address: recipient.address,
+              index,
+            })
+            .catch((error) => {
+              if (error) {
+                this.$Logger.log('file send error', error)
+                document.body.style.cursor = PropCommonEnum.DEFAULT
+              }
+            })
+        }
+      }
       document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/setContainsNsfw', false)
-      this.$store.commit('chat/setCountError', false)
-    },
-    onRecipientChangeResetUploadState(recipient: string) {
-      this.files = this.getFiles(recipient)
-      this.$store.commit('chat/setContainsNsfw', false)
-      this.$store.commit('chat/setCountError', false)
-      this.$store.commit('chat/setAlertNsfw', false)
-    },
-    beforeDestroy() {
-      this.unsubscribe()
+      this.$store.commit('chat/deleteFiles', recipient.address)
     },
   },
 })

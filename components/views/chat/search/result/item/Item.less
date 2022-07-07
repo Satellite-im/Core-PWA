@@ -15,10 +15,12 @@
       gap: @light-spacing;
       .username {
         font-size: @title-text;
+        font-family: @primary-font;
         font-weight: bold;
       }
       .timestamp {
         font-size: @micro-text-size;
+        font-family: @secondary-font;
         &:extend(.font-muted);
         display: flex;
         align-items: flex-end;
@@ -28,6 +30,7 @@
 
     .msg {
       &:extend(.ellipsis);
+      font-family: @secondary-font;
     }
   }
 }

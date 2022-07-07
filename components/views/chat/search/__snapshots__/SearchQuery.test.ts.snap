@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`SearchQuery.default._hasAncestor 0 1`] = `true`;
+
 exports[`SearchQuery.default._parseQuery 0 1`] = `
 Object {
   "queryIndex": 0,

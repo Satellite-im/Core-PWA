@@ -1,6 +1,6 @@
 @primary-font: 'SpaceMono', monospace;
 @secondary-font: 'Poppins';
-@title-text: 10pt;
+@title-text: 11pt;
 @text-size: 10pt;
 @mini-text-size: 9pt;
 @micro-text-size: 8pt;
@@ -10,4 +10,11 @@
   overflow: hidden;
   white-space: nowrap;
   display: block;
+}
+
+.multiline-ellipsis(@lines: 2) {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: @lines;
+  -webkit-box-orient: vertical;
 }

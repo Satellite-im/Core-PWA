@@ -1,0 +1,30 @@
+.user-picker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: @light-spacing;
+  min-height: 0;
+
+  .chips {
+    flex-basis: fit-content;
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: @xlight-spacing;
+    max-height: 100px;
+    overflow: auto;
+  }
+
+  .users {
+    flex-shrink: 1;
+    flex-grow: 1;
+    overflow: auto;
+  }
+
+  .empty-results-text {
+    text-align: center;
+    color: @gray;
+    margin: @light-spacing;
+  }
+}

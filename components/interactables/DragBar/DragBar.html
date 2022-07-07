@@ -1,0 +1,8 @@
+<div
+  class="drag-bar"
+  :class="`side-${side} ${overlay ? 'drag-bar-overlay' : ''}`"
+  ref="dragBar"
+  @mousedown="handleMouseDown"
+>
+  <div v-if="showHandle" class="handle"></div>
+</div>

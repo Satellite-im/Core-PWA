@@ -2,6 +2,7 @@ import { PublicKey } from '@solana/web3.js'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
+
 export interface FriendsState {
   incomingRequests: IncomingRequest[]
   outgoingRequests: OutgoingRequest[]
@@ -19,11 +20,8 @@ export enum FriendsError {
   TEXTILE_NOT_INITIALIZED = 'errors.friends.textile_not_initialized',
 }
 
-export interface CreateFriendRequestArguments {
-  friendToKey: PublicKey
-}
-export interface AcceptFriendRequestArguments {
-  friendRequest: IncomingRequest
+export interface FriendRequestArguments {
+  did: string
 }
 
 /**

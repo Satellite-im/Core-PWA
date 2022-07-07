@@ -1,5 +1,4 @@
-import Iridium from '@satellite-im/iridium/dist/index.browser'
-import { Emitter } from '@satellite-im/iridium/src/emitter'
+import { Iridium, Emitter } from '@satellite-im/iridium'
 import type {
   IridiumPeerMessage,
   IridiumGetOptions,
@@ -105,6 +104,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
   async getRequests(): Promise<{ [key: string]: FriendRequest }> {
     return this.state.requests || {}
+  }
+
+  async getFriends(): Promise<{ [key: string]: Friend }> {
+    return this.state.details || {}
   }
 
   private async onFriendActivity(
@@ -320,5 +323,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const list = this.state?.list?.filter((f) => f !== friendId)
     await this.set('/list', list)
     await this.set(`/details/${friendId}`, undefined)
+  }
+
+  isRequest(data: object): data is FriendRequest {
+    return Object.hasOwn(data, 'user')
   }
 }

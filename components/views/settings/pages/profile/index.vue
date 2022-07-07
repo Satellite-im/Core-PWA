@@ -6,31 +6,31 @@ import { mapState, mapGetters } from 'vuex'
 
 import { EditIcon } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
-import { AccountsState } from '~/store/accounts/types'
 import { ModalWindows } from '~/store/ui/types'
+import { PlatformTypeEnum } from '~/libraries/Enums/enums'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { RootState } from '~/types/store/store'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    accounts: AccountsState
-  }
-}
 export default Vue.extend({
-  name: 'ProfileSettings',
   components: {
     EditIcon,
   },
   layout: 'settings',
   data() {
     return {
-      profileInfo: sampleProfileInfo,
+      image: '',
+      status: '',
       croppedImage: '',
-      featureReadyToShow: false,
     }
   },
   computed: {
-    ...mapState(['accounts', 'ui']),
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+      ui: (state) => (state as RootState).ui,
+    }),
     ...mapGetters('textile', ['getInitialized']),
-    isSmallScreen(): Boolean {
+    sampleProfileInfo: () => sampleProfileInfo,
+    isSmallScreen(): boolean {
       // @ts-ignore
       if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
         return true
@@ -40,11 +40,31 @@ export default Vue.extend({
       if (this.croppedImage) {
         return this.croppedImage
       }
-      const hash = this.accounts.details.profilePicture
+      const hash = this.accounts?.details?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     showCropper(): boolean {
       return this.ui.modals[ModalWindows.CROP]
+    },
+    /**
+     * @method acceptableImageFormats
+     * @description embeddable types plus HEIC since we can convert
+     * ios doesn't support advanced <input> accept
+     * @returns {string} comma separated list of types
+     */
+    acceptableImageFormats(): string {
+      return this.$envinfo.currentPlatform === PlatformTypeEnum.IOS
+        ? 'image/*'
+        : [
+            FILE_TYPE.APNG,
+            FILE_TYPE.AVIF,
+            FILE_TYPE.GIF,
+            FILE_TYPE.JPG,
+            FILE_TYPE.PNG,
+            FILE_TYPE.WEBP,
+            FILE_TYPE.SVG,
+            FILE_TYPE.HEIC,
+          ].join(',')
     },
   },
   methods: {
@@ -97,7 +117,7 @@ export default Vue.extend({
 
         const reader = new FileReader()
         reader.onload = (e: any) => {
-          this.profileInfo.imageUrl = e.target.result
+          this.image = e.target.result
           e.target.value = ''
 
           this.toggleCropper()

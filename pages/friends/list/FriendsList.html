@@ -1,38 +1,62 @@
-<div
-  id="friends-list"
-  :v-scroll-lock="$device.isDesktop ? true : false"
-  :class="$device.isDesktop ? 'hidden-scroll' : '' "
->
+<div id="friends-list" :v-scroll-lock="$device.isDesktop ? true : false">
   <FriendsMobileList v-if="$device.isMobile" />
-  <UiScroll v-else verticalScroll enableWrap scrollbarVisibility="scroll">
-    <div class="columns">
-      <div class="column is-half-desktop">
-        <!-- Friends Add -->
-        <FriendsAdd />
-        <!-- Friend Requests -->
-        <UiLoadersFriend :count="1" v-if="data.loading" />
-        <template
-          v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
-        >
-          <div class="padded_divider">
-            <TypographyHorizontalRuleText
-              plaintext
-              :value="$t('friends.requests')"
-            />
-          </div>
-          <FriendsFriend
-            v-for="[did, request] in
-          Object.entries(data.friends.requests)"
-            v-if="request.status ===
-          'pending' && request.user"
-            :user='user || { did, name: request.user.name, status:
-          "offline" }'
-            :request="request"
-            :key="request.from"
+  <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
+  <div class="columns" v-else>
+    <div class="column is-half">
+      <!-- Friends Add -->
+      <FriendsAdd />
+      <!-- Incoming Requests -->
+      <UiLoadersFriend :count="1" v-if="data.loading" />
+      <template
+        v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
+      >
+        <div class="padded_divider">
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.requests')"
           />
-        </template>
-      </div>
-      <div class="column is-half-desktop">
+        </div>
+        <FriendsFriend
+          v-for="[did, request] in
+          incomingRequests"
+          v-if="request.status ===
+          'pending' && request.user"
+          :user='request.user || { did, name: request.user.name, status:
+          "offline" }'
+          :request="request"
+          :key="request.from"
+        />
+      </template>
+      <!-- Outgoing Requests -->
+      <UiLoadersFriend :count="1" v-if="data.loading" />
+      <template
+        v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
+      >
+        <div class="padded_divider">
+          <TypographyHorizontalRuleText
+            plaintext
+            :value="$t('friends.outgoing')"
+          />
+        </div>
+        <FriendsFriend
+          v-for="[did, request] in
+          outgoingRequests"
+          v-if="request.status ===
+          'pending' && request.user"
+          :user='request.user || { did, name: request.user.name, status:
+          "offline" }'
+          :request="request"
+          :key="request.from"
+        />
+      </template>
+    </div>
+
+    <UiSimpleScroll
+      scrollMode="vertical"
+      scrollShow="scroll"
+      containerClass="is-half"
+    >
+      <div class="friend-column">
         <!-- Friends List -->
         <div v-if="data.loading">
           <UiLoadersFriend :count="5" />
@@ -60,6 +84,6 @@
           />
         </div>
       </div>
-    </div>
-  </UiScroll>
+    </UiSimpleScroll>
+  </div>
 </div>

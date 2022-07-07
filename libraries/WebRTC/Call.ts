@@ -750,6 +750,8 @@ export class Call extends Emitter<CallEventListeners> {
     } else {
       track = stream.getVideoTracks()[0]
       track.enabled = false
+      track.stop()
+      stream.removeTrack(track)
     }
 
     // tell all of the peers that we muted the track
@@ -797,7 +799,10 @@ export class Call extends Emitter<CallEventListeners> {
     if (peerId === iridium.connector?.peerId) {
       if (kind === 'audio' && !this.streams[peerId]?.audio) {
         await this.createAudioStream(true)
-      } else if (kind === 'video' && !this.streams[peerId]?.video) {
+      } else if (
+        kind === 'video' &&
+        !this.streams[peerId]?.video?.getVideoTracks()?.length
+      ) {
         await this.createVideoStream(true)
       } else if (kind === 'screen' && !this.streams[peerId]?.screen) {
         await this.createDisplayStream()

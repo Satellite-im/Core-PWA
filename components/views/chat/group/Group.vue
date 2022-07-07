@@ -3,9 +3,9 @@
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { Group } from '~/types/messaging'
-import { getUsernameFromState } from '~/utilities/Messaging'
 import { GroupMember } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
+import { Friend } from '~/types/ui/friends'
 
 export default Vue.extend({
   props: {
@@ -27,11 +27,11 @@ export default Vue.extend({
     }),
     ...mapGetters('friends', ['findFriendByKey']),
     ...mapGetters('settings', ['getTimestamp']),
-    username(): string {
-      return (
-        this.groupMember?.name ||
-        getUsernameFromState(this.group.from, this.$store.state)
-      )
+    username(): string | undefined {
+      return this.groupMember
+        ? this.groupMember.name ||
+            this.$t('user.loading.loading_displayname').toString()
+        : this.friend?.name || this.accounts.details?.name
     },
     badge(): string {
       return ''
@@ -67,6 +67,9 @@ export default Vue.extend({
         .find((it) => it.id === this.groupId)
         ?.members?.find((it: GroupMember) => it.address === this.group.sender)
     },
+    friend(): Friend | undefined {
+      return this.friends.all.find((f) => f.textilePubkey === this.group.from)
+    },
     timestamp(): string {
       return this.getTimestamp({ time: this.group.at })
     },
@@ -74,7 +77,11 @@ export default Vue.extend({
       if (this.group.sender) {
         return this.group.sender
       }
-      return this.accounts.details?.address ?? ''
+      if (this.group.from === this.accounts.details?.textilePubkey) {
+        return this.accounts.details?.address
+      }
+      const friend = this.findFriendByKey(this.group.from)
+      return friend?.address ?? ''
     },
   },
   methods: {

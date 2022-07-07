@@ -1,16 +1,16 @@
-<div id="network-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle :size="6" :text="$t('pages.settings.storage.title')" />
       <TypographySubtitle
         :size="6"
         :text="$t('pages.settings.storage.subtitle')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop" v-if="featureReadyToShow">
-    <div class="column">
+  <SettingsSection v-if="featureReadyToShow">
+    <SettingsUnit>
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.storage.export.title')"
@@ -25,11 +25,11 @@
         size="small"
         :text="$t('pages.settings.storage.export.button')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.storage.clear.title')"
@@ -67,6 +67,6 @@
           :action="clearLocalStorage"
         />
       </span>
-    </div>
-  </div>
-</div>
+    </SettingsUnit>
+  </SettingsSection>
+</SettingsPage>

@@ -5,6 +5,9 @@ import { CaptureMouseTypes } from '~/store/settings/types'
 import { UIReply } from '~/types/messaging'
 import * as Messaging from '~/utilities/Messaging'
 
+Date.now = jest.fn(() => 1656069280)
+const dateNow = Date.now()
+
 const initialRootState: any = {
   accounts: {
     storePin: true,
@@ -439,6 +442,19 @@ describe('update message tracker', () => {
       },
     ]
     const result = Messaging.updateMessageTracker(newMessages)
+    expect(result).toMatchSnapshot()
+  })
+  test('convertTimestampToDate', () => {
+    const localTimestamp = dateNow
+    const result = Messaging.convertTimestampToDate(
+      {
+        now: 'now',
+        yesterday: 'yesterday',
+        days_short: 'd',
+        no_message: 'no message',
+      },
+      localTimestamp,
+    )
     expect(result).toMatchSnapshot()
   })
 })

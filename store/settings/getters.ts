@@ -14,6 +14,13 @@ export interface SettingsGetters {
   getTimestamp(
     state: SettingsState,
   ): ({ time, full }: { time: number; full?: boolean }) => string
+  /**
+   * @description return date associated with timestamp
+   * @argument {number} time unix timestamp
+   * @returns {string} formatted time
+   * @example (23423424) => 6/6/22
+   */
+  getDate(state: SettingsState): (time: number) => string
 }
 
 const getters: GetterTree<SettingsState, RootState> & SettingsGetters = {
@@ -24,6 +31,11 @@ const getters: GetterTree<SettingsState, RootState> & SettingsGetters = {
         .local()
         .tz(state.timezone)
         .format(full ? 'L LT' : 'LT')
+    },
+  getDate:
+    (state: SettingsState) =>
+    (time): string => {
+      return extendedDayjs(time).local().tz(state.timezone).format('L')
     },
 }
 

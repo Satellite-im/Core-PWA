@@ -22,11 +22,24 @@
         </div>
       </div>
     </div>
-    <UiSpacer :size="45" />
-    <InteractablesButton
-      full-width
-      :text="$t('pages.phrase.done')"
-      :action="confirm"
-    />
+    <UiSpacer :height="45" />
+    <div class="columns is-mobile">
+      <div class="column">
+        <InteractablesButton
+          full-width
+          :text="$t('pages.settings.accounts.copy_phrase')"
+          :action="copyPhrase"
+        >
+          <clipboard-icon size="1x" />
+        </InteractablesButton>
+      </div>
+      <div class="column">
+        <InteractablesButton
+          full-width
+          :text="$t('pages.phrase.done')"
+          :action="confirm"
+        />
+      </div>
+    </div>
   </div>
 </div>

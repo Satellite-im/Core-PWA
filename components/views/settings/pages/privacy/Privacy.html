@@ -1,13 +1,13 @@
-<div id="privacy-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle :size="6" :text="$t('pages.privacy.title')" />
       <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
   <UiLoadersGenericContent :count="3" v-if="!getInitialized" />
   <template v-else>
-    <div class="columns is-desktop">
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.privacy.register.title')"
         :text="$t('pages.privacy.register.subtitle')"
@@ -20,8 +20,8 @@
       >
         <InteractablesSwitch v-model="storePin" />
       </SettingsUnit>
-    </div>
-    <div class="columns is-desktop">
+    </SettingsSection>
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.privacy.embeds.title')"
         :text="$t('pages.privacy.embeds.subtitle')"
@@ -34,8 +34,8 @@
       >
         <InteractablesSwitch v-model="displayCurrentActivity" />
       </SettingsUnit>
-    </div>
-    <div class="columns is-desktop">
+    </SettingsSection>
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.privacy.consentScan.title')"
         :text="$t('pages.privacy.consentScan.subtitle')"
@@ -54,26 +54,25 @@
           :isLocked="loading.includes('blockNsfw')"
         />
       </SettingsUnit>
-    </div>
+    </SettingsSection>
     <TypographyText
       v-if="loading.length"
       :text="$t('pages.privacy.updating')"
     />
-    <!-- <div class="columns is-desktop">
-    <SettingsUnit
-      :title="$t('pages.privacy.serverType.title')"
-      :text="$t('pages.privacy.serverType.subtitle')"
-    >
-      <InteractablesSelect
-        :options="serverTypes"
-        v-model="serverType"
-        size="small"
-        class="form-control"
-      />
-    </SettingsUnit>
-  </div> -->
+    <!-- <SettingsSection>
+      <SettingsUnit
+        :title="$t('pages.privacy.serverType.title')"
+        :text="$t('pages.privacy.serverType.subtitle')"
+      >
+        <InteractablesSelect
+          v-model="serverType"
+          :options="serverTypes"
+          class="form-control"
+        />
+      </SettingsUnit>
+    </SettingsSection> -->
 
-    <div
+    <SettingsSection
       v-if="serverType === 'own'"
       class="columns is-desktop ownInfo-input-part"
     >
@@ -116,6 +115,6 @@
           />
         </span>
       </SettingsUnit>
-    </div>
+    </SettingsSection>
   </template>
-</div>
+</SettingsPage>

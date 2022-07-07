@@ -1,15 +1,18 @@
 <template>
   <div
     id="app-wrap"
-    :class="`${
-      showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed'
-    } ${$store.state.ui.theme.base.class}`"
+    :class="[
+      $store.state.ui.theme.base.class,
+      showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed',
+    ]"
   >
     <div
       id="app"
-      :class="`${
-        showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed'
-      } ${$device.isMobile ? 'mobile-app' : 'desktop'}`"
+      :class="[
+        showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed',
+        $device.isMobile ? 'mobile-app' : 'desktop',
+        isBackgroundCall ? 'has-background-call' : '',
+      ]"
     >
       <UiGlobal />
 
@@ -118,6 +121,7 @@ export default Vue.extend({
     },
     ...mapState(['friends', 'groups', 'dataState']),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
+    ...mapGetters('webrtc', ['isBackgroundCall']),
   },
   watch: {
     showSidebar(newValue, oldValue) {

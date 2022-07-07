@@ -74,13 +74,27 @@ Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
   cy.contains('Recover Account').click()
 })
 
+// Chat - URL Commands
+
+Cypress.Commands.add('validateURLOnClick', (expectedURL) => {
+  let locatorURL = 'a[href="' + expectedURL + '"]'
+  cy.get(locatorURL)
+    .last()
+    .scrollIntoView()
+    .should('have.attr', 'href', expectedURL)
+    .should('have.attr', 'target', '_blank')
+    .then((link) => {
+      cy.request(link.prop('href')).its('status').should('eq', 200)
+    })
+})
+
 // Chat - Page Load Commands
 
 Cypress.Commands.add('validateChatPageIsLoaded', () => {
-  cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
+  cy.get('[data-cy=user-name]', { timeout: 120000 }).should('exist')
 })
 
-Cypress.Commands.add('goToConversation', () => {
+Cypress.Commands.add('goToConversation', (user) => {
   cy.get('#app-wrap').then(($appWrap) => {
     if (!$appWrap.hasClass('is-open')) {
       cy.get('[data-cy=toggle-sidebar]').click()
@@ -89,14 +103,61 @@ Cypress.Commands.add('goToConversation', () => {
 
   //Find the friend and click on the message button associated
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
-  cy.getAttached('[data-cy=sidebar-user-name]').click()
+    .contains(user)
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
 
-  // Hide sidebar
-  cy.get('[data-cy=hamburger-button]').click()
+  //Navigate through several pages before going to conversation
+  //As a workaround for the issue of message containers taking a lot of time to be loaded
+  cy.workaroundChatLoad(user)
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-loading]', { timeout: 180000 }).should('not.exist')
+  cy.get('[data-cy=message-container]', { timeout: 120000 })
+    .last()
+    .should('be.visible')
 })
+
+Cypress.Commands.add('workaroundChatLoad', (user) => {
+  //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
+  cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
+  cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
+  cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
+  //Click on the conversation again
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+    .contains(user)
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
+})
+
+// Paste Command
+
+Cypress.Commands.add(
+  'paste',
+  { prevSubject: true },
+  function (subject, pasteOptions) {
+    const { pastePayload, pasteType } = pasteOptions
+    const data =
+      pasteType === 'application/json'
+        ? JSON.stringify(pastePayload)
+        : pastePayload
+    // https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
+    const clipboardData = new DataTransfer()
+    clipboardData.setData(pasteType, data)
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event
+    const pasteEvent = new ClipboardEvent('paste', {
+      bubbles: true,
+      cancelable: true,
+      dataType: pasteType,
+      data,
+      clipboardData,
+    })
+    subject[0].dispatchEvent(pasteEvent)
+
+    return subject
+  },
+)
 
 // Get element attached to DOM
 

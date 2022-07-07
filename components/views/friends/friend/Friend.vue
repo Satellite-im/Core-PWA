@@ -38,6 +38,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    isPreview: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {

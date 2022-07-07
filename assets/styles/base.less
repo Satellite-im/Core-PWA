@@ -30,6 +30,20 @@ body {
 *:active {
   outline: none;
 }
+* {
+  &::-webkit-scrollbar {
+    width: @scroll-bar-size;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: @flair-color;
+    &:extend(.round-corners);
+  }
+  scrollbar-width: thin;
+  scrollbar-color: @flair-color transparent;
+}
 
 code {
   &:extend(.background-semitransparent-lighter);
@@ -140,6 +154,7 @@ a.link {
   }
 
   li {
+    font-family: @secondary-font;
     &.is-active {
       &:extend(.background-flair-gradient);
       &:extend(.glow-flair);
@@ -185,6 +200,13 @@ a.link {
 }
 
 // Buttons
+button {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  &:extend(.font-primary);
+}
 .button {
   border: none;
   &.active {
@@ -273,6 +295,18 @@ a.link {
     }
   }
 
+  &.is-success,
+  .is-success {
+    &:extend(.glow-success);
+    &:extend(.background-success-gradient);
+
+    &:hover,
+    &:focus:not(:active) {
+      &:extend(.background-success-gradient);
+      box-shadow: @success-glow !important;
+    }
+  }
+
   &.is-danger.is-outlined {
     &:extend(.color-danger);
     &:extend(.glow-danger);
@@ -329,6 +363,7 @@ a.link {
 
 .is-primary {
   .custom-select {
+    font-family: @secondary-font;
     &:extend(.font-primary);
     .selected {
       &:extend(.background-flair-gradient);
@@ -402,6 +437,7 @@ a.link {
   }
   .vue-slider-dot-tooltip {
     .vue-slider-dot-tooltip-inner {
+      font-family: @secondary-font;
       &:extend(.background-flair);
       &::after {
         border-top-color: @flair-color !important;
@@ -443,26 +479,6 @@ a.link {
 }
 
 //Sidebar
-#sidebar {
-  .sidebar-nav {
-    .button,
-    div {
-      &.is-primary {
-        &:extend(.background-flair-gradient);
-        &:extend(.glow-flair);
-      }
-      .tag-inverted {
-        background: @midground !important;
-      }
-    }
-  }
-
-  .label {
-    &:extend(.background-flair);
-  }
-  background: @background !important;
-}
-
 .side-bar-inner {
   .body {
     .category-tree {
@@ -476,23 +492,7 @@ a.link {
   }
 }
 
-// Swiper
-.sidebar-container.swiper-slide.swiper-slide-active {
-  transform: none;
-}
-
 //Scrollbar
-.ps__thumb-x,
-.ps__thumb-y,
-.ps__rail-x:hover > .ps__thumb-x,
-.ps__rail-x:focus > .ps__thumb-x,
-.ps__rail-x.ps--clicking .ps__thumb-x,
-.ps__rail-y:hover > .ps__thumb-y,
-.ps__rail-y:focus > .ps__thumb-y,
-.ps__rail-y.ps--clicking .ps__thumb-y {
-  background: @flair-color !important;
-}
-
 .auto-scroll {
   &::-webkit-scrollbar-thumb {
     &:extend(.background-flair);
@@ -527,6 +527,7 @@ a.link {
   .media-user .tag {
     &:extend(.background-semitransparent-dark);
     &:extend(.font-primary);
+    font-family: @primary-font;
   }
 }
 
@@ -556,6 +557,7 @@ a.link {
 
 //Tag
 .tag {
+  font-family: @secondary-font;
   &:extend(.background-flair-gradient);
   &:extend(.glow-flair);
   &:extend(.font-secondary);
@@ -584,6 +586,9 @@ a.link {
   .chatbar-controls {
     .send-message-btn {
       &:extend(.font-flair);
+    }
+    [disabled] {
+      color: grey;
     }
   }
 
@@ -678,14 +683,6 @@ a.link {
   &:extend(.font-flair);
 }
 
-//Reactions
-.emoji-reactions {
-  .emoji-reaction.emoji-reacted {
-    &:extend(.background-flair-gradient);
-    &:extend(.glow-flair);
-  }
-}
-
 //Message
 .is-message {
   .pinned-message {
@@ -706,15 +703,6 @@ a.link {
 }
 
 // ------------- Ui Elements-------------
-
-// Chatbar
-#chatbar {
-  .chatbar-controls {
-    .send-message-btn {
-      &:extend(.color-flair);
-    }
-  }
-}
 
 .is-chatbar-reply {
   &:extend(.background-flair);
@@ -967,4 +955,9 @@ a.link {
       opacity: 1;
     }
   }
+}
+
+// Swiper
+.sidebar-container.swiper-slide.swiper-slide-active {
+  transform: none;
 }

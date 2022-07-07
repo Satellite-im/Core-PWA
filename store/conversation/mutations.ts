@@ -1,6 +1,6 @@
 import { ConversationParticipant, ConversationState } from './types'
 
-const actions = {
+const mutations = {
   setConversation(
     state: ConversationState,
     payload: {
@@ -14,6 +14,12 @@ const actions = {
     state.type = payload.type
     state.calling = !!payload.calling
     state.participants = payload.participants || []
+  },
+  resetConversation(state: ConversationState) {
+    state.id = ''
+    state.type = 'friend'
+    state.calling = false
+    state.participants = []
   },
   setCalling(state: ConversationState, active: boolean) {
     state.calling = active
@@ -60,4 +66,4 @@ const actions = {
     })
   },
 }
-export default actions
+export default mutations

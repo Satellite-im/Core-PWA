@@ -1,6 +1,6 @@
 {
   "name": "Core-PWA",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "dev": "yarn install --check-files && nuxi dev",
@@ -22,9 +22,12 @@
     "test": "jest",
     "summary": "jest test --coverage --coverageReporters=text-summary",
     "cy:run": "cypress run --browser chrome headless",
-    "cy:first": "xvfb-run -a cypress run --config-file cypress-first-user.json --browser chrome",
-    "cy:second": "xvfb-run -a cypress run --config-file cypress-second-user.json --browser chrome",
+    "cy:first": "xvfb-run -a cypress run --config-file cypress-first.config.js --browser chrome",
+    "cy:second": "xvfb-run -a cypress run --config-file cypress-second.config.js --browser chrome",
     "cy:chat": "concurrently npm:cy:first npm:cy:second",
+    "cy:first-local": "cypress run --config-file cypress-first.config.js --browser chrome",
+    "cy:second-local": "cypress run --config-file cypress-second.config.js --browser chrome",
+    "cy:chat-local": "concurrently npm:cy:first-local npm:cy:second-local",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -39,6 +42,7 @@
     "@nuxtjs/style-resources": "^1.2.1",
     "@nuxtjs/toast": "^3.3.1",
     "@project-serum/anchor": "0.18.2",
+    "@satellite-im/iridium": "git+https://git@github.com/Satellite-im/iridium.git#hotfix/deploy-race-condition",
     "@solana/web3.js": "1.43.1",
     "@tensorflow/tfjs": "^3.13.0",
     "@textile/hub": "^6.3.2",
@@ -93,7 +97,6 @@
     "v-scroll-lock": "^1.3.1",
     "vue-awesome-swiper": "^4.1.1",
     "vue-croppie": "^2.0.2",
-    "vue-custom-scrollbar": "^1.4.3",
     "vue-emoji-picker": "git+https://git@github.com/Satellite-im/vue-emoji-picker#build-satellite",
     "vue-markdown": "^2.2.4",
     "vue-multiselect": "^2.1.6",
@@ -126,7 +129,7 @@
     "babel-jest": "^27.5.1",
     "babel-plugin-lodash": "^3.3.4",
     "concurrently": "^7.0.0",
-    "cypress": "9.5.0",
+    "cypress": "10.3.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-image-snapshot": "^4.0.1",
     "cypress-localstorage-commands": "^1.7.0",

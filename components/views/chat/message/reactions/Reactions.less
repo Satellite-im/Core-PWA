@@ -1,68 +1,75 @@
-.emoji-reactions {
-  .emoji-reaction {
-    &:nth-child(1) {
-      margin-left: 0;
+.message-reactions {
+  display: flex;
+  align-items: center;
+  gap: @xlight-spacing;
+  margin: @light-spacing 0;
+
+  &:hover,
+  &:focus-within {
+    .add-reaction {
+      display: flex;
     }
+  }
+
+  .reaction-button {
+    display: flex;
+    gap: @xlight-spacing;
+    align-items: center;
+    position: relative;
+    padding: (@light-spacing / 2) @light-spacing;
+    color: white;
     &:extend(.background-semitransparent-light);
     &:extend(.bordered);
     &:extend(.round-corners);
-    padding: (@light-spacing / 2) @light-spacing;
-    margin: 0 (@light-spacing / 2);
-    margin-left: 0;
-    cursor: pointer;
-    text-align: center;
-    max-width: 3.5rem;
-  }
-  .react-button {
-    display: none;
-  }
-  &:hover {
-    .react-button {
-      display: inline-block;
+
+    &.reacted {
+      &:extend(.background-flair-gradient);
+      &:extend(.glow-flair);
     }
-  }
-  .emoji-icon {
-    font-size: 1.1rem;
-    margin: 8px 8px 2px 10px;
-    cursor: pointer;
-    &:extend(.font-muted);
-  }
-  .reactors {
-    .reactors-emoji {
-      font-size: 2rem;
-      padding: 0px 4px;
-      text-shadow: -1px 0 1px @midground, 0 1px 1px @midground,
-        1px 0 1px @midground, 0 -1px 1px @midground, 0 0 12px @gray;
-    }
-    .reactors-list {
-      .reactor {
+
+    &:hover,
+    &:focus {
+      .reaction-details {
         display: flex;
-        flex-flow: row wrap;
-        margin-left: 8px;
-        font-size: 10pt;
       }
     }
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    max-width: 240px;
-    bottom: 36px;
-    margin: 0px;
-    margin-left: -60px;
-    &:extend(.background-semitransparent-dark);
-    &:extend(.blur);
-    padding: 8px 12px;
-    &:extend(.bordered);
-    &:extend(.round-corners);
 
-    &:extend(.first-layer);
-    animation: @animation-speed fadeIn;
-    animation-fill-mode: both;
-    opacity: 0;
+    .reaction-details {
+      display: none;
+      align-items: center;
+      gap: @xlight-spacing;
+      padding: @light-spacing;
+      width: 140px;
+
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      font-size: 10pt;
+      text-align: left;
+      cursor: default;
+
+      &:extend(.background-semitransparent-dark);
+      &:extend(.blur);
+      &:extend(.bordered);
+      &:extend(.round-corners);
+      &:extend(.first-layer);
+
+      .reactors-emoji {
+        font-size: 2rem;
+        padding: 0px 4px;
+        text-shadow: -1px 0 1px @midground, 0 1px 1px @midground,
+          1px 0 1px @midground, 0 -1px 1px @midground, 0 0 12px @gray;
+      }
+    }
   }
-  display: flex;
-  margin-top: @light-spacing;
-  margin-bottom: @normal-spacing;
+
+  .add-reaction {
+    display: none;
+    font-size: 1.1rem;
+    background: transparent;
+    border: none;
+    &:extend(.font-muted);
+  }
 }

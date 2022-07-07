@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { WebRTCState } from './types'
 
 const mutations = {
@@ -31,6 +32,16 @@ const mutations = {
   },
   updateCreatedAt(state: WebRTCState, createdAt: number) {
     state.createdAt = createdAt
+    if (!state.interval && state.createdAt && state.activeCall) {
+      state.interval = setInterval(
+        () => this.commit('webrtc/updateElapsedTime'),
+        1000,
+      )
+    } else if (state.interval) {
+      clearInterval(state.interval)
+      state.interval = null
+      state.elapsedTime = ''
+    }
   },
   setStreamMuted(
     state: WebRTCState,
@@ -68,6 +79,13 @@ const mutations = {
         [kind]: !state.streamMuted[peerId][kind],
       },
     }
+  },
+  updateElapsedTime(state: WebRTCState) {
+    const duration = dayjs.duration(Date.now() - state.createdAt)
+    const hours = duration.hours()
+    state.elapsedTime = `${hours > 0 ? hours + ':' : ''}${duration.format(
+      'mm:ss',
+    )}`
   },
 }
 

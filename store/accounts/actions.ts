@@ -55,8 +55,6 @@ export default {
       throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
     const computedPinHash = await Crypto.hash(pin)
 
     if (computedPinHash !== pinHash) {

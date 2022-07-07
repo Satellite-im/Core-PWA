@@ -1,16 +1,16 @@
-<div id="network-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle :size="6" :text="$t('pages.settings.realms.title')" />
       <TypographySubtitle
         :size="6"
         :text="$t('pages.settings.realms.subtitle')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.realms.chain')" />
       <br />
       <SettingsPagesRealmsRealm
@@ -18,6 +18,6 @@
         :realm="realm"
         :key="realm.id"
       />
-    </div>
-  </div>
-</div>
+    </SettingsUnit>
+  </SettingsSection>
+</SettingsPage>

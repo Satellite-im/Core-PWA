@@ -37,7 +37,6 @@ export default Vue.extend({
         '#45aaf2',
         '#4b7bec',
         '#a55eea',
-        '#d1d8e0',
         '#778ca3',
         '#2d98da',
         '#3867d6',

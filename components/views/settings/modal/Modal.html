@@ -6,20 +6,19 @@
       ref="settingSwiper"
     >
       <swiper-slide class="sidebar is-secondary-background">
-        <UiScroll verticalScroll>
+        <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
           <SettingsSidebar
             :title="$t('pages.settings.settings')"
-            :toggleable="$device.isMobile"
             :toggle="toggleSidebar"
             :handleRouteChange="changeRoute"
           />
-        </UiScroll>
+        </UiSimpleScroll>
       </swiper-slide>
       <swiper-slide class="not-sidebar hidden-scroll" v-scroll-lock="true">
-        <UiScroll
-          :verticalScroll="verticalScroll"
-          enableWrap
-          scrollbarVisibility="scroll"
+        <UiSimpleScroll
+          containerClass="modal-container"
+          scrollMode="vertical"
+          scrollShow="scroll"
         >
           <menu-icon
             v-if="$device.isMobile"
@@ -28,7 +27,10 @@
             class="menu-toggle"
           />
           <SettingsBreadcrumbs />
-          <InteractablesClose :action="closeModal" />
+          <InteractablesClose
+            data-cy="settings-close-button"
+            :action="closeModal"
+          />
           <SettingsPagesPersonalize
             v-if="this.ui.settingsRoute === SettingsRoutes.PERSONALIZE"
           />
@@ -65,7 +67,7 @@
           <SettingsPagesPrivacy
             v-if="this.ui.settingsRoute === SettingsRoutes.PRIVACY"
           />
-        </UiScroll>
+        </UiSimpleScroll>
       </swiper-slide>
     </swiper>
   </div>

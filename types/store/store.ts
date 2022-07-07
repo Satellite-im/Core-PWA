@@ -13,22 +13,26 @@ import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
 import { MediaState } from '~/store/media/types'
 import { IridiumState } from '~/store/iridium/types'
+import { MetaState } from '~/store/meta/types'
+import { SoundsState } from '~/store/sounds/types'
 
 export interface RootState {
   accounts: AccountsState
   audio: AudioState
+  chat: ChatState
+  conversation: ConversationState
   dataState: DataState
   friends: FriendsState
-  media: MediaState
-  textile: TextileState
   iridium: IridiumState
-  webrtc: WebRTCState
   groups: GroupsState
-  video: VideoState
-  ui: UIState
+  media: MediaState
+  meta: MetaState
   settings: SettingsState
-  conversation: ConversationState
-  chat: ChatState
+  sounds: SoundsState
+  ui: UIState
+  textile: TextileState
+  video: VideoState
+  webrtc: WebRTCState
 }
 
 export type RootStore = Store<RootState>

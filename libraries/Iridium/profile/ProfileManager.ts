@@ -1,4 +1,4 @@
-import Emitter from '@satellite-im/iridium/src/emitter'
+import { Emitter } from '@satellite-im/iridium'
 import { IridiumManager } from '../IridiumManager'
 import { Profile } from './types'
 
@@ -9,7 +9,7 @@ export default class IridiumProfile extends Emitter {
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
-    this.iridium.connector.on('state:changed', this.onStateChanged.bind(this))
+    this.iridium.connector?.on('state:changed', this.onStateChanged.bind(this))
   }
 
   async load() {

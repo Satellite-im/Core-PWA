@@ -1,6 +1,6 @@
-<div id="developer-settings">
-  <div class="columns is-desktop">
-    <div class="column">
+<SettingsPage>
+  <SettingsSection>
+    <SettingsUnit>
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.notifications.title')"
@@ -9,15 +9,15 @@
         :size="6"
         :text="$t('pages.settings.notifications.notes')"
       />
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
   <TypographyLabel
     :text="$t('pages.settings.notifications.labels.current_platform')"
   /><TypographyText :text="Platform" />
   <br />
 
-  <div class="columns is-desktop">
-    <div class="column">
+  <SettingsSection>
+    <SettingsUnit>
       <span
         v-if="Platform === PlatformTypeEnum.WEB || Platform === PlatformTypeEnum.ELECTRON"
       >
@@ -70,8 +70,8 @@
           <arrow-right-icon size="1x" />
         </InteractablesInputGroup>
       </span>
-    </div>
-  </div>
+    </SettingsUnit>
+  </SettingsSection>
 
   <SettingsPagesNotificationsSounds />
-</div>
+</SettingsPage>

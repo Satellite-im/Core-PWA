@@ -1,16 +1,29 @@
 .friend {
+  display: flex;
+  align-items: center;
+  padding: @light-spacing @normal-spacing;
+  margin: 0 @light-spacing;
+  gap: @normal-spacing;
+  &:extend(.no-select);
+  &:extend(.round-corners);
+
   &:hover {
     &:extend(.background-semitransparent-light);
   }
+
+  .user-state,
+  .controls,
   .circle {
-    align-self: center;
+    flex-shrink: 0;
   }
   .description {
-    margin-left: @normal-spacing;
+    flex-grow: 1;
+    &:extend(.ellipsis);
     p,
     h1 {
       margin: 0;
       font-size: @mini-text-size;
+      &:extend(.ellipsis);
     }
     h1 {
       &:extend(.font-secondary);
@@ -19,20 +32,4 @@
       &:extend(.font-muted);
     }
   }
-  .controls {
-    justify-self: flex-end;
-    align-self: center;
-    float: right;
-    min-width: 4.8rem;
-  }
-  .spacer {
-    flex: 1;
-  }
-  position: relative;
-  &:extend(.more-pad-sides);
-  display: flex;
-  align-items: center;
-  &:extend(.no-select);
-  &:extend(.round-corners);
-  margin: 0 @light-spacing;
 }

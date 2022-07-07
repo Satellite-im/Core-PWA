@@ -1,0 +1,18 @@
+<div
+  class="file-preview bordered"
+  :class="{'no-round' : countError}"
+  @touchmove="handleTouchPreview"
+  @touchstart="handleTouchPreview"
+  @touchend="handleTouchPreview"
+>
+  <UiSimpleScroll scrollMode="horizontal" scrollShow="scroll">
+    <div class="file-list">
+      <FilesUploadPreviewItem
+        v-for="(item, index) in getFiles"
+        :item="item"
+        :key="index"
+        @removeUploadItem="removeUploadItem(index)"
+      />
+    </div>
+  </UiSimpleScroll>
+</div>

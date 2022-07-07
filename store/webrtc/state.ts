@@ -7,6 +7,8 @@ const InitialWebRTCState = (): WebRTCState => ({
   activeCall: undefined,
   streamMuted: {},
   createdAt: 0,
+  elapsedTime: '',
+  interval: null,
 })
 
 export default InitialWebRTCState

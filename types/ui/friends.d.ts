@@ -10,7 +10,7 @@ export interface EncryptedFriend extends User {
 
 export interface FriendRequest {
   requestId: string
-  account: FriendAccount
+  // account: FriendAccount
   pending: boolean
   userInfo: UserInfo | null
 }
@@ -18,6 +18,10 @@ export interface FriendRequest {
 export interface IncomingRequest extends FriendRequest {
   from: string
   account: FriendAccount
+}
+
+export interface OutgoingRequest extends FriendRequest {
+  to: string
 }
 
 export interface Friend extends EncryptedFriend {
@@ -37,8 +41,4 @@ export interface Friend extends EncryptedFriend {
   peerId?: string
   call?: Call
   status: string
-}
-
-export interface OutgoingRequest extends FriendRequest {
-  to: string
 }

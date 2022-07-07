@@ -3,6 +3,7 @@ import {
   EnhancerInfo,
   FileSort,
   Flair,
+  ModalWindows,
   Position,
   RecentGlyph,
   SettingsRoutes,
@@ -15,6 +16,7 @@ import { FileMessage } from '~/types/textile/mailbox'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Fil } from '~/libraries/Files/Fil'
+import modal from '~/components/views/settings/modal/Modal.vue'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -28,9 +30,6 @@ export default {
   },
   showSidebar(state: UIState, enabled: boolean) {
     state.showSidebar = enabled
-  },
-  showMedia(state: UIState, show: boolean) {
-    state.showMedia = show
   },
   setContextMenuValues(state: UIState, values: any) {
     state.contextMenuValues = values

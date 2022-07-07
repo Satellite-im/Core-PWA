@@ -39,3 +39,13 @@ export default Vue.extend({
   },
 })
 </script>
+<style scoped lang="less">
+#developer-settings {
+  pre {
+    white-space: pre-wrap;
+    text-align: left;
+    &:extend(.bordered);
+    &:extend(.round-corners);
+  }
+}
+</style>

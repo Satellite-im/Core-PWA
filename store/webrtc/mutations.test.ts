@@ -91,6 +91,15 @@ describe('Mutate WebRTC by setting', () => {
     })
   })
 
+  it('should initialize with default value for parameters', () => {
+    const localStateForUnitTest = { ...state }
+    inst.setInitialized(localStateForUnitTest)
+
+    expect(localStateForUnitTest).toMatchObject({
+      webrtc: { initialized: true },
+    })
+  })
+
   it('should set incoming call', () => {
     const localStateForUnitTest = { ...state }
     inst.setIncomingCall(localStateForUnitTest, '0x0')
@@ -106,6 +115,124 @@ describe('Mutate WebRTC by setting', () => {
 
     expect(localStateForUnitTest).toMatchObject({
       activeCall: '0x0',
+    })
+  })
+
+  it('should update createdAt', () => {
+    const localStateForUnitTest = { ...state }
+    inst.updateCreatedAt(localStateForUnitTest, 0x0)
+
+    expect(localStateForUnitTest).toMatchObject({
+      createdAt: 0x0,
+    })
+  })
+
+  it('should set streamMuted', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: 'id',
+      audio: true,
+      video: true,
+      screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.streamMuted).toMatchObject({
+      id: {
+        audio: true,
+        video: true,
+        screen: true,
+      },
+    })
+  })
+
+  it('should set streamMuted without peerId', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: null,
+      audio: true,
+      video: true,
+      screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest).not.toMatchObject({
+      streamMuted: {
+        id: {
+          audio: true,
+          video: true,
+          screen: true,
+        },
+      },
+    })
+  })
+
+  it('should set streamMuted without peerId and with default arguments', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: null,
+      // Commented out because we want to test if default values will come in.
+      // audio: true,
+      // video: true,
+      // screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest).not.toMatchObject({
+      streamMuted: {
+        id: {
+          audio: true,
+          video: true,
+          screen: true,
+        },
+      },
+    })
+  })
+
+  it('should set muted', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: 'id',
+      audio: true,
+      video: true,
+      screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+    const secondArgument = {
+      peerId: 'id',
+      kind: 'audio',
+      muted: false,
+    }
+    inst.setMuted(localStateForUnitTest, secondArgument) // Audio muted is now false.
+
+    expect(localStateForUnitTest.streamMuted).toMatchObject({
+      id: { audio: false, video: true, screen: true },
+    })
+  })
+
+  it('should toggle mute', () => {
+    const localStateForUnitTest = { ...state }
+    const argument = {
+      peerId: 'id',
+      audio: true,
+      video: true,
+      screen: true,
+    }
+    inst.setStreamMuted(localStateForUnitTest, argument)
+    const secondArgument = {
+      peerId: 'id',
+      kind: 'audio',
+      muted: false,
+    }
+    inst.setMuted(localStateForUnitTest, secondArgument)
+    const thirdArgument = {
+      peerId: 'id',
+      kind: 'audio',
+    }
+    inst.toggleMute(localStateForUnitTest, thirdArgument) // Audio muted is now true again.
+
+    expect(localStateForUnitTest.streamMuted).toMatchObject({
+      id: { audio: true, video: true, screen: true },
     })
   })
 })

@@ -1,5 +1,6 @@
 export type ButtonType =
   | 'primary'
+  | 'dark'
   | 'link'
   | 'info'
   | 'success'

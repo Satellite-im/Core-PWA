@@ -403,7 +403,7 @@ describe('', () => {
   test('module.default.matchesActiveCall', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const localRootState: RootState = { ...initialRootState }
-    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.activeCall?.peerId,) is true
+    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.BackgroundCall?.peerId,) is true
     const result = module.default.matchesActiveCall(
       // We have to call the function this way because of how it was declared in ./getters.ts
       localState,
@@ -440,7 +440,7 @@ describe('', () => {
   test('module.default.matchesSomeActiveCall', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const localRootState: RootState = { ...initialRootState }
-    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.activeCall?.peerId,) is true
+    localState.all[0].address = 'peer_1234' // So that (friend.address === rootState.webrtc.BackgroundCall?.peerId,) is true
     const result = module.default.matchesSomeActiveCall(
       // We have to call the function this way because of how it was declared in ./getters.ts
       localState,
@@ -642,5 +642,262 @@ describe('', () => {
         },
       },
     ])
+  })
+  test('module.default.friendsWithUnreadMessages', () => {
+    const localState: FriendsState = { ...initialFriendsState }
+    const result = module.default.friendsWithUnreadMessages(localState)
+    expect(result).toEqual([
+      {
+        account: {
+          accountId: 'Checking Account',
+          from: '.',
+          fromMailboxId: '12345',
+          status: 429,
+          to: './path/to/file',
+          toMailboxId: 'v4.0.0-rc.4',
+        },
+        activeChat: true,
+        address: 'peer_1234',
+        badge: 'community',
+        encryptedTextilePubkey: '',
+        item: {},
+        localSypingState: 'NOT_TYPING',
+        mailboxId: '',
+        name: 'Taurus Nix',
+        pending: true,
+        profilePicture: '',
+        publicKey: 'NoWiFi4you',
+        state: 'idle',
+        status: '',
+        textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
+        unreadCount: 123,
+        userAccount: '',
+      },
+      {
+        account: {
+          accountId: 'duplicate_Checking Account',
+          from: 'duplicate_.',
+          fromMailboxId: 'duplicate_12345',
+          status: 429,
+          to: 'duplicate_./path/to/file',
+          toMailboxId: 'duplicate_v4.0.0-rc.4',
+        },
+        activeChat: true,
+        address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+        badge: 'community',
+        encryptedTextilePubkey: 'duplicate_',
+        item: {},
+        localSypingState: 'NOT_TYPING',
+        mailboxId: 'duplicate_',
+        name: 'duplicate_Taurus Nix',
+        pending: true,
+        profilePicture: 'duplicate_',
+        publicKey: 'duplicate_NoWiFi4you',
+        state: 'online',
+        status: 'duplicate_',
+        textilePubkey:
+          'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+        unreadCount: 123,
+        userAccount: 'duplicate_',
+      },
+      {
+        account: {
+          accountId: 'duplicate_Checking Account',
+          from: 'duplicate_.',
+          fromMailboxId: 'duplicate_12345',
+          status: 429,
+          to: 'duplicate_./path/to/file',
+          toMailboxId: 'duplicate_v4.0.0-rc.4',
+        },
+        activeChat: true,
+        address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+        badge: 'community',
+        encryptedTextilePubkey: 'duplicate_',
+        item: {},
+        localSypingState: 'NOT_TYPING',
+        mailboxId: 'duplicate_',
+        name: 'duplicate_Taurus Nix',
+        pending: true,
+        profilePicture: 'duplicate_',
+        publicKey: 'duplicate_NoWiFi4you',
+        state: 'online',
+        status: 'duplicate_',
+        textilePubkey:
+          'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+        unreadCount: 123,
+        userAccount: 'duplicate_',
+      },
+      {
+        account: {
+          accountId: 'duplicate_Checking Account',
+          from: 'duplicate_.',
+          fromMailboxId: 'duplicate_12345',
+          status: 429,
+          to: 'duplicate_./path/to/file',
+          toMailboxId: 'duplicate_v4.0.0-rc.4',
+        },
+        activeChat: true,
+        address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+        badge: 'community',
+        encryptedTextilePubkey: 'duplicate_',
+        item: {},
+        localSypingState: 'NOT_TYPING',
+        mailboxId: 'duplicate_',
+        name: 'duplicate_Taurus Nix',
+        pending: true,
+        profilePicture: 'duplicate_',
+        publicKey: 'duplicate_NoWiFi4you',
+        state: 'online',
+        status: 'duplicate_',
+        textilePubkey:
+          'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+        unreadCount: 123,
+        userAccount: 'duplicate_',
+      },
+    ])
+  })
+  test('module.default.alphaSortedFriendsSearch', () => {
+    const localState: FriendsState = { ...initialFriendsState }
+    localState.all.push({
+      publicKey: 'duplicate_NoWiFi4you',
+      localSypingState: 'NOT_TYPING',
+      item: {},
+      pending: true,
+      activeChat: true,
+      encryptedTextilePubkey: 'duplicate_',
+      name: 'duplicate_Taurus Nix',
+      address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+      account: {
+        accountId: 'duplicate_Checking Account',
+        from: 'duplicate_.',
+        status: 429,
+        fromMailboxId: 'duplicate_12345',
+        toMailboxId: 'duplicate_v4.0.0-rc.4',
+        to: 'duplicate_./path/to/file',
+      },
+      textilePubkey:
+        'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+      status: 'duplicate_',
+      state: 'online', // Duplicate entry: changed from idle to online
+      unreadCount: 123,
+      profilePicture: 'duplicate_',
+      badge: 'community',
+      userAccount: 'duplicate_',
+      mailboxId: 'duplicate_',
+    })
+    const originalFunction = module.default.alphaSortedFriendsSearch(localState)
+    const result = originalFunction('duplicate_Taurus Nix')
+    expect(result).toEqual({
+      D: [
+        {
+          account: {
+            accountId: 'duplicate_Checking Account',
+            from: 'duplicate_.',
+            fromMailboxId: 'duplicate_12345',
+            status: 429,
+            to: 'duplicate_./path/to/file',
+            toMailboxId: 'duplicate_v4.0.0-rc.4',
+          },
+          activeChat: true,
+          address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          badge: 'community',
+          encryptedTextilePubkey: 'duplicate_',
+          item: {},
+          localSypingState: 'NOT_TYPING',
+          mailboxId: 'duplicate_',
+          name: 'duplicate_Taurus Nix',
+          pending: true,
+          profilePicture: 'duplicate_',
+          publicKey: 'duplicate_NoWiFi4you',
+          state: 'online',
+          status: 'duplicate_',
+          textilePubkey:
+            'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+          unreadCount: 123,
+          userAccount: 'duplicate_',
+        },
+        {
+          account: {
+            accountId: 'duplicate_Checking Account',
+            from: 'duplicate_.',
+            fromMailboxId: 'duplicate_12345',
+            status: 429,
+            to: 'duplicate_./path/to/file',
+            toMailboxId: 'duplicate_v4.0.0-rc.4',
+          },
+          activeChat: true,
+          address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          badge: 'community',
+          encryptedTextilePubkey: 'duplicate_',
+          item: {},
+          localSypingState: 'NOT_TYPING',
+          mailboxId: 'duplicate_',
+          name: 'duplicate_Taurus Nix',
+          pending: true,
+          profilePicture: 'duplicate_',
+          publicKey: 'duplicate_NoWiFi4you',
+          state: 'online',
+          status: 'duplicate_',
+          textilePubkey:
+            'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+          unreadCount: 123,
+          userAccount: 'duplicate_',
+        },
+        {
+          account: {
+            accountId: 'duplicate_Checking Account',
+            from: 'duplicate_.',
+            fromMailboxId: 'duplicate_12345',
+            status: 429,
+            to: 'duplicate_./path/to/file',
+            toMailboxId: 'duplicate_v4.0.0-rc.4',
+          },
+          activeChat: true,
+          address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          badge: 'community',
+          encryptedTextilePubkey: 'duplicate_',
+          item: {},
+          localSypingState: 'NOT_TYPING',
+          mailboxId: 'duplicate_',
+          name: 'duplicate_Taurus Nix',
+          pending: true,
+          profilePicture: 'duplicate_',
+          publicKey: 'duplicate_NoWiFi4you',
+          state: 'online',
+          status: 'duplicate_',
+          textilePubkey:
+            'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+          unreadCount: 123,
+          userAccount: 'duplicate_',
+        },
+        {
+          account: {
+            accountId: 'duplicate_Checking Account',
+            from: 'duplicate_.',
+            fromMailboxId: 'duplicate_12345',
+            status: 429,
+            to: 'duplicate_./path/to/file',
+            toMailboxId: 'duplicate_v4.0.0-rc.4',
+          },
+          activeChat: true,
+          address: 'duplicate_0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
+          badge: 'community',
+          encryptedTextilePubkey: 'duplicate_',
+          item: {},
+          localSypingState: 'NOT_TYPING',
+          mailboxId: 'duplicate_',
+          name: 'duplicate_Taurus Nix',
+          pending: true,
+          profilePicture: 'duplicate_',
+          publicKey: 'duplicate_NoWiFi4you',
+          state: 'online',
+          status: 'duplicate_',
+          textilePubkey:
+            'duplicate_https://accounts.google.com/o/oauth2/revoke?token=%s',
+          unreadCount: 123,
+          userAccount: 'duplicate_',
+        },
+      ],
+    })
   })
 })

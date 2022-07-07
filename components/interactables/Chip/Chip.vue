@@ -1,14 +1,28 @@
 <template>
-  <div v-if="show" class="chip-item">
-    {{ text }}
-    <x-icon size="1x" @click="hide" />
+  <div :class="`chip-item size-${size}`">
+    <UiCircle
+      v-if="friend"
+      :type="src ? 'image' : 'random'"
+      :seed="friend.address"
+      :size="16"
+      :source="src"
+    />
+    <div class="text">
+      {{ text }}
+    </div>
+    <x-icon class="delete-icon" size="1x" @click="$emit('delete')" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-
+import Vue, { PropType } from 'vue'
 import { XIcon } from 'satellite-lucide-icons'
+import { Friend } from '~/types/ui/friends'
+
+export enum ChipSize {
+  Medium = 'medium',
+  Small = 'small',
+}
 
 export default Vue.extend({
   components: {
@@ -19,19 +33,19 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    size: {
+      type: String as unknown as PropType<ChipSize>,
+      default: ChipSize.Medium,
+    },
+    friend: {
+      type: Object as PropType<Friend> | undefined,
+      default: undefined,
+    },
   },
-  data() {
-    return {
-      show: true,
-    }
-  },
-  methods: {
-    /**
-     * @method hide
-     * @description Hides chip element
-     */
-    hide() {
-      this.show = false
+  computed: {
+    src(): string {
+      const hash = this.friend.profilePicture
+      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },
 })
@@ -40,15 +54,35 @@ export default Vue.extend({
 <style scoped lang="less">
 .chip-item {
   .fa-times {
-    margin-bottom: -2px;
-    margin-left: @light-spacing;
     cursor: pointer;
   }
-  display: inline-block;
-  margin-right: @light-spacing;
-  margin-bottom: @light-spacing;
-  padding: @xlight-spacing @light-spacing;
+
+  display: inline-flex;
+  flex-shrink: 0;
+  flex-direction: row;
+  align-items: center;
+  padding: @xlight-spacing;
   border-radius: @corner-rounding-xxlarge;
   color: white;
+  max-width: 100%;
+
+  .circle,
+  .delete-icon {
+    flex-shrink: 0;
+  }
+
+  .text {
+    margin: 0 0.125rem 0 @xlight-spacing;
+    &:extend(.ellipsis);
+    align-self: stretch;
+  }
+
+  &.size-small {
+    font-size: @mini-text-size;
+  }
+
+  .delete-icon {
+    cursor: pointer;
+  }
 }
 </style>

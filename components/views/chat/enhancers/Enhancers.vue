@@ -23,12 +23,6 @@ export default Vue.extend({
     ImageIcon,
     EmojiPicker,
   },
-  props: {
-    recipient: {
-      type: Object as PropType<Friend>,
-      default: null,
-    },
-  },
   data() {
     return {
       search: '',
@@ -38,7 +32,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    ...mapGetters('ui', ['getSortedMostUsedEmojis']),
+    ...mapGetters({
+      recipient: 'conversation/recipient',
+      getSortedMostUsedEmojis: 'ui/getSortedMostUsedEmojis',
+    }),
     mostUsedEmojis(): EmojiUsage[] {
       return this.getSortedMostUsedEmojis.slice(0, 10)
     },

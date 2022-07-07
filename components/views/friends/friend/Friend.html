@@ -9,6 +9,18 @@
     <TypographyText :text="user.status || 'offline'" />
   </div>
   <div class="spacer"></div>
+  <div class="controls" v-if="user && !request && isPreview">
+    <InteractablesButton
+      type="success"
+      size="small"
+      v-tooltip.bottom="$t('friends.send')"
+      :loading="loading"
+      :disabled="loadCheck"
+      :action="createFriendRequest"
+    >
+      <check-icon size="1x" />
+    </InteractablesButton>
+  </div>
   <div
     class="controls"
     v-if="request && request.incoming && request.status === 'pending'"
@@ -59,7 +71,7 @@
   </div>
   <div class="controls" v-else>
     <InteractablesButton
-      v-if="loading"
+      v-if="user && !request && !isPreview"
       type="primary"
       size="small"
       data-cy="friend-send-message"

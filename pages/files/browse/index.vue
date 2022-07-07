@@ -6,9 +6,9 @@ import { mapGetters } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
-import { FilSystem } from '~/libraries/Files/FilSystem'
 import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FileSort } from '~/store/ui/types'
+import fileSystem from '~/libraries/Files/FilSystem'
 
 export default Vue.extend({
   name: 'Files',
@@ -17,7 +17,7 @@ export default Vue.extend({
     return {
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
-      fileSystem: this.$FileSystem as FilSystem,
+      fileSystem,
     }
   },
   computed: {
@@ -92,7 +92,7 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      await this.$store.dispatch('textile/exportFileSystem')
+      // await this.$store.dispatch('textile/exportFileSystem')
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
@@ -110,14 +110,14 @@ export default Vue.extend({
           'ui/setFilesUploadStatus',
           this.$t('pages.files.status.delete', [item.name]),
         )
-        await this.$FileSystem.removeFile(item.id)
+        // await fileSystem.removeFile(item.id)
       }
-      this.$FileSystem.removeChild(item.name, item.parent)
+      fileSystem.removeChild(item.name, item.parent)
       this.$store.commit(
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      await this.$store.dispatch('textile/exportFileSystem')
+      // await this.$store.dispatch('textile/exportFileSystem')
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       this.forceRender()

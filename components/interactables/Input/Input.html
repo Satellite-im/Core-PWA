@@ -21,6 +21,7 @@
       :minLength="minLength"
       @keydown.space="preventLeadingSpace"
       @paste="preventEmptyPaste"
+      @keydown.enter="submitEnter"
     />
     <button
       v-if="deleteIcon && internalText.length"

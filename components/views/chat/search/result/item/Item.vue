@@ -3,12 +3,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
-import { SearchResultItem } from '~/types/search/search'
+import { toHTML } from '~/libraries/ui/Markdown'
+import { UISearchResultData } from '~/types/search/search'
 
 export default Vue.extend({
   props: {
     data: {
-      type: Object as PropType<SearchResultItem>,
+      type: Object as PropType<UISearchResultData>,
       required: true,
     },
   },
@@ -22,17 +23,46 @@ export default Vue.extend({
       const msgTimestamp = this.$dayjs(this.data.at)
       // if today
       if (this.$dayjs().isSame(msgTimestamp, 'day')) {
-        return `${this.$t('search.result.today')} ${this.getTimestamp({
+        return `${this.$t('time.today')} ${this.getTimestamp({
           time: this.data.at,
         })}`
       }
       // if yesterday
       if (this.$dayjs().diff(msgTimestamp, 'day') <= 1) {
-        return `${this.$t('search.result.yesterday')} ${this.getTimestamp({
+        return `${this.$t('time.yesterday')} ${this.getTimestamp({
           time: this.data.at,
         })}`
       }
       return this.getTimestamp({ time: this.data.at, full: true })
+    },
+    htmlPayload(): any {
+      return toHTML(this.data.payload, { liveTyping: false })
+    },
+  },
+  watch: {
+    data: {
+      handler() {
+        this.$nextTick(() => this.addSpoilerClick())
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.addSpoilerClick()
+  },
+  methods: {
+    addSpoilerClick() {
+      Array.from(
+        (this.$refs.result as HTMLElement).getElementsByClassName(
+          'spoiler-container',
+        ),
+      ).forEach((spoiler) => {
+        spoiler.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          spoiler.classList.add('spoiler-open')
+        })
+      })
     },
   },
 })

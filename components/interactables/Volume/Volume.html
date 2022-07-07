@@ -1,4 +1,7 @@
-<div :class="`volume-slider volume-slider--${direction}`">
+<div
+  data-cy="volume-slider"
+  :class="`volume-slider volume-slider--${direction}`"
+>
   <vue-slider
     v-model="value"
     v-bind:direction="direction"

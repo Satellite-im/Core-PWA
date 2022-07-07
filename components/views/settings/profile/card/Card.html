@@ -1,5 +1,5 @@
 <div class="profile-card">
-  <SettingsProfilePicture :image="info.imageUrl" />
+  <SettingsProfileBanner />
   <div class="profile-card-body">
     <div class="profile-badges" v-if="info.badges && info.badges.length">
       <TypographyTitle
@@ -16,18 +16,13 @@
         :text="$t('pages.settings.profile.info.preferences')"
       />
       <div class="profile-preferences-timezone">
-        <TypographySubtitle
-          :size="6"
-          :text="$t('pages.settings.profile.info.timezone')"
+        <InteractablesSelect
+          v-model="timezone"
+          :options="timezones"
+          :label="$t('pages.settings.profile.info.timezone')"
+          show-label
+          small
         />
-        <div class="timezone-list">
-          <InteractablesSelect
-            :options="timezones"
-            v-model="timezone"
-            size="small"
-            class="form-control"
-          />
-        </div>
       </div>
       <div class="profile-preferences-language" v-if="featureReadyToShow">
         <TypographySubtitle

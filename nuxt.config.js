@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   alias: {
     tslib: 'tslib/tslib.es6.js',
     'merge-options': 'merge-options/index.js',
+    '@satellite-im/iridium': '@satellite-im/iridium/dist/index.browser.js',
   },
   bridge: {
     nitro: false,
@@ -233,7 +234,7 @@ export default defineNuxtConfig({
         }
       }
     },
-    transpile: ['libp2p'],
+    transpile: ['libp2p', '@satellite-im/iridium'],
     babel: {
       plugins: ['lodash'],
       compact: true,
@@ -263,5 +264,9 @@ export default defineNuxtConfig({
   },
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
-  ignore: ['**/*.test.*', 'store/*/types.ts'],
+  ignore: [
+    '**/*.test.*',
+    'store/*/types.ts',
+    'node_modules/@satellite-im/iridium/src/',
+  ],
 })

@@ -30,9 +30,7 @@
   }
 
   &body,
-  #app,
-  .horizontal-rule,
-  .vertical-divider {
+  #app {
     background: @midground !important;
   }
 
@@ -42,17 +40,8 @@
   }
 
   #mobile-nav {
-    div {
-      svg {
-        &:extend(.font-primary);
-      }
-      &.active {
-        border-radius: @half;
-      }
-      &:extend(.inline-flex-centered);
-      margin: auto;
-      width: 40px !important;
-      height: 40px;
+    &.active {
+      border-radius: @half;
     }
 
     background: @graydient !important;

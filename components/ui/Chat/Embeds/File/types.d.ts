@@ -4,4 +4,5 @@ export type FileMessagePayload = {
   size: number
   type: string
   id: string
+  nsfw: boolean
 }

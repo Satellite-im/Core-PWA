@@ -1,6 +1,7 @@
 import 'cypress-file-upload'
 import 'cypress-localstorage-commands'
 import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
+import { date } from 'fp-ts'
 
 addMatchImageSnapshotCommand({
   customSnapshotsDir: '/cypress/snapshots',
@@ -142,7 +143,7 @@ Cypress.Commands.add('createAccountSecondScreen', () => {
 
 Cypress.Commands.add('createAccountRecoverySeed', () => {
   cy.contains('Recovery Seed', { timeout: 15000 }).should('be.visible')
-  cy.get('#custom-cursor-area').click()
+  cy.contains('I Saved It').click()
 })
 
 Cypress.Commands.add('validateUserInputIsDisplayed', () => {
@@ -206,9 +207,9 @@ Cypress.Commands.add(
       .find('[data-cy=switch-button]')
       .then(($btn) => {
         if (expectedValue === true) {
-          cy.wrap($btn).should('have.class', 'enabled')
+          cy.wrap($btn, { timeout: 30000 }).should('have.class', 'enabled')
         } else {
-          cy.wrap($btn).should('not.have.class', 'enabled')
+          cy.wrap($btn, { timeout: 30000 }).should('not.have.class', 'enabled')
         }
       })
   },
@@ -216,22 +217,30 @@ Cypress.Commands.add(
 
 //Import Account Commands
 
-Cypress.Commands.add('importAccount', (pin, recoverySeed, isMobile = false) => {
-  cy.clearDatabase()
-  cy.visitRootPage(isMobile)
-  cy.url().should('contain', '#/auth/unlock')
-  cy.get('[data-cy=add-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type(pin, { log: false }, { force: true })
-  cy.get('[data-cy=submit-input]').click()
-  cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
-  cy.get('[data-cy=add-passphrase]')
-    .should('be.visible')
-    .trigger('input')
-    .type(recoverySeed, { log: false }, { force: true })
-  cy.contains('Recover Account').click()
-})
+Cypress.Commands.add(
+  'importAccount',
+  (pin, recoverySeed, isMobile = false, savePin = false) => {
+    cy.clearDatabase()
+    cy.visitRootPage(isMobile)
+    cy.url().should('contain', '#/auth/unlock')
+    cy.get('[data-cy=add-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(pin, { log: false }, { force: true })
+    if (savePin === true) {
+      cy.get('[data-cy=switch-button]').click().should('have.class', 'enabled')
+    } else {
+      cy.get('[data-cy=switch-button]').should('not.have.class', 'enabled')
+    }
+    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
+    cy.get('[data-cy=add-passphrase]')
+      .should('be.visible')
+      .trigger('input')
+      .type(recoverySeed, { log: false }, { force: true })
+    cy.contains('Recover Account').click()
+  },
+)
 
 Cypress.Commands.add(
   'importAccountPINscreen',
@@ -305,7 +314,7 @@ Cypress.Commands.add(
       'not.exist',
     )
     // Assert message
-    if ((assertMessage = true)) {
+    if (assertMessage) {
       cy.contains(message, { timeout: 30000 })
         .last()
         .scrollIntoView()
@@ -417,12 +426,10 @@ Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
   cy.get('#quick-upload').selectFile(imagePath, {
     force: true,
   })
-  cy.get('.file-item', { timeout: 30000 }).should('exist')
-  cy.get('.file-info > .title').should('contain', filename)
-  cy.contains('Scanning', { timeout: 120000 }).should('not.exist')
-  cy.get('.thumbnail').should('exist')
+  cy.get('[data-cy=file-item]', { timeout: 60000 }).should('exist')
+  cy.get('[data-cy=file-item-filename]').should('contain', filename)
   cy.get('[data-cy=send-message]').click() //sending image message
-  cy.get('.thumbnail', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
 })
 
 Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
@@ -434,15 +441,14 @@ Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
 
 // Chat - Send Files Commands
 
-Cypress.Commands.add('chatFeaturesSendFile', (filePath) => {
+Cypress.Commands.add('chatFeaturesSendFile', (filePath, filename) => {
   cy.get('#quick-upload').selectFile(filePath, {
     force: true,
   })
-  cy.get('.file-item').should('exist')
-  cy.get('.file-info > .title').should('contain', 'test-file.txt')
-  cy.get('.preview', { timeout: 180000 }).should('exist')
-  cy.get('[data-cy=send-message]').click() //sending file message
-  cy.get('.preview', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-item]', { timeout: 30000 }).should('exist')
+  cy.get('[data-cy=file-item-filename]').should('contain', filename)
+  cy.get('[data-cy=send-message]').click() //sending image message
+  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
 })
 
 // Chat - Context Menu Commands
@@ -489,9 +495,9 @@ Cypress.Commands.add('clickOutside', () => {
 
 Cypress.Commands.add('validateChatPageIsLoaded', (isMobile = false) => {
   if (isMobile === false) {
-    cy.get('[data-cy=user-name]', { timeout: 420000 }).should('exist')
+    cy.get('[data-cy=user-name]', { timeout: 120000 }).should('exist')
   } else if (isMobile === true) {
-    cy.get('#mobile-nav', { timeout: 420000 }).should('exist')
+    cy.get('#mobile-nav', { timeout: 120000 }).should('exist')
   }
 })
 
@@ -512,30 +518,45 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   // Hide sidebar if not on mobile browser
   if (isMobile === false) {
     cy.get('[data-cy=hamburger-button]').click()
+
+    //Navigate through several pages before going to conversation
+    //As a workaround for the issue of message containers taking a lot of time to be loaded
+    cy.workaroundChatLoad(user)
   }
 
   //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-loading]', { timeout: 180000 }).should('not.exist')
+  cy.get('[data-cy=message-container]', { timeout: 120000 })
+    .last()
+    .should('exist')
+})
+
+Cypress.Commands.add('workaroundChatLoad', (user) => {
+  //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
+
+  cy.get('[data-cy=toggle-sidebar]').click() //Click on toggle sidebar to display sidebar menu
+  cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
+  cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
+  cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
+  //Click on the conversation again
+  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
+    .contains(user)
+    .then(($el) => {
+      cy.getAttached($el).click()
+    })
+  cy.get('[data-cy=hamburger-button]').click() // Hide sidebar if not on mobile browser
 })
 
 // Chat - Hover on Icon Commands
 
 Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
-  cy.get(locator)
-    .should('be.visible')
-    .should('have.attr', 'data-tooltip', expectedMessage)
-    .should('have.class', 'grayscaled')
-    .realHover()
-  cy.get('.tooltip-container').should('be.visible')
+  cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
+  cy.get(locator).realHover()
+  cy.contains(expectedMessage).should('be.visible')
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
-  cy.get(locator)
-    .should('be.visible')
-    .should('have.attr', 'data-tooltip', expectedMessage)
-    .should('not.have.class', 'grayscaled')
-    .realHover()
-  cy.get('.tooltip-container').should('be.visible')
+  cy.get(locator).should('be.visible').realHover()
+  cy.contains(expectedMessage).should('be.visible')
 })
 
 // Chat - URL Commands
@@ -703,9 +724,9 @@ Cypress.Commands.add('renameFileOrFolder', (newName, type = 'folder') => {
   cy.get('[data-cy=files-table]').should('be.visible')
   //Assert on file or folder icon depending on parameters
   if (type === 'file') {
-    cy.get('[data-cy=file-icon]').as('itemLocator')
+    cy.get('[data-cy=file-icon]').first().as('itemLocator')
   } else {
-    cy.get('[data-cy=folder-icon]').as('itemLocator')
+    cy.get('[data-cy=folder-icon]').first().as('itemLocator')
   }
   //Get the file/folder with same name from parameters and click on options
   cy.get('@itemLocator')
@@ -765,13 +786,33 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
   } else if (markdown === '~~') {
     cy.get('del').last().should('have.text', text)
   } else if (markdown === '||') {
-    cy.get('.spoiler')
+    cy.get('.spoiler-container')
       .last()
       .should('not.have.class', 'spoiler-open')
       .click() // Assert that after clicking the spoiler, text is displayed
       .should('have.class', 'spoiler-open')
-      .and('have.text', text)
+      .find('.spoiler')
+      .should('have.text', text)
   }
+})
+
+//Chat - Get Time
+
+Cypress.Commands.add('getTimestamp', (value = 'now') => {
+  let date
+  if (value === 'now') {
+    date = new Date()
+  } else if (value === 'past') {
+    date = new Date(Date.now() - 60000)
+  }
+  let hours = date.getHours()
+  let minutes = date.getMinutes()
+  let ampm = hours >= 12 ? ' PM' : ' AM'
+  hours = hours % 12
+  hours = hours ? hours : 12
+  minutes = minutes.toString().padStart(2, '0')
+  let strTime = hours + ':' + minutes + ampm
+  return strTime
 })
 
 //Version Release Notes Commands
