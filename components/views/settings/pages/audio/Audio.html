@@ -1,15 +1,17 @@
-<div id="audio-settings">
+<SettingsPage>
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.audio.title')"
   />
   <!--Audio Sources-->
   <!-- Requires user permissions to see in most browsers -->
-  <div class="columns is-desktop">
+  <SettingsSection
+    v-if="!userHasGivenAudioAccess"
+  >
     <SettingsUnit
-      v-if="!userHasGivenAudioAccess && !userDeniedAudioAccess"
       :title="$t('pages.settings.audio.sources.title')"
       :text="$t('pages.settings.audio.sources.subtitle')"
+      v-if="!userDeniedAudioAccess"
     >
       <!-- Ask for permissions block -->
       <InteractablesButton
@@ -22,12 +24,12 @@
 
     <!-- Permission Denied Block -->
     <TypographyError
-      v-if="userDeniedAudioAccess"
+      v-else
       :text="$t('pages.settings.audio.sources.permissionDeniedMessage')"
     />
-  </div>
+  </SettingsSection>
   <!-- Permission Granted Block -->
-  <div v-if="userHasGivenAudioAccess" class="columns is-desktop">
+  <SettingsSection v-if="userHasGivenAudioAccess">
     <!-- Audio In -->
     <SettingsUnit
       :title="$t('pages.settings.audio.sources.input.title')"
@@ -55,10 +57,10 @@
         :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
       />
     </SettingsUnit>
-  </div>
+  </SettingsSection>
 
   <!--Audio Bitrate & Sample-->
-  <div class="columns is-desktop">
+  <SettingsSection>
     <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
       <br />
       <div class="meter-container">
@@ -83,11 +85,11 @@
         @volumeControlValueChange="volumeControlValueChange"
       />
     </SettingsUnit>
-  </div>
+  </SettingsSection>
 
   <!--Audio Bitrate & Sample-->
   <UiComingSoon :areaCover="true" :hide="true">
-    <div class="columns is-desktop">
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.bitrate.title')"
         :text="$t('pages.settings.audio.bitrate.subtitle')"
@@ -108,10 +110,10 @@
           :label="$t('pages.settings.audio.sampleSize.title')"
         />
       </SettingsUnit>
-    </div>
+    </SettingsSection>
 
     <!--Echo Cancellation & Noise Suppression-->
-    <div class="columns is-desktop">
+    <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.echo.title')"
         :text="$t('pages.settings.audio.echo.subtitle')"
@@ -130,7 +132,7 @@
           :isEnabled="settings.noiseSuppression"
         />
       </SettingsUnit>
-    </div>
+    </SettingsSection>
   </UiComingSoon>
   <!-- Video -->
   <TypographyHorizontalRuleText
@@ -139,7 +141,7 @@
   />
 
   <!--Video Input Source -->
-  <div class="columns is-desktop">
+  <SettingsSection>
     <SettingsUnit
       :title="$t('pages.settings.video.sources.input.title')"
       :text="$t('pages.settings.video.sources.input.subtitle')"
@@ -178,7 +180,7 @@
       />
     </SettingsUnit>
     <UiLoadersGenericContent class="column unit" :count="1" v-else />
-  </div>
+  </SettingsSection>
 
   <!-- Screen Share -->
   <TypographyHorizontalRuleText
@@ -188,7 +190,7 @@
   />
 
   <!-- Capture Mouse -->
-  <div class="columns is-desktop" v-if="featureReadyToShow">
+  <SettingsSection v-if="featureReadyToShow">
     <SettingsUnit
       :title="$t('pages.settings.screen.captureMouse.title')"
       :text="$t('pages.settings.screen.captureMouse.subtitle')"
@@ -199,7 +201,7 @@
         label="$t('pages.settings.screen.captureMouse.title')"
       />
     </SettingsUnit>
-  </div>
+  </SettingsSection>
 
   <!-- Notification Sounds -->
   <TypographyHorizontalRuleText
@@ -208,4 +210,4 @@
   />
   <SettingsPagesAudioSounds />
   <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
-</div>
+</SettingsPage>

@@ -1,6 +1,7 @@
-<div class="column unit is-half-desktop">
-  <TypographyTitle v-if="title.length" :size="6" :text="title" />
-  <TypographyText v-if="text.length" :text="text" />
-  <br v-if="text.length" />
+<div class="settings-unit" @click="$emit('click', $event)">
+  <div class="text">
+    <TypographyTitle v-if="title.length" :size="6" :text="title" />
+    <TypographyText v-if="text.length" :text="text" />
+  </div>
   <slot></slot>
 </div>
