@@ -25,7 +25,6 @@ declare module 'vue/types/vue' {
     $typedStore: RootStore
     $TextileManager: TextileManager
     $Logger: Logger
-    $FileSystem: TextileFileSystem
   }
 }
 
@@ -39,7 +38,6 @@ declare module '@nuxt/types' {
     $typedStore: RootStore
     $TextileManager: TextileManager
     $Logger: Logger
-    $FileSystem: TextileFileSystem
   }
 }
 
@@ -50,7 +48,6 @@ Vue.prototype.$Security = new Security()
 Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
-Vue.prototype.$FileSystem = new TextileFileSystem()
 Vue.prototype.$BlockchainClient = BlockchainClient.getInstance()
 // Add typed store alias to Vue prototype
 Object.defineProperty(Vue.prototype, '$typedStore', {

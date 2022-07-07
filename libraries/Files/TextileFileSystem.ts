@@ -4,7 +4,7 @@ import { FilSystem } from './FilSystem'
 import { FILE_TYPE } from './types/file'
 import { PersonalBucket } from './remote/textile/PersonalBucket'
 import createThumbnail from '~/utilities/Thumbnail'
-import blobToBase64 from '~/utilities/BlobToBase64'
+import { blobToBase64 } from '~/utilities/BlobManip'
 
 export class TextileFileSystem extends FilSystem {
   /**

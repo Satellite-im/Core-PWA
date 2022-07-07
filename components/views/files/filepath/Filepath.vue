@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { HomeIcon } from 'satellite-lucide-icons'
+import fileSystem from '~/libraries/Files/FilSystem'
 
 export default Vue.extend({
   components: {
@@ -14,7 +15,7 @@ export default Vue.extend({
      * @returns string array of file paths to current directory (not including root)
      */
     path(): string[] {
-      return this.$FileSystem.currentDirectoryPath?.slice(1) ?? []
+      return fileSystem.currentDirectoryPath?.slice(1) ?? []
     },
   },
   methods: {
@@ -24,7 +25,7 @@ export default Vue.extend({
      * @param string directory name
      */
     goBackToDirectory(dir: string) {
-      this.$FileSystem.goBackToDirectory(dir)
+      fileSystem.goBackToDirectory(dir)
     },
   },
 })

@@ -5,7 +5,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
-import blobToBase64 from '~/utilities/BlobToBase64'
+import { blobToBase64 } from '~/utilities/BlobManip'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 const convert = require('heic-convert')
@@ -62,7 +62,6 @@ export default Vue.extend({
             FILE_TYPE.WEBP,
             FILE_TYPE.SVG,
             FILE_TYPE.HEIC,
-            FILE_TYPE.HEIF,
           ].join(',')
     },
   },

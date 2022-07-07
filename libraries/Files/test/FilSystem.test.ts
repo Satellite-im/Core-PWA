@@ -82,11 +82,6 @@ describe('Test FilSystem', () => {
     expect(filesystem.totalSize).toBe(17349948))
   it(`Correctly returns filesystem percentStorageUsed`, () =>
     expect(filesystem.percentStorageUsed).toBe(0.4337487))
-  it(`Correctly exports filesystem`, () =>
-    expect(filesystem.export).toMatchObject({
-      version: 2,
-      type: FILESYSTEM_TYPE.DEFAULT,
-    }))
   it(`Correctly copies entire filesystem`, () =>
     expect(filesystem.copy).toMatchObject(mockFileSystemData))
   it(`Correctly creates a new directory`, () =>

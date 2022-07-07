@@ -7,7 +7,7 @@ import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import createThumbnail from '~/utilities/Thumbnail'
-import blobToBase64 from '~/utilities/BlobToBase64'
+import { blobToBase64 } from '~/utilities/BlobManip'
 const convert = require('heic-convert')
 
 export default Vue.extend({
