@@ -197,11 +197,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       action: 'message',
       message: messageCID,
     })
-    await this.iridium.connector.send(conversation, {
-      to: await Promise.all(
-        conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
-      ),
-    })
+    await this.iridium.connector.send(
+      { type: 'chat/message', conversationId: id, messageCID },
+      {
+        to: await Promise.all(
+          conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+        ),
+      },
+    )
     this.emit(`conversation/${id}`, {
       action: 'message',
       message: messageCID,

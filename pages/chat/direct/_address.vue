@@ -16,6 +16,7 @@ export default Vue.extend({
   data() {
     return {
       messages: [],
+      did: iridium.connector.id,
     }
   },
   computed: {
@@ -91,13 +92,10 @@ export default Vue.extend({
         this.messages.push(message)
       })
       await iridium.chat.subscribeToChannel(this.friend, async (event) => {
-        if (Object.keys(event.payload.message).length) {
-          const msgs = []
-          for (const msg in event.payload.message) {
-            msgs.push(await iridium.connector.load(msg))
-          }
-          console.log('in-coming chat messages...', msgs)
-          // todo: better append those messages to the UI
+        if (event.payload.messageCID && event.payload.type === 'chat/message') {
+          this.messages.push(
+            await iridium.connector.load(event.payload.messageCID),
+          )
         }
       })
     }
