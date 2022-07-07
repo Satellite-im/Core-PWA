@@ -16,7 +16,6 @@ export default Vue.extend({
   data() {
     return {
       messages: [],
-      replies: [],
     }
   },
   computed: {
@@ -90,6 +89,16 @@ export default Vue.extend({
       await iridium.chat.subscribeToConversation(this.friend, async (event) => {
         const message = await iridium.connector.load(event.message)
         this.messages.push(message)
+      })
+      await iridium.chat.subscribeToChannel(this.friend, async (event) => {
+        if (Object.keys(event.payload.message).length) {
+          const msgs = []
+          for (const msg in event.payload.message) {
+            msgs.push(await iridium.connector.load(msg))
+          }
+          console.log('in-coming chat messages...', msgs)
+          // todo: better append those messages to the UI
+        }
       })
     }
   },

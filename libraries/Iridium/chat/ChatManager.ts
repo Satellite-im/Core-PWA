@@ -172,7 +172,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @param message Message to be sent
    */
   async sendMessage(id: string, message: ConversationMessage) {
-    console.log('debug: | ChatManager | sendMessage | id', id)
     if (!this.iridium.connector) return
     const conversation = await this.getConversation(id)
     if (!conversation) {
@@ -208,5 +207,23 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       message: messageCID,
       from: this.iridium.connector.id,
     })
+  }
+
+  /**
+   * @method subscribeToChannel
+   * @description Adds a watcher to channel activity
+   * @param did {string} did
+   * @param onMessage {EmitterCallback<IridiumMessage>} function to be called
+   */
+  async subscribeToChannel(
+    did: string,
+    onMessage: EmitterCallback<ConversationMessage>,
+  ) {
+    const pid = await Iridium.DIDToPeerId(did)
+    if (this.iridium.connector._peers[pid])
+      this.iridium.connector.on(
+        this.iridium.connector._peers[pid].channel,
+        onMessage,
+      )
   }
 }
