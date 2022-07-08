@@ -4,7 +4,7 @@ import {
   Iridium,
   Emitter,
   EmitterCallback,
-} from '@satellite-im/iridium/'
+} from '@satellite-im/iridium'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
 import {
@@ -173,7 +173,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @param message Message to be sent
    */
   async sendMessage(id: string, message: ConversationMessage) {
-    console.log('debug: | ChatManager | sendMessage | id', id)
     if (!this.iridium.connector) return
     const conversation = await this.getConversation(id)
     if (!conversation) {
@@ -199,15 +198,36 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       action: 'message',
       message: messageCID,
     })
-    await this.iridium.connector.send(conversation, {
-      to: await Promise.all(
-        conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
-      ),
-    })
+    await this.iridium.connector.send(
+      { type: 'chat/message', conversationId: id, messageCID },
+      {
+        to: await Promise.all(
+          conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+        ),
+      },
+    )
     this.emit(`conversation/${id}`, {
       action: 'message',
       message: messageCID,
       from: this.iridium.connector.id,
     })
+  }
+
+  /**
+   * @method subscribeToChannel
+   * @description Adds a watcher to channel activity
+   * @param did {string} did
+   * @param onMessage {EmitterCallback<IridiumMessage>} function to be called
+   */
+  async subscribeToChannel(
+    did: string,
+    onMessage: EmitterCallback<ConversationMessage>,
+  ) {
+    const pid = await Iridium.DIDToPeerId(did)
+    if (this.iridium.connector._peers[pid])
+      this.iridium.connector.on(
+        this.iridium.connector._peers[pid].channel,
+        onMessage,
+      )
   }
 }

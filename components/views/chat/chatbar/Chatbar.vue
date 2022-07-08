@@ -1,6 +1,6 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
@@ -15,17 +15,23 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { UploadDropItemType } from '~/types/files/file'
-import { RootState } from '~/types/store/store'
 import { ChatText } from '~/store/chat/types'
+// import { Group } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-
 export default Vue.extend({
   components: {
     TerminalIcon,
   },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend | Group>,
+      default: () => {},
+    },
+  },
   computed: {
     ...mapGetters({
-      recipient: 'conversation/recipient',
+      // recipient: 'conversation/recipient',
       getFiles: 'chat/getFiles',
       isGroup: 'conversation/isGroup',
     }),

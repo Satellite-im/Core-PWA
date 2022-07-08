@@ -24,6 +24,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    did: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     ...mapState({
