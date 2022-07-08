@@ -1,6 +1,6 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
@@ -23,9 +23,15 @@ export default Vue.extend({
   components: {
     TerminalIcon,
   },
+  props: {
+    recipient: {
+      type: Object as PropType<Friend | Group>,
+      default: () => {},
+    },
+  },
   computed: {
     ...mapGetters({
-      recipient: 'conversation/recipient',
+      // recipient: 'conversation/recipient',
       getFiles: 'chat/getFiles',
       isGroup: 'conversation/isGroup',
     }),

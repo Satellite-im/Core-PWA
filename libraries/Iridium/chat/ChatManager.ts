@@ -2,10 +2,11 @@ import {
   IridiumPeerMessage,
   IridiumPubsubEvent,
   Iridium,
-} from '@satellite-im/iridium/dist/index.browser'
+  Emitter,
+  EmitterCallback,
+} from '@satellite-im/iridium'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
-import { EmitterCallback, Emitter } from '@satellite-im/iridium/src/emitter'
 import {
   Conversation,
   ConversationMessage,
