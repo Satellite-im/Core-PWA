@@ -15,7 +15,6 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import Logger from '~/utilities/Logger'
-import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -400,7 +399,7 @@ const webRTCActions = {
   /**
    * @method createCall
    * @description creates a webrtc call connection to the provided peer(s)
-   * @param callID - the identifier of the group or peer
+   * @param callId - the identifier of the group or peer
    * @param peerIds - an array of peerIds that are part of the call
    * @param signal - a pre-provided peer signal for dropping into ongoing calls (optional)
    * @param peerId - the peerId of the user that initiated the call
@@ -453,10 +452,13 @@ const webRTCActions = {
           friendToPeerDescriptor(friend),
         )
         .concat({
-          id: iridium.connector?.id as string,
+          id: iridium.connector?.peerId as string,
           name: rootState.accounts.details?.name as string,
         })
     }
+
+    console.log('createCall after peers', peers)
+
     const usedCallId = callId === iridium.connector?.peerId ? peerId : callId
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)
@@ -537,7 +539,7 @@ const webRTCActions = {
       kind?: string | undefined
     }) {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
-      let muted: boolean = false
+      let muted: Boolean = false
       if (kind === 'audio') {
         muted = rootState.audio.muted
       } else if (kind === 'video') {
@@ -721,17 +723,9 @@ const webRTCActions = {
   ) {
     const $Logger: Logger = Vue.prototype.$Logger
 
-    // check permission for audio call
-    try {
-      await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      })
-    } catch (e) {
-      throw new Error(WebRTCErrors.PERMISSION_DENIED)
-    }
+    const { id: callId, participants } = rootState.conversation
 
-    const activeConversation = rootState.conversation
-    if (!activeConversation.id) {
+    if (!callId) {
       $Logger.log(
         'webrtc',
         `call - conversation not initialized or id not found`,
@@ -739,17 +733,10 @@ const webRTCActions = {
       return
     }
 
-    const peerIds = activeConversation.participants
-      .map((p) => p.peerId)
-      .filter(Boolean)
+    const peerIds = participants.map((p) => p.peerId).filter(Boolean)
+
     if (peerIds.length === 0) {
       $Logger.log('webrtc', `call - conversation has no participants`)
-      return
-    }
-
-    const callId = activeConversation.id
-    if (!callId) {
-      $Logger.log('webrtc', `call - callId not found: ${callId}`)
       return
     }
 

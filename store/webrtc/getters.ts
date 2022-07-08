@@ -5,8 +5,8 @@ const getters = {
   isActiveCall: (state: WebRTCState, getters: any, rootState: RootState) => {
     return (
       state.activeCall &&
-      state.activeCall.peerId &&
-      state.activeCall.peerId === rootState.conversation.id
+      state.activeCall.callId &&
+      state.activeCall.callId === rootState.conversation.id
     )
   },
   isBackgroundCall: (
@@ -16,8 +16,8 @@ const getters = {
   ) => {
     return (
       state.activeCall &&
-      state.activeCall.peerId &&
-      state.activeCall.peerId !== rootState.conversation.id
+      state.activeCall.callId &&
+      state.activeCall.callId !== rootState.conversation.id
     )
   },
 }

@@ -3,10 +3,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
+  data() {
+    return {
+      caller: null,
+    }
+  },
   computed: {
     ...mapState({
       showSettings: (state) => (state as RootState).ui.showSettings,
@@ -14,11 +19,13 @@ export default Vue.extend({
       elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
       activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
-    caller(): Friend | undefined {
-      return this.friends.find(
-        (f: Friend) => f.peerId === this.activeCall?.peerId,
-      )
-    },
+  },
+  async mounted() {
+    const caller = await iridium.friends?.getFriend(this.activeCall?.callId)
+    if (!caller) {
+      return
+    }
+    this.caller = caller
   },
   methods: {
     navigateToActiveConversation() {
@@ -32,14 +39,7 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      this.$store.dispatch('conversation/setConversation', {
-        id: this.caller.peerId,
-        type: 'friend',
-        participants: [this.caller],
-        calling: false,
-      })
-
-      this.$router.push(`/chat/direct/${this.caller.address}`)
+      this.$router.push(`/chat/direct/${this.caller.did}`)
     },
   },
 })

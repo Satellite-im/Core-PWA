@@ -227,6 +227,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
     connection: Connection
     stream: MuxedStream
   }) {
+    console.log('_messageHandler', connection, stream)
     try {
       await pipe(stream, async (source) => {
         for await (const msg of source) {
