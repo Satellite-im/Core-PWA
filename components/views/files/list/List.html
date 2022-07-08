@@ -1,8 +1,4 @@
-<table
-  class="table"
-  data-cy="files-table"
-  :class="{'disabled' : isFilesIndexLoading}"
->
+<table class="table" data-cy="files-table">
   <thead>
     <th @click="setSort(FileSortEnum.NAME)">
       {{ $t('pages.files.browse.name') }}

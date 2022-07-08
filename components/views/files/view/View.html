@@ -24,8 +24,7 @@
       <a
         v-tooltip.bottom="$t('controls.share_link')"
         class="control"
-        :class="{'disabled' : isFilesIndexLoading}"
-        v-on="isFilesIndexLoading ? {} : {click: share}"
+        @click="share"
       >
         <link-icon size="1x" />
       </a> -->

@@ -41,7 +41,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    ...mapGetters('ui', ['isFilesIndexLoading']),
     /**
      * @returns {boolean} if item has discrete MIME type of image
      */
