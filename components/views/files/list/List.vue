@@ -38,7 +38,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('ui', ['isFilesIndexLoading']),
     FileSortEnum: () => FileSortEnum,
   },
   mounted() {

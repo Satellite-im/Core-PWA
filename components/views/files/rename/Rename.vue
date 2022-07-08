@@ -2,11 +2,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { SaveIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import { Directory } from '~/libraries/Files/Directory'
 import fileSystem from '~/libraries/Files/FilSystem'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -30,7 +31,6 @@ export default Vue.extend({
     ...mapState({
       renameItem: (state) => (state as RootState).ui.renameItem,
     }),
-    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   mounted() {
     if (!this.renameItem) {
@@ -74,7 +74,7 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      // await this.$store.dispatch('textile/exportFileSystem')
+      iridium.files?.exportFs()
       this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },

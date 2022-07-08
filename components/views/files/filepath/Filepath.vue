@@ -1,7 +1,6 @@
 <template src="./Filepath.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
 import { HomeIcon } from 'satellite-lucide-icons'
 import fileSystem from '~/libraries/Files/FilSystem'
 
@@ -10,7 +9,6 @@ export default Vue.extend({
     HomeIcon,
   },
   computed: {
-    ...mapGetters('ui', ['isFilesIndexLoading']),
     /**
      * @returns string array of file paths to current directory (not including root)
      */
