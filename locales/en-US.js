@@ -496,6 +496,7 @@ export default {
       profile: {
         title: 'Profile',
         subtitle: 'Update your profile photo, status, banners and more.',
+        status_placeholder: 'Some super interesting status message',
         info: {
           title: 'Account Info',
           subtitle:
@@ -514,6 +515,21 @@ export default {
           title: 'Recovery Phrase',
           subtitle:
             'Do not share this phrase with anyone. This phrase is used to recover your account. Anyone with access to this has access to your account.',
+        },
+        about: {
+          title: 'About Me',
+          subtitle:
+            'Let your friends know who you are! Your about me will display on your profile.',
+          edit: 'edit',
+          save: 'save',
+        },
+        accounts: {
+          title: 'Your Accounts',
+          subtitle_url: 'Share your blog, website, or portfolio URL.',
+          url_placeholder: 'Enter URL...',
+          subtitle_accounts:
+            'Link your accounts to display on your profile and have easier access to them while using Satellite.im.',
+          accounts_placeholder: 'Enter Website Name...',
         },
       },
     },

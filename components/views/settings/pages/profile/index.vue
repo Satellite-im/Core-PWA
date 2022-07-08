@@ -4,7 +4,13 @@
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 
-import { EditIcon } from 'satellite-lucide-icons'
+import {
+  EditIcon,
+  UserIcon,
+  AlignLeftIcon,
+  LaptopIcon,
+  InfoIcon,
+} from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { ModalWindows } from '~/store/ui/types'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
@@ -14,12 +20,18 @@ import { RootState } from '~/types/store/store'
 export default Vue.extend({
   components: {
     EditIcon,
+    UserIcon,
+    AlignLeftIcon,
+    LaptopIcon,
+    InfoIcon,
   },
   layout: 'settings',
   data() {
     return {
       image: '',
       status: '',
+      accountUrl: '',
+      accountUrls: [],
       croppedImage: '',
     }
   },
