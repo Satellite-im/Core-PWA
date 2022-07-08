@@ -31,7 +31,6 @@ export default Vue.extend({
       image: '',
       status: '',
       accountUrl: '',
-      accountUrls: [],
       croppedImage: '',
     }
   },

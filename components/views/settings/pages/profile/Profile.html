@@ -68,11 +68,7 @@
                 </div>
               </div>
               <div class="username">
-                <TypographyTitle
-                  :size="6"
-                  :text="accounts.details.name"
-                  :class="esSmallScreen ? 'mg-quarter' : 'mg-half'"
-                />
+                <TypographyTitle :size="6" :text="accounts.details.name" />
               </div>
               <div class="status-input">
                 <InteractablesInputGroup
@@ -164,7 +160,6 @@
               </div>
               <InteractablesInputGroup
                 class="status"
-                v-model="accountUrls"
                 size="small"
                 input-kind="text"
                 type="primary"
