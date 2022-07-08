@@ -130,7 +130,7 @@ export default Vue.extend({
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
     },
-    async action() {
+    action() {
       this.status = 'loading'
       return this.step === 'login' ? this.decrypt() : this.create()
     },
