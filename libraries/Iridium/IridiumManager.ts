@@ -10,6 +10,7 @@ import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
 import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
+import NotificationManager from '~/libraries/Iridium/NotificationManager'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
@@ -19,6 +20,7 @@ export class IridiumManager extends Emitter {
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
+  notifications?: NotificationManager
   settings: SettingsManager
 
   constructor() {
@@ -76,6 +78,7 @@ export class IridiumManager extends Emitter {
         friends: {},
         conversations: {},
         files: {},
+        notifications: {},
         settings: {},
         indexes: {},
       }
