@@ -18,13 +18,13 @@ export default Vue.extend({
     pin: string
     status: 'idle' | 'loading'
     error: ''
-    step: 'signin' | 'login'
+    step: 'signup' | 'login'
   } {
     return {
       pin: '',
       status: 'idle',
       error: '',
-      step: 'signin',
+      step: 'signup',
     }
   },
   computed: {
