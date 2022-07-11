@@ -34,6 +34,10 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Install pnpm
+        run: brew install pnpm
+      - name: Run corepack enable
+        run: corepack enable
       - name: Run yarn
         run: yarn install --network-concurrency 1
       - name: Cypress run pair chat testing
