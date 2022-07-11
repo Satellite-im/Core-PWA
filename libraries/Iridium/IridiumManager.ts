@@ -13,8 +13,8 @@ import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
 export class IridiumManager extends Emitter {
   ready: boolean = false
   connector?: Iridium
-  profile?: ProfileManager
-  groups?: GroupManager
+  profile: ProfileManager
+  groups: GroupManager
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
@@ -22,6 +22,8 @@ export class IridiumManager extends Emitter {
 
   constructor() {
     super()
+    this.profile = new ProfileManager(this)
+    this.groups = new GroupManager(this)
     this.friends = new FriendsManager(this)
     this.chat = new ChatManager(this)
     this.files = new FilesManager(this)
@@ -77,12 +79,10 @@ export class IridiumManager extends Emitter {
     doc.seen = Date.now()
     await this.connector.set('/', doc)
 
-    // TODO: init methods for Profile and Groups
     logger.log('iridium/manager', 'initializing profile')
-    this.profile = new ProfileManager(this)
+    await this.profile.init()
     logger.log('iridium/manager', 'initializing groups')
-    this.groups = new GroupManager(this)
-
+    await this.groups.init()
     logger.log('iridium/friends', 'initializing friends')
     await this.friends.init()
     logger.log('iridium/manager', 'initializing chat')
