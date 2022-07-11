@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install brew
-        run: curl -L "https://github.com/whalebrew/whalebrew/releases/download/0.4.0/whalebrew-$(uname -s)-$(uname -m)" -o /usr/local/bin/whalebrew; sudo chown -R $(whoami):admin /usr/local/bin/whalebrew
+        run: sudo curl -L "https://github.com/whalebrew/whalebrew/releases/download/0.4.0/whalebrew-$(uname -s)-$(uname -m)" -o /usr/local/bin/whalebrew; sudo chown -R $(whoami):admin /usr/local/bin/whalebrew
       - name: Install pnpm
         run: brew install pnpm
       - name: Run corepack enable
