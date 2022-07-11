@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install brew
-        run: docker pull linuxbrew/linuxbrew
+        run: docker pull ensemblorg/ensembl-linuxbrew-docker:latest
       - name: Install pnpm
         run: brew install pnpm
       - name: Run corepack enable
