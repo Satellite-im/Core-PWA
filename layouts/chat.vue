@@ -2,7 +2,7 @@
   <div
     id="app-wrap"
     :class="[
-      $store.state.ui.theme.base.class,
+      `theme-${settings.theme}`,
       showSidebar ? 'is-open' : 'is-collapsed chat-page',
       asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside',
       selectedGroup ? 'active-group' : null,
@@ -85,7 +85,7 @@
             </UiChatScroll>-->
             <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
-            <Chatbar v-if="recipient" ref="chatbar" :recipient="recipient" />
+            <Chatbar ref="chatbar" />
           </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
@@ -102,8 +102,9 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
-      {{ flairColor[1] }}; --flair-color-rgb:{{ flairColor[2] }}; }
+      :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
+      {{ flair.secondary }}; --flair-color-selection:
+      {{ `${flair.primary}fe` }}; }
     </v-style>
   </div>
 </template>
@@ -117,14 +118,12 @@ import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
-import { FlairColor, SettingsRoutes } from '~/store/ui/types'
-// import type { Friend } from '~/types/ui/friends'
+import { SettingsRoutes } from '~/store/ui/types'
 import type { Friend } from '~/libraries/Iridium/friends/types'
 import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
-// import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
-
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -147,6 +146,7 @@ export default Vue.extend({
     return {
       sidebar: !this.$device.isMobile,
       asidebar: !this.$device.isMobile,
+      settings: iridium.settings.state,
       swiperOption: {
         resistanceRatio: 0,
         slidesPerView: 'auto',
@@ -218,8 +218,8 @@ export default Vue.extend({
       //       )
       // return recipient
     },
-    flairColor(): FlairColor {
-      return this.ui.theme.flair.value
+    flair(): Flair {
+      return flairs[((this as any).settings as Settings).flair]
     },
     showOlderMessageInfo(): boolean {
       return this.ui.showOlderMessagesInfo

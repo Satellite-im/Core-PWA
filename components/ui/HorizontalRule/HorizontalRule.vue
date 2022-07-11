@@ -16,7 +16,7 @@ export default Vue.extend({})
 .horizontal-container {
   padding: @normal-spacing 0;
 }
-.moonless-night {
+.theme-moonlessNight {
   .horizontal-rule {
     background: @lighter-splash-radial;
   }

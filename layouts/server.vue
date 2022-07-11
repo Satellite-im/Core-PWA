@@ -1,15 +1,12 @@
 <template>
   <div
     id="app-wrap"
-    :class="[
-      $store.state.ui.theme.base.class,
-      sidebar ? 'is-open' : 'is-collapsed',
-    ]"
+    :class="[`theme-${settings.theme}`, sidebar ? 'is-open' : 'is-collapsed']"
   >
     <div
       id="app"
       :class="[
-        $store.state.ui.theme.base.class,
+        `theme-${settings.theme}`,
         sidebar ? 'is-open' : 'is-collapsed',
         $device.isMobile ? 'mobile-app' : 'desktop',
         isBackgroundCall ? 'has-background-call' : '',
@@ -73,8 +70,9 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
-      {{ flairColor[1] }}; --flair-color-rgb:{{ flairColor[2] }};}
+      :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
+      {{ flair.secondary }}; --flair-color-selection:
+      {{ `${flair.primary}fe` }}; }
     </v-style>
   </div>
 </template>
@@ -86,6 +84,8 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
 
 export default Vue.extend({
   name: 'ServerLayout',
@@ -100,6 +100,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: !this.$device.isMobile,
+      settings: iridium.settings.state,
       swiperOption: {
         initialSlide: this.$device.isMobile ? 1 : 0,
         resistanceRatio: 0,
@@ -122,8 +123,8 @@ export default Vue.extend({
     swiper() {
       return this.$refs.swiper.$swiper
     },
-    flairColor() {
-      return this.ui.theme.flair.value
+    flair(): Flair {
+      return flairs[((this as any).settings as Settings).flair]
     },
   },
   methods: {
