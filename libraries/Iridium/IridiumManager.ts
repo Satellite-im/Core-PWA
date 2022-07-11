@@ -8,6 +8,7 @@ import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
+import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
@@ -17,6 +18,7 @@ export class IridiumManager extends Emitter {
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
+  settings: SettingsManager
 
   constructor() {
     super()
@@ -88,6 +90,8 @@ export class IridiumManager extends Emitter {
     logger.log('iridium/manager', 'initializing files')
     await this.files.init()
     logger.log('iridium/manager', 'initializing settings')
+    await this.settings.init()
+    logger.log('iridium/manager', 'ready')
 
     this.ready = true
   }
