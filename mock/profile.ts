@@ -31,12 +31,14 @@ export const profileBadges = [
 
 export const sampleProfileInfo = {
   imageUrl: url,
+  bannerUrl: '',
   badges: [],
   locations: [] as string[],
   languages: ['English', 'Spanish', 'German'] as string[],
   username: 'username01234#0001',
   status: 'Some super interesting status message.',
   identifier: '5e8a98e2-7060-4781-a33f-ca526796aab1',
+  about: 'Some super interesting about message.',
 } as ProfileInfo
 
 export const recommendLocations = [

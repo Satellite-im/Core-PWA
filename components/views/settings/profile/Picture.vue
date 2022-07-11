@@ -1,10 +1,6 @@
 <template>
   <div class="img-container">
-    <img
-      :v-if="url"
-      :src="url"
-      :class="`${!bannerUrlExists ? 'img-default' : ''}`"
-    />
+    <img v-if="url" :src="url" />
   </div>
 </template>
 
@@ -14,8 +10,7 @@ import { sampleProfileInfo } from '~/mock/profile'
 
 export default Vue.extend({
   computed: {
-    url: () => sampleProfileInfo.bannerUrl || sampleProfileInfo.imageUrl,
-    bannerUrlExists: () => !!sampleProfileInfo.bannerUrl,
+    url: () => sampleProfileInfo.imageUrl,
     sampleProfileInfo: () => sampleProfileInfo,
   },
 })
@@ -23,18 +18,15 @@ export default Vue.extend({
 
 <style scoped lang="less">
 .img-container {
-  overflow: hidden;
   background-color: @gray;
+  border-radius: @corner-rounding @corner-rounding 0 0;
+  overflow: hidden;
+  height: 300px;
 
   img {
-    height: 300px;
+    height: 100%;
     width: 100%;
     object-fit: cover;
-    transform: scale(1.05);
   }
-}
-
-.img-default {
-  filter: blur(4px);
 }
 </style>
