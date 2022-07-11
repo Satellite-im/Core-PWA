@@ -15,9 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install whalebrew
-        run: curl -L "https://github.com/whalebrew/whalebrew/releases/download/0.4.0/whalebrew-$(uname -s)-$(uname -m)" -o /usr/local/bin/whalebrew; chmod +x /usr/local/bin/whalebrew
+        run: docker pull linuxbrew/linuxbrew
       - name: Install pnpm
-        run: whalebrew install pnpm
+        run: brew install pnpm
       - name: Run corepack enable
         run: corepack enable
       - name: Run yarn
