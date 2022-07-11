@@ -12,13 +12,6 @@ export default Vue.extend({
       type: Array as PropType<Array<Item>>,
       required: true,
     },
-    /**
-     * counter to force reactivity for Map
-     */
-    counter: {
-      type: Number,
-      required: true,
-    },
   },
   methods: {
     /**

@@ -4,12 +4,11 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { Directory } from '~/libraries/Files/Directory'
 import { Fil } from '~/libraries/Files/Fil'
 import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
-import { FileSort } from '~/store/ui/types'
 import fileSystem from '~/libraries/Files/FilSystem'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { IridiumItem } from '~/libraries/Iridium/files/types'
 
 export default Vue.extend({
   name: 'Files',
@@ -18,44 +17,51 @@ export default Vue.extend({
     return {
       view: 'grid',
       counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
-      fileSystem,
+      items: iridium.files?.state.items ?? [],
     }
   },
   computed: {
     ...mapGetters('textile', ['getInitialized']),
-    sort: {
-      set(value: FileSort) {
-        this.$store.commit('ui/setFileSort', value)
-      },
-      get(): FileSort {
-        return this.$store.state.ui.fileSort
-      },
-      /**
-       * @returns Current directory items
-       * @description included counter to force rendering on Map updates
-       */
+    ...mapGetters({
+      sortedItems: 'files/sortedItems',
+    }),
+    directory(): IridiumItem[] {
+      return this.sortedItems(this.items)
     },
-    directory(): Item[] {
-      if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
-        return (
-          this.$data.counter &&
-          this.fileSystem.sortContent(this.sort, this.fileSystem.recentFiles)
-        )
-      }
-      return (
-        this.$data.counter &&
-        this.fileSystem.sortContent(this.sort, this.fileSystem.content)
-      )
-    },
+    // sort: {
+    //   set(value: FileSort) {
+    //     this.$store.commit('ui/setFileSort', value)
+    //   },
+    //   get(): FileSort {
+    //     return this.$store.state.ui.fileSort
+    //   },
+    //   /**
+    //    * @returns Current directory items
+    //    * @description included counter to force rendering on Map updates
+    //    */
+    // },
+    // directory(): Item[] {
+    // if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
+    //   return (
+    //     this.$data.counter &&
+    //     this.fileSystem.sortContent(this.sort, this.fileSystem.recentFiles)
+    //   )
+    // }
+    // return (
+    //   this.$data.counter &&
+    //   this.fileSystem.sortContent(this.sort, this.fileSystem.content)
+    // )
+    // },
   },
   watch: {
     '$route.query.route': {
       handler(value) {
-        this.fileSystem.goBackToDirectory('root')
-        // if invalid route, reset to default
-        if (!Object.values(FileAsideRouteEnum).includes(value)) {
-          this.$router.push({ query: {} })
-        }
+        console.log(iridium.files)
+        // this.fileSystem.goBackToDirectory('root')
+        // // if invalid route, reset to default
+        // if (!Object.values(FileAsideRouteEnum).includes(value)) {
+        //   this.$router.push({ query: {} })
+        // }
       },
     },
   },
@@ -74,32 +80,28 @@ export default Vue.extend({
      * @description emitted from child components. Either open file view or directory
      * @param {Item} item
      */
-    handle(item: Item) {
-      if (item instanceof Fil) {
-        this.$store.commit('ui/setFilePreview', item)
+    handle(item: IridiumItem) {
+      if ('children' in item) {
+        this.$store.commit('files/setPath', [{ id: item.id, name: item.name }])
+        return
       }
-      if (item instanceof Directory) {
-        this.fileSystem.openDirectory(item.name)
-      }
+      this.$store.commit('files/setPreview', item.id)
     },
     /**
      * @method like
      * @description toggle like boolean, update bucket index
      * @param {Item} item
      */
-    async like(item: Item) {
-      item.toggleLiked()
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
-      iridium.files?.exportFs()
+    like(item: IridiumItem) {
+      iridium.files?.updateItem({
+        id: item.id,
+        liked: !item.liked,
+        parentId: item.parentId,
+      })
 
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
-      this.$store.commit('ui/setFilesUploadStatus', '')
-      this.forceRender()
     },
     /**
      * @method remove
@@ -119,7 +121,6 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      iridium.files?.exportFs()
       this.$store.commit('ui/setFilesUploadStatus', '')
 
       this.forceRender()
@@ -132,16 +133,16 @@ export default Vue.extend({
     async share(item: Item) {
       this.$toast.show(this.$t('todo - share') as string)
     },
-    /**
-     * @method setSort
-     * @description if current category, swap asc/desc. if different, change category
-     */
-    setSort(category: FileSortEnum) {
-      this.sort =
-        this.sort.category === category
-          ? { category: this.sort.category, asc: !this.sort.asc }
-          : { category, asc: true }
-    },
+    // /**
+    //  * @method setSort
+    //  * @description if current category, swap asc/desc. if different, change category
+    //  */
+    // setSort(category: FileSortEnum) {
+    //   this.sort =
+    //     this.sort.category === category
+    //       ? { category: this.sort.category, asc: !this.sort.asc }
+    //       : { category, asc: true }
+    // },
     /**
      * @method forceRender
      * @description Force render of new directory items after filesystem update

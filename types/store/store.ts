@@ -15,6 +15,7 @@ import { MediaState } from '~/store/media/types'
 import { IridiumState } from '~/store/iridium/types'
 import { MetaState } from '~/store/meta/types'
 import { SoundsState } from '~/store/sounds/types'
+import { FilesState } from '~/store/files/types'
 
 export interface RootState {
   accounts: AccountsState
@@ -22,6 +23,7 @@ export interface RootState {
   chat: ChatState
   conversation: ConversationState
   dataState: DataState
+  files: FilesState
   friends: FriendsState
   iridium: IridiumState
   groups: GroupsState

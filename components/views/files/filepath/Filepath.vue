@@ -1,20 +1,18 @@
 <template src="./Filepath.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { HomeIcon } from 'satellite-lucide-icons'
-import fileSystem from '~/libraries/Files/FilSystem'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
     HomeIcon,
   },
   computed: {
-    /**
-     * @returns string array of file paths to current directory (not including root)
-     */
-    path(): string[] {
-      return fileSystem.currentDirectoryPath?.slice(1) ?? []
-    },
+    ...mapState({
+      path: (state) => (state as RootState).files.path,
+    }),
   },
   methods: {
     /**
@@ -22,8 +20,8 @@ export default Vue.extend({
      * @description Navigate to specific directory in file system
      * @param string directory name
      */
-    goBackToDirectory(dir: string) {
-      fileSystem.goBackToDirectory(dir)
+    setPath(path: string[]) {
+      this.$store.commit('files/setPath', path)
     },
   },
 })

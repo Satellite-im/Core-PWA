@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
@@ -40,8 +40,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       filesUploadStatus: (state) => (state as RootState).ui.filesUploadStatus,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
+      path: (state) => (state as RootState).files.path,
     }),
   },
   methods: {
@@ -80,24 +79,15 @@ export default Vue.extend({
      * @method addFolder
      * @description Add new folder to fileSystem
      */
-    async addFolder() {
+    addFolder() {
       this.errors = []
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
       try {
-        fileSystem.createDirectory({ name: this.text })
+        iridium.files?.addDirectory(this.text, this.path.at(-1)?.id ?? '')
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
-      iridium.files?.exportFs()
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      this.$emit('forceRender')
     },
 
     handleInput(event: any) {
@@ -147,25 +137,13 @@ export default Vue.extend({
             'ui/setFilesUploadStatus',
             this.$t('pages.files.status.upload', [file.name]),
           )
-          await iridium.files?.personalUpload(file)
+          await iridium.files?.addFile(file, this.path.at(-1)?.id ?? '')
         } catch (e: any) {
           this.errors.push(e?.message ?? '')
         }
       }
 
-      // only update index if files have been updated
-      if (files.length) {
-        this.$store.commit(
-          'ui/setFilesUploadStatus',
-          this.$t('pages.files.status.index'),
-        )
-        iridium.files?.exportFs()
-      }
-
       this.$store.commit('ui/setFilesUploadStatus', '')
-
-      // re-render so new files show up
-      this.$emit('forceRender')
 
       if (originalFiles.length !== invalidNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.invalid'))

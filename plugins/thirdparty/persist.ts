@@ -42,6 +42,9 @@ const commonProperties = [
   'ui.fileDownloadList',
   'textile.userThread',
   'conversation.participants',
+  'files.currentParentId',
+  'files.path',
+  'files.status',
 ]
 
 const propertiesNoStorePin = [

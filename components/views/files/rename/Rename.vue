@@ -74,7 +74,6 @@ export default Vue.extend({
         'ui/setFilesUploadStatus',
         this.$t('pages.files.status.index'),
       )
-      iridium.files?.exportFs()
       this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },

@@ -71,11 +71,6 @@ export interface ContextMenuItem {
   func: Function
 }
 
-export interface FileSort {
-  category: FileSortEnum
-  asc: boolean
-}
-
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
@@ -130,7 +125,6 @@ export interface UIState {
   filePreview?: Fil
   fileDownloadList: string[]
   chatImageOverlay?: FileMessage
-  fileSort: FileSort
   swiperSlideIndex: number
 }
 

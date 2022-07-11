@@ -1,4 +1,4 @@
-<template src="./File.html"></template>
+<template src="./Item.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
@@ -12,12 +12,10 @@ import {
   FilmIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { Directory } from '~/libraries/Files/Directory'
-import { Fil } from '~/libraries/Files/Fil'
 import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { RootState } from '~/types/store/store'
+import { IridiumItem } from '~/libraries/Iridium/files/types'
 
 export default Vue.extend({
   components: {
@@ -35,7 +33,7 @@ export default Vue.extend({
      * File or Directory to be displayed in detail
      */
     item: {
-      type: Object as PropType<Item>,
+      type: Object as PropType<IridiumItem>,
       required: true,
     },
   },
@@ -55,9 +53,9 @@ export default Vue.extend({
      * @returns {string} if directory, child count. if file, size
      */
     getSubtext(): string {
-      return this.item instanceof Directory
-        ? this.$tc('pages.files.item_count', this.item.content.length)
-        : this.$filesize((this.item as Fil).size)
+      return 'children' in this.item
+        ? this.$tc('pages.files.item_count', this.item.children.length)
+        : this.$filesize(this.item.size)
     },
     /**
      * @returns {boolean} if item has discrete MIME type of image
@@ -147,4 +145,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./File.less"></style>
+<style scoped lang="less" src="./Item.less"></style>

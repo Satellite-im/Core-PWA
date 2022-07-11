@@ -1,16 +1,17 @@
 <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
   <ul>
     <li>
-      <a @click="goBackToDirectory('root')" style="display: flex">
+      <a @click="setPath([])" style="display: flex">
         <home-icon size="1.5x" />
       </a>
     </li>
     <li
-      v-for="name,i in path"
-      @click="goBackToDirectory(name)"
+      v-if="path.length"
+      v-for="el, i in path"
+      @click="setPath([])"
       :class="{'is-active' : i === path.length - 1}"
     >
-      <a> {{ name }} </a>
+      <a> {{ el.name }} </a>
     </li>
   </ul>
 </nav>
