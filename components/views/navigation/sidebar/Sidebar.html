@@ -38,7 +38,7 @@
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="incomingRequests.length"
+        v-if="incomingRequests.length > 0"
         :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
       >
         {{incomingRequests.length}}
@@ -83,12 +83,37 @@
             :isTyping="ui.isTyping.address === friend.did"
             :isSelected="friend.did === $route.params.did"
           />
-          <!-- <GroupClickable
+          <div v-for="friend in friends.details">
+            <User
+              v-if="friend"
+              :key="friend.did"
+              :user="friend"
+              :isTyping="ui.isTyping.address === friend.did"
+              :isSelected="friend.did === $route.params.address"
+            />
+            <!-- <GroupClickable
               v-else
               :group="thing"
               :key="thing.id"
               :isSelected="thing.id === $route.params.id"
             /> -->
+          </div>
+        </template>
+        <div
+          v-else-if="!friends.list || (friends && friends.list && !friends.list.length)"
+          class="mascot-container"
+        >
+          <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
+          <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
+          <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
+          <InteractablesButton
+            :text="$t('friends.add') + 's'"
+            size="small"
+            type="primary"
+            :action="gotoAddFriends"
+          >
+            <user-plus-icon size="1.2x" />
+          </InteractablesButton>
         </div>
       </template>
       <div

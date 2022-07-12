@@ -45,23 +45,30 @@ export default Vue.extend({
       default: false,
     },
   },
+  data() {
+    return {
+      friends: iridium.friends?.state,
+    }
+  },
   computed: {
-    incomingRequests: () =>
-      Object.values(iridium.friends?.state.requests || {}).filter(
-        (r: FriendRequest) => r.incoming,
-      ) || [],
+    incomingRequests(): Array<FriendRequest> {
+      return Object.values(this.friends?.requests || []).filter(
+        (r: FriendRequest) => r.incoming && r.status === 'pending',
+      )
+    },
     DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,
       dataState: (state) => (state as RootState).dataState,
       media: (state) => (state as RootState).media,
-      friends: () => iridium.friends?.state,
       groups: () => iridium.groups?.state,
       conversations: () => ({}),
     }),
   },
   async mounted() {
-    iridium.friends?.on('request/changed', () => this.$forceUpdate())
+    iridium.friends?.on('request/changed', () => {
+      this.friends = { ...iridium.friends?.state }
+    })
   },
   methods: {
     toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {

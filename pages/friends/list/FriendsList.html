@@ -7,9 +7,7 @@
       <FriendsAdd />
       <!-- Incoming Requests -->
       <UiLoadersFriend :count="1" v-if="data.loading" />
-      <template
-        v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
-      >
+      <template v-else-if="incomingRequests.length > 0">
         <div class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
@@ -17,11 +15,8 @@
           />
         </div>
         <FriendsFriend
-          v-for="[did, request] in
-          incomingRequests"
-          v-if="request.status ===
-          'pending' && request.user"
-          :user='request.user || { did, name: request.user.name, status:
+          v-for="request in incomingRequests"
+          :user='request.user || { did:request.did, name: request.user.name, status:
           "offline" }'
           :request="request"
           :key="request.from"
@@ -29,9 +24,7 @@
       </template>
       <!-- Outgoing Requests -->
       <UiLoadersFriend :count="1" v-if="data.loading" />
-      <template
-        v-else-if="data.friends && data.friends.requests && Object.keys(data.friends.requests).length"
-      >
+      <template v-else-if="outgoingRequests.length > 0">
         <div class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
@@ -39,11 +32,8 @@
           />
         </div>
         <FriendsFriend
-          v-for="[did, request] in
-          outgoingRequests"
-          v-if="request.status ===
-          'pending' && request.user"
-          :user='request.user || { did, name: request.user.name, status:
+          v-for="request in outgoingRequests"
+          :user='request.user || { did:request.did, name: request.user.name, status:
           "offline" }'
           :request="request"
           :key="request.from"
