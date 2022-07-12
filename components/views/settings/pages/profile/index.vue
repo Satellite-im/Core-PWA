@@ -39,7 +39,6 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore
