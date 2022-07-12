@@ -218,7 +218,7 @@ export const Config = {
   cropperOptions: {
     type: 'blob',
     circle: false,
-    size: { width: 600, height: 600 },
+    size: { width: 160, height: 160 },
     format: 'jpeg',
   },
   locale:
