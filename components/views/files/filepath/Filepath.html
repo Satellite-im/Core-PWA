@@ -1,14 +1,14 @@
 <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
   <ul>
     <li>
-      <a @click="setPath([])" style="display: flex">
+      <a @click="$store.commit('files/setPath', [])" style="display: flex">
         <home-icon size="1.5x" />
       </a>
     </li>
     <li
       v-if="path.length"
       v-for="el, i in path"
-      @click="setPath([])"
+      @click="setPath(el.id)"
       :class="{'is-active' : i === path.length - 1}"
     >
       <a> {{ el.name }} </a>

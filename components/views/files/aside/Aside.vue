@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { SimpleItem } from '~/types/ui/sidebar'
-import { FileAsideRouteEnum, FileIconsEnum } from '~/libraries/Enums/enums'
+import { FileRouteEnum, FileIconsEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -30,23 +30,23 @@ export default Vue.extend({
       return [
         {
           text: this.$t('pages.files.aside.default'),
-          route: FileAsideRouteEnum.DEFAULT,
+          route: FileRouteEnum.DEFAULT,
           icon: FileIconsEnum.FOLDER,
         },
         {
           text: this.$t('pages.files.aside.recent'),
-          route: FileAsideRouteEnum.RECENT,
+          route: FileRouteEnum.RECENT,
           icon: FileIconsEnum.CLOCK,
         },
         // remove for demo
         // {
         //   text: this.$t('pages.files.aside.deleted'),
-        //   route: FileAsideRouteEnum.DELETED,
+        //   route: FileRouteEnum.DELETED,
         //   icon: FileIconsEnum.TRASH,
         // },
         // {
         //   text: this.$t('pages.files.aside.favorited'),
-        //   route: FileAsideRouteEnum.FAVORITED,
+        //   route: FileRouteEnum.FAVORITED,
         //   icon: FileIconsEnum.HEART,
         // },
       ]
@@ -55,12 +55,12 @@ export default Vue.extend({
       return [
         {
           text: this.$t('pages.files.aside.shared_folders'),
-          route: FileAsideRouteEnum.SHARED,
+          route: FileRouteEnum.SHARED,
           icon: FileIconsEnum.FOLDER,
         },
         {
           text: this.$t('pages.files.aside.links'),
-          route: FileAsideRouteEnum.LINKS,
+          route: FileRouteEnum.LINKS,
           icon: FileIconsEnum.LINK,
         },
       ]

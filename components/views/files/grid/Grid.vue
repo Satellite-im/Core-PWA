@@ -1,7 +1,7 @@
 <template src="./Grid.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
+import { IridiumItem } from '~/libraries/Iridium/files/types'
 
 export default Vue.extend({
   props: {
@@ -9,38 +9,8 @@ export default Vue.extend({
      * Directory items to be displayed
      */
     directory: {
-      type: Array as PropType<Array<Item>>,
+      type: Array as PropType<Array<IridiumItem>>,
       required: true,
-    },
-  },
-  methods: {
-    /**
-     * @method handle
-     * @description Emit item to be handled in pages/files/browse/index.vue
-     */
-    handle(item: Item) {
-      this.$emit('handle', item)
-    },
-    /**
-     * @method like
-     * @description Emit to like item - pages/files/browse/index.vue
-     */
-    like(item: Item) {
-      this.$emit('like', item)
-    },
-    /**
-     * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
-     */
-    share(item: Item) {
-      this.$emit('share', item)
-    },
-    /**
-     * @method remove
-     * @description Emit to delete item - pages/files/browse/index.vue
-     */
-    remove(item: Item) {
-      this.$emit('remove', item)
     },
   },
 })

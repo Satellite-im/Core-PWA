@@ -1,13 +1,13 @@
 <table class="table" data-cy="files-table">
   <thead>
-    <th @click="setSort(FileSortEnum.NAME)">
+    <th @click="sort = FileSortEnum.NAME">
       {{ $t('pages.files.browse.name') }}
       <template v-if="sort.category===FileSortEnum.NAME">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
     </th>
-    <th @click="setSort(FileSortEnum.MODIFIED)">
+    <th @click="sort = FileSortEnum.MODIFIED">
       {{ $t('pages.files.browse.modified') }}
       <template v-if="sort.category===FileSortEnum.MODIFIED">
         <chevron-up-icon v-if="sort.asc" size="1x" />
@@ -16,7 +16,7 @@
     </th>
     <th
       v-if="!$device.isMobile"
-      @click="setSort(FileSortEnum.TYPE)"
+      @click="sort = FileSortEnum.TYPE"
       class="open-sidebar-hide"
     >
       {{ $t('pages.files.browse.type') }}
@@ -25,7 +25,7 @@
         <chevron-down-icon v-else size="1x" />
       </template>
     </th>
-    <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
+    <th @click="sort = FileSortEnum.SIZE" class="open-sidebar-hide">
       {{ $t('pages.files.browse.size') }}
       <template v-if="sort.category===FileSortEnum.SIZE">
         <chevron-up-icon v-if="sort.asc" size="1x" />
@@ -36,14 +36,15 @@
   </thead>
   <tbody>
     <FilesListRow
-      v-for="item, i in directory"
-      :key="i + counter"
+      v-for="item in directory"
       :item="item"
+      :key="item.id"
+      @like="(item) => $emit('like', item)"
+      @share="(item) => $emit('share', item)"
+      @rename="(item) => $emit('rename', item)"
+      @remove="(item) => $emit('remove', item)"
+      @handle="(item) => $emit('handle', item)"
       data-cy="files-item"
-      @like="like"
-      @share="share"
-      @remove="remove"
-      @handle="handle"
     />
   </tbody>
 </table>

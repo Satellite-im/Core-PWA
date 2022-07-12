@@ -16,12 +16,18 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method goBackToDirectory
      * @description Navigate to specific directory in file system
-     * @param string directory name
+     * @param {string} id desired path id
      */
-    setPath(path: string[]) {
-      this.$store.commit('files/setPath', path)
+    setPath(id: string) {
+      const newPath = []
+      for (let i = 0; i < this.path.length; i++) {
+        newPath.push(this.path[i])
+        if (this.path[i].id === id) {
+          break
+        }
+      }
+      this.$store.commit('files/setPath', newPath)
     },
   },
 })

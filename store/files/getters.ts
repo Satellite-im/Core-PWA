@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { IridiumDirectory, IridiumItem } from '~/libraries/Iridium/files/types'
 import { FilesState } from '~/store/files/types'
 import { RootState } from '~/types/store/store'
@@ -23,27 +23,34 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
               (e) => e.id === parentId,
             ) as IridiumDirectory
           )?.children ?? items
+        // if recent, get 15 most recently edited FILES. no directories
+      } else if (state.route === FileRouteEnum.RECENT) {
+        items =
+          iridium.files?.flat
+            .filter((e) => !('children' in e))
+            .sort((a, b) => b.modified - a.modified)
+            .slice(0, 14) ?? items
       }
-
       if (key === FileSortEnum.SIZE) {
         return items.sort(
           state.sort.asc
-            ? (a: IridiumItem, b: IridiumItem) => a[key] - b[key]
-            : (a: IridiumItem, b: IridiumItem) => b[key] - a[key],
+            ? (a, b) => a[key] - b[key]
+            : (a, b) => b[key] - a[key],
         )
       }
       if (key === FileSortEnum.MODIFIED) {
         return items.sort(
           state.sort.asc
-            ? (a: IridiumItem, b: IridiumItem) => b[key] - a[key]
-            : (a: IridiumItem, b: IridiumItem) => a[key] - b[key],
+            ? (a, b) => b[key] - a[key]
+            : (a, b) => a[key] - b[key],
         )
       }
-
       return items.sort(
         state.sort.asc
-          ? (a: IridiumItem, b: IridiumItem) => a[key].localeCompare(b[key])
-          : (a: IridiumItem, b: IridiumItem) => b[key].localeCompare(a[key]),
+          ? (a, b) =>
+              a[key].localeCompare(b[key], undefined, { sensitivity: 'base' })
+          : (a, b) =>
+              b[key].localeCompare(a[key], undefined, { sensitivity: 'base' }),
       )
     },
 }

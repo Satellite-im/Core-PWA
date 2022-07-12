@@ -1,9 +1,14 @@
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import { FileRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { FilesState } from '~/store/files/types'
 
-const InitialFriendsState: FilesState = {
+const InitialFilesState: FilesState = {
+  currentUpload: undefined,
+  downloadList: [],
   gridLayout: true,
   path: [],
+  preview: undefined,
+  rename: undefined,
+  route: FileRouteEnum.DEFAULT,
   sort: {
     category: FileSortEnum.MODIFIED,
     asc: true,
@@ -11,4 +16,4 @@ const InitialFriendsState: FilesState = {
   status: '',
 }
 
-export default () => InitialFriendsState
+export default () => InitialFilesState

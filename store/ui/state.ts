@@ -1,5 +1,4 @@
 import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
-import { FileSortEnum } from '~/libraries/Enums/enums'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,

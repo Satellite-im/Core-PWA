@@ -96,13 +96,22 @@ export default class FilesManager extends Emitter {
    * @param {File} file file to be uploaded
    * @param {string} parentId attach id to each item so the parent can be found later in case of rename operation
    */
-  async addFile(file: File, parentId: string) {
+  async addFile({
+    file,
+    parentId,
+    options,
+  }: {
+    file: File
+    parentId: string
+    options?: AddOptions
+  }) {
     const parent = this.flat.find((e) => e.id === parentId) as
       | IridiumDirectory
       | undefined
     this.validateName(file.name, parent)
     const res = await (this.iridium.connector?.ipfs as IPFS).add(
       blobToStream(file),
+      options,
     )
     const thumbnailBlob = await createThumbnail(file, 400)
 
@@ -125,6 +134,25 @@ export default class FilesManager extends Emitter {
         .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
         .toLowerCase(),
     })
+  }
+
+  removeItem(item: IridiumItem) {
+    // if root item
+    if (!item.parentId) {
+      const index = this.state.items.indexOf(item)
+      this.state.items.splice(index, 1)
+      return
+    }
+    const parent = this.flat.find((e) => e.id === item.parentId) as
+      | IridiumDirectory
+      | undefined
+    if (!parent) {
+      return
+    }
+    const index = parent.children.indexOf(item)
+    if (index > -1) {
+      parent.children.splice(index, 1)
+    }
   }
 
   /**
@@ -215,15 +243,37 @@ export default class FilesManager extends Emitter {
     writer.close()
   }
 
+  /**
+   * @returns {IridiumItem[]} flattened list of items
+   */
   get flat(): IridiumItem[] {
     return this.flatDeep(this.state.items)
   }
 
+  /**
+   * @returns {number} total size of all tracked files
+   */
+  get totalSize(): number {
+    return this.flat.reduce((total, curr) => total + curr.size, 0)
+  }
+
+  /**
+   * @returns {number} percentage of available storage used
+   */
+  get percentStorageUsed(): number {
+    return (this.totalSize / Config.personalFilesLimit) * 100
+  }
+
+  /**
+   * @description recursively flattens all directories
+   * @param {IridiumItem[]} list current directory items (starting with root, then calls itself when a nested dir is found)
+   * @returns {IridiumItem[]} flattened list of files and directories
+   */
   private flatDeep(list: IridiumItem[]): IridiumItem[] {
-    return list.reduce((prev: IridiumItem[], el) => {
-      prev.push(el)
-      if ('children' in el) {
-        prev.push(...this.flatDeep(el.children))
+    return list.reduce((prev: IridiumItem[], curr) => {
+      prev.push(curr)
+      if ('children' in curr) {
+        prev.push(...this.flatDeep(curr.children))
       }
       return prev
     }, [])

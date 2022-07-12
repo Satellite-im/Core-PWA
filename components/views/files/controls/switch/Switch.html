@@ -1,0 +1,8 @@
+<div id="switcher">
+  <button @click="switchView('list')" data-cy="files-view-list">
+    <list-icon size="1x" class="control-icon" :class="{active: !gridLayout}" />
+  </button>
+  <button @click="switchView('grid')" data-cy="files-view-grid">
+    <grid-icon size="1x" class="control-icon" :class="{active: gridLayout}" />
+  </button>
+</div>

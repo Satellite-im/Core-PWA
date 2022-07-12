@@ -38,12 +38,14 @@ const commonProperties = [
   'ui.modals',
   'ui.isScrollOver',
   'ui.filePreview',
-  'ui.filesUploadStatus',
   'ui.fileDownloadList',
   'textile.userThread',
   'conversation.participants',
-  'files.currentParentId',
+  'files.currentUpload',
+  'files.downloadList',
   'files.path',
+  'files.preview',
+  'files.rename',
   'files.status',
 ]
 

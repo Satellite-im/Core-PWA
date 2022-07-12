@@ -1,41 +1,30 @@
-<div
-  id="files"
-  data-cy="files-screen"
-  class="hidden-scroll"
-  v-scroll-lock="true"
->
+<div id="files" data-cy="files-screen">
   <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
   <div class="files-top">
     <FilesFilepath />
   </div>
   <div class="files-container">
     <div class="files-left">
-      <FilesControls
-        ref="controls"
-        :changeView="changeView"
-        @forceRender="forceRender"
-      />
+      <FilesControls ref="controls" />
       <TypographyText
         v-if="!directory.length"
         :text="$t('pages.files.empty')"
       />
-      <FilesList
-        v-else-if="view === 'list'"
+      <FilesGrid
+        v-else-if="gridLayout"
         :directory="directory"
-        :counter="counter"
-        :sort="sort"
         @like="like"
         @share="share"
+        @rename="rename"
         @remove="remove"
         @handle="handle"
-        @setSort="setSort"
-        @forceRender="forceRender"
       />
-      <FilesGrid
+      <FilesList
         v-else
         :directory="directory"
         @like="like"
         @share="share"
+        @rename="rename"
         @remove="remove"
         @handle="handle"
       />

@@ -120,10 +120,6 @@ export interface UIState {
     base: Theme
     flair: Flair
   }
-  filesUploadStatus: string
-  renameItem?: Item
-  filePreview?: Fil
-  fileDownloadList: string[]
   chatImageOverlay?: FileMessage
   swiperSlideIndex: number
 }

@@ -112,14 +112,10 @@ export default Vue.extend({
     },
     /**
      * @method rename
-     * @description Open rename modal
+     * @description Emit to rename item - pages/files/browse/index.vue
      */
     rename() {
-      this.$store.commit('ui/setRenameItem', this.item)
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.RENAME_FILE,
-        state: !this.ui.modals[ModalWindows.RENAME_FILE],
-      })
+      this.$emit('rename', this.item)
     },
     /**
      * @method like

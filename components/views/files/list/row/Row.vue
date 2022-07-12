@@ -1,7 +1,7 @@
 <template src="./Row.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import {
   FolderIcon,
   ArchiveIcon,
@@ -12,8 +12,9 @@ import {
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
+import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
+import { IridiumItem } from '~/libraries/Iridium/files/types'
 
 export default Vue.extend({
   components: {
@@ -26,11 +27,8 @@ export default Vue.extend({
   },
   mixins: [ContextMenu],
   props: {
-    /**
-     * File or Directory to be displayed in detail
-     */
     item: {
-      type: Object as PropType<Item>,
+      type: Object as PropType<IridiumItem>,
       required: true,
     },
   },
@@ -81,7 +79,7 @@ export default Vue.extend({
   methods: {
     /**
      * @method handle
-     * @description Emit item to be handled in pages/files/browse/index.vue
+     * @description Emit to handle item - pages/files/browse/index.vue
      */
     handle() {
       if (this.$data.menuHover) {
@@ -91,14 +89,10 @@ export default Vue.extend({
     },
     /**
      * @method rename
-     * @description Open rename modal
+     * @description Emit to rename item - pages/files/browse/index.vue
      */
     rename() {
-      this.$store.commit('ui/setRenameItem', this.item)
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.RENAME_FILE,
-        state: !this.ui.modals[ModalWindows.RENAME_FILE],
-      })
+      this.$emit('rename', this.item)
     },
     /**
      * @method like

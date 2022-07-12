@@ -2,95 +2,68 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { Fil } from '~/libraries/Files/Fil'
-import { FileAsideRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
-import fileSystem from '~/libraries/Files/FilSystem'
+import { FileRouteEnum } from '~/libraries/Enums/enums'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
+import { RootState } from '~/types/store/store'
+import { ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Files',
   layout: 'files',
   data() {
     return {
-      view: 'grid',
-      counter: 1 as number, // needed to force render on addChild. Vue2 lacks reactivity for Map
       items: iridium.files?.state.items ?? [],
     }
   },
   computed: {
-    ...mapGetters('textile', ['getInitialized']),
+    ...mapState({
+      sort: (state) => (state as RootState).files.sort,
+      path: (state) => (state as RootState).files.path,
+      gridLayout: (state) => (state as RootState).files.gridLayout,
+      modals: (state) => (state as RootState).ui.modals,
+    }),
     ...mapGetters({
       sortedItems: 'files/sortedItems',
     }),
     directory(): IridiumItem[] {
       return this.sortedItems(this.items)
     },
-    // sort: {
-    //   set(value: FileSort) {
-    //     this.$store.commit('ui/setFileSort', value)
-    //   },
-    //   get(): FileSort {
-    //     return this.$store.state.ui.fileSort
-    //   },
-    //   /**
-    //    * @returns Current directory items
-    //    * @description included counter to force rendering on Map updates
-    //    */
-    // },
-    // directory(): Item[] {
-    // if (this.$route.query.route === FileAsideRouteEnum.RECENT) {
-    //   return (
-    //     this.$data.counter &&
-    //     this.fileSystem.sortContent(this.sort, this.fileSystem.recentFiles)
-    //   )
-    // }
-    // return (
-    //   this.$data.counter &&
-    //   this.fileSystem.sortContent(this.sort, this.fileSystem.content)
-    // )
-    // },
   },
   watch: {
     '$route.query.route': {
       handler(value) {
-        console.log(iridium.files)
-        // this.fileSystem.goBackToDirectory('root')
-        // // if invalid route, reset to default
-        // if (!Object.values(FileAsideRouteEnum).includes(value)) {
-        //   this.$router.push({ query: {} })
-        // }
+        this.$store.commit('files/setPath', [])
+        this.$store.commit('files/setRoute', this.$route.query.route)
+        // if invalid route, reset to default
+        if (!Object.values(FileRouteEnum).includes(value)) {
+          this.$router.push({ query: {} })
+          this.$store.commit('files/setRoute', FileRouteEnum.DEFAULT)
+        }
       },
     },
   },
   methods: {
     /**
-     * @method changeView DocsTODO
-     * @description
-     * @param type
-     * @example
-     */
-    changeView(type: 'grid' | 'list') {
-      this.view = type
-    },
-    /**
-     * @method handle
-     * @description emitted from child components. Either open file view or directory
-     * @param {Item} item
+     * @description if directory, set new path. if file, open fullscreen view
+     * @param {IridiumItem} item
      */
     handle(item: IridiumItem) {
+      // if directory
       if ('children' in item) {
-        this.$store.commit('files/setPath', [{ id: item.id, name: item.name }])
+        this.$store.commit('files/setPath', [
+          ...this.path,
+          { id: item.id, name: item.name },
+        ])
         return
       }
-      this.$store.commit('files/setPreview', item.id)
+      this.$store.commit('files/setPreview', item)
     },
     /**
-     * @method like
      * @description toggle like boolean, update bucket index
-     * @param {Item} item
+     * @param {IridiumItem} item
      */
     like(item: IridiumItem) {
       iridium.files?.updateItem({
@@ -98,57 +71,33 @@ export default Vue.extend({
         liked: !item.liked,
         parentId: item.parentId,
       })
-
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
         : this.$toast.show(this.$t('pages.files.remove_favorite') as string)
     },
     /**
-     * @method remove
-     * @description delete item from filesystem. If file, also remove from textile bucket
-     * @param {Item} item
+     * @description delete item from iridium store
+     * @param {IridiumItem} item
      */
-    async remove(item: Item) {
-      if (item instanceof Fil) {
-        this.$store.commit(
-          'ui/setFilesUploadStatus',
-          this.$t('pages.files.status.delete', [item.name]),
-        )
-        // await fileSystem.removeFile(item.id)
-      }
-      fileSystem.removeChild(item.name, item.parent)
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      this.forceRender()
+    remove(item: IridiumItem) {
+      iridium.files?.removeItem(item)
     },
     /**
-     * @method share
-     * @description copy link to clipboard
-     * @param {Item} item
+     * @description set rename item and display modal
+     * @param {IridiumItem} item
      */
-    async share(item: Item) {
+    rename(item: IridiumItem) {
+      this.$store.commit('files/setRename', item)
+      this.$store.commit('ui/toggleModal', {
+        name: ModalWindows.RENAME_FILE,
+        state: !this.modals[ModalWindows.RENAME_FILE],
+      })
+    },
+    /**
+     * @param {IridiumItem} item
+     */
+    share(item: IridiumItem) {
       this.$toast.show(this.$t('todo - share') as string)
-    },
-    // /**
-    //  * @method setSort
-    //  * @description if current category, swap asc/desc. if different, change category
-    //  */
-    // setSort(category: FileSortEnum) {
-    //   this.sort =
-    //     this.sort.category === category
-    //       ? { category: this.sort.category, asc: !this.sort.asc }
-    //       : { category, asc: true }
-    // },
-    /**
-     * @method forceRender
-     * @description Force render of new directory items after filesystem update
-     */
-    forceRender() {
-      this.counter++
     },
   },
 })

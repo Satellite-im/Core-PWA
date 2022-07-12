@@ -18,7 +18,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'Global',
   computed: {
-    ...mapState(['ui', 'media', 'webrtc', 'conversation']),
+    ...mapState(['ui', 'media', 'webrtc', 'conversation', 'files']),
     ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     ModalWindows: () => ModalWindows,
     showBackgroundCall(): boolean {
