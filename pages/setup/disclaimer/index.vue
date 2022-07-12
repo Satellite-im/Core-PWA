@@ -2,6 +2,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
+import IdentityManager from '~/libraries/Iridium/IdentityManager'
+import logger from '~/plugins/local/logger'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'DisclaimerScreen',
@@ -17,6 +21,10 @@ export default Vue.extend({
     },
     importAccount() {
       this.$router.push('importAccount')
+    },
+    async connectAccount() {
+      await this.$store.dispatch('accounts/connectWallet')
+      this.$router.push('/')
     },
   },
 })

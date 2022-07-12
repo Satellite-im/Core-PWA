@@ -12,7 +12,11 @@ import {
   User,
   Group,
 } from '../../interfaces'
-import { accountFromWallet, walletFromAccount } from './utils'
+import {
+  accountFromKeyapair,
+  accountFromWallet,
+  walletFromAccount,
+} from './utils'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
 import FriendsProgram from '~/libraries/Solana/FriendsProgram/FriendsProgram'
 import GroupChatsProgram from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram'
@@ -22,7 +26,6 @@ import {
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { AccountsError } from '~/store/accounts/types'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-
 export default class SolanaAdapter implements Adapter {
   private readonly solanaManager: SolanaManager
   private usersProgram: UsersProgram | null = null
@@ -32,6 +35,17 @@ export default class SolanaAdapter implements Adapter {
   constructor() {
     this.solanaManager = new SolanaManager()
     this.usersProgram = null
+  }
+
+  signMessage(message: string): Promise<Uint8Array> {
+    throw new Error('Method not implemented.')
+  }
+
+  _getConnectionStatus(): boolean {
+    if (this.solanaManager.isInitialized()) {
+      return true
+    }
+    return false
   }
 
   get friendsProgram(): FriendsProgram {
@@ -74,7 +88,10 @@ export default class SolanaAdapter implements Adapter {
     return this.solanaManager.getCurrentAccountBalance()
   }
 
-  async getAccountFromMnemonic(mnemonic: string): Promise<Account | null> {
+  async getAccountFromMnemonic(mnemonic?: string): Promise<Account | null> {
+    if (!mnemonic) {
+      throw new Error('Mnemonic is required when working with Solana directly')
+    }
     await this.solanaManager.initializeFromMnemonic(mnemonic)
     const wallet = this.solanaManager.getMainSolanaWalletInstance()
     if (wallet) {
@@ -140,8 +157,9 @@ export default class SolanaAdapter implements Adapter {
     }
   }
 
-  async getActiveAccount(): Promise<Keypair | undefined> {
-    return this.solanaManager.getActiveAccount()
+  async getActiveAccount(): Promise<Account | undefined> {
+    const account = this.solanaManager.getActiveAccount()
+    return !account ? undefined : accountFromKeyapair(account)
   }
 
   async getCurrentUserInfo(): Promise<User | null> {
@@ -155,8 +173,9 @@ export default class SolanaAdapter implements Adapter {
     return null
   }
 
-  async getPayerAccount(): Promise<Keypair | undefined> {
-    return this.solanaManager.payerAccount
+  async getPayerAccount(): Promise<Account | undefined> {
+    const account = this.solanaManager.payerAccount
+    return !account ? undefined : accountFromKeyapair(account)
   }
 
   async setPhotoHash(photoHash: string): Promise<string> {
@@ -194,8 +213,8 @@ export default class SolanaAdapter implements Adapter {
     return await this.friendsProgram.computeAccountKeys(from, to)
   }
 
-  async getFriendsPayer(): Promise<Keypair> {
-    return this.friendsProgram.getPayer()
+  async getFriendsPayer(): Promise<Account> {
+    return accountFromKeyapair(this.friendsProgram.getPayer())
   }
 
   async getAccountStatus(accountKey: PublicKey): Promise<FriendStatus> {

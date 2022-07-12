@@ -7,6 +7,7 @@ import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
+import Crypto from '~/libraries/Crypto/Crypto'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
 
 export class IridiumManager extends Emitter {
@@ -32,6 +33,73 @@ export class IridiumManager extends Emitter {
     }
 
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
+    this.connector = await Iridium.fromSeed(seed, {
+      logger,
+      config: {
+        syncNodes: Config.iridium.syncNodes,
+      },
+    })
+
+    logger.log('iridium/manager', 'connector initialized', {
+      id: this.connector.id,
+      peerId: this.connector.peerId,
+    })
+
+    logger.log('iridium/manager', 'starting IPFS')
+    await this.connector.start()
+
+    // check for existing root document
+    let doc = (await this.connector.get('/')) || {}
+    if (!doc.id) {
+      logger.log('iridium/manager', 'creating new root document', doc)
+      doc = {
+        id: this.connector.id,
+        profile: { name: 'guest' },
+        groups: {},
+        friends: {},
+        conversations: {},
+        files: {},
+        settings: {},
+        indexes: {},
+      }
+    } else {
+      logger.log('iridium/manager', 'loaded root document', doc)
+    }
+    doc.seen = Date.now()
+    await this.connector.set('/', doc)
+
+    logger.log('iridium/manager', 'initializing profile')
+    this.profile = new ProfileManager(this)
+    logger.log('iridium/friends', 'initializing friends')
+    this.friends = new FriendsManager(this)
+    logger.log('iridium/manager', 'initializing groups')
+    this.groups = new GroupManager(this)
+    logger.log('iridium/manager', 'initializing chat')
+    this.chat = new ChatManager(this)
+    logger.log('iridium/manager', 'initializing files')
+    this.files = new FilesManager(this)
+
+    logger.log('iridium/manager', 'ready')
+    await this.friends.init()
+    await this.chat.init()
+    await this.files.init()
+    this.ready = true
+  }
+
+  /**
+   * @method
+   * Initialization function that creates a Textile identity
+   * and initializes the Mailbox
+   * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
+   * @returns a promise that resolves when the initialization completes
+   */
+  async initFromEntropy(entropy: Uint8Array) {
+    logger.log('iridium/manager', 'init()')
+    if (!entropy) {
+      throw new Error('Entropy not valid')
+    }
+
+    const seed = await Crypto.sha256(entropy)
     this.connector = await Iridium.fromSeed(seed, {
       logger,
       config: {

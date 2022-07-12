@@ -12,6 +12,9 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { ActionsArguments } from '~/types/store/store'
 import BlockchainClient from '~/libraries/BlockchainClient'
 import logger from '~/plugins/local/logger'
+import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
+import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
+import IdentityManager from '~/libraries/Iridium/IdentityManager'
 
 export default {
   /**
@@ -87,7 +90,9 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
+    await commit('setAdapter', 'Solana')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    $BlockchainClient.setAdapter(new SolanaAdapter())
 
     await $BlockchainClient.initRandom()
     const userWallet = $BlockchainClient.account
@@ -145,6 +150,13 @@ export default {
   }: ActionsArguments<AccountsState>) {
     console.info('loadAccount')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    if (state.adapter === 'Solana') {
+      $BlockchainClient.setAdapter(new SolanaAdapter())
+      window.console.log('Using Solana adapter')
+    } else {
+      $BlockchainClient.setAdapter(new PhantomAdapter())
+      window.console.log('Using Phantom adapter')
+    }
     const mnemonic = state.phrase
     if (mnemonic === '') {
       console.info('empty mnemonic')
@@ -158,19 +170,26 @@ export default {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    const payerAccount = $BlockchainClient.payerAccount
+    const payerAccount = $BlockchainClient.account
 
     if (!iridium.ready) {
-      console.info('initializing iridium')
-      const { pin } = state
-      await dispatch(
-        'iridium/initialize',
-        {
-          pass: pin,
-          wallet: $BlockchainClient.account,
-        },
-        { root: true },
-      )
+      if (state.adapter === 'Solana') {
+        console.info('initializing iridium')
+        const { pin } = state
+        await dispatch(
+          'iridium/initialize',
+          {
+            pass: pin,
+            wallet: $BlockchainClient.account,
+          },
+          { root: true },
+        )
+      } else {
+        console.info('initializing iridium')
+        const { entropyMessage } = state
+        const entropy = await $BlockchainClient.signMessage(entropyMessage)
+        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
+      }
     }
 
     commit('setActiveAccount', iridium.connector?.id)
@@ -188,7 +207,7 @@ export default {
       ...userInfo,
     })
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    dispatch('startup', payerAccount)
+    dispatch('startup')
   },
   /**
    * @method registerUser
@@ -255,8 +274,8 @@ export default {
       photoHash: imagePath,
       address: walletAccount.publicKey.toBase58(),
     })
-    dispatch('initializeEncryptionEngine', walletAccount)
-    dispatch('startup', walletAccount)
+    // dispatch('initializeEncryptionEngine', walletAccount)
+    dispatch('startup')
   },
 
   /**
@@ -297,34 +316,36 @@ export default {
     await $Crypto.init(userAccount)
   },
 
-  async startup(
-    { commit, dispatch, rootState, state }: ActionsArguments<AccountsState>,
-    payerAccount: Keypair,
-  ) {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-
+  async startup({
+    dispatch,
+    rootState,
+    state,
+  }: ActionsArguments<AccountsState>) {
     db.initializeSearchIndexes()
 
     const { pin } = state
     await dispatch('loadIridium', {
       pin,
     })
-    await dispatch('friends/initialize', {}, { root: true })
-    if ($BlockchainClient.payerAccount?.secretKey) {
-      dispatch(
-        'webrtc/initialize',
-        {
-          privateKeyInfo: {
-            type: 'ed25519',
-            privateKey: iridium.connector?.peerId,
-          },
-          originator: iridium.connector?.peerId,
-        },
-        {
-          root: true,
-        },
-      )
+
+    if (!iridium.connector?.peerId) {
+      return
     }
+
+    dispatch(
+      'webrtc/initialize',
+      {
+        privateKeyInfo: {
+          type: 'ed25519',
+          privateKey: iridium.connector?.peerId,
+        },
+        originator: iridium.connector?.peerId,
+      },
+      {
+        root: true,
+      },
+    )
+
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
   async loadIridium({
@@ -338,18 +359,54 @@ export default {
         'Loading Iridium from accounts startup',
       )
       const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-      const { pin } = state
-      await dispatch(
-        'iridium/initialize',
-        {
-          pass: pin,
-          wallet: $BlockchainClient.account,
-        },
-        { root: true },
-      )
+      if (state.adapter === 'Solana') {
+        const { pin } = state
+        await dispatch(
+          'iridium/initialize',
+          {
+            pass: pin,
+            wallet: $BlockchainClient.account,
+          },
+          { root: true },
+        )
+      } else {
+        const { entropyMessage } = state
+        const entropy = await $BlockchainClient.signMessage(entropyMessage)
+        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
+      }
     }
 
     await dispatch('groups/initialize', {}, { root: true })
+  },
+
+  async connectWallet({
+    commit,
+    dispatch,
+    state,
+  }: ActionsArguments<AccountsState>) {
+    const { pin } = state
+
+    if (!pin) {
+      throw new Error(AccountsError.INVALID_PIN)
+    }
+
+    commit('setAdapter', 'Phantom')
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    $BlockchainClient.setAdapter(new PhantomAdapter())
+    await $BlockchainClient.initFromMnemonic()
+
+    const { pinHash } = state
+    const entropyMessage = IdentityManager.generateEntropyMessage(
+      $BlockchainClient.account.publicKey.toBase58(),
+      pinHash,
+    )
+    commit('setEntropy', entropyMessage)
+
+    const fakeMnemonic = 'fake mnemonic to bypass checks'
+    commit('setPhrase', 'fake mnemonic to bypass checks')
+    const encryptedPhrase = await Crypto.encryptWithPassword(fakeMnemonic, pin)
+
+    commit('setEncryptedPhrase', encryptedPhrase)
   },
 }
 
