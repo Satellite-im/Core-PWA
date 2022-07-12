@@ -6,8 +6,7 @@
     <Nuxt />
     <v-style>
       :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
-      {{ flair.secondary }}; --flair-color-selection:
-      {{ `${flair.primary}fe` }}; }
+      {{ flair.secondary }}; --flair-color-rgb: {{ flair.primaryRGB }}; }
     </v-style>
   </div>
 </template>

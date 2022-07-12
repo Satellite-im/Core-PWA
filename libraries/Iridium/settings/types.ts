@@ -1,3 +1,5 @@
+import { hexToRGB } from '~/utilities/Colors'
+
 export enum ThemeKeys {
   DEFAULT = 'default',
   MOONLESS_NIGHT = 'moonlessNight',
@@ -24,54 +26,62 @@ export type Flair = {
   name: string
   primary: string
   secondary: string
+  primaryRGB: string
+}
+
+function flairDefinition(flair: Omit<Flair, 'primaryRGB'>): Flair {
+  return {
+    ...flair,
+    primaryRGB: hexToRGB(flair.primary),
+  }
 }
 
 export const flairs: { [key in FlairKeys]: Flair } = {
-  satellite: {
+  satellite: flairDefinition({
     name: 'Satellite',
     primary: '#2761fd',
     secondary: '#286cfe',
-  },
-  peach: {
+  }),
+  peach: flairDefinition({
     name: 'Peach',
     primary: '#ed4c67',
     secondary: '#ed5672',
-  },
-  pink: {
+  }),
+  pink: flairDefinition({
     name: 'Pink',
     primary: '#fda7df',
     secondary: '#fdb1e9',
-  },
-  lime: {
+  }),
+  lime: flairDefinition({
     name: 'Lime',
     primary: '#a3cb38',
     secondary: '#aed542',
-  },
-  purple: {
+  }),
+  purple: flairDefinition({
     name: 'Purple',
     primary: '#6f1e51',
     secondary: '#80215d',
-  },
-  lavender: {
+  }),
+  lavender: flairDefinition({
     name: 'Lavender',
     primary: '#9980fa',
     secondary: '#a891ff',
-  },
-  sunflower: {
+  }),
+  sunflower: flairDefinition({
     name: 'Sunflower',
     primary: '#ffc312',
     secondary: '#faca3e',
-  },
-  deepBlue: {
+  }),
+  deepBlue: flairDefinition({
     name: 'Deep Blue',
     primary: '#30336b',
     secondary: '#2d328a',
-  },
-  void: {
+  }),
+  void: flairDefinition({
     name: 'Void',
     primary: '#2c3a47',
     secondary: '#36434f',
-  },
+  }),
 }
 
 export enum LanguageKeys {
