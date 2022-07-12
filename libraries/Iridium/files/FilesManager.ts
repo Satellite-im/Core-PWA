@@ -89,6 +89,7 @@ export default class FilesManager extends Emitter {
       size: 0,
       parentId,
     })
+    this.set('/items', this.state.items)
   }
 
   /**
@@ -134,6 +135,7 @@ export default class FilesManager extends Emitter {
         .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
         .toLowerCase(),
     })
+    this.set('/items', this.state.items)
   }
 
   removeItem(item: IridiumItem) {
@@ -141,6 +143,7 @@ export default class FilesManager extends Emitter {
     if (!item.parentId) {
       const index = this.state.items.indexOf(item)
       this.state.items.splice(index, 1)
+      this.set('/items', this.state.items)
       return
     }
     const parent = this.flat.find((e) => e.id === item.parentId) as
@@ -153,66 +156,23 @@ export default class FilesManager extends Emitter {
     if (index > -1) {
       parent.children.splice(index, 1)
     }
-  }
-
-  /**
-   * @param {string} name new item name
-   * @param {IridiumDirectory} parent empty string if root element
-   */
-  private validateName(name: string, parent?: IridiumDirectory) {
-    if (Config.regex.empty.test(name)) {
-      throw new Error(FileSystemErrors.NO_EMPTY_STRING)
-    }
-
-    if (name[0] === '.') {
-      throw new Error(FileSystemErrors.LEADING_DOT)
-    }
-
-    if (Config.regex.invalid.test(name)) {
-      throw new Error(FileSystemErrors.INVALID)
-    }
-
-    // if root directory
-    if (!parent) {
-      this.isDuplicateName(name)
-      return
-    }
-    // else, look inside children of current parent item
-    this.isDuplicateName(name, parent.children)
-  }
-
-  /**
-   * @param {string} name new item name
-   * @param {IridiumItem[]} items default to root, sibling items will be provided for nested items
-   */
-  private isDuplicateName(
-    name: string,
-    items: IridiumItem[] = this.state.items,
-  ) {
-    items.forEach((e) => {
-      if (!e.name.localeCompare(name, undefined, { sensitivity: 'base' })) {
-        throw new Error(FileSystemErrors.DUPLICATE_NAME)
-      }
-    })
+    this.set('/items', this.state.items)
   }
 
   updateItem({
-    id,
+    item,
     name,
     liked,
-    parentId,
   }: {
-    id: string
+    item: IridiumItem
     name?: string
     liked?: boolean
-    parentId: string
   }) {
-    const item = this.flat.find((e) => e.id === id)
     if (!item) {
       return
     }
     if (name !== undefined) {
-      const parent = this.flat.find((e) => e.id === parentId) as
+      const parent = this.flat.find((e) => e.id === item.parentId) as
         | IridiumDirectory
         | undefined
       this.validateName(name, parent)
@@ -220,6 +180,7 @@ export default class FilesManager extends Emitter {
     } else if (liked !== undefined) {
       item.liked = liked
     }
+    this.set('/items', this.state.items)
   }
 
   /**
@@ -262,6 +223,47 @@ export default class FilesManager extends Emitter {
    */
   get percentStorageUsed(): number {
     return (this.totalSize / Config.personalFilesLimit) * 100
+  }
+
+  /**
+   * @param {string} name new item name
+   * @param {IridiumDirectory} parent empty string if root element
+   */
+  private validateName(name: string, parent?: IridiumDirectory) {
+    if (Config.regex.empty.test(name)) {
+      throw new Error(FileSystemErrors.NO_EMPTY_STRING)
+    }
+
+    if (name[0] === '.') {
+      throw new Error(FileSystemErrors.LEADING_DOT)
+    }
+
+    if (Config.regex.invalid.test(name)) {
+      throw new Error(FileSystemErrors.INVALID)
+    }
+
+    // if root directory
+    if (!parent) {
+      this.isDuplicateName(name)
+      return
+    }
+    // else, look inside children of current parent item
+    this.isDuplicateName(name, parent.children)
+  }
+
+  /**
+   * @param {string} name new item name
+   * @param {IridiumItem[]} items default to root, sibling items will be provided for nested items
+   */
+  private isDuplicateName(
+    name: string,
+    items: IridiumItem[] = this.state.items,
+  ) {
+    items.forEach((e) => {
+      if (!e.name.localeCompare(name, undefined, { sensitivity: 'base' })) {
+        throw new Error(FileSystemErrors.DUPLICATE_NAME)
+      }
+    })
   }
 
   /**

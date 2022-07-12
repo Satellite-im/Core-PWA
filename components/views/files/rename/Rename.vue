@@ -66,8 +66,7 @@ export default Vue.extend({
       }
       try {
         iridium.files?.updateItem({
-          id: this.item.id,
-          parentId: this.item.parentId,
+          item: this.item,
           name: this.text,
         })
       } catch (e: any) {

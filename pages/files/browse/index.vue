@@ -52,9 +52,8 @@ export default Vue.extend({
      */
     like(item: IridiumItem) {
       iridium.files?.updateItem({
-        id: item.id,
+        item,
         liked: !item.liked,
-        parentId: item.parentId,
       })
       item.liked
         ? this.$toast.show(this.$t('pages.files.add_favorite') as string)
