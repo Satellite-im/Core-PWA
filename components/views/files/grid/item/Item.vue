@@ -12,7 +12,7 @@ import {
   FilmIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { ContextMenuItem, ModalWindows } from '~/store/ui/types'
+import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { RootState } from '~/types/store/store'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
