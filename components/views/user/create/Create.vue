@@ -162,9 +162,12 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    setCroppedImage(image: string) {
-      this.croppedImage = image
+    setCroppedImage(image: Blob) {
+      this.croppedImage = URL.createObjectURL(image)
+      const img = new Image()
+      img.src = this.croppedImage
       this.resetFileInput()
+      // TODO: Save image with iridium
     },
     /**
      * @method confirm DocsTODO

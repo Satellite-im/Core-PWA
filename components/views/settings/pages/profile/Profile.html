@@ -24,9 +24,9 @@
             <div class="profile-image-cropper" v-if="showCropper">
               <div class="content">
                 <InteractablesImageCropper
-                  @set-cropped-image="setCroppedImage"
-                  @toggle-cropper="toggleCropper"
+                  :set-cropped-image="setCroppedImage"
                   :image-url="image"
+                  @toggle-cropper="toggleCropper"
                 />
                 <div class="cropper-mask"></div>
               </div>
@@ -40,9 +40,7 @@
                 />
               </div>
               <div class="profile-photo-column photo">
-                <div
-                  :class="['profile-photo', !getInitialized ? 'profile-photo-loading' : '']"
-                >
+                <div :class="['profile-photo']">
                   <input
                     ref="file"
                     class="input-file"

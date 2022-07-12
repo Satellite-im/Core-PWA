@@ -55,7 +55,7 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     showCropper(): boolean {
-      return this.ui.modals[ModalWindows.CROP]
+      return !!this.ui.modals[ModalWindows.CROP]
     },
     /**
      * @method acceptableImageFormats
@@ -96,10 +96,7 @@ export default Vue.extend({
      * @example
      */
     openFileDialog() {
-      if (!this.getInitialized) return
-
-      const fileInput = this.$refs.file as HTMLElement
-      fileInput.click()
+      ;(this.$refs.file as HTMLElement).click()
     },
     /**
      * @method setCroppedImage DocsTODO
@@ -107,15 +104,14 @@ export default Vue.extend({
      * @param image
      * @example
      */
-    setCroppedImage(image: any) {
-      const fileInput = this.$refs.file as HTMLInputElement
+    setCroppedImage(image: Blob) {
       this.croppedImage = URL.createObjectURL(image)
-      fileInput.value = ''
-
+      ;(this.$refs.file as HTMLInputElement).value = ''
       const img = new Image()
       img.src = this.croppedImage
-
-      this.$store.dispatch('accounts/updateProfilePhoto', img)
+      // TODO: Save image with iridium
+      // Note: This was used for Solana implementation
+      // this.$store.dispatch('accounts/updateProfilePhoto', image)
     },
     /**
      * @method selectProfileImage DocsTODO

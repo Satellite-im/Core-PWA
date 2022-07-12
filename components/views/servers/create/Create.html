@@ -1,9 +1,9 @@
 <div class="create-server-container">
   <InteractablesImageCropper
     v-if="showCropper"
-    @set-cropped-image="setCroppedImage"
-    @toggle-cropper="toggleCropper"
+    :set-cropped-image="setCroppedImage"
     :image-url="imageUrl"
+    @toggle-cropper="toggleCropper"
   />
   <div v-if="showCropper" class="cropper-mask" />
   <div class="modal-body">

@@ -1,6 +1,6 @@
 <template src="./Create.html" />
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -58,9 +58,12 @@ export default Vue.extend({
      * @param image
      * @example
      */
-    setCroppedImage(image) {
-      this.croppedImage = image
-      this.$refs.file.value = null
+    setCroppedImage(image: Blob) {
+      this.croppedImage = URL.createObjectURL(image)
+      ;(this.$refs.file as HTMLInputElement).value = ''
+      const img = new Image()
+      img.src = this.croppedImage
+      // TODO: Save image with iridium
     },
     /**
      * @method confirm DocsTODO
