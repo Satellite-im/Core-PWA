@@ -27,7 +27,6 @@ import {
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { AccountsError } from '~/store/accounts/types'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-
 export default class SolanaAdapter implements Adapter {
   private readonly solanaManager: SolanaManager
   private usersProgram: UsersProgram | null = null
