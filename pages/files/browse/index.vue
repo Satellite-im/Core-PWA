@@ -32,19 +32,6 @@ export default Vue.extend({
       return this.sortedItems(this.items)
     },
   },
-  watch: {
-    '$route.query.route': {
-      handler(value) {
-        this.$store.commit('files/setPath', [])
-        this.$store.commit('files/setRoute', this.$route.query.route)
-        // if invalid route, reset to default
-        if (!Object.values(FileRouteEnum).includes(value)) {
-          this.$router.push({ query: {} })
-          this.$store.commit('files/setRoute', FileRouteEnum.DEFAULT)
-        }
-      },
-    },
-  },
   methods: {
     /**
      * @description if directory, set new path. if file, open fullscreen view

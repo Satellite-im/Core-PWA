@@ -46,6 +46,7 @@ const commonProperties = [
   'files.path',
   'files.preview',
   'files.rename',
+  'files.route',
   'files.status',
 ]
 

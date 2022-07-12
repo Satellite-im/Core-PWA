@@ -37,6 +37,18 @@ export default Vue.extend({
       }
     },
   },
+  watch: {
+    '$route.query.route': {
+      handler(value) {
+        this.$store.commit('files/setPath', [])
+        // if invalid route, reset to default
+        if (!Object.values(FileRouteEnum).includes(value)) {
+          this.$router.push({ query: {} })
+          this.$store.commit('files/setRoute', FileRouteEnum.DEFAULT)
+        }
+      },
+    },
+  },
   methods: {
     /**
      * @method setActive
@@ -44,11 +56,14 @@ export default Vue.extend({
      * @param {FileRouteEnum} route clicked route string value
      */
     setActive(route: FileRouteEnum) {
+      // if invalid route, reset to default
       if (!route) {
         this.$router.push({ query: {} })
+        this.$store.commit('files/setRoute', FileRouteEnum.DEFAULT)
         return
       }
       this.$router.push({ query: { route } })
+      this.$store.commit('files/setRoute', route)
     },
     /**
      * @method isActiveRoute
