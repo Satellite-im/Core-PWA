@@ -29,7 +29,7 @@
 
       .profile-section {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: auto 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
         gap: 0px 0px;
         grid-template-areas:
@@ -40,17 +40,11 @@
 
       .photo {
         align-self: center;
-        grid-area: photo;
-      }
-
-      .username {
-        align-self: center;
-        grid-area: username;
+        margin: 0 @normal-spacing @xlight-spacing 0;
       }
 
       .status-input {
         align-self: center;
-        grid-area: status-input;
       }
 
       .profile-photo-column {
@@ -138,6 +132,7 @@
   }
 
   .username {
+    align-self: center;
     grid-area: username;
   }
 
