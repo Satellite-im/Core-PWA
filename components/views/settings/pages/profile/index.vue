@@ -109,10 +109,13 @@ export default Vue.extend({
      */
     setCroppedImage(image: any) {
       const fileInput = this.$refs.file as HTMLInputElement
-      this.croppedImage = image
+      this.croppedImage = URL.createObjectURL(image)
       fileInput.value = ''
 
-      this.$store.dispatch('accounts/updateProfilePhoto', image)
+      const img = new Image()
+      img.src = this.croppedImage
+
+      this.$store.dispatch('accounts/updateProfilePhoto', img)
     },
     /**
      * @method selectProfileImage DocsTODO

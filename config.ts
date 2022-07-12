@@ -216,7 +216,7 @@ export const Config = {
     },
   },
   cropperOptions: {
-    type: 'base64',
+    type: 'blob',
     circle: false,
     size: { width: 600, height: 600 },
     format: 'jpeg',
