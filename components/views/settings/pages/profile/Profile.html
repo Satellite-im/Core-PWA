@@ -105,12 +105,9 @@
                 :text="$t('pages.settings.profile.about.subtitle')"
               />
               <div>
-                <TypographySubtitle
-                  class="about-button"
-                  :size="6"
-                  :text="$t('pages.settings.profile.about.edit')"
-                  :action="() => {}"
-                />
+                <button class="edit-button" @click="() => {}">
+                  {{$t('global.edit')}}
+                </button>
               </div>
             </div>
             <TypographySubtitle :size="6" :text="sampleProfileInfo.about" />
@@ -158,16 +155,8 @@
                   :text="$t('pages.settings.profile.accounts.subtitle_accounts')"
                 />
               </div>
-              <InteractablesInputGroup
-                class="status"
-                size="small"
-                input-kind="text"
-                type="primary"
-                :placeholder="$t('pages.settings.profile.accounts.accounts_placeholder')"
-                :action="() => {}"
-              >
-                <edit-icon size="1x" />
-              </InteractablesInputGroup>
+
+              <SettingsProfileAccountsList />
             </div>
           </div>
         </div>
