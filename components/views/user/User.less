@@ -24,6 +24,15 @@
 
   .user-info {
     height: @user-details-height;
+    flex: 1;
+    min-width: 0;
+    padding-left: @light-spacing;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     .title {
       height: 20px;
       margin: 0 0 1.25rem 0;
@@ -36,23 +45,14 @@
     }
 
     .subtitle {
-      height: @mini-text-size * 1.2 * 2;
+      height: @mini-text-size * 1.2;
       line-height: 1.2;
       font-size: @mini-text-size;
       color: @text-muted;
       font-family: @secondary-font;
-      pointer-events: none;
-      .multiline-ellipsis(2);
+      .multiline-ellipsis(1);
+      overflow: hidden;
     }
-
-    flex: 1;
-    min-width: 0;
-    padding-left: @light-spacing;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .user-chat-details {
