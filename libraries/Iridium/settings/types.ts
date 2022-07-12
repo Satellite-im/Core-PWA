@@ -96,4 +96,7 @@ export type Settings = {
   theme: ThemeKeys
   flair: FlairKeys
   language: LanguageKeys
+  video: {
+    flipLocalStream: boolean
+  }
 }

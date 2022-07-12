@@ -7,6 +7,9 @@ const initialState: Settings = {
   theme: ThemeKeys.DEFAULT,
   flair: FlairKeys.SATELLITE,
   language: LanguageKeys.EN_US,
+  video: {
+    flipLocalStream: true,
+  },
 }
 
 export default class SettingsManager extends Emitter {

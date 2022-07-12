@@ -14,6 +14,7 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
 import { PeerMutedState } from '~/store/webrtc/types'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 async function loadVideos() {
   const videos = document.querySelectorAll(
@@ -56,12 +57,16 @@ export default Vue.extend({
       default: false,
     },
   },
+  data() {
+    return {
+      videoSettings: iridium.settings.state.video,
+    }
+  },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
       webrtc: (state) => (state as RootState).webrtc,
-      flipVideo: (state) => (state as RootState).textile.userThread.flipVideo,
     }),
     call() {
       return (
