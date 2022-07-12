@@ -24,9 +24,9 @@
             <div class="profile-image-cropper" v-if="showCropper">
               <div class="content">
                 <InteractablesImageCropper
-                  :setCroppedImage="setCroppedImage"
-                  :toggleCropper="toggleCropper"
-                  :imageUrl="image"
+                  @set-cropped-image="setCroppedImage"
+                  @toggle-cropper="toggleCropper"
+                  :image-url="image"
                 />
                 <div class="cropper-mask"></div>
               </div>
