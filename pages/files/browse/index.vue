@@ -3,8 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { FileRouteEnum } from '~/libraries/Enums/enums'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
 import { RootState } from '~/types/store/store'

@@ -2,9 +2,9 @@
   <td class="filename">
     <template v-if="!$device.isMobile">
       <folder-icon
-        data-cy="folder-icon"
-        v-if="item.content"
+        v-if="item.children"
         class="file-type-icon"
+        data-cy="folder-icon"
       />
       <archive-icon v-else-if="isArchive" class="file-type-icon" />
       <image-icon v-else-if="isImage" class="file-type-icon" />

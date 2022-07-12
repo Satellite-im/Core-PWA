@@ -11,7 +11,6 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
