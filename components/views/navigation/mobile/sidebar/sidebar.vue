@@ -56,10 +56,7 @@
             <users-icon size="1.2x" />
           </InteractablesButton>
           <span
-            v-if="
-              friends.incomingRequests.length &&
-              dataState.friends === DataStateType.Ready
-            "
+            v-if="friends.incomingRequests.length"
             :class="
               $route.path.includes('/friends/list')
                 ? 'label tag-inverted'
@@ -95,17 +92,13 @@
         v-scroll-lock="true"
         class="scrolling hidden-scroll users"
       >
-        <UiSimpleScroll
-          scroll-mode="vertical"
-          scroll-show="scroll"
-          :container-class="isNoFriends ? 'no-friends-scrollbar' : ''"
-        >
-          <UiLoadersAddress
+        <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
+          <!-- <UiLoadersAddress
             v-if="dataState.friends === DataStateType.Loading"
             :count="4"
             inverted
-          />
-          <div v-else-if="users && users.length">
+          /> -->
+          <div v-if="users && users.length">
             <UiInlineNotification
               v-if="ui.unreadMessage.length"
               :text="$t('messaging.new_messages')"
@@ -227,7 +220,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'media', 'friends']),
+    ...mapState(['ui', 'media']),
     // toggleView: {
     //   get() {
     //     return this.ui.showSidebarUsers
