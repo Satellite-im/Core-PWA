@@ -16,6 +16,8 @@ export default {
     unencrypted: 'Unencrypted',
     upload: 'Upload',
     upload_files: 'Upload Files',
+    edit: 'edit',
+    save: 'save',
   },
   ui: {
     talk: 'Speak Freely...',
@@ -521,8 +523,6 @@ export default {
           title: 'About Me',
           subtitle:
             'Let your friends know who you are! Your about me will display on your profile.',
-          edit: 'edit',
-          save: 'save',
         },
         accounts: {
           title: 'Your Accounts',
@@ -530,7 +530,9 @@ export default {
           url_placeholder: 'Enter URL...',
           subtitle_accounts:
             'Link your accounts to display on your profile and have easier access to them while using Satellite.im.',
-          accounts_placeholder: 'Enter Website Name...',
+          displayMusic: 'Display Your Music',
+          displayOnProfile: 'Display On Profile',
+          verify: 'Verify',
         },
       },
     },
