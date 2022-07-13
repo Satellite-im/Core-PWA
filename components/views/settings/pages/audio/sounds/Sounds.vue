@@ -2,8 +2,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'NotificationsSettingsSounds',
@@ -11,22 +11,21 @@ export default Vue.extend({
   data() {
     return {
       Sounds,
+      audioSettings: iridium.settings.state.audio,
     }
   },
   computed: {
-    ...mapState(['sounds']),
+    sounds() {
+      return this.audioSettings.sounds
+    },
   },
-  mounted() {},
   methods: {
-    sound(key: Sounds) {
-      return this.sounds[key]
+    toggleSound(key: Sounds, isEnabled: boolean) {
+      this.audioSettings.sounds[key] = isEnabled
     },
-    toggleSound(key: Sounds, value: boolean) {
-      this.$store.commit('sounds/set', { key, value })
-    },
-    toggleSounds(keys: Sounds[], value: boolean) {
+    toggleSounds(keys: Sounds[], isEnabled: boolean) {
       for (const key of keys) {
-        this.$store.commit('sounds/set', { key, value })
+        this.audioSettings.sounds[key] = isEnabled
       }
     },
   },

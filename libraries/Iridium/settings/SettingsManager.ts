@@ -1,4 +1,5 @@
 import { Emitter } from '@satellite-im/iridium'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
 import { ThemeKeys, FlairKeys, LanguageKeys, Settings } from './types'
@@ -11,6 +12,19 @@ const initialState: Settings = {
   language: LanguageKeys.EN_US,
   video: {
     flipLocalStream: true,
+  },
+  audio: {
+    sounds: {
+      [Sounds.NEW_MESSAGE]: true,
+      [Sounds.CALL]: true,
+      [Sounds.HANGUP]: true,
+      [Sounds.MUTE]: true,
+      [Sounds.UNMUTE]: true,
+      [Sounds.DEAFEN]: true,
+      [Sounds.UNDEAFEN]: true,
+      [Sounds.UPLOAD]: true,
+      [Sounds.CONNECTED]: true,
+    },
   },
 }
 

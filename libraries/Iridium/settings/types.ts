@@ -1,3 +1,4 @@
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { hexToRGB } from '~/utilities/Colors'
 
 export enum ThemeKeys {
@@ -98,5 +99,8 @@ export type Settings = {
   language: LanguageKeys
   video: {
     flipLocalStream: boolean
+  }
+  audio: {
+    sounds: { [key in Sounds]: boolean }
   }
 }
