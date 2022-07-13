@@ -6,7 +6,7 @@ export enum ThemeKeys {
   MOONLESS_NIGHT = 'moonlessNight',
 }
 
-export const themes: { [key in ThemeKeys]: string } = {
+export const themes: Record<ThemeKeys, string> = {
   default: 'Default',
   moonlessNight: 'Moonless Night',
 }
@@ -37,7 +37,7 @@ function flairDefinition(flair: Omit<Flair, 'primaryRGB'>): Flair {
   }
 }
 
-export const flairs: { [key in FlairKeys]: Flair } = {
+export const flairs: Record<FlairKeys, Flair> = {
   satellite: flairDefinition({
     name: 'Satellite',
     primary: '#2761fd',
@@ -89,7 +89,7 @@ export enum LanguageKeys {
   'EN_US' = 'en_US',
 }
 
-export const languages: { [key in LanguageKeys]: string } = {
+export const languages: Record<LanguageKeys, string> = {
   en_US: 'English (USA)',
 }
 
@@ -101,7 +101,7 @@ export type Settings = {
     flipLocalStream: boolean
   }
   audio: {
-    sounds: { [key in Sounds]: boolean }
+    sounds: Record<Sounds, boolean>
   }
   keybinds: Record<KeybindKeys, string>
 }
