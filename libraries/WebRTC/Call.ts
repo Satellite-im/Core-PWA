@@ -104,23 +104,17 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Send an iridium message requesting for the given peerIds to initiate a call
    */
   async requestPeerCalls(force = false) {
-    console.log('requestPeerCalls', force)
     await Promise.all(
       this.peerDetails.map(async (peer) => {
-        console.log('peer', peer)
-        console.log('iridium.connector?.peerId', iridium.connector?.peerId)
         if (peer.id === iridium.connector?.peerId) {
           return
         }
-        console.log('this.isCallee[peer.id]', this.isCallee[peer.id])
-        console.log('this.isCallee', this.isCallee)
         if (this.isCallee[peer.id]) {
           return
         }
 
         this.isCaller[peer.id] = true
         if (!this.peers[peer.id]) {
-          console.log('this.peers[peer.id]', !this.peers[peer.id])
           await this.initiateCall(peer.id, this.isCaller[peer.id])
         }
         await this.sendPeerCallRequest(peer.id, force)
@@ -224,7 +218,6 @@ export class Call extends Emitter<CallEventListeners> {
       return
     }
 
-    console.log('emit call', peerId, this.callId)
     this.emit('OUTGOING_CALL', { peerId, callId: this.callId })
   }
 
@@ -237,8 +230,6 @@ export class Call extends Emitter<CallEventListeners> {
    * await call.sendPeerCallRequest(peerId)
    */
   async sendPeerCallRequest(peerId: string, force = false) {
-    console.log('sendPeerCallRequest', peerId)
-
     if (!peerId) {
       return
     }
@@ -249,21 +240,8 @@ export class Call extends Emitter<CallEventListeners> {
       return
     }
     if (!this.peers[peerId]) {
-      console.log('initiateCall', peerId, this.peers)
       await this.initiateCall(peerId, true)
     }
-
-    console.log('peer:call')
-    console.log('peer:call this.callId', this.callId)
-    console.log('peer:call peerId', peerId)
-    console.log(
-      'peer:call iridium.connector?.peerId',
-      iridium.connector?.peerId,
-    )
-    console.log('peer:call peers', this.peerDetails)
-    console.log('peer:call signal', this.peerSignals)
-
-    // 12D3KooWLbiL4sV6fzUMcZJuvk9CgkFgi52VWd9X3USpx2RVCjLi
 
     await iridium.connector?.send(
       {
@@ -276,7 +254,6 @@ export class Call extends Emitter<CallEventListeners> {
         },
         at: Date.now().valueOf(),
       },
-      // here have to be peerID not did id, look into this.peerDetails and change peerIdis
       { to: [peerId] },
     )
   }
@@ -349,8 +326,6 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     const audioTrack = audioStream.getAudioTracks()[0]
-
-    console.log('audioTrack', audioTrack)
 
     this.streams[iridium.connector?.peerId].audio = audioStream
     this.tracks[iridium.connector?.peerId].add(audioTrack)
@@ -1118,7 +1093,6 @@ export class Call extends Emitter<CallEventListeners> {
    * @param message Message containing the signal data
    */
   protected async _onBusSignal(message: { peerId: PeerId; payload: any }) {
-    console.log('_onBusSignal', message)
     const peerHash = message.peerId.toB58String()
     this.peerSignals[peerHash] = message.payload.data
     if (

@@ -15,6 +15,7 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import Logger from '~/utilities/Logger'
+import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -457,8 +458,6 @@ const webRTCActions = {
         })
     }
 
-    console.log('createCall after peers', peers)
-
     const usedCallId = callId === iridium.connector?.peerId ? peerId : callId
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)
@@ -539,7 +538,7 @@ const webRTCActions = {
       kind?: string | undefined
     }) {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
-      let muted: Boolean = false
+      let muted: Boolean = true
       if (kind === 'audio') {
         muted = rootState.audio.muted
       } else if (kind === 'video') {
@@ -548,7 +547,7 @@ const webRTCActions = {
       commit('setMuted', {
         peerId: iridium.connector?.peerId,
         kind,
-        muted,
+        muted: !muted,
       })
       if (rootState.audio.muted) {
         call.mute({ peerId: iridium.connector?.peerId, kind: 'audio' })
@@ -722,6 +721,15 @@ const webRTCActions = {
     { kinds }: { kinds: TrackKind[] },
   ) {
     const $Logger: Logger = Vue.prototype.$Logger
+
+    // check permission for audio call
+    try {
+      await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      })
+    } catch (e) {
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
+    }
 
     const { id: callId, participants } = rootState.conversation
 
