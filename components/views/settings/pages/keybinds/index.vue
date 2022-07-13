@@ -3,12 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
 import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
-
 import { specialKeys, keyboardRegex } from '~/utilities/Keybinds'
-
 import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import {
+  defaultKeybinds,
+  KeybindKeys,
+} from '~/libraries/Iridium/settings/types'
 
 export default Vue.extend({
   name: 'KeybindSettings',
@@ -22,6 +24,7 @@ export default Vue.extend({
         error: false,
         errorMessage: '',
       },
+      keybinds: iridium.settings.state.keybinds,
     }
   },
   computed: {
@@ -34,13 +37,14 @@ export default Vue.extend({
      * @param keybind
      * @example
      */
-    editKeybind(keybind: String) {
-      this.$store.dispatch('ui/clearKeybinds')
+    editKeybind(keybind: string) {
       window.addEventListener('keydown', this.recordKeybind)
-      this.$data.editingKeybind.name = keybind
-      this.$data.editingKeybind.status = true
-      this.$data.editingKeybind.newString =
-        this.settings.keybinds[this.$data.editingKeybind.name]
+      this.editingKeybind = {
+        ...this.editingKeybind,
+        name: keybind,
+        status: true,
+        newString: defaultKeybinds[this.editingKeybind.name as KeybindKeys],
+      }
     },
     /**
      * @method recordKeybind DocsTODO
@@ -66,10 +70,10 @@ export default Vue.extend({
 
       this.errorCheck(key)
 
-      if (!this.$data.editingKeybind.error) {
-        this.$data.editingKeybind.newString.length === 0
-          ? (this.$data.editingKeybind.newString += key)
-          : (this.$data.editingKeybind.newString += `+${key}`)
+      if (!this.editingKeybind.error) {
+        this.editingKeybind.newString.length === 0
+          ? (this.editingKeybind.newString += key)
+          : (this.editingKeybind.newString += `+${key}`)
       }
     },
     /**
@@ -79,42 +83,20 @@ export default Vue.extend({
      */
     saveKeybind() {
       window.removeEventListener('keydown', this.recordKeybind)
-      const keybindName = this.$data.editingKeybind.name
-      const newKeybind = this.$data.editingKeybind.newString
+      const { name, newString } = this.editingKeybind
 
-      for (const key in this.settings.keybinds) {
-        if (this.checkSystemHotkey(this.settings.keybinds[key])) {
-          this.$data.editingKeybind.error = true
-          this.$data.editingKeybind.errorMessage = this.$t(
-            'pages.settings.keybinds.systemHotkeyError',
-          )
-          this.$store.commit('settings/updateKeybinding', {
-            keybindName: key,
-            newKeybind: '',
-          })
-        }
-
-        if (this.settings.keybinds[key] === newKeybind) {
-          this.$store.commit('settings/updateKeybinding', {
-            keybindName: key,
-            newKeybind: '',
-          })
-        }
-      }
-      if (!this.checkSystemHotkey(newKeybind)) {
-        this.$store.commit('settings/updateKeybinding', {
-          keybindName,
-          newKeybind,
-        })
-        this.$data.editingKeybind.newString = ''
-        this.$data.editingKeybind.status = false
-        this.$store.dispatch('ui/activateKeybinds')
-      } else {
-        this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t(
+      if (this.checkSystemHotkey(newString)) {
+        this.editingKeybind.error = true
+        this.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.systemHotkeyError',
-        )
+        ) as string
+        return
       }
+
+      iridium.settings.set(`/keybinds/${name}`, newString)
+      this.editingKeybind.newString = ''
+      this.editingKeybind.status = false
+      this.$store.dispatch('ui/activateKeybinds')
     },
     /**
      * @method cancelKeybind DocsTODO
@@ -123,10 +105,10 @@ export default Vue.extend({
      */
     cancelKeybind() {
       window.removeEventListener('keydown', this.recordKeybind)
-      this.$data.editingKeybind.newString = ''
-      this.$data.editingKeybind.status = false
-      this.$data.editingKeybind.errorMessage = ''
-      this.$data.editingKeybind.error = false
+      this.editingKeybind.newString = ''
+      this.editingKeybind.status = false
+      this.editingKeybind.errorMessage = ''
+      this.editingKeybind.error = false
       this.$store.dispatch('ui/activateKeybinds')
     },
     /**
@@ -135,9 +117,9 @@ export default Vue.extend({
      * @example
      */
     clearKeybind() {
-      this.$data.editingKeybind.newString = ''
-      this.$data.editingKeybind.errorMessage = ''
-      this.$data.editingKeybind.error = false
+      this.editingKeybind.newString = ''
+      this.editingKeybind.errorMessage = ''
+      this.editingKeybind.error = false
     },
     /**
      * @method resetKeybinds
@@ -145,22 +127,9 @@ export default Vue.extend({
      * @example resetKeybinds()
      */
     resetKeybinds() {
-      this.$store.commit('settings/updateKeybinding', {
-        keybindName: 'toggleMute',
-        newKeybind: 'alt+m',
-      })
-      this.$store.commit('settings/updateKeybinding', {
-        keybindName: 'toggleDeafen',
-        newKeybind: 'alt+d',
-      })
-      this.$store.commit('settings/updateKeybinding', {
-        keybindName: 'openSettings',
-        newKeybind: 'alt+s',
-      })
-      this.$store.commit('settings/updateKeybinding', {
-        keybindName: 'callActiveChat',
-        newKeybind: 'alt+c',
-      })
+      for (const [key, value] of Object.entries(defaultKeybinds)) {
+        iridium.settings.set(`/keybinds/${key}`, value)
+      }
       this.$store.dispatch('ui/activateKeybinds')
     },
     /**
@@ -172,7 +141,7 @@ export default Vue.extend({
     errorCheck(key: string) {
       if (!key) return
 
-      const newString = this.$data.editingKeybind.newString
+      const newString = this.editingKeybind.newString
 
       const keyAlreadyBound = newString.split('+').includes(key)
 
@@ -191,33 +160,33 @@ export default Vue.extend({
       const hasBlockedChars = key in BlockKeysEnum
 
       if (singleKeyAlreadyExist) {
-        this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t(
+        this.editingKeybind.error = true
+        this.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.singleHotkeyError',
-        )
+        ) as string
       } else if (keyAlreadyExist) {
-        this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t(
+        this.editingKeybind.error = true
+        this.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.systemHotkeyError',
-        )
+        ) as string
       } else if (keyAlreadyBound) {
-        this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t(
+        this.editingKeybind.error = true
+        this.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.existHotkeyError',
-        )
+        ) as string
       } else if (modifierAfterAlphanumeric) {
-        this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t(
+        this.editingKeybind.error = true
+        this.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.modifierHotkeyError',
-        )
+        ) as string
       } else if (hasBlockedChars) {
-        this.$data.editingKeybind.error = true
-        this.$data.editingKeybind.errorMessage = this.$t(
+        this.editingKeybind.error = true
+        this.editingKeybind.errorMessage = this.$t(
           'pages.settings.keybinds.editHotkeyError',
-        )
+        ) as string
       } else {
-        this.$data.editingKeybind.error = false
-        this.$data.editingKeybind.errorMessage = ''
+        this.editingKeybind.error = false
+        this.editingKeybind.errorMessage = ''
       }
     },
     checkSystemHotkey(keys: string) {
