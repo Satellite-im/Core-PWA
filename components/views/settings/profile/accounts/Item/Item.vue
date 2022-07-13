@@ -1,4 +1,4 @@
-<template src="./ListItem.html"></template>
+<template src="./Item.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
@@ -21,17 +21,9 @@ export default Vue.extend({
     account: {
       type: Object as PropType<Account>,
       required: true,
-      default: () => ({
-        name: '',
-        icon: '',
-        username: '',
-        isVerified: false,
-        displayOnProfile: false,
-        verifyUrl: 'https://www.reddit.com/',
-      }),
     },
   },
 })
 </script>
 
-<style scoped lang="less" src="./ListItem.less"></style>
+<style scoped lang="less" src="./Item.less"></style>

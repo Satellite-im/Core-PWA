@@ -1,6 +1,6 @@
 <template>
   <div class="list">
-    <UiListItem
+    <SettingsProfileAccountsItem
       v-for="account in accounts"
       :key="account.name"
       :account="account"
@@ -77,4 +77,10 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./List.less"></style>
+<style scoped lang="less">
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: @large-spacing;
+}
+</style>
