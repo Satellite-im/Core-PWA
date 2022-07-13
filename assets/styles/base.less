@@ -40,11 +40,22 @@ body {
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
+    background-color: @flair-color;
+    &:extend(.round-corners);
+    &:hover {
+      background: @semitransparent-white-gradient;
+    }
+  }
+  scrollbar-color: @flair-color transparent;
+  scrollbar-width: thin;
+}
+
+// only show scroll on hover
+.hover-scroll {
+  &::-webkit-scrollbar-thumb {
     background-color: transparent;
-    transition: all @animation-speed ease;
   }
   scrollbar-color: transparent transparent;
-  scrollbar-width: thin;
 
   &:hover,
   &:focus-within {
