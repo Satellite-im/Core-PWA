@@ -2,6 +2,8 @@ import { Emitter } from '@satellite-im/iridium'
 import { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
 import { ThemeKeys, FlairKeys, LanguageKeys, Settings } from './types'
+import merge from 'deepmerge'
+import { overwriteMerge } from '~/utilities/merge'
 
 const initialState: Settings = {
   theme: ThemeKeys.DEFAULT,
@@ -27,10 +29,9 @@ export default class SettingsManager extends Emitter {
   }
 
   private async fetch() {
-    this.state = {
-      ...initialState,
-      ...(await this.get()),
-    }
+    this.state = merge(initialState, await this.get(), {
+      arrayMerge: overwriteMerge,
+    })
   }
 
   get(path: string = '', options: any = {}) {
