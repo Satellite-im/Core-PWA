@@ -1,5 +1,4 @@
 import { Emitter } from '@satellite-im/iridium'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
 import {
@@ -8,6 +7,7 @@ import {
   LanguageKeys,
   Settings,
   defaultKeybinds,
+  defaultSounds,
 } from './types'
 import merge from 'deepmerge'
 import { overwriteMerge } from '~/utilities/merge'
@@ -20,17 +20,7 @@ const initialState: Settings = {
     flipLocalStream: true,
   },
   audio: {
-    sounds: {
-      [Sounds.NEW_MESSAGE]: true,
-      [Sounds.CALL]: true,
-      [Sounds.HANGUP]: true,
-      [Sounds.MUTE]: true,
-      [Sounds.UNMUTE]: true,
-      [Sounds.DEAFEN]: true,
-      [Sounds.UNDEAFEN]: true,
-      [Sounds.UPLOAD]: true,
-      [Sounds.CONNECTED]: true,
-    },
+    sounds: defaultSounds,
   },
   keybinds: defaultKeybinds,
   privacy: {

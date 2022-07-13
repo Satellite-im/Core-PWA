@@ -112,6 +112,10 @@ export type Settings = {
   }
 }
 
+export const defaultSounds = Object.fromEntries(
+  Object.keys(Sounds).map((key) => [key, true]),
+) as Record<Sounds, boolean>
+
 export enum KeybindKeys {
   TOGGLE_MUTE = 'toggleMute',
   TOGGLE_DEAFEN = 'toggleDeafen',
