@@ -21,6 +21,9 @@ export default Vue.extend({
       this.$Logger.log('Friends Watcher', 'New Friends', newFriends)
     },
   },
+  beforeDestroy() {
+    URL.revokeObjectURL(this.croppedImage)
+  },
   methods: {
     /**
      * @method toggleCropper DocsTODO

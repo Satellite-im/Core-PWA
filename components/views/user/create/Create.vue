@@ -46,6 +46,9 @@ export default Vue.extend({
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
     },
   },
+  beforeDestroy() {
+    URL.revokeObjectURL(this.croppedImage)
+  },
   methods: {
     /**
      * @method toggleCropper DocsTODO
