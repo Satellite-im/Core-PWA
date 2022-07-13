@@ -90,7 +90,7 @@ export class IridiumManager extends Emitter {
    * @method
    * Initialization function that creates a Textile identity
    * and initializes the Mailbox
-   * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
+   * @param entropy this will be tha base for the creation of the seed, it's created by signing a message containing the pin
    * @returns a promise that resolves when the initialization completes
    */
   async initFromEntropy(entropy: Uint8Array) {

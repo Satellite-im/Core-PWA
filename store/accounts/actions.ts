@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
 import {
@@ -101,7 +102,14 @@ export default {
       throw new Error(AccountsError.UNABLE_TO_CREATE_MNEMONIC)
     }
 
-    await commit('setPhrase', userWallet.mnemonic)
+    commit('setPhrase', userWallet.mnemonic)
+
+    const { pinHash } = state
+    const entropyMessage = IdentityManager.generateEntropyMessage(
+      $BlockchainClient.account.publicKey.toBase58(),
+      pinHash,
+    )
+    commit('setEntropy', entropyMessage)
 
     const encryptedPhrase = await Crypto.encryptWithPassword(
       userWallet.mnemonic,
@@ -173,23 +181,10 @@ export default {
     const payerAccount = $BlockchainClient.account
 
     if (!iridium.ready) {
-      if (state.adapter === 'Solana') {
-        console.info('initializing iridium')
-        const { pin } = state
-        await dispatch(
-          'iridium/initialize',
-          {
-            pass: pin,
-            wallet: $BlockchainClient.account,
-          },
-          { root: true },
-        )
-      } else {
-        console.info('initializing iridium')
-        const { entropyMessage } = state
-        const entropy = await $BlockchainClient.signMessage(entropyMessage)
-        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-      }
+      console.info('initializing iridium')
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      await dispatch('iridium/initializFromEntropy', entropy, { root: true })
     }
 
     commit('setActiveAccount', iridium.connector?.id)
@@ -201,7 +196,7 @@ export default {
     }
 
     console.info('user registered, dispatching')
-    dispatch('initializeEncryptionEngine', payerAccount)
+    // dispatch('initializeEncryptionEngine', payerAccount)
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
@@ -359,21 +354,10 @@ export default {
         'Loading Iridium from accounts startup',
       )
       const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-      if (state.adapter === 'Solana') {
-        const { pin } = state
-        await dispatch(
-          'iridium/initialize',
-          {
-            pass: pin,
-            wallet: $BlockchainClient.account,
-          },
-          { root: true },
-        )
-      } else {
-        const { entropyMessage } = state
-        const entropy = await $BlockchainClient.signMessage(entropyMessage)
-        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-      }
+
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      await dispatch('iridium/initializFromEntropy', entropy, { root: true })
     }
 
     await dispatch('groups/initialize', {}, { root: true })

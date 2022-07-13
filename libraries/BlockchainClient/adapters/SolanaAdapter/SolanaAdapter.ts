@@ -4,6 +4,7 @@ import {
   RpcResponseAndContext,
   SignatureResult,
 } from '@solana/web3.js'
+import nacl from 'tweetnacl'
 import {
   Account,
   Adapter,
@@ -37,8 +38,13 @@ export default class SolanaAdapter implements Adapter {
     this.usersProgram = null
   }
 
-  signMessage(message: string): Promise<Uint8Array> {
-    throw new Error('Method not implemented.')
+  async signMessage(message: string): Promise<Uint8Array> {
+    const messageBytes = Buffer.from(message, 'utf8')
+    const wallet = await this.getPayerAccount()
+    if (!wallet?.secretKey) {
+      throw new Error(AccountsError.PAYER_NOT_PRESENT)
+    }
+    return nacl.sign.detached(messageBytes, wallet?.secretKey)
   }
 
   _getConnectionStatus(): boolean {
