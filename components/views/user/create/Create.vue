@@ -6,8 +6,6 @@ import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
 import { blobToBase64 } from '~/utilities/BlobManip'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
-import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -44,25 +42,8 @@ export default Vue.extend({
     isInvalidStatus(): boolean {
       return this.status.trim().length > this.$Config.account.statusMaxLength
     },
-    /**
-     * @method acceptableImageFormats
-     * @description embeddable types plus HEIC since we can convert
-     * ios doesn't support advanced <input> accept
-     * @returns {string} comma separated list of types
-     */
-    acceptableImageFormats(): string {
-      return this.$envinfo.currentPlatform === PlatformTypeEnum.IOS
-        ? 'image/*'
-        : [
-            FILE_TYPE.APNG,
-            FILE_TYPE.AVIF,
-            FILE_TYPE.GIF,
-            FILE_TYPE.JPG,
-            FILE_TYPE.PNG,
-            FILE_TYPE.WEBP,
-            FILE_TYPE.SVG,
-            FILE_TYPE.HEIC,
-          ].join(',')
+    imageInputRef(): HTMLInputElement {
+      return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
     },
   },
   methods: {
@@ -149,11 +130,7 @@ export default Vue.extend({
      * @example
      */
     resetFileInput() {
-      const fileInputRef = this.$refs.file as HTMLInputElement
-
-      if (fileInputRef) {
-        fileInputRef.value = ''
-      }
+      this.imageInputRef.value = ''
     },
     /**
      * @method setCroppedImage

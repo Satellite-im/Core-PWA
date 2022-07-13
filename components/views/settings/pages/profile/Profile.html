@@ -41,12 +41,9 @@
               </div>
               <div class="profile-photo-column photo">
                 <div :class="['profile-photo']">
-                  <input
-                    ref="file"
-                    class="input-file"
-                    type="file"
+                  <InteractablesImageInput
+                    ref="imageInput"
                     @change="selectProfileImage"
-                    :accept="acceptableImageFormats"
                   />
                   <UiCircle
                     :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"

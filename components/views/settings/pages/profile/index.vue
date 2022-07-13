@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 import {
   EditIcon,
@@ -13,8 +13,6 @@ import {
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { ModalWindows } from '~/store/ui/types'
-import { PlatformTypeEnum } from '~/libraries/Enums/enums'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -56,25 +54,8 @@ export default Vue.extend({
     showCropper(): boolean {
       return !!this.ui.modals[ModalWindows.CROP]
     },
-    /**
-     * @method acceptableImageFormats
-     * @description embeddable types plus HEIC since we can convert
-     * ios doesn't support advanced <input> accept
-     * @returns {string} comma separated list of types
-     */
-    acceptableImageFormats(): string {
-      return this.$envinfo.currentPlatform === PlatformTypeEnum.IOS
-        ? 'image/*'
-        : [
-            FILE_TYPE.APNG,
-            FILE_TYPE.AVIF,
-            FILE_TYPE.GIF,
-            FILE_TYPE.JPG,
-            FILE_TYPE.PNG,
-            FILE_TYPE.WEBP,
-            FILE_TYPE.SVG,
-            FILE_TYPE.HEIC,
-          ].join(',')
+    imageInputRef(): HTMLInputElement {
+      return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
     },
   },
   methods: {
@@ -95,7 +76,7 @@ export default Vue.extend({
      * @example
      */
     openFileDialog() {
-      ;(this.$refs.file as HTMLElement).click()
+      this.imageInputRef.click()
     },
     /**
      * @method setCroppedImage DocsTODO
@@ -105,7 +86,7 @@ export default Vue.extend({
      */
     setCroppedImage(image: Blob) {
       this.croppedImage = URL.createObjectURL(image)
-      ;(this.$refs.file as HTMLInputElement).value = ''
+      this.imageInputRef.value = ''
       const img = new Image()
       img.src = this.croppedImage
       // TODO: Save image with iridium
