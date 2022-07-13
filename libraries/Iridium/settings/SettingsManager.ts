@@ -2,7 +2,13 @@ import { Emitter } from '@satellite-im/iridium'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
-import { ThemeKeys, FlairKeys, LanguageKeys, Settings } from './types'
+import {
+  ThemeKeys,
+  FlairKeys,
+  LanguageKeys,
+  Settings,
+  defaultKeybinds,
+} from './types'
 import merge from 'deepmerge'
 import { overwriteMerge } from '~/utilities/merge'
 
@@ -26,6 +32,7 @@ const initialState: Settings = {
       [Sounds.CONNECTED]: true,
     },
   },
+  keybinds: defaultKeybinds,
 }
 
 export default class SettingsManager extends Emitter {

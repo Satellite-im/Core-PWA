@@ -103,4 +103,19 @@ export type Settings = {
   audio: {
     sounds: { [key in Sounds]: boolean }
   }
+  keybinds: Record<KeybindKeys, string>
+}
+
+export enum KeybindKeys {
+  TOGGLE_MUTE = 'toggleMute',
+  TOGGLE_DEAFEN = 'toggleDeafen',
+  OPEN_SETTINGS = 'openSettings',
+  CALL_ACTIVE_CHAT = 'callActiveChat',
+}
+
+export const defaultKeybinds: Record<KeybindKeys, string> = {
+  [KeybindKeys.TOGGLE_MUTE]: 'alt-m',
+  [KeybindKeys.TOGGLE_DEAFEN]: 'alt-d',
+  [KeybindKeys.OPEN_SETTINGS]: 'alt-s',
+  [KeybindKeys.CALL_ACTIVE_CHAT]: 'alt-c',
 }
