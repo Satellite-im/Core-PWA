@@ -104,6 +104,12 @@ export type Settings = {
     sounds: Record<Sounds, boolean>
   }
   keybinds: Record<KeybindKeys, string>
+  privacy: {
+    embeddedLinks: boolean
+    displayCurrentActivity: boolean
+    consentToScan: boolean
+    blockNsfw: boolean
+  }
 }
 
 export enum KeybindKeys {

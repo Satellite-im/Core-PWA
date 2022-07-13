@@ -33,6 +33,12 @@ const initialState: Settings = {
     },
   },
   keybinds: defaultKeybinds,
+  privacy: {
+    embeddedLinks: true,
+    displayCurrentActivity: true,
+    consentToScan: false,
+    blockNsfw: true,
+  },
 }
 
 export default class SettingsManager extends Emitter {
