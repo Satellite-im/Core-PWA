@@ -1,0 +1,47 @@
+<div class="list-item">
+  <div class="header" :class="{'no-bottom-radius': account.isVerified}">
+    <component class="icon" :is="account.icon" size="1.3x" />
+    <div class="titles">
+      <TypographyTitle :size="6" :text="account.name" />
+      <TypographySubtitle
+        v-if="account.username"
+        :size="6"
+        :text="account.username"
+        class="username"
+      />
+    </div>
+    <InteractablesButton
+      v-if="!account.isVerified"
+      type="primary"
+      size="small"
+      :action="() => {}"
+      :text="$t('pages.settings.profile.accounts.verify')"
+    />
+    <div v-else class="controls">
+      <button class="edit-button" @click="() => {}">
+        {{$t('global.edit')}}
+      </button>
+      <button class="edit-button" @click="() => {}">
+        <x-icon size="1x" />
+      </button>
+    </div>
+  </div>
+  <div v-if="account.isVerified" class="display-details">
+    <div class="display-row">
+      <TypographyText
+        :size="6"
+        :text="$t('pages.settings.profile.accounts.displayMusic')"
+        class="music-label"
+      />
+      <InteractablesSwitch v-model="account.displayMusic" />
+    </div>
+    <div class="display-row">
+      <TypographyText
+        :size="6"
+        :text="$t('pages.settings.profile.accounts.displayOnProfile')"
+        class="music-label"
+      />
+      <InteractablesSwitch v-model="account.displayOnProfile" />
+    </div>
+  </div>
+</div>

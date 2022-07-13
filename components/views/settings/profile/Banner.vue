@@ -1,7 +1,7 @@
 <template>
   <div class="img-container">
     <img
-      :v-if="url"
+      v-if="url"
       :src="url"
       :class="`${!bannerUrlExists ? 'img-default' : ''}`"
     />
