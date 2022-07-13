@@ -19,11 +19,9 @@
     padding: @normal-spacing;
     background: @midground-alt;
     &:extend(.round-corners);
-    &:extend(.ellipsis);
-
     .transition(background, @animation-speed, ease-in-out);
 
-    .no-bottom-radius {
+    &.no-bottom-radius {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
