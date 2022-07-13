@@ -124,6 +124,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const request = await this.getRequest(did).catch(() => undefined)
     if (!request && status === 'pending') {
       await this.requestCreate(did, true, user)
+    } else if (request && status === 'rejected') {
+      await this.removeUserData(did, request, true)
     } else if (request) {
       request.status = status
       await this.requestSave(did, request, true)
@@ -262,6 +264,29 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     return this.send(payload)
   }
 
+  async removeUserData(did: string, request: FriendRequest, incoming = false) {
+    const friend = this.getFriend(did)
+    request.status = 'rejected'
+
+    if (!friend) {
+      return this.requestSave(did, request, incoming)
+    }
+
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+
+    const list = this.state?.list?.filter((f) => f !== did)
+    const detailsList = Object.fromEntries(
+      Object.entries(this.state?.details || []).filter(([key]) => key !== did),
+    )
+
+    await this.set('/list', list)
+    await this.set(`/details`, detailsList)
+
+    return this.requestSave(did, request, incoming)
+  }
+
   async requestSetUserData(remotePeerDID: string, user: User) {
     const request = await this.getRequest(remotePeerDID)
     if (!request) {
@@ -324,13 +349,27 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   async remove(friendId: string) {
-    const friend = await this.getFriend(friendId)
-    if (!friend) {
-      throw new Error('friend not found')
+    if (!this.iridium.connector) {
+      throw new Error(FriendsError.NETWORK_ERROR)
     }
-    const list = this.state?.list?.filter((f) => f !== friendId)
-    await this.set('/list', list)
-    await this.set(`/details/${friendId}`, null)
+    const request = await this.getRequest(friendId)
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+
+    this.removeUserData(friendId, request, request.incoming)
+
+    request.status = 'rejected'
+    const payload = {
+      to: friendId,
+      ...request,
+    }
+    logger.info('iridium/friends', 'removing friend', {
+      friendId,
+      payload,
+    })
+
+    return this.send(payload)
   }
 
   isRequest(data: object): data is FriendRequest {
