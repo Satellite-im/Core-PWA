@@ -6,16 +6,12 @@
   &:hover {
     .header {
       background: @foreground;
-      transition: background @animation-speed ease-in-out;
-      -moz-transition: background @animation-speed ease-in-out;
-      -webkit-transition: background @animation-speed ease-in-out;
+      .transition(background, @animation-speed, ease-in-out);
 
       .right {
         .controls {
           opacity: 1;
-          transition: opacity @animation-speed ease-in-out;
-          -moz-transition: opacity @animation-speed ease-in-out;
-          -webkit-transition: opacity @animation-speed ease-in-out;
+          .transition(opacity, @animation-speed, ease-in-out);
         }
       }
     }
@@ -36,10 +32,7 @@
   .header {
     background: @midground-alt;
     &:extend(.round-corners);
-
-    transition: background @animation-speed ease-in-out;
-    -moz-transition: background @animation-speed ease-in-out;
-    -webkit-transition: background @animation-speed ease-in-out;
+    .transition(background, @animation-speed, ease-in-out);
 
     &-no-bottom-radius {
       border-bottom-left-radius: 0;
@@ -73,9 +66,7 @@
         display: flex;
         gap: @normal-spacing;
         opacity: 0;
-        transition: opacity @animation-speed ease-in-out;
-        -moz-transition: opacity @animation-speed ease-in-out;
-        -webkit-transition: opacity @animation-speed ease-in-out;
+        .transition(opacity, @animation-speed, ease-in-out);
 
         .edit-button {
           display: flex;
@@ -108,25 +99,5 @@
     .row {
       padding: 0;
     }
-  }
-}
-
-@-webkit-keyframes fadeinout {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeinout {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
   }
 }
