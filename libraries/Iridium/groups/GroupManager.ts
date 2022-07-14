@@ -4,7 +4,6 @@ import * as json from 'multiformats/codecs/json'
 import { IridiumManager } from '../IridiumManager'
 import Group from './Group'
 import { GroupConfig, GroupData, GroupsError } from './types'
-import logger from '~/plugins/local/logger'
 
 export default class GroupManager extends Emitter<IridiumMessage> {
   groupIds?: string[]
@@ -12,10 +11,19 @@ export default class GroupManager extends Emitter<IridiumMessage> {
 
   constructor(private readonly iridium: IridiumManager) {
     super()
+    this.iridium = iridium
   }
 
   async init() {
-    logger.log('iridium/groups', 'init()')
+    const iridium = this.iridium.connector
+    if (!iridium) {
+      throw new Error('cannot initialize groups, no iridium connector')
+    }
+
+    await this.fetch()
+  }
+
+  private async fetch() {
     this.state = await this.iridium.connector?.get('/groups')
   }
 

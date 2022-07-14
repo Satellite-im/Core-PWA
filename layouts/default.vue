@@ -1,19 +1,22 @@
 <template>
-  <div id="app" :class="$store.state.ui.theme.base.class">
+  <div id="app" :class="`theme-${iridium.settings.state.theme}`">
     <UiModal v-if="$store.state.ui.modals.errorNetwork.isOpen" nopad>
       <UiPopupsErrorNetwork />
     </UiModal>
     <Nuxt />
     <v-style>
-      :root { --flair-color: {{ $store.state.ui.theme.flair.value[0] }};
-      --flair-color-secondary: {{ $store.state.ui.theme.flair.value[1] }};
-      --flair-color-rgb:{{ $store.state.ui.theme.flair.value[2] }};}
+      :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
+      {{ flair.secondary }}; --flair-color-rgb: {{ flair.primaryRGB }}; }
     </v-style>
   </div>
 </template>
 
 <script setup lang="ts">
 import useMeta from '~/components/compositions/useMeta'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { flairs } from '~/libraries/Iridium/settings/types'
+
+const flair = flairs[iridium.settings.state.flair]
 
 useMeta()
 </script>

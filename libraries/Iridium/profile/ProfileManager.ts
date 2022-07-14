@@ -9,10 +9,19 @@ export default class IridiumProfile extends Emitter {
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
-    this.iridium.connector?.on('state:changed', this.onStateChanged.bind(this))
   }
 
-  async load() {
+  async init() {
+    const iridium = this.iridium.connector
+    if (!iridium) {
+      throw new Error('cannot initialize profile, no iridium connector')
+    }
+
+    iridium.on('state:changed', this.onStateChanged.bind(this))
+    await this.fetch()
+  }
+
+  private async fetch() {
     this.state = await this.iridium.connector?.get('/profile')
     // TODO: verify schema of profile data, recover from invalid data
   }

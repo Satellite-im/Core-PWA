@@ -10,6 +10,7 @@ import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
 import { AlertState, AlertType } from '~/libraries/ui/Alerts'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 const $Sounds = new SoundManager()
 
@@ -45,10 +46,10 @@ export default {
    * @description Activates all keybindings with Mousetrap
    * @example mounted (){ activateKeybinds() }
    */
-  async activateKeybinds({ dispatch, rootState }: ActionsArguments<UIState>) {
+  async activateKeybinds({ dispatch }: ActionsArguments<UIState>) {
     const { toggleMute, toggleDeafen, openSettings, callActiveChat } =
       // @ts-ignore
-      rootState.settings.keybinds
+      iridium.settings.state.keybinds
     Mousetrap.reset()
     Mousetrap.bind(getCorrectKeybind(toggleMute), (event: KeyboardEvent) => {
       event.preventDefault()

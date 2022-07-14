@@ -2,7 +2,7 @@
   <div
     id="app-wrap"
     :class="[
-      $store.state.ui.theme.base.class,
+      `theme-${settings.theme}`,
       showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed',
     ]"
   >
@@ -57,8 +57,8 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
-      {{ flairColor[1] }}; --flair-color-rgb:{{ flairColor[2] }};}
+      :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
+      {{ flair.secondary }}; --flair-color-rgb: {{ flair.primaryRGB }}; }
     </v-style>
   </div>
 </template>
@@ -70,6 +70,8 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
 
 export default Vue.extend({
   name: 'ChatLayout',
@@ -84,6 +86,7 @@ export default Vue.extend({
   data() {
     return {
       sidebar: !this.$device.isMobile,
+      settings: iridium.settings.state,
       swiperOption: {
         resistanceRatio: 0,
         slidesPerView: 'auto',
@@ -116,8 +119,8 @@ export default Vue.extend({
   },
 
   computed: {
-    flairColor() {
-      return this.$store.state.ui.theme.flair.value
+    flair(): Flair {
+      return flairs[((this as any).settings as Settings).flair]
     },
     ...mapState(['friends', 'groups', 'dataState']),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),

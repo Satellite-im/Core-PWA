@@ -5,116 +5,110 @@
       <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
     </SettingsUnit>
   </SettingsSection>
-  <UiLoadersGenericContent :count="3" v-if="!getInitialized" />
-  <template v-else>
-    <SettingsSection>
-      <SettingsUnit
-        :title="$t('pages.privacy.register.title')"
-        :text="$t('pages.privacy.register.subtitle')"
-      >
-        <InteractablesSwitch isLocked v-model="registry" />
-      </SettingsUnit>
-      <SettingsUnit
-        :title="$t('pages.privacy.pin.title')"
-        :text="$t('pages.privacy.pin.subtitle')"
-      >
-        <InteractablesSwitch v-model="storePin" />
-      </SettingsUnit>
-    </SettingsSection>
-    <SettingsSection>
-      <SettingsUnit
-        :title="$t('pages.privacy.embeds.title')"
-        :text="$t('pages.privacy.embeds.subtitle')"
-      >
-        <InteractablesSwitch v-model="embeddedLinks" />
-      </SettingsUnit>
-      <SettingsUnit
-        :title="$t('pages.privacy.activity.title')"
-        :text="$t('pages.privacy.activity.subtitle')"
-      >
-        <InteractablesSwitch v-model="displayCurrentActivity" />
-      </SettingsUnit>
-    </SettingsSection>
-    <SettingsSection>
-      <SettingsUnit
-        :title="$t('pages.privacy.consentScan.title')"
-        :text="$t('pages.privacy.consentScan.subtitle')"
-      >
-        <InteractablesSwitch
-          v-model="consentScan"
-          :isLocked="loading.includes('consentScan')"
-        />
-      </SettingsUnit>
-      <SettingsUnit
-        :title="$t('pages.privacy.nsfw.title')"
-        :text="$t('pages.privacy.nsfw.subtitle')"
-      >
-        <InteractablesSwitch
-          v-model="blockNsfw"
-          :isLocked="loading.includes('blockNsfw')"
-        />
-      </SettingsUnit>
-    </SettingsSection>
-    <TypographyText
-      v-if="loading.length"
-      :text="$t('pages.privacy.updating')"
-    />
-    <!-- <SettingsSection>
-      <SettingsUnit
-        :title="$t('pages.privacy.serverType.title')"
-        :text="$t('pages.privacy.serverType.subtitle')"
-      >
-        <InteractablesSelect
-          v-model="serverType"
-          :options="serverTypes"
-          class="form-control"
-        />
-      </SettingsUnit>
-    </SettingsSection> -->
-
-    <SettingsSection
-      v-if="serverType === 'own'"
-      class="columns is-desktop ownInfo-input-part"
+  <SettingsSection>
+    <SettingsUnit
+      :title="$t('pages.privacy.register.title')"
+      :text="$t('pages.privacy.register.subtitle')"
     >
-      <SettingsUnit
-        :title="$t('pages.privacy.ownInfo.title')"
-        :text="$t('pages.privacy.ownInfo.subtitle')"
-      >
-        <InteractablesInput
-          v-model="ownInfo"
-          type="dark"
-          size="small"
-          :placeholder="$t('pages.privacy.ownInfo.placeholder')"
-          class="ownInfo-input"
-        />
+      <InteractablesSwitch isLocked v-model="registry" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.pin.title')"
+      :text="$t('pages.privacy.pin.subtitle')"
+    >
+      <InteractablesSwitch v-model="storePin" />
+    </SettingsUnit>
+  </SettingsSection>
+  <SettingsSection>
+    <SettingsUnit
+      :title="$t('pages.privacy.embeds.title')"
+      :text="$t('pages.privacy.embeds.subtitle')"
+    >
+      <InteractablesSwitch v-model="embeddedLinks" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.activity.title')"
+      :text="$t('pages.privacy.activity.subtitle')"
+    >
+      <InteractablesSwitch v-model="displayCurrentActivity" />
+    </SettingsUnit>
+  </SettingsSection>
+  <SettingsSection>
+    <SettingsUnit
+      :title="$t('pages.privacy.consentScan.title')"
+      :text="$t('pages.privacy.consentScan.subtitle')"
+    >
+      <InteractablesSwitch
+        v-model="consentScan"
+        :isLocked="loading.includes('consentScan')"
+      />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.nsfw.title')"
+      :text="$t('pages.privacy.nsfw.subtitle')"
+    >
+      <InteractablesSwitch
+        v-model="blockNsfw"
+        :isLocked="loading.includes('blockNsfw')"
+      />
+    </SettingsUnit>
+  </SettingsSection>
+  <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
+  <!-- <SettingsSection>
+    <SettingsUnit
+      :title="$t('pages.privacy.serverType.title')"
+      :text="$t('pages.privacy.serverType.subtitle')"
+    >
+    <InteractablesSelect
+      v-model="serverType"
+      :options="serverTypes"
+      class="form-control"
+    />
+    </SettingsUnit>
+  </SettingsSection> -->
+
+  <SettingsSection
+    v-if="serverType === 'own'"
+    class="columns is-desktop ownInfo-input-part"
+  >
+    <SettingsUnit
+      :title="$t('pages.privacy.ownInfo.title')"
+      :text="$t('pages.privacy.ownInfo.subtitle')"
+    >
+      <InteractablesInput
+        v-model="ownInfo"
+        type="dark"
+        size="small"
+        :placeholder="$t('pages.privacy.ownInfo.placeholder')"
+        class="ownInfo-input"
+      />
+      <TypographyText
+        class="color-danger"
+        type="danger"
+        :size="6"
+        :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
+        v-if="lengthError"
+      />
+      <span v-if="formatError">
         <TypographyText
           class="color-danger"
           type="danger"
           :size="6"
-          :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
-          v-if="lengthError"
+          :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
         />
-        <span v-if="formatError">
-          <TypographyText
-            class="color-danger"
-            type="danger"
-            :size="6"
-            :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
-          />
-          <TypographyText
-            class="color-danger ml-3"
-            type="danger"
-            :size="6"
-            :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
-          />
-          <TypographyText
-            class="color-danger ml-3"
-            type="danger"
-            :size="6"
-            :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
-          />
-        </span>
-      </SettingsUnit>
-    </SettingsSection>
-  </template>
+        <TypographyText
+          class="color-danger ml-3"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
+        />
+        <TypographyText
+          class="color-danger ml-3"
+          type="danger"
+          :size="6"
+          :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
+        />
+      </span>
+    </SettingsUnit>
+  </SettingsSection>
 </SettingsPage>

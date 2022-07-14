@@ -168,7 +168,6 @@
       </span>
     </SettingsUnit>
     <SettingsUnit
-      v-if="getInitialized"
       :title="$t('pages.settings.video.flipVideo.title')"
       :text="$t('pages.settings.video.flipVideo.subtitle')"
     >
@@ -177,7 +176,6 @@
         :isLocked="loading.includes('flipVideo')"
       />
     </SettingsUnit>
-    <UiLoadersGenericContent class="column unit" :count="1" v-else />
   </SettingsSection>
 
   <!-- Screen Share -->
