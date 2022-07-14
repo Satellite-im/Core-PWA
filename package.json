@@ -115,7 +115,7 @@
     "@commitlint/config-conventional": "^12.0.1",
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "@nuxt/types": "^2.15.8",
-    "@nuxtjs/eslint-config-typescript": "^8.0.0",
+    "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@types/ed2curve": "^0.2.2",
     "@types/howler": "^2.2.5",
     "@types/jest": "^27.4.1",
