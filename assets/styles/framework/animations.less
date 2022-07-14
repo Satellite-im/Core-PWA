@@ -21,6 +21,14 @@
   transform: translateY(100%);
 }
 
+.animation(@value) {
+  -webkit-animation: @value;
+  -moz-animation: @value;
+  -o-animation: @value;
+  -ms-transition: @value;
+  animation: @value;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(0.95);
@@ -139,56 +147,46 @@
   }
 }
 
-@-webkit-keyframes typing {
-  0% {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  25% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  75% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 1);
-  }
-}
-
-@-moz-keyframes typing {
-  0% {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  25% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  75% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 1);
-  }
-}
-
 @keyframes typing {
   0% {
     background: rgba(255, 255, 255, 1);
     box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
       20px 0px 0px 0px rgba(255, 255, 255, 0.2);
   }
-  25% {
+  50% {
     background: rgba(255, 255, 255, 0.4);
     box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 2),
       20px 0px 0px 0px rgba(255, 255, 255, 0.2);
   }
-  75% {
+  100% {
     background: rgba(255, 255, 255, 0.4);
     box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
       20px 0px 0px 0px rgba(255, 255, 255, 1);
   }
+}
+
+.typing-animation {
+  .animation(typing 1s linear infinite alternate);
+}
+
+@keyframes typingState {
+  0% {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 8px 0px 0px 0px rgba(255, 255, 255, 0.2),
+      16px 0px 0px 0px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 8px 0px 0px 0px rgba(255, 255, 255, 2),
+      16px 0px 0px 0px rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 8px 0px 0px 0px rgba(255, 255, 255, 0.2),
+      16px 0px 0px 0px rgba(255, 255, 255, 1);
+  }
+}
+
+.typing-state-animation {
+  .animation(typingState 1s linear infinite alternate);
 }
