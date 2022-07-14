@@ -49,6 +49,7 @@ export class IridiumManager extends Emitter {
       logger,
       config: {
         syncNodes: Config.iridium.syncNodes,
+        ipfs: Config.iridium.ipfs,
       },
     })
 
