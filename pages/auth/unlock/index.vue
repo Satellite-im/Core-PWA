@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { RootState } from '~/types/store/store'
@@ -17,10 +17,9 @@ export default Vue.extend({
   data() {
     return {
       pin: '',
+      status: 'idle' as 'idle' | 'loading',
       error: '',
-      decrypting: false,
-      peer: null,
-      showChangeLog: false,
+      step: 'signup' as 'signup' | 'login',
     }
   },
   computed: {
@@ -36,6 +35,21 @@ export default Vue.extend({
         return !this.accounts ? false : this.accounts.storePin
       },
     },
+  },
+  watch: {
+    error(newValue) {
+      if (newValue !== '' && this.status !== 'idle') {
+        this.status = 'idle'
+      }
+    },
+    status(newValue) {
+      if (newValue === 'loading' && this.error !== '') {
+        this.error = ''
+      }
+    },
+  },
+  beforeMount() {
+    if (this.accounts.pinHash) this.step = 'login'
   },
   mounted() {
     // This information can be useful for users to help us find and report bugs.
@@ -75,16 +89,13 @@ export default Vue.extend({
      * @example
      */
     async decrypt() {
-      this.decrypting = true
-      this.error = ''
-
       try {
         await this.$store.dispatch('accounts/unlock', this.pin)
 
         if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
           try {
-            await this.$store.dispatch('settings/clearLocalStorage')
+            await this.deleteAccount()
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
@@ -96,8 +107,6 @@ export default Vue.extend({
         this.error = error.message
         this.pin = ''
       }
-
-      this.decrypting = false
     },
     // Create & store a new pin, then decrypt.
     /**
@@ -115,7 +124,10 @@ export default Vue.extend({
     },
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
-      location.reload()
+    },
+    action() {
+      this.status = 'loading'
+      return this.step === 'login' ? this.decrypt() : this.create()
     },
   },
 })
