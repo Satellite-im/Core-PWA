@@ -56,7 +56,10 @@ export default class SettingsManager extends Emitter {
   }
 
   set(path: string = '', payload: any, options: any = {}) {
-    setInObject(this.state, path, payload)
+    const didSet = setInObject(this.state, path, payload)
+    if (!didSet) {
+      return
+    }
     return this.iridium.connector?.set(`/settings${path}`, payload, options)
   }
 }
