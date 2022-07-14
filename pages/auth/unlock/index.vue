@@ -14,17 +14,12 @@ export default Vue.extend({
     ChevronRightIcon,
     InfoIcon,
   },
-  data(): {
-    pin: string
-    status: 'idle' | 'loading'
-    error: ''
-    step: 'signup' | 'login'
-  } {
+  data() {
     return {
       pin: '',
-      status: 'idle',
+      status: 'idle' as 'idle' | 'loading',
       error: '',
-      step: 'signup',
+      step: 'signup' as 'signup' | 'login',
     }
   },
   computed: {
