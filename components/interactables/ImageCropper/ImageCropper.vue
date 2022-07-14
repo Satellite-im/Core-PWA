@@ -46,6 +46,9 @@ export default Vue.extend({
 
       this.$emit('toggle-cropper')
     },
+    close() {
+      this.$emit('toggle-cropper')
+    },
   },
 })
 </script>

@@ -4,7 +4,7 @@
 import { MenuIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SettingsRoutes, ModalWindows } from '~/store/ui/types'
+import { SettingsRoutes } from '~/store/ui/types'
 
 type Swiper = {
   $swiper: {
