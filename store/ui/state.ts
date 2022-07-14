@@ -1,4 +1,5 @@
 import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
@@ -62,6 +63,10 @@ const InitialUIState = (): UIState => ({
   editMessage: { id: '', from: '', payload: '' },
   mostEmojiUsed: [],
   recentGlyphs: [],
+  filesUploadStatus: '',
+  renameItem: undefined,
+  filePreview: undefined,
+  fileDownloadList: [],
   chatImageOverlay: undefined,
   swiperSlideIndex: 0,
 })
