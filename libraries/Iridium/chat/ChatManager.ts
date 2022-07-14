@@ -88,6 +88,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversation/${conversationId}`, payload)
   }
 
+  hasConversation(id: string) {
+    return this.state.conversations.includes(id)
+  }
+
   async createConversation(
     name: string,
     type: 'group' | 'direct',
@@ -135,9 +139,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (!conversation) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
+
     this.state.conversation[id] = conversation
     this.emit(`conversation/${id}`, conversation)
+
+    await this.subscribeToChannel(id)
+    // this.emit(`conversations`, this.state.conversations)
     return conversation
+  }
+
+  async loadMessages(id: string) {
+    if (id && this.hasConversation(id)) {
+      return Object.values(this.state.conversation[id]?.message)
+    }
   }
 
   /**
@@ -198,12 +212,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       action: 'message',
       message: messageCID,
     })
+
+    const pids = await Promise.all(
+      conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+    )
     await this.iridium.connector.send(
       { type: 'chat/message', conversationId: id, messageCID },
       {
-        to: await Promise.all(
-          conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
-        ),
+        to: pids,
       },
     )
     this.emit(`conversation/${id}`, {
@@ -219,15 +235,28 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @param did {string} did
    * @param onMessage {EmitterCallback<IridiumMessage>} function to be called
    */
-  async subscribeToChannel(
-    did: string,
-    onMessage: EmitterCallback<ConversationMessage>,
-  ) {
+  async subscribeToChannel(did: string) {
     const pid = await Iridium.DIDToPeerId(did)
-    if (this.iridium.connector._peers[pid])
+    if (this.iridium.connector?._peers[pid])
       this.iridium.connector.on(
         this.iridium.connector._peers[pid].channel,
-        onMessage,
+        async (event: any) => {
+          const { messageCID, type } = event.payload
+          if (messageCID && type === 'chat/message') {
+            const message = await this.iridium.connector.load(messageCID, {
+              decrypt: true,
+            })
+            await this.iridium.connector.set(
+              `/chat/conversation/${did}/message/${messageCID}`,
+              message,
+            )
+            this.emit(`conversation/${did}`, {
+              action: 'message',
+              message: messageCID,
+              from: this.iridium.connector.id,
+            })
+          }
+        },
       )
   }
 }

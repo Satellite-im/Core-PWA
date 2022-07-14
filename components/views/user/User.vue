@@ -164,10 +164,16 @@ export default Vue.extend({
         return
       }
 
-      await iridium.chat?.createConversation(this.user?.name, 'direct', [
-        this.user?.did,
-        iridium.connector.id,
-      ])
+      if (await iridium.chat?.hasConversation(this.user.did)) {
+        await iridium.chat?.getConversation(this.user?.did)
+      }
+
+      if (!(await iridium.chat?.hasConversation(this.user?.did))) {
+        await iridium.chat?.createConversation(this.user?.name, 'direct', [
+          this.user?.did,
+          iridium.connector.id,
+        ])
+      }
 
       // this.$store.dispatch('conversation/setConversation', {
       //   id: this.user.did,
