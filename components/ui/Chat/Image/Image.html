@@ -1,5 +1,9 @@
 <div class="image">
-  <figure class="image-placeholder" v-if="usePlaceholder">
+  <figure
+    class="image-placeholder"
+    :style="{ width: `${image.width}px`, height: `${image.height}px` }"
+    v-if="usePlaceholder"
+  >
     <img
       class="image-placeholder-img"
       data-cy="chat-image-placeholder"
@@ -13,13 +17,19 @@
       {{placeholderText}}
     </figcaption>
   </figure>
-  <div v-else class="image-container">
+  <div
+    v-else
+    class="image-container"
+    :style="{ width: `${image.width}px`, height: `${image.height}px` }"
+  >
+    <div v-if="loading" class="image-loader" />
     <img
       class="is-image"
-      :class="{'blur-image' : image.nsfw && blockNsfw}"
+      :class="[{'blur-image': image.nsfw && blockNsfw }, {'hidden': loading}]"
       :src="image.url"
       @click="clickHandler"
       @error="onImageError"
+      @load="onImageLoad"
       data-cy="chat-image"
     />
   </div>

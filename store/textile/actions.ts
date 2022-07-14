@@ -470,6 +470,8 @@ export default {
             size: file.file.size,
             type: file.file.type,
             nsfw: file.nsfw,
+            width: file.width,
+            height: file.height,
           },
           type: 'file',
         },
@@ -659,7 +661,21 @@ export default {
    */
   async sendGlyphMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { to, src, pack }: { to: string; src: string; pack: string },
+    {
+      to,
+      src,
+      pack,
+      width,
+      height,
+      sizeType,
+    }: {
+      to: string
+      src: string
+      pack: string
+      width: number
+      height: number
+      sizeType: string
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -681,7 +697,7 @@ export default {
       friend.textilePubkey,
       {
         to: friend.textilePubkey,
-        payload: src,
+        payload: { src, width, height, sizeType },
         pack,
         type: 'glyph',
       },
@@ -692,7 +708,10 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    await dispatch('storeMessage', { address: friend.address, message: result })
+    await dispatch('storeMessage', {
+      address: friend.address,
+      message: result,
+    })
 
     commit('setMessageLoading', { loading: false })
   },
@@ -944,7 +963,21 @@ export default {
    */
   async sendGroupGlyphMessage(
     { commit, rootState, dispatch }: ActionsArguments<TextileState>,
-    { groupID, src, pack }: { groupID: string; src: string; pack: string },
+    {
+      groupID,
+      src,
+      pack,
+      width,
+      height,
+      sizeType,
+    }: {
+      groupID: string
+      src: string
+      pack: string
+      width: number
+      height: number
+      sizeType: string
+    },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
 
@@ -967,6 +1000,9 @@ export default {
       payload: src,
       pack,
       type: 'glyph',
+      width,
+      height,
+      sizeType,
     })
 
     dispatch('addMessageToConversation', {
@@ -974,7 +1010,10 @@ export default {
       sender: MessageRouteEnum.OUTBOUND,
       message: result,
     })
-    dispatch('storeMessage', { address: groupID, message: result })
+    dispatch('storeMessage', {
+      address: groupID,
+      message: result,
+    })
 
     commit('setMessageLoading', { loading: false })
   },
@@ -1028,6 +1067,8 @@ export default {
           size: file.file.size,
           type: file.file.type,
           nsfw: file.nsfw,
+          width: file.width,
+          height: file.height,
         },
         type: 'file',
       })

@@ -3,30 +3,69 @@
   border-radius: @corner-rounding;
 
   .image-container {
+    max-width: 400px;
     overflow: hidden;
-    max-width: 300px;
+    &:extend(.flex-centered);
+
+    .image-loader {
+      width: @full;
+      height: @full;
+      position: relative;
+      overflow: hidden;
+      background: rgba(36, 40, 57, 0.5);
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -150px;
+        top: 0;
+        height: @full;
+        width: 75%;
+        background: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(34, 44, 63, 0.5) 50%,
+          transparent 100%
+        );
+        animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+    }
+
     .is-image {
       cursor: pointer;
       width: @full;
+      height: @full;
       object-fit: cover;
-      max-width: 300px;
       &:extend(.round-corners);
       &:extend(.no-select);
+      visibility: visible;
+
+      &.hidden {
+        visibility: hidden;
+      }
     }
   }
 
   &-placeholder {
-    text-align: center;
     max-width: 200px;
+    flex-direction: column;
+    &:extend(.flex-centered);
     &:extend(.no-select);
     pointer-events: none;
+
     &-img {
-      padding: @normal-spacing;
+      flex: 1;
+      height: auto;
+      min-height: 0;
     }
+
     &-caption {
+      flex: 0 1 auto;
       color: @secondary-text;
       font-family: @primary-font;
       font-size: @mini-text-size;
+      text-align: center;
     }
   }
 }

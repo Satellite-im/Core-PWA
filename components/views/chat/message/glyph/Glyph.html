@@ -1,9 +1,15 @@
-<div>
+<div
+  class="image-container"
+  :style="{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }"
+>
+  <div v-if="loading" class="image-loader" />
   <img
     class="glyph"
+    :class="{'hidden': loading}"
     :src="getSource"
     data-cy="chat-glyph"
     alt=""
     @click="openModal"
+    @load="onImageLoad"
   />
 </div>

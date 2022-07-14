@@ -1,26 +1,42 @@
 <template src="./Glyph.html" />
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+
+import { getGlyphSource } from '~/utilities/ImageSize'
 
 export default Vue.extend({
   props: {
-    source: {
-      type: String,
-      default: '',
+    message: {
+      type: Object as PropType<any>,
+      required: true,
     },
     pack: {
       type: String,
       default: '',
     },
   },
+  data() {
+    return {
+      loading: true,
+    }
+  },
   computed: {
     ...mapState(['ui']),
     getSource(): string {
-      if (this.source.includes('/$1/')) {
-        return this.source.replace('$1', 'small')
+      return getGlyphSource({
+        source: this.message.src ?? this.message,
+        sizeType:
+          this.message.sizeType ?? this.$Config.chat.glyphDimensions.base.type,
+      })
+    },
+    dimensions(): { width: number; height: number } {
+      return {
+        width:
+          this.message.width ?? this.$Config.chat.glyphDimensions.base.width,
+        height:
+          this.message.height ?? this.$Config.chat.glyphDimensions.base.height,
       }
-      return this.source
     },
   },
   methods: {
@@ -30,6 +46,9 @@ export default Vue.extend({
         state: !this.ui.modals.glyph,
       })
       this.$store.commit('ui/setGlyphModalPack', this.pack)
+    },
+    onImageLoad() {
+      this.loading = false
     },
   },
 })

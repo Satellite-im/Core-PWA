@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
+import { getGlyphSource, getSizeFromAspectRatio } from '~/utilities/ImageSize'
 import { Glyph } from '~/types/ui/glyph'
 import loadImg from '~/assets/img/glyphLoader.webp'
 
@@ -54,27 +55,41 @@ export default Vue.extend({
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
     },
-    sendGlyph() {
+    async sendGlyph() {
       const { id, address } = this.$route.params
       const activeFriend = this.findFriendByAddress(address)
+
+      // At the moment is hard coded but in the future the size type should be dynamic to let the user choose the size of the glyph
+      const sizeType = 'small'
 
       if (!activeFriend && !id) {
         return
       }
+
+      const glyphBlob = await fetch(
+        getGlyphSource({ source: this.src, sizeType }),
+      ).then((image) => image.blob())
+
+      const size = await getSizeFromAspectRatio(glyphBlob)
 
       if (id) {
         this.$store.dispatch('textile/sendGroupGlyphMessage', {
           groupID: id,
           src: this.src,
           pack: this.pack.name,
+          ...size,
+          sizeType,
         })
       } else {
         this.$store.dispatch('textile/sendGlyphMessage', {
           to: activeFriend?.textilePubkey,
           src: this.src,
           pack: this.pack.name,
+          ...size,
+          sizeType,
         })
       }
+
       this.$store.commit('ui/updateRecentGlyphs', {
         pack: this.pack,
         url: this.src,
