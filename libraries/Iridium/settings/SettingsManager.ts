@@ -1,4 +1,5 @@
 import { Emitter } from '@satellite-im/iridium'
+import merge from 'deepmerge'
 import { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
 import {
@@ -9,7 +10,6 @@ import {
   defaultKeybinds,
   defaultSounds,
 } from './types'
-import merge from 'deepmerge'
 import { overwriteMerge } from '~/utilities/merge'
 
 const initialState: Settings = {
