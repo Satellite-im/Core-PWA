@@ -29,7 +29,7 @@ Array [
         "payload": Object {
           "filename": "satellite.tar.gz",
           "size": 19203,
-          "src": "https://satellite.mypinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
+          "src": "https://satellite.infura-ipfs.io/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
           "type": "application/tar",
         },
         "reactions": Array [],
@@ -88,7 +88,7 @@ Array [
         "payload": Object {
           "filename": "satellite.tar.gz",
           "size": 19203,
-          "src": "https://satellite.mypinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
+          "src": "https://satellite.infura-ipfs.io/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
           "type": "application/tar",
         },
         "pinned": true,
@@ -249,7 +249,7 @@ Array [
         "payload": Object {
           "author": "Test Audio",
           "filename": "breakaway.mp3",
-          "src": "https://satellite.mypinata.cloud/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
+          "src": "https://satellite.infura-ipfs.io/ipfs/QmTm39rhwcPYMFc788KVBxtM7UNaxoucovFyY21gsmFqz9",
           "title": "Break Away",
         },
         "reactions": Array [

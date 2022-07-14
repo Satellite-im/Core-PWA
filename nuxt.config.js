@@ -170,7 +170,7 @@ export default defineNuxtConfig({
       // enabled: true,
       runtimeCaching: [
         {
-          urlPattern: 'https://satellite.mypinata.cloud/ipfs/*',
+          urlPattern: 'https://satellite.infura-ipfs.io/ipfs/*',
           handler: 'StaleWhileRevalidate',
           method: 'GET',
           strategyOptions: {
