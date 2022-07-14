@@ -16,6 +16,26 @@ export const Config = {
           '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
       },
     ],
+    ipfs: {
+      config: {
+        Addresses: {
+          API: '/dns4/ipfs.infura.io/tcp/5001/https',
+          Gateway: '/dns4/satellite.infura-ipfs.io/tcp/443/https',
+          RemotePinning: ['/dns4/satellite.infura-ipfs.io/tcp/443/https'],
+          Swarm: [
+            '/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star',
+            '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
+            '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
+          ],
+        },
+        Bootstrap: [
+          '/ip4/127.0.0.1/tcp/15003/ws/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
+          '/ip4/127.0.0.1/tcp/8000/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
+          '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
+          '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
+        ],
+      },
+    },
   },
   textile: {
     localURI: 'http://localhost:6007',
