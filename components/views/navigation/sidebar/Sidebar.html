@@ -74,7 +74,7 @@
             v-if="ui.unreadMessage.length"
             :text="$t('messaging.new_messages')"
           />
-          <div v-for="thing in usersAndGroups">
+          <div v-for="thing in getSortedFriendsAndGroups">
             <User
               v-if="!thing.admin"
               :key="thing.address"

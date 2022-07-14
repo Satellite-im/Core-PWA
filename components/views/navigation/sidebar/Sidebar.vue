@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import {
   UsersIcon,
   UserPlusIcon,
@@ -14,7 +14,6 @@ import {
 } from 'satellite-lucide-icons'
 
 import { DataStateType } from '~/store/dataState/types'
-import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
@@ -55,19 +54,7 @@ export default Vue.extend({
       conversations: (state) =>
         (state as RootState).textile.conversations || [],
     }),
-    usersAndGroups() {
-      const combined = [...this.friends.all, ...this.groups.all]
-      return combined.sort((a, b) => b.lastUpdate - a.lastUpdate)
-    },
-  },
-  watch: {
-    conversations: {
-      handler(newValue) {
-        this.sortUserList(newValue)
-      },
-      deep: true,
-      immediate: true,
-    },
+    ...mapGetters('textile', ['getSortedFriendsAndGroups']),
   },
   methods: {
     toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {
@@ -90,9 +77,6 @@ export default Vue.extend({
       } else {
         this.$router.push({ path: '/friends/list' })
       }
-    },
-    sortUserList(conversations: Conversation) {
-      this.$store.commit('friends/sortFriends', conversations)
     },
   },
 })

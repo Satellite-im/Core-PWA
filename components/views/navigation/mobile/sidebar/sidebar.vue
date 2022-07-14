@@ -167,7 +167,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 import {
   UsersIcon,
@@ -226,6 +226,7 @@ export default Vue.extend({
   computed: {
     DataStateType: () => DataStateType,
     ...mapState(['ui', 'dataState', 'media', 'friends', 'textile']),
+    ...mapGetters('textile', ['getSortedFriendsAndGroups']),
     toggleView: {
       get() {
         return this.ui.showSidebarUsers
@@ -242,15 +243,6 @@ export default Vue.extend({
     },
     isChatPage() {
       return this.$route.name?.includes('chat-direct')
-    },
-  },
-  watch: {
-    'textile.conversations': {
-      handler(newValue) {
-        this.sortUserList(newValue)
-      },
-      deep: true,
-      immediate: true,
     },
   },
   methods: {
@@ -276,9 +268,6 @@ export default Vue.extend({
         this.$store.commit('ui/setSwiperSlideIndex', 1) // New message slide index is 2
       }
       this.$router.push({ path: '/message' })
-    },
-    sortUserList(conversations: Conversation) {
-      this.$store.commit('friends/sortFriends', conversations)
     },
     navigateToGroup(groupId: string) {
       this.$router.push(`/chat/groups/${groupId}`)

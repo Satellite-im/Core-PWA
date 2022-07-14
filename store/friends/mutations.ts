@@ -1,4 +1,3 @@
-import { Conversation } from '../textile/types'
 import { FriendsState } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 
@@ -95,15 +94,6 @@ const mutations = {
   },
   removeFriend(state: FriendsState, accountAddress: string) {
     state.all = state.all.filter((fr) => fr.address !== accountAddress)
-  },
-  sortFriends(state: FriendsState, rConversations: Conversation) {
-    state.all = state.all
-      .map((user) => {
-        const conversation = rConversations[user.address]
-        user.lastUpdate = conversation?.lastUpdate || 0
-        return user
-      })
-      .sort((user1, user2) => user2.lastUpdate - user1.lastUpdate)
   },
 }
 
