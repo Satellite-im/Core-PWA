@@ -27,6 +27,7 @@ import {
 } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { AccountsError } from '~/store/accounts/types'
 import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
+
 export default class SolanaAdapter implements Adapter {
   private readonly solanaManager: SolanaManager
   private usersProgram: UsersProgram | null = null
@@ -44,6 +45,7 @@ export default class SolanaAdapter implements Adapter {
     if (!wallet?.secretKey) {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
+    // eslint-disable-next-line import/no-named-as-default-member
     return nacl.sign.detached(messageBytes, wallet?.secretKey)
   }
 
