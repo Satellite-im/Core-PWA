@@ -10,7 +10,7 @@ import { FlairColors, ThemeNames } from '~/store/ui/types'
 Date.now = jest.fn(() => 1645617999076)
 const dateNow = Date.now()
 
-describe('mutations.default.sendMessage', () => {
+describe.skip('mutations.default.sendMessage', () => {
   test('0', () => {
     const object: any = [
       [
@@ -2157,7 +2157,7 @@ describe('mutations.default.sendMessage', () => {
   })
 })
 
-describe('mutations', () => {
+describe.skip('mutations', () => {
   const initialRootState: any = {
     accounts: {
       storePin: true,
