@@ -36,8 +36,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    onChange(file: File): void {
-      this.$emit('change', file)
+    onChange(e: Event): void {
+      this.$emit('change', e)
     },
   },
 })

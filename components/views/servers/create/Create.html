@@ -46,11 +46,6 @@
 
       <div class="input-container">
         <span class="label">{{$t('servers.create.select_friends')}}</span>
-        <!-- <InteractablesInput 
-                :placeholder="$t('servers.create.select_friends_placeholder')"
-                input-kind="text" 
-                outlined 
-                type="primary" /> -->
         <SettingsPagesUserSearch
           v-model="friends"
           :placeholder="$t('servers.create.select_friends_placeholder')"
@@ -63,7 +58,6 @@
       <p class="red" v-if="error">{{error}}</p>
     </div>
 
-    <!-- <hr class="divider"> -->
     <div class="submit-container">
       <InteractablesButton
         type="primary"

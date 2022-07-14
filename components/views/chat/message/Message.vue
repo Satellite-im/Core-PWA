@@ -272,7 +272,7 @@ export default Vue.extend({
      */
     editMessage() {
       const { id, payload, type, from } = this.message
-      if (type === 'text' && from === this.accounts.details.textilePubkey) {
+      if (type === 'text' && from === this.accounts.details?.textilePubkey) {
         this.$store.commit('ui/setEditMessage', {
           id,
           payload,
