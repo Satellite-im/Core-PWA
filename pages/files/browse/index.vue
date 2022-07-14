@@ -13,7 +13,7 @@ export default Vue.extend({
   layout: 'files',
   data() {
     return {
-      items: iridium.files?.state.items ?? [],
+      items: iridium.files.state.items ?? [],
     }
   },
   computed: {
@@ -51,7 +51,7 @@ export default Vue.extend({
      * @param {IridiumItem} item
      */
     like(item: IridiumItem) {
-      iridium.files?.updateItem({
+      iridium.files.updateItem({
         item,
         liked: !item.liked,
       })
@@ -64,7 +64,7 @@ export default Vue.extend({
      * @param {IridiumItem} item
      */
     remove(item: IridiumItem) {
-      iridium.files?.removeItem(item)
+      iridium.files.removeItem(item)
     },
     /**
      * @description set rename item and display modal

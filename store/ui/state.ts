@@ -62,10 +62,6 @@ const InitialUIState = (): UIState => ({
   editMessage: { id: '', from: '', payload: '' },
   mostEmojiUsed: [],
   recentGlyphs: [],
-  filesUploadStatus: '',
-  renameItem: undefined,
-  filePreview: undefined,
-  fileDownloadList: [],
   chatImageOverlay: undefined,
   swiperSlideIndex: 0,
 })

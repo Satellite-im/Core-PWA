@@ -19,14 +19,14 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
         const parentId = state.path.at(-1)?.id
         items =
           (
-            iridium.files?.flat.find(
+            iridium.files.flat.find(
               (e) => e.id === parentId,
             ) as IridiumDirectory
           )?.children ?? items
         // if recent, get 15 most recently edited FILES. no directories
       } else if (state.route === FileRouteEnum.RECENT) {
         items =
-          iridium.files?.flat
+          iridium.files.flat
             .filter((e) => !('children' in e))
             .sort((a, b) => b.modified - a.modified)
             .slice(0, 14) ?? items

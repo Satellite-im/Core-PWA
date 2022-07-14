@@ -73,7 +73,7 @@ export default Vue.extend({
     addFolder() {
       this.errors = []
       try {
-        iridium.files?.addDirectory(this.text, this.path.at(-1)?.id ?? '')
+        iridium.files.addDirectory(this.text, this.path.at(-1)?.id ?? '')
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
         return
@@ -128,7 +128,7 @@ export default Vue.extend({
             name: file.name,
             size: file.size,
           })
-          await iridium.files?.addFile({
+          await iridium.files.addFile({
             file,
             parentId: this.path.at(-1)?.id ?? '',
             options: { progress: this.setProgress },

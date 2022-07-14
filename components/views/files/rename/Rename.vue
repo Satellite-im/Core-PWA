@@ -65,7 +65,7 @@ export default Vue.extend({
         return
       }
       try {
-        iridium.files?.updateItem({
+        iridium.files.updateItem({
           item: this.item,
           name: this.text,
         })

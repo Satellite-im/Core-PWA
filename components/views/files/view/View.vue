@@ -52,7 +52,7 @@ export default Vue.extend({
           .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
           .toLowerCase()
 
-        await iridium.files?.download(
+        await iridium.files.download(
           file.id,
           file.extension === fileExt
             ? file.name
