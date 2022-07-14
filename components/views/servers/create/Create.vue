@@ -23,6 +23,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     URL.revokeObjectURL(this.croppedImage)
+    URL.revokeObjectURL(this.imageUrl)
   },
   methods: {
     /**
@@ -39,20 +40,13 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    selectImage(e) {
-      if (e.target.value !== null) {
-        const files = e.target.files || e.dataTransfer.files
-        if (!files.length) return
+    selectImage(e: Event) {
+      const target = e.target as HTMLInputElement
+      const file = target.files?.[0]
 
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.imageUrl = e.target.result
-          e.target.value = ''
-
-          this.toggleCropper()
-        }
-
-        reader.readAsDataURL(files[0])
+      if (file) {
+        this.imageUrl = URL.createObjectURL(file)
+        this.toggleCropper()
       }
     },
     /**

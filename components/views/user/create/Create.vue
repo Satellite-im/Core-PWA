@@ -48,6 +48,7 @@ export default Vue.extend({
   },
   beforeDestroy() {
     URL.revokeObjectURL(this.croppedImage)
+    URL.revokeObjectURL(this.imageUrl)
   },
   methods: {
     /**
@@ -122,7 +123,7 @@ export default Vue.extend({
         return
       }
 
-      this.imageUrl = await blobToBase64(file)
+      this.imageUrl = URL.createObjectURL(file)
       this.toggleCropper()
       this.isLoading = false
     },
