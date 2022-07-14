@@ -8,15 +8,27 @@ import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
+import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
   connector?: Iridium
-  profile?: ProfileManager
-  groups?: GroupManager
-  chat?: ChatManager
-  friends?: FriendsManager
-  files?: FilesManager
+  profile: ProfileManager
+  groups: GroupManager
+  chat: ChatManager
+  friends: FriendsManager
+  files: FilesManager
+  settings: SettingsManager
+
+  constructor() {
+    super()
+    this.profile = new ProfileManager(this)
+    this.groups = new GroupManager(this)
+    this.friends = new FriendsManager(this)
+    this.chat = new ChatManager(this)
+    this.files = new FilesManager(this)
+    this.settings = new SettingsManager(this)
+  }
 
   /**
    * @method
@@ -68,20 +80,19 @@ export class IridiumManager extends Emitter {
     await this.connector.set('/', doc)
 
     logger.log('iridium/manager', 'initializing profile')
-    this.profile = new ProfileManager(this)
-    logger.log('iridium/friends', 'initializing friends')
-    this.friends = new FriendsManager(this)
+    await this.profile.init()
     logger.log('iridium/manager', 'initializing groups')
-    this.groups = new GroupManager(this)
-    logger.log('iridium/manager', 'initializing chat')
-    this.chat = new ChatManager(this)
-    logger.log('iridium/manager', 'initializing files')
-    this.files = new FilesManager(this)
-
-    logger.log('iridium/manager', 'ready')
+    await this.groups.init()
+    logger.log('iridium/friends', 'initializing friends')
     await this.friends.init()
+    logger.log('iridium/manager', 'initializing chat')
     await this.chat.init()
+    logger.log('iridium/manager', 'initializing files')
     await this.files.init()
+    logger.log('iridium/manager', 'initializing settings')
+    await this.settings.init()
+    logger.log('iridium/manager', 'ready')
+
     this.ready = true
   }
 }

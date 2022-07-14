@@ -52,7 +52,7 @@
       <InteractablesInput
         readonly
         type="primary"
-        :placeholder="settings.keybinds.toggleMute"
+        :placeholder="keybinds.toggleMute"
       />
     </SettingsUnit>
     <SettingsUnit @click="editKeybind('openSettings')">
@@ -60,7 +60,7 @@
       <InteractablesInput
         readonly
         type="primary"
-        :placeholder="settings.keybinds.openSettings"
+        :placeholder="keybinds.openSettings"
       />
     </SettingsUnit>
   </SettingsSection>
@@ -71,7 +71,7 @@
       <InteractablesInput
         readonly
         type="primary"
-        :placeholder="settings.keybinds.toggleDeafen"
+        :placeholder="keybinds.toggleDeafen"
       />
     </SettingsUnit>
     <SettingsUnit @click="editKeybind('callActiveChat')">
@@ -79,7 +79,7 @@
       <InteractablesInput
         readonly
         type="primary"
-        :placeholder="settings.keybinds.callActiveChat"
+        :placeholder="keybinds.callActiveChat"
       />
     </SettingsUnit>
   </SettingsSection>

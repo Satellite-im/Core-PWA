@@ -11,6 +11,7 @@ import {
 import { UserPermissions } from '~/components/mixins/UserPermissions'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -53,6 +54,7 @@ export default Vue.extend({
           text: this.$i18n.t('pages.settings.never'),
         },
       ],
+      iridiumSettings: iridium.settings.state,
     }
   },
   computed: {
@@ -134,15 +136,13 @@ export default Vue.extend({
       },
     },
     flipVideo: {
-      async set(flipVideo: boolean) {
+      async set(value: boolean) {
         this.loading.push('flipVideo')
-        await this.$store.dispatch('textile/updateUserThreadData', {
-          flipVideo,
-        })
+        await iridium.settings.set('/video/flipLocalStream', value)
         this.loading.splice(this.loading.indexOf('flipVideo'), 1)
       },
       get(): boolean {
-        return this.userThread.flipVideo
+        return this.iridiumSettings.video.flipLocalStream
       },
     },
   },
