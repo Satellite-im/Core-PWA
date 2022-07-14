@@ -12,7 +12,6 @@ import {
   InfoIcon,
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
-import { ModalWindows } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -30,6 +29,7 @@ export default Vue.extend({
       status: '',
       accountUrl: '',
       croppedImage: '',
+      showCropper: false,
     }
   },
   computed: {
@@ -40,9 +40,7 @@ export default Vue.extend({
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore
-      if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
-        return true
-      return false
+      return this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md')
     },
     src(): string {
       if (this.croppedImage) {
@@ -50,9 +48,6 @@ export default Vue.extend({
       }
       const hash = this.accounts?.details?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
-    showCropper(): boolean {
-      return !!this.ui.modals[ModalWindows.CROP]
     },
     imageInputRef(): HTMLInputElement {
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
@@ -69,10 +64,7 @@ export default Vue.extend({
      * @example
      */
     toggleCropper() {
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CROP,
-        state: !this.ui.modals[ModalWindows.CROP],
-      })
+      this.showCropper = !this.showCropper
     },
     /**
      * @method openFileDialog DocsTODO

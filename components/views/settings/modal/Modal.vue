@@ -35,14 +35,6 @@ export default Vue.extend({
       return !this.ui.modals.crop
     },
   },
-  watch: {
-    'ui.settingsRoute'(val) {
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CROP,
-        state: false,
-      })
-    },
-  },
   methods: {
     /**
      * Opens and closes the left hand sidebar
