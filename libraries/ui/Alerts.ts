@@ -1,6 +1,7 @@
 export enum AlertType {
   FRIEND_REQUEST = 'FRIEND_REQUEST',
-  MISSED_CALL = 'MISSED_CALL',
+  MISSED_CALL = 'Missed Call',
+  INCOMING_CALL = 'Incoming Call',
   FILES_FULL = 'FILES_FULL',
   FILE_UPLOADED = 'FILE_UPLOADED',
   FILE_NSFW = 'FILE_NSFW',
@@ -11,6 +12,12 @@ export enum AlertType {
   ACCOUNT_NOTIFICATION = 'accountNotification',
   APPLICATION_NOTIFICATION = 'applicationNotification',
   MISCELLANEOUS = 'miscellaneous',
+}
+export enum AlertTitle {
+  FRIEND_REQUEST = 'New Friend Request',
+  DIRECT_MESSAGE = 'New Direct Message',
+  GROUP_MESSAGE = 'New Group Message',
+  MISSED_CALL = 'New Missed Call',
 }
 
 export enum AlertState {

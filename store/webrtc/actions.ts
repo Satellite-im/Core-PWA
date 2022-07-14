@@ -14,9 +14,10 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import Logger from '~/utilities/Logger'
+import { AlertTitle, AlertType } from '~/libraries/ui/Alerts'
 
 const announceFrequency = 5000
-
+let setDenyTracker = false
 const webRTCActions = {
   /**
    * @method initialized
@@ -643,6 +644,24 @@ const webRTCActions = {
     call.on('ANSWERED', onAnswered)
 
     function onCallDestroy() {
+      if (rootState.webrtc.incomingCall !== undefined && !setDenyTracker) {
+        const callerInfo = rootState.friends.all.find((friend) => {
+          return friend.peerId === rootState.webrtc.incomingCall?.peerId
+        })
+        dispatch(
+          'ui/sendNotification',
+          {
+            message: 'Missed Call',
+            from: callerInfo?.name,
+            fromAddress: callerInfo?.address,
+            imageHash: callerInfo?.profilePicture,
+            title: AlertTitle.MISSED_CALL,
+            type: AlertType.MISSED_CALL,
+          },
+          { root: true },
+        )
+      }
+      setDenyTracker = false
       commit('setIncomingCall', undefined)
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
@@ -674,6 +693,7 @@ const webRTCActions = {
    * this.$store.dispatch('webrtc/deny')
    */
   denyCall({ state }: ActionsArguments<WebRTCState>) {
+    setDenyTracker = true
     if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
     if (state.incomingCall) {
       $WebRTC.getCall(state.incomingCall.callId)?.destroy()

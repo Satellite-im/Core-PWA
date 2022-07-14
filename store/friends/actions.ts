@@ -29,6 +29,7 @@ import { FriendMetadata } from '~/types/textile/metadata'
 import { Friend, FriendRequest, OutgoingRequest } from '~/types/ui/friends'
 import BlockchainClient from '~/libraries/BlockchainClient'
 import { Peer2Peer } from '~/libraries/WebRTC/Libp2p'
+import { AlertTitle, AlertType } from '~/libraries/ui/Alerts'
 
 export default {
   async initialize({ dispatch, commit }: ActionsArguments<FriendsState>) {
@@ -326,6 +327,18 @@ export default {
             friendAccountToIncomingRequest(account, userInfo),
           )
         }
+        dispatch(
+          'ui/sendNotification',
+          {
+            message: '',
+            from: userInfo?.name,
+            fromAddress: userInfo?.address,
+            title: AlertTitle.FRIEND_REQUEST,
+            imageHash: userInfo?.photoHash,
+            type: AlertType.FRIEND_REQUEST,
+          },
+          { root: true },
+        )
       },
     )
 
