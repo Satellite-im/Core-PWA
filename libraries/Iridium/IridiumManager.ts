@@ -151,16 +151,17 @@ export class IridiumManager extends Emitter {
     logger.log('iridium/friends', 'initializing friends')
     this.friends = new FriendsManager(this)
     logger.log('iridium/manager', 'initializing groups')
-    this.groups = new GroupManager(this)
-    logger.log('iridium/manager', 'initializing chat')
-    this.chat = new ChatManager(this)
-    logger.log('iridium/manager', 'initializing files')
-    this.files = new FilesManager(this)
-
-    logger.log('iridium/manager', 'ready')
+    await this.groups.init()
+    logger.log('iridium/friends', 'initializing friends')
     await this.friends.init()
+    logger.log('iridium/manager', 'initializing chat')
     await this.chat.init()
+    logger.log('iridium/manager', 'initializing files')
     await this.files.init()
+    logger.log('iridium/manager', 'initializing settings')
+    await this.settings.init()
+    logger.log('iridium/manager', 'ready')
+
     this.ready = true
   }
 }
