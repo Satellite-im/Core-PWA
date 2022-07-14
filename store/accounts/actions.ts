@@ -181,30 +181,10 @@ export default {
     const payerAccount = $BlockchainClient.account
 
     if (!iridium.ready) {
-<<<<<<< HEAD
       console.info('initializing iridium')
       const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
       await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-=======
-      if (state.adapter === 'Solana') {
-        console.info('initializing iridium')
-        const { pin } = state
-        await dispatch(
-          'iridium/initialize',
-          {
-            pass: pin,
-            wallet: $BlockchainClient.account,
-          },
-          { root: true },
-        )
-      } else {
-        console.info('initializing iridium')
-        const { entropyMessage } = state
-        const entropy = await $BlockchainClient.signMessage(entropyMessage)
-        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-      }
->>>>>>> 64bd86b9 (chore(add): added phantom manager and fully integrated Phantom)
     }
 
     commit('setActiveAccount', iridium.connector?.id)
@@ -374,28 +354,9 @@ export default {
         'Loading Iridium from accounts startup',
       )
       const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-<<<<<<< HEAD
-
       const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
       await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-=======
-      if (state.adapter === 'Solana') {
-        const { pin } = state
-        await dispatch(
-          'iridium/initialize',
-          {
-            pass: pin,
-            wallet: $BlockchainClient.account,
-          },
-          { root: true },
-        )
-      } else {
-        const { entropyMessage } = state
-        const entropy = await $BlockchainClient.signMessage(entropyMessage)
-        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-      }
->>>>>>> 64bd86b9 (chore(add): added phantom manager and fully integrated Phantom)
     }
 
     await dispatch('groups/initialize', {}, { root: true })
