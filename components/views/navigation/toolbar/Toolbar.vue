@@ -109,6 +109,10 @@ export default Vue.extend({
         : (this.$t('controls.not_connected') as string)
     },
   },
+  mounted() {
+    console.log('mounted recipient', this.recipient.peerId)
+    iridium.webRTC.subscribeToChannel(this.recipient.peerId)
+  },
   methods: {
     groupInvite() {
       this.$store.commit('ui/toggleModal', {
@@ -167,9 +171,7 @@ export default Vue.extend({
         return
       }
       try {
-        await this.$store.dispatch('webrtc/call', {
-          kinds,
-        })
+        await iridium.webRTC.call(this.recipient, kinds)
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
@@ -181,6 +183,7 @@ export default Vue.extend({
       if (!this.enableRTC || this.webrtc.activeCall) {
         return
       }
+
       await this.call(['audio'])
     },
   },

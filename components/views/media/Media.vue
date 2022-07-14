@@ -45,7 +45,6 @@ export default Vue.extend({
       'webrtc',
       'conversation',
     ]),
-    ...mapGetters('webrtc', ['isActiveCall']),
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
@@ -59,11 +58,6 @@ export default Vue.extend({
         (participant: ConversationParticipant) =>
           participant.peerId !== iridium.connector?.peerId,
       )
-    },
-    activeCall() {
-      const { activeCall } = this.webrtc
-      const call = $WebRTC.getCall(activeCall.callId)
-      return call
     },
     ...mapState(['audio']),
   },

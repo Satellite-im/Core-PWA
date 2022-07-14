@@ -118,7 +118,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'media']),
-    ...mapGetters('webrtc', ['isBackgroundCall']),
+    ...mapGetters('webrtc', ['isActiveCall', 'isBackgroundCall']),
     swiper() {
       return this.$refs.swiper.$swiper
     },

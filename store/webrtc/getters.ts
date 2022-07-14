@@ -1,24 +1,26 @@
 import { WebRTCState } from './types'
-import { RootState } from '~/types/store/store'
 
 const getters = {
-  isActiveCall: (state: WebRTCState, getters: any, rootState: RootState) => {
-    return (
-      state.activeCall &&
-      state.activeCall.callId &&
-      state.activeCall.callId === rootState.conversation.id
-    )
+  isActiveCall: (state: WebRTCState): boolean => {
+    if (!state.activeCall?.callId) {
+      return false
+    }
+    const conversationId = $nuxt.$route.params.address || $nuxt.$route.params.id
+    if (!conversationId) {
+      return false
+    }
+    return state.activeCall.callId === conversationId
   },
-  isBackgroundCall: (
-    state: WebRTCState,
-    getters: any,
-    rootState: RootState,
-  ) => {
-    return (
-      state.activeCall &&
-      state.activeCall.callId &&
-      state.activeCall.callId !== rootState.conversation.id
-    )
+
+  isBackgroundCall: (state: WebRTCState): boolean => {
+    if (!state.activeCall?.callId) {
+      return false
+    }
+    const conversationId = $nuxt.$route.params.address || $nuxt.$route.params.id
+    if (!conversationId) {
+      return true
+    }
+    return state.activeCall.callId !== conversationId
   },
 }
 

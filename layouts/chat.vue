@@ -56,14 +56,14 @@
             />
             <Toolbar id="toolbar" />
             <Media
-              v-if="$device.isMobile"
+              v-if="$device.isMobile && isActiveCall"
               :fullscreen="ui.fullscreen"
               :users="$mock.callUsers"
               :max-viewable-users="10"
               :fullscreen-max-viewable-users="6"
             />
             <Media
-              v-else
+              v-if="!$device.isMobile && isActiveCall"
               :fullscreen="ui.fullscreen"
               :users="$mock.callUsers"
               :max-viewable-users="10"

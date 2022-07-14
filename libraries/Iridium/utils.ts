@@ -9,7 +9,7 @@ export const stringToTypedBase64 = (s: string): Base64 =>
  * @param obj The deeply nested object
  * @param path The path to the deeply nested property in obj
  * @param value The new value for the property
-   @returns true if the property's value was changed
+ @returns true if the property's value was changed
  */
 export function setInObject(obj: any, path: string, value: any): boolean {
   const parts = path.split('/').filter((p) => p !== '')

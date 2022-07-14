@@ -8,6 +8,7 @@ import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
+import WebRTCManager from '~/libraries/Iridium/webrtc/WebRTCManager'
 import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
 import Crypto from '~/libraries/Crypto/Crypto'
 
@@ -19,6 +20,7 @@ export class IridiumManager extends Emitter {
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
+  webRTC: WebRTCManager
   settings: SettingsManager
 
   constructor() {
@@ -28,6 +30,7 @@ export class IridiumManager extends Emitter {
     this.friends = new FriendsManager(this)
     this.chat = new ChatManager(this)
     this.files = new FilesManager(this)
+    this.webRTC = new WebRTCManager(this)
     this.settings = new SettingsManager(this)
   }
 
@@ -91,6 +94,8 @@ export class IridiumManager extends Emitter {
     await this.chat.init()
     logger.log('iridium/manager', 'initializing files')
     await this.files.init()
+    logger.log('iridium/manager', 'initializing webRTC')
+    await this.webRTC.init()
     logger.log('iridium/manager', 'initializing settings')
     await this.settings.init()
     logger.log('iridium/manager', 'ready')

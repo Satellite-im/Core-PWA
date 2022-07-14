@@ -2,6 +2,9 @@ import dayjs from 'dayjs'
 import { WebRTCState } from './types'
 
 const mutations = {
+  setProperty(state: WebRTCState, { key, value }: { key: string; value: any }) {
+    state[key] = value
+  },
   setInitialized(
     state: WebRTCState,
     {

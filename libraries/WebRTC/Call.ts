@@ -113,6 +113,8 @@ export class Call extends Emitter<CallEventListeners> {
           return
         }
 
+        console.log('this.isCaller[peer.id]', this.isCaller[peer.id])
+
         this.isCaller[peer.id] = true
         if (!this.peers[peer.id]) {
           await this.initiateCall(peer.id, this.isCaller[peer.id])
@@ -128,6 +130,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param stream MediaStream object containing the audio/video tracks
    */
   async start() {
+    console.log('start')
     if (!this.active) {
       clearInterval(this.peerPollingInterval)
       this.peerPollingInterval = setInterval(async () => {
@@ -137,6 +140,7 @@ export class Call extends Emitter<CallEventListeners> {
       this.active = true
     }
 
+    console.log('requestPeerCalls')
     await this.requestPeerCalls(true)
   }
 
@@ -243,8 +247,10 @@ export class Call extends Emitter<CallEventListeners> {
       await this.initiateCall(peerId, true)
     }
 
+    console.log('sendPeerCallRequest', this.callId)
     await iridium.connector?.send(
       {
+        module: 'webrtc',
         type: 'peer:call',
         payload: {
           callId:
