@@ -16,7 +16,7 @@ Vue.prototype.$Logger = new DefaultLogger(Vue.prototype.$Config.debug)
 Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$FileSystem = new TextileFileSystem()
 
-describe('actions.default.initialize', () => {
+describe.skip('actions.default.initialize', () => {
   test('initialize', async () => {
     try {
       // Mocks so we have a fs.export
