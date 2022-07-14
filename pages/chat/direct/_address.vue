@@ -86,18 +86,13 @@ export default Vue.extend({
     // },
   },
   async mounted() {
+    this.messages = [...((await iridium.chat.loadMessages(this.friend)) || [])]
     if (this.friend) {
       await iridium.chat.subscribeToConversation(this.friend, async (event) => {
         const message = await iridium.connector.load(event.message)
         this.messages.push(message)
       })
-      await iridium.chat.subscribeToChannel(this.friend, async (event) => {
-        if (event.payload.messageCID && event.payload.type === 'chat/message') {
-          this.messages.push(
-            await iridium.connector.load(event.payload.messageCID),
-          )
-        }
-      })
+      await iridium.chat.subscribeToChannel(this.friend)
     }
   },
 })
