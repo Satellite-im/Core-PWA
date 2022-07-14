@@ -1,6 +1,8 @@
 // eslint-disable-next-line import/named
 import { Commitment, clusterApiUrl } from '@solana/web3.js'
 
+const soundsCID = 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9'
+
 export const Config = {
   debug: true,
   iridium: {
@@ -32,22 +34,21 @@ export const Config = {
     sharedBucket: 'shared-files',
   },
   ipfs: {
-    gateway: 'https://satellite.mypinata.cloud/ipfs/',
+    gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
   indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
-    newMessage:
-      'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Notification.m4a',
-    call: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Call.m4a',
-    hangup: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Unused.m4a',
-    mute: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Mute.m4a',
-    unmute: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Unmute.m4a',
-    deafen: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Deafen.m4a',
-    undeafen: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Undeafen.m4a',
-    upload: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Success.m4a',
-    connected: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Success.m4a',
+    newMessage: `${soundsCID}/Notification.m4a`,
+    call: `${soundsCID}/Call.m4a`,
+    hangup: `${soundsCID}/Unused.m4a`,
+    mute: `${soundsCID}/Mute.m4a`,
+    unmute: `${soundsCID}/Unmute.m4a`,
+    deafen: `${soundsCID}/Deafen.m4a`,
+    undeafen: `${soundsCID}/Undeafen.m4a`,
+    upload: `${soundsCID}/Success.m4a`,
+    connected: `${soundsCID}/Success.m4a`,
   },
   cacher: {
     user_lifespan: 90000,
