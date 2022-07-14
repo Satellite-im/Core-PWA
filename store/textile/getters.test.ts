@@ -75,7 +75,7 @@ describe('getters.default.getConversation', () => {
             at: 1650504356737,
             type: 'glyph',
             payload:
-              'https://satellite.mypinata.cloud/ipfs/QmRwZDz8qavwCcmq6DSDTDLrt1qzzw2nMcz1pcGuNxdhcW/$1/Sad3.gif',
+              'https://satellite.infura-ipfs.io/ipfs/QmRwZDz8qavwCcmq6DSDTDLrt1qzzw2nMcz1pcGuNxdhcW/$1/Sad3.gif',
             pack: 'Astrobunny',
             id: '01g14vkmw10bj09n45630t6m6a',
           },
@@ -124,7 +124,7 @@ describe('getters.default.getConversationMessages', () => {
             at: 1650504356737,
             type: 'glyph',
             payload:
-              'https://satellite.mypinata.cloud/ipfs/QmRwZDz8qavwCcmq6DSDTDLrt1qzzw2nMcz1pcGuNxdhcW/$1/Sad3.gif',
+              'https://satellite.infura-ipfs.io/ipfs/QmRwZDz8qavwCcmq6DSDTDLrt1qzzw2nMcz1pcGuNxdhcW/$1/Sad3.gif',
             pack: 'Astrobunny',
             id: '01g14vkmw10bj09n45630t6m6a',
           },
