@@ -113,7 +113,7 @@ export type Settings = {
 }
 
 export const defaultSounds = Object.fromEntries(
-  Object.keys(Sounds).map((key) => [key, true]),
+  Object.values(Sounds).map((key) => [key, true]),
 ) as Record<Sounds, boolean>
 
 export enum KeybindKeys {
