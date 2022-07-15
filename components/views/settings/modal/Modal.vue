@@ -4,7 +4,7 @@
 import { MenuIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SettingsRoutes, ModalWindows } from '~/store/ui/types'
+import { SettingsRoutes } from '~/store/ui/types'
 
 type Swiper = {
   $swiper: {
@@ -33,14 +33,6 @@ export default Vue.extend({
     ...mapState(['ui']),
     verticalScroll(): boolean {
       return !this.ui.modals.crop
-    },
-  },
-  watch: {
-    'ui.settingsRoute'(val) {
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CROP,
-        state: false,
-      })
     },
   },
   methods: {

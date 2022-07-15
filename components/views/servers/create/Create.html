@@ -1,9 +1,9 @@
 <div class="create-server-container">
   <InteractablesImageCropper
     v-if="showCropper"
-    :setCroppedImage="setCroppedImage"
-    :toggleCropper="toggleCropper"
-    :imageUrl="imageUrl"
+    :set-cropped-image="setCroppedImage"
+    :image-url="imageUrl"
+    @toggle-cropper="toggleCropper"
   />
   <div v-if="showCropper" class="cropper-mask" />
   <div class="modal-body">
@@ -46,11 +46,6 @@
 
       <div class="input-container">
         <span class="label">{{$t('servers.create.select_friends')}}</span>
-        <!-- <InteractablesInput 
-                :placeholder="$t('servers.create.select_friends_placeholder')"
-                input-kind="text" 
-                outlined 
-                type="primary" /> -->
         <SettingsPagesUserSearch
           v-model="friends"
           :placeholder="$t('servers.create.select_friends_placeholder')"
@@ -63,7 +58,6 @@
       <p class="red" v-if="error">{{error}}</p>
     </div>
 
-    <!-- <hr class="divider"> -->
     <div class="submit-container">
       <InteractablesButton
         type="primary"

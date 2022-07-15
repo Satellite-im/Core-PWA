@@ -24,9 +24,10 @@
             <div class="profile-image-cropper" v-if="showCropper">
               <div class="content">
                 <InteractablesImageCropper
-                  :setCroppedImage="setCroppedImage"
-                  :toggleCropper="toggleCropper"
-                  :imageUrl="image"
+                  v-click-outside="toggleCropper"
+                  :set-cropped-image="setCroppedImage"
+                  :image-url="image"
+                  @toggle-cropper="toggleCropper"
                 />
                 <div class="cropper-mask"></div>
               </div>
@@ -40,15 +41,10 @@
                 />
               </div>
               <div class="profile-photo-column photo">
-                <div
-                  :class="['profile-photo', !getInitialized ? 'profile-photo-loading' : '']"
-                >
-                  <input
-                    ref="file"
-                    class="input-file"
-                    type="file"
+                <div :class="['profile-photo']">
+                  <InteractablesImageInput
+                    ref="imageInput"
                     @change="selectProfileImage"
-                    :accept="acceptableImageFormats"
                   />
                   <UiCircle
                     :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
@@ -67,7 +63,11 @@
                   />
                 </div>
               </div>
-              <button class="remove-button" @click="removeProfileImage">
+              <button
+                v-if="src"
+                class="remove-button"
+                @click="removeProfileImage"
+              >
                 <span>{{ $t('pages.settings.profile.remove_image') }}</span>
               </button>
               <div class="username">
