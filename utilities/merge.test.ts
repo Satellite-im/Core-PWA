@@ -1,5 +1,5 @@
 import * as merge from '~/utilities/merge'
-// @ponicode
+
 describe('merge.overwriteMerge', () => {
   test('0', () => {
     const result: any = merge.overwriteMerge('#FF00FF', 'green')

@@ -1,5 +1,5 @@
-import * as state from '~/store/ui/state'
-// @ponicode
+import * as state from '~/store/iridium/state'
+
 describe('state.default', () => {
   test('0', () => {
     const result: any = state.default()

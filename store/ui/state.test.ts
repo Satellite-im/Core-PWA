@@ -1,17 +1,8 @@
-import InitialUIState from '~/store/ui/state'
+import * as state from '~/store/ui/state'
 
-describe.skip('init', () => {
-  let inst: any
-
-  beforeEach(() => {
-    inst = InitialUIState()
-  })
-
-  it('should return the initial settings state', () => {
-    expect(inst).toMatchSnapshot()
-  })
-
-  it('should not return the initial settings state', () => {
-    expect(inst).not.toEqual({})
+describe('state.default', () => {
+  test('0', () => {
+    const result: any = state.default()
+    expect(result).toMatchSnapshot()
   })
 })
