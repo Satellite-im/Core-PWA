@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check flair constants should return the flair constants 1`] = `undefined`;
+
+exports[`check theme constants should return the theme constants 1`] = `undefined`;
