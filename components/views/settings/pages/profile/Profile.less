@@ -30,17 +30,27 @@
       .profile-section {
         display: grid;
         grid-template-columns: auto 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: auto 1fr auto 1fr;
         gap: 0px 0px;
         grid-template-areas:
           'subtitle subtitle subtitle subtitle'
           'photo username username username'
+          'remove-button . . .'
           'status-input status-input status-input status-input';
+      }
+
+      .subtitle {
+        margin-bottom: @light-spacing;
       }
 
       .photo {
         align-self: center;
         margin: 0 @normal-spacing @xlight-spacing 0;
+      }
+
+      .remove-button {
+        margin-left: 0.3rem;
+        margin-top: 0;
       }
 
       .status-input {
@@ -115,12 +125,13 @@
   .profile-section {
     display: grid;
     grid-template-columns: 0.3fr 1fr 1fr;
-    grid-template-rows: 0.5fr 0.5fr 0.5fr;
+    grid-template-rows: 0.5fr 0.5fr 0.5fr auto;
     gap: 0px 16px;
     grid-template-areas:
       'subtitle subtitle subtitle'
       'photo username username'
-      'photo status-input status-input';
+      'photo status-input status-input'
+      'remove-button . .';
   }
 
   .subtitle {
@@ -129,6 +140,15 @@
 
   .photo {
     grid-area: photo;
+  }
+
+  .remove-button {
+    display: flex;
+    grid-area: remove-button;
+    margin-top: @xlight-spacing;
+    margin-left: 1.1rem;
+    font-size: @mini-text-size;
+    &:extend(.color-danger);
   }
 
   .username {
@@ -147,16 +167,19 @@
 
 .profile-photo-column {
   max-width: 100px;
+
   .profile-photo {
     position: relative;
     height: @size;
     width: @size;
     cursor: pointer;
+
     .is-rounded,
     .is-square {
       max-width: @full !important;
       max-height: @full !important;
     }
+
     .plus-button {
       &:extend(.first-layer);
       right: 0;
@@ -248,9 +271,11 @@
   left: 0;
   right: 0;
   top: 0;
+
   .content {
     position: relative;
     width: 500px;
+
     .cropper-mask {
       &:extend(.blur-less);
       position: fixed;
