@@ -137,6 +137,11 @@ export default Vue.extend({
         reader.readAsDataURL(files[0])
       }
     },
+    removeProfileImage() {
+      this.croppedImage = ''
+      // TODO: Update with IPFS method
+      // this.$store.dispatch('accounts/updateProfilePhoto', '')
+    },
   },
 })
 </script>

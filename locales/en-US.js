@@ -499,6 +499,7 @@ export default {
         title: 'Profile',
         subtitle: 'Update your profile photo, status, banners and more.',
         status_placeholder: 'Some super interesting status message',
+        remove_image: 'Remove',
         info: {
           title: 'Account Info',
           subtitle:
