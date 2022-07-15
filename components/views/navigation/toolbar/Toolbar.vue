@@ -109,10 +109,6 @@ export default Vue.extend({
         : (this.$t('controls.not_connected') as string)
     },
   },
-  mounted() {
-    console.log('mounted recipient', this.recipient.peerId)
-    iridium.webRTC.subscribeToChannel(this.recipient.peerId)
-  },
   methods: {
     groupInvite() {
       this.$store.commit('ui/toggleModal', {

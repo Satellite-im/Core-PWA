@@ -72,12 +72,20 @@ export default class WebRTCManager extends Emitter {
   }
 
   public subscribeToChannel(peerId: string) {
+    console.log(
+      'this.iridium.connector?._peers',
+      this.iridium.connector?._peers,
+    )
     if (!this.iridium.connector?._peers[peerId]) {
       return
     }
+
     this.iridium.connector?.on(
       this.iridium.connector?._peers[peerId].channel,
       this.onMessage,
+    )
+    console.log(
+      `subscribe to ${this.iridium.connector?._peers[peerId].channel}`,
     )
   }
 
@@ -265,6 +273,8 @@ export default class WebRTCManager extends Emitter {
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
+
+    console.log('peers', peers)
     const call = $WebRTC.connect(
       usedCallId,
       peers,

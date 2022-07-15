@@ -105,21 +105,23 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async requestPeerCalls(force = false) {
     await Promise.all(
-      this.peerDetails.map(async (peer) => {
-        if (peer.id === iridium.connector?.peerId) {
+      this.peerDetails.map(async ({ peerId }) => {
+        if (peerId === iridium.connector?.peerId) {
           return
         }
-        if (this.isCallee[peer.id]) {
+        if (this.isCallee[peerId]) {
           return
         }
 
-        console.log('this.isCaller[peer.id]', this.isCaller[peer.id])
+        console.log('this.isCaller[peer.id]', this.isCaller[peerId])
 
-        this.isCaller[peer.id] = true
-        if (!this.peers[peer.id]) {
-          await this.initiateCall(peer.id, this.isCaller[peer.id])
+        this.isCaller[peerId] = true
+        if (!this.peers[peerId]) {
+          console.log('initiateCall', peerId, this.isCaller[peerId])
+          await this.initiateCall(peerId, this.isCaller[peerId])
         }
-        await this.sendPeerCallRequest(peer.id, force)
+        console.log('sendPeerCallRequest', peerId, force)
+        await this.sendPeerCallRequest(peerId, force)
       }),
     )
   }
@@ -140,7 +142,7 @@ export class Call extends Emitter<CallEventListeners> {
       this.active = true
     }
 
-    console.log('requestPeerCalls')
+    console.log('requestPeerCalls', this, this.peerDetails)
     await this.requestPeerCalls(true)
   }
 
@@ -247,7 +249,7 @@ export class Call extends Emitter<CallEventListeners> {
       await this.initiateCall(peerId, true)
     }
 
-    console.log('sendPeerCallRequest', this.callId)
+    console.log('sendPeerCallRequest', this.callId, peerId)
     await iridium.connector?.send(
       {
         module: 'webrtc',
