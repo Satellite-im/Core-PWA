@@ -9,13 +9,13 @@ interface Shared {
   name: string
   liked: boolean
   shared: boolean
-  type: FILE_TYPE | DIRECTORY_TYPE
   modified: number
   size: number
   parentId: IridiumDirectory['id'] // empty string if root item
 }
 
 export interface IridiumFile extends Shared {
+  type: FILE_TYPE
   description?: string
   thumbnail: string
   extension: string
@@ -23,6 +23,7 @@ export interface IridiumFile extends Shared {
 }
 
 export interface IridiumDirectory extends Shared {
+  type: DIRECTORY_TYPE
   children: IridiumItem[]
 }
 

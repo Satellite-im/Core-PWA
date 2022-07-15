@@ -23,11 +23,11 @@
     />
   </div>
   <!-- add container so blur effect doesn't go outside the dimensions of the image -->
-  <div v-if="item.thumbnail" class="image-container">
+  <div v-if="thumbnail" class="image-container">
     <img
       class="image-preview"
       :class="{'blur-image' : item.nsfw && blockNsfw}"
-      :src="item.thumbnail"
+      :src="thumbnail"
       draggable="false"
     />
   </div>
