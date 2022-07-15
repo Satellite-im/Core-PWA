@@ -32,7 +32,7 @@
     />
   </div>
   <div v-else class="icon-container">
-    <folder-icon v-if="item.content" size="4x" class="file-type-icon" />
+    <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
     <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
     <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
     <film-icon v-else-if="isVideo" size="4x" class="file-type-icon" />

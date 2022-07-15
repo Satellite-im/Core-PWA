@@ -112,7 +112,7 @@ export default Vue.extend({
       consentToScan: (state) =>
         (state as RootState).textile.userThread.consentToScan,
     }),
-    ...mapGetters('ui', ['showSidebar', 'isFilesIndexLoading']),
+    ...mapGetters('ui', ['showSidebar']),
     ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('webrtc', ['isBackgroundCall']),
     flair(): Flair {
@@ -172,10 +172,7 @@ export default Vue.extend({
       }
 
       // if already uploading, return to prevent bucket fast-forward crash
-      if (this.isFilesIndexLoading) {
-        this.$toast.show(this.$t('pages.files.errors.in_progress') as string)
-        return
-      }
+
       if (e?.dataTransfer) {
         const files: (File | null)[] = [...e.dataTransfer.items].map((f) =>
           f.getAsFile(),

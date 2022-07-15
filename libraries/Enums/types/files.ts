@@ -13,7 +13,7 @@ export enum FileIconsEnum {
   LINK = 'link',
 }
 
-export enum FileAsideRouteEnum {
+export enum FileRouteEnum {
   DEFAULT = '',
   RECENT = 'recent',
   DELETED = 'deleted',

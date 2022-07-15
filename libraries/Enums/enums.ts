@@ -13,7 +13,7 @@ import { PlatformTypeEnum } from '~/libraries/Enums/types/platformType'
 import {
   FileSortEnum,
   FileIconsEnum,
-  FileAsideRouteEnum,
+  FileRouteEnum,
 } from '~/libraries/Enums/types/files'
 import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 
@@ -33,5 +33,5 @@ export {
   NotificationTypes,
   FileSortEnum,
   FileIconsEnum,
-  FileAsideRouteEnum,
+  FileRouteEnum,
 }

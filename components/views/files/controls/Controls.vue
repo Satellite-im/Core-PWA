@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
@@ -21,16 +21,6 @@ export default Vue.extend({
     AlertTriangleIcon,
     XIcon,
   },
-  // todo - best practice would be emitting rather than passing function as a prop - AP-639
-  props: {
-    /**
-     * Switch between grid/table view
-     */
-    changeView: {
-      type: Function,
-      required: true,
-    },
-  },
   data() {
     return {
       text: '' as string,
@@ -39,11 +29,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      filesUploadStatus: (state) => (state as RootState).ui.filesUploadStatus,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
+      currentUpload: (state) => (state as RootState).files.currentUpload,
+      path: (state) => (state as RootState).files.path,
+      status: (state) => (state as RootState).files.status,
     }),
-    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   methods: {
     /**
@@ -81,24 +70,15 @@ export default Vue.extend({
      * @method addFolder
      * @description Add new folder to fileSystem
      */
-    async addFolder() {
+    addFolder() {
       this.errors = []
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
       try {
-        fileSystem.createDirectory({ name: this.text })
+        iridium.files.addDirectory(this.text, this.path.at(-1)?.id ?? '')
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
-      iridium.files?.exportFs()
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      this.$emit('forceRender')
     },
 
     handleInput(event: any) {
@@ -114,7 +94,7 @@ export default Vue.extend({
     async handleFile(originalFiles: File[]) {
       this.errors = []
       this.$store.commit(
-        'ui/setFilesUploadStatus',
+        'files/setStatus',
         this.$t('pages.files.status.prepare'),
       )
 
@@ -125,7 +105,7 @@ export default Vue.extend({
           fileSystem.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
-        this.$store.commit('ui/setFilesUploadStatus', '')
+        this.$store.commit('files/setStatus', '')
         this.errors.push(this.$t('pages.files.errors.storage_limit'))
         return
       }
@@ -144,30 +124,21 @@ export default Vue.extend({
 
       for (const file of files) {
         try {
-          this.$store.commit(
-            'ui/setFilesUploadStatus',
-            this.$t('pages.files.status.upload', [file.name]),
-          )
-          await iridium.files?.personalUpload(file)
+          this.$store.commit('files/setCurrentUpload', {
+            name: file.name,
+            size: file.size,
+          })
+          await iridium.files.addFile({
+            file,
+            parentId: this.path.at(-1)?.id ?? '',
+            options: { progress: this.setProgress },
+          })
         } catch (e: any) {
-          this.errors.push(e?.message ?? '')
+          this.errors.push(this.$t(e?.message ?? ''))
         }
       }
-
-      // only update index if files have been updated
-      if (files.length) {
-        this.$store.commit(
-          'ui/setFilesUploadStatus',
-          this.$t('pages.files.status.index'),
-        )
-        iridium.files?.exportFs()
-      }
-
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      // re-render so new files show up
-      this.$emit('forceRender')
-
+      this.$store.commit('files/setStatus', '')
+      this.$store.commit('files/setCurrentUpload', undefined)
       if (originalFiles.length !== invalidNameResults.length) {
         this.errors.push(this.$t('pages.files.errors.invalid'))
       }
@@ -180,16 +151,20 @@ export default Vue.extend({
     },
     /**
      * @method setProgress
-     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
-     * we encountered a bug where % was getting set to 105, math.min fixes that
-     * @param num current progress in bytes
-     * @param size total file size in bytes
+     * @description set progress (% out of 100) while file is being pushed to ipfs
+     * @param bytes current upload progress in bytes
      */
-    setProgress(num: number, size: number, name: string) {
+    setProgress(bytes: number) {
+      if (!this.currentUpload) {
+        return
+      }
       this.$store.commit(
-        'ui/setFilesUploadStatus',
+        'files/setStatus',
         this.$t('pages.files.status.upload', [
-          `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
+          `${this.currentUpload.name} - ${Math.min(
+            Math.floor((bytes / this.currentUpload.size) * 100),
+            100,
+          )}%`,
         ]),
       )
     },

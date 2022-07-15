@@ -199,7 +199,7 @@ export default {
       errors: {
         no_empty: 'Item name must be a non empty string',
         leading_dot: 'Item name cannot begin with .',
-        invalid: 'Item name cannot contain invalid symbols',
+        invalid: 'Item name cannot contain invalid symbols (/:"*?<>|~#%&+{}\\)',
         file_size: 'File needs to have a size of 1 byte or greater',
         duplicate_name: 'Item with name already exists in this directory',
         storage_limit: 'This upload would exceed your storage limit',

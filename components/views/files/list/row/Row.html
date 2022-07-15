@@ -1,13 +1,10 @@
-<tr
-  ref="row"
-  v-on="isFilesIndexLoading ? {} : { click: handle, contextmenu: contextMenu }"
->
+<tr ref="row" @click="handle" @contextmenu="contextMenu">
   <td class="filename">
     <template v-if="!$device.isMobile">
       <folder-icon
-        data-cy="folder-icon"
-        v-if="item.content"
+        v-if="item.children"
         class="file-type-icon"
+        data-cy="folder-icon"
       />
       <archive-icon v-else-if="isArchive" class="file-type-icon" />
       <image-icon v-else-if="isImage" class="file-type-icon" />
@@ -25,7 +22,7 @@
     @mouseover="menuHover=true"
     @mouseleave="menuHover=false"
     data-cy="file-item-options"
-    v-on="isFilesIndexLoading ? {} : { click: contextMenu }"
+    @click="contextMenu"
   >
     <more-vertical-icon size="1x" />
   </td>

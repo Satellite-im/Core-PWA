@@ -38,10 +38,16 @@ const commonProperties = [
   'ui.modals',
   'ui.isScrollOver',
   'ui.filePreview',
-  'ui.filesUploadStatus',
   'ui.fileDownloadList',
   'textile.userThread',
   'conversation.participants',
+  'files.currentUpload',
+  'files.downloadList',
+  'files.path',
+  'files.preview',
+  'files.rename',
+  'files.route',
+  'files.status',
 ]
 
 const propertiesNoStorePin = [
