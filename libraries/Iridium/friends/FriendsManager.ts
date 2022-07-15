@@ -193,13 +193,17 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   async requestCreate(remotePeerDID: string, incoming = false, user: User) {
-    if (this.isFriend(remotePeerDID)) {
-      logger.error('iridium/friends', 'already a friend', { remotePeerDID })
-      throw new Error(FriendsError.FRIEND_EXISTS)
-    }
-    if (this.hasRequest(remotePeerDID)) {
-      logger.error('iridium/friends', 'request already exists')
-      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
+    try {
+      if (this.isFriend(remotePeerDID)) {
+        logger.error('iridium/friends', 'already a friend', { remotePeerDID })
+        throw new Error(FriendsError.FRIEND_EXISTS)
+      }
+      if (this.hasRequest(remotePeerDID)) {
+        logger.error('iridium/friends', 'request already exists')
+        throw new Error(FriendsError.REQUEST_ALREADY_SENT)
+      }
+    } catch (err) {
+      this.emit('request/error', err)
     }
     logger.info('iridium/friends', 'creating friend request', {
       remotePeerDID,
@@ -265,15 +269,15 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   async removeUserData(did: string, request: FriendRequest, incoming = false) {
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+
     const friend = this.getFriend(did)
     request.status = 'rejected'
 
     if (!friend) {
       return this.requestSave(did, request, incoming)
-    }
-
-    if (!request) {
-      throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
     const list = this.state?.list?.filter((f) => f !== did)

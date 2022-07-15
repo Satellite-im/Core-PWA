@@ -23,11 +23,14 @@ export default Vue.extend({
       user: null as User | null,
     }
   },
-  mounted() {
+  async mounted() {
     if (this.$route.params && this.$route.params.id) {
       this.$data.friendId = this.$route.params.id
       this._searchFriend()
     }
+    iridium.friends?.on('request/error', (err) => {
+      this.error = err
+    })
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
@@ -61,11 +64,7 @@ export default Vue.extend({
       }
       this.searching = false
     },
-    onFriendRequestSent(error?: string) {
-      if (error) {
-        this.error = error
-        return
-      }
+    onFriendRequestSent() {
       this.request = null
       this.user = null
       this.friendId = ''

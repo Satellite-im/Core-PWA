@@ -67,11 +67,7 @@ export default Vue.extend({
   methods: {
     async createFriendRequest() {
       this.loading = true
-      try {
-        const req = await iridium.friends?.requestCreate(this.user.did)
-      } catch (err) {
-        return this.$emit('requestSent', err)
-      }
+      await iridium.friends?.requestCreate(this.user.did)
       this.loading = false
       this.$emit('requestSent')
     },
