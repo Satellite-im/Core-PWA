@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`merge.overwriteMerge 0 1`] = `"green"`;
+
+exports[`merge.overwriteMerge 1 1`] = `"#FF00FF"`;
+
+exports[`merge.overwriteMerge 2 1`] = `"rgb(0.1,0.2,0.3)"`;
+
+exports[`merge.overwriteMerge 3 1`] = `"rgb(0.1,0.2,0.3)"`;
+
+exports[`merge.overwriteMerge 4 1`] = `"#FF00FF"`;
+
+exports[`merge.overwriteMerge 5 1`] = `""`;
