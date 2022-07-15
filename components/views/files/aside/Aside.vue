@@ -8,11 +8,14 @@ import { FileRouteEnum, FileIconsEnum } from '~/libraries/Enums/enums'
 export default Vue.extend({
   data() {
     return {
-      totalSize: this.$filesize(iridium.files.totalSize),
+      files: iridium.files,
       percentageUsed: iridium.files.percentStorageUsed,
     }
   },
   computed: {
+    totalSize(): string {
+      return this.$filesize(this.files.totalSize)
+    },
     sizeLimit(): string {
       return this.$filesize(this.$Config.personalFilesLimit)
     },

@@ -1,5 +1,7 @@
 <div id="files" data-cy="files-screen">
-  <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
+  <FilesAside
+    :class="[$device.isMobile ? 'mobile-file-aside' : 'files-right']"
+  />
   <div class="files-top">
     <FilesFilepath />
   </div>
@@ -29,6 +31,5 @@
         @handle="handle"
       />
     </div>
-    <FilesAside v-if="!$device.isMobile" class="files-right" />
   </div>
 </div>
