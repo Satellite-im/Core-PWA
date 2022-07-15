@@ -1,30 +1,23 @@
 <template src="./Aside.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import iridium from '~/libraries/Iridium/IridiumManager'
 import { SimpleItem } from '~/types/ui/sidebar'
 import { FileRouteEnum, FileIconsEnum } from '~/libraries/Enums/enums'
-import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
+  data() {
+    return {
+      totalSize: this.$filesize(iridium.files.totalSize),
+      percentageUsed: iridium.files.percentStorageUsed,
+    }
+  },
   computed: {
-    ...mapState({
-      fileSystem: (state) => (state as RootState).textile.fileSystem,
-    }),
-    /**
-     * @description total size of all uploaded files
-     */
-    totalSize(): string {
-      return this.$filesize(this.fileSystem.totalSize)
-    },
-    /**
-     * @description storage space (free tier is 4GB)
-     */
     sizeLimit(): string {
       return this.$filesize(this.$Config.personalFilesLimit)
     },
     sizeColor(): string {
-      return this.fileSystem.percentageUsed > 90 ? 'red' : 'green'
+      return this.percentageUsed > 90 ? 'red' : 'green'
     },
     quickAccessOptions(): SimpleItem[] {
       return [

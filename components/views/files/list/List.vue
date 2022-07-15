@@ -24,7 +24,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      timer: null,
+      timer: undefined as NodeJS.Timer | undefined,
+      counter: 0,
     }
   },
   computed: {
@@ -36,27 +37,20 @@ export default Vue.extend({
       get(): FileSort {
         return this.files.sort
       },
-      /**
-       * @method set
-       * @description Sets current chatbar text to new value
-       * @param val Value to set the chatbar content to
-       * @example set('This is the new chatbar content')
-       */
       set(category: FileSortEnum) {
         this.$store.commit('files/setSort', category)
       },
     },
   },
   mounted() {
-    // this.$data.timer = setInterval(
-    //   this.forceRender,
-    //   this.$Config.chat.timestampUpdateInterval,
-    // )
+    this.timer = setInterval(() => {
+      this.counter++
+    }, this.$Config.chat.timestampUpdateInterval)
   },
   beforeDestroy() {
-    // if (this.$data.timer) {
-    //   clearInterval(this.$data.timer)
-    // }
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   },
 })
 </script>
