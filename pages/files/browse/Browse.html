@@ -1,34 +1,35 @@
-<div id="files" data-cy="files-screen">
-  <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
+<div
+  id="files"
+  class="files-container"
+  :class="{'files-container-mobile': $device.isMobile}"
+  data-cy="files-screen"
+>
   <div class="files-top">
     <FilesFilepath />
   </div>
-  <div class="files-container">
-    <div class="files-left">
-      <FilesControls ref="controls" />
-      <TypographyText
-        v-if="!directory.length"
-        :text="$t('pages.files.empty')"
-      />
-      <FilesGrid
-        v-else-if="gridLayout"
-        :directory="directory"
-        @like="like"
-        @share="share"
-        @rename="rename"
-        @remove="remove"
-        @handle="handle"
-      />
-      <FilesList
-        v-else
-        :directory="directory"
-        @like="like"
-        @share="share"
-        @rename="rename"
-        @remove="remove"
-        @handle="handle"
-      />
-    </div>
-    <FilesAside v-if="!$device.isMobile" class="files-right" />
+  <FilesControls ref="files-controls" />
+  <div class="files-aside-container">
+    <FilesAside />
+  </div>
+  <div class="files-table">
+    <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
+    <FilesGrid
+      v-else-if="gridLayout"
+      :directory="directory"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
+      @handle="handle"
+    />
+    <FilesList
+      v-else
+      :directory="directory"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
+      @handle="handle"
+    />
   </div>
 </div>
