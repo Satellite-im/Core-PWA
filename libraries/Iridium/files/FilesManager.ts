@@ -156,6 +156,9 @@ export default class FilesManager extends Emitter {
     if ('thumbnail' in item) {
       // TODO - confirm this actually works when we can connect to ipfs
       this.iridium.connector?.ipfs.pin.rm(item.id)
+      if (item.thumbnail) {
+        this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
+      }
     }
     // if root item
     if (!item.parentId) {
