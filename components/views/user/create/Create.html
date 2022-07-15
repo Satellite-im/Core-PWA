@@ -1,9 +1,9 @@
 <div class="create-server-container">
   <InteractablesImageCropper
     v-if="showCropper"
-    :setCroppedImage="setCroppedImage"
-    :toggleCropper="toggleCropper"
-    :imageUrl="imageUrl"
+    :set-cropped-image="setCroppedImage"
+    :image-url="imageUrl"
+    @toggle-cropper="toggleCropper"
   />
   <div v-if="showCropper" class="cropper-mask" />
   <div class="modal-body">
@@ -24,15 +24,9 @@
               class="set-photo-title"
               :text="$t('user.registration.photo_text')"
             />
-            <input
-              ref="file"
-              class="input-file"
-              type="file"
-              @change="selectImage"
-              :accept="acceptableImageFormats"
-            />
+            <InteractablesImageInput ref="imageInput" @change="selectImage" />
             <InteractablesButton
-              :action="() => $refs.file.click()"
+              :action="() => imageInputRef.click()"
               type="primary"
               size="small"
               :text="$t('servers.create.photo_button')"
@@ -79,7 +73,6 @@
         </template>
       </div>
 
-      <!-- <hr class="divider"> -->
       <div class="submit-container">
         <InteractablesButton
           type="primary"

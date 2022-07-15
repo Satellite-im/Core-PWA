@@ -66,6 +66,8 @@ export default async function isNSFW(file: Blob): Promise<boolean> {
 
     const model = await nsfwjs.load()
     predictions = await model.classify(vid)
+
+    URL.revokeObjectURL(vid.src)
   }
   // else, it's an embeddable image
   else {
@@ -97,6 +99,8 @@ export default async function isNSFW(file: Blob): Promise<boolean> {
     )
     const model = await nsfwjs.load()
     predictions = await model.classify(img)
+
+    URL.revokeObjectURL(img.src)
   }
 
   const results: { [key: string]: number } = {}

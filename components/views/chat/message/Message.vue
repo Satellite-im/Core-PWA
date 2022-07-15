@@ -195,7 +195,7 @@ export default Vue.extend({
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         const img = new Image()
-        img.src = URL.createObjectURL(this.blob)
+        img.src = URL.createObjectURL(this.blob as Blob)
         img.onload = () => {
           canvas.width = img.naturalWidth
           canvas.height = img.naturalHeight
@@ -203,6 +203,7 @@ export default Vue.extend({
           canvas.toBlob((newBlob: Blob) => {
             resolve(newBlob)
           })
+          URL.revokeObjectURL(img.src)
         }
       })
     },
@@ -271,7 +272,7 @@ export default Vue.extend({
      */
     editMessage() {
       const { id, payload, type, from } = this.message
-      if (type === 'text' && from === this.accounts.details.textilePubkey) {
+      if (type === 'text' && from === this.accounts.details?.textilePubkey) {
         this.$store.commit('ui/setEditMessage', {
           id,
           payload,
