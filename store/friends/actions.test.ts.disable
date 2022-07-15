@@ -124,6 +124,7 @@ describe('default functions', () => {
     expect(dispatch).toBeCalledWith('fetchFriendRequests', {})
     expect(dispatch).toBeCalledWith('subscribeToFriendsEvents', {})
   })
+
   test('module.default.removeFriend without payer account', async () => {
     const BCConstructor = BlockchainClient
     BCConstructor.getInstance = jest.fn().mockReturnValueOnce({
@@ -294,6 +295,7 @@ describe('utility functions', () => {
     )
     expect(result.account).toEqual(friendAccount)
   })
+
   test('module.exportForTesting.friendAccountToOutgoingRequest', () => {
     const friendAccount = {
       accountId: 'Checking Account',

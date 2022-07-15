@@ -98,6 +98,7 @@ describe('misc', () => {
     mutations.default.setCalling(state, argument)
     expect(state.calling).toBeTruthy()
   })
+
   test('mutations.default.setCalling', () => {
     const state = { ...initialState }
     const argument = false
@@ -105,6 +106,7 @@ describe('misc', () => {
     mutations.default.setCalling(state, argument)
     expect(state.calling).toBeFalsy()
   })
+
   test('mutations.default.setParticipants', () => {
     const state = { ...initialState }
     const argument = false
@@ -112,6 +114,7 @@ describe('misc', () => {
     mutations.default.setParticipants(state, argument)
     expect(state.participants).toEqual([])
   })
+
   test('mutations.default.setParticipants', () => {
     const state = { ...initialState }
     const argument = {
@@ -127,6 +130,7 @@ describe('misc', () => {
     mutations.default.setParticipants(state, [argument])
     expect(state.participants).toEqual([argument])
   })
+
   test('mutations.default.addParticipant', () => {
     const state = { ...initialState }
     const argument = {
@@ -152,6 +156,7 @@ describe('misc', () => {
     mutations.default.addParticipant(state, argument2) // Append
     expect(state.participants).toEqual([argument, argument2])
   })
+
   test('mutations.default.updateParticipant', () => {
     const state = { ...initialState }
     const argument = {
@@ -189,6 +194,7 @@ describe('misc', () => {
     mutations.default.updateParticipant(state, argument3)
     expect(state.participants).toEqual([argument, argument3])
   })
+
   test('mutations.default.updateParticipant with no participant entry to update', () => {
     const state = { ...initialState }
     const argument = {
@@ -217,6 +223,7 @@ describe('misc', () => {
     expect(state.participants).toEqual([argument]) // Entry does not have argument3 because it does not exist
     expect(result).toBe(undefined)
   })
+
   test('mutations.default.updateParticipant with identical updated entry', () => {
     const state = { ...initialState }
     const argument = {

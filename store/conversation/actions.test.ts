@@ -273,6 +273,7 @@ describe('misc', () => {
     actions.default.setCalling({ commit }, argument)
     expect(commit).toHaveBeenCalledWith('setCalling', true)
   })
+
   test('actions.default.setCalling false', () => {
     const commit = jest.fn()
     const argument = false
@@ -280,6 +281,7 @@ describe('misc', () => {
     actions.default.setCalling({ commit }, argument)
     expect(commit).toHaveBeenCalledWith('setCalling', false)
   })
+
   test('actions.default.addParticipants 2 entry', () => {
     const dispatch = jest.fn()
     const participant = {
@@ -309,6 +311,7 @@ describe('misc', () => {
       participant2.address,
     )
   })
+
   test('actions.default.addParticipant', () => {
     const commit = jest.fn()
     const rootState = { ...initialRootState }

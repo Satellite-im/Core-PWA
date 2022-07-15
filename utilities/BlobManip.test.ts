@@ -37,6 +37,7 @@ describe('convert blob to base 64 failing', () => {
       value: original,
     })
   })
+
   test('file is jpeg', async () => {
     const jpegBlob = new Blob(['testing'], { type: 'image/jpeg' })
 

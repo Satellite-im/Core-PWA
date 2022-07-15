@@ -155,6 +155,7 @@ describe('', () => {
 
     expect(result).toBe(rootStateForTest.accounts.details)
   })
+
   test('getFullUserInfoFromState with non-identical textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest =
@@ -192,6 +193,7 @@ describe('', () => {
       mailboxId: '',
     })
   })
+
   test('getUsernameFromState with unknown textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest = 'publickey1'
@@ -204,6 +206,7 @@ describe('', () => {
 
     expect(result).toBe(PropCommonEnum.UNKNOWN)
   })
+
   test('getAddressFromState with unknown textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest = 'publickey1'
@@ -216,6 +219,7 @@ describe('', () => {
 
     expect(result).toBe(PropCommonEnum.UNKNOWN)
   })
+
   test('refreshTimeStampInterval', () => {
     jest.useFakeTimers()
     const action = jest.fn()
@@ -224,6 +228,7 @@ describe('', () => {
     const result2 = Messaging.refreshTimestampInterval(135, action, 3000)
     expect(result2).toBe(1000000000001)
   })
+
   test('replyMessageToUIReply', () => {
     const result: UIReply = Messaging.exportedForTesting.replyMessageToUIReply(
       [
@@ -250,6 +255,7 @@ describe('', () => {
     )
     expect(result).toMatchSnapshot()
   })
+
   test('messageRepliesToUIReplies', () => {
     const result = Messaging.exportedForTesting.messageRepliesToUIReplies(
       [
@@ -285,6 +291,7 @@ describe('', () => {
     )
     expect(result).toMatchSnapshot()
   })
+
   test('groupMessages', () => {
     const message1 = `message1`
     const message2 = `message2`
@@ -352,6 +359,7 @@ describe('update message tracker', () => {
     const result = Messaging.updateMessageTracker(newMessages)
     expect(result).toMatchSnapshot()
   })
+
   test('updateMessageTracker text', () => {
     const newMessages = [
       {
@@ -375,6 +383,7 @@ describe('update message tracker', () => {
     const result = Messaging.updateMessageTracker(newMessages)
     expect(result).toMatchSnapshot()
   })
+
   test('updateMessageTracker file', () => {
     const newMessages = [
       {
@@ -398,6 +407,7 @@ describe('update message tracker', () => {
     const result = Messaging.updateMessageTracker(newMessages)
     expect(result).toMatchSnapshot()
   })
+
   test('updateMessageTracker reaction', () => {
     const newMessages = [
       {
@@ -421,6 +431,7 @@ describe('update message tracker', () => {
     const result = Messaging.updateMessageTracker(newMessages)
     expect(result).toMatchSnapshot()
   })
+
   test('updateMessageTracker reply', () => {
     const newMessages = [
       {
@@ -444,6 +455,7 @@ describe('update message tracker', () => {
     const result = Messaging.updateMessageTracker(newMessages)
     expect(result).toMatchSnapshot()
   })
+
   test('convertTimestampToDate', () => {
     const localTimestamp = dateNow
     const result = Messaging.convertTimestampToDate(

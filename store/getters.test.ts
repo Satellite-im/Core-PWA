@@ -75,6 +75,7 @@ describe('prerequisites returns', () => {
 
     expect(result).toBeFalsy()
   })
+
   test('finished init', () => {
     const state = { ...initialRootState }
     state.accounts.active = 'accountAddress'

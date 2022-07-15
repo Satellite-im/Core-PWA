@@ -26,6 +26,7 @@ describe('index.Touch.methods.sidebarSwipeHandler human created', () => {
     givenFunction('left')
     expect(local.sidebar).toBeFalsy()
   })
+
   test('showSettings false and right direction', () => {
     const local = {
       $store: {
@@ -44,6 +45,7 @@ describe('index.Touch.methods.sidebarSwipeHandler human created', () => {
     givenFunction('right')
     expect(local.sidebar).toBeTruthy()
   })
+
   test('showSettings true and left direction', () => {
     const local = {
       $store: {
@@ -62,6 +64,7 @@ describe('index.Touch.methods.sidebarSwipeHandler human created', () => {
     givenFunction('left')
     expect(local.sidebar).toBeFalsy()
   })
+
   test('showSettings true and right direction', () => {
     const local = {
       $store: {

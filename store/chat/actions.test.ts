@@ -207,6 +207,7 @@ describe('actions.loadMessages', () => {
     await actions.loadMessages({ state, commit, rootState }, argument)
     expect(commit).toBeCalledWith('setCurrentChat', { isMessagesLoading: true })
   })
+
   test('loadMessages but conversationId is false', async () => {
     const rootState: RootState = {
       accounts: {

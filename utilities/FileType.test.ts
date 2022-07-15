@@ -164,6 +164,7 @@ describe('FileType.mimeType', () => {
 
     expect(result).toBeTruthy()
   })
+
   test('mimeType check non svg image', async () => {
     const buffer = fs.readFileSync('utilities/test_assets/heic-image.heic', {
       flag: 'r',

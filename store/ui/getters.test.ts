@@ -335,6 +335,7 @@ describe('init', () => {
     ])
     expect(result).toMatchSnapshot()
   })
+
   test('get all unseen notifications', () => {
     const localState = {
       contextMenuStatus: false,

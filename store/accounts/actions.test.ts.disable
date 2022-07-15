@@ -21,6 +21,7 @@ describe('init', () => {
   beforeEach(() => {
     fetchMock.resetMocks()
   })
+
   test('setPin with 5 letter', async () => {
     const CPrototype = Vue.prototype.$Crypto
 
@@ -32,6 +33,7 @@ describe('init', () => {
     expect(CPrototype.hash).toHaveBeenCalledWith('12345')
     expect(commit).toHaveBeenCalledWith('setPin', '12345')
   })
+
   test('setPin with less than 5 letter', async () => {
     const CPrototype = Vue.prototype.$Crypto
 
@@ -45,6 +47,7 @@ describe('init', () => {
       expect(error).toHaveProperty('message', AccountsError.PIN_TOO_SHORT)
     }
   })
+
   test('unlock with non-matching pinHash', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = InitialAccountsState()
@@ -62,6 +65,7 @@ describe('init', () => {
       await accounts.default.unlock({ commit, state }, state.pin)
     }).rejects.toThrowError(AccountsError.INVALID_PIN)
   })
+
   test('unlock with 3 length pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = {
@@ -101,6 +105,7 @@ describe('init', () => {
 
     expect(result).rejects.toThrowError(AccountsError.PIN_TOO_SHORT)
   })
+
   test('unlock with set phrase', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = {
@@ -145,6 +150,7 @@ describe('init', () => {
 
     expect(result).rejects.toThrowError(AccountsError.INVALID_PIN)
   })
+
   test('loadAccount with empty mnemonic', async () => {
     const state = {
       storePin: false,
@@ -182,6 +188,7 @@ describe('init', () => {
 
     expect(result).rejects.toThrowError(AccountsError.MNEMONIC_NOT_PRESENT)
   })
+
   test('generate wallet with invalid pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const SMPrototype = Vue.prototype.$SolanaManager
@@ -265,6 +272,7 @@ describe('init', () => {
     expect(result).rejects.toThrowError(AccountsError.INVALID_PIN) // Cannot do anything right now.
     // On the `if (!solanaWallet.mnemonic) {` line, solanaWallet is undefined.
   })
+
   test('setRecoverMnemonic with a pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = InitialAccountsState()
@@ -284,6 +292,7 @@ describe('init', () => {
     expect(commit).toHaveBeenCalledWith('setEncryptedPhrase', undefined)
     // It is undefined because setEncryptedPhrase updates the state, rather than returning any value.
   })
+
   test('setRecoverMnemonic with an invalid pin', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = InitialAccountsState()
@@ -301,6 +310,7 @@ describe('init', () => {
       expect(error).toHaveProperty('message', AccountsError.INVALID_PIN)
     }
   })
+
   test('setRecoverMnemonic without a mnemonic', async () => {
     const CPrototype = Vue.prototype.$Crypto
     const state = InitialAccountsState()
@@ -321,6 +331,7 @@ describe('init', () => {
       )
     }
   })
+
   test('uploadPicture with an image', async () => {
     /*
      * The comments are here because I am still discussing on how to proceed in testing out the TextileManager on the Vue side. Right now it is about fetch.
@@ -337,10 +348,12 @@ describe('init', () => {
     // expect(TMPrototype.bucketManager.getBucket).toHaveBeenCalled()
     // expect(TMPrototype.bucketManager.pushFile).toHaveBeenCalled()
   })
+
   test('uploadPicture with a non image', async () => {
     const result = await accounts.exportForTesting.uploadPicture(false)
     expect(result).toBe('')
   })
+
   test('initializeEncryptionEngine', async () => {
     const state: any = {
       accounts: {
