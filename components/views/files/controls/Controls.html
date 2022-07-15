@@ -50,12 +50,7 @@
       multiple
     />
   </div>
-  <TypographyText
-    v-if="filesUploadStatus"
-    class="status"
-    :text="filesUploadStatus"
-    :size="6"
-  />
+  <TypographyText v-if="status" class="status" :text="status" :size="6" />
   <div class="error-container" v-if="errors.length">
     <alert-triangle-icon size="1.3x" />
     <div>
@@ -65,6 +60,6 @@
   </div>
   <div class="switcher-container">
     <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
-    <FilesViewSwitcher :changeView="changeView" />
+    <FilesControlsSwitch />
   </div>
 </div>

@@ -1,6 +1,5 @@
 import { EmojiUsage, UIState } from './types'
 import { Alert, AlertState } from '~/libraries/ui/Alerts'
-import { RootState } from '~/types/store/store'
 
 const getters = {
   getSortedMostUsedEmojis: (state: UIState): EmojiUsage[] => {
@@ -23,16 +22,6 @@ const getters = {
   },
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
-  },
-  isFilesIndexLoading: (
-    state: UIState,
-    getters: any,
-    rootState: RootState,
-    rootGetters: any,
-  ): boolean => {
-    return (
-      Boolean(state.filesUploadStatus) || !rootGetters['textile/getInitialized']
-    )
   },
 }
 

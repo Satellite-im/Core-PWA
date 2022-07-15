@@ -9,7 +9,7 @@
         v-tooltip.bottom="$t('pages.files.aside.coming_soon')"
       />
     </div>
-    <UiProgress :progress="fileSystem.percentageUsed" />
+    <UiProgress :progress="percentageUsed" />
     <div class="usage-text">
       <span :class="sizeColor">{{totalSize}}</span>
       <span>of {{sizeLimit}}</span>

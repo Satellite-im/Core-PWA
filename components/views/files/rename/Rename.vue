@@ -2,11 +2,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { SaveIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
-import { Directory } from '~/libraries/Files/Directory'
-import fileSystem from '~/libraries/Files/FilSystem'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { IridiumItem } from '~/libraries/Iridium/files/types'
 
 export default Vue.extend({
   components: {
@@ -21,33 +21,32 @@ export default Vue.extend({
   data() {
     return {
       text: '' as string,
-      currentName: '' as string,
-      parent: null as Directory | null,
       error: '' as string,
+      item: undefined as IridiumItem | undefined,
     }
   },
   computed: {
     ...mapState({
-      renameItem: (state) => (state as RootState).ui.renameItem,
+      rename: (state) => (state as RootState).files.rename,
     }),
-    ...mapGetters('ui', ['isFilesIndexLoading']),
   },
   mounted() {
-    if (!this.renameItem) {
+    if (!this.rename) {
       this.error = this.$t('pages.files.errors.lost') as string
       return
     }
     // extract data we need from store and then clear to avoid vuex outside mutation error
-    this.text = this.renameItem.name
-    this.currentName = this.renameItem.name
-    this.parent = this.renameItem.parent
-    this.$store.commit('ui/setRenameItem', undefined)
+    this.item = this.rename
+    this.$store.commit('files/setRename', undefined)
+
+    this.text = this.item.name
     this.$nextTick(() => {
       // extension string including .
       const extString = this.text.slice(
         ((this.text.lastIndexOf('.') - 1) >>> 0) + 1,
       )
-      const input = this.$refs.inputGroup.$refs.input as HTMLInputElement
+      const input = (this.$refs.inputGroup as Vue).$refs
+        .input as HTMLInputElement
       // if file extension is found, highlight everything except the [.ext]
       if (extString) {
         input.focus()
@@ -59,23 +58,22 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method rename
-     * @description attempt to rename child. Update textile files index if successful
+     * @description attempt to rename item, catch name errors
      */
-    async rename() {
+    renameItem() {
+      if (!this.item) {
+        return
+      }
       try {
-        fileSystem.renameChild(this.currentName, this.text, this.parent)
+        iridium.files.updateItem({
+          item: this.item,
+          name: this.text,
+        })
       } catch (e: any) {
         this.error = this.$t(e?.message) as string
         return
       }
       this.closeModal()
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
-      // await this.$store.dispatch('textile/exportFileSystem')
-      this.$store.commit('ui/setFilesUploadStatus', '')
     },
   },
 })

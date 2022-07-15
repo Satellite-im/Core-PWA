@@ -1,7 +1,7 @@
 <template src="./View.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import {
   FileIcon,
   DownloadIcon,
@@ -24,14 +24,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      file: (state) => (state as RootState).ui.filePreview,
-      fileDownloadList: (state) => (state as RootState).ui.fileDownloadList,
+      file: (state) => (state as RootState).files.preview,
+      downloadList: (state) => (state as RootState).files.downloadList,
       blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
-    ...mapGetters('ui', ['isFilesIndexLoading']),
     isDownloading(): boolean {
       return this.file?.name
-        ? this.fileDownloadList.includes(this.file.name)
+        ? this.downloadList.includes(this.file.name)
         : false
     },
   },
@@ -43,41 +42,31 @@ export default Vue.extend({
      * @method download
      * @description download file using stream saver, apply original extension if it was removed
      * add name to store so the user doesn't start another download of the same file
-     * also takes a bit to get started for large files, this adds loading indicator
      */
     async download() {
       // assign variable in case the user closes modal and removes store value before download is finished
       const file = this.file
       if (file) {
-        this.$store.commit('ui/addFileDownload', file.name)
+        this.$store.commit('files/addDownload', file.name)
         const fileExt = file.name
           .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
           .toLowerCase()
 
-        await iridium.files?.download(
+        await iridium.files.download(
           file.id,
           file.extension === fileExt
             ? file.name
             : `${file.name}.${file.extension}`,
           file.size,
         )
-        this.$store.commit('ui/removeFileDownload', file.name)
+        this.$store.commit('files/removeDownload', file.name)
       }
     },
-    /**
-     * @method share
-     * @description copy link to clipboard
-     */
-    // async share() {
-    //   this.$toast.show(this.$t('todo - share') as string)
-    // },
-    /**
-     * @method closeFilePreview
-     * @description Close File Preview
-     * @example
-     */
+    share() {
+      this.$toast.show(this.$t('todo - share') as string)
+    },
     close() {
-      this.$store.commit('ui/setFilePreview', undefined)
+      this.$store.commit('files/setPreview', undefined)
     },
   },
 })
