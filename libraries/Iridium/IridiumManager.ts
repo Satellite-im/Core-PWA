@@ -152,7 +152,6 @@ export class IridiumManager extends Emitter {
     logger.log('iridium/friends', 'initializing friends')
     this.friends = new FriendsManager(this)
     logger.log('iridium/manager', 'initializing groups')
-<<<<<<< HEAD
     await this.groups.init()
     logger.log('iridium/friends', 'initializing friends')
     await this.friends.init()
@@ -164,18 +163,6 @@ export class IridiumManager extends Emitter {
     await this.settings.init()
     logger.log('iridium/manager', 'ready')
 
-=======
-    this.groups = new GroupManager(this)
-    logger.log('iridium/manager', 'initializing chat')
-    this.chat = new ChatManager(this)
-    logger.log('iridium/manager', 'initializing files')
-    this.files = new FilesManager(this)
-
-    logger.log('iridium/manager', 'ready')
-    await this.friends.init()
-    await this.chat.init()
-    await this.files.init()
->>>>>>> a555394b (chore(add): added phantom manager and fully integrated Phantom)
     this.ready = true
   }
 }

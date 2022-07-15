@@ -196,7 +196,6 @@ export default {
     }
 
     console.info('user registered, dispatching')
-    // dispatch('initializeEncryptionEngine', payerAccount)
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
@@ -269,7 +268,6 @@ export default {
       photoHash: imagePath,
       address: walletAccount.publicKey.toBase58(),
     })
-    // dispatch('initializeEncryptionEngine', walletAccount)
     dispatch('startup')
   },
 
@@ -354,27 +352,9 @@ export default {
         'Loading Iridium from accounts startup',
       )
       const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-<<<<<<< HEAD
       const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
       await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-=======
-      if (state.adapter === 'Solana') {
-        const { pin } = state
-        await dispatch(
-          'iridium/initialize',
-          {
-            pass: pin,
-            wallet: $BlockchainClient.account,
-          },
-          { root: true },
-        )
-      } else {
-        const { entropyMessage } = state
-        const entropy = await $BlockchainClient.signMessage(entropyMessage)
-        await dispatch('iridium/initializFromEntropy', entropy, { root: true })
-      }
->>>>>>> a555394b (chore(add): added phantom manager and fully integrated Phantom)
     }
 
     await dispatch('groups/initialize', {}, { root: true })

@@ -569,11 +569,12 @@ export default class PhantomFriends extends EventEmitter {
       [incomingRequestsFilter],
     )
 
-    // Filter for new friends checks only if an outgoing request has been accepted
-    // because we suppose the incoming request acceptance to be catch directly after the
-    // success of the acceptRequest action
-    // This filter checks the sender public key (our) and the status
-    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+    /** Filter for new friends checks only if an outgoing request has been accepted
+     * because we suppose the incoming request acceptance to be catch directly after the
+     * success of the acceptRequest action
+     * This filter checks the sender public key (our) and the status
+     * [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+     **/
     const newFriendFromOutgoingBytes = base58(
       Buffer.from([...payer.toBytes(), FriendStatus.ACCEPTED]),
     )
@@ -589,9 +590,11 @@ export default class PhantomFriends extends EventEmitter {
       [newFriendFromOutgoingFilter],
     )
 
-    // Filter for new friends checks only if an outgoing request has been denied
-    // This filter checks the sender public key (our) and the status
-    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+    /** Filter for new friends checks only if an outgoing request has been denied
+     * This filter checks the sender public key (our) and the status
+     * [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+     **/
+
     const friendRequestDeniedBytes = base58(
       Buffer.from([...payer.toBytes(), FriendStatus.DENIED]),
     )
@@ -607,11 +610,13 @@ export default class PhantomFriends extends EventEmitter {
       [friendRequestDeniedFilter],
     )
 
-    // To listen for friend removal we need to filter from both directions
-    // because the account can be on from or to field depending on who was the
-    // original sender of the friend request
-    // This filter checks the sender public key (our) and the status
-    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+    /** To listen for friend removal we need to filter from both directions
+     * because the account can be on from or to field depending on who was the
+     * original sender of the friend request
+     * This filter checks the sender public key (our) and the status
+     * [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+     */
+
     const friendRemovedBytes = base58(
       Buffer.from([...payer.toBytes(), FriendStatus.REMOVED]),
     )
@@ -642,9 +647,11 @@ export default class PhantomFriends extends EventEmitter {
       [friendRemovedMirroredFilter],
     )
 
-    // Filter for remove friend requests checks only if an incoming request has been removed
-    // This filter checks the status and recipient public key
-    // [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+    /** Filter for remove friend requests checks only if an incoming request has been removed
+     * This filter checks the status and recipient public key
+     * [32 bytes (sender public key)][1 byte (status)][32 bytes (recipient public key)]
+     */
+
     const friendRequestRemovedBytes = base58(
       Buffer.from([FriendStatus.REQUEST_REMOVED, ...payer.toBytes()]),
     )
