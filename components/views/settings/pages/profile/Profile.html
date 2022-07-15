@@ -24,6 +24,7 @@
             <div class="profile-image-cropper" v-if="showCropper">
               <div class="content">
                 <InteractablesImageCropper
+                  v-click-outside="toggleCropper"
                   :set-cropped-image="setCroppedImage"
                   :image-url="image"
                   @toggle-cropper="toggleCropper"
@@ -62,7 +63,11 @@
                   />
                 </div>
               </div>
-              <button class="remove-button" @click="removeProfileImage">
+              <button
+                v-if="src"
+                class="remove-button"
+                @click="removeProfileImage"
+              >
                 <span>{{ $t('pages.settings.profile.remove_image') }}</span>
               </button>
               <div class="username">
