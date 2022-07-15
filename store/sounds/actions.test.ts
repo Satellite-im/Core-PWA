@@ -39,6 +39,7 @@ describe('Manage sounds', () => {
 
     expect(result).toMatchSnapshot()
   })
+
   test('sound does not play', () => {
     window.HTMLMediaElement.prototype.load = () => {
       return Promise.resolve()

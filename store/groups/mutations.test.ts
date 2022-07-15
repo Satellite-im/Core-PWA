@@ -667,6 +667,7 @@ describe('misc', () => {
     mutations.default.setGroups(localState, argument)
     expect(localState.all).toMatchObject(argument)
   })
+
   test('mutations.default.updateGroup', () => {
     const localState = { ...GroupsInitialState }
     const argument = {
@@ -676,6 +677,7 @@ describe('misc', () => {
     mutations.default.updateGroup(localState, argument)
     expect(localState.all[3].name).toContain(argument.name)
   })
+
   test('mutations.default.setGroupsLastUpdate', () => {
     const localState = { ...GroupsInitialState }
     const argument = {
@@ -684,18 +686,21 @@ describe('misc', () => {
     mutations.default.setGroupsLastUpdate(localState, argument)
     expect(localState.all[3].lastUpdate).toBe(1234)
   })
+
   test('mutations.default.setInviteSubscription', () => {
     const localState = { ...GroupsInitialState }
     const argument = 10
     mutations.default.setInviteSubscription(localState, argument)
     expect(localState.inviteSubscription).toBe(argument)
   })
+
   test('mutations.default.setGroupSubscriptions', () => {
     const localState = { ...GroupsInitialState }
     const argument = ['string']
     mutations.default.setGroupSubscriptions(localState, argument)
     expect(localState.groupSubscriptions).toBe(argument)
   })
+
   test('mutations.default.addGroupSubscription', () => {
     const localState = { ...GroupsInitialState }
     const argument = 'string'

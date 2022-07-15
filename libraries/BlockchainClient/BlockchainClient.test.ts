@@ -10,6 +10,7 @@ describe('', () => {
       expect(error).toHaveProperty('message', `Account is not initialized`)
     }
   })
+
   test('get payerAccount but it is uninitialized', () => {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     try {
@@ -19,11 +20,13 @@ describe('', () => {
       expect(error).toHaveProperty('message', `PayerAccount is not initialized`)
     }
   })
+
   test('get isInitialized', () => {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const result = $BlockchainClient.isInitialized
     expect(result).toBeFalsy()
   })
+
   test('get isPayerInitialized', () => {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     const result = $BlockchainClient.isPayerInitialized

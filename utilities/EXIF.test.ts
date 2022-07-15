@@ -15,6 +15,7 @@ describe('', () => {
     const result = await exif.stripEXIF(file2)
     expect(result).toBe(file2)
   })
+
   test('file is jpeg', async () => {
     const jpegBlob = new Blob(['testing'], { type: 'image/jpeg' })
 
@@ -30,6 +31,7 @@ describe('', () => {
     // expect(result).rejects.toMatchObject({})
     expect(result).toBe(jpegBlob)
   })
+
   test('file returns TypeError', async () => {
     const mockFileData = {
       name: 'TestFile.png',
@@ -53,6 +55,7 @@ describe('', () => {
       )
     }
   })
+
   test('dv.getUint16 mocked ', async () => {
     // global.DataView = class MockDataView {
     //   filename: string

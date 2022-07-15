@@ -7,6 +7,7 @@ describe('SatelliteDB', () => {
   beforeEach(async () => {
     db = new SatelliteDB()
   })
+
   test('tables', () => {
     expect(Object.keys(db.tables)).toMatchSnapshot()
   })

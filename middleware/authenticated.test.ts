@@ -168,6 +168,7 @@ describe('', () => {
       }),
     ).toMatchSnapshot()
   })
+
   test('the wallet has not been created yet', () => {
     const inst = authenticated.default
     initialRootState.accounts.locked = false
@@ -187,6 +188,7 @@ describe('', () => {
       }),
     ).toMatchSnapshot()
   })
+
   test('param3 path included in config', () => {
     const inst = authenticated.default
     initialRootState.accounts.locked = false
@@ -208,6 +210,7 @@ describe('', () => {
       }),
     ).toMatchSnapshot()
   })
+
   test('all prerequisites not ready', () => {
     const inst = authenticated.default
     initialRootState.accounts.locked = false
@@ -229,6 +232,7 @@ describe('', () => {
       }),
     ).toMatchSnapshot()
   })
+
   test('store.commit called', () => {
     const inst = authenticated.default
     initialRootState.accounts.locked = false
@@ -252,6 +256,7 @@ describe('', () => {
     ).toMatchSnapshot()
     expect(param1.commit).toHaveBeenCalled()
   })
+
   test(`eventuallyRedirect(' / ')`, () => {
     const inst = authenticated.default
     initialRootState.accounts.locked = false
@@ -274,6 +279,7 @@ describe('', () => {
       }),
     ).toMatchSnapshot()
   })
+
   test(`route.path === path`, () => {
     const inst = authenticated.default
     initialRootState.accounts.locked = true

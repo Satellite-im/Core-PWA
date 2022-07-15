@@ -2,7 +2,7 @@ import { Flairs, GlyphMarketViewStatus, Themes } from './types'
 import * as getters from '~/store/ui/getters'
 import InitialUIState from '~/store/ui/state'
 
-describe.skip('init', () => {
+describe('init', () => {
   let inst: any
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe.skip('init', () => {
     expect(result).not.toBeTruthy()
   })
 
-  test('sort most recent glyphs', () => {
+  test.skip('sort most recent glyphs', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
@@ -237,7 +237,7 @@ describe.skip('init', () => {
     ])
     expect(result).toMatchSnapshot()
   })
-  test('sort most used emojis', () => {
+  test.skip('sort most used emojis', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
@@ -335,6 +335,7 @@ describe.skip('init', () => {
     ])
     expect(result).toMatchSnapshot()
   })
+
   test('get all unseen notifications', () => {
     const localState = {
       contextMenuStatus: false,

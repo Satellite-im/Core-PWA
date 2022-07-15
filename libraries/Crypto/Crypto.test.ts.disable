@@ -172,6 +172,7 @@ describe('Crypto.getRandomString', () => {
     const result: string = inst.getRandomString(10)
     expect(typeof result).toBe('string')
   })
+
   test('it should return string with proper length', () => {
     const length = 20
     const result: string = inst.getRandomString(length)

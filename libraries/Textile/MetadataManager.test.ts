@@ -57,6 +57,7 @@ describe('', () => {
       )
     }
   })
+
   test('', async () => {
     ThreadID.fromString.mockImplementationOnce(() => new Uint8Array([]))
     const result = await konstruktor.init()

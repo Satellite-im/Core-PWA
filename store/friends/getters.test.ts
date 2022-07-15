@@ -299,6 +299,7 @@ describe('', () => {
       userAccount: '',
     })
   })
+
   test('module.default.findFriendByAddress', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const originalFunction = module.default.findFriendByAddress(localState)
@@ -333,6 +334,7 @@ describe('', () => {
       userAccount: '',
     })
   })
+
   test('module.default.getActiveFriend', () => {
     const localState: FriendsState = { ...initialFriendsState }
     localState.all.push({
@@ -391,6 +393,7 @@ describe('', () => {
       userAccount: 'duplicate_',
     })
   })
+
   test('module.default.friendExists', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const originalFunction = module.default.friendExists(localState)
@@ -400,6 +403,7 @@ describe('', () => {
     )
     expect(result).toBeTruthy()
   })
+
   test('module.default.matchesActiveCall', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const localRootState: RootState = { ...initialRootState }
@@ -437,6 +441,7 @@ describe('', () => {
       userAccount: '',
     })
   })
+
   test('module.default.matchesSomeActiveCall', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const localRootState: RootState = { ...initialRootState }
@@ -449,6 +454,7 @@ describe('', () => {
     )
     expect(result).toBeTruthy()
   })
+
   test('module.default.alphaSortedFriends', () => {
     const localState: FriendsState = { ...initialFriendsState }
     localState.all.push({
@@ -566,6 +572,7 @@ describe('', () => {
       ],
     })
   })
+
   test('module.default.alphaSortedOutgoing', () => {
     const localState: FriendsState = { ...initialFriendsState }
     localState.all.push({
@@ -643,6 +650,7 @@ describe('', () => {
       },
     ])
   })
+
   test('module.default.friendsWithUnreadMessages', () => {
     const localState: FriendsState = { ...initialFriendsState }
     const result = module.default.friendsWithUnreadMessages(localState)
@@ -756,6 +764,7 @@ describe('', () => {
       },
     ])
   })
+
   test('module.default.alphaSortedFriendsSearch', () => {
     const localState: FriendsState = { ...initialFriendsState }
     localState.all.push({

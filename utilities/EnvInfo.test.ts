@@ -12,6 +12,7 @@ describe('init', () => {
   beforeEach(() => {
     canvas = document.createElement('canvas')
   })
+
   test('constructor success', () => {
     const envinfo = new EnvInfo()
     // const gl =
@@ -21,6 +22,7 @@ describe('init', () => {
 
     // gl is currently commented out because of the Error: `Cannot spyOn on a primitive value; undefined given`
   })
+
   test('constructor fail', () => {
     HTMLCanvasElement.prototype.getContext = () => {
       throw new Error('mocked error')

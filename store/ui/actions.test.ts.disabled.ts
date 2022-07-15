@@ -246,6 +246,7 @@ describe('init', () => {
     actions.default.setMessages({ commit }, messages)
     expect(commit).toHaveBeenCalledWith('setMessages', messages)
   })
+
   test('sendMessage', () => {
     const commit = jest.fn()
     const rootState: any = {
@@ -285,6 +286,7 @@ describe('init', () => {
     actions.default.sendMessage({ commit, rootState }, message)
     expect(commit).toHaveBeenCalledWith('sendMessage', message)
   })
+
   test('sendMessage with non-matching addresses', () => {
     const commit = jest.fn()
     const rootState: any = {
@@ -334,16 +336,19 @@ describe('init', () => {
     actions.default.sendMessage({ commit, rootState }, message)
     expect(commit).toHaveBeenCalledWith('sendMessage', message)
   })
+
   test('setIsScrollOver', () => {
     const commit = jest.fn()
     actions.default.setIsScrollOver({ commit }, false)
     expect(commit).toHaveBeenCalledWith('setIsScrollOver', false)
   })
+
   test('setIsReacted', () => {
     const commit = jest.fn()
     actions.default.setIsReacted({ commit }, false)
     expect(commit).toHaveBeenCalledWith('setIsReacted', false)
   })
+
   test('setActiveChannel', () => {
     const commit = jest.fn()
     actions.default.setActiveChannel(
@@ -360,6 +365,7 @@ describe('init', () => {
       name: 'name',
     })
   })
+
   test('openSettings', () => {
     const commit = jest.fn()
     const state = { ...initialState }
@@ -368,12 +374,14 @@ describe('init', () => {
       show: !state.showSettings,
     })
   })
+
   test('setChatbarFocus', async () => {
     const dispatch = jest.fn()
     await actions.default.setChatbarFocus({ dispatch })
     expect(dispatch).toHaveBeenCalledWith('toggleChatbarFocus', false)
     expect(dispatch).toHaveBeenCalledWith('toggleChatbarFocus', true)
   })
+
   test('toggleChatbarFocus', async () => {
     const commit = jest.fn()
     const flag = true
@@ -381,6 +389,7 @@ describe('init', () => {
     actions.default.toggleChatbarFocus({ commit }, flag)
     expect(commit).toHaveBeenCalledWith('setChatbarFocus', flag)
   })
+
   test('activateKeybinds', async () => {
     const dispatch = jest.fn()
     const rootState = { ...initialRootState }
@@ -391,12 +400,14 @@ describe('init', () => {
     expect(Mousetrap.bind).toHaveBeenCalled()
     expect(Mousetrap.bind).toBeCalledTimes(4)
   })
+
   test('clearKeybinds', async () => {
     const dispatch = jest.fn()
     Mousetrap.reset = jest.fn()
     await actions.default.clearKeybinds({ dispatch })
     expect(Mousetrap.reset).toHaveBeenCalled()
   })
+
   test('setChatbarContent without userId', async () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
@@ -406,6 +417,7 @@ describe('init', () => {
     await actions.default.setChatbarContent({ commit, dispatch }, val)
     expect(commit).toHaveBeenCalledWith('chatbarContent', val.content)
   })
+
   test('setChatbarContent with userId', async () => {
     const commit = jest.fn()
     const dispatch = jest.fn()
@@ -421,6 +433,7 @@ describe('init', () => {
       { root: true },
     )
   })
+
   test('showQuickProfile with payload', async () => {
     const commit = jest.fn()
     const rootState = { ...initialRootState }
@@ -441,6 +454,7 @@ describe('init', () => {
       payload.position,
     )
   })
+
   test('showQuickProfile without payload', async () => {
     const commit = jest.fn()
     const localInitState = { ...initialState }
@@ -456,6 +470,7 @@ describe('init', () => {
     )
     expect(result).toBeUndefined()
   })
+
   test('showProfile with existing friend metadata', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.metadataManager = jest.fn()
@@ -478,6 +493,7 @@ describe('init', () => {
       state: true,
     })
   })
+
   test('showProfile with no friend metadata', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
 
@@ -494,6 +510,7 @@ describe('init', () => {
       state: true,
     })
   })
+
   test('showProfile with no passed-in user argument', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
 
@@ -507,6 +524,7 @@ describe('init', () => {
     )
     expect(result).toBeUndefined()
   })
+
   test('showProfile with no passed-in user metadata argument', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.metadataManager = jest.fn()
@@ -560,6 +578,7 @@ describe('init', () => {
     ).not.toHaveBeenCalled() // Because it has metadata, the function should note be called
     expect(result).toBeUndefined()
   })
+
   test('sendNotification with initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()
@@ -591,6 +610,7 @@ describe('init', () => {
       note: 'notification response',
     })
   })
+
   test('sendNotification without an initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()
@@ -620,6 +640,7 @@ describe('init', () => {
       )
     }
   })
+
   test('sendNotification with initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()
@@ -639,6 +660,7 @@ describe('init', () => {
       note: 'notification response',
     })
   })
+
   test('setNotifications without an initialized mailbox manager', async () => {
     const TMConstructor = Vue.prototype.$TextileManager
     TMConstructor.notificationManager = jest.fn()
