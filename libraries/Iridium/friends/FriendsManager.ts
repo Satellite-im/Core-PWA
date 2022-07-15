@@ -202,20 +202,21 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         logger.error('iridium/friends', 'request already exists')
         throw new Error(FriendsError.REQUEST_ALREADY_SENT)
       }
+
+      logger.info('iridium/friends', 'creating friend request', {
+        remotePeerDID,
+        incoming,
+      })
+      const request: FriendRequest = {
+        user: user || { did: remotePeerDID, name: remotePeerDID },
+        status: 'pending',
+        incoming,
+        at: Date.now(),
+      }
+      return this.requestSave(remotePeerDID, request, incoming)
     } catch (err) {
       this.emit('request/error', err)
     }
-    logger.info('iridium/friends', 'creating friend request', {
-      remotePeerDID,
-      incoming,
-    })
-    const request: FriendRequest = {
-      user: user || { did: remotePeerDID, name: remotePeerDID },
-      status: 'pending',
-      incoming,
-      at: Date.now(),
-    }
-    return this.requestSave(remotePeerDID, request, incoming)
   }
 
   async requestSave(
@@ -223,6 +224,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     request: FriendRequest,
     incoming = false,
   ) {
+    request.incoming = incoming
     logger.info('iridium/friends', 'saving friend request', {
       remotePeerDID,
       request,
