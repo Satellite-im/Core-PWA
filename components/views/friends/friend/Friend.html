@@ -69,9 +69,8 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
-  <div class="controls" v-else>
+  <div class="controls" v-else-if="user && !request && !isPreview">
     <InteractablesButton
-      v-if="user && !request && !isPreview"
       type="primary"
       size="small"
       data-cy="friend-send-message"
