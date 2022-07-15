@@ -67,6 +67,9 @@
                   />
                 </div>
               </div>
+              <button class="remove-button" @click="removeProfileImage">
+                <span>{{ $t('pages.settings.profile.remove_image') }}</span>
+              </button>
               <div class="username">
                 <TypographyTitle :size="6" :text="accounts.details.name" />
               </div>
