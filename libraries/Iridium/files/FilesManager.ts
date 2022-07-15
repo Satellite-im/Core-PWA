@@ -283,8 +283,8 @@ export default class FilesManager extends Emitter {
       throw new Error(FileSystemErrors.INVALID)
     }
 
-    // if no parent, look at root, otherwise look at sibling items
-    this.isDuplicateName(name, !parent ? this.state.items : parent.children)
+    // if parent was found, check sibling items. otherwise check root
+    this.isDuplicateName(name, parent ? parent.children : this.state.items)
   }
 
   /**
