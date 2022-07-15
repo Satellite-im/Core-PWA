@@ -9,12 +9,14 @@ export default Vue.extend({
   data() {
     return {
       files: iridium.files,
-      percentageUsed: iridium.files.percentStorageUsed,
     }
   },
   computed: {
     totalSize(): string {
       return this.$filesize(this.files.totalSize)
+    },
+    percentageUsed(): number {
+      return this.files.percentStorageUsed
     },
     sizeLimit(): string {
       return this.$filesize(this.$Config.personalFilesLimit)
