@@ -15,7 +15,6 @@ export default Vue.extend({
   layout: 'chat',
   data() {
     return {
-      messages: [],
       did: iridium.connector.id,
     }
   },
@@ -42,7 +41,16 @@ export default Vue.extend({
       const { address } = this.$route.params
       return address
     },
+    messages() {
+      // TODO: fetch messages from backend
+      // -------
+      // const id = await iridium.chat.directConversationId(this.friend)
+      // const msgs = (await iridium.chat.loadMessages(id)) || []
+      // console.log('debug: | messages | msgs', msgs)
+      return []
+    },
   },
+
   watch: {
     // friend(friend: Friend | undefined) {
     //   const { address } = this.$route.params
@@ -85,15 +93,12 @@ export default Vue.extend({
     //   immediate: true,
     // },
   },
+
   async mounted() {
-    this.messages = [...((await iridium.chat.loadMessages(this.friend)) || [])]
-    if (this.friend) {
-      await iridium.chat.subscribeToConversation(this.friend, async (event) => {
-        const message = await iridium.connector.load(event.message)
-        this.messages.push(message)
-      })
-      await iridium.chat.subscribeToChannel(this.friend)
-    }
+    const id = await iridium.chat.directConversationId(this.friend)
+    iridium.chat.subscribeToConversation(id, () => {
+      this.$forceUpdate()
+    })
   },
 })
 </script>

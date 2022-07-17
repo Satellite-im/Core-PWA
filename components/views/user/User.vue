@@ -163,15 +163,12 @@ export default Vue.extend({
         this.$store.dispatch('ui/setChatbarFocus')
         return
       }
+      const id = await iridium.chat?.directConversationId(this.user.did)
 
-      if (await iridium.chat?.hasConversation(this.user.did)) {
-        await iridium.chat?.getConversation(this.user?.did)
-      }
-
-      if (!(await iridium.chat?.hasConversation(this.user?.did))) {
+      if (id && !(await iridium.chat?.hasConversation(id))) {
         await iridium.chat?.createConversation(this.user?.name, 'direct', [
           this.user?.did,
-          iridium.connector.id,
+          iridium.connector?.id,
         ])
       }
 
@@ -181,7 +178,8 @@ export default Vue.extend({
       //   participants: [this.user],
       //   calling: false,
       // })
-      this.$router.push(`/chat/direct/${this.user.did}`)
+
+      this.$router.push(id ? `/chat/direct/${id}` : `/`)
     },
     handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)

@@ -263,11 +263,9 @@ export default Vue.extend({
           message: value,
         })
       } else {
-        // sendMessage to friend
-
-        // await iridium.chat?.sendMessage(this.recipient.address, value)
-        await iridium.chat?.sendMessage(this.recipient?.did, {
-          from: iridium.connector.id,
+        // we should be looking into conversation instead of passing a recipient
+        await iridium.chat?.sendMessage(this.$route.params.address, {
+          from: iridium.connector?.id,
           type: 'direct',
           body: value,
           conversation: value,
