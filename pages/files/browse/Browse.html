@@ -11,10 +11,10 @@
   <div class="files-aside-container">
     <FilesAside />
   </div>
-  <div class="files-table">
+  <div class="files-table" :class="{'files-table-grid-layout': gridLayout}">
     <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
     <FilesGrid
-      v-else-if="gridLayout"
+      v-if="gridLayout"
       :directory="directory"
       @like="like"
       @share="share"
