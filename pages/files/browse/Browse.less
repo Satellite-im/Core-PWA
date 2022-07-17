@@ -7,7 +7,7 @@
   grid-template-areas:
     'files-top files-top'
     'files-controls files-aside-container'
-    'files-table files-aside-container';
+    'files-view files-aside-container';
 
   padding: @normal-spacing;
   overflow-y: scroll;
@@ -21,9 +21,9 @@
     grid-area: files-controls;
   }
 
-  .files-table {
+  .files-view {
     overflow-x: auto;
-    grid-area: files-table;
+    grid-area: files-view;
   }
 
   .files-aside-container {
@@ -37,14 +37,14 @@
       'files-top'
       'files-container'
       'files-aside-container'
-      'files-table';
+      'files-view';
     margin-top: 3.5rem;
 
     .files-aside-container {
       padding-bottom: @light-spacing;
     }
 
-    .files-table {
+    .files-view {
       min-height: 380px;
       margin-top: @normal-spacing;
 

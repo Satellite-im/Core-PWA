@@ -11,7 +11,7 @@
   <div class="files-aside-container">
     <FilesAside />
   </div>
-  <div class="files-table" :class="{'files-table-grid-layout': gridLayout}">
+  <div class="files-view" :class="{'files-view-grid-layout': gridLayout}">
     <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
     <FilesGrid
       v-if="gridLayout"
