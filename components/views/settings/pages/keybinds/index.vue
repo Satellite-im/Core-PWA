@@ -24,13 +24,14 @@ export default Vue.extend({
         error: false,
         errorMessage: '',
       },
-      keybinds: iridium.settings.state.keybinds,
+      settings: iridium.settings.state,
     }
   },
-  computed: {
-    ...mapState(['settings']),
-  },
+  computed: {},
   methods: {
+    setBinding(key: string, value: any) {
+      iridium.settings.set(`/keybinds/${key}`, value)
+    },
     /**
      * @method editKeybind DocsTODO
      * @description
