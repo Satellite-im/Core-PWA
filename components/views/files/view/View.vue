@@ -12,7 +12,6 @@ import {
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-
 export default Vue.extend({
   components: {
     FileIcon,
@@ -21,6 +20,11 @@ export default Vue.extend({
     ArchiveIcon,
     XIcon,
     LinkIcon,
+  },
+  data() {
+    return {
+      thumbnail: '',
+    }
   },
   computed: {
     ...mapState({
@@ -34,8 +38,17 @@ export default Vue.extend({
         : false
     },
   },
-  mounted() {
+  async mounted() {
     if (this.$refs.modal) (this.$refs.modal as HTMLElement).focus()
+
+    if (this.file?.thumbnail) {
+      this.thumbnail = URL.createObjectURL(
+        await iridium.files.fetchThumbnail(this.file.thumbnail, this.file.type),
+      )
+    }
+  },
+  beforeDestroy() {
+    if (this.thumbnail) URL.revokeObjectURL(this.thumbnail)
   },
   methods: {
     /**

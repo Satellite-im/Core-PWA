@@ -16,6 +16,7 @@ import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { RootState } from '~/types/store/store'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -29,9 +30,6 @@ export default Vue.extend({
   },
   mixins: [ContextMenu],
   props: {
-    /**
-     * File or Directory to be displayed in detail
-     */
     item: {
       type: Object as PropType<IridiumItem>,
       required: true,
@@ -39,6 +37,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      thumbnail: '',
       fileHover: false as boolean,
       linkHover: false as boolean,
       heartHover: false as boolean,
@@ -57,21 +56,12 @@ export default Vue.extend({
         ? this.$tc('pages.files.item_count', this.item.children.length)
         : this.$filesize(this.item.size)
     },
-    /**
-     * @returns {boolean} if item has discrete MIME type of image
-     */
     isImage(): boolean {
       return this.item.type.includes('image')
     },
-    /**
-     * @returns {boolean} if item has discrete MIME type of video
-     */
     isVideo(): boolean {
       return this.item.type.includes('video')
     },
-    /**
-     * @returns {boolean} if item is archive file type
-     */
     isArchive(): boolean {
       return isMimeArchive(this.item.type)
     },
@@ -93,6 +83,17 @@ export default Vue.extend({
         { text: this.$t('context.delete'), func: this.remove },
       ]
     },
+  },
+  async mounted() {
+    // if item is IridiumFile and has thumbnail cid stored
+    if ('thumbnail' in this.item && this.item.thumbnail) {
+      this.thumbnail = URL.createObjectURL(
+        await iridium.files.fetchThumbnail(this.item.thumbnail, this.item.type),
+      )
+    }
+  },
+  beforeDestroy() {
+    if (this.thumbnail) URL.revokeObjectURL(this.thumbnail)
   },
   methods: {
     /**

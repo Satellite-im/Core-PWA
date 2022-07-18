@@ -4,7 +4,7 @@ import type {
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
 import type { IPFS } from 'ipfs-core-types'
-import type { AddOptions } from 'ipfs-core-types/root'
+import type { AddOptions, AddResult } from 'ipfs-core-types/root'
 import { createWriteStream } from 'streamsaver'
 import { v4 as uuidv4 } from 'uuid'
 import type { IridiumManager } from '../IridiumManager'
@@ -12,7 +12,7 @@ import logger from '~/plugins/local/logger'
 import { IridiumDirectory, IridiumItem } from '~/libraries/Iridium/files/types'
 import isNSFW from '~/utilities/NSFW'
 import createThumbnail from '~/utilities/Thumbnail'
-import { blobToStream, blobToBase64 } from '~/utilities/BlobManip'
+import { blobToStream } from '~/utilities/BlobManip'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { Config } from '~/config'
 import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
@@ -110,15 +110,11 @@ export default class FilesManager extends Emitter {
       | IridiumDirectory
       | undefined
     this.validateName(file.name, parent)
-    const res = await (this.iridium.connector?.ipfs as IPFS).add(
-      blobToStream(file),
-      options,
-    )
     const thumbnailBlob = await createThumbnail(file, 400)
 
     const target = parent?.children ?? this.state.items
     target.push({
-      id: res?.path,
+      id: (await this.upload(file, options)).path,
       name: file.name,
       size: file.size,
       nsfw: await isNSFW(file),
@@ -129,8 +125,9 @@ export default class FilesManager extends Emitter {
       type: Object.values(FILE_TYPE).includes(file.type as FILE_TYPE)
         ? (file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      // TODO- maybe store thumbnail blob in ipfs as second object, then store hash here and lazy load
-      thumbnail: thumbnailBlob ? await blobToBase64(thumbnailBlob) : '',
+      thumbnail: thumbnailBlob
+        ? (await this.upload(thumbnailBlob, options)).path
+        : '',
       extension: file.name
         .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
         .toLowerCase(),
@@ -138,7 +135,31 @@ export default class FilesManager extends Emitter {
     this.set('/items', this.state.items)
   }
 
+  /**
+   * @description push file to ipfs
+   * @param {Blob} file
+   * @param {AddOptions} options
+   */
+  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
+    return await (this.iridium.connector?.ipfs as IPFS).add(
+      blobToStream(file),
+      options,
+    )
+  }
+
+  /**
+   * @description unpin file from ipfs and remove from file system index
+   * @param {IridiumItem} item
+   */
   removeItem(item: IridiumItem) {
+    // if file, unpin from ipfs
+    if ('thumbnail' in item) {
+      // TODO - confirm this actually works when we can connect to ipfs
+      this.iridium.connector?.ipfs.pin.rm(item.id)
+      if (item.thumbnail) {
+        this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
+      }
+    }
     // if root item
     if (!item.parentId) {
       const index = this.state.items.indexOf(item)
@@ -159,6 +180,12 @@ export default class FilesManager extends Emitter {
     this.set('/items', this.state.items)
   }
 
+  /**
+   * @description update item properties based on optional params
+   * @param {IridiumItem} item
+   * @param {string} name potential new name
+   * @param {boolean} liked new liked status
+   */
   updateItem({
     item,
     name,
@@ -184,9 +211,8 @@ export default class FilesManager extends Emitter {
   }
 
   /**
-   * @method download
    * @description fetch file from ipfs and download with streamsaver
-   * @param {string} path file path in bucket
+   * @param {string} path file cid
    * @param {string} name file name
    * @param {number} size file size to show progress in browser
    */
@@ -202,6 +228,21 @@ export default class FilesManager extends Emitter {
       writer.write(bytes)
     }
     writer.close()
+  }
+
+  /**
+   * @description fetch thumbnail from ipfs and return as blob
+   * @param {string} path thumbnail cid
+   * @returns {Promise<Blob>}
+   */
+  async fetchThumbnail(path: string, type?: FILE_TYPE): Promise<Blob> {
+    const data = []
+    for await (const bytes of (this.iridium.connector?.ipfs as IPFS).cat(
+      path,
+    )) {
+      data.push(bytes)
+    }
+    return new Blob(data, { type })
   }
 
   /**
@@ -242,23 +283,15 @@ export default class FilesManager extends Emitter {
       throw new Error(FileSystemErrors.INVALID)
     }
 
-    // if root directory
-    if (!parent) {
-      this.isDuplicateName(name)
-      return
-    }
-    // else, look inside children of current parent item
-    this.isDuplicateName(name, parent.children)
+    // if parent was found, check sibling items. otherwise check root
+    this.isDuplicateName(name, parent ? parent.children : this.state.items)
   }
 
   /**
    * @param {string} name new item name
-   * @param {IridiumItem[]} items default to root, sibling items will be provided for nested items
+   * @param {IridiumItem[]} items list of items to compare
    */
-  private isDuplicateName(
-    name: string,
-    items: IridiumItem[] = this.state.items,
-  ) {
+  private isDuplicateName(name: string, items: IridiumItem[]) {
     items.forEach((e) => {
       if (!e.name.localeCompare(name, undefined, { sensitivity: 'base' })) {
         throw new Error(FileSystemErrors.DUPLICATE_NAME)
