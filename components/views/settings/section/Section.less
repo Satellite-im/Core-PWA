@@ -1,6 +1,9 @@
 .settings-section {
-  display: flex;
-  flex-direction: row;
-  gap: @large-spacing;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: @large-spacing;
+
+  @media only screen and (max-width: @medium-breakpoint) {
+    grid-template-columns: auto;
+  }
 }
