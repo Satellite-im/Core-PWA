@@ -6,14 +6,17 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export interface FilesGetters {
-  sortedItems(state: FilesState): (items: IridiumItem[]) => IridiumItem[]
+  sortedItems(
+    state: FilesState,
+  ): (items: IridiumItem[], route: FileRouteEnum) => IridiumItem[]
 }
 
 const getters: GetterTree<FilesState, RootState> & FilesGetters = {
   sortedItems:
     (state: FilesState) =>
-    (items: IridiumItem[]): IridiumItem[] => {
+    (items: IridiumItem[], route: FileRouteEnum): IridiumItem[] => {
       const key = state.sort.category
+      console.log(route)
 
       if (state.path.length) {
         const parentId = state.path.at(-1)?.id
@@ -24,7 +27,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
             ) as IridiumDirectory
           )?.children ?? items
         // if recent, get 15 most recently edited FILES. no directories
-      } else if (state.route === FileRouteEnum.RECENT) {
+      } else if (route === FileRouteEnum.RECENT) {
         items =
           iridium.files.flat
             .filter((e) => !('children' in e))

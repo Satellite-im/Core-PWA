@@ -1,4 +1,4 @@
-import { FileRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 import {
   IridiumDirectory,
   IridiumFile,
@@ -20,7 +20,6 @@ export interface FilesState {
   path: { id: IridiumDirectory['id']; name: IridiumDirectory['name'] }[]
   preview?: IridiumFile
   rename?: IridiumItem
-  route: FileRouteEnum
   sort: FileSort
   status: string
 }
