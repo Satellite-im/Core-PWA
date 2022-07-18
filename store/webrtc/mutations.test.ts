@@ -1,5 +1,10 @@
+import dayjs from 'dayjs'
 import { expect } from '@jest/globals'
 import * as WebRTC from '~/store/webrtc/mutations'
+dayjs.duration = jest.fn().mockReturnValueOnce({
+  hours: () => 1645617999076,
+  format: () => '12:34',
+})
 
 describe('Mutate WebRTC by setting', () => {
   let inst: any
@@ -234,5 +239,11 @@ describe('Mutate WebRTC by setting', () => {
     expect(localStateForUnitTest.streamMuted).toMatchObject({
       id: { audio: true, video: true, screen: true },
     })
+  })
+
+  it('should update elapsed time', () => {
+    const localStateForUnitTest = { ...state }
+    inst.updateElapsedTime(localStateForUnitTest)
+    expect(localStateForUnitTest.elapsedTime).toBe('1645617999076:12:34')
   })
 })
