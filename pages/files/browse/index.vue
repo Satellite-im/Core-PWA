@@ -7,6 +7,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
+import { FileRouteEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'Files',
@@ -27,7 +28,18 @@ export default Vue.extend({
       sortedItems: 'files/sortedItems',
     }),
     directory(): IridiumItem[] {
-      return this.sortedItems(this.items)
+      return this.sortedItems(this.items, this.$route.query.route)
+    },
+  },
+  watch: {
+    '$route.query.route': {
+      handler(value) {
+        this.$store.commit('files/setPath', [])
+        // if invalid route, reset to default
+        if (!Object.values(FileRouteEnum).includes(value)) {
+          this.$router.push({ query: {} })
+        }
+      },
     },
   },
   methods: {

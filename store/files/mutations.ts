@@ -1,4 +1,4 @@
-import { FileRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
+import { FileSortEnum } from '~/libraries/Enums/enums'
 import { IridiumFile, IridiumItem } from '~/libraries/Iridium/files/types'
 import { FilesState } from '~/store/files/types'
 
@@ -23,9 +23,6 @@ const mutations = {
   },
   setPreview(state: FilesState, file?: IridiumFile) {
     state.preview = file
-  },
-  setRoute(state: FilesState, route: FileRouteEnum) {
-    state.route = route
   },
   // if current category, swap asc/desc. if different, change category
   setSort(state: FilesState, category: FileSortEnum) {
