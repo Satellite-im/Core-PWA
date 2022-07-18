@@ -68,7 +68,7 @@ export default Vue.extend({
     async createFriendRequest() {
       this.loading = true
       try {
-        const req = await iridium.friends?.requestCreate(this.user.did)
+        const req = await iridium.friends?.requestUpsert(this.user.did)
       } catch (err) {
         return this.$emit('requestSent', err)
       }
@@ -87,7 +87,7 @@ export default Vue.extend({
     },
     async removeFriend() {
       this.loading = true
-      await iridium.friends?.remove(this.user.did)
+      await iridium.friends?.removeFriend(this.user.did)
       this.loading = false
     },
     async cancelRequest() {

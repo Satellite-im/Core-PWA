@@ -14,27 +14,26 @@ export default Vue.extend({
       route: 'active',
       data: {
         loading: true,
-        friends: iridium.friends?.state,
+        friends: iridium.friends.state,
       },
     }
   },
   computed: {
     incomingRequests(): Array<FriendRequest> {
-      return Object.values(this.data.friends?.requests || []).filter(
+      console.log('incoming req')
+      return this.data.friends.requests.filter(
         (r: FriendRequest) => r.incoming && r.status === 'pending',
       )
     },
     outgoingRequests(): Array<FriendRequest> {
-      return Object.values(this.data.friends?.requests || []).filter(
+      console.log('outoging req')
+      return this.data.friends.requests.filter(
         (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
     },
   },
   async mounted() {
     this.data.loading = false
-    iridium.friends?.on('request/changed', () => {
-      this.data.friends = { ...iridium.friends?.state }
-    })
   },
 })
 </script>

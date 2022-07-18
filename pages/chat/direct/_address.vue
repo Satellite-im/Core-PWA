@@ -24,9 +24,8 @@ export default Vue.extend({
     ...mapState({
       friendsDS: () => iridium.friends?.state,
       friendsExist: () =>
-        Object.values(iridium.friends?.state.requests || {}).filter(
-          (r: FriendRequest) => r.incoming,
-        ).length,
+        iridium.friends?.state.requests.filter((r: FriendRequest) => r.incoming)
+          .length,
     }),
     ...mapGetters('friends', ['findFriendByAddress']),
     groupedMessages() {

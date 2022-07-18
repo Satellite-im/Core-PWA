@@ -1,14 +1,14 @@
-import { Iridium, Emitter } from '@satellite-im/iridium'
-import { Account } from '~/libraries/BlockchainClient/interfaces'
-import IdentityManager from '~/libraries/Iridium/IdentityManager'
-import GroupManager from '~/libraries/Iridium/groups/GroupManager'
-import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
-import ChatManager from '~/libraries/Iridium/chat/ChatManager'
-import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
-import logger from '~/plugins/local/logger'
+import { Emitter, Iridium } from '@satellite-im/iridium'
 import { Config } from '~/config'
+import { Account } from '~/libraries/BlockchainClient/interfaces'
+import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
+import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
+import GroupManager from '~/libraries/Iridium/groups/GroupManager'
+import IdentityManager from '~/libraries/Iridium/IdentityManager'
+import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
 import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
+import logger from '~/plugins/local/logger'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
