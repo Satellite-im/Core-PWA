@@ -79,6 +79,12 @@ const mutations = {
   setLastVisited(state: AccountsState, lastVisited: string) {
     state.lastVisited = lastVisited
   },
+  setAdapter(state: AccountsState, adapter: string) {
+    state.adapter = adapter
+  },
+  setEntropy(state: AccountsState, entropyMessage: string) {
+    state.entropyMessage = entropyMessage
+  },
 }
 
 export default mutations
