@@ -90,8 +90,6 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
       throw new Error(WebRTCError.NOT_INITIALIZED)
     }
 
-    console.log('connect', peers)
-
     let call = this.calls.get(callId)
     if (call) {
       // @ts-ignore
@@ -100,7 +98,6 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
     }
 
     call = new Call(callId, peers, peerSignals)
-    console.log('create new call', callId, peers, peerSignals)
     this.calls.set(callId, call)
     return call
   }

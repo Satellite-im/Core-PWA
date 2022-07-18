@@ -258,7 +258,7 @@ export class Call extends Emitter<CallEventListeners> {
           callId:
             this.callId === peerId ? iridium.connector?.peerId : this.callId,
           peers: this.peerDetails,
-          signal: this.peerSignals[peerId],
+          peerId,
         },
         at: Date.now().valueOf(),
       },

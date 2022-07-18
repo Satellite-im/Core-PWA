@@ -109,6 +109,9 @@ export default Vue.extend({
         : (this.$t('controls.not_connected') as string)
     },
   },
+  mounted() {
+    // console.log('this.recipient', this.recipient)
+  },
   methods: {
     groupInvite() {
       this.$store.commit('ui/toggleModal', {

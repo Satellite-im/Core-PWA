@@ -32,7 +32,7 @@ export default class WebRTCManager extends Emitter {
     this.iridium = iridium
     this.state = new Proxy(initialState, {
       set(target, key, value) {
-        console.log(`${key} set from ${target[key]} to ${value}`)
+        // console.log(`${key} set from ${target[key]} to ${value}`)
         target[key] = value
         Vue.prototype.$nuxt.$store.commit('webrtc/setProperty', {
           key,
@@ -45,10 +45,10 @@ export default class WebRTCManager extends Emitter {
 
   async init() {
     // await this.fetch()
-    console.log(
-      'this.iridium.connector?.peerId',
-      this.iridium.connector?.peerId,
-    )
+    // console.log(
+    //   'this.iridium.connector?.peerId',
+    //   this.iridium.connector?.peerId,
+    // )
     this.state.initialized = true
     this.state.originator = this.iridium.connector?.peerId
   }
@@ -89,7 +89,7 @@ export default class WebRTCManager extends Emitter {
     )
   }
 
-  private onMessage(message: any) {
+  private onMessage = async (message: any) => {
     console.log('message', message)
 
     if (!message.payload.module || message.payload.module !== 'webrtc') {
@@ -101,12 +101,12 @@ export default class WebRTCManager extends Emitter {
     switch (type) {
       case 'peer:call':
         console.log('peer:call', payload)
-        this.onPeerCall(payload)
+        await this.onPeerCall(payload)
         break
     }
   }
 
-  private onPeerCall = (payload: any) => {
+  private onPeerCall = async (payload: any) => {
     const { peerId, callId, peers } = payload
     // update conversation participants with peers from call announcement
     const $Logger: Logger = Vue.prototype.$Logger
@@ -130,6 +130,8 @@ export default class WebRTCManager extends Emitter {
     //   })
     // }
 
+    console.log('callId', callId)
+
     if (!callId) {
       $Logger.log(loggerPrefix, `invalid callId`)
       return
@@ -137,9 +139,15 @@ export default class WebRTCManager extends Emitter {
 
     const call = $WebRTC.getCall(callId)
 
+    console.log('call', call)
+
     if (!call) {
       $Logger.log(loggerPrefix, `create a call...`)
-      // dispatch('createCall', payload)
+      await this.createCall({
+        callId,
+        peers,
+        peerId,
+      })
       return
     }
 
@@ -154,13 +162,14 @@ export default class WebRTCManager extends Emitter {
       !call.peerDialingDisabled[peerIdStr]
     ) {
       $Logger.log(loggerPrefix, `initiate a call...`)
-      // await call.initiateCall(peerIdStr)
+      await call.initiateCall(peerIdStr)
     }
   }
 
   public async call(recipient: any, kinds: TrackKind[]) {
     const $Logger: Logger = Vue.prototype.$Logger
 
+    console.log('call recipient', recipient)
     // check permission for audio call
     try {
       await navigator.mediaDevices.getUserMedia({
@@ -170,13 +179,16 @@ export default class WebRTCManager extends Emitter {
       throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
-    let conversation
+    const id = await iridium.chat?.directConversationId(recipient.did)
 
-    try {
-      conversation = await iridium.chat?.getConversation(recipient.did)
-    } catch (e) {
-      console.log(e)
+    if (id && !(await iridium.chat?.hasConversation(id))) {
+      await iridium.chat?.createConversation(recipient.did, 'direct', [
+        recipient.did,
+        iridium.connector?.id,
+      ])
     }
+
+    const conversation = await iridium.chat?.getConversation(id)
 
     if (!conversation) {
       return
@@ -202,22 +214,25 @@ export default class WebRTCManager extends Emitter {
     if (!$WebRTC.calls.has(callId)) {
       $Logger.log('webrtc', `call - call not found: ${callId}, creating...`)
 
+      const profile = iridium.profile.state
+
       const peers = participants.map((did) => {
-        if (did === callId) {
-          const { name, peerId } = this.iridium.friends.getFriend(did)
+        if (did !== profile.did) {
+          const friend = this.iridium.friends.getFriend(did)
           return {
-            name,
-            peerId,
+            name: friend.name,
+            peerId: friend.peerId,
           }
         }
-        const { name, peerId } = this.iridium.profile.state
         return {
-          name,
-          peerId,
+          name: profile.name,
+          peerId: profile.peerId,
         }
       })
 
+      console.log('callId', callId)
       console.log('peers', peers)
+      console.log('peerId', recipient.peerId)
 
       await this.createCall({
         callId,
@@ -227,7 +242,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     const call = $WebRTC.getCall(callId)
-    console.log('call', call)
+    // console.log('call', call)
     if (!call) {
       $Logger.log('webrtc', `call - call not ready: ${callId}`)
       return
@@ -288,31 +303,31 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    function onCallIncoming({ peerId }: { peerId: string }) {
-      // call.peerDialingDisabled[peerId] = true
-      // if (state.activeCall?.callId === call.callId) {
-      //   call.answer(peerId)
-      //   return
-      // }
-      // if (state.activeCall?.callId) {
-      //   return
-      // }
-      // if (
-      //   state.incomingCall === undefined &&
-      //   (!call.active || state.activeCall?.callId !== call.callId)
-      // ) {
-      //   const type = call.callId?.indexOf('|') > -1 ? 'group' : 'friend'
-      //   $Logger.log(
-      //     'webrtc/incomingCall',
-      //     `incoming call #${call.callId} (${type})`,
-      //   )
-      //   commit('setIncomingCall', {
-      //     callId: call.callId,
-      //     peerId,
-      //     type,
-      //   })
-      // }
-      // commit('ui/showMedia', true, { root: true })
+    const onCallIncoming = ({ peerId }: { peerId: string }) => {
+      console.log('onCallIncoming peerId', peerId)
+      console.log('onCallIncoming this', this)
+      call.peerDialingDisabled[peerId] = true
+      if (this.state.activeCall?.callId === call.callId) {
+        call.answer(peerId)
+      }
+      if (this.state.activeCall?.callId) {
+        return
+      }
+      if (
+        this.state.incomingCall === undefined &&
+        (!call.active || this.state.activeCall?.callId !== call.callId)
+      ) {
+        const type = call.callId?.indexOf('|') > -1 ? 'group' : 'friend'
+        $Logger.log(
+          'webrtc/incomingCall',
+          `incoming call #${call.callId} (${type})`,
+        )
+        this.state.incomingCall = {
+          callId: call.callId,
+          peerId,
+          type,
+        }
+      }
     }
     call.on('INCOMING_CALL', onCallIncoming)
 

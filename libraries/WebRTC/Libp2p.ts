@@ -283,7 +283,7 @@ export class Peer2Peer extends Emitter<P2PListeners> {
           }
 
           if (message.type === 'SIGNAL') {
-            console.log('message.type', message.type)
+            // console.log('message.type', message.type)
             this.emit('peer:signal', {
               peerId,
               payload: message.payload,
