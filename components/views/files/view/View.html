@@ -37,11 +37,8 @@
       </button>
     </div>
   </div>
-  <div v-if="file.thumbnail" class="image-container">
-    <img
-      :src="file.thumbnail"
-      :class="{'blur-image' : file.nsfw && blockNsfw}"
-    />
+  <div v-if="thumbnail" class="image-container">
+    <img :src="thumbnail" :class="{'blur-image' : file.nsfw && blockNsfw}" />
   </div>
   <div v-else class="no-preview">
     <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
