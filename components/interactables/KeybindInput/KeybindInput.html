@@ -1,0 +1,10 @@
+<div class="keybind-input">
+  <TypographyLabel :text="name" />
+  <InteractablesInput
+    :placeholder="isListening ? keybindPreview : value"
+    readonly
+    type="primary"
+    @focus="handleFocus"
+    @blur="handleBlur"
+  />
+</div>
