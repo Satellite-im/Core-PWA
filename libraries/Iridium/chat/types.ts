@@ -13,6 +13,7 @@ export type Conversation = {
   participants: string[]
   createdAt: number
   updatedAt: number
+  lastMessageAt: number
   messages: string[]
   message: {
     [key: string]: ConversationMessage
