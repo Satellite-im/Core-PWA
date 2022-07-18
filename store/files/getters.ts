@@ -16,7 +16,6 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
     (state: FilesState) =>
     (items: IridiumItem[], route: FileRouteEnum): IridiumItem[] => {
       const key = state.sort.category
-      console.log(route)
 
       if (state.path.length) {
         const parentId = state.path.at(-1)?.id
