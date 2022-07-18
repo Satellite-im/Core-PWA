@@ -29,7 +29,7 @@
       :label="$t('pages.unlock.store_pin')"
     />
     <br />
-    <a v-if="step === 'login'" class="delete-link" @click="deleteAccount">
+    <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
       {{$t('pages.unlock.delete_account_label')}}
     </a>
     <div class="realm-container">
