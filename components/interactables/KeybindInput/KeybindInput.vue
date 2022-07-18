@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { PencilIcon, UndoIcon, XIcon, CheckIcon } from 'satellite-lucide-icons'
 
 const modifiers = ['Control', 'Alt', 'Shift', 'Meta']
 const initialModifiersState = Object.fromEntries(
@@ -9,6 +10,12 @@ const initialModifiersState = Object.fromEntries(
 )
 
 export default Vue.extend({
+  components: {
+    PencilIcon,
+    UndoIcon,
+    XIcon,
+    CheckIcon,
+  },
   props: {
     name: {
       type: String,
@@ -18,26 +25,81 @@ export default Vue.extend({
       type: String,
       required: true,
     },
+    defaultValue: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
       modifiers: { ...initialModifiersState },
-      keybindPreview: null as string | null,
       isListening: false,
+      key: null as string | null,
+      newKeybind: [] as string[],
     }
   },
   computed: {
-    activeModifiers() {
+    activeModifiers(): string[] {
       return Object.entries(this.modifiers)
         .filter(([_, state]) => state)
         .map(([m]) => m)
     },
+    keybindKeys(): string[] {
+      const keys = [...this.activeModifiers]
+      if (this.key) {
+        keys.push(this.key)
+      }
+      return keys
+    },
+    keys(): string[] {
+      if (!this.isListening) {
+        return this.value.split('-')
+      }
+      if (!this.activeModifiers.length || this.key) {
+        return this.newKeybind
+      }
+      if (this.keybindKeys.length) {
+        return this.keybindKeys
+      }
+      return []
+    },
+    canSave(): boolean {
+      if (this.activeModifiers.length) {
+        return false
+      }
+      return this.newKeybind.length > 1
+    },
+    canReset(): boolean {
+      return this.value !== this.defaultValue
+    },
+    canClear(): boolean {
+      return this.value !== ''
+    },
   },
   methods: {
-    handleFocus() {
+    edit() {
       this.addKeybindListener()
     },
-    handleBlur() {
+    save() {
+      if (!this.canSave) {
+        return
+      }
+      this.$emit('change', this.newKeybind.join('-'))
+      this.newKeybind = []
+      this.removeKeybindListener()
+    },
+    cancel() {
+      this.newKeybind = []
+      this.removeKeybindListener()
+    },
+    clear() {
+      this.$emit('change', '')
+      this.newKeybind = []
+      this.removeKeybindListener()
+    },
+    reset() {
+      this.$emit('change', this.defaultValue)
+      this.newKeybind = []
       this.removeKeybindListener()
     },
     addKeybindListener() {
@@ -52,29 +114,29 @@ export default Vue.extend({
       Object.assign(this.modifiers, initialModifiersState)
     },
     handleKeyEvent(event: KeyboardEvent) {
-      console.log('event', event)
       event.stopPropagation()
       event.preventDefault()
 
       if (modifiers.includes(event.key)) {
         this.modifiers[event.key] = event.type === 'keydown'
-        this.updateKeybindPreview()
+        if (this.activeModifiers.length === 0) {
+          this.key = null
+        }
         return
       }
 
-      if (modifiers.length === 0) {
+      if (this.activeModifiers.length === 0) {
         return
       }
 
-      this.$emit('change', this.getNewKeybind(event.key))
-      const target = event.target as HTMLInputElement
-      target.blur()
-    },
-    updateKeybindPreview() {
-      this.keybindPreview = this.activeModifiers.join('-')
-    },
-    getNewKeybind(key: string) {
-      return [...this.activeModifiers, key].join('-')
+      console.log(event)
+
+      if (event.key === 'Dead') {
+        return
+      }
+
+      this.key = event.key
+      this.newKeybind = this.keybindKeys
     },
   },
 })

@@ -10,20 +10,20 @@
   </SettingsSection>
 
   <SettingsSection>
-    <SettingsUnit
+    <SettingsUniit
       v-for="[key, value] in Object.entries(settings.keybinds).filter(([key, value]) => key.length > 0)"
     >
       <InteractablesKeybindInput
         :name="$t(`pages.settings.keybinds.${key}`)"
         :value="value"
+        :defaultValue="defaultKeybinds[key]"
         @change="setBinding(key, $event)"
       />
-    </SettingsUnit>
+    </SettingsUniit>
   </SettingsSection>
 
   <InteractablesButton
     :text="$t('pages.settings.keybinds.reset_all')"
-    size="small"
     type="primary"
     :action="resetKeybinds"
   />

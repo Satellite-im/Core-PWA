@@ -1,10 +1,63 @@
-<div class="keybind-input">
+<div class="keybind-input" v-click-outside="cancel">
   <TypographyLabel :text="name" />
-  <InteractablesInput
-    :placeholder="isListening ? keybindPreview : value"
-    readonly
-    type="primary"
-    @focus="handleFocus"
-    @blur="handleBlur"
-  />
+  <div class="control">
+    <TypographyText
+      v-if="!isListening && value === ''"
+      class="info-label"
+      text="No mapping"
+    />
+    <TypographyText
+      v-else-if="isListening && !keys.length"
+      class="info-label"
+      text="Enter a new keybinding"
+    />
+    <div v-else class="key-list">
+      <template v-for="key, index in keys">
+        <kbd class="key">{{key}}</kbd>
+        <div v-if="index !== keys.length - 1" class="plus">+</div>
+      </template>
+    </div>
+    <div v-if="isListening" key="editing-controls" class="controls">
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="'Cancel'"
+        :action="cancel"
+      >
+        <XIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        type="primary"
+        v-tooltip.top="'Save'"
+        :action="save"
+        :disabled="!canSave"
+      >
+        <CheckIcon size="1x" />
+      </InteractablesButton>
+    </div>
+
+    <div v-else key="normal-controls" class="controls">
+      <InteractablesButton type="dark" v-tooltip.top="'Edit'" :action="edit">
+        <PencilIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="'Reset'"
+        :action="reset"
+        :disabled="!canReset"
+      >
+        <UndoIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="'Clear'"
+        :action="clear"
+        :disabled="!canClear"
+      >
+        <XIcon size="1x" />
+      </InteractablesButton>
+    </div>
+  </div>
 </div>
