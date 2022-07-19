@@ -4,12 +4,12 @@
     <TypographyText
       v-if="!isListening && value === ''"
       class="info-label"
-      text="No mapping"
+      :text="$t('pages.settings.keybinds.no_mapping')"
     />
     <TypographyText
       v-else-if="isListening && !keys.length"
       class="info-label"
-      text="Enter a new keybinding"
+      :text="$t('pages.settings.keybinds.enter_new_keybind')"
     />
     <div v-else class="key-list">
       <template v-for="key, index in keys">
@@ -20,7 +20,7 @@
     <div v-if="isListening" key="editing-controls" class="controls">
       <InteractablesButton
         type="dark"
-        v-tooltip.top="'Cancel'"
+        v-tooltip.top="$t('pages.settings.keybinds.cancel')"
         :action="cancel"
       >
         <XIcon size="1x" />
@@ -28,7 +28,7 @@
 
       <InteractablesButton
         type="primary"
-        v-tooltip.top="'Save'"
+        v-tooltip.top="$t('pages.settings.keybinds.save')"
         :action="save"
         :disabled="!canSave"
       >
@@ -37,13 +37,17 @@
     </div>
 
     <div v-else key="normal-controls" class="controls">
-      <InteractablesButton type="dark" v-tooltip.top="'Edit'" :action="edit">
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="$t('pages.settings.keybinds.edit')"
+        :action="edit"
+      >
         <PencilIcon size="1x" />
       </InteractablesButton>
 
       <InteractablesButton
         type="dark"
-        v-tooltip.top="'Reset'"
+        v-tooltip.top="$t('pages.settings.keybinds.reset')"
         :action="reset"
         :disabled="!canReset"
       >
@@ -52,7 +56,7 @@
 
       <InteractablesButton
         type="dark"
-        v-tooltip.top="'Clear'"
+        v-tooltip.top="$t('pages.settings.keybinds.clear')"
         :action="clear"
         :disabled="!canClear"
       >
