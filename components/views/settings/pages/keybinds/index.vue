@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { defaultKeybinds } from '~/libraries/Iridium/settings/types'
 
@@ -22,15 +21,13 @@ export default Vue.extend({
       defaultKeybinds,
     }
   },
-  computed: {},
   methods: {
-    setBinding(key: string, value: any) {
-      iridium.settings.set(`/keybinds/${key}`, value)
+    async setBinding(key: string, value: any) {
+      await iridium.settings.set(`/keybinds/${key}`, value)
+      this.$store.dispatch('ui/activateKeybinds')
     },
-    checkSystemHotkey(keys: string) {
-      return navigator.userAgent.indexOf('Mac') > 0
-        ? macShortcuts.includes(keys)
-        : windowsShortcuts.includes(keys)
+    async resetKeybinds() {
+      await iridium.settings.set('/keybinds', defaultKeybinds)
     },
   },
 })
