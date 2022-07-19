@@ -65,9 +65,9 @@ export default Vue.extend({
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
-          this.$store.dispatch('audio/toggleMute')
+          await this.$store.dispatch('audio/toggleMute')
         } else if (kind === WebRTCEnum.VIDEO && this.inCall) {
-          this.$store.dispatch('video/toggleMute')
+          await this.$store.dispatch('video/toggleMute')
         }
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
