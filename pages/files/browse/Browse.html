@@ -1,5 +1,4 @@
 <div
-  id="files"
   class="files-container"
   :class="{'files-container-mobile': $device.isMobile}"
   data-cy="files-screen"
@@ -7,14 +6,14 @@
   <div class="files-top">
     <FilesFilepath />
   </div>
-  <FilesControls ref="files-controls" />
+  <FilesControls ref="files" />
   <div class="files-aside-container">
     <FilesAside />
   </div>
-  <div class="files-view" :class="{'files-view-grid-layout': gridLayout}">
+  <div class="files-view">
     <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
     <FilesGrid
-      v-if="gridLayout"
+      v-else-if="gridLayout"
       :directory="directory"
       @like="like"
       @share="share"

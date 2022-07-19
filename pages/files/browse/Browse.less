@@ -22,11 +22,13 @@
   }
 
   .files-view {
-    overflow-x: auto;
     grid-area: files-view;
   }
 
   .files-aside-container {
+    height: fit-content;
+    position: sticky;
+    top: 0;
     grid-area: files-aside-container;
   }
 
@@ -41,17 +43,12 @@
     margin-top: 3.5rem;
 
     .files-aside-container {
+      position: relative;
       padding-bottom: @light-spacing;
     }
 
     .files-view {
-      min-height: 380px;
       margin-top: @normal-spacing;
-
-      &-grid-layout {
-        overflow-x: visible;
-        min-height: unset;
-      }
     }
   }
 }
