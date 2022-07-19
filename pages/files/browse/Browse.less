@@ -1,35 +1,54 @@
-#files {
+.files-container {
+  display: grid;
+  grid-template-columns: auto 350px;
+  grid-template-rows: auto auto auto;
+  gap: 0px @normal-spacing;
+  grid-auto-flow: row;
+  grid-template-areas:
+    'files-top files-top'
+    'files-controls files-aside-container'
+    'files-view files-aside-container';
+
   padding: @normal-spacing;
   overflow-y: scroll;
 
-  .files-container {
-    display: flex;
-    gap: @normal-spacing;
-
-    .files-left {
-      flex-grow: 1;
-    }
+  .files-top {
+    margin-bottom: @normal-spacing;
+    grid-area: files-top;
   }
 
-  .files-right {
-    width: 350px;
-    min-width: 350px;
+  .files-controls {
+    grid-area: files-controls;
+  }
+
+  .files-view {
+    grid-area: files-view;
+  }
+
+  .files-aside-container {
     height: fit-content;
     position: sticky;
     top: 0;
-  }
-  .files-top {
-    display: flex;
-    margin: @normal-spacing 0;
+    grid-area: files-aside-container;
   }
 
-  .mobile-file-aside {
-    padding-bottom: 8px;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  #files {
+  &-mobile {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      'files-top'
+      'files-container'
+      'files-aside-container'
+      'files-view';
     margin-top: 3.5rem;
+
+    .files-aside-container {
+      position: relative;
+      padding-bottom: @light-spacing;
+    }
+
+    .files-view {
+      margin-top: @normal-spacing;
+    }
   }
 }

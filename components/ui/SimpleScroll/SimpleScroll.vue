@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { throttle } from 'lodash'
 
 type ScrollMode = 'vertical' | 'horizontal'
 type ScrollShow = 'always' | 'scroll'
