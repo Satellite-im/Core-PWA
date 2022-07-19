@@ -2,15 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
-import { specialKeys, keyboardRegex } from '~/utilities/Keybinds'
-import { ModifierKeysEnum, BlockKeysEnum } from '~/libraries/Enums/enums'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import {
-  defaultKeybinds,
-  KeybindKeys,
-} from '~/libraries/Iridium/settings/types'
+import { defaultKeybinds } from '~/libraries/Iridium/settings/types'
 
 export default Vue.extend({
   name: 'KeybindSettings',
