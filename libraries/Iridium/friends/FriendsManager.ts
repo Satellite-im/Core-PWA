@@ -376,7 +376,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         id,
         name: user.name,
         type: 'direct',
-        participants: [user.did, this.iridium.connector.id],
+        participants: [
+          { ...user },
+          { ...this.iridium.profile.state },
+        ],
       })
     }
   }

@@ -1,3 +1,5 @@
+import { Friend } from '~/libraries/Iridium/friends/types'
+
 export type ConversationMessage = {
   conversationId: string
   from: string
@@ -11,7 +13,7 @@ export type Conversation = {
   id: string
   type: 'direct' | 'group'
   name?: string
-  participants: string[]
+  participants: Friend[]
   createdAt: number
   updatedAt: number
   message: {

@@ -52,6 +52,29 @@ export default Vue.extend({
       })
     },
   },
+  async mounted() {
+    const conversation = await iridium.chat?.getConversation(
+      this.$route.params.address,
+    )
+
+    if (!conversation) {
+      return
+    }
+
+    console.log('conversation', conversation)
+
+    const recipient = conversation.participants.find(
+      (p) => p.did !== iridium.profile.state.did,
+    )
+
+    console.log('conversation recipient', recipient)
+
+    if (!recipient) {
+      return
+    }
+
+    iridium.webRTC.subscribeToChannel(recipient.peerId)
+  },
   methods: {},
 })
 </script>

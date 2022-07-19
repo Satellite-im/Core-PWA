@@ -247,7 +247,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const pids = (
       await Promise.all(
-        conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+        conversation.participants.map((p) => Iridium.DIDToPeerId(p.did)),
       )
     ).map((pid) => pid.toString())
 
