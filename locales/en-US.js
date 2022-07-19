@@ -434,13 +434,7 @@ export default {
         reset_all: 'Reset All Keybinds',
         no_mapping: 'No mapping',
         enter_new_keybind: 'Enter a new keybinding',
-        singleHotkeyError: 'Single key already exist',
-        systemHotkeyError:
-          'That is browser/system shortcut. Please input other keys.',
-        existHotkeyError: 'Key already bound',
-        modifierHotkeyError:
-          'Modifiers (Shift, Tab, Option, etc.) Must come before alphanumerics',
-        editHotkeyError: 'Character Not Allowed',
+        reserved: 'Reserved keybinding, try something else',
       },
       accounts: {
         title: 'Accounts & Devices',

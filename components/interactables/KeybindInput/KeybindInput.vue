@@ -3,11 +3,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { PencilIcon, UndoIcon, XIcon, CheckIcon } from 'satellite-lucide-icons'
+import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
 
 const modifiers = ['Control', 'Alt', 'Shift', 'Meta']
 const initialModifiersState = Object.fromEntries(
   modifiers.map((m) => [m, false]),
 )
+
+const separator = '+'
 
 export default Vue.extend({
   components: {
@@ -53,7 +56,7 @@ export default Vue.extend({
     },
     keys(): string[] {
       if (!this.isListening) {
-        return this.value.split('-')
+        return this.value.split(separator)
       }
       if (!this.activeModifiers.length || this.key) {
         return this.newKeybind
@@ -64,7 +67,7 @@ export default Vue.extend({
       return []
     },
     canSave(): boolean {
-      if (this.activeModifiers.length) {
+      if (this.activeModifiers.length || this.isReservedKeybind) {
         return false
       }
       return this.newKeybind.length > 1
@@ -75,6 +78,17 @@ export default Vue.extend({
     canClear(): boolean {
       return this.value !== ''
     },
+    isReservedKeybind(): boolean {
+      return navigator.userAgent.indexOf('Mac') > 0
+        ? macShortcuts.includes(this.newKeybindString)
+        : windowsShortcuts.includes(this.newKeybindString)
+    },
+    newKeybindString(): string {
+      return this.newKeybind.join(separator).toLowerCase()
+    },
+  },
+  beforeDestroy() {
+    this.removeKeybindListener()
   },
   methods: {
     edit() {
@@ -84,7 +98,7 @@ export default Vue.extend({
       if (!this.canSave) {
         return
       }
-      this.$emit('change', this.newKeybind.join('-'))
+      this.$emit('change', this.newKeybindString)
       this.newKeybind = []
       this.removeKeybindListener()
     },
@@ -129,13 +143,16 @@ export default Vue.extend({
         return
       }
 
-      console.log(event)
-
       if (event.key === 'Dead') {
         return
       }
 
-      this.key = event.key
+      // @ts-ignore deprecated
+      const physicalKey = event.code.startsWith('Key')
+        ? event.code.slice(3)
+        : event.key
+
+      this.key = physicalKey
       this.newKeybind = this.keybindKeys
     },
   },

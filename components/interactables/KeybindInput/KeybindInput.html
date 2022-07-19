@@ -11,7 +11,11 @@
       class="info-label"
       :text="$t('pages.settings.keybinds.enter_new_keybind')"
     />
-    <div v-else class="key-list">
+    <div
+      v-else
+      class="key-list"
+      :class="{ invalid: isReservedKeybind && !activeModifiers.length }"
+    >
       <template v-for="key, index in keys">
         <kbd class="key">{{key}}</kbd>
         <div v-if="index !== keys.length - 1" class="plus">+</div>
@@ -26,14 +30,13 @@
         <XIcon size="1x" />
       </InteractablesButton>
 
-      <InteractablesButton
-        type="primary"
-        v-tooltip.top="$t('pages.settings.keybinds.save')"
-        :action="save"
-        :disabled="!canSave"
+      <span
+        v-tooltip.top="$t(isReservedKeybind ? 'pages.settings.keybinds.reserved' : 'pages.settings.keybinds.save')"
       >
-        <CheckIcon size="1x" />
-      </InteractablesButton>
+        <InteractablesButton type="primary" :action="save" :disabled="!canSave">
+          <CheckIcon size="1x" />
+        </InteractablesButton>
+      </span>
     </div>
 
     <div v-else key="normal-controls" class="controls">
