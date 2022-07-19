@@ -52,7 +52,7 @@ export default Vue.extend({
         this.error = this.$t('friends.self_add') as string
         return
       }
-      const hasFriend = iridium.friends?.isFriend(friendId)
+      const hasFriend = iridium.friends.isFriend(friendId)
       if (hasFriend) {
         this.error = this.$t('friends.already_friend') as string
       }

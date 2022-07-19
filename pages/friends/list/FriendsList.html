@@ -7,7 +7,7 @@
       <FriendsAdd />
       <!-- Incoming Requests -->
       <UiLoadersFriend :count="1" v-if="data.loading" />
-      <template v-else-if="incomingRequests.length > 0">
+      <template v-else-if="incomingRequests.length">
         <div class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
@@ -24,7 +24,7 @@
       </template>
       <!-- Outgoing Requests -->
       <UiLoadersFriend :count="1" v-if="data.loading" />
-      <template v-else-if="outgoingRequests.length > 0">
+      <template v-else-if="outgoingRequests.length">
         <div class="padded_divider">
           <TypographyHorizontalRuleText
             plaintext
@@ -51,12 +51,9 @@
         <div v-if="data.loading">
           <UiLoadersFriend :count="5" />
         </div>
-        <div v-else-if="data.friends && data.friends.details">
-          <div
-            v-for="[did, user] in Object.entries(data.friends.details)"
-            :key="did"
-          >
-            <FriendsFriend v-if="user" :user="user" :key="did" />
+        <div v-else-if="data.friends && data.friends.list">
+          <div v-for="user in data.friends.list" :key="user.did">
+            <FriendsFriend v-if="user" :user="user" :key="user.did" />
           </div>
         </div>
         <div class="loading-container" v-if="data.loading">

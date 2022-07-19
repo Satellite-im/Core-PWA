@@ -38,7 +38,7 @@
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="incomingRequests.length > 0"
+        v-if="incomingRequests.length"
         :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
       >
         {{incomingRequests.length}}
@@ -68,14 +68,12 @@
         :count="4"
         inverted
       />
-      <template
-        v-else-if="friends && Object.values(friends.details || {}).length"
-      >
+      <template v-else-if="friends && friends.list.length">
         <UiInlineNotification
           v-if="ui.unreadMessage.length"
           :text="$t('messaging.new_messages')"
         />
-        <div v-for="friend in friends.details">
+        <div v-for="friend in friends.list">
           <User
             v-if="friend"
             :key="friend.did"
@@ -91,10 +89,7 @@
             /> -->
         </div>
       </template>
-      <div
-        v-else-if="!friends.list || (friends && friends.list && !friends.list.length)"
-        class="mascot-container"
-      >
+      <div v-else-if="!friends.list.length" class="mascot-container">
         <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
         <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
         <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />

@@ -47,14 +47,12 @@ export default Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends?.state,
+      friends: iridium.friends.state,
     }
   },
   computed: {
     incomingRequests(): Array<FriendRequest> {
-      return Object.values(this.friends?.requests || []).filter(
-        (r: FriendRequest) => r.incoming && r.status === 'pending',
-      )
+      return this.friends.requests.filter((r: FriendRequest) => r.incoming)
     },
     DataStateType: () => DataStateType,
     ...mapState({
@@ -64,11 +62,6 @@ export default Vue.extend({
       groups: () => iridium.groups?.state,
       conversations: () => ({}),
     }),
-  },
-  async mounted() {
-    iridium.friends?.on('request/changed', () => {
-      this.friends = { ...iridium.friends?.state }
-    })
   },
   methods: {
     toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {

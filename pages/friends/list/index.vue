@@ -5,7 +5,6 @@ import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 
-type Route = 'active' | 'requests' | 'blocked' | 'add'
 export default Vue.extend({
   name: 'FriendsList',
   layout: 'friends',
@@ -14,27 +13,22 @@ export default Vue.extend({
       route: 'active',
       data: {
         loading: true,
-        friends: iridium.friends?.state,
+        friends: iridium.friends.state,
       },
     }
   },
   computed: {
     incomingRequests(): Array<FriendRequest> {
-      return Object.values(this.data.friends?.requests || []).filter(
-        (r: FriendRequest) => r.incoming && r.status === 'pending',
-      )
+      return this.data.friends.requests.filter((r: FriendRequest) => r.incoming)
     },
     outgoingRequests(): Array<FriendRequest> {
-      return Object.values(this.data.friends?.requests || []).filter(
-        (r: FriendRequest) => !r.incoming && r.status === 'pending',
+      return this.data.friends.requests.filter(
+        (r: FriendRequest) => !r.incoming,
       )
     },
   },
-  async mounted() {
+  mounted() {
     this.data.loading = false
-    iridium.friends?.on('request/changed', () => {
-      this.data.friends = { ...iridium.friends?.state }
-    })
   },
 })
 </script>

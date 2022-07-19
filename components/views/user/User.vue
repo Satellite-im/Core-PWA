@@ -43,7 +43,6 @@ export default Vue.extend({
     return {
       existConversation: false,
       isLoading: false,
-      timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
     }
   },
