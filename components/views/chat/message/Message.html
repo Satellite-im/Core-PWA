@@ -1,6 +1,6 @@
 <div
   class="is-message"
-  :class="textile.messageLoading ? 'loading' : ''"
+  :class="iridium.messageLoading ? 'loading' : ''"
   @contextmenu="contextMenu"
 >
   <div
@@ -18,44 +18,44 @@
       :editMessage="editMessage"
       :message="message"
     />
-    <template v-if="!messageEdit && message.type === 'text'">
+    <template v-if="!messageEdit && message.type === 'direct'">
       <MessageMarkdown
-        :text="wrapEmoji(markdownToHtml(message.payload))"
-        :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
+        :text="wrapEmoji(markdownToHtml(message.body))"
+        :class="`markdown ${containsOnlyEmoji(message.body) ? 'bigmoji' : ''}`"
         :data-cy="`chat-message`"
       />
       <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
       </span>
       <span
-        class="status edited"
-        data-cy="message-edited"
-        v-else-if="message.editedAt"
-      >
-        ({{$t('ui.edited')}})
-      </span>
+      class="status edited"
+      data-cy="message-edited"
+      v-else-if="message.editedAt"
+    >
+      ({{$t('ui.edited')}})
+    </span>
     </template>
     <MessageGlyph
       v-if="message.type === 'glyph'"
-      :source="message.payload"
+      :source="message.body"
       :pack="message.pack"
     />
     <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
     <UiChatEmbedsEmbeddedLinkContent
-      v-if="message.type === 'text'"
-      :data="message.payload"
+      v-if="message.type === 'direct'"
+      :data="message.body"
     />
     <UiChatEmbedsVideoPlayer
       v-else-if="message.type === 'video'"
-      :data="message.payload"
+      :data="message.body"
     />
     <UiChatEmbedsAudioPlayer
       v-else-if="message.type === 'audio'"
-      :data="message.payload"
+      :data="message.body"
     />
     <UiChatEmbedsFile
       v-else-if="message.type === 'file'"
-      :file="message.payload"
+      :file="message.body"
     />
     <MessageReactions
       v-if="!hideActions && hasReactions"
@@ -72,7 +72,7 @@
   />
   <MessageEdit
     v-if="messageEdit"
-    :message="message.payload"
+    :message="message.body"
     @commitMessage="saveMessage"
     @cancelMessage="cancelMessage"
   />

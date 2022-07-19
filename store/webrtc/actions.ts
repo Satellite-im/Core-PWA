@@ -40,7 +40,9 @@ const webRTCActions = {
         (friend) => friend.peerId === peerId.toB58String(),
       )
 
-      if (!connectedFriend) return
+      if (!connectedFriend) {
+        return
+      }
 
       $Logger.log(loggerPrefix, `discovered peer: ${peerId.toB58String()}`)
       dispatch(
@@ -51,7 +53,8 @@ const webRTCActions = {
         },
         { root: true },
       )
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
+
+      dispatch('iridium/subscribeToConversations', {}, { root: true })
     })
 
     iridium.connector.on(
@@ -80,7 +83,9 @@ const webRTCActions = {
         const connectedFriend = rootState.friends.all.find(
           (friend) => friend.peerId === peerId.toB58String(),
         )
-        if (!connectedFriend) return
+        if (!connectedFriend) {
+          return
+        }
         $Logger.log(loggerPrefix, `connected friend: ${peerId.toB58String()}`)
         dispatch(
           'friends/setFriendState',
@@ -90,7 +95,8 @@ const webRTCActions = {
           },
           { root: true },
         )
-        dispatch('textile/subscribeToMailbox', {}, { root: true })
+
+        dispatch('iridium/subscribeToConversations', {}, { root: true })
       },
     )
 
@@ -133,13 +139,13 @@ const webRTCActions = {
         }
 
         if (!payload.callId || payload.callId === did) {
-          $Logger.log(loggerPrefix, `invalid callId`)
+          $Logger.log(loggerPrefix, 'invalid callId')
           return
         }
 
         const call = $WebRTC.getCall(payload.callId)
         if (!call) {
-          $Logger.log(loggerPrefix, `create a call...`)
+          $Logger.log(loggerPrefix, 'create a call...')
           dispatch('createCall', payload)
           return
         }
@@ -157,7 +163,7 @@ const webRTCActions = {
           !call.peerConnected[peerIdStr] &&
           !call.peerDialingDisabled[peerIdStr]
         ) {
-          $Logger.log(loggerPrefix, `initiate a call...`)
+          $Logger.log(loggerPrefix, 'initiate a call...')
           await call.initiateCall(peerIdStr)
         }
       },
@@ -240,7 +246,7 @@ const webRTCActions = {
         )
       }, Config.chat.typingInputThrottle * 3)
 
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
+      dispatch('iridium/subscribeToConversations', {}, { root: true })
     })
 
     iridium.connector?.on(
@@ -266,7 +272,9 @@ const webRTCActions = {
         const requestFriend = rootState.friends.all.find(
           (friend) => friend.peerId === peerId.toB58String(),
         )
-        if (!requestFriend || requestFriend.state === 'online') return
+        if (!requestFriend || requestFriend.state === 'online') {
+          return
+        }
         dispatch(
           'friends/setFriendState',
           {
@@ -275,7 +283,8 @@ const webRTCActions = {
           },
           { root: true },
         )
-        dispatch('textile/subscribeToMailbox', {}, { root: true })
+
+        dispatch('iridium/subscribeToConversations', {}, { root: true })
       },
     )
 
@@ -689,7 +698,9 @@ const webRTCActions = {
    * this.$store.dispatch('webrtc/deny')
    */
   denyCall({ state }: ActionsArguments<WebRTCState>) {
-    if (state.activeCall) $WebRTC.getCall(state.activeCall.callId)?.destroy()
+    if (state.activeCall) {
+      $WebRTC.getCall(state.activeCall.callId)?.destroy()
+    }
     if (state.incomingCall) {
       $WebRTC.getCall(state.incomingCall.callId)?.destroy()
     }
@@ -724,7 +735,7 @@ const webRTCActions = {
     if (!activeConversation.id) {
       $Logger.log(
         'webrtc',
-        `call - conversation not initialized or id not found`,
+        'call - conversation not initialized or id not found',
       )
       return
     }
@@ -733,7 +744,7 @@ const webRTCActions = {
       .map((p) => p.peerId)
       .filter(Boolean)
     if (peerIds.length === 0) {
-      $Logger.log('webrtc', `call - conversation has no participants`)
+      $Logger.log('webrtc', 'call - conversation has no participants')
       return
     }
 

@@ -309,7 +309,9 @@ export default {
     await dispatch('loadIridium', {
       pin,
     })
-    await dispatch('friends/initialize', {}, { root: true })
+
+    dispatch('iridium/subscribeToConversations', {}, { root: true })
+    // await dispatch('friends/initialize', {}, { root: true })
     if ($BlockchainClient.payerAccount?.secretKey) {
       dispatch(
         'webrtc/initialize',

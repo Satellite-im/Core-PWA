@@ -1,4 +1,4 @@
-<template src="./Message.html"></template>
+<template src="./Message.html" />
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
@@ -26,7 +26,7 @@ export default Vue.extend({
         id: '0',
         at: 1620515543000,
         type: 'text',
-        payload: 'Invalid Message',
+        body: 'Invalid Message',
       }),
     },
     group: {
@@ -55,7 +55,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      textile: (state) => (state as RootState).textile,
+      iridium: (state) => (state as RootState).iridium,
       accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters({
@@ -96,10 +96,10 @@ export default Vue.extend({
       // if image message
       if (
         this.message.type === 'file' &&
-        isMimeEmbeddableImage(this.message.payload.type)
+        isMimeEmbeddableImage(this.message.body.type)
       ) {
         // remove copy from GIF because it copies a still png version
-        if (this.message.payload.type === FILE_TYPE.GIF) {
+        if (this.message.body.type === FILE_TYPE.GIF) {
           return [
             ...mainList,
             { text: this.$t('context.save_img'), func: this.saveImage },
@@ -118,11 +118,11 @@ export default Vue.extend({
     this.cancelMessage()
   },
   async mounted() {
-    if (!this.message.payload?.url) {
+    if (!this.message.body?.url) {
       return
     }
     try {
-      this.blob = await this.getImageBlob(this.message.payload?.url)
+      this.blob = await this.getImageBlob(this.message.body?.url)
     } catch (error: any) {
       this.blob = await this.getImageBlob(placeholderImage)
       this.$Logger.log('error', error.message)
@@ -161,7 +161,7 @@ export default Vue.extend({
      * @description copy contents of message. Will only be called if text message
      */
     copyMessage() {
-      navigator.clipboard.writeText(this.message.payload)
+      navigator.clipboard.writeText(this.message.body)
     },
     /**
      * @method copyImage
@@ -180,9 +180,9 @@ export default Vue.extend({
     },
     saveImage() {
       this.$TextileManager.sharedBucket?.pullFile(
-        this.message.payload.id,
-        this.message.payload.name,
-        this.message.payload.size,
+        this.message.body.id,
+        this.message.body.name,
+        this.message.body.size,
       )
     },
     /**
@@ -218,8 +218,8 @@ export default Vue.extend({
         return
       }
       const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      const { id, type, payload, to, from } = this.message
-      let finalPayload = payload
+      const { id, type, body, to, from } = this.message
+      let finalPayload = body
       if (['image', 'video', 'audio', 'file'].includes(type)) {
         finalPayload = `*${this.$t('conversation.multimedia')}*`
       } else if (type === 'glyph') {
@@ -271,11 +271,11 @@ export default Vue.extend({
      * Commit store mutation in order to notify the edit status
      */
     editMessage() {
-      const { id, payload, type, from } = this.message
+      const { id, body, type, from } = this.message
       if (type === 'text' && from === this.accounts.details?.textilePubkey) {
         this.$store.commit('ui/setEditMessage', {
           id,
-          payload,
+          body,
           from: this.group.id,
         })
       }
@@ -296,7 +296,7 @@ export default Vue.extend({
         from: this.group.id,
       })
 
-      if (message !== this.message.payload) {
+      if (message !== this.message.body) {
         const { address } = this.$route.params
         const recipient = this.findFriendByAddress(address)
 

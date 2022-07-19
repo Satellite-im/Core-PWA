@@ -1,4 +1,4 @@
-<template src="./Chatbar.html"></template>
+<template src="./Chatbar.html" />
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
@@ -31,7 +31,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters({
-      // recipient: 'conversation/recipient',
       getFiles: 'chat/getFiles',
       isGroup: 'conversation/isGroup',
     }),
@@ -40,8 +39,7 @@ export default Vue.extend({
       friends: (state) => (state as RootState).friends,
       webrtc: (state) => (state as RootState).webrtc,
       chat: (state) => (state as RootState).chat,
-      textile: (state) => (state as RootState).textile,
-      conversation: (state) => (state as RootState).conversation,
+      iridiumState: (state) => (state as RootState).iridium,
     }),
     /**
      * @method charlimit DocsTODO
@@ -217,20 +215,29 @@ export default Vue.extend({
       if (!this.recipient) {
         return
       }
-      // keep recipient in case user changes chats quickly after send
+
       const recipient = this.recipient
+      /*
       // if there are any files attached to this chat, send
       await this.sendFiles()
-      // return if input is empty or over max length
+      // return if input is empty or over max length */
+
       if (
         this.text.length > this.$Config.chat.maxChars ||
         !this.text.trim().length
       ) {
         return
       }
+
       const value = this.text
       this.text = ''
-      if (
+
+      this.$store.dispatch('iridium/sendTextMessage', {
+        to: recipient.did,
+        text: value,
+      })
+
+      /* if (
         this.ui.replyChatbarContent.from &&
         !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
       ) {
@@ -273,11 +280,7 @@ export default Vue.extend({
           attachments: [],
         })
 
-        // this.$store.dispatch('textile/sendTextMessage', {
-        //   to: (this.recipient as Friend).textilePubkey,
-        //   text: value,
-        // })
-      }
+      } */
     },
     /**
      * @method handlePaste

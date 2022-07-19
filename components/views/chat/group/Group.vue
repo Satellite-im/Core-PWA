@@ -1,4 +1,4 @@
-<template src="./Group.html"></template>
+<template src="./Group.html" />
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
@@ -37,7 +37,7 @@ export default Vue.extend({
       return ''
     },
     src(): string {
-      if (!this.group?.avatar) {
+      /* if (!this.group?.avatar) {
         return ''
       }
       // To check if the sender is you we just compare the from field
@@ -58,8 +58,7 @@ export default Vue.extend({
 
       if (friend?.profilePicture) {
         return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
-      }
-
+      } */
       return ''
     },
     groupMember(): GroupMember | undefined {

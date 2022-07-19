@@ -1,5 +1,29 @@
+import {
+  MessagesTracker,
+  MessageTrackerValues,
+  ReactionsTracker,
+  RepliesTracker,
+} from '~/types/textile/mailbox'
+import { MessageGroup } from '~/types/messaging'
+
+export interface Conversation {
+  [key: string]: {
+    type: 'friend' | 'group'
+    messages: MessagesTracker
+    replies: RepliesTracker
+    reactions: ReactionsTracker
+    groupedMessages: MessageGroup
+    lastInbound: number // the last time a message was received by any member of conversation, other than account owner
+    lastUpdate: number // the last time a message was received by any member of conversation, including account owner
+    lastMessage: MessageTrackerValues | null
+    limit: number
+    skip: number
+    end: boolean
+  }
+}
 export interface IridiumState {
   initialized: boolean
+  conversations: Conversation
   activeConversation?: string
   conversationLoading?: boolean
   messageLoading?: boolean

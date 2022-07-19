@@ -13,33 +13,21 @@ import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
   name: 'DirectMessages',
   layout: 'chat',
-  data() {
-    return {
-      did: iridium.connector.id,
-    }
-  },
   computed: {
     DataStateType: () => DataStateType,
     ...mapState({
+      initialized: (state) => (state as RootState).iridium.initialized,
       friendsDS: () => iridium.friends?.state,
       friendsExist: () =>
         Object.values(iridium.friends?.state.requests || {}).filter(
           (r: FriendRequest) => r.incoming,
         ).length,
     }),
-    ...mapGetters('friends', ['findFriendByAddress']),
-    groupedMessages() {
-      const { address } = this.$route.params
-
-      const conversation = this.$typedStore.state.textile.conversations[address]
-      if (!conversation) return []
-      const { messages, replies, reactions } = conversation
-      return groupMessages(messages, replies, reactions)
-    },
     // Get the active friend
     friend() {
-      const { address } = this.$route.params
-      return address
+      const { address: did } = this.$route.params
+
+      return iridium.friends?.state.details?.[did]
     },
     messages() {
       // TODO: fetch messages from backend
@@ -52,53 +40,49 @@ export default Vue.extend({
   },
 
   watch: {
-    // friend(friend: Friend | undefined) {
-    //   const { address } = this.$route.params
-    //   // If the friend is not found, redirect to the friends screen
-    //   // if (address && !friend) {
-    //   //   this.$router.replace('/friends/list')
-    //   // }
-    // },
-    getInitialized: {
+    friend(friend: Friend | undefined) {
+      const { address: did } = this.$route.params
+
+      // If the friend is not found, redirect to the friends screen
+      if (did && !friend) {
+        this.$router.replace('/friends/list')
+      }
+    },
+    initialized: {
       handler(nextValue) {
         if (nextValue) {
-          const { address } = this.$route.params
-          // if (address) {
-          // this.$store.dispatch('textile/fetchMessages', {
-          //   address,
-          //   setActive: true,
-          // })
-          // }
+          const { address: did } = this.$route.params
+
+          if (did && this.friend) {
+            this.$store.dispatch('iridium/fetchMessages', {
+              did,
+              setActive: true,
+            })
+          }
         }
       },
       immediate: true,
     },
-    // friendsDS: {
-    //   handler(nextValue) {
-    //     if (nextValue === DataStateType.Ready) {
-    //       ConsoleWarning(this.$config.clientVersion, this.$store.state)
-    //       const { address } = this.$route.params
-    //       const { friends } = this.$store.state
-    //       if (address && this.friend) return
-    //       // If no address is specified, but we have at least one friend, we can redirect to
-    //       // a chat with the first friend in the list
-    //       if (!address && friends?.list?.length > 0) {
-    //         this.$router.replace(`/chat/direct/${friends.list[0].address}`)
-    //         return
-    //       }
-    //       // Defaults to friends list
-    //       this.$router.replace('/friends/list')
-    //     }
-    //   },
-    //   immediate: true,
-    // },
-  },
+    friendsDS: {
+      handler(nextValue) {
+        if (nextValue === DataStateType.Ready) {
+          ConsoleWarning(this.$config.clientVersion, this.$store.state)
+          const { address: did } = this.$route.params
+          const { friends } = this.$store.state
 
-  async mounted() {
-    const id = await iridium.chat.directConversationId(this.friend)
-    iridium.chat.subscribeToConversation(id, () => {
-      this.$forceUpdate()
-    })
+          // If no address is specified, but we have at least one friend, we can redirect to
+          // a chat with the first friend in the list
+          /* if (!address && friends?.all?.length > 0) {
+            this.$router.replace(`/chat/direct/${friends.all[0].address}`)
+            return
+          } */
+
+          // Defaults to friends list
+          // this.$router.replace('/friends/list')
+        }
+      },
+      immediate: true,
+    },
   },
 })
 </script>

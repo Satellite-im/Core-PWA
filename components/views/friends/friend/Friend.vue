@@ -1,4 +1,4 @@
-<template src="./Friend.html"></template>
+<template src="./Friend.html" />
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import {
@@ -73,6 +73,11 @@ export default Vue.extend({
     async acceptFriendRequest() {
       this.loading = true
       await iridium.friends?.requestAccept(this.user.did)
+      await this.$store.dispatch(
+        'iridium/subscribeToConversations',
+        {},
+        { root: true },
+      )
       this.loading = false
     },
     async rejectFriendRequest() {
@@ -91,6 +96,12 @@ export default Vue.extend({
       this.loading = false
     },
     sendMessageRequest() {
+      this.$store.dispatch('conversation/setConversation', {
+        id: this.$props.user.peerId,
+        type: 'friend',
+        participants: [this.$props.user],
+        calling: false,
+      })
       this.$router.push(`/chat/direct/${this.user.did}`)
     },
   },

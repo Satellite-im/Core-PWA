@@ -85,7 +85,7 @@
             </UiChatScroll>-->
             <Nuxt />
             <WalletMini v-if="ui.modals.walletMini" />
-            <Chatbar ref="chatbar" />
+            <Chatbar v-if="recipient" ref="chatbar" :recipient="recipient" />
           </DroppableWrapper>
         </swiper-slide>
         <swiper-slide v-if="$data.asidebar" class="aside-container">
@@ -250,7 +250,7 @@ export default Vue.extend({
   beforeDestroy() {
     this.$store.commit('ui/setShowOlderMessagesInfo', false)
     // reset active conversation on chat leave
-    this.$store.commit('textile/setActiveConversation', '')
+    this.$store.commit('iridium/setActiveConversation', '')
     this.$store.commit('conversation/resetConversation')
   },
   mounted() {

@@ -16,7 +16,7 @@ export default {
 
     commit('setCurrentChat', { isMessagesLoading: true })
 
-    const conversation = rootState.textile.conversations[conversationId]
+    const conversation = rootState.iridium.conversations[conversationId]
 
     // if conversations are empty or found conversation does not have groupedMessages
     if (!conversation?.groupedMessages) {

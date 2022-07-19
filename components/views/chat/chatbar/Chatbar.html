@@ -23,7 +23,7 @@
       ref="editable"
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient) && !textile.messageLoading"
+      :enabled="Boolean(recipient) && !iridiumState.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"

@@ -1,4 +1,4 @@
-<template src="./Conversation.html"></template>
+<template src="./Conversation.html" />
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
@@ -12,19 +12,7 @@ export default Vue.extend({
     ChevronDownIcon,
   },
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    messages: {
-      type: Array,
-      default: () => [],
-    },
     groupId: {
-      type: String,
-      default: '',
-    },
-    did: {
       type: String,
       default: '',
     },
@@ -34,7 +22,7 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       showOlderMessageInfo: (state) =>
         (state as RootState).ui.showOlderMessagesInfo,
-      textile: (state) => (state as RootState).textile,
+      iridium: (state) => (state as RootState).iridium,
       currentChat: (state) => (state as RootState).chat.currentChat,
       webrtc: (state) => (state as RootState).webrtc,
       conversation: (state) => (state as RootState).conversation,

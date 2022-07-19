@@ -135,17 +135,7 @@ Object {
 
 exports[`update message tracker updateMessageTracker text 1`] = `
 Object {
-  "messages": Object {
-    "undefined": Object {
-      "fileMessage": "",
-      "glyphMessage": "",
-      "mediaMessage": "",
-      "reactionMessage": "",
-      "replyMessage": "text1",
-      "textMessage": "",
-      "type": "text",
-    },
-  },
+  "messages": Object {},
   "reactions": Object {},
   "replies": Object {},
 }

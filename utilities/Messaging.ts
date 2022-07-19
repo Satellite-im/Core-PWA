@@ -29,17 +29,19 @@ function messageRepliesToUIReplies(
 
 function getMessageUIReactions(message: Message, reactions: ReactionMessage[]) {
   const groupedReactions: { [key: string]: UIReaction } = {}
-  if (reactions)
+  if (reactions) {
     reactions.forEach((reactionMessage) => {
       let reactors = groupedReactions[reactionMessage.payload]?.reactors || []
-      if (!reactors.includes(reactionMessage.from))
+      if (!reactors.includes(reactionMessage.from)) {
         reactors = [...reactors, reactionMessage.from]
+      }
       groupedReactions[reactionMessage.payload] = {
         emoji: reactionMessage.payload,
         reactors,
         showReactors: true,
       }
     })
+  }
 
   return Object.values(groupedReactions)
 }
@@ -139,8 +141,11 @@ export function updateMessageTracker(
       case MessagingTypesEnum.REPLY: {
         const reply: ReplyMessage = currentMessage
         repliesTracker[reply.repliedTo] = repliesTracker[reply.repliedTo] || []
-        if (!repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id))
+        if (
+          !repliesTracker[reply.repliedTo].some((elm) => elm.id === reply.id)
+        ) {
           repliesTracker[reply.repliedTo].push(reply)
+        }
         break
       }
       case MessagingTypesEnum.REACTION: {
@@ -151,8 +156,9 @@ export function updateMessageTracker(
           !reactionsTracker[reaction.reactedTo].some(
             (elm) => elm.id === reaction.id,
           )
-        )
+        ) {
           reactionsTracker[reaction.reactedTo].push(reaction)
+        }
         break
       }
       case MessagingTypesEnum.FILE: {
@@ -161,7 +167,7 @@ export function updateMessageTracker(
         messagesTracker[fileMessage.id] = fileMessage
         break
       }
-      case MessagingTypesEnum.TEXT: {
+      case 'direct': {
         const textMessage: TextMessage = currentMessage
 
         messagesTracker[textMessage.id] = textMessage
