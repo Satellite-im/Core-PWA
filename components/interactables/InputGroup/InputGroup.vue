@@ -3,27 +3,19 @@
 import Vue, { PropType } from 'vue'
 import { toArray } from 'lodash'
 import { InputTypes, InputStyle, InputSize } from './types.d'
-import { Icon } from '~/types/ui/icons'
 
 export default Vue.extend({
   model: {
     prop: 'text',
-    event: 'update',
+    event: 'change',
   },
   props: {
-    /**
-     * Default text can be included here
-     */
     text: {
-      type: [String, Number],
+      type: String,
       default: '',
     },
-    /**
-     * Used for display only inputs
-     */
     readonly: {
       type: Boolean,
-      required: false,
       default: false,
     },
     /**
@@ -31,7 +23,6 @@ export default Vue.extend({
      */
     autofocus: {
       type: Boolean,
-      required: false,
       default: false,
     },
     /**
@@ -39,7 +30,6 @@ export default Vue.extend({
      */
     inputKind: {
       type: String as PropType<InputTypes>,
-      required: false,
       default: 'text',
     },
     /**
@@ -54,7 +44,6 @@ export default Vue.extend({
      */
     size: {
       type: String as PropType<InputSize>,
-      required: false,
       default: 'normal',
     },
     /**
@@ -62,53 +51,22 @@ export default Vue.extend({
      */
     type: {
       type: String as PropType<InputStyle>,
-      required: false,
       default: 'normal',
     },
-    /**
-     * Disables the attached button
-     */
     disabled: {
       type: Boolean,
-      required: false,
       default: false,
     },
-    /**
-     * Attached button action
-     */
     action: {
       type: Function,
-      default: () => {},
+      required: true,
     },
-    /**
-     * Optional button text
-     */
-    buttonText: {
-      type: String,
-      default: '',
-    },
-    /**
-     * Supported fontawesome icon
-     * @deprecated provide icons as slot
-     */
-    // eslint-disable-next-line vue/require-default-prop
-    icon: {
-      type: Object as PropType<Icon>,
-      required: false,
-    },
-    /**
-     * Should the button be in the loading state
-     */
     loading: {
       type: Boolean,
       default: false,
     },
-    /**
-     * Add a label to the top of the input
-     */
-    labelText: {
+    label: {
       type: String,
-      required: false,
       default: '',
     },
     showLimit: {
@@ -120,35 +78,16 @@ export default Vue.extend({
       default: 256,
     },
   },
-  data() {
-    return {
-      internalText: this.text ? this.text : '',
-    }
-  },
   computed: {
     textLength(): string {
       /* toArray(): https://lodash.com/docs/4.17.15#toArray */
-      return `${toArray(this.internalText).length}/${this.maxLength}`
-    },
-  },
-  watch: {
-    text() {
-      this.internalText = this.text
+      return `${toArray(this.text).length}/${this.maxLength}`
     },
   },
   mounted() {
     if (this.autofocus) {
       this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
     }
-  },
-  methods: {
-    /**
-     * @method update
-     * @description Emits the update event with updated internalText string
-     */
-    update() {
-      this.$emit('update', this.$data.internalText)
-    },
   },
 })
 </script>
