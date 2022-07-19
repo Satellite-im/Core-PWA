@@ -1,24 +1,19 @@
-import { Emitter } from '@satellite-im/iridium'
+import { Emitter, Iridium } from '@satellite-im/iridium'
 import merge from 'deepmerge'
-import Vue from 'vue'
 import { SignalData } from 'simple-peer'
+import Vue from 'vue'
 import iridium, { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
-import { overwriteMerge } from '~/utilities/merge'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
-import Logger from '~/utilities/Logger'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { TrackKind } from '~/libraries/WebRTC/types'
-import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-import {
-  ConversationActivity,
-  ConversationParticipant,
-} from '~/store/conversation/types'
-import { Config } from '~/config'
+
+import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
+import { TrackKind } from '~/libraries/WebRTC/types'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import Logger from '~/utilities/Logger'
+import { overwriteMerge } from '~/utilities/merge'
 
 const announceFrequency = 5000
-
 const initialState: WebRTCState = {
   initialized: false,
   originator: '',
@@ -67,6 +62,35 @@ export default class WebRTCManager extends Emitter {
     })
     this.state.originator = this.iridium.connector?.peerId
     this.state.initialized = true
+
+    this.setupListeners()
+  }
+
+  private setupListeners() {
+    this.iridium.connector?.on(
+      'peer:discovery',
+      ({ peerId }: { peerId: string }) => {
+        const $Logger: Logger = Vue.prototype.$Logger
+        const loggerPrefix = 'webrtc/peer:discovery - '
+
+        if (!peerId) return
+        let did = ''
+        try {
+          did = Iridium.peerIdToDID(peerId)
+        } catch (error) {}
+
+        const connectedFriend = this.iridium.friends.getFriend(did)
+
+        if (!connectedFriend) return
+
+        $Logger.log(loggerPrefix, `discovered peer: ${peerId}`)
+
+        this.iridium.friends.updateDetails(did, {
+          ...connectedFriend,
+          status: 'online',
+        })
+      },
+    )
   }
 
   private async fetch() {

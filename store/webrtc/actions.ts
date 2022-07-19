@@ -10,12 +10,12 @@ import { Config } from '~/config'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import Logger from '~/utilities/Logger'
-import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 
 const announceFrequency = 5000
 const webRTCActions = {
@@ -33,27 +33,27 @@ const webRTCActions = {
     commit('setIncomingCall', undefined)
     commit('setActiveCall', undefined)
     commit('conversation/setCalling', false, { root: true })
-    iridium.connector.on('peer:discovery', ({ peerId }: { peerId: string }) => {
-      const $Logger: Logger = Vue.prototype.$Logger
-      const loggerPrefix = 'webrtc/peer:discovery - '
+    // iridium.connector.on('peer:discovery', ({ peerId }: { peerId: string }) => {
+    //   const $Logger: Logger = Vue.prototype.$Logger
+    //   const loggerPrefix = 'webrtc/peer:discovery - '
 
-      const connectedFriend = rootState.friends.all.find(
-        (friend) => friend.peerId === peerId.toB58String(),
-      )
+    //   const connectedFriend = rootState.friends.all.find(
+    //     (friend) => friend.peerId === peerId.toB58String(),
+    //   )
 
-      if (!connectedFriend) return
+    //   if (!connectedFriend) return
 
-      $Logger.log(loggerPrefix, `discovered peer: ${peerId.toB58String()}`)
-      dispatch(
-        'friends/setFriendState',
-        {
-          address: connectedFriend.address,
-          state: 'online',
-        },
-        { root: true },
-      )
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
-    })
+    //   $Logger.log(loggerPrefix, `discovered peer: ${peerId.toB58String()}`)
+    //   dispatch(
+    //     'friends/setFriendState',
+    //     {
+    //       address: connectedFriend.address,
+    //       state: 'online',
+    //     },
+    //     { root: true },
+    //   )
+    //   dispatch('textile/subscribeToMailbox', {}, { root: true })
+    // })
 
     iridium.connector.on(
       'peer:connect',
