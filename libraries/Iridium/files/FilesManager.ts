@@ -9,13 +9,16 @@ import { createWriteStream } from 'streamsaver'
 import { v4 as uuidv4 } from 'uuid'
 import type { IridiumManager } from '../IridiumManager'
 import logger from '~/plugins/local/logger'
-import { IridiumDirectory, IridiumItem } from '~/libraries/Iridium/files/types'
+import {
+  IridiumDirectory,
+  IridiumItem,
+  ItemErrors,
+} from '~/libraries/Iridium/files/types'
 import isNSFW from '~/utilities/NSFW'
 import createThumbnail from '~/utilities/Thumbnail'
 import { blobToStream } from '~/utilities/BlobManip'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { Config } from '~/config'
-import { FileSystemErrors } from '~/libraries/Files/errors/Errors'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 export default class FilesManager extends Emitter {
@@ -106,6 +109,9 @@ export default class FilesManager extends Emitter {
     parentId: string
     options?: AddOptions
   }) {
+    if (file.size === 0) {
+      throw new Error(ItemErrors.FILE_SIZE)
+    }
     const parent = this.flat.find((e) => e.id === parentId) as
       | IridiumDirectory
       | undefined
@@ -272,15 +278,15 @@ export default class FilesManager extends Emitter {
    */
   private validateName(name: string, parent?: IridiumDirectory) {
     if (Config.regex.empty.test(name)) {
-      throw new Error(FileSystemErrors.NO_EMPTY_STRING)
+      throw new Error(ItemErrors.NO_EMPTY_STRING)
     }
 
     if (name[0] === '.') {
-      throw new Error(FileSystemErrors.LEADING_DOT)
+      throw new Error(ItemErrors.LEADING_DOT)
     }
 
     if (Config.regex.invalid.test(name)) {
-      throw new Error(FileSystemErrors.INVALID)
+      throw new Error(ItemErrors.INVALID)
     }
 
     // if parent was found, check sibling items. otherwise check root
@@ -294,7 +300,7 @@ export default class FilesManager extends Emitter {
   private isDuplicateName(name: string, items: IridiumItem[]) {
     items.forEach((e) => {
       if (!e.name.localeCompare(name, undefined, { sensitivity: 'base' })) {
-        throw new Error(FileSystemErrors.DUPLICATE_NAME)
+        throw new Error(ItemErrors.DUPLICATE_NAME)
       }
     })
   }
