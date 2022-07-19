@@ -14,7 +14,7 @@
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
       :data-cy="`pin-label`"
-      :label-text="step === 'login' ? $t('pages.unlock.decrypt') : 'Choose Your Pin'"
+      :label="step === 'login' ? $t('pages.unlock.decrypt') : 'Choose Your Pin'"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="status === 'loading'"
       :action="action"
