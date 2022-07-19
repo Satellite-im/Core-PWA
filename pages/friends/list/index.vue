@@ -11,24 +11,16 @@ export default Vue.extend({
   data() {
     return {
       route: 'active',
-      data: {
-        loading: true,
-        friends: iridium.friends.state,
-      },
+      friends: iridium.friends.state,
     }
   },
   computed: {
     incomingRequests(): Array<FriendRequest> {
-      return this.data.friends.requests.filter((r: FriendRequest) => r.incoming)
+      return this.friends.requests.filter((r: FriendRequest) => r.incoming)
     },
     outgoingRequests(): Array<FriendRequest> {
-      return this.data.friends.requests.filter(
-        (r: FriendRequest) => !r.incoming,
-      )
+      return this.friends.requests.filter((r: FriendRequest) => !r.incoming)
     },
-  },
-  mounted() {
-    this.data.loading = false
   },
 })
 </script>

@@ -94,11 +94,11 @@ export default Vue.extend({
 
         if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
-          // try {
-          //   await this.deleteAccount()
-          // } catch (e: any) {
-          //   this.$toast.error(this.$t(e.message) as string)
-          // }
+          try {
+            await this.deleteAccount()
+          } catch (e: any) {
+            this.$toast.error(this.$t(e.message) as string)
+          }
           this.$router.replace('/setup/disclaimer')
         } else {
           this.$router.replace('/')
@@ -124,7 +124,6 @@ export default Vue.extend({
     },
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
-      location.reload()
     },
     async clearAndReset() {
       await this.deleteAccount()
