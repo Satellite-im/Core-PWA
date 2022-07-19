@@ -11,8 +11,8 @@ import {
 } from 'satellite-lucide-icons'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-import fileSystem from '~/libraries/Files/FilSystem'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { ItemErrors } from '~/libraries/Iridium/files/types'
 
 export default Vue.extend({
   components: {
@@ -91,7 +91,7 @@ export default Vue.extend({
      * @param {File[]} originalFiles files to upload
      * @example <input @change="handleFile" />
      */
-    async handleFile(originalFiles: File[]) {
+    async handleFile(files: File[]) {
       this.errors = []
       this.$store.commit(
         'files/setStatus',
@@ -100,54 +100,35 @@ export default Vue.extend({
 
       // if these files go over the storage limit, prevent upload
       if (
-        originalFiles.reduce(
+        files.reduce(
           (total, curr) => total + curr.size,
-          fileSystem.totalSize,
+          iridium.files.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
         this.$store.commit('files/setStatus', '')
-        this.errors.push(this.$t('pages.files.errors.storage_limit'))
+        this.errors.push(this.$t(ItemErrors.LIMIT))
         return
       }
-      // todo - move validation inside of file constructor
-      const invalidNameResults: File[] = originalFiles.filter(
-        (file) => !this.$Config.regex.invalid.test(file.name),
-      )
-      // filter out files with 0 bytes size
-      const emptyFileResults: File[] = invalidNameResults.filter(
-        (file) => !(file.size === 0),
-      )
-      // filter out files with the same name as another file
-      const files: File[] = emptyFileResults.filter((file) => {
-        return !fileSystem.currentDirectory.hasChild(file.name)
-      })
 
       for (const file of files) {
-        try {
-          this.$store.commit('files/setCurrentUpload', {
-            name: file.name,
-            size: file.size,
-          })
-          await iridium.files.addFile({
+        this.$store.commit('files/setCurrentUpload', {
+          name: file.name,
+          size: file.size,
+        })
+        await iridium.files
+          .addFile({
             file,
             parentId: this.path.at(-1)?.id ?? '',
             options: { progress: this.setProgress },
           })
-        } catch (e: any) {
-          this.errors.push(this.$t(e?.message ?? ''))
-        }
+          .catch((e) => {
+            // ensure there aren't any duplicate error messages
+            if (!this.errors.includes(this.$t(e?.message)))
+              this.errors.push(this.$t(e?.message ?? ''))
+          })
       }
       this.$store.commit('files/setStatus', '')
       this.$store.commit('files/setCurrentUpload', undefined)
-      if (originalFiles.length !== invalidNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.invalid'))
-      }
-      if (invalidNameResults.length !== emptyFileResults.length) {
-        this.errors.push(this.$t('pages.files.errors.file_size'))
-      }
-      if (emptyFileResults.length !== files.length) {
-        this.errors.push(this.$t('pages.files.errors.duplicate_name'))
-      }
     },
     /**
      * @method setProgress

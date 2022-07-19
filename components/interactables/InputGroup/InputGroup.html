@@ -1,39 +1,29 @@
 <div>
-  <TypographyLabel
-    class="input-label"
-    v-if="labelText.length"
-    :text="labelText"
-  />
-  <div class="field has-addons">
-    <div class="control" data-cy="add-input">
-      <input
-        v-model="internalText"
-        class="input"
-        :class="[`is-${size} is-${type}`, {'disabled' : disabled || loading}]"
-        :readonly="readonly"
-        :type="inputKind"
-        data-cy="input-group"
-        :placeholder="placeholder"
-        :maxLength="maxLength"
-        :disabled="disabled || loading"
-        v-on:keyup.enter="action"
-        @input="update"
-        ref="input"
-      />
-    </div>
-    <div class="control" data-cy="submit-input">
-      <a
-        class="button"
-        :class="[`is-${type} is-${size} has-${icon ? 'icon' : 'no-icon'}`, {'disabled' : disabled || loading}]"
-        @click="() => disabled || loading ? null : action()"
-      >
-        <UiLoadersSpinner v-if="loading" spinning />
-        <span v-else>
-          <slot></slot>
-          {{ buttonText }}
-        </span>
-      </a>
-    </div>
+  <TypographyLabel v-if="label.length" :text="label" />
+  <div class="input-wrapper">
+    <input
+      ref="input"
+      class="input"
+      :class="`is-${size} is-${type}`"
+      :value="text"
+      :type="inputKind"
+      :readonly="readonly"
+      :placeholder="placeholder"
+      :maxLength="maxLength"
+      :disabled="disabled || loading"
+      @keydown.enter="action"
+      @input="$emit('change', $event.target.value)"
+      data-cy="input-group"
+    />
+    <button
+      class="button"
+      :class="[`is-${type} is-${size}`, {disabled: disabled}]"
+      @click="disabled || loading ? null : action()"
+      data-cy="submit-input"
+    >
+      <UiLoadersSpinner v-if="loading" spinning />
+      <slot v-else></slot>
+    </button>
   </div>
   <span v-if="showLimit" class="char-limit"> {{ textLength }} </span>
 </div>

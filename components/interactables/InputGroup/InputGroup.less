@@ -1,27 +1,12 @@
-.input-label {
-  text-align: left;
-}
-.has-icon {
-  width: 40px;
-}
 .control:nth-child(1) {
   &:extend(.full-width);
 }
-.button {
-  &:extend(.inline-flex-content-centered);
-
-  span {
-    &:extend(.inline-flex-content-centered);
-  }
-
-  &.disabled {
-    opacity: 0.5;
-  }
-}
-.has-addons {
+.input-wrapper {
+  display: flex;
   &:extend(.bordered);
   &:extend(.round-corners);
 }
+
 .input.is-normal,
 .button.is-normal {
   height: 2.3rem;
