@@ -11,7 +11,7 @@
       :placeholder="placeholder"
       :maxLength="maxLength"
       :disabled="disabled || loading"
-      @keyup.enter="action"
+      @keydown.enter="action"
       @input="$emit('change', $event.target.value)"
       data-cy="input-group"
     />
