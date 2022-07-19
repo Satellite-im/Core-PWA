@@ -3,37 +3,24 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 
-type Route = 'active' | 'requests' | 'blocked' | 'add'
 export default Vue.extend({
   name: 'FriendsList',
   layout: 'friends',
   data() {
     return {
       route: 'active',
-      data: {
-        loading: true,
-        friends: iridium.friends?.state,
-      },
+      friends: iridium.friends.state,
     }
   },
   computed: {
-    incomingRequests() {
-      if (!iridium.friends?.state.requests) return []
-      return Object.entries(iridium.friends?.state.requests).filter(
-        ([_key, request]) => request.incoming && request.status === 'pending',
-      )
+    incomingRequests(): Array<FriendRequest> {
+      return this.friends.requests.filter((r: FriendRequest) => r.incoming)
     },
-    outgoingRequests() {
-      if (!iridium.friends?.state.requests) return []
-      return Object.entries(iridium.friends?.state.requests).filter(
-        ([_key, request]) => !request.incoming && request.status === 'pending',
-      )
+    outgoingRequests(): Array<FriendRequest> {
+      return this.friends.requests.filter((r: FriendRequest) => !r.incoming)
     },
-  },
-  async mounted() {
-    this.data.loading = false
-    iridium.friends?.on('request/changed', () => this.$forceUpdate())
   },
 })
 </script>

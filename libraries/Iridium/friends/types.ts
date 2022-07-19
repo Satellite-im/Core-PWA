@@ -9,7 +9,12 @@ export type User = {
 
 export type Friend = User & {}
 
-export type FriendRequestStatus = 'pending' | 'accepted' | 'rejected'
+export type FriendRequestStatus =
+  | 'pending'
+  | 'accepted'
+  | 'rejected'
+  | 'removed'
+
 export type FriendRequest = {
   user: User
   incoming: boolean
