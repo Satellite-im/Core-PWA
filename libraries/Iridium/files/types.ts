@@ -28,3 +28,14 @@ export interface IridiumDirectory extends Shared {
 }
 
 export type IridiumItem = IridiumFile | IridiumDirectory
+
+export enum ItemErrors {
+  // IridiumItem
+  NO_EMPTY_STRING = 'pages.files.errors.no_empty',
+  INVALID = 'pages.files.errors.invalid',
+  DUPLICATE_NAME = 'pages.files.errors.duplicate_name',
+  LEADING_DOT = 'pages.files.errors.leading_dot',
+  // IridiumFile
+  FILE_SIZE = 'pages.files.errors.file_size',
+  LIMIT = 'pages.files.errors.storage_limit',
+}
