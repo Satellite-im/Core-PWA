@@ -2,7 +2,7 @@
   class="file"
   :class="{ 'is-liked': item.liked }"
   @click="click"
-  @contextmenu="contextmenu"
+  v-contextmenu="contextmenu"
 >
   <div class="quick-actions">
     <link-icon v-if="item.shared" size="1.25x" class="link" />
