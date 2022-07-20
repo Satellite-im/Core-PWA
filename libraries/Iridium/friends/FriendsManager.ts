@@ -33,8 +33,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
   async init() {
     if (!this.iridium.connector) {
-      this.state.error = FriendsError.CONNECTOR_ERROR
-      return this.state.error
+      try {
+        logger.error('iridium/friends', 'connector error')
+        throw new Error(FriendsError.CONNECTOR_ERROR)
+      } catch (err) {
+        this.setError(err)
+      }
     }
 
     const iridium = this.iridium.connector
