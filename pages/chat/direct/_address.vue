@@ -3,14 +3,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   name: 'Direct',
   layout: 'chat',
   data() {
     return {
-      conversationMessages: iridium.chat.conversationMessages,
+      messages: iridium.chat.conversationMessages[this.$route.params.address],
     }
   },
   computed: {
@@ -29,9 +28,6 @@ export default Vue.extend({
     // const msgs = (await iridium.chat.loadMessages(id)) || []
     // console.log('debug: | messages | msgs', msgs)
     // },
-    messages(): ConversationMessage[] {
-      return this.conversationMessages[this.$route.params.address]
-    },
   },
 })
 </script>
