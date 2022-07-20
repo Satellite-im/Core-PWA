@@ -3,6 +3,9 @@ import { WebRTCState } from './types'
 
 const mutations = {
   setProperty(state: WebRTCState, { key, value }: { key: string; value: any }) {
+    console.log('state', state)
+    console.log('key', key)
+    console.log('value', value)
     state[key] = value
   },
   setInitialized(

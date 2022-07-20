@@ -22,8 +22,6 @@ import { Config } from '~/config'
 const announceFrequency = 5000
 
 const initialState: WebRTCState = {
-  initialized: false,
-  originator: '',
   incomingCall: undefined,
   activeCall: undefined,
   streamMuted: {},
@@ -39,18 +37,18 @@ export default class WebRTCManager extends Emitter {
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
-    this.state = initialState
-    // this.state = new Proxy(initialState, {
-    //   set(target, key, value) {
-    //     // console.log(`${key} set from ${target[key]} to ${value}`)
-    //     target[key] = value
-    //     Vue.prototype.$nuxt.$store.commit('webrtc/setProperty', {
-    //       key,
-    //       value,
-    //     })
-    //     return true
-    //   },
-    // })
+    // this.state = initialState
+    this.state = new Proxy(initialState, {
+      set(target, key, value) {
+        // console.log(`${key} set from ${target[key]} to ${value}`)
+        target[key] = value
+        Vue.prototype.$nuxt.$store.commit('webrtc/setProperty', {
+          key,
+          value,
+        })
+        return true
+      },
+    })
   }
 
   async init() {
@@ -60,7 +58,6 @@ export default class WebRTCManager extends Emitter {
     //   this.iridium.connector?.peerId,
     // )
 
-    this.subscribeToAnnounce()
     // await this.onPeerDiscovery({
     //   peerId: '12D3KooWM4bdDMvtajWRdbAc7nPH6ggZJtNu44hhXmbAkpXa2nom',
     // })
@@ -68,10 +65,9 @@ export default class WebRTCManager extends Emitter {
     //   did: 'did:key:z6MkqhVW4UbcjNjQLCVtAkbnAz9ie8c7SFsaGC95D7Lh44sD',
     //   peerId: '12D3KooWM4bdDMvtajWRdbAc7nPH6ggZJtNu44hhXmbAkpXa2nom',
     // })
-    this.state.originator = this.iridium.connector?.peerId
-    this.state.initialized = true
 
     this.setupListeners()
+    this.subscribeToAnnounce()
   }
 
   private setupListeners() {
@@ -204,6 +200,58 @@ export default class WebRTCManager extends Emitter {
     )
   }
 
+  private subscribeToAnnounce = async () => {
+    const profile = this.iridium.profile.state
+
+    setInterval(async () => {
+      const id = await this.iridium.chat?.directConversationId(profile.did)
+
+      if (id && (await this.iridium.chat?.hasConversation(id))) {
+        const conversation = await this.iridium.chat?.getConversation(id)
+        conversation.participants
+          .filter(
+            (p) => p.peerId && p.peerId !== this.iridium.connector?.peerId,
+          )
+          .forEach((p) => {
+            this.iridium.connector?.send(
+              {
+                module: 'webrtc',
+                type: 'peer:announce',
+                payload: {
+                  name: profile.name,
+                  address: profile.address,
+                  profilePicture: profile.profilePicture,
+                },
+                at: Date.now().valueOf(),
+              },
+              { to: [p.peerId] },
+            )
+          })
+      }
+
+      const friends = await this.iridium.friends.getFriends()
+
+      for (const key in friends) {
+        if (!friends[key]?.peerId || friends[key]?.status === 'online') {
+          return
+        }
+        this.iridium.connector?.send(
+          {
+            module: 'webrtc',
+            type: 'peer:announce',
+            payload: {
+              name: profile.name,
+              address: profile.address,
+              profilePicture: profile.profilePicture,
+            },
+            at: Date.now().valueOf(),
+          },
+          { to: [friends[key].peerId] },
+        )
+      }
+    }, announceFrequency)
+  }
+
   private async fetch() {
     this.state = merge(initialState, await this.get(), {
       arrayMerge: overwriteMerge,
@@ -264,45 +312,6 @@ export default class WebRTCManager extends Emitter {
         await this.onPeerUnmute(payload)
         break
     }
-  }
-
-  private subscribeToAnnounce = () => {
-    // setInterval(() => {
-    //   if (rootState.conversation) {
-    //     rootState.conversation.participants
-    //       .filter((p) => p.peerId && p.peerId !== iridium.connector?.peerId)
-    //       .forEach((p) => {
-    //         iridium.connector.send(
-    //           {
-    //             type: 'peer:announce',
-    //             payload: {
-    //               name: rootState.accounts.details?.name,
-    //               address: rootState.accounts.details?.address,
-    //               profilePicture: rootState.accounts.details?.profilePicture,
-    //             },
-    //             sentAt: Date.now().valueOf(),
-    //           },
-    //           p.peerId as string,
-    //         )
-    //       })
-    //   }
-    //   rootState.friends.all
-    //     .filter((friend) => !!friend.peerId && friend.state !== 'online')
-    //     .forEach((friend) => {
-    //       iridium.connector?.sendMessage(
-    //         {
-    //           type: 'peer:announce',
-    //           payload: {
-    //             name: rootState.accounts.details?.name,
-    //             address: rootState.accounts.details?.address,
-    //             profilePicture: rootState.accounts.details?.profilePicture,
-    //           },
-    //           sentAt: Date.now().valueOf(),
-    //         },
-    //         friend.peerId as string,
-    //       )
-    //     })
-    // }, announceFrequency)
   }
 
   private onPeerCall = async (payload: any) => {
@@ -595,11 +604,12 @@ export default class WebRTCManager extends Emitter {
 
     $Logger.log('webrtc: creating call', callId + peers)
 
-    if (!$WebRTC.initialized && this.state.originator) {
-      $WebRTC.init(this.state.originator)
+    if (!$WebRTC.initialized && this.iridium.connector?.peerId) {
+      $WebRTC.init(this.iridium.connector?.peerId)
     }
 
-    const usedCallId = callId === this.state.originator ? peerId : callId
+    const usedCallId =
+      callId === this.iridium.connector?.peerId ? peerId : callId
     console.log('usedCallId', usedCallId)
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)

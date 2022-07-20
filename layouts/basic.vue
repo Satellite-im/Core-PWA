@@ -11,7 +11,7 @@
       :class="[
         showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed',
         $device.isMobile ? 'mobile-app' : 'desktop',
-        showBackgroundCall ? 'has-background-call' : '',
+        isBackgroundCall ? 'has-background-call' : '',
       ]"
     >
       <UiGlobal />
