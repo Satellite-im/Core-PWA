@@ -78,7 +78,7 @@ export default Vue.extend({
      */
     async acceptCall(kinds: TrackKind[]) {
       this.$store.commit('webrtc/setStreamMuted', {
-        peerId: iridium.connector?.peerId,
+        did: iridium.connector?.peerId,
         audio: true,
         video: true,
         screen: true,

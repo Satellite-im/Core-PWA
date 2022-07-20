@@ -1,4 +1,5 @@
-import { Iridium, Emitter } from '@satellite-im/iridium'
+import { Emitter, createIridiumIPFS } from '@satellite-im/iridium'
+import type { IridiumIPFS } from '@satellite-im/iridium'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import GroupManager from '~/libraries/Iridium/groups/GroupManager'
@@ -13,7 +14,7 @@ import Crypto from '~/libraries/Crypto/Crypto'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
-  connector?: Iridium
+  connector?: IridiumIPFS
   profile: ProfileManager
   groups: GroupManager
   chat: ChatManager
@@ -45,7 +46,7 @@ export class IridiumManager extends Emitter {
     }
 
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
-    this.connector = await Iridium.fromSeed(seed, {
+    this.connector = await createIridiumIPFS(seed, {
       logger,
       config: {
         syncNodes: Config.iridium.syncNodes,
@@ -55,7 +56,6 @@ export class IridiumManager extends Emitter {
 
     logger.log('iridium/manager', 'connector initialized', {
       id: this.connector.id,
-      peerId: this.connector.peerId,
     })
 
     logger.log('iridium/manager', 'starting IPFS')

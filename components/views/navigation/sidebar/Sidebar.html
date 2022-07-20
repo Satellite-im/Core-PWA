@@ -65,6 +65,51 @@
       />
     </div>
     <SidebarList />
+    <div class="list-container hover-scroll">
+      <UiLoadersAddress
+        v-if="dataState.friends === DataStateType.Loading"
+        :count="4"
+        inverted
+      />
+      <template v-else-if="friendsList && friendsList.length">
+        <UiInlineNotification
+          v-if="ui.unreadMessage.length"
+          :text="$t('messaging.new_messages')"
+        />
+        <div v-for="friend in friendsList">
+          <User
+            v-if="friend"
+            :key="friend.did"
+            :user="friend"
+            :isTyping="ui.isTyping.address === friend.did"
+            :isSelected="friend.did === $route.params.address"
+          />
+          <!-- <GroupClickable
+              v-else
+              :group="thing"
+              :key="thing.id"
+              :isSelected="thing.id === $route.params.id"
+            /> -->
+        </div>
+      </template>
+      <div
+        v-else-if="!friendsList || !friendsList.length"
+        class="mascot-container"
+      >
+        <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
+        <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
+        <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
+        <InteractablesButton
+          :text="$t('friends.add') + 's'"
+          size="small"
+          type="primary"
+          :action="gotoAddFriends"
+        >
+          <user-plus-icon size="1.2x" />
+        </InteractablesButton>
+      </div>
+      <UiLoadersAddress v-else :count="4" inverted />
+    </div>
   </div>
   <div class="controls">
     <SidebarLive />

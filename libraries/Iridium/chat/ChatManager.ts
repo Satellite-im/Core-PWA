@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import {
-  IridiumPeerMessage,
-  IridiumPubsubEvent,
+  IridiumMessage,
   Iridium,
   Emitter,
-  EmitterCallback,
+  didUtils,
+  encoding,
 } from '@satellite-im/iridium'
+import type { EmitterCallback } from '@satellite-im/iridium'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
 import {
@@ -16,7 +17,7 @@ import {
 import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 
-export type ConversationPubsubEvent = IridiumPeerMessage<{
+export type ConversationPubsubEvent = IridiumMessage<{
   type: string
   conversation: string
   message?: string
@@ -236,7 +237,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.set(`/conversations/${conversationId}/message/${messageCID}`, message)
 
     // broadcast the message to connected peers
-    await this.iridium.connector.broadcast(
+    await this.iridium.connector.publish(
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/message',
@@ -247,15 +248,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const pids = (
       await Promise.all(
-        conversation.participants.map((p) => Iridium.DIDToPeerId(p)),
+        conversation.participants.map((p) => didUtils.DIDToPeerId(p)),
       )
     ).map((pid) => pid.toString())
 
     await this.iridium.connector.send(
+      pids,
       { type: 'chat/message', conversationId, messageCID },
-      {
-        to: pids,
-      },
     )
   }
 }

@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import type { FriendRequest } from '~/libraries/Iridium/friends/types'
+import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   name: 'FriendsList',
@@ -15,11 +15,18 @@ export default Vue.extend({
     }
   },
   computed: {
+    friendsList(): Array<Friend> {
+      return iridium.friends.list
+    },
     incomingRequests(): Array<FriendRequest> {
-      return this.friends.requests.filter((r: FriendRequest) => r.incoming)
+      return iridium.friends.requestList.filter(
+        (r: FriendRequest) => r.incoming,
+      )
     },
     outgoingRequests(): Array<FriendRequest> {
-      return this.friends.requests.filter((r: FriendRequest) => !r.incoming)
+      return iridium.friends.requestList.filter(
+        (r: FriendRequest) => !r.incoming,
+      )
     },
   },
 })

@@ -33,8 +33,11 @@
     "@nuxtjs/style-resources": "^1.2.1",
     "@nuxtjs/toast": "^3.3.1",
     "@project-serum/anchor": "0.18.2",
+<<<<<<< HEAD
     "@satellite-im/iridium": "git+https://git@github.com/Satellite-im/iridium.git#fix/main",
     "@solana/wallet-adapter-wallets": "^0.16.8",
+=======
+>>>>>>> 3cf606d7 (feat(iridium): refactor updates)
     "@solana/web3.js": "1.43.1",
     "@tensorflow/tfjs": "^3.13.0",
     "@textile/hub": "^6.3.2",
@@ -56,13 +59,8 @@
     "fp-ts": "^2.11.8",
     "heic-convert": "^1.2.4",
     "howler": "^2.2.3",
+    "ipfs-core-types": "^0.11.1",
     "it-pipe": "2.0.0",
-    "libp2p": "0.35.8",
-    "libp2p-crypto": "^0.21.2",
-    "libp2p-mplex": "^0.10.7",
-    "libp2p-noise": "^4.0.0",
-    "libp2p-secio": "^0.13.1",
-    "libp2p-webrtc-star": "^0.25.0",
     "lodash": "^4.17.21",
     "magic-bytes.js": "^1.0.10",
     "match-sorter": "^6.3.1",

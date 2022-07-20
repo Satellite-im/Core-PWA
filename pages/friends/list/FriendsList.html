@@ -47,18 +47,18 @@
       <div class="friend-column">
         <!-- Friends List -->
         <div v-if="friends && friends.list">
-          <div v-for="user in friends.list" :key="user.did">
+          <div v-for="user in friendsList" :key="user.did">
             <FriendsFriend v-if="user" :user="user" :key="user.did" />
           </div>
         </div>
-        <div v-if="friends && friends.blocked" class="padded_divider">
+        <!-- <div v-if="friends && blockedList" class="padded_divider">
           <FriendsFriend
             v-for="(user, did) in friends.blocked"
             :user="user"
             :key="did"
             blocked
           />
-        </div>
+        </div> -->
       </div>
     </UiSimpleScroll>
   </div>

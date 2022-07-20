@@ -210,6 +210,7 @@ export default defineNuxtConfig({
         child_process: 'empty',
         dgram: 'empty',
         tls: 'empty',
+        dns: 'empty',
       }
       if (process.env.ENVIRONMENT !== 'dev') {
         const testAttributes = ['data-cy']
@@ -234,7 +235,6 @@ export default defineNuxtConfig({
         }
       }
     },
-    transpile: ['libp2p', '@satellite-im/iridium'],
     babel: {
       plugins: ['lodash'],
       compact: true,
@@ -268,5 +268,6 @@ export default defineNuxtConfig({
     '**/*.test.*',
     'store/*/types.ts',
     'node_modules/@satellite-im/iridium/src/',
+    '../iridium/node_modules/',
   ],
 })
