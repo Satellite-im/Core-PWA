@@ -40,7 +40,6 @@ export default Vue.extend({
       thumbnail: '',
       fileHover: false as boolean,
       linkHover: false as boolean,
-      heartHover: false as boolean,
     }
   },
   computed: {
@@ -105,10 +104,6 @@ export default Vue.extend({
         this.share()
         return
       }
-      if (this.heartHover) {
-        this.like()
-        return
-      }
       this.$emit('handle', this.item)
     },
     /**
@@ -122,7 +117,8 @@ export default Vue.extend({
      * @method like
      * @description Emit to like item - pages/files/browse/index.vue
      */
-    like() {
+    like(event: MouseEvent) {
+      event.stopPropagation()
       this.$emit('like', this.item)
     },
     /**
