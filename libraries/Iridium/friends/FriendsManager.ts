@@ -195,15 +195,18 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   /**
-   * @method updateDetails
+   * @method updateFriend
    * @description check if there's a friend with the current did and change it with new user object
    * @param did string (required)
    * @param user User (required)
    */
-  updateDetails(did: string, user: User): void {
-    const index = this.state.list.findIndex((f) => f.did === did)
-    if (!index) return
-    this.state.list[index] = user
+  updateFriend(did: string, user: User): void {
+    const friend = this.getFriend(did)
+    if (friend) {
+      const index = this.state.list.indexOf(friend)
+      this.state.list.splice(index, 1)
+    }
+    this.state.list.push(user)
   }
 
   /**

@@ -89,7 +89,7 @@ export default class WebRTCManager extends Emitter {
 
         $Logger.log(loggerPrefix, `discovered peer: ${peerId}`)
 
-        this.iridium.friends.updateDetails(did, {
+        this.iridium.friends.updateFriend(did, {
           ...connectedFriend,
           status: 'online',
         })
