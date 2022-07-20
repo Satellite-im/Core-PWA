@@ -19,6 +19,7 @@ import {
   User,
 } from './types'
 import logger from '~/plugins/local/logger'
+import { AlertType } from '~/libraries/ui/Alerts'
 
 export type IridiumFriendEvent = {
   to: IridiumPeerIdentifier
@@ -280,6 +281,19 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.set(`/requests/${did}`, request)
     logger.info(this.loggerTag, 'friend request created', {
       did,
+      request,
+    })
+    const buildNotification = {
+      from: request.user.name,
+      message: 'new noti',
+      type: AlertType.FRIEND_REQUEST,
+      seen: false,
+      imageHash: request.user.photoHash,
+      title: 'notification title',
+    }
+    this.iridium.notifications?.sendNotification(buildNotification)
+    logger.info('iridium/friends', 'saving friend request', {
+      remotePeerDID,
       request,
     })
 

@@ -20,7 +20,7 @@ export class IridiumManager extends Emitter {
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
-  notifications?: NotificationManager
+  notifications: NotificationManager
   settings: SettingsManager
 
   constructor() {
@@ -31,6 +31,7 @@ export class IridiumManager extends Emitter {
     this.chat = new ChatManager(this)
     this.files = new FilesManager(this)
     this.settings = new SettingsManager(this)
+    this.notifications = new NotificationManager(this)
   }
 
   /**
@@ -100,6 +101,8 @@ export class IridiumManager extends Emitter {
     await this.files.init()
     logger.log('iridium/manager', 'initializing settings')
     await this.settings.init()
+    logger.log('iridium/manager', 'notification settings')
+    await this.notifications.init()
     logger.log('iridium/manager', 'ready')
 
     this.ready = true
