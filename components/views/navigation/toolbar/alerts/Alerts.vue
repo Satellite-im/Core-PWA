@@ -6,16 +6,26 @@ import { mapGetters, mapState } from 'vuex'
 import { FlaskConicalIcon } from 'satellite-lucide-icons'
 import { AlertState } from '~/libraries/ui/Alerts'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     FlaskConicalIcon,
   },
+  data() {
+    return {
+      messages: [],
+      did: iridium.connector.id,
+    }
+  },
   computed: {
     ...mapState({
-      notifications: (state) => (state as RootState).ui.notifications,
+      notifications: () => Object.values(iridium.notifications?.state),
     }),
     ...mapGetters('ui', ['allUnseenNotifications']),
     AlertState: () => AlertState,
+  },
+  mounted() {
+    console.log(this.notifications, 'in alert')
   },
   methods: {
     clearNotifications() {

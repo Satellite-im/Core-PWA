@@ -19,17 +19,17 @@ export enum AlertState {
 }
 
 export type Alert = {
-  at: number
+  at?: number
   id?: string
-  state?: AlertState
-  type: AlertType
-  fromName: string
+  seen?: boolean
+  type?: AlertType
+  fromName?: string
   fromAddress?: string
   groupName?: string
   groupId?: string
   content: {
-    title: string
-    description: string
+    title?: string
+    description?: string
     image?: string
   }
 }

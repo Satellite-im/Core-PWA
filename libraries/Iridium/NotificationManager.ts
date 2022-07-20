@@ -1,20 +1,24 @@
 import {
+  IridiumPeerMessage,
+  IridiumPubsubEvent,
+  Iridium,
   Emitter,
-  IridiumGetOptions,
+  EmitterCallback,
   IridiumSetOptions,
-} from '@satellite-im/iridium/dist/index.browser'
-import type { EmitterCallback } from '@satellite-im/iridium/src/emitter'
+  IridiumGetOptions,
+} from '@satellite-im/iridium'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import { NotificationsError } from '~/libraries/Iridium/notifications/types'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
-export default class NotificationManager extends Emitter<Notification> {
+export default class NotificationManager extends Emitter<Alert> {
   public ready: boolean = false
   public subscriptions: string[] = []
   public state: {
-    notifications: []
-    notification: { [key: string]: Notification }
+    notifications: string[]
+    notification: { [key: string]: Alert }
   } = {
     notifications: [],
     notification: {},
@@ -26,23 +30,24 @@ export default class NotificationManager extends Emitter<Notification> {
 
   async init() {
     await this.fetch()
-
-    await Promise.all(
-      this.state.notifications.map(async (notification) => {
-        this.iridium.connector?.on(
-          `/notifications/${notification}`,
-          this.state.notifications.push(notification),
-        )
-        await this.iridium.connector?.subscribe(`/notifications`)
-      }),
-    )
-
+    // await Promise.all(
+    //   this.state.notifications.map(async (notification) => {
+    //     this.iridium.connector?.on(
+    //       `notifications/${notification}`,
+    //       this.onNotificationActivity.bind(notification),
+    //     )
+    //     await this.iridium.connector?.subscribe(`/notifications`)
+    //   }),
+    // )
     this.ready = true
     this.emit('ready', {})
   }
 
   async fetch() {
-    this.state = await this.iridium.connector?.get('/notifications')
+    this.state = (await this.iridium.connector?.get('notifications')) || {
+      notifications: [],
+      notification: {},
+    }
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
@@ -58,10 +63,22 @@ export default class NotificationManager extends Emitter<Notification> {
       payload,
     })
     return this.iridium.connector?.set(
-      `/notifications${path === '/' ? '' : path}`,
+      `/${path === '/' ? '' : path}`,
       payload,
       options,
     )
+  }
+
+  private async onNotificationActivity(notificationID: string) {
+    if (!this.iridium.connector) return
+    const noti = await this.iridium.connector.load(notificationID, {
+      decrypt: true,
+    })
+    if (noti) {
+      this.state.notifications.push(noti)
+      await this.iridium.connector?.set(`notifications/${noti}`, noti)
+    }
+    this.emit(`notifications/${noti}`, noti)
   }
 
   async subscribeToNotifications(
@@ -84,16 +101,15 @@ export default class NotificationManager extends Emitter<Notification> {
    * @returns returns the textile response
    */
   async sendNotification(payload: {
-    from: string
-    id: string
-    message: string
-    imageHash: string
-    type: AlertType
+    from?: string
+    message?: string
+    imageHash?: string
+    type?: AlertType
+    seen?: boolean
+    title?: string
     fromAddress?: string
     groupName?: string
     groupId?: string
-    notificationState: AlertState
-    title: string
   }) {
     const buildNotification: Alert = {
       content: {
@@ -101,20 +117,18 @@ export default class NotificationManager extends Emitter<Notification> {
         image: payload.imageHash,
         description: payload.message,
       },
-      state: payload.notificationState,
-      fromName: payload.from,
-      fromAddress: payload.fromAddress,
-      groupName: payload.groupName,
-      groupId: payload.groupId,
+      seen: payload.seen,
+      fromName: payload.from || '',
+      fromAddress: payload.fromAddress || '',
+      groupName: payload.groupName || '',
+      groupId: payload.groupId || '',
       type: payload.type,
       at: Date.now(),
-      id: payload.id,
     }
+    if (!this.iridium.connector) return
     const notificationCID = await this.iridium.connector.store(
       buildNotification,
-      {
-        encrypt: { buildNotification },
-      },
+      {},
     )
     if (!notificationCID) {
       throw new Error(NotificationsError.NOTIFICATION_NOT_SENT)
