@@ -6,12 +6,21 @@
   <div class="files-top">
     <FilesFilepath />
   </div>
-  <FilesControls ref="controls" />
+  <FilesControls ref="controls" class="controls" />
   <div class="files-aside-container">
     <FilesAside />
   </div>
   <div class="files-view">
     <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
+    <FilesCards
+      v-else-if="$device.isMobile"
+      :directory="directory"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
+      @handle="handle"
+    />
     <FilesGrid
       v-else-if="gridLayout"
       :directory="directory"
@@ -22,7 +31,7 @@
       @handle="handle"
     />
     <FilesList
-      v-else
+      v-else-if="!gridLayout"
       :directory="directory"
       @like="like"
       @share="share"

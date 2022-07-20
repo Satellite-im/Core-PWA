@@ -1,0 +1,22 @@
+<div id="cards-view" :class="{'cards-view-list': !gridLayout}">
+  <InteractablesSelect
+    v-if="directory.length"
+    v-model="sort"
+    :options="sortOptions"
+    :label="$t('pages.files.browse.sort')"
+    small
+    class="sort-selection"
+  />
+  <div class="files-container">
+    <FilesCardsCard
+      v-for="item in directory"
+      :item="item"
+      :key="item.id"
+      @like="(item) => $emit('like', item)"
+      @share="(item) => $emit('share', item)"
+      @rename="(item) => $emit('rename', item)"
+      @remove="(item) => $emit('remove', item)"
+      @handle="(item) => $emit('handle', item)"
+    />
+  </div>
+</div>

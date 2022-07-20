@@ -1,0 +1,24 @@
+#cards-view {
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  .sort-selection {
+    display: flex;
+    align-items: center;
+    align-self: end;
+  }
+
+  .files-container {
+    display: flex;
+    flex-direction: column;
+    gap: @normal-spacing;
+    min-width: 0;
+  }
+}
+
+.cards-view-list {
+  .files-container {
+    gap: @light-spacing !important;
+  }
+}
