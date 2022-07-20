@@ -1,5 +1,5 @@
 export type ConversationMessage = {
-  conversation: string
+  conversationId: string
   from: string
   body: string
   at: number
@@ -10,12 +10,12 @@ export type ConversationMessage = {
 export type Conversation = {
   id: string
   type: 'direct' | 'group'
+  name?: string
   participants: string[]
   createdAt: number
   updatedAt: number
-  lastMessageAt: number
-  messages: string[]
-  message: {
+  lastMessageAt?: number
+  messages: {
     [key: string]: ConversationMessage
   }
 }

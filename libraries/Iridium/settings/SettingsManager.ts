@@ -46,7 +46,7 @@ export default class SettingsManager extends Emitter {
   }
 
   private async fetch() {
-    this.state = merge(initialState, await this.get(), {
+    this.state = merge(initialState, (await this.get()) as Settings, {
       arrayMerge: overwriteMerge,
     })
   }
