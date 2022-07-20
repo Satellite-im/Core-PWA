@@ -180,18 +180,22 @@ export default Vue.extend({
       if (!this.enableRTC) {
         return
       }
-      await this.$store.dispatch('webrtc/call', {
-        kinds,
-      })
+      try {
+        await this.$store.dispatch('webrtc/call', {
+          kinds,
+        })
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
+      }
     },
-    handleCall() {
+    async handleCall() {
       if (this.isGroup) {
         return
       }
       if (!this.enableRTC || this.webrtc.activeCall) {
         return
       }
-      this.call(['audio'])
+      await this.call(['audio'])
     },
   },
 })
