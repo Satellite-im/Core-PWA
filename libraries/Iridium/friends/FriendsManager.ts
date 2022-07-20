@@ -60,10 +60,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await iridium.subscribe('/friends/announce')
     // console.info('waiting for topic peer')
     // await this.iridium.connector?.waitForTopicPeer(topic)
-    this.iridium.connector?.on(
-      '/friends/announce',
-      this.onFriendActivity.bind(this),
-    )
+    iridium.pubsub.on('/friends/announce', this.onFriendActivity.bind(this))
     logger.log('iridium/friends', 'listening for friend activity', this.state)
 
     // connect to all friends
