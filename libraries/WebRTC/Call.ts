@@ -422,6 +422,16 @@ export class Call extends Emitter<CallEventListeners> {
     const screenTrack = screenStream.getVideoTracks()[0]
     screenTrack.enabled = true
 
+    this.screenStreams[iridium.connector?.peerId] = screenStream.id
+    this.streams[iridium.connector?.peerId].screen = screenStream
+    this.tracks[iridium.connector?.peerId].add(screenTrack)
+
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: screenTrack,
+      kind: 'screen',
+      stream: screenStream,
+    })
+
     await Promise.all(
       Object.values(this.peers).map(async (peer) => {
         await iridium.connector?.send(
@@ -440,16 +450,6 @@ export class Call extends Emitter<CallEventListeners> {
         } catch (_) {}
       }),
     )
-
-    this.screenStreams[iridium.connector?.peerId] = screenStream.id
-    this.streams[iridium.connector?.peerId].screen = screenStream
-    this.tracks[iridium.connector?.peerId].add(screenTrack)
-
-    this.emit('LOCAL_TRACK_CREATED', {
-      track: screenTrack,
-      kind: 'screen',
-      stream: screenStream,
-    })
   }
 
   /**
