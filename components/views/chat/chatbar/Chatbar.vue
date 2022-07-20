@@ -214,13 +214,13 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
-      if (!this.recipient) {
-        return
-      }
+      // if (!this.recipient) {
+      //   return
+      // }
       // keep recipient in case user changes chats quickly after send
       const recipient = this.recipient
       // if there are any files attached to this chat, send
-      await this.sendFiles()
+      // await this.sendFiles()
       // return if input is empty or over max length
       if (
         this.text.length > this.$Config.chat.maxChars ||
@@ -230,54 +230,52 @@ export default Vue.extend({
       }
       const value = this.text
       this.text = ''
-      if (
-        this.ui.replyChatbarContent.from &&
-        !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
-      ) {
-        this.$store.dispatch('textile/sendReplyMessage', {
-          to: (recipient as Friend).textilePubkey,
-          text: value,
-          replyTo: this.ui.replyChatbarContent.messageID,
-          replyType: MessagingTypesEnum.TEXT,
-        })
-        return
-      }
+      // we should be looking into conversation instead of passing a recipient
+      await iridium.chat?.sendMessage(this.$route.params.address, {
+        type: 'direct',
+        body: value,
+        conversationId: this.$route.params.address,
+        at: Date.now(),
+        attachments: [],
+      })
+      // if (
+      //   this.ui.replyChatbarContent.from &&
+      //   !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
+      // ) {
+      //   this.$store.dispatch('textile/sendReplyMessage', {
+      //     to: (recipient as Friend).textilePubkey,
+      //     text: value,
+      //     replyTo: this.ui.replyChatbarContent.messageID,
+      //     replyType: MessagingTypesEnum.TEXT,
+      //   })
+      //   return
+      // }
 
-      if (
-        RegExp(this.$Config.regex.uuidv4).test(
-          (this.recipient as Group)?.did?.split('|')[1],
-        )
-      ) {
-        if (this.ui.replyChatbarContent.from) {
-          this.$store.dispatch('textile/sendGroupReplyMessage', {
-            to: (recipient as Group).id,
-            text: value,
-            replyTo: this.ui.replyChatbarContent.messageID,
-            replyType: MessagingTypesEnum.TEXT,
-          })
-          this.text = ''
-          return
-        }
-        this.$store.dispatch('textile/sendGroupMessage', {
-          groupId: (recipient as Group).id,
-          message: value,
-        })
-      } else {
-        // we should be looking into conversation instead of passing a recipient
-        await iridium.chat?.sendMessage(this.$route.params.address, {
-          from: iridium.connector?.id,
-          type: 'direct',
-          body: value,
-          conversation: value,
-          at: Date.now(),
-          attachments: [],
-        })
-
-        // this.$store.dispatch('textile/sendTextMessage', {
-        //   to: (this.recipient as Friend).textilePubkey,
-        //   text: value,
-        // })
-      }
+      // if (
+      //   RegExp(this.$Config.regex.uuidv4).test(
+      //     (this.recipient as Group)?.did?.split('|')[1],
+      //   )
+      // ) {
+      //   if (this.ui.replyChatbarContent.from) {
+      //     this.$store.dispatch('textile/sendGroupReplyMessage', {
+      //       to: (recipient as Group).id,
+      //       text: value,
+      //       replyTo: this.ui.replyChatbarContent.messageID,
+      //       replyType: MessagingTypesEnum.TEXT,
+      //     })
+      //     this.text = ''
+      //     return
+      //   }
+      //   this.$store.dispatch('textile/sendGroupMessage', {
+      //     groupId: (recipient as Group).id,
+      //     message: value,
+      //   })
+      // } else {
+      //   // this.$store.dispatch('textile/sendTextMessage', {
+      //   //   to: (this.recipient as Friend).textilePubkey,
+      //   //   text: value,
+      //   // })
+      // }
     },
     /**
      * @method handlePaste

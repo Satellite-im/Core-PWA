@@ -64,12 +64,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async fetch() {
     this.state = ((await this.get()) as State) ?? initialState
-    console.log('state:', this.state.conversations)
     for (const conversation of Object.values(this.state.conversations)) {
-      this.conversationMessages[conversation.id] = Object.values(
-        conversation.messages,
+      Vue.set(
+        this.conversationMessages,
+        conversation.id,
+        Object.entries(conversation.messages).map(([key, value]) => ({
+          ...value,
+          id: key,
+        })),
       )
-      // TODO: sort the messages :)
+      this.conversationMessages[conversation.id].sort((a, b) => a.at - b.at)
     }
   }
 
@@ -152,8 +156,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       updatedAt: Date.now(),
     }
     await this.iridium.connector?.set(`/chat/conversations/${id}`, conversation)
-    Vue.set(this.state.conversations, id, conversation)
-    this.conversationMessages[id] = []
+    this.state.conversations[id] = conversation
+    Vue.set(this.conversationMessages, id, [])
 
     this.emit(`conversations/${id}`, conversation)
     this.iridium.connector?.on(
@@ -225,14 +229,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(ChatError.MESSAGE_NOT_SENT)
     }
     const messageCID = messageID.toString()
-    conversation.messages.push(message)
+    conversation.messages[messageCID] = message
     conversation.lastMessageAt = Date.now()
     this.state.conversations[conversationId] = conversation
-    await this.set(
-      `/conversations/${conversationId}/messages/${messageCID}`,
-      message,
+    this.conversationMessages[conversationId].push(
+      conversation.messages[messageCID],
     )
-    await this.saveConversation(conversation)
+    await this.set(`/conversations/${conversationId}`, conversation)
     // broadcast the message to connected peers
     await this.iridium.connector.broadcast(
       `/chat/conversation/${conversationId}`,
