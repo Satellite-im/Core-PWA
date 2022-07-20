@@ -231,11 +231,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const messageCID = messageID.toString()
     conversation.messages[messageCID] = message
     conversation.lastMessageAt = Date.now()
-    this.state.conversations[conversationId] = conversation
-    this.conversationMessages[conversationId].push(
-      conversation.messages[messageCID],
+    this.conversationMessages[conversationId].push(message)
+    this.iridium.connector.set(
+      `/chat/conversation/${conversationId}/message/${messageCID}`,
+      message,
     )
-    await this.set(`/conversations/${conversationId}`, conversation)
+    this.iridium.connector.set(
+      `/chat/conversation/${conversationId}/message/lastMessageAt`,
+      conversation.lastMessageAt,
+    )
     // broadcast the message to connected peers
     await this.iridium.connector.broadcast(
       `/chat/conversation/${conversationId}`,
