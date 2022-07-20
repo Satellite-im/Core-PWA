@@ -14,7 +14,6 @@ export default Vue.extend({
   data() {
     return {
       messages: [],
-      did: iridium.connector.id,
     }
   },
   computed: {
