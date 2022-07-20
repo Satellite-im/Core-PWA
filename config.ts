@@ -6,7 +6,6 @@ const soundsCID = 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9'
 export const Config = {
   debug: true,
   iridium: {
-    relayId: process.env.NUXT_ENV_IRIDIUM_LOCAL_RELAY,
     syncNodes: [
       {
         label: 'Satellite.im Sync Node',
@@ -31,8 +30,8 @@ export const Config = {
           ],
         },
         Bootstrap: [
-          '/ip4/127.0.0.1/tcp/15003/ws/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
-          '/ip4/127.0.0.1/tcp/8000/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
+          `/ip4/127.0.0.1/tcp/15003/ws/p2p/${process.env.NUXT_ENV_IRIDIUM_LOCAL_RELAY}`,
+          `/ip4/127.0.0.1/tcp/8000/p2p/${process.env.NUXT_ENV_IRIDIUM_LOCAL_RELAY}`,
           '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
           '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
         ],
