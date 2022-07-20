@@ -229,26 +229,25 @@ export default class WebRTCManager extends Emitter {
           })
       }
 
-      const friends = await this.iridium.friends.getFriends()
+      const friends = this.iridium.friends.getFriends()
 
-      for (const key in friends) {
-        if (!friends[key]?.peerId || friends[key]?.status === 'online') {
-          return
-        }
-        this.iridium.connector?.send(
-          {
-            module: 'webrtc',
-            type: 'peer:announce',
-            payload: {
-              name: profile.name,
-              address: profile.address,
-              profilePicture: profile.profilePicture,
+      friends
+        .filter((friend) => !!friend.peerId && friend.status !== 'online')
+        .forEach((friend) => {
+          this.iridium.connector?.send(
+            {
+              module: 'webrtc',
+              type: 'peer:announce',
+              payload: {
+                name: profile.name,
+                address: profile.address,
+                profilePicture: profile.profilePicture,
+              },
+              at: Date.now().valueOf(),
             },
-            at: Date.now().valueOf(),
-          },
-          { to: [friends[key].peerId] },
-        )
-      }
+            { to: [friend.peerId] },
+          )
+        })
     }, announceFrequency)
   }
 

@@ -57,11 +57,11 @@ export default Vue.extend({
       this.$route.params.address,
     )
 
+    console.log('conversation', conversation)
+
     if (!conversation) {
       return
     }
-
-    console.log('conversation', conversation)
 
     const recipient = conversation.participants.find(
       (p) => p.did !== iridium.profile.state.did,

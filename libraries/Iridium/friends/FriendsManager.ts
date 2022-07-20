@@ -157,6 +157,15 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   /**
+   * @method getFriends
+   * @description return all friends
+   * @returns Array of friends
+   */
+  getFriends(): User[] {
+    return this.state.list || []
+  }
+
+  /**
    * @method getFriend
    * @description check if there's a friend with the current id and returns friend data object
    * @param id string (required)
@@ -183,6 +192,18 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       request.user = user
       await this.requestSave(did, request)
     }
+  }
+
+  /**
+   * @method updateDetails
+   * @description check if there's a friend with the current did and change it with new user object
+   * @param did string (required)
+   * @param user User (required)
+   */
+  updateDetails(did: string, user: User): void {
+    const index = this.state.list.findIndex((f) => f.did === did)
+    if (!index) return
+    this.state.list[index] = user
   }
 
   /**
