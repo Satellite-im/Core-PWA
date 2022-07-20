@@ -12,6 +12,7 @@ import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import { NotificationsError } from '~/libraries/Iridium/notifications/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { Notifications } from '~/utilities/Notifications'
 
 export default class NotificationManager extends Emitter<Alert> {
   public ready: boolean = false
@@ -101,12 +102,12 @@ export default class NotificationManager extends Emitter<Alert> {
    * @returns returns the textile response
    */
   async sendNotification(payload: {
-    from?: string
-    message?: string
-    imageHash?: string
-    type?: AlertType
+    from: string
+    message: string
+    imageHash: string
+    type: AlertType
     seen?: boolean
-    title?: string
+    title: string
     fromAddress?: string
     groupName?: string
     groupId?: string
@@ -149,5 +150,12 @@ export default class NotificationManager extends Emitter<Alert> {
       message: buildNotification,
       from: this.iridium.connector.did,
     })
+    const browserNotification = new Notifications()
+    await browserNotification.sendNotifications(
+      payload.type,
+      payload.title,
+      payload.imageHash,
+      payload.message,
+    )
   }
 }
