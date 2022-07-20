@@ -1,15 +1,15 @@
-<template src="./Direct.html"></template>
+<template src="./Chat.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
-  name: 'Direct',
+  name: 'Chat',
   layout: 'chat',
   data() {
     return {
-      messages: iridium.chat.conversationMessages[this.$route.params.address],
+      messages: iridium.chat.conversationMessages[this.$route.params.id],
     }
   },
   computed: {
@@ -20,16 +20,8 @@ export default Vue.extend({
     //   const { messages, replies, reactions } = conversation
     //   return groupMessages(messages, replies, reactions)
     // },
-    // Get the active friend
-    // messages() {
-    // TODO: fetch messages from backend
-    // -------
-    // const id = await iridium.chat.directConversationId(this.$route.params.address)
-    // const msgs = (await iridium.chat.loadMessages(id)) || []
-    // console.log('debug: | messages | msgs', msgs)
-    // },
   },
 })
 </script>
 
-<style lang="less" src="./Direct.less"></style>
+<style lang="less" src="./Chat.less"></style>

@@ -164,7 +164,7 @@ export default Vue.extend({
       }
       const id = await iridium.chat?.directConversationId(this.user.did)
 
-      this.$router.push(id ? `/chat/direct/${id}` : `/`)
+      this.$router.push(id ? `/chat/${id}` : `/`)
     },
     handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)

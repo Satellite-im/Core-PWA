@@ -209,7 +209,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    */
   async sendMessage(
     conversationId: string,
-    payload: Omit<ConversationMessage, 'from'>,
+    payload: Omit<ConversationMessage, 'from' | 'conversationId'>,
   ) {
     if (!this.iridium.connector) {
       return
@@ -220,6 +220,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const message = {
       ...payload,
       from: this.iridium.connector.id,
+      conversationId,
     }
 
     const messageID = await this.iridium.connector.store(message, {

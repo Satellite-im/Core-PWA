@@ -231,10 +231,9 @@ export default Vue.extend({
       const value = this.text
       this.text = ''
       // we should be looking into conversation instead of passing a recipient
-      await iridium.chat?.sendMessage(this.$route.params.address, {
+      await iridium.chat?.sendMessage(this.$route.params.id, {
         type: 'direct',
         body: value,
-        conversationId: this.$route.params.address,
         at: Date.now(),
         attachments: [],
       })
