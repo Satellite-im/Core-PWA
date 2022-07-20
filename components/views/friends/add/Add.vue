@@ -27,7 +27,7 @@ export default Vue.extend({
       return iridium.friends.state.error
     },
   },
-  async mounted() {
+  mounted() {
     if (this.$route.params && this.$route.params.id) {
       this.$data.friendId = this.$route.params.id
       this._searchFriend()
@@ -44,7 +44,7 @@ export default Vue.extend({
       await this.searchFriend()
       this.searching = false
     }, 500),
-    async searchFriend() {
+    searchFriend() {
       iridium.friends.clearError()
       this.user = null
       this.searching = true
