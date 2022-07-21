@@ -42,7 +42,6 @@ export default Vue.extend({
   data() {
     return {
       thumbnail: '',
-      fileHover: false as boolean,
       linkHover: false as boolean,
       heartHover: false as boolean,
     }

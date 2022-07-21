@@ -3,8 +3,6 @@
   :class="{'file-list': !gridLayout}"
   @click="click"
   @contextmenu="contextMenu"
-  @mouseover="fileHover=true"
-  @mouseleave="fileHover=false"
 >
   <!-- add container so blur effect doesn't go outside the dimensions of the image -->
   <div v-if="thumbnail" class="image-container">
