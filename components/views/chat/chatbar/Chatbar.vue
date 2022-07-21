@@ -149,7 +149,10 @@ export default Vue.extend({
      * @description blur chatbar
      */
     blurChatbar() {
-      document.activeElement?.blur()
+      if (this.$device.isDesktop) {
+        return
+      }
+      this.$refs.editable?.$refs.editable.blur()
     },
     /**
      * @method throttleTyping
