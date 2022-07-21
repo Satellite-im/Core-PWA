@@ -1,20 +1,17 @@
 <template src="./List.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
     UserPlusIcon,
   },
-  props: {
-    conversations: {
-      type: Object as PropType<Array<Conversation>>,
-      required: true,
-    },
-  },
+  data: () => ({
+    conversations: iridium.chat.state.conversations,
+  }),
   methods: {
     navigateAddFriends() {
       if (this.$route.name?.includes('friends-list')) {

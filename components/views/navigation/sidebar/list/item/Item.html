@@ -20,11 +20,7 @@
     />
   </div>
   <div class="user-chat-details">
-    <TypographyText
-      v-if="conversation.messageArray.length"
-      :text="timestamp"
-      :size="6"
-    />
+    <TypographyText v-if="messages.length" :text="timestamp" :size="6" />
     <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->
   </div>
   <div class="user-loader">

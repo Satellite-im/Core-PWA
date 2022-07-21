@@ -32,7 +32,8 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends.state.list,
+      // friends: iridium.friends.state,
+      messages: iridium.chat.messages[this.conversation.id],
     }
   },
   computed: {
@@ -66,18 +67,16 @@ export default Vue.extend({
       ]
     },
     lastMessage(): ConversationMessage | undefined {
-      if (!this.conversation.messageArray.length) {
+      if (!this.messages.length) {
         return undefined
       }
 
-      return this.conversation.messageArray[
-        this.conversation.messageArray.length - 1
-      ]
+      return this.messages[this.messages.length - 1]
     },
 
     lastMessageDisplay(): string {
       if (!this.lastMessage) {
-        return ''
+        return this.$t('messaging.say_hi') as string
       }
       return this.lastMessage.body
 
@@ -101,7 +100,7 @@ export default Vue.extend({
         const friendDid = this.conversation.participants.find(
           (f) => f !== iridium.connector?.id,
         )
-        return this.friends.find((f) => f.did === friendDid)
+        return iridium.friends.state.list.find((f) => f.did === friendDid)
       }
       return undefined
     },
@@ -111,7 +110,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    conversation: {
+    messages: {
       handler() {
         this.setTimestamp()
       },
@@ -200,11 +199,11 @@ export default Vue.extend({
      * "MM/DD/YYYY" > 2 days before
      */
     setTimestamp() {
-      // set now, update timestamp after 30s
-      const lastMsg = this.conversation.messageArray.at(-1)?.at
-      if (!lastMsg) {
+      if (!this.messages.length) {
         return
       }
+      const lastMsg = this.messages.at(-1)?.at
+
       if (this.$dayjs().diff(lastMsg, 'second') < 30) {
         this.clearTimeoutId()
         this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)

@@ -13,8 +13,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      messages:
-        iridium.chat.state.conversations[this.$route.params.id].messageArray,
+      messages: iridium.chat.messages[this.$route.params.id],
     }
   },
   computed: {

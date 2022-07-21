@@ -17,7 +17,6 @@ export type Conversation = {
   message: {
     [key: string]: ConversationMessage
   }
-  messageArray: Array<ConversationMessage & { id: string }>
 }
 
 export const ChatError = {

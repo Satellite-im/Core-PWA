@@ -39,7 +39,6 @@ export default Vue.extend({
   data() {
     return {
       friends: iridium.friends.state,
-      conversations: iridium.chat.state.conversations,
     }
   },
   computed: {
