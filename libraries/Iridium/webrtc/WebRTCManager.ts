@@ -74,6 +74,7 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:discovery',
       ({ peerId }: { peerId: string }) => {
+        console.log('peer:discovery peerId', peerId)
         const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:discovery - '
 
@@ -98,6 +99,7 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:connect',
       async ({ peerId }: { peerId: string }) => {
+        console.log('peer:connect peerId', peerId)
         const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:connect - '
 
@@ -137,7 +139,7 @@ export default class WebRTCManager extends Emitter {
 
         $Logger.log(loggerPrefix, `connected friend: ${peerId}`)
 
-        this.iridium.friends.updateDetails(did, {
+        this.iridium.friends.updateFriend(did, {
           ...connectedFriend,
           status: 'online',
         })
@@ -146,6 +148,7 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:disconnect',
       async ({ peerId }: { peerId: string }) => {
+        console.log('peer:disconnect peerId', peerId)
         const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:disconnect - '
 
@@ -185,7 +188,7 @@ export default class WebRTCManager extends Emitter {
 
         $Logger.log(loggerPrefix, `discovered peer: ${peerId}`)
 
-        this.iridium.friends.updateDetails(did, {
+        this.iridium.friends.updateFriend(did, {
           ...disconnectedFriend,
           status: 'offline',
         })
@@ -270,6 +273,12 @@ export default class WebRTCManager extends Emitter {
   }
 
   public subscribeToChannel(peerId: string) {
+    console.log('subscribeToChannel peerId', peerId)
+    console.log(
+      'subscribeToChannel this.iridium.connector?._peers',
+      this.iridium.connector?._peers,
+    )
+
     if (!peerId || !this.iridium.connector?._peers[peerId]) {
       return
     }
@@ -320,6 +329,8 @@ export default class WebRTCManager extends Emitter {
     const loggerPrefix = 'webrtc/peer:call - '
     $Logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
 
+    console.log('onPeerCall peerId', peerId)
+    console.log('onPeerCall callId', callId)
     console.log('onPeerCall peers', peers)
 
     // if (payload.peers) {
@@ -339,8 +350,6 @@ export default class WebRTCManager extends Emitter {
     //   })
     // }
 
-    console.log('callId', callId)
-
     if (!callId) {
       $Logger.log(loggerPrefix, `invalid callId`)
       return
@@ -348,7 +357,7 @@ export default class WebRTCManager extends Emitter {
 
     const call = $WebRTC.getCall(callId)
 
-    console.log('call', call)
+    console.log('onPeerCall call', call)
 
     if (!call) {
       $Logger.log(loggerPrefix, `create a call...`)
@@ -360,18 +369,29 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
+    console.log(
+      'onPeerCall this.state.activeCall?.callId',
+      this.state.activeCall?.callId,
+    )
+
     if (this.state.activeCall?.callId !== call.callId) {
       $Logger.log(loggerPrefix, `No active call with call id: ${call.callId}`)
       return
     }
 
-    const peerIdStr = peerId.toB58String()
-    if (
-      !call.peerConnected[peerIdStr] &&
-      !call.peerDialingDisabled[peerIdStr]
-    ) {
+    console.log(
+      'onPeerCall call.peerConnected[peerId]',
+      call.peerConnected[peerId],
+    )
+
+    console.log(
+      'onPeerCall call.peerDialingDisabled[peerId]',
+      call.peerDialingDisabled[peerId],
+    )
+
+    if (!call.peerConnected[peerId] && !call.peerDialingDisabled[peerId]) {
       $Logger.log(loggerPrefix, `initiate a call...`)
-      await call.initiateCall(peerIdStr)
+      await call.initiateCall(peerId)
     }
   }
 
@@ -462,7 +482,7 @@ export default class WebRTCManager extends Emitter {
 
     if (!requestFriend) return
 
-    this.iridium.friends.updateDetails(did, {
+    this.iridium.friends.updateFriend(did, {
       ...requestFriend,
       status: 'online',
     })
@@ -508,6 +528,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     console.log('call recipient', recipient)
+    console.log('call kinds', kinds)
     // check permission for audio call
     try {
       await navigator.mediaDevices.getUserMedia({
@@ -529,7 +550,7 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    console.log('conversation', conversation)
+    console.log('call conversation', conversation)
 
     const { id: callId, participants } = conversation
 
@@ -566,7 +587,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     const call = $WebRTC.getCall(callId)
-    // console.log('call', call)
+    console.log('call call', call)
     if (!call) {
       $Logger.log('webrtc', `call - call not ready: ${callId}`)
       return
@@ -582,7 +603,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     this.state.incomingCall = undefined
-    this.state.activeCall = { callId }
+    this.state.activeCall = { callId, participants }
 
     await call.createLocalTracks(kinds)
     await call.start()

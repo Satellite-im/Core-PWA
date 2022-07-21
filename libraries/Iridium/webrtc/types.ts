@@ -1,4 +1,5 @@
 import { WebRTCEnum } from '~/libraries/Enums/enums'
+import { Friend } from '~/libraries/Iridium/friends/types'
 
 export type PeerMutedState = {
   [key in WebRTCEnum]: boolean
@@ -14,6 +15,7 @@ export interface WebRTCState {
   activeCall?: {
     callId: string
     peerId: string
+    participants: Friend[]
   }
   incomingCall?: {
     callId: string

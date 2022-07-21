@@ -190,6 +190,7 @@ export default {
     commit('setActiveAccount', iridium.connector?.id)
     console.info('fetching user info')
     const userInfo = await iridium.profile?.get()
+    console.log('userInfo', userInfo)
     if (!userInfo?.did) {
       console.info('user not registered', userInfo)
       throw new Error(AccountsError.USER_NOT_REGISTERED)

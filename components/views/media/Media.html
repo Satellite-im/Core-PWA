@@ -9,7 +9,7 @@
       :isLocal="true"
     />
 
-    <div v-for="participant in remoteParticipants" v-if="participant">
+    <div v-for="participant in remoteParticipants">
       <MediaUser
         :id="`remote_video_${ participant.peerId }`"
         data-cy="remote-video"

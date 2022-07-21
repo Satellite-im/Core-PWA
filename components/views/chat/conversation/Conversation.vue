@@ -53,6 +53,16 @@ export default Vue.extend({
     },
   },
   async mounted() {
+    const id = this.$route.params.address
+
+    if (!id) {
+      this.$router.push('/friends/list')
+    }
+
+    if (!id || !(await iridium.chat?.hasConversation(id))) {
+      return
+    }
+
     const conversation = await iridium.chat?.getConversation(
       this.$route.params.address,
     )

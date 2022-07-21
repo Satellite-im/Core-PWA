@@ -248,7 +248,7 @@ export default Vue.extend({
     this.$store.commit('textile/setActiveConversation', '')
     this.$store.commit('conversation/resetConversation')
   },
-  async mounted() {
+  mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
 
     const appHeight = () => {

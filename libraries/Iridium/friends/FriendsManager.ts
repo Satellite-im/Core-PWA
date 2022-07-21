@@ -13,6 +13,7 @@ import {
   User,
 } from './types'
 import logger from '~/plugins/local/logger'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export type IridiumFriendEvent = {
   to: string

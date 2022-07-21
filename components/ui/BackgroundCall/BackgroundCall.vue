@@ -17,18 +17,20 @@ export default Vue.extend({
       showSettings: (state) => (state as RootState).ui.showSettings,
       friends: (state) => (state as RootState).friends.all,
       elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
-      activeCall: (state) => (state as RootState).webrtc.activeCall,
     }),
   },
   async mounted() {
-    const caller = await iridium.friends?.getFriend(this.activeCall?.callId)
-    if (!caller) {
+    if (!iridium.webRTC.state.activeCall?.participants) {
       return
     }
-    this.caller = caller
+    this.caller = iridium.webRTC.state.activeCall?.participants.find(
+      (participant) => {
+        return participant.peerId !== iridium.connector?.peerId
+      },
+    )
   },
   methods: {
-    navigateToActiveConversation() {
+    async navigateToActiveConversation() {
       if (!this.caller) {
         return
       }
@@ -39,7 +41,13 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      this.$router.push(`/chat/direct/${this.caller.did}`)
+      const id = await iridium.chat?.directConversationId(this.caller.did)
+
+      if (!id || !(await iridium.chat?.hasConversation(id))) {
+        return
+      }
+
+      this.$router.push(`/chat/direct/${id}`)
     },
   },
 })
