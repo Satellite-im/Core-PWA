@@ -14,10 +14,10 @@ export type Conversation = {
   participants: string[]
   createdAt: number
   updatedAt: number
-  messages: {
+  message: {
     [key: string]: ConversationMessage
   }
-  messageArray: ConversationMessage[]
+  messageArray: Array<ConversationMessage & { id: string }>
 }
 
 export const ChatError = {
