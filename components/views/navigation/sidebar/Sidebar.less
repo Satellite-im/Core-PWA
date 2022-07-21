@@ -50,39 +50,12 @@
       }
     }
 
-    .list-container {
-      overflow-y: scroll;
-    }
-
     .users {
       flex: 1;
       position: relative;
       overflow: hidden;
       .inline-notification {
         width: @sidebar-size - (@normal-spacing * 2);
-      }
-    }
-
-    .mascot-container {
-      &:extend(.full-width);
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-
-      .mascot {
-        max-width: @half;
-        padding-top: @normal-spacing;
-        pointer-events: none;
-      }
-
-      .button {
-        margin-top: @normal-spacing;
-        width: 75%;
-      }
-
-      .is-text {
-        text-align: center;
       }
     }
   }
@@ -109,14 +82,9 @@
     font-family: @primary-font;
     &:extend(.font-primary);
     &:extend(.background-flair);
+    pointer-events: none;
     &.tag-inverted {
       background: @foreground;
     }
-  }
-
-  .loading-container {
-    display: inline-flex;
-    justify-content: center;
-    &:extend(.full-width);
   }
 }

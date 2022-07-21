@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ChevronDownIcon } from 'satellite-lucide-icons'
-import type { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import { ScrollDirections } from '~/types/chat/chat'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -12,23 +11,10 @@ export default Vue.extend({
   components: {
     ChevronDownIcon,
   },
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    messages: {
-      type: Array,
-      default: () => [],
-    },
-    groupId: {
-      type: String,
-      default: '',
-    },
-  },
   data() {
     return {
-      did: iridium.connector.id,
+      messages:
+        iridium.chat.state.conversations[this.$route.params.id].messageArray,
     }
   },
   computed: {
@@ -60,6 +46,16 @@ export default Vue.extend({
         this.webrtc.activeCall.callId === this.conversation.id
       )
     },
+    myDid(): string {
+      return iridium.connector?.id ?? ''
+    },
+    // groupedMessages() {
+    //   const { address } = this.$route.params
+    //   const conversation = this.$typedStore.state.textile.conversations[address]
+    //   if (!conversation) return []
+    //   const { messages, replies, reactions } = conversation
+    //   return groupMessages(messages, replies, reactions)
+    // },
   },
   beforeDestroy() {
     this.$store.commit('chat/resetCurrentChat')

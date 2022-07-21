@@ -3,7 +3,7 @@ export type ConversationMessage = {
   from: string
   body: string
   at: number
-  type: string
+  type: 'text' | 'file' | 'group' | 'glyph' | 'divider' | 'string'
   attachments: string[]
 }
 
@@ -14,10 +14,10 @@ export type Conversation = {
   participants: string[]
   createdAt: number
   updatedAt: number
-  lastMessageAt?: number
   messages: {
     [key: string]: ConversationMessage
   }
+  messageArray: ConversationMessage[]
 }
 
 export const ChatError = {

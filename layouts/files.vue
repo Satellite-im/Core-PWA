@@ -30,11 +30,7 @@
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />
-          <Sidebar
-            v-if="!$device.isMobile"
-            :sidebar="showSidebar"
-            :show-menu="toggleMenu"
-          />
+          <Sidebar v-if="!$device.isMobile" :sidebar="showSidebar" />
         </swiper-slide>
         <swiper-slide class="dynamic-content">
           <DroppableWrapper @handle-drop-prop="handleDrop">

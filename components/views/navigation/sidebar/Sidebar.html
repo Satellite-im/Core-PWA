@@ -4,7 +4,7 @@
       <menu-icon
         class="toggle-sidebar"
         data-cy="hamburger-button"
-        @click="showMenu"
+        @click="toggleMenu"
         size="1.2x"
         full-width
         :style="`${sidebar ? 'display: block' : 'display: none'}`"
@@ -32,14 +32,15 @@
         data-cy="sidebar-friends"
         :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
         size="small"
-        :action="() => { incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
+        :action="() => $router.push('/friends/list')"
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
         v-if="incomingRequests.length"
-        :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
+        class="label"
+        :class="{inverted : $route.path.includes('/friends/list')}"
       >
         {{incomingRequests.length}}
       </span>
@@ -62,48 +63,7 @@
         v-click-outside="()=>toggleModal('quickchat')"
       />
     </div>
-    <div class="list-container hover-scroll">
-      <UiLoadersAddress
-        v-if="dataState.friends === DataStateType.Loading"
-        :count="4"
-        inverted
-      />
-      <template v-else-if="friends && friends.list.length">
-        <UiInlineNotification
-          v-if="ui.unreadMessage.length"
-          :text="$t('messaging.new_messages')"
-        />
-        <div v-for="friend in friends.list">
-          <User
-            v-if="friend"
-            :key="friend.did"
-            :user="friend"
-            :isTyping="ui.isTyping.address === friend.did"
-            :isSelected="friend.did === $route.params.address"
-          />
-          <!-- <GroupClickable
-              v-else
-              :group="thing"
-              :key="thing.id"
-              :isSelected="thing.id === $route.params.id"
-            /> -->
-        </div>
-      </template>
-      <div v-else-if="!friends.list.length" class="mascot-container">
-        <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
-        <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
-        <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
-        <InteractablesButton
-          :text="$t('friends.add') + 's'"
-          size="small"
-          type="primary"
-          :action="gotoAddFriends"
-        >
-          <user-plus-icon size="1.2x" />
-        </InteractablesButton>
-      </div>
-      <UiLoadersAddress v-else :count="4" inverted />
-    </div>
+    <SidebarList :conversations="conversations" />
   </div>
   <div class="controls">
     <SidebarLive />

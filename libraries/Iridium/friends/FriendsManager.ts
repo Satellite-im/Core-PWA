@@ -372,10 +372,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     if (!user.name) return
     const id = await this.iridium.chat?.directConversationId(user.did)
     if (id && !this.iridium.chat?.hasConversation(id)) {
-      return this.iridium.chat?.createConversation(user.name, 'direct', [
-        user.did,
-        this.iridium.connector.id,
-      ])
+      return this.iridium.chat?.createConversation({
+        name: user.name,
+        type: 'direct',
+        participants: [user.did, this.iridium.connector.id],
+      })
     }
   }
 

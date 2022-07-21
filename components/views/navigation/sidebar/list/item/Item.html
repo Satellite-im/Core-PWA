@@ -1,0 +1,33 @@
+<div
+  class="item"
+  :class="{'is-loading' : isLoading , selected : isSelected}"
+  @contextmenu="contextMenu"
+  @click="navigateToUser"
+  data-cy="sidebar-user"
+>
+  <UiUserState :user="friendDetails" />
+  <div class="user-info">
+    <TypographyTitle
+      :size="6"
+      data-cy="sidebar-user-name"
+      :text="conversation.name"
+    />
+    <div
+      v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
+      class="subtitle"
+      :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
+      ref="subtitle"
+    />
+  </div>
+  <div class="user-chat-details">
+    <TypographyText
+      v-if="conversation.messageArray.length"
+      :text="timestamp"
+      :size="6"
+    />
+    <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->
+  </div>
+  <div class="user-loader">
+    <UiLoadersSpinner :spinning="isLoading" />
+  </div>
+</div>

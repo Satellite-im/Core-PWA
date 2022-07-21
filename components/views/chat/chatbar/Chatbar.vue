@@ -14,7 +14,6 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { UploadDropItemType } from '~/types/files/file'
 import { ChatText } from '~/store/chat/types'
 // import { Group } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
@@ -214,11 +213,8 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
-      // if (!this.recipient) {
-      //   return
-      // }
-      // keep recipient in case user changes chats quickly after send
-      const recipient = this.recipient
+      // set id in case recipient changes during send
+      const conversationId = this.$route.params.id
       // if there are any files attached to this chat, send
       // await this.sendFiles()
       // return if input is empty or over max length
@@ -231,8 +227,9 @@ export default Vue.extend({
       const value = this.text
       this.text = ''
       // we should be looking into conversation instead of passing a recipient
-      await iridium.chat?.sendMessage(this.$route.params.id, {
-        type: 'direct',
+      await iridium.chat?.sendMessage({
+        conversationId,
+        type: 'text',
         body: value,
         at: Date.now(),
         attachments: [],
