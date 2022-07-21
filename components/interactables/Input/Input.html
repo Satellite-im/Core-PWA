@@ -22,6 +22,8 @@
       @keydown.space="preventLeadingSpace"
       @paste="preventEmptyPaste"
       @keydown.enter="submitEnter"
+      @focus="$emit('focus', $event)"
+      @blur="$emit('blur', $event)"
     />
     <button
       v-if="deleteIcon && internalText.length"

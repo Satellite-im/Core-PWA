@@ -48,7 +48,6 @@ export default {
    */
   async activateKeybinds({ dispatch }: ActionsArguments<UIState>) {
     const { toggleMute, toggleDeafen, openSettings, callActiveChat } =
-      // @ts-ignore
       iridium.settings.state.keybinds
     Mousetrap.reset()
     Mousetrap.bind(getCorrectKeybind(toggleMute), (event: KeyboardEvent) => {

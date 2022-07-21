@@ -20,9 +20,9 @@ const initialState: Settings = {
     flipLocalStream: true,
   },
   audio: {
-    sounds: defaultSounds,
+    sounds: { ...defaultSounds },
   },
-  keybinds: defaultKeybinds,
+  keybinds: { ...defaultKeybinds },
   privacy: {
     embeddedLinks: true,
     displayCurrentActivity: true,

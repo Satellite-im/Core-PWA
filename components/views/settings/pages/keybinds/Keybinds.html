@@ -9,84 +9,21 @@
     </SettingsUnit>
   </SettingsSection>
 
-  <SettingsSection v-if="editingKeybind.status">
-    <SettingsUnit>
-      <InteractablesInput
-        readonly
-        type="primary"
-        :placeholder="editingKeybind.newString"
-      />
-      <TypographySubtitle
-        class="keybind-error color-danger"
-        type="danger"
-        :size="6"
-        :text="editingKeybind.errorMessage"
-        v-if="editingKeybind.error"
-      />
-    </SettingsUnit>
-    <SettingsUnit>
-      <InteractablesButton
-        :text="$t('pages.settings.keybinds.clear')"
-        size="small"
-        type="primary"
-        :action="clearKeybind"
-      />
-      <InteractablesButton
-        :text="$t('pages.settings.keybinds.save')"
-        size="small"
-        type="primary"
-        :action="saveKeybind"
-      />
-      <InteractablesButton
-        :text="$t('pages.settings.keybinds.cancel')"
-        size="small"
-        type="primary"
-        :action="cancelKeybind"
-      />
-    </SettingsUnit>
-  </SettingsSection>
-
   <SettingsSection>
-    <SettingsUnit @click="editKeybind('toggleMute')">
-      <TypographyLabel :text="$t('pages.settings.keybinds.mute')" />
-      <InteractablesInput
-        readonly
-        type="primary"
-        :placeholder="keybinds.toggleMute"
+    <SettingsUniit
+      v-for="[key, value] in Object.entries(settings.keybinds).filter(([key, value]) => key.length > 0)"
+    >
+      <InteractablesKeybindInput
+        :name="$t(`pages.settings.keybinds.${key}`)"
+        :value="value"
+        :defaultValue="defaultKeybinds[key]"
+        @change="setBinding(key, $event)"
       />
-    </SettingsUnit>
-    <SettingsUnit @click="editKeybind('openSettings')">
-      <TypographyLabel :text="$t('pages.settings.keybinds.settings')" />
-      <InteractablesInput
-        readonly
-        type="primary"
-        :placeholder="keybinds.openSettings"
-      />
-    </SettingsUnit>
-  </SettingsSection>
-
-  <SettingsSection>
-    <SettingsUnit @click="editKeybind('toggleDeafen')">
-      <TypographyLabel :text="$t('pages.settings.keybinds.deafen')" />
-      <InteractablesInput
-        readonly
-        type="primary"
-        :placeholder="keybinds.toggleDeafen"
-      />
-    </SettingsUnit>
-    <SettingsUnit @click="editKeybind('callActiveChat')">
-      <TypographyLabel :text="$t('pages.settings.keybinds.call')" />
-      <InteractablesInput
-        readonly
-        type="primary"
-        :placeholder="keybinds.callActiveChat"
-      />
-    </SettingsUnit>
+    </SettingsUniit>
   </SettingsSection>
 
   <InteractablesButton
     :text="$t('pages.settings.keybinds.reset_all')"
-    size="small"
     type="primary"
     :action="resetKeybinds"
   />

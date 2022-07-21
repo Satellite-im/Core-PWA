@@ -93,6 +93,24 @@ export const languages: Record<LanguageKeys, string> = {
   en_US: 'English (USA)',
 }
 
+export const defaultSounds = Object.fromEntries(
+  Object.values(Sounds).map((key) => [key, true]),
+) as Record<Sounds, boolean>
+
+export enum KeybindKeys {
+  TOGGLE_MUTE = 'toggleMute',
+  TOGGLE_DEAFEN = 'toggleDeafen',
+  OPEN_SETTINGS = 'openSettings',
+  CALL_ACTIVE_CHAT = 'callActiveChat',
+}
+
+export const defaultKeybinds: Record<KeybindKeys, string> = {
+  [KeybindKeys.TOGGLE_MUTE]: 'alt+m',
+  [KeybindKeys.TOGGLE_DEAFEN]: 'alt+d',
+  [KeybindKeys.OPEN_SETTINGS]: 'alt+s',
+  [KeybindKeys.CALL_ACTIVE_CHAT]: 'alt+c',
+}
+
 export type Settings = {
   theme: ThemeKeys
   flair: FlairKeys
@@ -110,22 +128,4 @@ export type Settings = {
     consentToScan: boolean
     blockNsfw: boolean
   }
-}
-
-export const defaultSounds = Object.fromEntries(
-  Object.values(Sounds).map((key) => [key, true]),
-) as Record<Sounds, boolean>
-
-export enum KeybindKeys {
-  TOGGLE_MUTE = 'toggleMute',
-  TOGGLE_DEAFEN = 'toggleDeafen',
-  OPEN_SETTINGS = 'openSettings',
-  CALL_ACTIVE_CHAT = 'callActiveChat',
-}
-
-export const defaultKeybinds: Record<KeybindKeys, string> = {
-  [KeybindKeys.TOGGLE_MUTE]: 'alt-m',
-  [KeybindKeys.TOGGLE_DEAFEN]: 'alt-d',
-  [KeybindKeys.OPEN_SETTINGS]: 'alt-s',
-  [KeybindKeys.CALL_ACTIVE_CHAT]: 'alt-c',
 }
