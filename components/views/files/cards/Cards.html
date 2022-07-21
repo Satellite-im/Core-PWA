@@ -1,12 +1,18 @@
 <div id="cards-view" :class="{'cards-view-list': !gridLayout}">
-  <InteractablesSelect
-    v-if="directory.length"
-    v-model="sort"
-    :options="sortOptions"
-    :label="$t('pages.files.browse.sort')"
-    small
-    class="sort-selection"
-  />
+  <div class="sort-container">
+    <InteractablesSelect
+      v-if="directory.length"
+      v-model="sort"
+      :options="sortOptions"
+      :label="$t('pages.files.browse.sort')"
+      small
+      class="sort-selection"
+    />
+    <button @click="sort = sort" class="sort-button">
+      <sort-asc-icon v-if="isSortAsc" size="1x" />
+      <sort-desc-icon v-else size="1x" />
+    </button>
+  </div>
   <div class="files-container">
     <FilesCardsCard
       v-for="item in directory"

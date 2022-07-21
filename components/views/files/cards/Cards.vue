@@ -2,12 +2,17 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { SortAscIcon, SortDescIcon } from 'satellite-lucide-icons'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
 import { FileSortEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import { SelectOption } from '~/types/ui/inputs'
 
 export default Vue.extend({
+  components: {
+    SortAscIcon,
+    SortDescIcon,
+  },
   props: {
     /**
      * Directory items to be displayed
@@ -48,6 +53,9 @@ export default Vue.extend({
           value: FileSortEnum.SIZE,
         },
       ]
+    },
+    isSortAsc(): boolean {
+      return this.files.sort.asc
     },
     sort: {
       get(): String {
