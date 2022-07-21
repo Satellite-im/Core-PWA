@@ -1,4 +1,4 @@
-<div class="alert">
+<div class="alert" @click="notificationLink(alert.type)">
   <UiCircle
     :type="alertImage ? 'image' : 'random'"
     :source="alertImage"
@@ -6,12 +6,12 @@
   />
   <div class="info-container">
     <div class="head">
-      <TypographySubtitle :size="6" :text="alert.content.title" />
+      <TypographySubtitle :size="6" :text="setTranslateText" />
       <TypographyText :text="$dayjs(alert.at).fromNow()" class="timestamp" />
     </div>
     <TypographyText
-      :text="setTranslateText"
-      :title="setTranslateText"
+      :text="this.alert.description"
+      :title="this.alert.description"
       class="description"
     />
   </div>

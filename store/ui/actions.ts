@@ -9,7 +9,6 @@ import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
-import { AlertState, AlertType } from '~/libraries/ui/Alerts'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 const $Sounds = new SoundManager()
@@ -97,7 +96,6 @@ export default {
       imageHash: string
       activeUser?: string
       title: string
-      type: AlertType
     },
   ) {
     const $TextileManager: TextileManager = Vue.prototype.$TextileManager
@@ -105,25 +103,25 @@ export default {
     if (!$TextileManager.notificationManager?.isInitialized()) {
       throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
     }
-    if (rootState.textile.activeConversation !== payload.fromAddress) {
-      const userId = $TextileManager.getIdentityPublicKey()
-      if (userId !== payload.fromAddress) {
-        const notificationResponse =
-          await $TextileManager.notificationManager?.sendNotification({
-            from: payload.from,
-            title: payload.title,
-            groupName: payload.groupName,
-            groupId: payload.groupId,
-            id: payload.id,
-            notificationState: AlertState.UNREAD,
-            fromAddress: payload.fromAddress,
-            imageHash: payload.imageHash,
-            message: payload.message,
-            type: payload.type,
-          })
-        commit('sendNotification', notificationResponse)
-      }
-    }
+    // if (rootState.textile.activeConversation !== payload.fromAddress) {
+    //   const userId = $TextileManager.getIdentityPublicKey()
+    //   if (userId !== payload.fromAddress) {
+    //     const notificationResponse =
+    //       await $TextileManager.notificationManager?.sendNotification({
+    //         from: payload.from,
+    //         title: payload.title,
+    //         groupName: payload.groupName,
+    //         groupId: payload.groupId,
+    //         id: payload.id,
+    //         notificationState: AlertState.UNREAD,
+    //         fromAddress: payload.fromAddress,
+    //         imageHash: payload.imageHash,
+    //         message: payload.message,
+    //         type: payload.type,
+    //       })
+    //     commit('sendNotification', notificationResponse)
+    //   }
+    // }
   },
   /**
    * @method clearKeybinds
