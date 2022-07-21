@@ -67,7 +67,7 @@ export default class WebRTCManager extends Emitter {
     // })
 
     this.setupListeners()
-    this.subscribeToAnnounce()
+    await this.subscribeToAnnounce()
   }
 
   private setupListeners() {

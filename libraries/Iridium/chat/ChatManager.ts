@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 import {
   IridiumPeerMessage,
   IridiumPubsubEvent,
@@ -83,6 +85,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   set(path: string = '', payload: any, options: any = {}) {
     return this.iridium.connector?.set(`/chat${path}`, payload, options)
+  }
+
+  async saveConversation(conversation: Conversation) {
+    await this.iridium.connector?.set(
+      `/chat/conversation/${conversation.id}`,
+      conversation,
+    )
   }
 
   // async onConversationMessage(
