@@ -19,7 +19,10 @@ import {
   User,
 } from './types'
 import logger from '~/plugins/local/logger'
-import { AlertType } from '~/libraries/ui/Alerts'
+import {
+  Notification,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
 
 export type IridiumFriendEvent = {
   to: IridiumPeerIdentifier
@@ -283,15 +286,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       did,
       request,
     })
-    const buildNotification = {
-      from: request.user.name,
-      message: 'new noti',
-      type: AlertType.FRIEND_REQUEST,
-      seen: false,
-      imageHash: request.user.photoHash,
-      title: 'notification title',
-    }
-    this.iridium.notifications?.sendNotification(buildNotification)
     logger.info('iridium/friends', 'saving friend request', {
       remotePeerDID,
       request,
@@ -317,6 +311,15 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         did,
         payload,
       })
+      const buildNotification: Partial<Notification> = {
+        fromName: request.user.name,
+        title: 'New Request',
+        description: `New ${NotificationType.FRIEND_REQUEST} From ${request.user.name}`,
+        image: request.user.photoHash,
+        type: NotificationType.FRIEND_REQUEST,
+        seen: false,
+      }
+      this.iridium.notifications?.sendNotification(buildNotification)
       await this.send(payload)
     }
   }

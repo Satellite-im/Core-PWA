@@ -26,6 +26,10 @@ import createThumbnail from '~/utilities/Thumbnail'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { blobToStream } from '~/utilities/BlobManip'
 import isNSFW from '~/utilities/NSFW'
+import {
+  Notification,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
 
 export type ConversationPubsubEvent = IridiumMessage<{
   message?: ConversationMessage
@@ -148,6 +152,55 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   set(path: string = '', payload: any, options: IridiumSetOptions = {}) {
     return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
+  async onConversationMessage(
+    conversationId: string,
+    message: ConversationPubsubEvent,
+  ) {
+    if (!this.iridium.connector) return
+    const { from, did, payload } = message
+    const conversation = await this.getConversation(conversationId)
+    if (!conversation || !conversation.participants.includes(did)) {
+      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+    }
+    const { type, message: messageCID } = payload
+    if (type === 'chat/message' && messageCID) {
+      // TODO: type check the message?
+      const msg = await this.iridium.connector.load(messageCID, {
+        decrypt: true,
+      })
+      if (msg) {
+        conversation.messages.push(messageCID)
+        conversation.message[messageCID] = msg
+        this.state.conversation[conversationId] = conversation
+        await this.iridium.connector.set(
+          `/chat/conversation/${conversationId}/messages`,
+          conversation.messages,
+        )
+        await this.iridium.connector.set(
+          `/chat/conversation/${conversationId}/message/${messageCID}`,
+          msg,
+        )
+        const friendUser = await this.iridium.friends.getFriend(
+          this.state.conversation[conversationId].participants.find(
+            (friendId) => {
+              return friendId !== this.iridium.connector?.id
+            },
+          )!,
+        )
+        const buildNotification: Partial<Notification> = {
+          fromName: friendUser?.name,
+          fromAddress: conversationId,
+          title: `New ${NotificationType.DIRECT_MESSAGE} From ${friendUser?.name}`,
+          description:
+            msg.body.length > 79 ? `${msg.body.substring(0, 80)}...` : msg.body,
+          image: friendUser?.photoHash,
+          type: NotificationType.DIRECT_MESSAGE,
+          seen: false,
+        }
+        this.iridium.notifications?.sendNotification(buildNotification)
+        await this.saveConversation(conversation)
+      }
+    }
 
   async onConversationMessage(
     conversationId: string,

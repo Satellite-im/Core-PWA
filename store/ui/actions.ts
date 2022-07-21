@@ -59,6 +59,60 @@ export default {
     )
   },
   /**
+   * @method setNotifications
+   * @description Collects all existing notifications for a user
+   */
+  async setNotifications({ commit }: ActionsArguments<UIState>) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.notificationManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    const notifications =
+      await $TextileManager.notificationManager?.getnotifications()
+    commit('setNotifications', notifications)
+  },
+  async sendNotification(
+    { commit, rootState }: ActionsArguments<UIState>,
+    payload: {
+      message: string
+      from: string
+      groupName?: string
+      id: string
+      groupId?: string
+      groupURL?: string
+      fromAddress?: string
+      imageHash: string
+      activeUser?: string
+      title: string
+    },
+  ) {
+    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
+
+    if (!$TextileManager.notificationManager?.isInitialized()) {
+      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
+    }
+    // if (rootState.textile.activeConversation !== payload.fromAddress) {
+    //   const userId = $TextileManager.getIdentityPublicKey()
+    //   if (userId !== payload.fromAddress) {
+    //     const notificationResponse =
+    //       await $TextileManager.notificationManager?.sendNotification({
+    //         from: payload.from,
+    //         title: payload.title,
+    //         groupName: payload.groupName,
+    //         groupId: payload.groupId,
+    //         id: payload.id,
+    //         notificationState: AlertState.UNREAD,
+    //         fromAddress: payload.fromAddress,
+    //         imageHash: payload.imageHash,
+    //         message: payload.message,
+    //         type: payload.type,
+    //       })
+    //     commit('sendNotification', notificationResponse)
+    //   }
+    // }
+  },
+  /**
    * @method clearKeybinds
    * @description Unbinds all current keybindings with Mousetrap
    * @example destroyed (){ clearKeybinds() }

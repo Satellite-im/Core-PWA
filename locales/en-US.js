@@ -712,6 +712,7 @@ export default {
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
     requests: 'Friend requests',
+    new_friend_request: 'New friend request from {user}',
     incoming: 'Requests',
     received: 'Received',
     sent: 'Sent',
