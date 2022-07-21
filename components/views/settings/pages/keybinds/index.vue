@@ -10,13 +10,6 @@ export default Vue.extend({
   layout: 'settings',
   data() {
     return {
-      editingKeybind: {
-        name: '',
-        status: false,
-        newString: '',
-        error: false,
-        errorMessage: '',
-      },
       settings: iridium.settings.state,
       defaultKeybinds,
     }

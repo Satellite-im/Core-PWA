@@ -3,7 +3,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { PencilIcon, UndoIcon, XIcon, CheckIcon } from 'satellite-lucide-icons'
-import { windowsShortcuts, macShortcuts } from '~/utilities/HotkeyList'
+import {
+  windowsShortcuts,
+  macShortcuts,
+  keyCodeToKey,
+} from '~/utilities/Keyboard'
 
 const modifiers = ['Control', 'Alt', 'Shift', 'Meta']
 const initialModifiersState = Object.fromEntries(
@@ -140,19 +144,18 @@ export default Vue.extend({
       }
 
       if (this.activeModifiers.length === 0) {
+        const editButton = this.$refs.editButton as HTMLButtonElement
+        if (event.keyCode === 13) {
+          this.save()
+          editButton.focus()
+        } else if (event.keyCode === 27) {
+          this.cancel()
+          editButton.focus()
+        }
         return
       }
 
-      if (event.key === 'Dead') {
-        return
-      }
-
-      // @ts-ignore deprecated
-      const physicalKey = event.code.startsWith('Key')
-        ? event.code.slice(3)
-        : event.key
-
-      this.key = physicalKey
+      this.key = keyCodeToKey[event.keyCode]
       this.newKeybind = this.keybindKeys
     },
   },

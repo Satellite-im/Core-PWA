@@ -21,7 +21,7 @@
         <div v-if="index !== keys.length - 1" class="plus">+</div>
       </template>
     </div>
-    <div v-if="isListening" key="editing-controls" class="controls">
+    <div v-show="isListening" key="editing-controls" class="controls">
       <InteractablesButton
         type="dark"
         v-tooltip.top="$t('pages.settings.keybinds.cancel')"
@@ -39,8 +39,9 @@
       </span>
     </div>
 
-    <div v-else key="normal-controls" class="controls">
+    <div v-show="!isListening" key="normal-controls" class="controls">
       <InteractablesButton
+        ref="editButton"
         type="dark"
         v-tooltip.top="$t('pages.settings.keybinds.edit')"
         :action="edit"
