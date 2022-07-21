@@ -9,6 +9,8 @@ export const accountFromWallet = (wallet: SolanaWallet): Account => {
     address: wallet.address,
     mnemonic: wallet.mnemonic,
     path: wallet.path,
+    publicKey: wallet.keypair.publicKey,
+    secretKey: wallet.keypair.secretKey,
   }
 }
 
@@ -17,6 +19,7 @@ export const publicKeyFromAddress = (address: string): PublicKey => {
 }
 
 export const walletFromAccount = (account: Account): SolanaWallet => {
+  if (!account.privateKey) throw new Error('Account must have a private key')
   const keyPair = Keypair.fromSecretKey(base58decode(account.privateKey), {
     skipValidation: true,
   })
@@ -25,5 +28,16 @@ export const walletFromAccount = (account: Account): SolanaWallet => {
     address: account.address,
     mnemonic: account.mnemonic,
     path: account.path,
+  }
+}
+
+export const accountFromKeyapair = (keypair: Keypair): Account => {
+  return {
+    privateKey: base58encode(keypair.secretKey),
+    address: keypair.publicKey.toBase58(),
+    publicKey: keypair.publicKey,
+    secretKey: keypair.secretKey,
+    mnemonic: '',
+    path: '',
   }
 }

@@ -228,6 +228,7 @@ export default {
       create: 'Create Account',
       or: 'Or',
       import: 'Import Account',
+      connect: 'Connect Wallet',
     },
     inputAccount: {
       title: 'Import Account',

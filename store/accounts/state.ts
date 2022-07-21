@@ -15,6 +15,8 @@ const InitialAccountsState = (): AccountsState => ({
   registered: false,
   registrationStatus: RegistrationStatus.UNKNOWN,
   lastVisited: '/',
+  adapter: '',
+  entropyMessage: '',
 })
 
 export default InitialAccountsState
