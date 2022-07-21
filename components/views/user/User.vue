@@ -164,21 +164,7 @@ export default Vue.extend({
       }
       const id = await iridium.chat?.directConversationId(this.user.did)
 
-      if (id && !(await iridium.chat?.hasConversation(id))) {
-        await iridium.chat?.createConversation(this.user?.name, 'direct', [
-          this.user?.did,
-          iridium.connector?.id,
-        ])
-      }
-
-      // this.$store.dispatch('conversation/setConversation', {
-      //   id: this.user.did,
-      //   type: 'friend',
-      //   participants: [this.user],
-      //   calling: false,
-      // })
-
-      this.$router.push(id ? `/chat/direct/${id}` : `/`)
+      this.$router.push(id ? `/chat/${id}` : `/`)
     },
     handleShowProfile() {
       this.$store.dispatch('ui/showProfile', this.user)

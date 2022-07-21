@@ -7,7 +7,7 @@
   <FilesUploadPreview v-if="getFiles.length" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': isSharpCorners}"
+    :class="{'is-error': charlimit, inactive: false, 'top-corners-sharp': isSharpCorners}"
   >
     <div class="control-wrap file-upload-wrap">
       <FilesUpload ref="upload" />
@@ -23,7 +23,6 @@
       ref="editable"
       v-model="text"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient) && !textile.messageLoading"
       :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
@@ -32,7 +31,7 @@
     <ChatbarControls
       id="chatbar-controls"
       :sendMessage="sendMessage"
-      :disabled="!recipient || charlimit"
+      :disabled="charlimit"
     />
   </div>
   <ChatbarFooter :text="text" :charlimit="charlimit" />

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import {
   IridiumPeerMessage,
   IridiumPubsubEvent,
@@ -21,16 +22,25 @@ export type ConversationPubsubEvent = IridiumPeerMessage<{
   message?: string
   payload?: any
 }>
+
+export type State = {
+  conversations: { [key: Conversation['id']]: Conversation }
+}
+
+const initialState: State = {
+  conversations: {},
+}
+
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
   public subscriptions: string[] = []
-  public state: {
-    conversations: string[]
-    conversation: { [key: string]: Conversation }
-  } = {
-    conversations: [],
-    conversation: {},
+  public state: State = {
+    conversations: {},
   }
+
+  public conversationMessages: {
+    [key: Conversation['id']]: ConversationMessage[]
+  } = {}
 
   constructor(public readonly iridium: IridiumManager) {
     super()
@@ -39,14 +49,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   async init() {
     await this.fetch()
     await Promise.all(
-      this.state.conversations.map(async (conversationId) => {
+      Object.keys(this.state.conversations).map(async (id) => {
         this.iridium.connector?.on(
-          `/chat/conversation/${conversationId}`,
-          this.onConversationMessage.bind(this, conversationId),
+          `/chat/conversation/${id}`,
+          this.onConversationMessage.bind(this, id),
         )
-        await this.iridium.connector?.subscribe(
-          `/chat/conversation/${conversationId}`,
-        )
+        await this.iridium.connector?.subscribe(`/chat/conversation/${id}`)
       }),
     )
 
@@ -55,17 +63,26 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async fetch() {
-    this.state = (await this.iridium.connector?.get('/chat')) || {
-      conversations: [],
-      conversation: {},
+    this.state = ((await this.get()) as State) ?? initialState
+    for (const conversation of Object.values(this.state.conversations)) {
+      Vue.set(
+        this.conversationMessages,
+        conversation.id,
+        Object.entries(conversation.messages).map(([key, value]) => ({
+          ...value,
+          id: key,
+        })),
+      )
+      this.conversationMessages[conversation.id].sort((a, b) => a.at - b.at)
     }
   }
 
-  async saveConversation(conversation: Conversation) {
-    await this.iridium.connector?.set(
-      `/chat/conversation/${conversation.id}`,
-      conversation,
-    )
+  get(path: string = '', options: any = {}) {
+    return this.iridium.connector?.get(`/chat${path}`, options)
+  }
+
+  set(path: string = '', payload: any, options: any = {}) {
+    return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
 
   async onConversationMessage(
@@ -104,7 +121,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   hasConversation(id: string) {
-    return this.state.conversations.includes(id)
+    return Object.keys(this.state.conversations).includes(id)
   }
 
   async directConversationId(recipientId: string) {
@@ -112,71 +129,50 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async createConversation(
-    name: string,
+    name: string, // TODO: test passing undefined to name
     type: 'group' | 'direct',
     participants: string[],
   ) {
     const id =
       type === 'direct'
         ? await Iridium.hash(participants.sort())
-        : await Iridium.hash({ name, origin: this.iridium.connector?.id })
+        : await Iridium.hash({ name, origin: this.iridium.connector?.id }) // TODO: generate random hash for group chat
 
     if (!id) {
       throw new Error(FriendsError.FRIEND_NOT_FOUND)
     }
-    if (this.state.conversations.includes(id)) {
+
+    if (this.hasConversation(id)) {
       throw new Error(ChatError.CONVERSATION_EXISTS)
     }
-    const conversation = {
+
+    const conversation: Conversation = {
       id,
       type,
       name,
       participants,
-      messages: [],
-      message: {},
+      messages: {},
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      lastMessageAt: 0,
     }
-    await this.iridium.connector?.set(`/chat/conversation/${id}`, conversation)
-    await this.iridium.connector?.set(`/chat/conversations`, [
-      ...this.state.conversations,
-      id,
-    ])
-    this.state.conversation[id] = conversation
-    this.state.conversations.push(id)
+    await this.iridium.connector?.set(`/chat/conversations/${id}`, conversation)
+    this.state.conversations[id] = conversation
+    Vue.set(this.conversationMessages, id, [])
 
-    this.emit(`conversation/${id}`, conversation)
-    this.emit(`conversations`, this.state.conversations)
+    this.emit(`conversations/${id}`, conversation)
     this.iridium.connector?.on(
-      `/chat/conversation/${id}`,
+      `/chat/conversations/${id}`,
       this.onConversationMessage.bind(this, id),
     )
-    await this.iridium.connector?.subscribe(`/chat/conversation/${id}`)
+    await this.iridium.connector?.subscribe(`/chat/conversations/${id}`)
   }
 
-  /**
-   * @method getConversation
-   * Retrieve a conversation with a specific user, filtered by the given query parameters
-   * @param friendIdentifier friend mailboxId
-   * @param query parameters for filtering
-   * @param lastInbound timestamp of last received message
-   * @returns an array of messages
-   */
-  async getConversation(id: string): Promise<Conversation> {
-    const conversation = await this.iridium.connector?.get<Conversation>(
-      `/chat/conversation/${id}`,
-    )
+  getConversation(id: string): Conversation {
+    const conversation = this.state.conversations[id]
     if (!conversation) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
     return conversation
-  }
-
-  loadMessages(id: string) {
-    if (id && this.hasConversation(id)) {
-      return Object.values(this.state.conversation[id]?.message)
-    }
   }
 
   /**
@@ -211,11 +207,20 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @param group
    * @param message Message to be sent
    */
-  async sendMessage(id: string, message: ConversationMessage) {
-    if (!this.iridium.connector) return
-    const conversation = await this.getConversation(id)
-    if (!conversation) {
-      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+  async sendMessage(
+    conversationId: string,
+    payload: Omit<ConversationMessage, 'from' | 'conversationId'>,
+  ) {
+    if (!this.iridium.connector) {
+      return
+    }
+
+    const conversation = this.getConversation(conversationId)
+
+    const message = {
+      ...payload,
+      from: this.iridium.connector.id,
+      conversationId,
     }
 
     const messageID = await this.iridium.connector.store(message, {
@@ -225,25 +230,26 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(ChatError.MESSAGE_NOT_SENT)
     }
     const messageCID = messageID.toString()
-    conversation.message[messageCID] = message
-    conversation.messages.push(messageCID)
+    conversation.messages[messageCID] = message
     conversation.lastMessageAt = Date.now()
-    this.state.conversation[id] = conversation
-    await this.iridium.connector.set(
-      `/chat/conversation/${id}/messages`,
-      conversation.messages,
-    )
-    await this.iridium.connector.set(
-      `/chat/conversation/${id}/message/${messageCID}`,
+    this.conversationMessages[conversationId].push(message)
+    this.iridium.connector.set(
+      `/chat/conversation/${conversationId}/message/${messageCID}`,
       message,
     )
-    await this.saveConversation(conversation)
+    this.iridium.connector.set(
+      `/chat/conversation/${conversationId}/message/lastMessageAt`,
+      conversation.lastMessageAt,
+    )
     // broadcast the message to connected peers
-    await this.iridium.connector.broadcast(`/chat/conversation/${id}`, {
-      type: 'chat/message',
-      conversation: id,
-      message: messageCID,
-    })
+    await this.iridium.connector.broadcast(
+      `/chat/conversation/${conversationId}`,
+      {
+        type: 'chat/message',
+        conversation: conversationId,
+        message: messageCID,
+      },
+    )
 
     const pids = (
       await Promise.all(
@@ -252,7 +258,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     ).map((pid) => pid.toString())
 
     await this.iridium.connector.send(
-      { type: 'chat/message', conversationId: id, messageCID },
+      { type: 'chat/message', conversationId, messageCID },
       {
         to: pids,
       },

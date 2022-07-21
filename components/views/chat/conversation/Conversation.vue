@@ -6,6 +6,7 @@ import { ChevronDownIcon } from 'satellite-lucide-icons'
 import type { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import { ScrollDirections } from '~/types/chat/chat'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -24,10 +25,11 @@ export default Vue.extend({
       type: String,
       default: '',
     },
-    did: {
-      type: String,
-      default: '',
-    },
+  },
+  data() {
+    return {
+      did: iridium.connector.id,
+    }
   },
   computed: {
     ...mapState({
