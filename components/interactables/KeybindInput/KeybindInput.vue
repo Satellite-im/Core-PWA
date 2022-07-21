@@ -144,6 +144,14 @@ export default Vue.extend({
       }
 
       if (this.activeModifiers.length === 0) {
+        const editButton = this.$refs.editButton as HTMLButtonElement
+        if (event.keyCode === 13) {
+          this.save()
+          editButton.focus()
+        } else if (event.keyCode === 27) {
+          this.cancel()
+          editButton.focus()
+        }
         return
       }
 
