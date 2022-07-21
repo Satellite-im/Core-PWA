@@ -15,12 +15,7 @@
   />
   <TypographyError v-if="friendRequestError" :text="$t(friendRequestError)" />
   <UiLoadersLoadingBar v-else-if="searching" />
-  <FriendsFriend
-    v-else-if="user && user.did"
-    :user="user"
-    @requestSent="onFriendRequestSent"
-    isPreview
-  />
+  <FriendsFriend v-else-if="user && user.did" :user="user" isPreview />
   <!-- <UiSpacer :height="10" />
     <TypographyHorizontalRuleText plaintext value="OR" />
     <UiSpacer :height="10" />

@@ -20,11 +20,27 @@ export default Vue.extend({
       searching: false,
       request: null as FriendRequest | null,
       user: null as User | null,
+      outgoingReq: iridium.friends.state.requests.filter(
+        (r: FriendRequest) => !r.incoming && r.status === 'pending',
+      ).length,
     }
   },
   computed: {
     friendRequestError() {
       return iridium.friends.state.error
+    },
+    outgoingRequestsLength(): Number {
+      return iridium.friends.state.requests.filter(
+        (r: FriendRequest) => !r.incoming && r.status === 'pending',
+      ).length
+    },
+  },
+  watch: {
+    outgoingRequestsLength(listLength) {
+      if (this.outgoingReq < listLength) {
+        this.onFriendRequestSent()
+      }
+      this.outgoingReq = listLength
     },
   },
   mounted() {
