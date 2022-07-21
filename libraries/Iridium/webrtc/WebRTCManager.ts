@@ -57,7 +57,6 @@ export default class WebRTCManager extends Emitter {
     //   'this.iridium.connector?.peerId',
     //   this.iridium.connector?.peerId,
     // )
-
     // await this.onPeerDiscovery({
     //   peerId: '12D3KooWM4bdDMvtajWRdbAc7nPH6ggZJtNu44hhXmbAkpXa2nom',
     // })
@@ -65,7 +64,6 @@ export default class WebRTCManager extends Emitter {
     //   did: 'did:key:z6MkqhVW4UbcjNjQLCVtAkbnAz9ie8c7SFsaGC95D7Lh44sD',
     //   peerId: '12D3KooWM4bdDMvtajWRdbAc7nPH6ggZJtNu44hhXmbAkpXa2nom',
     // })
-
     this.setupListeners()
     await this.subscribeToAnnounce()
   }
@@ -303,6 +301,10 @@ export default class WebRTCManager extends Emitter {
         console.log('peer:call', payload)
         await this.onPeerCall(payload)
         break
+      case 'peer:signal':
+        console.log('peer:signal', payload)
+        await this.onPeerSignal(payload)
+        break
       case 'peer:typing':
         console.log('peer:typing', payload)
         await this.onPeerTyping(payload)
@@ -320,6 +322,10 @@ export default class WebRTCManager extends Emitter {
         await this.onPeerUnmute(payload)
         break
     }
+  }
+
+  private onPeerSignal = (payload: any) => {
+    console.log('onPeerSignal', payload)
   }
 
   private onPeerCall = async (payload: any) => {
@@ -374,20 +380,17 @@ export default class WebRTCManager extends Emitter {
       this.state.activeCall?.callId,
     )
 
+    console.log('onPeerCall call.peerConnected[peerId]', call.peerConnected)
+
+    console.log(
+      'onPeerCall call.peerDialingDisabled[peerId]',
+      call.peerDialingDisabled,
+    )
+
     if (this.state.activeCall?.callId !== call.callId) {
       $Logger.log(loggerPrefix, `No active call with call id: ${call.callId}`)
       return
     }
-
-    console.log(
-      'onPeerCall call.peerConnected[peerId]',
-      call.peerConnected[peerId],
-    )
-
-    console.log(
-      'onPeerCall call.peerDialingDisabled[peerId]',
-      call.peerDialingDisabled[peerId],
-    )
 
     if (!call.peerConnected[peerId] && !call.peerDialingDisabled[peerId]) {
       $Logger.log(loggerPrefix, `initiate a call...`)

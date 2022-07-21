@@ -163,6 +163,8 @@ export class IridiumManager extends Emitter {
     await this.chat.init()
     logger.log('iridium/manager', 'initializing files')
     await this.files.init()
+    logger.log('iridium/manager', 'initializing webRTC')
+    await this.webRTC.init()
     logger.log('iridium/manager', 'initializing settings')
     await this.settings.init()
     logger.log('iridium/manager', 'ready')

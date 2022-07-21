@@ -153,13 +153,9 @@ const webRTCActions = {
           return
         }
 
-        const peerIdStr = peerId.toB58String()
-        if (
-          !call.peerConnected[peerIdStr] &&
-          !call.peerDialingDisabled[peerIdStr]
-        ) {
+        if (!call.peerConnected[peerId] && !call.peerDialingDisabled[peerId]) {
           $Logger.log(loggerPrefix, `initiate a call...`)
-          await call.initiateCall(peerIdStr)
+          await call.initiateCall(peerId)
         }
       },
     )

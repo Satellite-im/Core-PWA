@@ -959,9 +959,11 @@ export class Call extends Emitter<CallEventListeners> {
       throw new Error('Communication bus not found')
     }
 
+    console.log('_sendSignal', peer.id)
     await iridium.connector.send(
       {
-        type: 'SIGNAL',
+        module: 'webrtc',
+        type: 'peer:signal',
         payload: {
           callId:
             this.callId === peer.id ? iridium.connector?.peerId : this.callId,
@@ -969,7 +971,7 @@ export class Call extends Emitter<CallEventListeners> {
         },
         at: Date.now().valueOf(),
       },
-      { to: peer.id },
+      { to: [peer.id] },
     )
   }
 
