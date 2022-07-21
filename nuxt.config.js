@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/local/mock.ts' },
     { src: '~/plugins/local/style.ts' },
     { src: '~/plugins/local/envinfo.ts' },
-    { src: '~/plugins/local/longpress.ts' },
+    { src: '~/plugins/local/contextmenu.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
