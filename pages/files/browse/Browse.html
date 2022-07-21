@@ -12,7 +12,7 @@
   </div>
   <div class="files-view">
     <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
-    <FilesCards
+    <FilesMobileList
       v-else-if="$device.isMobile"
       :directory="directory"
       @like="like"

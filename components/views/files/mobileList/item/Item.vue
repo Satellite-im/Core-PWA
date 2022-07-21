@@ -1,4 +1,4 @@
-<template src="./Card.html"></template>
+<template src="./Item.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
@@ -149,4 +149,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Card.less"></style>
+<style scoped lang="less" src="./Item.less"></style>

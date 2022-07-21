@@ -1,4 +1,4 @@
-<div id="cards-view" :class="{'cards-view-list': !gridLayout}">
+<div id="mobile-list" :class="{'mobile-list-flat': !gridLayout}">
   <div class="sort-container">
     <InteractablesSelect
       v-if="directory.length"
@@ -14,7 +14,7 @@
     </button>
   </div>
   <div class="files-container">
-    <FilesCardsCard
+    <FilesMobileListItem
       v-for="item in directory"
       :item="item"
       :key="item.id"
