@@ -1,4 +1,5 @@
 .table {
+  display: table;
   cursor: pointer;
   &:extend(.full-width);
   font-size: @text-size;
@@ -10,24 +11,36 @@
     cursor: not-allowed;
   }
 
-  th {
-    &:extend(.font-secondary);
-    border-bottom-width: 1px;
-    border-bottom-color: @text-muted;
+  .table-header {
+    display: table-row;
 
-    &:first-of-type {
-      padding-left: @xlarge-spacing;
-    }
-    &:not(:last-child) {
-      min-width: 160px;
-    }
-    &:last-child {
-      padding: 0;
-    }
+    .table-cell {
+      display: table-cell;
+      &:extend(.font-secondary);
+      border-bottom: 1px solid @text-muted;
+      padding: @light-spacing 0;
+      min-width: 18px;
 
-    svg {
-      font-size: 9pt;
+      &:first-of-type {
+        padding-left: 1.8rem;
+      }
+
+      &:not(:last-child) {
+        min-width: 160px;
+      }
+
+      &:last-child {
+        padding: 0;
+      }
+
+      svg {
+        font-size: 9pt;
+      }
     }
+  }
+
+  .table-body {
+    display: table-row-group;
   }
 }
 
@@ -42,13 +55,20 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   .table {
     min-width: @viewport-width - 20px;
-    th {
-      padding: @light-spacing;
-      &:first-of-type {
-        padding-left: @light-spacing;
-      }
-      &:not(:last-child) {
-        min-width: 75px;
+
+    .table-header {
+      .table-cell {
+        &:first-of-type {
+          padding-left: @light-spacing;
+        }
+
+        &:not(:last-child) {
+          min-width: 75px;
+        }
+
+        &:last-child {
+          padding-right: @light-spacing;
+        }
       }
     }
   }

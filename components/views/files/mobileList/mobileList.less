@@ -1,0 +1,36 @@
+#mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  .sort-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: @light-spacing;
+
+    .sort-button {
+      display: flex;
+      align-items: center;
+    }
+
+    .sort-selection {
+      display: flex;
+      align-items: center;
+      align-self: end;
+    }
+  }
+
+  .files-container {
+    display: flex;
+    flex-direction: column;
+    gap: @normal-spacing;
+    min-width: 0;
+  }
+}
+
+.mobile-list-flat {
+  .files-container {
+    gap: 0 !important;
+  }
+}

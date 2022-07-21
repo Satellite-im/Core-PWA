@@ -172,6 +172,7 @@ export default {
       browse: {
         files: 'Files',
         search: 'Search...',
+        sort: 'Sort',
         name: 'Name',
         modified: 'Modified',
         type: 'Type',

@@ -1,5 +1,5 @@
-<tr ref="row" @click="handle" @contextmenu="contextMenu">
-  <td class="filename">
+<div ref="row" @click="handle" @contextmenu="contextMenu" class="table-row">
+  <div class="filename table-cell">
     <template v-if="!$device.isMobile">
       <folder-icon
         v-if="item.children"
@@ -12,18 +12,21 @@
       <file-icon data-cy="file-icon" v-else class="file-type-icon" />
     </template>
     <span data-cy="file-item-name"> {{ item.name }} </span>
-  </td>
-  <td>{{ $dayjs(item.modified).fromNow() }}</td>
-  <td v-if="!$device.isMobile" class="open-sidebar-hide">{{ item.type }}</td>
-  <td class="open-sidebar-hide">
+  </div>
+  <div class="table-cell">{{ $dayjs(item.modified).fromNow() }}</div>
+  <div v-if="!$device.isMobile" class="table-cell open-sidebar-hide">
+    {{ item.type }}
+  </div>
+  <div class="open-sidebar-hide table-cell">
     {{ item.size ? $filesize(item.size) : '-' }}
-  </td>
-  <td
+  </div>
+  <div
     @mouseover="menuHover=true"
     @mouseleave="menuHover=false"
     data-cy="file-item-options"
     @click="contextMenu"
+    class="table-cell"
   >
     <more-vertical-icon size="1x" />
-  </td>
-</tr>
+  </div>
+</div>
