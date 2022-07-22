@@ -101,9 +101,17 @@ export class Call extends Emitter<CallEventListeners> {
   }
 
   private subscribeToChannel = async () => {
-    await iridium.connector?.subscribe(
-      `peer:signal/${iridium.connector?.peerId}`,
-    )
+    await Promise.all([
+      iridium.connector?.subscribe(`peer:signal/${iridium.connector?.peerId}`),
+      iridium.connector?.subscribe(`peer:refuse/${iridium.connector?.peerId}`),
+      iridium.connector?.subscribe(`peer:hangup/${iridium.connector?.peerId}`),
+      iridium.connector?.subscribe(
+        `peer:screenshare/${iridium.connector?.peerId}`,
+      ),
+      iridium.connector?.subscribe(`peer:mute/${iridium.connector?.peerId}`),
+      iridium.connector?.subscribe(`peer:unmute/${iridium.connector?.peerId}`),
+      iridium.connector?.subscribe(`peer:destroy/${iridium.connector?.peerId}`),
+    ])
   }
 
   /**
@@ -450,17 +458,24 @@ export class Call extends Emitter<CallEventListeners> {
 
     await Promise.all(
       Object.values(this.peers).map(async (peer) => {
-        await iridium.connector?.send(
-          {
-            type: 'peer:screenshare',
-            payload: {
-              streamId: screenStream.id,
-              trackId: screenTrack.id,
-            },
-            sentAt: Date.now().valueOf(),
-          },
-          { to: peer.id },
-        )
+        // await iridium.connector?.send(
+        //   {
+        //     type: 'peer:screenshare',
+        //     payload: {
+        //       streamId: screenStream.id,
+        //       trackId: screenTrack.id,
+        //     },
+        //     sentAt: Date.now().valueOf(),
+        //   },
+        //   { to: peer.id },
+        // )
+        await iridium.connector?.broadcast(`peer:screenshare/${peer.id}`, {
+          type: 'peer:screenshare',
+          peerId: iridium.connector?.peerId,
+          streamId: screenStream.id,
+          trackId: screenTrack.id,
+          at: Date.now().valueOf(),
+        })
         try {
           peer.addTrack(screenTrack, screenStream)
         } catch (_) {}
@@ -662,14 +677,12 @@ export class Call extends Emitter<CallEventListeners> {
   async deny() {
     await Promise.all(
       this.peerDetails.map(async (peer) => {
-        await iridium.connector?.send(
-          {
-            type: 'peer:hangup',
-            payload: { peerId: iridium.connector?.peerId, callId: this.callId },
-            sentAt: Date.now().valueOf(),
-          },
-          { to: peer.id },
-        )
+        await iridium.connector?.broadcast(`peer:hangup/${peer.id}`, {
+          type: 'peer:hangup',
+          peerId: iridium.connector?.peerId,
+          callId: this.callId,
+          at: Date.now().valueOf(),
+        })
       }),
     )
     this.closeStreams()
@@ -774,21 +787,30 @@ export class Call extends Emitter<CallEventListeners> {
     if (peerId === iridium.connector?.peerId) {
       await Promise.all(
         Object.values(this.peers).map(async (peer) => {
-          await iridium.connector?.send(
-            {
-              type: 'peer:mute',
-              payload: {
-                callId:
-                  this.callId === peer.id
-                    ? iridium.connector?.peerId
-                    : this.callId,
-                trackId: track.id,
-                kind,
-              },
-              at: Date.now().valueOf(),
-            },
-            { to: peer.id },
-          )
+          await iridium.connector?.broadcast(`peer:mute/${peer.id}`, {
+            type: 'peer:mute',
+            peerId: iridium.connector?.peerId,
+            callId:
+              this.callId === peer.id ? iridium.connector?.peerId : this.callId,
+            trackId: track.id,
+            kind,
+            at: Date.now().valueOf(),
+          })
+          // await iridium.connector?.send(
+          //   {
+          //     type: 'peer:mute',
+          //     payload: {
+          //       callId:
+          //         this.callId === peer.id
+          //           ? iridium.connector?.peerId
+          //           : this.callId,
+          //       trackId: track.id,
+          //       kind,
+          //     },
+          //     at: Date.now().valueOf(),
+          //   },
+          //   { to: peer.id },
+          // )
         }),
       )
 
@@ -892,16 +914,30 @@ export class Call extends Emitter<CallEventListeners> {
         `peer:signal/${iridium.connector?.peerId}`,
         this._onBusSignal.bind(this),
       ),
-      iridium.connector?.on('peer:signal', this._onBusSignal.bind(this)),
-      iridium.connector?.on('peer:refuse', this._onBusRefuse.bind(this)),
-      iridium.connector?.on('peer:hangup', this._onBusHangup.bind(this)),
       iridium.connector?.on(
-        'peer:screenshare',
+        `peer:refuse/${iridium.connector?.peerId}`,
+        this._onBusRefuse.bind(this),
+      ),
+      iridium.connector?.on(
+        `peer:hangup/${iridium.connector?.peerId}`,
+        this._onBusHangup.bind(this),
+      ),
+      iridium.connector?.on(
+        `peer:screenshare/${iridium.connector?.peerId}`,
         this._onBusScreenshare.bind(this),
       ),
-      iridium.connector?.on('peer:mute', this._onBusMute.bind(this)),
-      iridium.connector?.on('peer:unmute', this._onBusUnmute.bind(this)),
-      iridium.connector?.on('peer:destroy', this._onBusDestroy.bind(this)),
+      iridium.connector?.on(
+        `peer:mute/${iridium.connector?.peerId}`,
+        this._onBusMute.bind(this),
+      ),
+      iridium.connector?.on(
+        `peer:unmute/${iridium.connector?.peerId}`,
+        this._onBusUnmute.bind(this),
+      ),
+      iridium.connector?.on(
+        `peer:destroy/${iridium.connector?.peerId}`,
+        this._onBusDestroy.bind(this),
+      ),
     ])
   }
 
@@ -913,13 +949,34 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected async _unbindBusListeners() {
     await Promise.all([
-      iridium.connector?.off('peer:signal', this._onBusSignal),
-      iridium.connector?.off('peer:refuse', this._onBusRefuse),
-      iridium.connector?.off('peer:hangup', this._onBusHangup),
-      iridium.connector?.off('peer:screenshare', this._onBusScreenshare),
-      iridium.connector?.off('peer:mute', this._onBusMute),
-      iridium.connector?.off('peer:unmute', this._onBusUnmute),
-      iridium.connector?.off('peer:destroy', this._onBusDestroy),
+      iridium.connector?.off(
+        `peer:signal/${iridium.connector?.peerId}`,
+        this._onBusSignal,
+      ),
+      iridium.connector?.off(
+        `peer:refuse/${iridium.connector?.peerId}`,
+        this._onBusRefuse,
+      ),
+      iridium.connector?.off(
+        `peer:hangup/${iridium.connector?.peerId}`,
+        this._onBusHangup,
+      ),
+      iridium.connector?.off(
+        `peer:screenshare/${iridium.connector?.peerId}`,
+        this._onBusScreenshare,
+      ),
+      iridium.connector?.off(
+        `peer:mute/${iridium.connector?.peerId}`,
+        this._onBusMute,
+      ),
+      iridium.connector?.off(
+        `peer:unmute/${iridium.connector?.peerId}`,
+        this._onBusUnmute,
+      ),
+      iridium.connector?.off(
+        `peer:destroy/${iridium.connector?.peerId}`,
+        this._onBusDestroy,
+      ),
     ])
   }
 
@@ -981,18 +1038,6 @@ export class Call extends Emitter<CallEventListeners> {
       data,
       at: Date.now().valueOf(),
     })
-    // await iridium.connector.send(
-    //   {
-    //     type: 'peer:signal',
-    //     payload: {
-    //       callId:
-    //         this.callId === peer.id ? iridium.connector?.peerId : this.callId,
-    //       data,
-    //     },
-    //     at: Date.now().valueOf(),
-    //   },
-    //   { to: [peer.id] },
-    // )
   }
 
   /**
@@ -1031,17 +1076,25 @@ export class Call extends Emitter<CallEventListeners> {
     // tell the peer to start screen sharing
     const screenStream = this.streams[iridium.connector?.peerId]?.screen
     const screenTrack = screenStream?.getVideoTracks()[0]
-    await iridium.connector?.send(
-      {
-        type: 'peer:screenshare',
-        payload: {
-          streamId: screenStream.id,
-          trackId: screenTrack.id,
-        },
-        sentAt: Date.now().valueOf(),
-      },
-      { to: peer.id },
-    )
+
+    await iridium.connector?.broadcast(`peer:screenshare/${peer.id}`, {
+      type: 'peer:screenshare',
+      peerId: iridium.connector?.peerId,
+      streamId: screenStream.id,
+      trackId: screenTrack.id,
+      at: Date.now().valueOf(),
+    })
+    // await iridium.connector?.send(
+    //   {
+    //     type: 'peer:screenshare',
+    //     payload: {
+    //       streamId: screenStream.id,
+    //       trackId: screenTrack.id,
+    //     },
+    //     sentAt: Date.now().valueOf(),
+    //   },
+    //   { to: peer.id },
+    // )
   }
 
   /**
@@ -1127,29 +1180,30 @@ export class Call extends Emitter<CallEventListeners> {
   }: {
     payload: { peerId: string; callId: string; data: any }
   }) {
-    console.log('_onBusSignal', payload.peerId)
-    console.log('_onBusSignal', payload.callId)
-    console.log('_onBusSignal', payload.data)
-    this.peerSignals[payload.peerId] = payload.data
+    const { peerId, callId, data } = payload
+    console.log('_onBusSignal', peerId)
+    console.log('_onBusSignal', callId)
+    console.log('_onBusSignal', data)
+    this.peerSignals[peerId] = data
     if (
-      payload.data?.type === 'candidate' &&
-      !this.isCallee[payload.peerId] &&
-      !this.isCaller[payload.peerId] &&
+      data?.type === 'candidate' &&
+      !this.isCallee[peerId] &&
+      !this.isCaller[peerId] &&
       !this.active
     ) {
       this.emit('INCOMING_CALL', {
-        peerId: payload.peerId,
+        peerId,
         callId: this.callId,
       })
     }
 
-    const peer = this.peers[payload.peerId]
+    const peer = this.peers[peerId]
     if (!peer) {
       return
     }
 
-    this.peerConnected[payload.peerId] = true
-    await peer.signal(payload.data)
+    this.peerConnected[peerId] = true
+    await peer.signal(data)
   }
 
   /**
@@ -1199,6 +1253,7 @@ export class Call extends Emitter<CallEventListeners> {
    * before the call started
    */
   protected _onBusRefuse() {
+    console.log('_onBusRefuse')
     this.deny()
   }
 
@@ -1207,12 +1262,19 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on hangup event. Used for the hang up
    * after the call started
    */
-  protected _onBusHangup({ peerId }: { peerId: PeerId }) {
-    const peerHash = peerId.toB58String()
-    this.peerDialingDisabled[peerHash] = true
-    this.isCallee[peerHash] = false
-    this.isCaller[peerHash] = false
-    this.destroyPeer(peerHash)
+  protected _onBusHangup({
+    payload,
+  }: {
+    payload: { peerId: string; callId: string }
+  }) {
+    const { peerId, callId } = payload
+    console.log('_onBusHangup peerId', peerId)
+    console.log('_onBusHangup callId', callId)
+
+    this.peerDialingDisabled[peerId] = true
+    this.isCallee[peerId] = false
+    this.isCaller[peerId] = false
+    this.destroyPeer(peerId)
   }
 
   /**
@@ -1221,14 +1283,17 @@ export class Call extends Emitter<CallEventListeners> {
    * @param peerId
    * @param payload
    */
+
   protected _onBusScreenshare({
-    peerId,
-    payload: { streamId },
+    payload,
   }: {
-    peerId: PeerId
-    payload: { streamId: string }
+    payload: { peerId: string; streamId: any; trackId: any }
   }) {
-    const peer = this.peers[peerId.toB58String()]
+    const { peerId, streamId, trackId } = payload
+    console.log('_onBusScreenshare peerId', peerId)
+    console.log('_onBusScreenshare streamId', streamId)
+    console.log('_onBusScreenshare trackId', trackId)
+    const peer = this.peers[peerId]
     if (!peer) {
       return
     }
@@ -1245,25 +1310,26 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on mute event
    */
   protected _onBusMute({
-    peerId,
-    payload: { kind, trackId },
+    payload,
   }: {
-    peerId: PeerId
-    payload: { kind: string; trackId: string }
+    payload: { peerId: string; callId: string; trackId: string; kind: string }
   }) {
-    const peerHash = peerId.toB58String()
+    const { peerId, callId, trackId, kind } = payload
+    console.log('_onBusMute peerId', peerId)
+    console.log('_onBusMute callId', callId)
+    console.log('_onBusMute trackId', trackId)
+    console.log('_onBusMute kind', kind)
+
     this.emit('REMOTE_TRACK_MUTED', {
-      peerId: peerHash,
+      peerId,
       kind,
       trackId,
     })
-    Object.values(this.streams[peerId.toB58String()] || {}).forEach(
-      (stream) => {
-        const track = stream.getTrackById(trackId)
-        if (!track) return
-        track.enabled = false
-      },
-    )
+    Object.values(this.streams[peerId] || {}).forEach((stream) => {
+      const track = stream.getTrackById(trackId)
+      if (!track) return
+      track.enabled = false
+    })
   }
 
   /**
@@ -1277,6 +1343,7 @@ export class Call extends Emitter<CallEventListeners> {
     peerId: PeerId
     payload: { kind: string; trackId: string }
   }) {
+    console.log('_onBusUnmute', peerId, kind, trackId)
     const peerHash = peerId.toB58String()
     this.emit('REMOTE_TRACK_UNMUTED', {
       peerId: peerHash,
@@ -1297,6 +1364,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on destroy event
    */
   protected _onBusDestroy({ peerId }: { peerId: PeerId }) {
+    console.log('_onBusDestroy', peerId)
     this.destroyPeer(peerId.toB58String())
   }
 }
