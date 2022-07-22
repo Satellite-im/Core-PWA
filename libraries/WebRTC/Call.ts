@@ -324,9 +324,11 @@ export class Call extends Emitter<CallEventListeners> {
   async createAudioStream(
     constraints: MediaTrackConstraints | boolean | undefined,
   ) {
+    console.log('createAudioStream constraints', constraints)
     const audioStream = await navigator.mediaDevices.getUserMedia({
       audio: constraints || true,
     })
+    console.log('createAudioStream audioStream', constraints)
     if (!this.streams[iridium.connector?.peerId]) {
       this.streams[iridium.connector?.peerId] = {}
     }
@@ -334,16 +336,41 @@ export class Call extends Emitter<CallEventListeners> {
       this.tracks[iridium.connector?.peerId] = new Set()
     }
 
+    console.log(
+      'createAudioStream streams',
+      this.streams[iridium.connector?.peerId],
+    )
+    console.log(
+      'createAudioStream tracks',
+      this.tracks[iridium.connector?.peerId],
+    )
+
     const audioTrack = audioStream.getAudioTracks()[0]
+
+    console.log(
+      'createAudioStream audioTrack',
+      this.tracks[iridium.connector?.peerId],
+    )
 
     this.streams[iridium.connector?.peerId].audio = audioStream
     this.tracks[iridium.connector?.peerId].add(audioTrack)
+
+    console.log(
+      'createAudioStream streams',
+      this.streams[iridium.connector?.peerId],
+    )
+    console.log(
+      'createAudioStream tracks',
+      this.tracks[iridium.connector?.peerId],
+    )
 
     this.emit('LOCAL_TRACK_CREATED', {
       track: audioTrack,
       kind: 'audio',
       stream: audioStream,
     })
+
+    console.log('createAudioStream this.peers', this.peers)
 
     await Promise.all(
       Object.values(this.peers).map(async (peer) => {

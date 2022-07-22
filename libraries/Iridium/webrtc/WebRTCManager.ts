@@ -708,19 +708,17 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('INCOMING_CALL', onCallIncoming)
 
-    function onCallOutgoing({ peerId }: { peerId: string }) {
-      // console.log('onCallOutgoing', peerId)
-      // this.state.incomingCall = undefined
-      // this.state.activeCall = { callId, peerId }
-      // commit('setIncomingCall', undefined)
-      // commit('setActiveCall', { callId, peerId })
+    const onCallOutgoing = ({ peerId }: { peerId: string }) => {
+      console.log('onCallOutgoing', peerId)
+      this.state.incomingCall = undefined
+      this.state.activeCall = { callId, peerId }
       // commit('ui/showMedia', true, { root: true })
     }
     call.on('OUTGOING_CALL', onCallOutgoing)
 
-    function onCallConnected({ peerId }: { peerId: string }) {
-      // commit('setIncomingCall', undefined)
-      // commit('setActiveCall', { callId, peerId })
+    const onCallConnected = ({ peerId }: { peerId: string }) => {
+      this.state.incomingCall = undefined
+      this.state.activeCall = { callId, peerId }
       // commit('conversation/setCalling', true, { root: true })
       // commit('updateCreatedAt', Date.now())
       // if (rootState.audio.muted) {
@@ -730,12 +728,12 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('CONNECTED', onCallConnected)
 
-    function onCallHangup() {
+    const onCallHangup = () => {
       // commit('updateCreatedAt', 0)
       // commit('ui/showMedia', false, { root: true })
       // commit('conversation/setCalling', false, { root: true })
-      // commit('setIncomingCall', undefined)
-      // commit('setActiveCall', undefined)
+      this.state.incomingCall = undefined
+      this.state.activeCall = undefined
     }
     call.on('HANG_UP', onCallHangup)
 
