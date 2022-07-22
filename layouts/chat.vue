@@ -37,11 +37,7 @@
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />
-          <Sidebar
-            v-if="!$device.isMobile"
-            :sidebar="showSidebar"
-            :show-menu="toggleMenu"
-          />
+          <Sidebar v-if="!$device.isMobile" :sidebar="showSidebar" />
         </swiper-slide>
         <!-- Hide swiper slide when no friends and mobile -->
         <swiper-slide

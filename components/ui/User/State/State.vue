@@ -1,17 +1,16 @@
 <template>
   <div
     class="user-state"
-    data-cy="user-state"
-    :style="`width:${size}px; height:${size}px`"
     :class="{ 'is-large': size > 36 }"
+    :style="`width:${size}px; height:${size}px`"
+    data-cy="user-state"
   >
     <UiCircle
-      data-cy="satellite-circle-profile"
-      :type="src ? 'image' : 'random'"
-      :seed="user.id"
+      :type="imageSource ? 'image' : 'random'"
+      :seed="user.did"
       :size="size"
-      :source="src"
-      @click="clickHandler"
+      :source="imageSource"
+      data-cy="satellite-circle-profile"
     />
     <div
       v-if="user.state !== 'mobile' && !isTyping"
@@ -20,8 +19,9 @@
     />
     <smartphone-icon
       v-else-if="user.state === 'mobile'"
+      class="mobile-status"
+      :class="`is-${user.state}`"
       size="1x"
-      :class="`mobile-status is-${user.state}`"
     />
     <UiChatTypingIndicator v-else />
   </div>
@@ -31,7 +31,7 @@
 import Vue, { PropType } from 'vue'
 
 import { SmartphoneIcon } from 'satellite-lucide-icons'
-import { User } from '~/types/ui/user'
+import { User } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   components: {
@@ -45,18 +45,17 @@ export default Vue.extend({
     isTyping: {
       type: Boolean,
       default: false,
-      required: false,
     },
-    src: { type: String, default: '', required: false },
     size: {
       type: Number,
       default: 36,
-      required: false,
     },
-    clickHandler: {
-      type: Function,
-      required: false,
-      default: () => {},
+  },
+  computed: {
+    imageSource(): string {
+      return this.user.photoHash
+        ? `${this.$Config.textile.browser}/ipfs/${this.user.photoHash}`
+        : ''
     },
   },
 })

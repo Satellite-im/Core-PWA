@@ -47,12 +47,12 @@ export default Vue.extend({
   watch: {
     allPrerequisitesReady(nextValue) {
       if (!nextValue) return
-      this.$router.replace('/chat/direct')
+      this.$router.replace('/friends/list')
     },
   },
   mounted() {
     if (this.allPrerequisitesReady) {
-      this.$router.replace('/chat/direct')
+      this.$router.replace('/friends/list')
     }
   },
   methods: {

@@ -1,8 +1,8 @@
-<div id="conversation">
-  <UiLoadersMessage :count="3" v-if="loading" />
+<div class="conversation">
+  <UiLoadersMessage :count="3" v-if="false" />
   <div class="group" v-for="message of messages">
-    <div v-if="message.type === 'direct'">
-      <div v-if="message.from === did">
+    <div v-if="message.type === 'text'">
+      <div v-if="message.from === myDid">
         <p>SELF:</p>
       </div>
       <div v-else>

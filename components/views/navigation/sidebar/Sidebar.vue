@@ -14,7 +14,6 @@ import {
 } from 'satellite-lucide-icons'
 
 import { DataStateType } from '~/store/dataState/types'
-import { Conversation } from '~/store/textile/types'
 import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
@@ -32,14 +31,6 @@ export default Vue.extend({
     GroupInvite,
   },
   props: {
-    toggle: {
-      type: Function,
-      default: () => {},
-    },
-    showMenu: {
-      type: Function,
-      default: () => {},
-    },
     sidebar: {
       type: Boolean,
       default: false,
@@ -51,42 +42,24 @@ export default Vue.extend({
     }
   },
   computed: {
-    incomingRequests(): Array<FriendRequest> {
+    incomingRequests(): FriendRequest[] {
       return this.friends.requests.filter((r: FriendRequest) => r.incoming)
     },
     DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,
       dataState: (state) => (state as RootState).dataState,
-      media: (state) => (state as RootState).media,
-      groups: () => iridium.groups?.state,
-      conversations: () => ({}),
     }),
   },
   methods: {
-    toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {
+    toggleModal(type: ModalWindows.QUICK_CHAT) {
       this.$store.commit('ui/toggleModal', {
         name: type,
         state: !this.ui.modals[type],
       })
     },
-    closeGroupInviteModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: false },
-      })
-    },
-    gotoAddFriends() {
-      if (this.$route.name?.includes('friends-list')) {
-        if (this.$device.isMobile) {
-          this.$store.commit('ui/showSidebar', false)
-        }
-      } else {
-        this.$router.push({ path: '/friends/list' })
-      }
-    },
-    sortUserList(conversations: Conversation) {
-      this.$store.commit('friends/sortFriends', conversations)
+    toggleMenu() {
+      this.$store.commit('ui/showSidebar', !this.ui.showSidebar)
     },
   },
 })

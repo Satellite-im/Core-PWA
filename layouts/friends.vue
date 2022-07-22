@@ -34,11 +34,7 @@
             :groups="$mock.groups"
             :sidebar="showSidebar"
           />
-          <Sidebar
-            v-if="!$device.isMobile"
-            :show-menu="toggleMenu"
-            :sidebar="showSidebar"
-          />
+          <Sidebar v-if="!$device.isMobile" :sidebar="showSidebar" />
         </swiper-slide>
         <swiper-slide class="dynamic-content">
           <menu-icon
