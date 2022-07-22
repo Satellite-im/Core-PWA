@@ -634,7 +634,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     this.state.incomingCall = undefined
-    this.state.activeCall = { callId, participants }
+    this.state.activeCall = { callId }
 
     await call.createLocalTracks(kinds)
     await call.start()
@@ -906,5 +906,53 @@ export default class WebRTCManager extends Emitter {
       $WebRTC.destroyCall(call.callId)
     }
     call.on('DESTROY', onCallDestroy)
+  }
+
+  public acceptCall = async (kinds: TrackKind[]) => {
+    console.log('acceptCall', this.state)
+    console.log('acceptCall kinds', kinds)
+
+    this.state.streamMuted = {
+      ...this.state.streamMuted,
+      [this.iridium.connector?.peerId]: {
+        audio: true,
+        video: true,
+        screen: true,
+      },
+    }
+
+    const { callId, peerId } = this.state.incomingCall
+
+    console.log('acceptCall callId', callId)
+    console.log('acceptCall peerId', peerId)
+
+    const call = $WebRTC.getCall(callId)
+
+    console.log('acceptCall call', call)
+
+    if (!call) {
+      return
+    }
+
+    await call.createLocalTracks(kinds)
+    await call.answer(peerId)
+  }
+
+  public denyCall = () => {
+    console.log('denyCall', this.state)
+    if (this.state.activeCall)
+      $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
+    if (this.state.incomingCall) {
+      $WebRTC.getCall(this.state.incomingCall.callId)?.destroy()
+    }
+  }
+
+  public hangUp = () => {
+    console.log('hangUp', this.state)
+    if (this.state.activeCall) {
+      $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
+    }
+    this.state.activeCall = undefined
+    this.state.incomingCall = undefined
   }
 }

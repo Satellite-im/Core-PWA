@@ -77,37 +77,22 @@ export default Vue.extend({
      * @example
      */
     async acceptCall(kinds: TrackKind[]) {
-      this.$store.commit('webrtc/setStreamMuted', {
-        peerId: iridium.connector?.peerId,
-        audio: true,
-        video: true,
-        screen: true,
-      })
-      const { callId, peerId } = this.webrtc.incomingCall
-      const call = $WebRTC.getCall(callId)
-      if (!call) {
-        return
-      }
-
-      const redirectId =
-        this.webrtc.incomingCall.type === 'group'
-          ? `groups/${callId}`
-          : `direct/${
-              this.$store.state.friends.all.find(
-                (f: Friend) => f.peerId === peerId,
-              )?.address || 'error'
-            }`
-
       try {
-        await call.createLocalTracks(kinds)
-        await call.answer(peerId)
+        await iridium.webRTC.acceptCall(kinds)
       } catch (error) {
         if (error instanceof Error) {
           this.$toast.error(this.$t(error.message) as string)
         }
       }
 
-      const callingPath = `/chat/${redirectId}`
+      const callId = iridium.webRTC.state.activeCall?.callId
+
+      if (!callId) {
+        return
+      }
+
+      const callingPath = `/chat/${callId}`
+
       if (this.$route.path !== callingPath) {
         this.$router.push(callingPath)
       }
@@ -123,7 +108,7 @@ export default Vue.extend({
      */
     denyCall() {
       this.$store.commit('ui/fullscreen', false)
-      this.$store.dispatch('webrtc/denyCall')
+      iridium.webRTC.denyCall()
     },
     /**
      * @method hangUp
@@ -133,7 +118,7 @@ export default Vue.extend({
     hangUp() {
       this.$store.commit('webrtc/setIncomingCall', undefined, { root: true })
       this.$store.commit('ui/fullscreen', false)
-      this.$store.dispatch('webrtc/hangUp')
+      iridium.webRTC.hangUp()
     },
   },
 })

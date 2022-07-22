@@ -20,14 +20,17 @@ export default Vue.extend({
     }),
   },
   async mounted() {
-    if (!iridium.webRTC.state.activeCall?.participants) {
+    const id = iridium.webRTC.state.activeCall?.callId
+
+    if (!id || !iridium.chat?.hasConversation(id)) {
       return
     }
-    this.caller = iridium.webRTC.state.activeCall?.participants.find(
-      (participant) => {
-        return participant.peerId !== iridium.connector?.peerId
-      },
-    )
+
+    const conversation = iridium.chat?.getConversation(id)
+
+    this.caller = conversation?.participants.find((participant) => {
+      return participant.peerId !== iridium.connector?.peerId
+    })
   },
   methods: {
     async navigateToActiveConversation() {
@@ -47,7 +50,7 @@ export default Vue.extend({
         return
       }
 
-      this.$router.push(`/chat/direct/${id}`)
+      this.$router.push(`/chat/${id}`)
     },
   },
 })

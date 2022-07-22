@@ -15,7 +15,7 @@ export interface WebRTCState {
   activeCall?: {
     callId: string
     peerId: string
-    participants: Friend[]
+    // participants: Friend[]
   }
   incomingCall?: {
     callId: string

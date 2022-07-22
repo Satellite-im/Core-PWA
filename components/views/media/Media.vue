@@ -51,24 +51,21 @@ export default Vue.extend({
         : this.users.slice(0, this.maxViewableUsers)
     },
     localParticipant() {
-      if (!iridium.webRTC.state.activeCall?.participants) {
-        return { ...this.accounts.details, peerId: iridium.connector?.peerId }
-      }
-      return iridium.webRTC.state.activeCall?.participants.find(
-        (participant) => {
-          return participant.peerId === iridium.connector?.peerId
-        },
-      )
+      return { ...this.accounts.details, peerId: iridium.connector?.peerId }
     },
     remoteParticipants() {
-      if (!iridium.webRTC.state.activeCall?.participants) {
+      const id = iridium.webRTC.state.activeCall?.callId
+
+      if (!id || !iridium.chat?.hasConversation(id)) {
         return []
       }
-      return iridium.webRTC.state.activeCall?.participants.filter(
-        (participant) => {
-          return participant.peerId !== iridium.connector?.peerId
-        },
-      )
+
+      const conversation = iridium.chat?.getConversation(id)
+      console.log('conversation', conversation)
+
+      return conversation?.participants.filter((participant) => {
+        return participant.peerId !== iridium.connector?.peerId
+      })
     },
     ...mapState(['audio']),
   },
