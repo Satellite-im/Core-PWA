@@ -9,7 +9,7 @@
     <!--      :clickHandler="openProfile"-->
     <!--    />-->
     <UiUserState v-if="!isGroup" class="circle" :user="recipient" :src="src" />
-    <GroupIcon v-else :group="recipient" />
+    <UiGroupIcon v-else :group="recipient" />
   </div>
   <div class="user-info">
     <TypographyTitle :size="6" :text="recipient.name" />

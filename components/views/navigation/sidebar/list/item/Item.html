@@ -5,7 +5,8 @@
   @click="navigateToUser"
   data-cy="sidebar-user"
 >
-  <UiUserState :user="friendDetails" />
+  <UiUserState v-if="conversation.type === 'direct'" :user="details" />
+  <UiGroupIcon v-else :group="details" />
   <div class="user-info">
     <TypographyTitle
       :size="6"

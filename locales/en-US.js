@@ -630,6 +630,8 @@ export default {
       failed_load: 'Image failed to load',
       group_name:
         'Enter a group name of at least {min} characters, up to {max}',
+      conversation_exists:
+        'A conversation with that name already exists, please choose a different name',
     },
     textile: {
       friend_not_found: 'Friend not found',

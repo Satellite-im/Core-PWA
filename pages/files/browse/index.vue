@@ -14,7 +14,7 @@ export default Vue.extend({
   layout: 'files',
   data() {
     return {
-      items: iridium.files.state.items ?? [],
+      items: iridium.files.state.items,
     }
   },
   computed: {

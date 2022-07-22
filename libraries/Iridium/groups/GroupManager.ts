@@ -28,29 +28,30 @@ export default class GroupManager extends Emitter<IridiumMessage> {
   }
 
   /**
-   * @method createGroupConversation
-   * Create a conversation with specific users
+   * @method createGroup
+   * attempt to create conversation with the provided config. if successful, create a new group too
    * @returns a string UUID of the created groupChat
    */
-  async createGroup(config: GroupConfig): Promise<string> {
-    const id = await Iridium.hash(
-      json.encode({
-        timestamp: Date.now(),
-        origin: this.iridium.connector?.id,
-      }),
-    )
+  async createGroup(config: Omit<GroupConfig, 'origin'>): Promise<string> {
+    if (!this.iridium.connector) {
+      return ''
+    }
+    const id = await Iridium.hash({
+      timestamp: Date.now(),
+      origin: this.iridium.connector?.id,
+    })
 
-    const group: GroupData = {
+    await this.iridium.chat.createConversation({
       id,
+      name: config.name,
+      type: 'group',
+      participants: Object.values(config.members).map((m) => m.id),
+    })
+    await this.iridium.connector.set(`/groups/${id}`, {
+      id,
+      origin: this.iridium.connector.id,
       ...config,
-    }
-
-    const exists = await this.iridium.connector?.get(`/groups/${id}`)
-    if (exists) {
-      throw new Error(GroupsError.GROUP_ALREADY_EXISTS)
-    }
-
-    await this.iridium.connector?.set(`/groups/${id}`, group)
+    })
     return id
   }
 

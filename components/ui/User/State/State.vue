@@ -54,7 +54,7 @@ export default Vue.extend({
   computed: {
     imageSource(): string {
       return this.user.photoHash
-        ? `${this.$Config.textile.browser}/ipfs/${this.user.photoHash}`
+        ? this.$Config.ipfs.gateway + this.user.photoHash
         : ''
     },
   },

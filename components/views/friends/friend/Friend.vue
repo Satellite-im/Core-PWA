@@ -92,8 +92,9 @@ export default Vue.extend({
       this.loading = false
     },
     async sendMessageRequest() {
-      const id = await iridium.chat?.directConversationId(this.user.did)
-      this.$router.push(id ? `/chat/${id}` : `/`)
+      this.$router.push(
+        `/chat/${iridium.chat?.directConversationIdFromDid(this.user.did)}`,
+      )
     },
   },
 })
