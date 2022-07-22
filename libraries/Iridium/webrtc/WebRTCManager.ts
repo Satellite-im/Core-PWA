@@ -5,19 +5,15 @@ import Vue from 'vue'
 import iridium, { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
-import { CallPeerDescriptor, Call } from '~/libraries/WebRTC/Call'
+import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 
+import { Friend } from '~/libraries/Iridium/friends/types'
 import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { ConversationActivity } from '~/store/conversation/types'
 import Logger from '~/utilities/Logger'
 import { overwriteMerge } from '~/utilities/merge'
-import {
-  ConversationActivity,
-  ConversationParticipant,
-} from '~/store/conversation/types'
-import { Friend } from '~/libraries/Iridium/friends/types'
-import { Config } from '~/config'
 
 const announceFrequency = 5000
 
@@ -883,7 +879,7 @@ export default class WebRTCManager extends Emitter {
 
     const onCallDestroy = () => {
       this.state.incomingCall = undefined
-      this.state.incomingCall = undefined
+      this.state.activeCall = undefined
       this.state.createdAt = 0
 
       // commit('conversation/setCalling', false, { root: true })
