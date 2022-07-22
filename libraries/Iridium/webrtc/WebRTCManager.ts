@@ -5,7 +5,7 @@ import Vue from 'vue'
 import iridium, { IridiumManager } from '../IridiumManager'
 import { setInObject } from '../utils'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
-import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { CallPeerDescriptor, Call } from '~/libraries/WebRTC/Call'
 
 import { WebRTCErrors } from '~/libraries/WebRTC/errors/Errors'
 import { TrackKind } from '~/libraries/WebRTC/types'
@@ -66,6 +66,33 @@ export default class WebRTCManager extends Emitter {
     // })
     this.setupListeners()
     await this.subscribeToAnnounce()
+    await this.subscribeToBroadcast()
+  }
+
+  private subscribeToBroadcast = async () => {
+    await Promise.all([
+      this.iridium.connector?.subscribe(
+        `peer:signal/${this.iridium.connector?.peerId}`,
+      ),
+      this.iridium.connector?.subscribe(
+        `peer:refuse/${this.iridium.connector?.peerId}`,
+      ),
+      this.iridium.connector?.subscribe(
+        `peer:hangup/${this.iridium.connector?.peerId}`,
+      ),
+      this.iridium.connector?.subscribe(
+        `peer:screenshare/${this.iridium.connector?.peerId}`,
+      ),
+      this.iridium.connector?.subscribe(
+        `peer:mute/${this.iridium.connector?.peerId}`,
+      ),
+      this.iridium.connector?.subscribe(
+        `peer:unmute/${this.iridium.connector?.peerId}`,
+      ),
+      this.iridium.connector?.subscribe(
+        `peer:destroy/${this.iridium.connector?.peerId}`,
+      ),
+    ])
   }
 
   private setupListeners() {

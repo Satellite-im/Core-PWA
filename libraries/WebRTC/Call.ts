@@ -86,7 +86,6 @@ export class Call extends Emitter<CallEventListeners> {
     this.peerDetails = peers || []
     this.peerSignals = peerSignals || {}
     this._bindBusListeners()
-    this.subscribeToChannel()
   }
 
   /**
@@ -98,20 +97,6 @@ export class Call extends Emitter<CallEventListeners> {
    */
   isDirectCall() {
     return this.callId?.indexOf('|') === -1
-  }
-
-  private subscribeToChannel = async () => {
-    await Promise.all([
-      iridium.connector?.subscribe(`peer:signal/${iridium.connector?.peerId}`),
-      iridium.connector?.subscribe(`peer:refuse/${iridium.connector?.peerId}`),
-      iridium.connector?.subscribe(`peer:hangup/${iridium.connector?.peerId}`),
-      iridium.connector?.subscribe(
-        `peer:screenshare/${iridium.connector?.peerId}`,
-      ),
-      iridium.connector?.subscribe(`peer:mute/${iridium.connector?.peerId}`),
-      iridium.connector?.subscribe(`peer:unmute/${iridium.connector?.peerId}`),
-      iridium.connector?.subscribe(`peer:destroy/${iridium.connector?.peerId}`),
-    ])
   }
 
   /**
@@ -869,21 +854,30 @@ export class Call extends Emitter<CallEventListeners> {
 
     await Promise.all(
       Object.values(this.peers).map(async (peer) => {
-        await iridium.connector?.send(
-          {
-            type: 'peer:unmute',
-            payload: {
-              callId:
-                this.callId === peer.id
-                  ? iridium.connector?.peerId
-                  : this.callId,
-              trackId: track.id,
-              kind,
-            },
-            sentAt: Date.now().valueOf(),
-          },
-          { to: peer.id },
-        )
+        await iridium.connector?.broadcast(`peer:unmute/${peer.id}`, {
+          type: 'peer:unmute',
+          peerId: iridium.connector?.peerId,
+          callId:
+            this.callId === peer.id ? iridium.connector?.peerId : this.callId,
+          trackId: track.id,
+          kind,
+          at: Date.now().valueOf(),
+        })
+        // await iridium.connector?.send(
+        //   {
+        //     type: 'peer:unmute',
+        //     payload: {
+        //       callId:
+        //         this.callId === peer.id
+        //           ? iridium.connector?.peerId
+        //           : this.callId,
+        //       trackId: track.id,
+        //       kind,
+        //     },
+        //     sentAt: Date.now().valueOf(),
+        //   },
+        //   { to: peer.id },
+        // )
       }),
     )
   }
@@ -1016,8 +1010,8 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer signal event
    * @param data Simple Peer signaling data
    */
-  protected _onSignal(peer: CallPeer, data: Peer.SignalData) {
-    this._sendSignal(peer, data)
+  protected async _onSignal(peer: CallPeer, data: Peer.SignalData) {
+    await this._sendSignal(peer, data)
   }
 
   /**
@@ -1030,7 +1024,8 @@ export class Call extends Emitter<CallEventListeners> {
       throw new Error('Communication bus not found')
     }
 
-    console.log('_sendSignal', peer.id)
+    console.log('_sendSignal peer.id', peer.id)
+    console.log('_sendSignal data', data)
     await iridium.connector?.broadcast(`peer:signal/${peer.id}`, {
       type: 'peer:signal',
       peerId: iridium.connector?.peerId,
@@ -1186,7 +1181,7 @@ export class Call extends Emitter<CallEventListeners> {
     console.log('_onBusSignal', data)
     this.peerSignals[peerId] = data
     if (
-      data?.type === 'candidate' &&
+      data?.type === 'offer' &&
       !this.isCallee[peerId] &&
       !this.isCaller[peerId] &&
       !this.active
@@ -1337,26 +1332,26 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on unmute event
    */
   protected _onBusUnmute({
-    peerId,
-    payload: { kind, trackId },
+    payload,
   }: {
-    peerId: PeerId
-    payload: { kind: string; trackId: string }
+    payload: { peerId: string; callId: string; trackId: string; kind: string }
   }) {
-    console.log('_onBusUnmute', peerId, kind, trackId)
-    const peerHash = peerId.toB58String()
+    const { peerId, callId, trackId, kind } = payload
+    console.log('_onBusUnmute peerId', peerId)
+    console.log('_onBusUnmute callId', callId)
+    console.log('_onBusUnmute trackId', trackId)
+    console.log('_onBusUnmute kind', kind)
+
     this.emit('REMOTE_TRACK_UNMUTED', {
-      peerId: peerHash,
+      peerId,
       kind,
       trackId,
     })
-    Object.values(this.streams[peerId.toB58String()] || {}).forEach(
-      (stream) => {
-        const track = stream.getTrackById(trackId)
-        if (!track) return
-        track.enabled = true
-      },
-    )
+    Object.values(this.streams[peerId] || {}).forEach((stream) => {
+      const track = stream.getTrackById(trackId)
+      if (!track) return
+      track.enabled = true
+    })
   }
 
   /**
