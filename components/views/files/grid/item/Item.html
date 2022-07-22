@@ -1,36 +1,33 @@
-<div
-  class="file"
-  :class="{ 'is-liked': item.liked }"
-  @click="click"
-  v-contextmenu="contextmenu"
->
-  <div class="quick-actions">
-    <link-icon v-if="item.shared" size="1.25x" class="link" />
-    <heart-icon
-      size="1.25x"
-      class="like"
-      :class="{liked : item.liked}"
-      @click="like"
-    />
-  </div>
-  <!-- add container so blur effect doesn't go outside the dimensions of the image -->
-  <div v-if="thumbnail" class="image-container">
-    <img
-      class="image-preview"
-      :class="{'blur-image' : item.nsfw && blockNsfw}"
-      :src="thumbnail"
-      draggable="false"
-    />
-  </div>
-  <div v-else class="icon-container">
-    <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
-    <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
-    <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
-    <film-icon v-else-if="isVideo" size="4x" class="file-type-icon" />
-    <file-icon v-else size="4x" class="file-type-icon" />
-  </div>
-  <div class="text-container">
-    <TypographyText :size="6" :text="item.name" class="maintext" />
-    <TypographyText :size="6" :text="getSubtext" class="subtext" />
-  </div>
+<div class="file" :class="{ 'is-liked': item.liked }" @click="click">
+  <UiContextMenu :items="contextMenuValues">
+    <div class="quick-actions">
+      <link-icon v-if="item.shared" size="1.25x" class="link" />
+      <heart-icon
+        size="1.25x"
+        class="like"
+        :class="{liked : item.liked}"
+        @click="like"
+      />
+    </div>
+    <!-- add container so blur effect doesn't go outside the dimensions of the image -->
+    <div v-if="thumbnail" class="image-container">
+      <img
+        class="image-preview"
+        :class="{'blur-image' : item.nsfw && blockNsfw}"
+        :src="thumbnail"
+        draggable="false"
+      />
+    </div>
+    <div v-else class="icon-container">
+      <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
+      <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
+      <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
+      <film-icon v-else-if="isVideo" size="4x" class="file-type-icon" />
+      <file-icon v-else size="4x" class="file-type-icon" />
+    </div>
+    <div class="text-container">
+      <TypographyText :size="6" :text="item.name" class="maintext" />
+      <TypographyText :size="6" :text="getSubtext" class="subtext" />
+    </div>
+  </UiContextMenu>
 </div>

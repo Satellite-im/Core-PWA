@@ -79,7 +79,7 @@ export default Vue.extend({
         //   func: this.share,
         // },
         { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.remove },
+        { text: this.$t('context.delete'), func: this.remove, type: 'danger' },
       ]
     },
   },

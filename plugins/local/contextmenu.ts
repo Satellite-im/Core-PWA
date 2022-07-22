@@ -4,31 +4,31 @@ const LONG_PRESS_DURATION = 500 // ms
 
 Vue.directive('contextmenu', {
   bind(element, binding) {
-    console.log('bind')
-    let timeout: number
+    let timeout: NodeJS.Timeout
+    let isLongPressed = false
 
     const start = (e: MouseEvent) => {
-      console.log('start')
       timeout = setTimeout(() => handler(e), LONG_PRESS_DURATION)
     }
 
     const cancel = () => {
       if (timeout) {
-        console.log('cancelled')
         clearTimeout(timeout)
       }
     }
 
     const handler = (e: MouseEvent) => {
       e.preventDefault()
-      console.log('handler')
       binding.value(e)
+      isLongPressed = true
     }
 
     const prevent = (e: MouseEvent) => {
-      console.log('prevent!')
-      e.stopPropagation()
-      e.preventDefault()
+      if (isLongPressed) {
+        e.stopPropagation()
+        e.preventDefault()
+        isLongPressed = false
+      }
     }
 
     element.addEventListener('contextmenu', handler)

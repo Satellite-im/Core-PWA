@@ -55,7 +55,13 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
-      return [{ text: this.$t('context.remove'), func: this.removeFriend }]
+      return [
+        {
+          text: this.$t('context.remove'),
+          func: this.removeFriend,
+          type: 'danger',
+        },
+      ]
     },
     requestIncoming() {
       return this.request && this.request.to === iridium.connector?.id
