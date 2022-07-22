@@ -13,18 +13,15 @@ import {
   Notification,
   NotificationsError,
 } from '~/libraries/Iridium/notifications/types'
-import { Conversation } from '~/libraries/Iridium/chat/types'
 import { Notifications } from '~/utilities/Notifications'
 
 export default class NotificationManager extends Emitter<Notification> {
   public ready: boolean = false
   public subscriptions: string[] = []
   public state: {
-    notifications: string[]
-    notification: { [key: string]: Notification }
+    notifications: [{ [key: string]: Notification }]
   } = {
-    notifications: [],
-    notification: {},
+    notifications: [{}],
   }
 
   constructor(public readonly iridium: IridiumManager) {
@@ -33,23 +30,13 @@ export default class NotificationManager extends Emitter<Notification> {
 
   async init() {
     await this.fetch()
-    // await Promise.all(
-    //   this.state.notifications.map(async (notification) => {
-    //     this.iridium.connector?.on(
-    //       `notifications/${notification}`,
-    //       this.onNotificationActivity.bind(notification),
-    //     )
-    //     await this.iridium.connector?.subscribe(`/notifications`)
-    //   }),
-    // )
     this.ready = true
     this.emit('ready', {})
   }
 
   async fetch() {
     this.state = (await this.iridium.connector?.get('notifications')) || {
-      notifications: [],
-      notification: {},
+      notifications: [{}],
     }
   }
 

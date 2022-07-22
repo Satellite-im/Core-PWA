@@ -189,8 +189,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         )
         const buildNotification: Partial<Notification> = {
           fromName: friendUser?.name,
+          at: Date.now(),
           fromAddress: conversationId,
-          title: `New ${NotificationType.DIRECT_MESSAGE} From ${friendUser?.name}`,
+          title: `New message from ${friendUser?.name}`,
           description:
             msg.body.length > 79 ? `${msg.body.substring(0, 80)}...` : msg.body,
           image: friendUser?.photoHash,

@@ -1,13 +1,3 @@
-// export type Notification = {
-//   id: string
-//   type: string
-//   from: string
-//   to: string
-//   body: string
-//   at: number
-//   read: boolean
-// }
-
 export const NotificationsError = {
   NOTIFICATION_NOT_SENT: 'error.notifications.notifications_not_sent',
 }

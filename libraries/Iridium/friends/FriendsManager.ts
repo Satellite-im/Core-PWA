@@ -313,6 +313,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       })
       const buildNotification: Partial<Notification> = {
         fromName: request.user.name,
+        at: Date.now(),
         title: 'New Request',
         description: `New ${NotificationType.FRIEND_REQUEST} From ${request.user.name}`,
         image: request.user.photoHash,

@@ -30,12 +30,6 @@ export default Vue.extend({
             user: this.alert.fromName,
           })
         }
-        // case NotificationType.GROUP_MESSAGE: {
-        //   return this.$t('messaging.user_sent_group_message.user', {
-        //     user: this.alert.fromName,
-        //     group: this.alert.groupName,
-        //   })
-        // }
       }
       return this.$t('user_sent_something.user')
     },
