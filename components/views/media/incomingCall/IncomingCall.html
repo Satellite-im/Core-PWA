@@ -4,7 +4,7 @@
     <div
       v-if="Boolean(caller)"
       class="caller"
-      :class="callType === 'friend' ? 'caller--user' : 'caller--group'"
+      :class="incomingCall.type === 'friend' ? 'caller--user' : 'caller--group'"
     >
       <div
         v-if="callerAvatar"

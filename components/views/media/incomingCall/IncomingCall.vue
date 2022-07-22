@@ -10,9 +10,11 @@ import {
   VideoIcon,
   VideoOffIcon,
 } from 'satellite-lucide-icons'
-import { Friend } from '~/types/ui/friends'
+import { Iridium } from '../../../../../iridium'
 import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/types'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -36,27 +38,26 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      callId: (state) => (state as RootState).webrtc.incomingCall?.callId,
-      friends: (state) => (state as RootState).friends.all,
       groups: (state) => (state as RootState).groups.all,
+      incomingCall: (state) => (state as RootState).webrtc.incomingCall,
     }),
-    callType(): 'group' | 'friend' | undefined {
-      return this.callId &&
-        RegExp(this.$Config.regex.uuidv4).test(this.callId?.split('|')?.[1])
-        ? 'group'
-        : 'friend'
-    },
-    caller(): Friend | Group | undefined {
-      if (!this.callType) {
+    caller(): User | undefined {
+      if (!this.incomingCall?.type) {
         return
       }
-      if (this.callType === 'friend') {
-        return this.friends.find((f: Friend) => f.peerId === this.callId)
+      if (this.incomingCall.type !== 'friend') {
+        return
+        // return this.groups.find((g: Group) => g.id === this.callId)
       }
-      return this.groups.find((g: Group) => g.id === this.callId)
+      let did
+      try {
+        did = Iridium.peerIdToDID(this.incomingCall.peerId)
+      } catch (error) {}
+      const friend = iridium.friends.getFriend(did)
+      return friend
     },
     callerAvatar(): string {
-      const hash = this.caller?.profilePicture
+      const hash = this.caller?.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
   },

@@ -86,6 +86,7 @@ export class Call extends Emitter<CallEventListeners> {
     this.peerDetails = peers || []
     this.peerSignals = peerSignals || {}
     this._bindBusListeners()
+    this.subscribeToChannel()
   }
 
   /**
@@ -99,13 +100,19 @@ export class Call extends Emitter<CallEventListeners> {
     return this.callId?.indexOf('|') === -1
   }
 
+  private subscribeToChannel = async () => {
+    await iridium.connector?.subscribe(
+      `peer:signal/${iridium.connector?.peerId}`,
+    )
+  }
+
   /**
    * @method requestPeerCalls
    * @description Send an iridium message requesting for the given peerIds to initiate a call
    */
   async requestPeerCalls(force = false) {
     await Promise.all(
-      this.peerDetails.map(async ({ peerId }) => {
+      this.peerDetails.map(async ({ id: peerId }) => {
         if (peerId === iridium.connector?.peerId) {
           return
         }
@@ -259,6 +266,7 @@ export class Call extends Emitter<CallEventListeners> {
             this.callId === peerId ? iridium.connector?.peerId : this.callId,
           peers: this.peerDetails,
           peerId,
+          signal: this.peerSignals[peerId],
         },
         at: Date.now().valueOf(),
       },
@@ -878,7 +886,12 @@ export class Call extends Emitter<CallEventListeners> {
    * this._bindBusListeners()
    */
   protected async _bindBusListeners() {
+    console.log('_bindBusListeners')
     await Promise.all([
+      iridium.connector?.on(
+        `peer:signal/${iridium.connector?.peerId}`,
+        this._onBusSignal.bind(this),
+      ),
       iridium.connector?.on('peer:signal', this._onBusSignal.bind(this)),
       iridium.connector?.on('peer:refuse', this._onBusRefuse.bind(this)),
       iridium.connector?.on('peer:hangup', this._onBusHangup.bind(this)),
@@ -917,6 +930,7 @@ export class Call extends Emitter<CallEventListeners> {
    * this._bindPeerListeners()
    */
   protected _bindPeerListeners(peer: CallPeer) {
+    console.log('_bindPeerListeners')
     peer.on('signal', this._onSignal.bind(this, peer))
     peer.on('connect', this._onConnect.bind(this, peer))
     peer.on('error', this._onError.bind(this, peer))
@@ -960,19 +974,25 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     console.log('_sendSignal', peer.id)
-    await iridium.connector.send(
-      {
-        module: 'webrtc',
-        type: 'peer:signal',
-        payload: {
-          callId:
-            this.callId === peer.id ? iridium.connector?.peerId : this.callId,
-          data,
-        },
-        at: Date.now().valueOf(),
-      },
-      { to: [peer.id] },
-    )
+    await iridium.connector?.broadcast(`peer:signal/${peer.id}`, {
+      type: 'peer:signal',
+      peerId: iridium.connector?.peerId,
+      callId: this.callId === peer.id ? iridium.connector?.peerId : this.callId,
+      data,
+      at: Date.now().valueOf(),
+    })
+    // await iridium.connector.send(
+    //   {
+    //     type: 'peer:signal',
+    //     payload: {
+    //       callId:
+    //         this.callId === peer.id ? iridium.connector?.peerId : this.callId,
+    //       data,
+    //     },
+    //     at: Date.now().valueOf(),
+    //   },
+    //   { to: [peer.id] },
+    // )
   }
 
   /**
@@ -1102,28 +1122,34 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on signal event
    * @param message Message containing the signal data
    */
-  protected async _onBusSignal(message: { peerId: PeerId; payload: any }) {
-    const peerHash = message.peerId.toB58String()
-    this.peerSignals[peerHash] = message.payload.data
+  protected async _onBusSignal({
+    payload,
+  }: {
+    payload: { peerId: string; callId: string; data: any }
+  }) {
+    console.log('_onBusSignal', payload.peerId)
+    console.log('_onBusSignal', payload.callId)
+    console.log('_onBusSignal', payload.data)
+    this.peerSignals[payload.peerId] = payload.data
     if (
-      message.payload?.data?.type === 'offer' &&
-      !this.isCallee[peerHash] &&
-      !this.isCaller[peerHash] &&
+      payload.data?.type === 'candidate' &&
+      !this.isCallee[payload.peerId] &&
+      !this.isCaller[payload.peerId] &&
       !this.active
     ) {
       this.emit('INCOMING_CALL', {
-        peerId: peerHash,
+        peerId: payload.peerId,
         callId: this.callId,
       })
     }
 
-    const peer = this.peers[peerHash]
+    const peer = this.peers[payload.peerId]
     if (!peer) {
       return
     }
 
-    this.peerConnected[peerHash] = true
-    await peer.signal(message.payload.data)
+    this.peerConnected[payload.peerId] = true
+    await peer.signal(payload.data)
   }
 
   /**

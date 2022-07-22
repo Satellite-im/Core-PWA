@@ -301,10 +301,10 @@ export default class WebRTCManager extends Emitter {
         console.log('peer:call', payload)
         await this.onPeerCall(payload)
         break
-      case 'peer:signal':
-        console.log('peer:signal', payload)
-        await this.onPeerSignal(payload)
-        break
+      // case 'peer:signal':
+      //   console.log('peer:signal', payload)
+      //   await this.onPeerSignal(payload)
+      //   break
       case 'peer:typing':
         console.log('peer:typing', payload)
         await this.onPeerTyping(payload)
@@ -324,12 +324,12 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  private onPeerSignal = (payload: any) => {
-    console.log('onPeerSignal', payload)
-  }
+  // private onPeerSignal = (payload: any) => {
+  //   console.log('onPeerSignal', payload)
+  // }
 
   private onPeerCall = async (payload: any) => {
-    const { peerId, callId, peers } = payload
+    const { peerId, callId, peers, signal } = payload
     // update conversation participants with peers from call announcement
     const $Logger: Logger = Vue.prototype.$Logger
     const loggerPrefix = 'webrtc/peer:call - '
@@ -368,9 +368,10 @@ export default class WebRTCManager extends Emitter {
     if (!call) {
       $Logger.log(loggerPrefix, `create a call...`)
       await this.createCall({
+        peerId,
         callId,
         peers,
-        peerId,
+        signal,
       })
       return
     }
@@ -575,7 +576,7 @@ export default class WebRTCManager extends Emitter {
 
       const peers = participants.map((participant) => ({
         name: participant.name,
-        peerId: participant.peerId,
+        id: participant.peerId,
       }))
 
       console.log('callId', callId)
