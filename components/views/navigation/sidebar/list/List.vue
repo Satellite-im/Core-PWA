@@ -9,11 +9,9 @@ export default Vue.extend({
   components: {
     UserPlusIcon,
   },
-  computed: {
-    conversations() {
-      return iridium.chat.state.conversations
-    },
-  },
+  data: () => ({
+    conversations: iridium.chat.state.conversations,
+  }),
   methods: {
     navigateAddFriends() {
       if (this.$route.name?.includes('friends-list')) {
