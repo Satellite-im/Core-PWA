@@ -13,7 +13,7 @@
     ref="input"
     autofocus
   />
-  <TypographyError v-if="error" :text="$t(error)" />
+  <TypographyError v-if="friendRequestError" :text="$t(friendRequestError)" />
   <UiLoadersLoadingBar v-else-if="searching" />
   <FriendsFriend
     v-else-if="user && user.did"

@@ -16,26 +16,27 @@ export default Vue.extend({
   },
   data() {
     return {
-      error: '',
       friendId: '',
       searching: false,
       request: null as FriendRequest | null,
       user: null as User | null,
     }
   },
+  computed: {
+    friendRequestError() {
+      return iridium.friends.state.error
+    },
+  },
   async mounted() {
     if (this.$route.params && this.$route.params.id) {
       this.$data.friendId = this.$route.params.id
       this._searchFriend()
     }
-    iridium.friends?.on('request/error', (err) => {
-      this.error = err
-    })
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
       if (!this.friendId.length) {
-        this.error = ''
+        iridium.friends.clearError()
         this.user = null
         this.searching = false
         return
@@ -44,18 +45,10 @@ export default Vue.extend({
       this.searching = false
     }, 500),
     async searchFriend() {
+      iridium.friends.clearError()
       this.user = null
-      this.error = ''
       this.searching = true
       const friendId = this.friendId.trim()
-      if (friendId === iridium.connector?.id) {
-        this.error = this.$t('friends.self_add') as string
-        return
-      }
-      const hasFriend = iridium.friends.isFriend(friendId)
-      if (hasFriend) {
-        this.error = this.$t('friends.already_friend') as string
-      }
 
       this.user = {
         did: friendId,
