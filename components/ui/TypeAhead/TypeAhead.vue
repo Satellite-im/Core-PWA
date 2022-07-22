@@ -146,7 +146,9 @@ export default Vue.extend({
         let doesEveryOccurrenceMatch = true
 
         for (const text of searchTextSplitted) {
-          if (!suggestions.find((item) => item.suggestion === text)) {
+          if (
+            !suggestions.find((item) => item.suggestion === text.toLowerCase())
+          ) {
             doesEveryOccurrenceMatch = false
             break
           }
@@ -170,7 +172,9 @@ export default Vue.extend({
           this.$emit('onRecoverPhraseError', true)
         }
       } else if (
-        suggestions.find((item) => item.suggestion === this.searchText) &&
+        suggestions.find(
+          (item) => item.suggestion === this.searchText.toLowerCase(),
+        ) &&
         numberOfMatchesLeft >= 0 &&
         suggestions.length === 1
       ) {
