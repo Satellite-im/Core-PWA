@@ -4,8 +4,7 @@ import Group from './Group'
 export type GroupMemberDetails = {
   id: string
   name: string
-  avatar: string
-  seen: Date
+  photoHash: string
 }
 
 export type GroupConfig = {

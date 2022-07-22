@@ -20,7 +20,7 @@ export type Conversation = {
 }
 
 export const ChatError = {
-  CONVERSATION_EXISTS: 'error.chat.conversation_exists',
-  CONVERSATION_NOT_FOUND: 'error.chat.conversation_not_found',
-  MESSAGE_NOT_SENT: 'error.chat.message_not_sent',
+  CONVERSATION_EXISTS: 'errors.chat.conversation_exists',
+  CONVERSATION_NOT_FOUND: 'errors.chat.conversation_not_found',
+  MESSAGE_NOT_SENT: 'errors.chat.message_not_sent',
 }

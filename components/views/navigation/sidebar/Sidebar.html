@@ -38,11 +38,11 @@
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="incomingRequests.length"
+        v-if="incomingRequests"
         class="label"
         :class="{inverted : $route.path.includes('/friends/list')}"
       >
-        {{incomingRequests.length}}
+        {{incomingRequests}}
       </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files')"
@@ -57,10 +57,11 @@
       </InteractablesButton>
     </div>
     <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
-      <plus-circle-icon size="1x" @click="()=>toggleModal('quickchat')" />
+      <plus-circle-icon size="1x" @click="toggleModal" />
       <FriendsQuick
-        v-if="ui.modals.quickchat"
-        v-click-outside="()=>toggleModal('quickchat')"
+        v-if="isQuickchatVisible"
+        v-click-outside="toggleModal"
+        @toggle="toggleModal"
       />
     </div>
     <SidebarList />

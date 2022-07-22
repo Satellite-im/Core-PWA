@@ -370,9 +370,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.iridium.connector.followPeer(pid.toString())
     await this.set('/list', this.state.list)
     if (!user.name) return
-    const id = await this.iridium.chat?.directConversationId(user.did)
-    if (id && !this.iridium.chat?.hasConversation(id)) {
-      return this.iridium.chat?.createConversation({
+    const id = await Iridium.hash([user.did, this.iridium.connector?.id].sort())
+    if (id && !this.iridium.chat.hasConversation(id)) {
+      return this.iridium.chat.createConversation({
+        id,
         name: user.name,
         type: 'direct',
         participants: [user.did, this.iridium.connector.id],

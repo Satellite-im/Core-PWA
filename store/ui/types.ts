@@ -18,7 +18,6 @@ export enum ModalWindows {
   CREATE_SERVER = 'createServer',
   MARKETPLACE = 'marketplace',
   WALLET = 'wallet',
-  QUICK_CHAT = 'quickchat',
   WALLET_MINI = 'walletMini',
   ERROR = 'error',
   CHANGELOG = 'changelog',

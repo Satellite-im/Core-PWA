@@ -56,7 +56,6 @@ Object {
     },
     "marketplace": false,
     "newfolder": false,
-    "quickchat": false,
     "renameFile": false,
     "userProfile": false,
     "wallet": false,

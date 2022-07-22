@@ -13,7 +13,7 @@ import {
   ConversationMessage,
   ChatError,
 } from '~/libraries/Iridium/chat/types'
-import { FriendsError } from '~/libraries/Iridium/friends/types'
+import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 
 export type ConversationPubsubEvent = IridiumPeerMessage<{
@@ -83,11 +83,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   set(path: string = '', payload: any, options: any = {}) {
-    return this.iridium.connector?.set(
-      `/chat${path}`,
-      JSON.parse(JSON.stringify(payload)),
-      options,
-    )
+    return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
 
   // async onConversationMessage(
@@ -129,24 +125,29 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return Object.keys(this.state.conversations).includes(id)
   }
 
-  async directConversationId(recipientId: string) {
-    return Iridium.hash([recipientId, this.iridium.connector?.id].sort())
+  /**
+   * @param {string} name new item name
+   * @param {IridiumDirectory} parent empty string if root element
+   * @description fetch direct conversation id based on friend did.
+   * significantly faster than Iridium.hash until about 5,000,000 conversation records
+   */
+  directConversationIdFromDid(friendDid: Friend['did']): string | undefined {
+    return Object.values(this.state.conversations).find(
+      (c) => c.type === 'direct' && c.participants.includes(friendDid),
+    )?.id
   }
 
   async createConversation({
+    id,
     type,
     name,
     participants,
-  }: Omit<Conversation, 'id' | 'message' | 'createdAt' | 'updatedAt'>) {
-    const id =
-      type === 'direct'
-        ? await Iridium.hash(participants.sort())
-        : await Iridium.hash({ name, origin: this.iridium.connector?.id }) // TODO: generate random hash for group chat
-
-    if (!id) {
-      throw new Error(FriendsError.FRIEND_NOT_FOUND)
-    }
-
+  }: {
+    id: Conversation['id']
+    type: Conversation['type']
+    name: Conversation['name']
+    participants: Conversation['participants']
+  }) {
     if (this.hasConversation(id)) {
       throw new Error(ChatError.CONVERSATION_EXISTS)
     }

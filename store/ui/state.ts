@@ -19,7 +19,6 @@ const InitialUIState = (): UIState => ({
     createServer: false,
     marketplace: false,
     wallet: false,
-    quickchat: false,
     walletMini: false,
     error: false,
     changelog: false,

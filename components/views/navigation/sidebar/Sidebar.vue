@@ -13,10 +13,7 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
-import { DataStateType } from '~/store/dataState/types'
-import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { RootState } from '~/types/store/store'
-import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
@@ -28,7 +25,6 @@ export default Vue.extend({
     FolderIcon,
     MessageSquareIcon,
     MenuIcon,
-    GroupInvite,
   },
   props: {
     sidebar: {
@@ -38,25 +34,21 @@ export default Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends.state,
+      requests: iridium.friends.state.requests,
+      isQuickchatVisible: false,
     }
   },
   computed: {
-    incomingRequests(): FriendRequest[] {
-      return this.friends.requests.filter((r: FriendRequest) => r.incoming)
+    incomingRequests(): number {
+      return this.requests.filter((r: FriendRequest) => r.incoming).length
     },
-    DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      dataState: (state) => (state as RootState).dataState,
     }),
   },
   methods: {
-    toggleModal(type: ModalWindows.QUICK_CHAT) {
-      this.$store.commit('ui/toggleModal', {
-        name: type,
-        state: !this.ui.modals[type],
-      })
+    toggleModal() {
+      this.isQuickchatVisible = !this.isQuickchatVisible
     },
     toggleMenu() {
       this.$store.commit('ui/showSidebar', !this.ui.showSidebar)

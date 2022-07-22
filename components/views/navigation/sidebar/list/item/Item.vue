@@ -15,6 +15,8 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
+import Group from '~/libraries/Iridium/groups/Group'
+import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 
 export default Vue.extend({
   components: {
@@ -32,7 +34,8 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      // friends: iridium.friends.state,
+      friends: iridium.friends.state.list,
+      groups: iridium.groups.state,
       messages: iridium.chat.messages[this.conversation.id],
     }
   },
@@ -95,14 +98,14 @@ export default Vue.extend({
       // }
     },
 
-    friendDetails(): User | undefined {
+    details(): User | Group | undefined {
       if (this.conversation.type === 'direct') {
         const friendDid = this.conversation.participants.find(
           (f) => f !== iridium.connector?.id,
         )
-        return iridium.friends.state.list.find((f) => f.did === friendDid)
+        return this.friends.find((f) => f.did === friendDid)
       }
-      return undefined
+      return this.groups[this.conversation.id]
     },
 
     isSelected(): boolean {

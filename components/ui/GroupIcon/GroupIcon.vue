@@ -2,24 +2,30 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Group, GroupMember } from '~/store/groups/types'
+import {
+  GroupConfig,
+  GroupMemberDetails,
+} from '~/libraries/Iridium/groups/types'
 
 export default Vue.extend({
   props: {
     group: {
-      type: Object as PropType<Group>,
+      type: Object as PropType<GroupConfig>,
       required: true,
     },
   },
   computed: {
+    members(): GroupMemberDetails[] {
+      return Object.values(this.group.members)
+    },
     /**
      * @method groupClass
      * @description Returns classname as string based on group members
      * @example :class="groupClass"
      */
     groupClass(): string {
-      if (this.group.members.length > 2) return 'multi'
-      if (this.group.members.length > 1) return 'double'
+      if (this.members.length > 2) return 'multi'
+      if (this.members.length > 1) return 'double'
       return 'single'
     },
     /**
@@ -28,7 +34,7 @@ export default Vue.extend({
      * @example :size="groupIconSize"
      */
     groupIconSize(): number {
-      if (this.group.members.length > 1) return 25
+      if (this.members.length > 1) return 25
       return 36
     },
   },
@@ -39,9 +45,9 @@ export default Vue.extend({
      * @param member <GroupMember> the User object/info for a member
      * @example :source="getSource(member)"
      */
-    getSource(member: GroupMember) {
-      return member?.photoHash
-        ? `${this.$Config.textile.browser}/ipfs/${member.photoHash}`
+    getSource(member: GroupMemberDetails) {
+      return member.photoHash
+        ? this.$Config.ipfs.gateway + member.photoHash
         : ''
     },
   },
