@@ -13,6 +13,10 @@ export default Vue.extend({
       type: Object as PropType<GroupConfig>,
       required: true,
     },
+    size: {
+      type: Number,
+      default: 36,
+    },
   },
   computed: {
     members(): GroupMemberDetails[] {

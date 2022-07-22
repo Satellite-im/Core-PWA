@@ -1,6 +1,10 @@
-<div :class="['group-icon', members.length > 3 ? 'unread' : '']">
-  <div class="group" :class="groupClass">
-    <div v-for="(member, i) in members.slice(0, 3)" :class="[`group-el-${i}`]">
+<div
+  class="group-icon"
+  :class="{unread : members.length > 3 }"
+  :style="`width:${size}px; height:${size}px`"
+>
+  <div :class="groupClass">
+    <div v-for="(member, i) in members.slice(0, 3)" :class="`group-el-${i}`">
       <UiCircle
         :type="getSource(member) ? 'image' : 'random'"
         :source="getSource(member)"
