@@ -1,5 +1,32 @@
 .typeahead-container {
   position: relative;
+
+  .search-box {
+    position: relative;
+    
+    &.right-icon {
+      input {
+        padding-right: 34px;
+      }
+    }
+    .search-clear {
+      &:extend(.font-primary);
+      &:focus {
+        background: @background;
+      }
+      position: absolute;
+      font-size: @tiny-icon-size;
+      top: 0;
+      right: 0;
+      width: 34px;
+      height: @full;
+      background: transparent;
+      border-color: transparent;
+      cursor: pointer;
+      &:extend(.first-layer);
+    }
+  }
+  
   .search-options {
     position: absolute;
     left: 0;

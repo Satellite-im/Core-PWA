@@ -1,12 +1,20 @@
 .container {
+  margin: 0 auto;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
   .input-account-body {
-    .recover-account.button {
-      width: 24rem;
-      max-width: @full;
-      margin-top: @normal-spacing;
-    }
+    min-width: 250px;
+    align-self: center;
+
     .columns {
+      margin: @normal-spacing auto 0;
+      
       .column {
+        padding: @xlight-spacing;
+
         .tag,
         .tag-container {
           &:extend(.full-width);
@@ -14,49 +22,43 @@
         .tag {
           margin: @xlight-spacing 0;
         }
-        padding: @xlight-spacing;
       }
-      margin: @normal-spacing auto 0;
-      max-width: @full;
-      width: 24rem;
     }
-    width: 32rem;
-    align-self: center;
-    padding: 0 @normal-spacing;
   }
+
   .input-error {
     margin-top: @normal-spacing;
   }
-  margin: 0 auto;
-  max-width: 40rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    .columns {
-      margin: 0;
-    }
-    .input-account-body {
-      .recover-account.button {
-        margin-top: auto;
-        width: unset;
-        min-width: @full;
-      }
+    margin: 0 @normal-spacing;
+    justify-content: flex-start;
+    &:extend(.full-width);
 
-      .columns {
-        width: 18rem;
-      }
-      margin: 0;
-      padding-top: 10vh;
-      width: 100%;
+    .input-account-body {
+      margin-top: @normal-spacing;
+      align-self: flex-start;
+      height: @full;
       display: flex;
       flex-direction: column;
-      align-self: flex-start;
-      height: 100%;
+      padding-bottom: @normal-spacing;
+
+      .columns {
+        margin: 0;
+        margin-top: @normal-spacing;
+      }
+
+      .is-button {
+        margin-top: auto;
+        &:extend(.full-width);
+        justify-self: flex-end;
+        margin-bottom: @normal-spacing;
+      }
     }
-    padding-bottom: @normal-spacing;
+  }
+  .spacer {
+    flex: 1;
   }
 }

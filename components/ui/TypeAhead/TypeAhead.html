@@ -3,17 +3,26 @@
   data-cy="add-passphrase"
   v-click-outside="lostFocus"
 >
-  <input
-    v-model="searchText"
-    :class="`input is-${size} is-${type}`"
-    :placeholder="placeholder"
-    @mousedown="setFocus"
-    @input="update"
-    v-on:keyup.enter="onEnterPressed"
-    v-on:keyup.esc="lostFocus"
-    v-on:keydown.up="onUpBrowseItem"
-    v-on:keydown.down="onDownBrowseItem"
-  />
+  <div :class="{'search-box': true, 'right-icon': clearIcon && searchText.length > 0}">
+    <input
+      v-model="searchText"
+      :class="`input is-${size} is-${type}`"
+      :placeholder="placeholder"
+      @mousedown="setFocus"
+      @input="update"
+      v-on:keyup.enter="onEnterPressed"
+      v-on:keyup.esc="lostFocus"
+      v-on:keydown.up="onUpBrowseItem"
+      v-on:keydown.down="onDownBrowseItem"
+    />
+    <button
+      v-if="clearIcon && searchText.length > 0"
+      class="search-clear"
+      @click="clearSearch"
+    >
+      <delete-icon size="1x" />
+    </button>
+  </div>
   <div v-if="isFocus && searchResults.length" class="search-options">
     <ul class="search-option-group">
       <li
