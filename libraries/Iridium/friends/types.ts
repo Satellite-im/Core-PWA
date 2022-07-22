@@ -23,6 +23,8 @@ export type FriendRequest = {
 }
 
 export const FriendsError = {
+  SELF_ADD: 'error.friends.self_add',
+  CONNECTOR_ERROR: 'error.friends.connector',
   NETWORK_ERROR: 'error.friends.network',
   FRIEND_EXISTS: 'error.friends.exists',
   FRIEND_NOT_FOUND: 'error.friends.not_found',

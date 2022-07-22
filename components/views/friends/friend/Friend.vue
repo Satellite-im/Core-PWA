@@ -69,7 +69,6 @@ export default Vue.extend({
       this.loading = true
       await iridium.friends?.requestInsert(this.user.did)
       this.loading = false
-      this.$emit('requestSent')
     },
     async acceptFriendRequest() {
       this.loading = true
