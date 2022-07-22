@@ -32,56 +32,56 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   async init() {
-    if (!this.iridium.connector) {
-      try {
+    try {
+      if (!this.iridium.connector) {
         logger.error('iridium/friends', 'connector error')
         throw new Error(FriendsError.CONNECTOR_ERROR)
-      } catch (err) {
-        this.setError(err)
       }
-    }
 
-    const iridium = this.iridium.connector
-    logger.log('iridium/friends', 'initializing')
-    // const pubsub = await iridium.ipfs.pubsub.ls()
-    // logger.info('iridium/friends', 'pubsub', pubsub)
-    await this.fetch()
-    logger.log('iridium/friends', 'friends state loaded', this.state)
-    logger.info('iridium/friends', 'subscribing to announce topic')
-    await iridium.subscribe('/friends/announce')
-    // console.info('waiting for topic peer')
-    // await this.iridium.connector?.waitForTopicPeer(topic)
-    this.iridium.connector?.on(
-      '/friends/announce',
-      this.onFriendActivity.bind(this),
-    )
-    logger.log('iridium/friends', 'listening for friend activity', this.state)
-
-    // connect to all friends
-    if (this.state.list) {
-      logger.info('iridium/friends', 'connecting to friends', this.state.list)
-      this.state.list.forEach(async (user) => {
-        const peerId = await Iridium.DIDToPeerId(user.did)
-        if (peerId && !iridium.hasPeer(peerId.toString())) {
-          logger.info(
-            'iridium/friends',
-            'registering friendly peerId with iridium',
-            {
-              did: user.did,
-              peerId,
-            },
-          )
-          iridium.followPeer(peerId.toString())
-        }
-      })
-    }
-
-    if (this.state.requests.length) {
-      logger.info(
-        'iridium/friends',
-        'connecting to requested friends',
-        this.state.requests,
+      const iridium = this.iridium.connector
+      logger.log('iridium/friends', 'initializing')
+      // const pubsub = await iridium.ipfs.pubsub.ls()
+      // logger.info('iridium/friends', 'pubsub', pubsub)
+      await this.fetch()
+      logger.log('iridium/friends', 'friends state loaded', this.state)
+      logger.info('iridium/friends', 'subscribing to announce topic')
+      await iridium.subscribe('/friends/announce')
+      // console.info('waiting for topic peer')
+      // await this.iridium.connector?.waitForTopicPeer(topic)
+      this.iridium.connector?.on(
+        '/friends/announce',
+        this.onFriendActivity.bind(this),
       )
+      logger.log('iridium/friends', 'listening for friend activity', this.state)
+
+      // connect to all friends
+      if (this.state.list) {
+        logger.info('iridium/friends', 'connecting to friends', this.state.list)
+        this.state.list.forEach(async (user) => {
+          const peerId = await Iridium.DIDToPeerId(user.did)
+          if (peerId && !iridium.hasPeer(peerId.toString())) {
+            logger.info(
+              'iridium/friends',
+              'registering friendly peerId with iridium',
+              {
+                did: user.did,
+                peerId,
+              },
+            )
+            iridium.followPeer(peerId.toString())
+          }
+        })
+      }
+
+      if (this.state.requests.length) {
+        logger.info(
+          'iridium/friends',
+          'connecting to requested friends',
+          this.state.requests,
+        )
+      }
+    } catch (err) {
+      this.setError(err)
     }
   }
 

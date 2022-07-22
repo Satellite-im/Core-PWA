@@ -20,9 +20,6 @@ export default Vue.extend({
       searching: false,
       request: null as FriendRequest | null,
       user: null as User | null,
-      outgoingReq: iridium.friends.state.requests.filter(
-        (r: FriendRequest) => !r.incoming && r.status === 'pending',
-      ).length,
     }
   },
   computed: {
@@ -36,11 +33,10 @@ export default Vue.extend({
     },
   },
   watch: {
-    outgoingRequestsLength(listLength) {
-      if (this.outgoingReq < listLength) {
+    outgoingRequestsLength(listLength, oldListLength) {
+      if (oldListLength < listLength) {
         this.onFriendRequestSent()
       }
-      this.outgoingReq = listLength
     },
   },
   mounted() {
