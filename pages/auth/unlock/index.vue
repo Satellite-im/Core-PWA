@@ -6,6 +6,7 @@ import { mapState } from 'vuex'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { RootState } from '~/types/store/store'
+import { AccountsError } from '~/store/accounts/types'
 
 export default Vue.extend({
   name: 'UnlockScreen',
@@ -88,9 +89,9 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async decrypt() {
+    async decrypt(redirect = true, pin = undefined) {
       try {
-        await this.$store.dispatch('accounts/unlock', this.pin)
+        await this.$store.dispatch('accounts/unlock', pin ?? this.pin)
 
         if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
@@ -99,9 +100,9 @@ export default Vue.extend({
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          this.$router.replace('/setup/disclaimer')
+          redirect && this.$router.replace('/setup/disclaimer')
         } else {
-          this.$router.replace('/')
+          redirect && this.$router.replace('/')
         }
       } catch (error: any) {
         this.error = error.message
@@ -132,6 +133,32 @@ export default Vue.extend({
     action() {
       this.status = 'loading'
       return this.step === 'login' ? this.decrypt() : this.create()
+    },
+    // FOR DEVELOPMENT PURPOSES ONLY
+    async createRandom() {
+      const pin = '11111'
+      try {
+        this.status = 'loading'
+        await this.deleteAccount()
+        await this.$store.dispatch('accounts/setPin', pin)
+        await this.decrypt(false, pin)
+        await this.$store.dispatch('accounts/generateWallet')
+        try {
+          await this.$store.dispatch('accounts/loadAccount')
+        } catch (error: any) {
+          if (error.message === AccountsError.USER_NOT_REGISTERED) {
+            await this.$store.dispatch('accounts/registerUser', {
+              name: (Math.random() + 1).toString(36).substring(2),
+              image: '',
+              status: 'user-status',
+            })
+          }
+        }
+
+        this.$router.replace('/')
+      } catch (error: any) {
+        this.error = error.message
+      }
     },
   },
 })

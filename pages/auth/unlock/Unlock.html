@@ -35,6 +35,15 @@
     <div class="realm-container">
       <InteractablesRealm />
     </div>
+    <div class="random-user-container">
+      <InteractablesButton
+        type="primary"
+        class="random-user-btn"
+        :text="status === 'loading' ? '': '?'"
+        :action="createRandom"
+        ><UiLoadersSpinner v-if="status === 'loading'" spinning
+      /></InteractablesButton>
+    </div>
   </div>
   <span @click="toggleChangelogVisibility">
     <UiVersion name version />
