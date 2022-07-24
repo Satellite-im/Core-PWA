@@ -3,12 +3,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/user'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Unread',
-  mixins: [ContextMenu],
   props: {
     user: {
       type: Object as PropType<User>,

@@ -11,7 +11,6 @@ import {
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
 import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -23,7 +22,6 @@ export default Vue.extend({
     CircleIcon,
     SmartphoneIcon,
   },
-  mixins: [ContextMenu],
   props: {
     user: {
       type: Object as PropType<User>,

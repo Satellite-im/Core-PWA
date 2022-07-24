@@ -10,7 +10,6 @@ import {
   FilmIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
@@ -24,7 +23,6 @@ export default Vue.extend({
     FilmIcon,
     MoreVerticalIcon,
   },
-  mixins: [ContextMenu],
   props: {
     item: {
       type: Object as PropType<IridiumItem>,

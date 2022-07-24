@@ -5,7 +5,6 @@ import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
@@ -21,7 +20,6 @@ export default Vue.extend({
   components: {
     VueMarkdown,
   },
-  mixins: [ContextMenu],
   props: {
     conversation: {
       type: Object as PropType<Conversation>,
@@ -52,7 +50,11 @@ export default Vue.extend({
               func: () =>
                 this.$store.dispatch('ui/showProfile', this.conversation),
             },
-            { text: this.$t('context.remove'), func: this.removeFriend },
+            {
+              text: this.$t('context.remove'),
+              func: this.removeFriend,
+              type: 'danger',
+            },
           ]
         : [
             { text: this.$t('context.send'), func: this.openConversation },

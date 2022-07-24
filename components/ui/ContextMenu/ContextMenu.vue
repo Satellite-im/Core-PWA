@@ -1,9 +1,11 @@
 <template>
-  <div v-if="!$device.isMobile" @contextmenu="contextMenu">
+  <!-- Desktop Context Menu -->
+  <div v-if="!$device.isMobile" @contextmenu="contextMenu" @click="handleClick">
     <slot />
   </div>
 
-  <div v-else v-contextmenu="showMenu" @click="hideMenu">
+  <!-- Mobile Context Menu -->
+  <div v-else v-contextmenu="showMenu" @click="handleClick">
     <slot />
     <div
       v-if="isVisible"
@@ -19,7 +21,7 @@
           :key="String(item.text)"
           class="action-button"
           :class="{ danger: item.type === 'danger' }"
-          @click="() => handleAction(item.func)"
+          @click="(e) => handleAction(e, item.func)"
         >
           {{ item.text }}
         </button>
@@ -34,13 +36,13 @@
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
-  components: {},
   mixins: [ContextMenu],
   props: {
     items: {
@@ -62,12 +64,20 @@ export default Vue.extend({
     showMenu(): void {
       this.isVisible = true
     },
-    hideMenu(): void {
+    hideMenu(e: Event): void {
+      e.stopPropagation()
       this.isVisible = false
     },
-    handleAction(func: Function): void {
+    handleAction(e: Event, func: Function): void {
       func()
-      this.hideMenu()
+      this.hideMenu(e)
+    },
+    handleClick(e: Event): void {
+      if (this.isVisible) {
+        this.hideMenu(e)
+        return
+      }
+      this.$emit('click')
     },
   },
 })
@@ -83,8 +93,6 @@ export default Vue.extend({
   padding-bottom: 100px;
   &:extend(.fourth-layer);
   position: fixed;
-  outline: none;
-  cursor: pointer;
   width: 100%;
   height: 100%;
   &:extend(.blur-less);

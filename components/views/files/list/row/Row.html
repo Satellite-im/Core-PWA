@@ -1,4 +1,9 @@
-<div ref="row" @click="handle" @contextmenu="contextMenu" class="table-row">
+<UiContextMenu
+  ref="row"
+  :items="contextMenuValues"
+  @click="handle"
+  class="table-row"
+>
   <div class="filename table-cell">
     <template v-if="!$device.isMobile">
       <folder-icon
@@ -29,4 +34,4 @@
   >
     <more-vertical-icon size="1x" />
   </div>
-</div>
+</UiContextMenu>

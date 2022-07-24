@@ -4,7 +4,6 @@ import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { UIMessage, Group } from '~/types/messaging'
 
 import { toHTML } from '~/libraries/ui/Markdown'
@@ -20,7 +19,6 @@ export default Vue.extend({
   components: {
     ArchiveIcon,
   },
-  mixins: [ContextMenu],
   props: {
     message: {
       type: Object as PropType<ConversationMessage>,
