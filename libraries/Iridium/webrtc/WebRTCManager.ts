@@ -21,9 +21,6 @@ const initialState: WebRTCState = {
   incomingCall: undefined,
   activeCall: undefined,
   streamMuted: {},
-  createdAt: 0,
-  elapsedTime: '',
-  interval: null,
 }
 
 export default class WebRTCManager extends Emitter {
@@ -36,7 +33,6 @@ export default class WebRTCManager extends Emitter {
     // this.state = initialState
     this.state = new Proxy(initialState, {
       set(target, key, value) {
-        // console.log(`${key} set from ${target[key]} to ${value}`)
         target[key] = value
         Vue.prototype.$nuxt.$store.commit('webrtc/setProperty', {
           key,
@@ -49,17 +45,6 @@ export default class WebRTCManager extends Emitter {
 
   async init() {
     // await this.fetch()
-    // console.log(
-    //   'this.iridium.connector?.peerId',
-    //   this.iridium.connector?.peerId,
-    // )
-    // await this.onPeerDiscovery({
-    //   peerId: '12D3KooWM4bdDMvtajWRdbAc7nPH6ggZJtNu44hhXmbAkpXa2nom',
-    // })
-    // await this.onPeerConnect({
-    //   did: 'did:key:z6MkqhVW4UbcjNjQLCVtAkbnAz9ie8c7SFsaGC95D7Lh44sD',
-    //   peerId: '12D3KooWM4bdDMvtajWRdbAc7nPH6ggZJtNu44hhXmbAkpXa2nom',
-    // })
     this.setupListeners()
     await this.subscribeToAnnounce()
     await this.subscribeToBroadcast()
@@ -95,7 +80,6 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:discovery',
       ({ peerId }: { peerId: string }) => {
-        console.log('peer:discovery peerId', peerId)
         const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:discovery - '
 
@@ -120,7 +104,6 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:connect',
       async ({ peerId }: { peerId: string }) => {
-        console.log('peer:connect peerId', peerId)
         const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:connect - '
 
@@ -169,7 +152,6 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:disconnect',
       async ({ peerId }: { peerId: string }) => {
-        console.log('peer:disconnect peerId', peerId)
         const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:disconnect - '
 
@@ -294,12 +276,6 @@ export default class WebRTCManager extends Emitter {
   }
 
   public subscribeToChannel(peerId: string) {
-    console.log('subscribeToChannel peerId', peerId)
-    console.log(
-      'subscribeToChannel this.iridium.connector?._peers',
-      this.iridium.connector?._peers,
-    )
-
     if (!peerId || !this.iridium.connector?._peers[peerId]) {
       return
     }
@@ -324,10 +300,6 @@ export default class WebRTCManager extends Emitter {
         console.log('peer:call', payload)
         await this.onPeerCall(payload)
         break
-      // case 'peer:signal':
-      //   console.log('peer:signal', payload)
-      //   await this.onPeerSignal(payload)
-      //   break
       case 'peer:typing':
         console.log('peer:typing', payload)
         await this.onPeerTyping(payload)
@@ -347,20 +319,12 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  // private onPeerSignal = (payload: any) => {
-  //   console.log('onPeerSignal', payload)
-  // }
-
   private onPeerCall = async (payload: any) => {
     const { peerId, callId, peers, signal } = payload
     // update conversation participants with peers from call announcement
     const $Logger: Logger = Vue.prototype.$Logger
     const loggerPrefix = 'webrtc/peer:call - '
     $Logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
-
-    console.log('onPeerCall peerId', peerId)
-    console.log('onPeerCall callId', callId)
-    console.log('onPeerCall peers', peers)
 
     // if (payload.peers) {
     //   payload.peers.forEach((peer) => {
@@ -386,8 +350,6 @@ export default class WebRTCManager extends Emitter {
 
     const call = $WebRTC.getCall(callId)
 
-    console.log('onPeerCall call', call)
-
     if (!call) {
       $Logger.log(loggerPrefix, `create a call...`)
       await this.createCall({
@@ -398,18 +360,6 @@ export default class WebRTCManager extends Emitter {
       })
       return
     }
-
-    console.log(
-      'onPeerCall this.state.activeCall?.callId',
-      this.state.activeCall?.callId,
-    )
-
-    console.log('onPeerCall call.peerConnected[peerId]', call.peerConnected)
-
-    console.log(
-      'onPeerCall call.peerDialingDisabled[peerId]',
-      call.peerDialingDisabled,
-    )
 
     if (this.state.activeCall?.callId !== call.callId) {
       $Logger.log(loggerPrefix, `No active call with call id: ${call.callId}`)
@@ -554,8 +504,6 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    console.log('call recipient', recipient)
-    console.log('call kinds', kinds)
     // check permission for audio call
     try {
       await navigator.mediaDevices.getUserMedia({
@@ -576,8 +524,6 @@ export default class WebRTCManager extends Emitter {
     if (!conversation) {
       return
     }
-
-    console.log('call conversation', conversation)
 
     const { id: callId, participants } = conversation
 
@@ -602,10 +548,6 @@ export default class WebRTCManager extends Emitter {
         id: participant.peerId,
       }))
 
-      console.log('callId', callId)
-      console.log('peers', peers)
-      console.log('peerId', recipient.peerId)
-
       await this.createCall({
         callId,
         peers,
@@ -614,7 +556,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     const call = $WebRTC.getCall(callId)
-    console.log('call call', call)
+
     if (!call) {
       $Logger.log('webrtc', `call - call not ready: ${callId}`)
       return
@@ -657,19 +599,16 @@ export default class WebRTCManager extends Emitter {
 
     const usedCallId =
       callId === this.iridium.connector?.peerId ? peerId : callId
-    console.log('usedCallId', usedCallId)
+
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
 
-    console.log('peers', peers)
     const call = $WebRTC.connect(
       usedCallId,
       peers,
       signal && peerId ? { [peerId]: signal } : {},
     )
-
-    console.log('call', call)
 
     if (!call) {
       $Logger.log('webrtc/createCall', 'call invalid')
@@ -677,8 +616,6 @@ export default class WebRTCManager extends Emitter {
     }
 
     const onCallIncoming = ({ peerId }: { peerId: string }) => {
-      console.log('onCallIncoming peerId', peerId)
-      console.log('onCallIncoming this', this)
       call.peerDialingDisabled[peerId] = true
       if (this.state.activeCall?.callId === call.callId) {
         call.answer(peerId)
@@ -705,7 +642,6 @@ export default class WebRTCManager extends Emitter {
     call.on('INCOMING_CALL', onCallIncoming)
 
     const onCallOutgoing = ({ peerId }: { peerId: string }) => {
-      console.log('onCallOutgoing', peerId)
       this.state.incomingCall = undefined
       this.state.activeCall = { callId, peerId }
       // commit('ui/showMedia', true, { root: true })
@@ -716,16 +652,18 @@ export default class WebRTCManager extends Emitter {
       this.state.incomingCall = undefined
       this.state.activeCall = { callId, peerId }
       // commit('conversation/setCalling', true, { root: true })
-      // commit('updateCreatedAt', Date.now())
-      // if (rootState.audio.muted) {
-      //   call.mute({ peerId: iridium.connector?.peerId, kind: 'audio' })
-      // }
-      // commit('video/setDisabled', true, { root: true })
+      Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', Date.now())
+      if (Vue.prototype.$nuxt.$store.state.audio.muted) {
+        call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
+      }
+      Vue.prototype.$nuxt.$store.commit('video/setDisabled', true, {
+        root: true,
+      })
     }
     call.on('CONNECTED', onCallConnected)
 
     const onCallHangup = () => {
-      // commit('updateCreatedAt', 0)
+      Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', 0)
       // commit('ui/showMedia', false, { root: true })
       // commit('conversation/setCalling', false, { root: true })
       this.state.incomingCall = undefined
@@ -733,28 +671,36 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('HANG_UP', onCallHangup)
 
-    function onCallTrack({
+    const onCallTrack = ({
       track,
       kind,
     }: {
       track: MediaStreamTrack
       stream: MediaStream
       kind?: string | undefined
-    }) {
+    }) => {
       $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
-      // let muted: Boolean = true
-      // if (kind === 'audio') {
-      //   muted = rootState.audio.muted
-      // } else if (kind === 'video') {
-      //   muted = rootState.video.disabled
-      // }
-      // commit('setMuted', {
-      //   peerId: iridium.connector?.peerId,
-      //   kind,
-      //   muted: !muted,
-      // })
-      // if (rootState.audio.muted) {
-      //   call.mute({ peerId: iridium.connector?.peerId, kind: 'audio' })
+      let muted: Boolean = true
+      if (kind === 'audio') {
+        muted = Vue.prototype.$nuxt.$store.state.audio.muted
+      } else if (kind === 'video') {
+        muted = Vue.prototype.$nuxt.$store.state.video.disabled
+      }
+
+      this.state.streamMuted = {
+        ...this.state.streamMuted,
+        [this.iridium.connector?.peerId]: {
+          ...this.state.streamMuted[this.iridium.connector?.peerId],
+          [kind]: !muted,
+        },
+      }
+
+      // if (Vue.prototype.$nuxt.$store.state.audio.muted) {
+      //   console.log(
+      //     'onCallTrack call.mute',
+      //     Vue.prototype.$nuxt.$store.state.audio,
+      //   )
+      //   call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
       // }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
@@ -779,9 +725,9 @@ export default class WebRTCManager extends Emitter {
           [kind]: false,
         },
       }
-      // if (rootState.audio.muted) {
-      //   call.mute({ peerId: iridium.connector?.peerId, kind: 'audio' })
-      // }
+      if (Vue.prototype.$nuxt.$store.state.audio.muted) {
+        call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
+      }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
@@ -903,9 +849,6 @@ export default class WebRTCManager extends Emitter {
   }
 
   public acceptCall = async (kinds: TrackKind[]) => {
-    console.log('acceptCall', this.state)
-    console.log('acceptCall kinds', kinds)
-
     this.state.streamMuted = {
       ...this.state.streamMuted,
       [this.iridium.connector?.peerId]: {
@@ -917,12 +860,7 @@ export default class WebRTCManager extends Emitter {
 
     const { callId, peerId } = this.state.incomingCall
 
-    console.log('acceptCall callId', callId)
-    console.log('acceptCall peerId', peerId)
-
     const call = $WebRTC.getCall(callId)
-
-    console.log('acceptCall call', call)
 
     if (!call) {
       return
@@ -933,7 +871,6 @@ export default class WebRTCManager extends Emitter {
   }
 
   public denyCall = () => {
-    console.log('denyCall', this.state)
     if (this.state.activeCall)
       $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
     if (this.state.incomingCall) {
@@ -942,7 +879,6 @@ export default class WebRTCManager extends Emitter {
   }
 
   public hangUp = () => {
-    console.log('hangUp', this.state)
     if (this.state.activeCall) {
       $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
     }

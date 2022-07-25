@@ -61,7 +61,6 @@ export default Vue.extend({
       }
 
       const conversation = iridium.chat?.getConversation(id)
-      console.log('conversation', conversation)
 
       return conversation?.participants.filter((participant) => {
         return participant.peerId !== iridium.connector?.peerId

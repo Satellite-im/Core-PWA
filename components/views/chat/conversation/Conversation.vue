@@ -55,9 +55,6 @@ export default Vue.extend({
   async mounted() {
     const id = this.$route.params.id
 
-    console.log('conversation id', id)
-    console.log('conversations', iridium.chat.state.conversations)
-
     if (!id) {
       this.$router.push('/friends/list')
     }
@@ -68,8 +65,6 @@ export default Vue.extend({
 
     const conversation = await iridium.chat?.getConversation(id)
 
-    console.log('conversation', conversation)
-
     if (!conversation) {
       return
     }
@@ -77,8 +72,6 @@ export default Vue.extend({
     const recipient = conversation.participants.find(
       (p) => p.did !== iridium.profile.state.did,
     )
-
-    console.log('conversation recipient', recipient)
 
     if (!recipient) {
       return
