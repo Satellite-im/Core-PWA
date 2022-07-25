@@ -19,7 +19,7 @@ export default Vue.extend({
       return Object.values(this.conversations).filter((conversation) => {
         const { participants } = conversation
 
-        let doesConversationsContainsActualFriends = true
+        let doesConversationContainsActualFriends = true
 
         participants.forEach((participant) => {
           if (participant === iridium.connector?.id) {
@@ -27,11 +27,11 @@ export default Vue.extend({
           }
 
           if (!this.friends.list.find((friend) => friend.did === participant)) {
-            doesConversationsContainsActualFriends = false
+            doesConversationContainsActualFriends = false
           }
         })
 
-        return doesConversationsContainsActualFriends
+        return doesConversationContainsActualFriends
       })
     },
   },
