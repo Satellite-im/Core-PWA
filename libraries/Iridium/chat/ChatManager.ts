@@ -145,6 +145,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
   }
 
+  async saveConversation(conversation: Conversation) {
+    await this.iridium.connector?.set(
+      `/chat/conversation/${conversation.id}`,
+      conversation,
+    )
+  }
+
   get(path: string = '', options: any = {}) {
     return this.iridium.connector?.get(`/chat${path}`, options)
   }
@@ -152,6 +159,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   set(path: string = '', payload: any, options: IridiumSetOptions = {}) {
     return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
+
   async onConversationMessage(
     conversationId: string,
     message: ConversationPubsubEvent,
@@ -169,19 +177,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         decrypt: true,
       })
       if (msg) {
-        conversation.messages.push(messageCID)
-        conversation.message[messageCID] = msg
-        this.state.conversation[conversationId] = conversation
-        await this.iridium.connector.set(
-          `/chat/conversation/${conversationId}/messages`,
-          conversation.messages,
+        // conversation.message.push(messageCID)
+        // conversation.message[messageCID] = msg
+        this.state.conversations[conversationId] = conversation
+        await this.set(
+          `/conversations/${conversationId}/messages`,
+          conversation.message,
         )
-        await this.iridium.connector.set(
-          `/chat/conversation/${conversationId}/message/${messageCID}`,
+        await this.set(
+          `/conversations/${conversationId}/message/${messageCID}`,
           msg,
         )
         const friendUser = await this.iridium.friends.getFriend(
-          this.state.conversation[conversationId].participants.find(
+          this.state.conversations[conversationId].participants.find(
             (friendId) => {
               return friendId !== this.iridium.connector?.id
             },
