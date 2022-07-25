@@ -3,7 +3,6 @@
     :tooltipText="$t('coming_soon.send_money')"
     :tooltipPosition="'top'"
   >
-    <!-- to add disable color to icon, had to add color="grey" to the icon -->
     <button
       id="send-money-toggle"
       v-tooltip.top="$t('wallet.send_money')"
@@ -11,7 +10,7 @@
       class="control-tooltip-wrap"
       disabled
     >
-      <banknote-icon size="1x" :class="`control-icon `" color="grey" />
+      <banknote-icon size="1x" class="control-icon" color="grey" />
     </button>
   </UiComingSoon>
   <button
@@ -19,7 +18,6 @@
     v-tooltip.top="$t('ui.glyphs')"
     @click="toggleEnhancers('glyphs')"
     class="control-tooltip-wrap"
-    :disabled="disabled"
   >
     <box-select-icon
       size="1x"
@@ -31,7 +29,6 @@
     v-tooltip.top="$t('ui.emotes')"
     @click="toggleEnhancers('emotes')"
     class="control-tooltip-wrap"
-    :disabled="disabled"
   >
     <smile-icon
       size="1x"
@@ -41,9 +38,9 @@
   <button
     v-tooltip.top="$t('ui.send')"
     class="control-tooltip-wrap send-message-btn"
-    data-cy="send-message"
     :disabled="disabled"
-    @click="sendMessage"
+    @click="$emit('send')"
+    data-cy="send-message"
   >
     <arrow-right-icon size="1x" class="control-icon" />
   </button>

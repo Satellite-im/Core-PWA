@@ -1,13 +1,10 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import Vue from 'vue'
+import { mapState } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
-// import { Friend } from '~/types/ui/friends'
-import type { Friend } from '~/libraries/Iridium/friends/types'
-import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
@@ -15,33 +12,27 @@ import {
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { ChatText } from '~/store/chat/types'
-// import { Group } from '~/types/messaging'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { SettingsRoutes } from '~/store/ui/types'
+import { UploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
+
 export default Vue.extend({
   components: {
     TerminalIcon,
   },
-  props: {
-    recipient: {
-      type: Object as PropType<Friend | Group>,
-      default: () => {},
-    },
-  },
   computed: {
-    ...mapGetters({
-      // recipient: 'conversation/recipient',
-      getFiles: 'chat/getFiles',
-      isGroup: 'conversation/isGroup',
-    }),
     ...mapState({
-      ui: (state) => (state as RootState).ui,
-      friends: (state) => (state as RootState).friends,
-      webrtc: (state) => (state as RootState).webrtc,
-      chat: (state) => (state as RootState).chat,
-      textile: (state) => (state as RootState).textile,
-      conversation: (state) => (state as RootState).conversation,
+      ui: (state: RootState) => state.ui,
+      chat: (state: RootState) => state.chat,
+      files(state: RootState) {
+        return state.chat.files?.[this.$route.params.id] ?? []
+      },
     }),
+
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
     /**
      * @method charlimit DocsTODO
      * @description Checks if current text is longer than the max character limit
@@ -95,7 +86,7 @@ export default Vue.extend({
     },
     isSharpCorners(): boolean {
       return (
-        Boolean(this.getFiles?.length) ||
+        Boolean(this.files.length) ||
         Boolean(this.ui.replyChatbarContent.id) ||
         this.commandPreview ||
         this.chat.countError
@@ -120,7 +111,7 @@ export default Vue.extend({
       set(value: string) {
         this.$store.dispatch('ui/setChatbarContent', {
           content: value,
-          userId: this.recipient?.did,
+          // userId: this.recipient?.did,
         })
       },
     },
@@ -280,28 +271,32 @@ export default Vue.extend({
      * @example v-on:paste="handlePaste"
      */
     handlePaste(e: ClipboardEvent) {
-      /* Don't use event.preventDefault(). It prevent original text copy-paste */
       e.stopPropagation()
-      /* Upload if image, if not then no action */
-      this.handleUpload(e?.clipboardData?.items, e)
+      if (!e.clipboardData?.items) {
+        return
+      }
+
+      this.handleUpload([...e.clipboardData.items])
     },
     /**
      * @method handleUpload
-     * @description Takes in an array of event items and uploads the file objects
+     * @description if event has files attached
      * @param items Array of objects
      * @example this.handleUpload(someEvent.itsData.items)
      */
-    handleUpload(items: Array<object>, e: Event) {
-      const files: File[] = [...items]
-        .filter((f: any) => {
+    handleUpload(items: DataTransferItem[]) {
+      if (!this.consentToScan) {
+        this.showSettings()
+      }
+
+      const files = items
+        .filter((f) => {
           return f.kind !== MessagingTypesEnum.STRING
         })
-        .map((f: any) => f.getAsFile())
-      if (files.length) {
-        e.preventDefault()
-        const handleFileExpectEvent = { target: { files } }
-        // @ts-ignore
-        this.$refs.upload?.handleFile(handleFileExpectEvent)
+        .map((f) => f.getAsFile())
+
+      if (files.length && this.$refs.upload) {
+        ;(this.$refs.upload as UploadRef).handleFile({ target: { files } })
       }
     },
     handleChatTextFromOutside(text: string) {
@@ -312,64 +307,26 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendFiles() {
-      // keep recipient in case user changes chats
-      const recipient = this.recipient
-      for (const [index, file] of this.getFiles.entries()) {
-        if (this.isGroup) {
-          await this.$store
-            .dispatch('textile/sendGroupFileMessage', {
-              groupID: (recipient as Group)?.id,
-              file,
-              address: recipient.address,
-              index,
-            })
-            .catch((error) => {
-              if (error) {
-                this.$Logger.log('file send error', error)
-                document.body.style.cursor = PropCommonEnum.DEFAULT
-              }
-            })
-        } else {
-          await this.$store
-            .dispatch('textile/sendFileMessage', {
-              to: (recipient as Friend)?.textilePubkey,
-              file,
-              address: recipient.address,
-              index,
-            })
-            .catch((error) => {
-              if (error) {
-                this.$Logger.log('file send error', error)
-                document.body.style.cursor = PropCommonEnum.DEFAULT
-              }
-            })
-        }
-      }
+      // set id in case recipient changes during send
+      const conversationId = this.$route.params.id
+      // send files logic
       document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/deleteFiles', recipient.address)
+      this.$store.commit('chat/deleteFiles', conversationId)
+    },
+
+    showSettings() {
+      this.$toast.error(
+        this.$t('pages.files.errors.enable_consent') as string,
+        {
+          duration: 3000,
+        },
+      )
+      this.$store.commit('ui/toggleSettings', {
+        show: true,
+        defaultRoute: SettingsRoutes.PRIVACY,
+      })
     },
   },
 })
 </script>
 <style scoped lang="less" src="./Chatbar.less"></style>
-<style lang="less">
-.messageuser {
-  &.editable-container {
-    > div {
-      padding: 14px 0;
-    }
-  }
-  blockquote {
-    border-left: 4px solid @text-muted;
-    padding-left: @light-spacing;
-  }
-  p {
-    font-size: @text-size !important;
-    .chatbar-tag {
-      &:extend(.round-corners);
-      background: @midground;
-      padding: @xlight-spacing;
-    }
-  }
-}
-</style>

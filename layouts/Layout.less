@@ -84,14 +84,6 @@
       flex: 1;
     }
 
-    #chatbar {
-      &:extend(.full-width);
-      min-width: 0;
-      justify-content: flex-end;
-      transition: height @animation-speed;
-      margin-bottom: 1rem;
-    }
-
     &.fullscreen-media {
       .media-open {
         margin-top: 0;
@@ -106,9 +98,6 @@
       }
       #mediastream {
         height: calc(@full - @toolbar-height - @light-spacing);
-      }
-      #chatbar {
-        &:extend(.first-layer);
       }
     }
   }

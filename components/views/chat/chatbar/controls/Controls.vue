@@ -19,9 +19,6 @@ export default Vue.extend({
     ArrowRightIcon,
   },
   props: {
-    sendMessage: {
-      type: Function,
-    },
     disabled: {
       type: Boolean,
     },

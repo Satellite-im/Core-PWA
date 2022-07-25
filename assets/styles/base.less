@@ -601,22 +601,6 @@ button {
   background: @foreground;
 }
 
-// Chatbar
-#chatbar {
-  .chatbar-controls {
-    .send-message-btn {
-      &:extend(.font-flair);
-    }
-    [disabled] {
-      color: grey;
-    }
-  }
-
-  .chat-label {
-    &:extend(.background-flair);
-  }
-}
-
 .is-chatbar-reply {
   &:extend(.background-flair);
 }
@@ -624,17 +608,6 @@ button {
 #chat-mobile-sidebar {
   .label {
     &:extend(.background-flair);
-  }
-}
-
-//Editable
-.editable-container {
-  .editable-input {
-    .chat-row-content {
-      .md-url {
-        &:extend(.font-flair);
-      }
-    }
   }
 }
 

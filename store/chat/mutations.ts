@@ -7,6 +7,7 @@ import {
   ChatText,
   ChatFileUpload,
 } from '~/store/chat/types'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const mutations = {
   chatText(state: ChatState, req: ChatText) {
@@ -33,38 +34,38 @@ const mutations = {
     state: ChatState,
     {
       file,
-      address,
+      id,
     }: {
       file: ChatFileUpload
-      address: string
+      id: Conversation['id']
     },
   ) {
-    state.files[address]
-      ? state.files[address].push(file)
-      : Vue.set(state.files, address, [file])
+    state.files[id]
+      ? state.files[id].push(file)
+      : Vue.set(state.files, id, [file])
     // Vue can't detect new objects automatically, hence set syntax https://forum.vuejs.org/t/mutation-not-updating-data-in-vuex/102124
   },
   removeFile(
     state: ChatState,
     {
-      address,
+      id,
       index,
     }: {
-      address: string
+      id: Conversation['id']
       index: number
     },
   ) {
-    state.files[address].splice(index, 1)
+    state.files[id].splice(index, 1)
   },
   setFileProgress(
     state: ChatState,
     {
-      address,
+      id,
       index,
       progress,
-    }: { address: string; index: number; progress: number },
+    }: { id: Conversation['id']; index: number; progress: number },
   ) {
-    state.files[address][index].progress = progress
+    state.files[id][index].progress = progress
   },
   deleteFiles(state: ChatState, address: string) {
     Vue.delete(state.files, address)

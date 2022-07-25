@@ -1,10 +1,9 @@
 <template src="./Item.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
 import { FileIcon, XIcon } from 'satellite-lucide-icons'
 import { ChatFileUpload } from '~/store/chat/types'
-import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -17,15 +16,10 @@ export default Vue.extend({
       required: true,
     },
   },
-  data: () => ({
-    url: '',
-  }),
-
   computed: {
-    ...mapState({
-      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
-      messageLoading: (state) => (state as RootState).textile.messageLoading,
-    }),
+    blockNsfw(): boolean {
+      return iridium.settings.state.privacy.blockNsfw
+    },
   },
 })
 </script>
