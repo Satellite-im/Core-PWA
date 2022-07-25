@@ -38,8 +38,9 @@ export default Vue.extend({
     },
     isDev(): boolean {
       if (
-        location.href.startsWith('http://localhost') ||
-        location.href.startsWith('https://core-dev')
+        location.href.startsWith('http://localhost') || // local
+        location.href.startsWith('https://core-dev') || // dev build
+        location.host.endsWith('.on.fleek.co') // preview deploys
       ) {
         return true
       }
