@@ -122,7 +122,7 @@ export default class WebRTCManager extends Emitter {
           )
           if (connectedParticipant) {
             $Logger.log(loggerPrefix, `connected participant: ${peerId}`)
-            await this.iridium.chat.saveConversation({
+            this.iridium.chat.updateConversation({
               ...conversation,
               participants: conversation.participants.map((participant) => {
                 if (participant.peerId === connectedParticipant.peerId) {
@@ -170,7 +170,7 @@ export default class WebRTCManager extends Emitter {
           )
           if (disconnectedParticipant) {
             $Logger.log(loggerPrefix, `disconnected participant: ${peerId}`)
-            await this.iridium.chat.saveConversation({
+            this.iridium.chat.updateConversation({
               ...conversation,
               participants: conversation.participants.map((participant) => {
                 if (participant.peerId === disconnectedParticipant.peerId) {
@@ -387,7 +387,7 @@ export default class WebRTCManager extends Emitter {
         (participant) => participant.peerId === peerId,
       )
       if (typingParticipant) {
-        await this.iridium.chat.saveConversation({
+        this.iridium.chat.updateConversation({
           ...conversation,
           participants: conversation.participants.map((participant) => {
             if (participant.peerId === typingParticipant.peerId) {
@@ -438,7 +438,7 @@ export default class WebRTCManager extends Emitter {
         (participant) => participant.peerId === peerId,
       )
       if (requestParticipant) {
-        await this.iridium.chat.saveConversation({
+        this.iridium.chat.updateConversation({
           ...conversation,
           participants: conversation.participants.map((participant) => {
             if (participant.peerId === requestParticipant.peerId) {

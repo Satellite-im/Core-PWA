@@ -87,13 +87,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
 
-  async saveConversation(conversation: Conversation) {
-    await this.iridium.connector?.set(
-      `/chat/conversation/${conversation.id}`,
-      conversation,
-    )
-  }
-
   // async onConversationMessage(
   //   conversationId: string,
   //   message: ConversationPubsubEvent,
@@ -187,6 +180,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
     return conversation
+  }
+
+  public updateConversation(conversation: Conversation) {
+    this.state.conversations = {
+      ...this.state.conversations,
+      [conversation.id]: { ...conversation },
+    }
   }
 
   /**
