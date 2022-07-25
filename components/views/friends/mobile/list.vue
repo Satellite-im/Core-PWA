@@ -114,7 +114,7 @@ export default Vue.extend({
     MoreVerticalIcon,
   },
   mixins: [ContextMenu],
-  layout: 'friends',
+  layout: 'basic',
   data() {
     return {
       route: 'active',

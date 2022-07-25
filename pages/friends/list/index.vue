@@ -7,7 +7,7 @@ import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   name: 'FriendsList',
-  layout: 'friends',
+  layout: 'basic',
   data() {
     return {
       route: 'active',
