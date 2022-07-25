@@ -3,20 +3,24 @@
     id="app-wrap"
     :class="[
       `theme-${settings.theme}`,
-      showSidebar ? 'is-open' : 'is-collapsed',
+      showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed',
     ]"
   >
     <div
       id="app"
       :class="[
-        showSidebar ? 'is-open' : 'is-collapsed',
+        showSidebar && swiperSlideIndex == 0 ? 'is-open' : 'is-collapsed',
         $device.isMobile ? 'mobile-app' : 'desktop',
         isBackgroundCall ? 'has-background-call' : '',
       ]"
     >
       <UiGlobal />
 
-      <swiper ref="swiper" class="swiper" :options="swiperOption">
+      <swiper
+        ref="swiper"
+        class="swiper"
+        :options="{ ...swiperOption, initialSlide: swiperSlideIndex }"
+      >
         <swiper-slide class="sidebar-container">
           <Slimbar
             v-if="!$device.isMobile"
@@ -25,24 +29,24 @@
           />
           <MobileSidebar
             v-if="$device.isMobile"
+            :show-menu="toggleMenu"
             :users="friends.all"
             :groups="$mock.groups"
             :sidebar="showSidebar"
-            :show-menu="toggleMenu"
           />
           <Sidebar v-if="!$device.isMobile" :sidebar="showSidebar" />
         </swiper-slide>
         <swiper-slide class="dynamic-content">
-          <DroppableWrapper @handle-drop-prop="handleDrop">
-            <menu-icon
-              v-if="!showSidebar || $device.isMobile"
-              class="toggle--sidebar"
-              size="1.2x"
-              full-width
-              @click="toggleMenu"
-            />
-            <Nuxt id="files" ref="files" />
-          </DroppableWrapper>
+          <menu-icon
+            v-if="!showSidebar || !$device.isMobile"
+            class="toggle--sidebar"
+            data-cy="toggle-sidebar"
+            size="1.2x"
+            full-width
+            :style="`${!showSidebar ? 'display: block' : 'display: none'}`"
+            @click="toggleMenu"
+          />
+          <Nuxt id="friends" ref="chat" />
         </swiper-slide>
       </swiper>
     </div>
@@ -59,20 +63,17 @@
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
-import DroppableWrapper from '~/components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
-import { SettingsRoutes } from '~/store/ui/types'
-import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  name: 'FilesLayout',
+  name: 'ChatLayout',
   components: {
     MenuIcon,
-    DroppableWrapper,
   },
   mixins: [Touch, Layout],
   middleware: 'authenticated',
@@ -92,24 +93,34 @@ export default Vue.extend({
         on: {
           slideChange: () => {
             if (this.$refs.swiper && this.$refs.swiper.$swiper) {
-              const newShowSidebar = this.$refs.swiper.$swiper.activeIndex === 0
-              if (this.showSidebar !== newShowSidebar) {
-                this.$store.commit('ui/showSidebar', newShowSidebar)
+              const activeIndex = this.$refs.swiper.$swiper.activeIndex
+              this.$store.commit('ui/setSwiperSlideIndex', activeIndex)
+
+              const newShowSidebar = activeIndex === 0
+
+              // force virtual keyboard hide on mobile when swiper slide change
+              if (newShowSidebar) {
+                document.activeElement.blur()
               }
+
+              // if slide active index is set as 0, set showSidebar flag true, else set as false
+              if (newShowSidebar) {
+                this.$store.commit('ui/showSidebar', true)
+                return
+              }
+              this.$store.commit('ui/showSidebar', false)
             }
           },
         },
       },
     }
   },
+
   computed: {
     ...mapState({
       friends: (state) => (state as RootState).friends,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
     }),
-    ...mapGetters('ui', ['showSidebar']),
-    ...mapGetters('textile', ['getInitialized']),
+    ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     ...mapGetters('webrtc', ['isBackgroundCall']),
     flair(): Flair {
       return flairs[((this as any).settings as Settings).flair]
@@ -119,16 +130,16 @@ export default Vue.extend({
     showSidebar(newValue, oldValue) {
       if (newValue !== oldValue) {
         newValue
-          ? this.$refs.swiper.$swiper.slidePrev()
-          : this.$refs.swiper.$swiper.slideNext()
+          ? this.$refs.swiper?.$swiper.slidePrev()
+          : this.$refs.swiper?.$swiper.slideNext()
       }
     },
     $route() {
       this.showInitialSidebar()
     },
-  },
-  mounted() {
-    this.showInitialSidebar()
+    mounted() {
+      this.showInitialSidebar()
+    },
   },
   methods: {
     toggleMenu() {
@@ -140,41 +151,6 @@ export default Vue.extend({
         return
       }
       this.$store.commit('ui/showSidebar', true)
-    },
-    /**
-     * @method handleDrop
-     * @description Allows the drag and drop of files into the filesystem
-     * @param e Drop event data object
-     */
-    handleDrop(e: DragEvent) {
-      e.preventDefault()
-
-      if (!this.getInitialized) {
-        return
-      }
-
-      if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
-        return
-      }
-
-      // if already uploading, return to prevent bucket fast-forward crash
-
-      if (e?.dataTransfer) {
-        const files: (File | null)[] = [...e.dataTransfer.items].map((f) =>
-          f.getAsFile(),
-        )
-        this.$refs.files.$children[0].$refs.controls.handleFile(files)
-      }
     },
   },
 })
