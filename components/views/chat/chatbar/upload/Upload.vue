@@ -42,16 +42,7 @@ const Upload = Vue.extend({
      */
     clickFileInput() {
       if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
+        this.$store.dispatch('ui/displayConsentSettings')
         return
       }
 
@@ -64,10 +55,14 @@ const Upload = Vue.extend({
      * @param event Input event object
      * @example <input @change="handleFile" />
      */
-    async handleFile(event: any) {
+    async handleFile(event: InputEvent) {
       this.$store.dispatch('ui/setChatbarFocus')
       this.$store.commit('chat/setCountError', false)
-      const newFiles: File[] = [...event.target.files]
+      const target = event.target as HTMLInputElement
+      if (target.files === null) {
+        return
+      }
+      const newFiles: File[] = [...target?.files]
 
       if (
         newFiles.length + this.files.length >
@@ -121,7 +116,7 @@ const Upload = Vue.extend({
     },
   },
 })
-export type UploadRef = InstanceType<typeof Upload>
+export type ChatbarUploadRef = InstanceType<typeof Upload>
 export default Upload
 </script>
 <style scoped lang="less" src="./Upload.less"></style>

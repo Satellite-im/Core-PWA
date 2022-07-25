@@ -14,7 +14,7 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ItemErrors } from '~/libraries/Iridium/files/types'
 
-export default Vue.extend({
+const Controls = Vue.extend({
   components: {
     FolderPlusIcon,
     FilePlusIcon,
@@ -33,6 +33,9 @@ export default Vue.extend({
       path: (state) => (state as RootState).files.path,
       status: (state) => (state as RootState).files.status,
     }),
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
   },
   methods: {
     /**
@@ -40,20 +43,10 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      // comment until we have the settings store figured out. some will need to be remote across instances, some should be local only
-      // if (!this.consentToScan) {
-      //   this.$toast.error(
-      //     this.$t('pages.files.errors.enable_consent') as string,
-      //     {
-      //       duration: 3000,
-      //     },
-      //   )
-      //   this.$store.commit('ui/toggleSettings', {
-      //     show: true,
-      //     defaultRoute: SettingsRoutes.PRIVACY,
-      //   })
-      //   return
-      // }
+      if (!this.consentToScan) {
+        this.$store.dispatch('ui/displayConsentSettings')
+        return
+      }
       if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
     },
 
@@ -151,5 +144,7 @@ export default Vue.extend({
     },
   },
 })
+export type FilesControlsRef = InstanceType<typeof Controls>
+export default Controls
 </script>
 <style scoped lang="less" src="./Controls.less"></style>

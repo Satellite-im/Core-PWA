@@ -119,6 +119,7 @@ import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
+import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -179,12 +180,9 @@ export default Vue.extend({
       groups: (state) => (state as RootState).groups,
       dataState: (state) => (state as RootState).dataState,
       conversation: (state) => (state as RootState).conversation,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
       webrtc: (state) => (state as RootState).webrtc,
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
-    ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('conversation', ['recipient']),
     ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     DataStateType: () => DataStateType,
@@ -212,6 +210,9 @@ export default Vue.extend({
       //         (friend: Friend) => friend.peerId === this.conversation.id,
       //       )
       // return recipient
+    },
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
     },
     flair(): Flair {
       return flairs[((this as any).settings as Settings).flair]
@@ -273,26 +274,14 @@ export default Vue.extend({
      */
     handleDrop(e: DragEvent) {
       e.preventDefault()
-
-      if (!this.getInitialized) {
-        return
-      }
-
       if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
+        this.$store.dispatch('ui/displayConsentSettings')
         return
       }
-      if (e?.dataTransfer) {
-        this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
+      if (e?.dataTransfer && this.$refs.chatbar) {
+        ;(this.$refs.chatbar as ChatbarRef).handleUpload([
+          ...e.dataTransfer.items,
+        ])
       }
     },
   },

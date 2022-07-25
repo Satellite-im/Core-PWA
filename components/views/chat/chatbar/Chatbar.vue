@@ -15,9 +15,9 @@ import { ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { SettingsRoutes } from '~/store/ui/types'
-import { UploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
+import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
 
-export default Vue.extend({
+const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
   },
@@ -29,7 +29,6 @@ export default Vue.extend({
         return state.chat.files?.[this.$route.params.id] ?? []
       },
     }),
-
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan
     },
@@ -285,10 +284,6 @@ export default Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: DataTransferItem[]) {
-      if (!this.consentToScan) {
-        this.showSettings()
-      }
-
       const files = items
         .filter((f) => {
           return f.kind !== MessagingTypesEnum.STRING
@@ -296,7 +291,9 @@ export default Vue.extend({
         .map((f) => f.getAsFile())
 
       if (files.length && this.$refs.upload) {
-        ;(this.$refs.upload as UploadRef).handleFile({ target: { files } })
+        ;(this.$refs.upload as ChatbarUploadRef).handleFile({
+          target: { files },
+        })
       }
     },
     handleChatTextFromOutside(text: string) {
@@ -313,20 +310,9 @@ export default Vue.extend({
       document.body.style.cursor = PropCommonEnum.DEFAULT
       this.$store.commit('chat/deleteFiles', conversationId)
     },
-
-    showSettings() {
-      this.$toast.error(
-        this.$t('pages.files.errors.enable_consent') as string,
-        {
-          duration: 3000,
-        },
-      )
-      this.$store.commit('ui/toggleSettings', {
-        show: true,
-        defaultRoute: SettingsRoutes.PRIVACY,
-      })
-    },
   },
 })
+export type ChatbarRef = InstanceType<typeof Chatbar>
+export default Chatbar
 </script>
 <style scoped lang="less" src="./Chatbar.less"></style>
