@@ -38,8 +38,8 @@ export default Vue.extend({
     },
     isDev(): boolean {
       if (
-        location.href.includes('localhost') ||
-        location.href.includes('core-dev')
+        location.href.startsWith('http://localhost') ||
+        location.href.startsWith('https://core-dev')
       ) {
         return true
       }
