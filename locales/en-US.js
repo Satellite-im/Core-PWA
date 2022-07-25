@@ -216,8 +216,13 @@ export default {
       decrypt: 'Decrypt Account',
       create: 'Create Account Pin',
       placeholder: 'Enter Pin...',
+      choose_pin: 'Choose Your Pin',
+      choose_pin_description_1: 'Create a pin to protect your account.',
+      choose_pin_description_2:
+        "The pin can be anything you want, just don't forget it.",
       store_pin: 'Store Pin? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
+      generate_random_user: 'Generate a Random User (DEV)',
     },
     loading: {
       loading: 'Linking Satellites...',

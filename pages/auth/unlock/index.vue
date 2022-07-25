@@ -36,6 +36,15 @@ export default Vue.extend({
         return !this.accounts ? false : this.accounts.storePin
       },
     },
+    isDev(): boolean {
+      if (
+        location.href.includes('localhost') ||
+        location.href.includes('core-dev')
+      ) {
+        return true
+      }
+      return false
+    },
   },
   watch: {
     error(newValue) {
