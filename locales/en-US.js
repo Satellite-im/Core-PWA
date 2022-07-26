@@ -621,6 +621,7 @@ export default {
       friend_info_not_found: 'Seems that this user is not registered',
       textile_not_initialized: 'Your account is not ready. Try later',
       friend_not_removed: 'Could not remove friend',
+      network: 'We are experiencing network issues, please try again later',
     },
     chat: {
       drop_file_count: 'Sorry, you can only upload 8 files at a time',
@@ -801,11 +802,12 @@ export default {
     unshare: 'Unshare',
     rename: 'Rename',
     delete: 'Delete',
-    // friends
+    // SidebarListItem
     send: 'Send Message',
     voice: 'Start Call',
     video: 'Video Call',
     remove: 'Remove Friend',
+    leave_group: 'Leave Group',
     profile: 'Profile',
     // message
     edit: 'Edit Message',

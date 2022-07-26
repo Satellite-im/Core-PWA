@@ -2,11 +2,11 @@
   class="item"
   :class="{'is-loading' : isLoading , selected : isSelected}"
   @contextmenu="contextMenu"
-  @click="navigateToUser"
+  @click="openConversation"
   data-cy="sidebar-user"
 >
-  <UiUserState v-if="conversation.type === 'direct'" :user="details" />
-  <UiGroupIcon v-else :group="details" />
+  <!-- <UiUserState v-if="conversation.type === 'direct'" :user="details" /> -->
+  <!-- <UiGroupIcon v-else :group="details" /> -->
   <div class="user-info">
     <TypographyTitle
       :size="6"
