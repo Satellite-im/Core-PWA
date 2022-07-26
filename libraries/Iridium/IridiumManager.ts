@@ -57,7 +57,6 @@ export class IridiumManager extends Emitter {
     this.connector = await createIridiumIPFS(entropy, {
       logger,
       nodes: Config.iridium.syncNodes,
-      ipfs: Config.iridium.ipfs,
     })
 
     logger.log('iridium/manager', 'connector initialized', {

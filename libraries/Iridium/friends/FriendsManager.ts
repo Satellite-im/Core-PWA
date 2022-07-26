@@ -273,9 +273,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       did,
       request,
     })
-    Vue.set(this.state.requests, didUtils.didString(did), request)
     await this.set(`/requests/${didUtils.didString(did)}`, request)
-    await this.set(`/requests`, this.state.requests)
+    Vue.set(this.state.requests, didUtils.didString(did), request)
 
     if (!request.incoming && request.status === 'pending') {
       await this.requestSend(did)
@@ -358,9 +357,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
-    Vue.set(this.state.requests, didUtils.didString(did), request)
     await this.set(`/requests/${didUtils.didString(did)}`, request)
-    await this.set(`/requests`, this.state.requests)
+    Vue.set(this.state.requests, didUtils.didString(did), request)
 
     if (request.incoming) {
       const profile = await this.iridium.profile?.get()
