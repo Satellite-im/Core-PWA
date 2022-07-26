@@ -35,7 +35,7 @@ export default Vue.extend({
           : false
         const timeDiff = prevMessage ? message.at - prevMessage.at : 0
         const isNextDay = prevMessage
-          ? !this.$dayjs(prevMessage.at).isSame(message.at, 'minute')
+          ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
           : false
         const lastReadAt = this.conversation.lastReadAt
         const isFirstUnreadMessage =
