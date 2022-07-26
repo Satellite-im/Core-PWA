@@ -1,9 +1,5 @@
 <div class="file-item" data-cy="file-item">
-  <button
-    class="close"
-    :class="{disabled: messageLoading}"
-    @click="!messageLoading && $emit('removeUploadItem')"
-  >
+  <button class="close" @click="$emit('removeUploadItem')">
     <x-icon size="1x" />
   </button>
   <div v-if="item.thumbnail" class="image-container">

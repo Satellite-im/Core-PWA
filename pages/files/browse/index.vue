@@ -6,9 +6,10 @@ import { mapState, mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
 import { RootState } from '~/types/store/store'
-import { ModalWindows, SettingsRoutes } from '~/store/ui/types'
+import { ModalWindows } from '~/store/ui/types'
 import { FileRouteEnum } from '~/libraries/Enums/enums'
 import DroppableWrapper from '~/components/ui/DroppableWrapper/DroppableWrapper.vue'
+import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 
 export default Vue.extend({
   name: 'Files',
@@ -27,13 +28,13 @@ export default Vue.extend({
       path: (state) => (state as RootState).files.path,
       gridLayout: (state) => (state as RootState).files.gridLayout,
       modals: (state) => (state as RootState).ui.modals,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
     }),
     ...mapGetters({
       sortedItems: 'files/sortedItems',
     }),
-    ...mapGetters('textile', ['getInitialized']),
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
     directory(): IridiumItem[] {
       return this.sortedItems(this.items, this.$route.query.route)
     },
@@ -110,31 +111,17 @@ export default Vue.extend({
     handleDrop(e: DragEvent) {
       e.preventDefault()
 
-      if (!this.getInitialized) {
-        return
-      }
-
       if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
+        this.$store.dispatch('ui/displayConsentSettings')
         return
       }
 
       // if already uploading, return to prevent bucket fast-forward crash
-
-      if (e?.dataTransfer) {
+      if (e.dataTransfer) {
         const files: (File | null)[] = [...e.dataTransfer.items].map((f) =>
           f.getAsFile(),
         )
-        this.$refs.files?.$children[0].$refs.controls.handleFile(files)
+        ;(this.$refs.controls as FilesControlsRef).handleFile(files)
       }
     },
   },

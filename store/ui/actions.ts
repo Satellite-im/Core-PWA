@@ -1,6 +1,6 @@
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
-import { Position, UIState } from './types'
+import { Position, SettingsRoutes, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
@@ -197,5 +197,15 @@ export default {
       commit('friends/updateFriend', friend, { root: true })
     }
     commit('setUserProfile', friend)
+  },
+
+  displayConsentSettings({ commit }: ActionsArguments<UIState>) {
+    this.$toast.error(this.$i18n.t('pages.files.errors.enable_consent'), {
+      duration: 3000,
+    })
+    commit('toggleSettings', {
+      show: true,
+      defaultRoute: SettingsRoutes.PRIVACY,
+    })
   },
 }

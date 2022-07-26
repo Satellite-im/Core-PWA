@@ -1,8 +1,7 @@
 .chatbar-controls {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
 
-  .control-tooltip-wrap {
+  button {
     font-size: @larger-icon-size;
     padding: 12px @light-spacing;
     display: inline-flex;
@@ -17,6 +16,11 @@
     }
     &[disabled] {
       cursor: not-allowed !important;
+      color: @gray;
+    }
+
+    &.send-message-btn {
+      &:extend(.font-flair);
     }
   }
 }

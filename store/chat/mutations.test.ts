@@ -365,7 +365,7 @@ describe('module.default.setChatReply', () => {
   })
 })
 
-describe('module.default.addFile', () => {
+describe.skip('module.default.addFile', () => {
   test('0', () => {
     const object: any = [
       ['index.js', 'index.js', 'image.png', 'program.exe'],
@@ -427,7 +427,7 @@ describe('module.default.addFile', () => {
   })
 })
 
-describe('module.default.deleteFiles', () => {
+describe.skip('module.default.deleteFiles', () => {
   test('0', () => {
     const object: any = [
       ['image.png', 'install.deb', 'image.png', 'program.exe'],
@@ -1047,7 +1047,7 @@ describe('misc', () => {
     })
   })
 
-  test('module.removeFile', () => {
+  test.skip('module.removeFile', () => {
     const localState = {
       ...InitialChatState,
       files: {
@@ -1071,7 +1071,7 @@ describe('misc', () => {
     expect(localState.files).toEqual({ file1: [] })
   })
 
-  test('module.setFileProgress', () => {
+  test.skip('module.setFileProgress', () => {
     const localState = {
       ...InitialChatState,
       files: {

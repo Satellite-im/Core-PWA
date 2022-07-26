@@ -1,29 +1,30 @@
 <template src="./Upload.html"></template>
 <script lang="ts">
-import { FilePlusIcon, PlusIcon } from 'satellite-lucide-icons'
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
+import { PlusIcon } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
 import { SettingsRoutes } from '~/store/ui/types'
-import { RootState } from '~/types/store/store'
 import createThumbnail from '~/utilities/Thumbnail'
 import { blobToBase64 } from '~/utilities/BlobManip'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { RootState } from '~/types/store/store'
+
 const convert = require('heic-convert')
 
-export default Vue.extend({
+const Upload = Vue.extend({
   components: {
     PlusIcon,
-    FilePlusIcon,
   },
   computed: {
     ...mapState({
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
+      files(state: RootState) {
+        return state.chat.files?.[this.$route.params.id] ?? []
+      },
     }),
-    ...mapGetters({
-      getFiles: 'chat/getFiles',
-      recipient: 'conversation/recipient',
-    }),
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
   },
   methods: {
     /**
@@ -41,16 +42,7 @@ export default Vue.extend({
      */
     clickFileInput() {
       if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
+        this.$store.dispatch('ui/displayConsentSettings')
         return
       }
 
@@ -63,22 +55,23 @@ export default Vue.extend({
      * @param event Input event object
      * @example <input @change="handleFile" />
      */
-    async handleFile(event: any) {
+    async handleFile(event: InputEvent) {
       this.$store.dispatch('ui/setChatbarFocus')
       this.$store.commit('chat/setCountError', false)
-      if (!this.recipient) {
+      const target = event.target as HTMLInputElement
+      if (target.files === null) {
         return
       }
-      const newFiles: File[] = [...event.target.files]
+      const newFiles: File[] = [...target?.files]
 
       if (
-        newFiles.length + this.getFiles.length >
+        newFiles.length + this.files.length >
         this.$Config.chat.uploadMaxLength
       ) {
         this.$store.commit('chat/setCountError', true)
         return
       }
-      const address = this.recipient?.address
+      const id = this.$route.params.id
 
       const filesToAdd: { file: File; nsfw: boolean }[] = await Promise.all(
         newFiles.map(async (file: File) => {
@@ -117,11 +110,13 @@ export default Vue.extend({
             progress: 0,
             thumbnail: thumbnail ? await blobToBase64(thumbnail) : '',
           },
-          address,
+          id,
         })
       }
     },
   },
 })
+export type ChatbarUploadRef = InstanceType<typeof Upload>
+export default Upload
 </script>
 <style scoped lang="less" src="./Upload.less"></style>
