@@ -86,7 +86,7 @@ const actions = {
           ? 'CONNECTED'
           : 'DISCONNECTED'
         : participant?.state || 'DISCONNECTED',
-      profilePicture: participant?.profilePicture,
+      profilePicture: friend?.profilePicture || participant?.profilePicture,
       activity: ConversationActivity.NOT_TYPING,
     }
 
