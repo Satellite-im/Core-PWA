@@ -5,11 +5,10 @@
   @click="openConversation"
   data-cy="sidebar-user"
 >
-  <UiUserState
-    v-if="conversation.type === 'direct' && details"
-    :user="details"
-  />
-  <UiGroupIcon v-else-if="details" :group="details" />
+  <template v-if="details">
+    <UiUserState v-if="conversation.type === 'direct'" :user="details" />
+    <UiGroupIcon v-else :group="details" />
+  </template>
   <div class="user-info">
     <TypographyTitle
       :size="6"
