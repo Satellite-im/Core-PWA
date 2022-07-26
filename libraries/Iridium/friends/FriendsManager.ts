@@ -1,4 +1,10 @@
-import { IridiumPeerIdentifier, Emitter, didUtils, encoding } from '@satellite-im/iridium'
+import Vue from 'vue'
+import {
+  IridiumPeerIdentifier,
+  Emitter,
+  didUtils,
+  encoding,
+} from '@satellite-im/iridium'
 import type {
   IridiumMessage,
   IridiumGetOptions,
@@ -36,8 +42,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     requests: {},
     blocked: [],
   }
-
-  public updatedAt: number = 0
 
   private loggerTag = 'iridium/friends'
 
@@ -142,7 +146,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       await this.requestSave(from, request)
     }
     if (request && user && status === 'accepted') {
-      this.state.details[user.did] = user
+      Vue.set(this.state.details, user.did, user)
       await this.set(`/details/${from}`, user)
     }
     return this.state
@@ -175,7 +179,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns iridium's connector result
    */
   set(path: string, payload: any, options: IridiumSetOptions = {}) {
-    this.updatedAt = Date.now()
     logger.info(this.loggerTag, 'path, paylaod and state', {
       path,
       payload,
@@ -270,7 +273,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       did,
       request,
     })
-    this.state.requests[didUtils.didString(did)] = request
+    Vue.set(this.state.requests, didUtils.didString(did), request)
     await this.set(`/requests/${didUtils.didString(did)}`, request)
     await this.set(`/requests`, this.state.requests)
 
@@ -355,7 +358,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
-    this.state.requests[didUtils.didString(did)] = request
+    Vue.set(this.state.requests, didUtils.didString(did), request)
     await this.set(`/requests/${didUtils.didString(did)}`, request)
     await this.set(`/requests`, this.state.requests)
 
@@ -424,10 +427,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       did: user.did,
       type: 'peer',
     })
-    this.state.details[user.did] = user
+    Vue.set(this.state.details, user.did, user)
     await this.set(`/details/${user.did}`, user)
- if (!user.name) return
-    const id = await encoding.hash([user.did, this.iridium.connector?.id].sort())
+    if (!user.name) return
+    const id = await encoding.hash(
+      [user.did, this.iridium.connector?.id].sort(),
+    )
     if (id && !this.iridium.chat.hasConversation(id)) {
       await this.iridium.chat.createConversation({
         id,
@@ -437,6 +442,14 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       })
     }
 
+    // TODO: needs updated ChatManager
+    if (id && !this.iridium.chat.hasConversation(id)) {
+      // return this.iridium.chat?.createConversation({
+      //   name: user.name,
+      //   type: 'direct',
+      //   participants: [user.did, this.iridium.connector.id],
+      // })
+    }
     const request = await this.getRequest(user.did)
 
     if (request.incoming) {
@@ -479,6 +492,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       status: 'removed',
       at: Date.now(),
       user: {
+        name: profile.name,
         did: this.iridium.connector.id,
       },
     }
@@ -501,7 +515,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       throw new Error(FriendsError.FRIEND_NOT_FOUND)
     }
 
-    delete this.state.details[remotePeerDID]
+    Vue.set(this.state.details, remotePeerDID, null)
     await this.set('/details', this.state.details)
   }
 }
