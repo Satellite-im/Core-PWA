@@ -66,11 +66,7 @@
     </div>
     <SidebarList />
     <div class="list-container hover-scroll">
-      <UiLoadersAddress
-        v-if="dataState.friends === DataStateType.Loading"
-        :count="4"
-        inverted
-      />
+      <UiLoadersAddress v-if="!friendsList" :count="4" inverted />
       <template v-else-if="friendsList && friendsList.length">
         <UiInlineNotification
           v-if="ui.unreadMessage.length"

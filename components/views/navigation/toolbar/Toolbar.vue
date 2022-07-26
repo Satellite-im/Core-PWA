@@ -43,7 +43,7 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
-      friends: iridium.friends.state.list,
+      friends: iridium.friends.list,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
     }

@@ -37,7 +37,7 @@ export default {
    * @param param0 Entropy
    * @param config Textile configuration (id, pass, wallet)
    */
-  async initializFromEntropy(
+  async initializeFromEntropy(
     { commit }: ActionsArguments<IridiumState>,
     entropy: Uint8Array,
   ) {

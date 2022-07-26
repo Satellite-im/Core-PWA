@@ -182,7 +182,7 @@ export default {
       console.info('initializing iridium')
       const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      await dispatch('iridium/initializFromEntropy', entropy, {
+      await dispatch('iridium/initializeFromEntropy', entropy, {
         root: true,
       })
     }
@@ -350,7 +350,7 @@ export default {
       const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
       const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      await dispatch('iridium/initializFromEntropy', entropy, { root: true })
+      await dispatch('iridium/initializeFromEntropy', entropy, { root: true })
     }
 
     await dispatch('groups/initialize', {}, { root: true })

@@ -7,15 +7,8 @@ export const Config = {
   debug: true,
   iridium: {
     syncNodes: [
-      {
-        label: 'Satellite.im Sync Node',
-        peerId:
-          process.env.NUXT_ENV_IRIDIUM_SYNC_PEER_ID ||
-          '12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-        multiaddr:
-          process.env.NUXT_ENV_IRIDIUM_SYNC_ADDR ||
-          '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-      },
+      process.env.NUXT_ENV_IRIDIUM_SYNC_ADDR ||
+        '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
     ],
     ipfs: {
       config: {
