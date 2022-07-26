@@ -11,12 +11,17 @@
     data-cy="circle-has-picture"
     draggable="false"
   />
-  <UiSatelliteCircle
+
+  <div
     v-else-if="type === 'random'"
-    :address="seed"
-    :name="name"
+    class="satellite-circle"
+    :style="`background: ${finalColor}`"
     data-cy="circle-without-picture"
-  />
+  >
+    <satellite-icon v-if="!name" size="0.75x" />
+    <div v-else>{{ firstLetter }}</div>
+  </div>
+
   <UiDynamicIcon size="1x" :icon="icon" v-else-if="icon" />
   <slot></slot>
 </div>
