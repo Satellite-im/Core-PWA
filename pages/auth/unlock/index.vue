@@ -36,6 +36,14 @@ export default Vue.extend({
         return !this.accounts ? false : this.accounts.storePin
       },
     },
+    isDev(): boolean {
+      return (
+        location.href.startsWith('http://localhost') ||
+        location.href.startsWith('https://iridium-dev') ||
+        location.href.startsWith('https://core-dev') ||
+        location.host.endsWith('.on.fleek.co')
+      )
+    },
   },
   watch: {
     error(newValue) {

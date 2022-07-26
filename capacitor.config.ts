@@ -1,14 +1,10 @@
-// import { CapacitorConfig } from '@capacitor/cli'
-import { ElectronCapacitorConfig } from '@capacitor-community/electron'
+import { CapacitorConfig } from '@capacitor/cli'
 
-const config: ElectronCapacitorConfig = {
+const config: CapacitorConfig = {
   appId: 'im.satellite.absolute',
   appName: 'Satellite',
   webDir: 'dist',
   bundledWebRuntime: true,
-  electron: {
-    deepLinkingEnabled: true,
-  },
   plugins: {
     LocalNotifications: {
       smallIcon: 'notification',

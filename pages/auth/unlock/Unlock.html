@@ -3,10 +3,8 @@
     <div v-if="step === 'signup'" class="create_pin_section">
       <info-icon size="0.8x" />
       <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
-      <TypographyText text="Create a pin to protect your account." />
-      <TypographyText
-        text="The pin can be anything you want, just don't forget it."
-      />
+      <TypographyText :text="$t('pages.unlock.choose_pin_description_1')" />
+      <TypographyText :text="$t('pages.unlock.choose_pin_description_2')" />
     </div>
     <InteractablesInputGroup
       v-model="pin"
@@ -14,7 +12,7 @@
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
       :data-cy="`pin-label`"
-      :label="step === 'login' ? $t('pages.unlock.decrypt') : 'Choose Your Pin'"
+      :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="status === 'loading'"
       :action="action"
@@ -35,11 +33,11 @@
     <div class="realm-container">
       <InteractablesRealm />
     </div>
-    <div class="random-user-container">
+    <div class="random-user-container" v-if="isDev">
       <InteractablesButton
         type="primary"
         class="random-user-btn"
-        :text="status === 'loading' ? '': '?'"
+        :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
         :action="createRandom"
         ><UiLoadersSpinner v-if="status === 'loading'" spinning
       /></InteractablesButton>
