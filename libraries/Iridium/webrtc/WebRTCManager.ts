@@ -700,7 +700,7 @@ export default class WebRTCManager extends Emitter {
         ...this.state.streamMuted,
         [this.iridium.connector?.peerId]: {
           ...this.state.streamMuted[this.iridium.connector?.peerId],
-          [kind]: !muted,
+          [kind]: muted,
         },
       }
 
@@ -709,6 +709,26 @@ export default class WebRTCManager extends Emitter {
       // }
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
+
+    const onLocalTrackUnmuted = ({
+      track,
+      kind,
+    }: {
+      track: MediaStreamTrack
+      stream: MediaStream
+      kind?: string | undefined
+    }) => {
+      $Logger.log('webrtc', `local track unmuted: ${track.kind}#${track.id}`)
+
+      this.state.streamMuted = {
+        ...this.state.streamMuted,
+        [this.iridium.connector?.peerId]: {
+          ...this.state.streamMuted[this.iridium.connector?.peerId],
+          [kind]: false,
+        },
+      }
+    }
+    call.on('LOCAL_TRACK_UNMUTED', onLocalTrackUnmuted)
 
     const onCallPeerTrack = ({
       track,

@@ -104,6 +104,11 @@ export interface CallEventListeners {
     stream: MediaStream
     kind?: string
   }) => void
+  LOCAL_TRACK_UNMUTED: (data: {
+    track: MediaStreamTrack
+    stream: MediaStream
+    kind?: string
+  }) => void
   DESTROY: (data: { peerId: string; callId?: string }) => void
   ANSWERED: (data: { peerId: string; callId?: string }) => void
 }

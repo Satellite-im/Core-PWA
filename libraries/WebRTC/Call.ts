@@ -825,7 +825,7 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     // tell all of the peers that we unmuted the track
-    this.emit('LOCAL_TRACK_CREATED', {
+    this.emit('LOCAL_TRACK_UNMUTED', {
       track,
       kind,
       stream,
