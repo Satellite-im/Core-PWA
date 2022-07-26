@@ -3,7 +3,10 @@
   data-cy="add-passphrase"
   v-click-outside="lostFocus"
 >
-  <div class="search-box" :class="{'right-icon': clearIcon && searchText.length > 0}">
+  <div
+    class="search-box"
+    :class="{'right-icon': clearIcon && searchText.length > 0}"
+  >
     <input
       v-model="searchText"
       :class="`input is-${size} is-${type}`"
