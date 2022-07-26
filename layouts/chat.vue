@@ -54,7 +54,7 @@
               full-width
               @click="toggleMenu"
             />
-            <Toolbar v-if="recipient" id="toolbar" :recipient="recipient" />
+            <Toolbar id="toolbar" />
             <Media
               v-if="$device.isMobile"
               :fullscreen="ui.fullscreen"
@@ -114,8 +114,6 @@ import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
 import { SettingsRoutes } from '~/store/ui/types'
-import type { Friend } from '~/libraries/Iridium/friends/types'
-import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
