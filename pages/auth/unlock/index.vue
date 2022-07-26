@@ -40,6 +40,7 @@ export default Vue.extend({
       return (
         location.href.startsWith('http://localhost') ||
         location.href.startsWith('https://iridium-dev') ||
+        location.href.startsWith('https://core-dev') ||
         location.host.endsWith('.on.fleek.co')
       )
     },
