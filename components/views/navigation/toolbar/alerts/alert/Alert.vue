@@ -8,11 +8,16 @@ import {
   Notification,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
     alert: {
       type: Object as PropType<Notification>,
+      required: true,
+    },
+    alertDid: {
+      type: String,
       required: true,
     },
   },
@@ -58,8 +63,9 @@ export default Vue.extend({
     },
   },
   methods: {
-    removeNotification() {
-      this.$store.commit('ui/removeNotification', this.alert.id)
+    removeNotification(id: string) {
+      console.log(this.alert)
+      iridium.notifications.deleteNotification(this.alertDid)
     },
     notificationLink(alertType: NotificationType) {
       switch (alertType) {

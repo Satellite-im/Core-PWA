@@ -12,7 +12,8 @@
     />
     <ToolbarAlertsAlert
       v-for="notification in notifications"
-      :alert="notification"
+      :alert="notification[1]"
+      :alertDid="notification[0]"
       :key="notification.id"
     />
   </template>

@@ -18,11 +18,10 @@ export default Vue.extend({
   computed: {
     ...mapState({
       notifications: () =>
-        Object.values(iridium.notifications?.state).sort(
-          (a: Notification, b: Notification) => {
-            return b.at - a.at
-          },
-        ),
+        Object.entries(iridium.notifications?.state).sort((a: any, b: any) => {
+          console.log(a)
+          return b.at - a.at
+        }),
     }),
   },
   methods: {
