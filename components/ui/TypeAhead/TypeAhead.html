@@ -3,17 +3,17 @@
   data-cy="add-passphrase"
   v-click-outside="lostFocus"
 >
-  <div :class="{'search-box': true, 'right-icon': clearIcon && searchText.length > 0}">
+  <div class="search-box" :class="{'right-icon': clearIcon && searchText.length > 0}">
     <input
       v-model="searchText"
       :class="`input is-${size} is-${type}`"
       :placeholder="placeholder"
       @mousedown="setFocus"
       @input="update"
-      v-on:keyup.enter="onEnterPressed"
-      v-on:keyup.esc="lostFocus"
-      v-on:keydown.up="onUpBrowseItem"
-      v-on:keydown.down="onDownBrowseItem"
+      @keyup.enter="onEnterPressed"
+      @keyup.esc="lostFocus"
+      @keydown.up="onUpBrowseItem"
+      @keydown.down="onDownBrowseItem"
     />
     <button
       v-if="clearIcon && searchText.length > 0"

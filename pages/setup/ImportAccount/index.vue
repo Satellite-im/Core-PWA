@@ -25,7 +25,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    bipList: function () {
+    bipList(): Array<string> {
       return bip39.wordlists.english
     },
     seedPhraseCharsCount(): number {

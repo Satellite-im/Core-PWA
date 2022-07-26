@@ -10,7 +10,8 @@
     align-self: center;
 
     .columns {
-      margin: @normal-spacing auto 0;
+      margin: 0;
+      margin-top: 1rem;
       
       .column {
         padding: @xlight-spacing;
@@ -24,6 +25,21 @@
         }
       }
     }
+
+    .container-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+
+      .action {
+        width: calc(50% -  @xlight-spacing);
+
+        .is-button {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
   }
 
   .input-error {
@@ -33,31 +49,23 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0 @normal-spacing;
-    justify-content: flex-start;
+    padding: 0 @normal-spacing;
     &:extend(.full-width);
+  }
 
-    .input-account-body {
-      margin-top: @normal-spacing;
-      align-self: flex-start;
-      height: @full;
-      display: flex;
-      flex-direction: column;
-      padding-bottom: @normal-spacing;
+  .input-account-body {
+    margin-top: @normal-spacing;
+    align-self: flex-start;
+    height: @full;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: @normal-spacing;
 
-      .columns {
-        margin: 0;
-        margin-top: @normal-spacing;
-      }
-
-      .is-button {
-        margin-top: auto;
-        &:extend(.full-width);
-        justify-self: flex-end;
-        margin-bottom: @normal-spacing;
-      }
+    .title {
+      margin-top: 10vh;
     }
   }
+
   .spacer {
     flex: 1;
   }
