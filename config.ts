@@ -28,6 +28,8 @@ export const Config = {
             '/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star',
             '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
             '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
+            '/dns4/relay-frankfurt.satellite.im/tcp/443/wss/p2p-webrtc-star',
+            '/dns6/relay-frankfurt.satellite.im/tcp/443/wss/p2p-webrtc-star',
           ],
         },
         Bootstrap: [
@@ -35,6 +37,8 @@ export const Config = {
           '/ip4/127.0.0.1/tcp/8000/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
           '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
           '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
+          '/dns4/relay-frankfurt.satellite.im/tcp/443/wss/p2p-webrtc-star',
+          '/dns6/relay-frankfurt.satellite.im/tcp/443/wss/p2p-webrtc-star',
         ],
       },
     },
