@@ -42,7 +42,7 @@
         class="label"
         :class="{inverted : $route.path.includes('/friends/list')}"
       >
-        {{incomingRequests}}
+        {{incomingRequests.length}}
       </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files')"

@@ -35,13 +35,20 @@ export default Vue.extend({
   },
   data() {
     return {
-      friendsList: iridium.friends.list,
-      requestList: iridium.friends.requestList,
       isQuickchatVisible: false,
+      friends: iridium.friends?.state,
     }
   },
 
   computed: {
+    incomingRequests(): Array<FriendRequest> {
+      return iridium.friends.requestList.filter(
+        (r: FriendRequest) => r.incoming,
+      )
+    },
+    friendsList(): Array<Friend> {
+      return iridium.friends.list
+    },
     DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,

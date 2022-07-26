@@ -23,7 +23,7 @@ export default Vue.extend({
     },
     incomingRequests(): Array<FriendRequest> {
       return iridium.friends?.requestList.filter(
-        (r: FriendRequest) => r.incoming,
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },
     outgoingRequests(): Array<FriendRequest> {
