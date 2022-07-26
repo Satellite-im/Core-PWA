@@ -13,6 +13,8 @@ import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/types'
 
 export default Vue.extend({
   components: {
@@ -21,27 +23,10 @@ export default Vue.extend({
   mixins: [ContextMenu],
   props: {
     message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Message',
-      }),
+      type: Object as PropType<ConversationMessage>,
+      required: true,
     },
-    group: {
-      type: Object as PropType<Group>,
-      default: () => {},
-    },
-    from: {
-      type: String,
-      default: '',
-    },
-    index: {
-      type: Number,
-      default: -1,
-    },
-    hideActions: {
+    showHeader: {
       type: Boolean,
       default: false,
     },
@@ -62,11 +47,30 @@ export default Vue.extend({
       findFriendByAddress: 'friends/findFriendByAddress',
       getFiles: 'chat/getFiles',
       isGroup: 'conversation/isGroup',
+      getTimestamp: 'settings/getTimestamp',
     }),
-    hasReactions(): boolean {
-      return this.message.reactions && this.message.reactions.length
+    author(): User {
+      // TODO: access User from iridium via did
+      return {
+        id: this.message.did,
+        name: 'test',
+      } as User
+      // if (this.message.did === iridium.profile.state.
+      // if (this.conversation.type === 'direct') {
+      //   const friendDid = this.conversation.participants.find(
+      //     (f) => f !== iridium.connector?.id,
+      //   )
+      //   return this.friends.find((f) => f.did === friendDid)
+      // }
+      // return this.groups[this.conversation.id]
     },
-    messageEdit(): boolean {
+    timestamp(): string {
+      return this.getTimestamp({ time: this.message.at })
+    },
+    hasReactions(): boolean {
+      return false // this.message.reactions && this.message.reactions.length
+    },
+    isEditing(): boolean {
       return this.ui.editMessage.id === this.message.id
     },
     contextMenuValues(): ContextMenuItem[] {
@@ -115,7 +119,7 @@ export default Vue.extend({
     },
   },
   beforeDestroy() {
-    this.cancelMessage()
+    // this.cancelMessage()
   },
   async mounted() {
     if (!this.message.payload?.url) {

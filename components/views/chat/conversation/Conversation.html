@@ -1,34 +1,17 @@
 <div class="conversation">
   <UiLoadersMessage :count="3" v-if="false" />
-  <div class="group" v-for="message of messages">
-    <div v-if="message.type === 'text'">
-      <div v-if="message.from === myDid">
-        <p>SELF:</p>
-      </div>
-      <div v-else>
-        <p>FRIEND:</p>
-      </div>
-      <span>
-        <UiUserName :username="message.from" :badge="badge" />
-      </span>
-      <TypographyText :text="message.at" data-cy="chat-timestamp" />
-      <p>{{message.body}}</p>
-    </div>
-    <p>--------</p>
+  <div class="messages">
+    <template v-for="(item, i) of chatItems">
+      <TypographyHorizontalRuleText
+        v-if="item.isNextDay"
+        :value="item.message.at"
+      />
+      <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
+      <Message
+        :message="item.message"
+        :key="item.message.id"
+        :showHeader="!item.isSameAuthor"
+      />
+    </template>
   </div>
-  <!-- 
-  <div class="group" v-for="message in messages">
-    <div v-if="message.type === 'direct'">
-      <Group :group="message" :key="message.id" :groupId="groupId" />
-    </div>
-    <div v-if="message.type === 'caret_divider'">
-      <UiCaretDivider text="New Messages" />
-    </div>
-    <div v-else-if="message.type === 'divider'">
-      <TypographyHorizontalRuleText :value="message.at.toString()" />
-    </div>
-  </div>
-  <div v-if="textile.messageLoading" data-cy="loading-indicator" class="zoop">
-    <UiLoadersLoadingBar />
-  </div> -->
 </div>
