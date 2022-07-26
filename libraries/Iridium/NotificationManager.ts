@@ -59,17 +59,17 @@ export default class NotificationManager extends Emitter<Notification> {
     )
   }
 
-  private async onNotificationActivity(notificationID: string) {
-    if (!this.iridium.connector) return
-    const noti = await this.iridium.connector.load(notificationID, {
-      decrypt: true,
-    })
-    if (noti) {
-      this.state.notifications.push(noti)
-      await this.iridium.connector?.set(`notifications/${noti}`, noti)
-    }
-    this.emit(`notifications/${noti}`, noti)
-  }
+  // private async onNotificationActivity(notificationID: string) {
+  //   if (!this.iridium.connector) return
+  //   const noti = await this.iridium.connector.load(notificationID, {
+  //     decrypt: true,
+  //   })
+  //   if (noti) {
+  //     this.state.notifications.push(noti)
+  //     await this.iridium.connector?.set(`notifications/${noti}`, noti)
+  //   }
+  //   this.emit(`notifications/${noti}`, noti)
+  // }
 
   async subscribeToNotifications(
     id: string,
@@ -83,6 +83,13 @@ export default class NotificationManager extends Emitter<Notification> {
     onNotification: EmitterCallback<Notification>,
   ) {
     this.off(`notifications`, onNotification)
+  }
+
+  async deleteNotification(
+    Id: string,
+    onNotification: EmitterCallback<Notification>,
+  ) {
+    await this.iridium.connector?.set(`/notifications/${Id}`, onNotification)
   }
 
   /**
