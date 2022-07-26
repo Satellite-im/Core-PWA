@@ -1,8 +1,8 @@
-import Peer, { SignalData } from 'simple-peer'
 import PeerId from 'peer-id'
+import Peer, { SignalData } from 'simple-peer'
 import Emitter from './Emitter'
-import { CallEventListeners } from './types'
 import { WebRTCErrors } from './errors/Errors'
+import { CallEventListeners } from './types'
 import { Config } from '~/config'
 
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -147,6 +147,8 @@ export class Call extends Emitter<CallEventListeners> {
    * @param stream MediaStream object containing the audio/video stream
    */
   async answer(peerId: string) {
+    this.isCallee[peerId] = true
+
     await this.initiateCall(peerId, false)
     await this.start()
   }
@@ -329,7 +331,6 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     const audioTrack = audioStream.getAudioTracks()[0]
-
     this.streams[iridium.connector?.peerId].audio = audioStream
     this.tracks[iridium.connector?.peerId].add(audioTrack)
 
@@ -655,14 +656,16 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async deny() {
     await Promise.all(
-      this.peerDetails.map(async (peer) => {
-        await iridium.connector?.broadcast(`peer:hangup/${peer.id}`, {
-          type: 'peer:hangup',
-          peerId: iridium.connector?.peerId,
-          callId: this.callId,
-          at: Date.now().valueOf(),
-        })
-      }),
+      this.peerDetails
+        .filter((p) => p.id !== iridium.connector?.peerId)
+        .map(async (peer) => {
+          await iridium.connector?.broadcast(`peer:hangup/${peer.id}`, {
+            type: 'peer:hangup',
+            peerId: iridium.connector?.peerId,
+            callId: this.callId,
+            at: Date.now().valueOf(),
+          })
+        }),
     )
     this.closeStreams()
   }
