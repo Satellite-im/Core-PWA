@@ -1,10 +1,15 @@
 <template src="./TypeAhead.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { Suggestion } from 'minisearch'
+import { DeleteIcon } from 'satellite-lucide-icons'
 import { InputSize, InputStyle } from '~/components/interactables/Input/types'
 import SearchIndex from '~/libraries/SatelliteDB/SearchIndex'
 
 export default Vue.extend({
+  components: {
+    DeleteIcon,
+  },
   props: {
     /**
      * List for showing typeahead items
@@ -45,6 +50,21 @@ export default Vue.extend({
       default: 'normal',
     },
     /**
+     * Number of matches / selected items
+     */
+    currentMatches: {
+      type: Number,
+      required: true,
+    },
+
+    /**
+     * Max number of possible matches / selection
+     */
+    maxMatches: {
+      type: Number,
+      required: true,
+    },
+    /**
      * Placeholder text for blank inputs
      */
     placeholder: {
@@ -57,6 +77,14 @@ export default Vue.extend({
     maxShowCounts: {
       type: Number,
       default: 8,
+      required: false,
+    },
+    /**
+     * Clear icon to clear the input
+     */
+    clearIcon: {
+      type: Boolean,
+      default: false,
       required: false,
     },
   },
@@ -92,11 +120,72 @@ export default Vue.extend({
       }
       if (!this.isFocus) this.isFocus = true
 
+      const suggestions = this.searchIndex.autoSuggest(this.searchText)
+
+      this.$emit('onRecoverPhraseError', false)
+
+      this.onMatch(suggestions)
+
       this.browseIndex = 0
-      this.searchResults = this.searchIndex
-        .autoSuggest(this.searchText)
+      this.searchResults = suggestions
         .map((match) => match.suggestion)
         .slice(0, this.maxShowCounts)
+    },
+    onMatch(suggestions: Suggestion[]) {
+      if (this.searchText === '') {
+        return
+      }
+
+      let match = false
+
+      let searchTextSplitted = this.searchText.trim().toLowerCase().split(' ')
+      const numberOfMatchesLeft =
+        this.maxMatches - (this.currentMatches + searchTextSplitted.length)
+
+      if (searchTextSplitted.length > 1) {
+        let doesEveryOccurrenceMatch = true
+
+        for (const text of searchTextSplitted) {
+          if (
+            !suggestions.find((item) => item.suggestion === text.toLowerCase())
+          ) {
+            doesEveryOccurrenceMatch = false
+            break
+          }
+        }
+
+        if (doesEveryOccurrenceMatch) {
+          const numberOfCurrentMatchesLeft =
+            this.maxMatches - this.currentMatches
+
+          if (numberOfCurrentMatchesLeft > 0) {
+            match = true
+
+            if (numberOfMatchesLeft < 0) {
+              searchTextSplitted = searchTextSplitted.slice(
+                0,
+                numberOfCurrentMatchesLeft,
+              )
+            }
+          }
+        } else {
+          this.$emit('onRecoverPhraseError', true)
+        }
+      } else if (
+        suggestions.find(
+          (item) => item.suggestion === this.searchText.toLowerCase(),
+        ) &&
+        numberOfMatchesLeft >= 0 &&
+        suggestions.length === 1
+      ) {
+        match = true
+      }
+
+      if (match) {
+        this.$emit('onMatch', searchTextSplitted)
+        this.isFocus = false
+        this.searchText = ''
+      }
     },
     setFocus() {
       this.isFocus = true
@@ -139,6 +228,10 @@ export default Vue.extend({
       } else if (item) {
         this.onItemClicked(item, this.browseIndex)
       }
+    },
+    clearSearch() {
+      this.$emit('onRecoverPhraseError', false)
+      this.searchText = ''
     },
   },
 })

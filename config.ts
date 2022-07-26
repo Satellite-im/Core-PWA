@@ -235,4 +235,5 @@ export const Config = {
   modal: {
     errorNetworkActionThrottle: 1000,
   },
+  seedPhraseCharsCount: 12,
 }

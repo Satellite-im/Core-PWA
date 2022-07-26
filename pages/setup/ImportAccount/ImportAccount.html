@@ -6,9 +6,14 @@
       :list="bipList"
       size="small"
       type="primary"
+      :currentMatches="phrases.length"
+      :maxMatches="seedPhraseCharsCount"
       :placeholder="$t('pages.inputAccount.enter')"
+      :clearIcon="true"
+      @onMatch="onMatch"
       @onSelected="onSelected"
       @onMultipleSelected="onMultipleSelected"
+      @onRecoverPhraseError="onRecoverPhraseError"
     />
     <TypographyError v-if="error" :text="$t(error)" class="input-error" />
     <div class="columns is-mobile" v-if="phrases.length > 0">
@@ -35,11 +40,26 @@
         </div>
       </div>
     </div>
-    <InteractablesButton
-      class="recover-account"
-      :text="$t('pages.inputAccount.recover')"
-      :disabled="phrases.length<12"
-      :action="recoverAccount"
-    />
+    <UiSpacer :height="45" />
+    <div class="container-actions">
+      <div class="action">
+        <InteractablesButton
+        full-width
+        :text="$t('pages.inputAccount.reset')"
+        :disabled="phrases.length === 0"
+        :action="resetPassphrase"
+        >
+          <trash-icon size="1x" />
+        </InteractablesButton>
+      </div>
+      <div class="action">
+        <InteractablesButton
+        full-width
+          :text="$t('pages.inputAccount.recover')"
+          :disabled="phrases.length<12"
+          :action="recoverAccount"
+        />
+      </div>
+    </div>
   </div>
 </div>

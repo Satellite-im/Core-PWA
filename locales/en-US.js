@@ -241,7 +241,9 @@ export default {
       subtitle:
         'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
       enter: 'Enter Passphrase',
+      reset: 'Reset Passphrase',
       recover: 'Recover Account',
+      error_recover_phrase: 'Invalid passphrase',
     },
     phrase: {
       title: 'Recovery Seed',

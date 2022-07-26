@@ -1,12 +1,21 @@
 .container {
+  margin: 0 auto;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
   .input-account-body {
-    .recover-account.button {
-      width: 24rem;
-      max-width: @full;
-      margin-top: @normal-spacing;
-    }
+    min-width: 250px;
+    align-self: center;
+
     .columns {
+      margin: 0;
+      margin-top: 1rem;
+      
       .column {
+        padding: @xlight-spacing;
+
         .tag,
         .tag-container {
           &:extend(.full-width);
@@ -14,49 +23,50 @@
         .tag {
           margin: @xlight-spacing 0;
         }
-        padding: @xlight-spacing;
       }
-      margin: @normal-spacing auto 0;
-      max-width: @full;
-      width: 24rem;
     }
-    width: 32rem;
-    align-self: center;
-    padding: 0 @normal-spacing;
+
+    .container-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+
+      .action {
+        width: calc(50% -  @xlight-spacing);
+
+        .is-button {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
   }
+
   .input-error {
     margin-top: @normal-spacing;
   }
-  margin: 0 auto;
-  max-width: 40rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    .columns {
-      margin: 0;
-    }
-    .input-account-body {
-      .recover-account.button {
-        margin-top: auto;
-        width: unset;
-        min-width: @full;
-      }
+    padding: 0 @normal-spacing;
+    &:extend(.full-width);
+  }
 
-      .columns {
-        width: 18rem;
-      }
-      margin: 0;
-      padding-top: 10vh;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-self: flex-start;
-      height: 100%;
-    }
+  .input-account-body {
+    margin-top: @normal-spacing;
+    align-self: flex-start;
+    height: @full;
+    display: flex;
+    flex-direction: column;
     padding-bottom: @normal-spacing;
+
+    .title {
+      margin-top: 10vh;
+    }
+  }
+
+  .spacer {
+    flex: 1;
   }
 }
