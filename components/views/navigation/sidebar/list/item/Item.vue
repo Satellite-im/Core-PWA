@@ -100,11 +100,15 @@ export default Vue.extend({
 
     details(): User | Group | undefined {
       if (this.conversation.type === 'direct') {
-        const friendDid = this.conversation.participants.find(
-          (f) => f !== iridium.connector?.id,
+        const participant = this.conversation.participants.find(
+          (f) => f.did !== iridium.connector?.id,
         )
-        return this.friends.find((f) => f.did === friendDid)
+        if (!participant) {
+          return
+        }
+        return this.friends.find((f) => f.did === participant.did)
       }
+
       return this.groups[this.conversation.id]
     },
 

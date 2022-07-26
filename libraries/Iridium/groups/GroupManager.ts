@@ -45,7 +45,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       id,
       name: config.name,
       type: 'group',
-      participants: Object.values(config.members).map((m) => m.id),
+      participants: Object.values(config.members),
     })
     await this.iridium.connector.set(`/groups/${id}`, {
       id,

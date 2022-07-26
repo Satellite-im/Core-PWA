@@ -8,6 +8,7 @@ import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Friend } from '~/types/ui/friends'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 declare module 'vue/types/vue' {
   interface Vue {

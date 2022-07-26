@@ -14,6 +14,9 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ConversationActivity } from '~/store/conversation/types'
 import Logger from '~/utilities/Logger'
 import { overwriteMerge } from '~/utilities/merge'
+import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+
+const $Sounds = new SoundManager()
 
 const announceFrequency = 5000
 
@@ -113,7 +116,7 @@ export default class WebRTCManager extends Emitter {
           did = Iridium.peerIdToDID(peerId)
         } catch (error) {}
 
-        const id = await this.iridium.chat?.directConversationId(did)
+        const id = await this.iridium.chat?.directConversationIdFromDid(did)
 
         if (id && (await this.iridium.chat?.hasConversation(id))) {
           const conversation = await this.iridium.chat?.getConversation(id)
@@ -161,7 +164,7 @@ export default class WebRTCManager extends Emitter {
           did = Iridium.peerIdToDID(peerId)
         } catch (error) {}
 
-        const id = await this.iridium.chat?.directConversationId(did)
+        const id = await this.iridium.chat?.directConversationIdFromDid(did)
 
         if (id && (await this.iridium.chat?.hasConversation(id))) {
           const conversation = await this.iridium.chat?.getConversation(id)
@@ -210,7 +213,9 @@ export default class WebRTCManager extends Emitter {
     const profile = this.iridium.profile.state
 
     setInterval(async () => {
-      const id = await this.iridium.chat?.directConversationId(profile.did)
+      const id = await this.iridium.chat?.directConversationIdFromDid(
+        profile.did,
+      )
 
       if (id && (await this.iridium.chat?.hasConversation(id))) {
         const conversation = await this.iridium.chat?.getConversation(id)
@@ -379,7 +384,7 @@ export default class WebRTCManager extends Emitter {
       did = Iridium.peerIdToDID(peerId)
     } catch (error) {}
 
-    const id = await this.iridium.chat?.directConversationId(did)
+    const id = await this.iridium.chat?.directConversationIdFromDid(did)
 
     if (id && (await this.iridium.chat?.hasConversation(id))) {
       const conversation = await this.iridium.chat?.getConversation(id)
@@ -430,7 +435,7 @@ export default class WebRTCManager extends Emitter {
       did = Iridium.peerIdToDID(peerId)
     } catch (error) {}
 
-    const id = await this.iridium.chat?.directConversationId(did)
+    const id = await this.iridium.chat?.directConversationIdFromDid(did)
 
     if (id && (await this.iridium.chat?.hasConversation(id))) {
       const conversation = await this.iridium.chat?.getConversation(id)
@@ -513,7 +518,7 @@ export default class WebRTCManager extends Emitter {
       throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
-    const id = await iridium.chat?.directConversationId(recipient.did)
+    const id = iridium.chat?.directConversationIdFromDid(recipient.did)
 
     if (!id || !(await this.iridium.chat?.hasConversation(id))) {
       return
@@ -564,7 +569,7 @@ export default class WebRTCManager extends Emitter {
 
     this.state.streamMuted = {
       ...this.state.streamMuted,
-      [iridium.connector?.peerId]: {
+      [this.iridium.connector?.peerId]: {
         audio: !kinds.includes('audio'),
         video: !kinds.includes('video'),
         screen: !kinds.includes('screen'),
@@ -638,12 +643,14 @@ export default class WebRTCManager extends Emitter {
           type,
         }
       }
+      $Sounds.playSound(Sounds.CALL)
     }
     call.on('INCOMING_CALL', onCallIncoming)
 
     const onCallOutgoing = ({ peerId }: { peerId: string }) => {
       this.state.incomingCall = undefined
       this.state.activeCall = { callId, peerId }
+      $Sounds.playSound(Sounds.CALL)
       // commit('ui/showMedia', true, { root: true })
     }
     call.on('OUTGOING_CALL', onCallOutgoing)
@@ -659,6 +666,8 @@ export default class WebRTCManager extends Emitter {
       Vue.prototype.$nuxt.$store.commit('video/setDisabled', true, {
         root: true,
       })
+      $Sounds.stopSound(Sounds.CALL)
+      $Sounds.playSound(Sounds.CONNECTED)
     }
     call.on('CONNECTED', onCallConnected)
 
@@ -696,10 +705,6 @@ export default class WebRTCManager extends Emitter {
       }
 
       // if (Vue.prototype.$nuxt.$store.state.audio.muted) {
-      //   console.log(
-      //     'onCallTrack call.mute',
-      //     Vue.prototype.$nuxt.$store.state.audio,
-      //   )
       //   call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
       // }
     }
@@ -826,7 +831,7 @@ export default class WebRTCManager extends Emitter {
     const onCallDestroy = () => {
       this.state.incomingCall = undefined
       this.state.activeCall = undefined
-      this.state.createdAt = 0
+      Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', 0)
 
       // commit('conversation/setCalling', false, { root: true })
       // commit('ui/fullscreen', false, { root: true })
@@ -844,6 +849,8 @@ export default class WebRTCManager extends Emitter {
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
+      $Sounds.stopSound(Sounds.CALL)
+      $Sounds.playSound(Sounds.HANGUP)
     }
     call.on('DESTROY', onCallDestroy)
   }

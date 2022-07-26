@@ -44,7 +44,9 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      const id = await iridium.chat?.directConversationId(this.caller.did)
+      const id = await iridium.chat?.directConversationIdFromDid(
+        this.caller.did,
+      )
 
       if (!id || !(await iridium.chat?.hasConversation(id))) {
         return

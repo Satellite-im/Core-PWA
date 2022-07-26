@@ -68,10 +68,13 @@ export default Vue.extend({
       if (this.isGroup) {
         return this.groups[this.conversation.id]
       }
-      const friendDid = this.conversation.participants.find(
-        (f) => f !== iridium.connector?.id,
+      const participant = this.conversation.participants.find(
+        (f) => f.did !== iridium.connector?.id,
       )
-      return this.friends.find((f) => f.did === friendDid)
+      if (!participant) {
+        return
+      }
+      return this.friends.find((f) => f.did === participant.did)
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -108,9 +111,6 @@ export default Vue.extend({
         ? (this.$t('controls.call') as string)
         : (this.$t('controls.not_connected') as string)
     },
-  },
-  mounted() {
-    // console.log('this.recipient', this.recipient)
   },
   methods: {
     groupInvite() {
@@ -166,11 +166,11 @@ export default Vue.extend({
     //   this.$store.dispatch('ui/showProfile', this.recipient)
     // },
     async call(kinds: TrackKind[]) {
-      if (!this.enableRTC) {
+      if (!this.enableRTC || !this.details) {
         return
       }
       try {
-        await iridium.webRTC.call(this.recipient, kinds)
+        await iridium.webRTC.call(this.details, kinds)
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }

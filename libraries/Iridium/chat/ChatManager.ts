@@ -134,7 +134,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    */
   directConversationIdFromDid(friendDid: Friend['did']): string | undefined {
     return Object.values(this.state.conversations).find(
-      (c) => c.type === 'direct' && c.participants.includes(friendDid),
+      (c) =>
+        c.type === 'direct' && c.participants.some((p) => p.did === friendDid),
     )?.id
   }
 

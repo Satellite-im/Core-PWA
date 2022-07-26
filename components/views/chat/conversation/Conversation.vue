@@ -52,33 +52,6 @@ export default Vue.extend({
       })
     },
   },
-  async mounted() {
-    const id = this.$route.params.id
-
-    if (!id) {
-      this.$router.push('/friends/list')
-    }
-
-    if (!id || !(await iridium.chat?.hasConversation(id))) {
-      return
-    }
-
-    const conversation = await iridium.chat?.getConversation(id)
-
-    if (!conversation) {
-      return
-    }
-
-    const recipient = conversation.participants.find(
-      (p) => p.did !== iridium.profile.state.did,
-    )
-
-    if (!recipient) {
-      return
-    }
-
-    iridium.webRTC.subscribeToChannel(recipient.peerId)
-  },
   methods: {},
 })
 </script>

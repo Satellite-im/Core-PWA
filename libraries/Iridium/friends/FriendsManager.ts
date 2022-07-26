@@ -397,15 +397,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     if (!user.name) return
     const id = await Iridium.hash([user.did, this.iridium.connector?.id].sort())
     const profile = await this.iridium?.profile.get()
+    this.iridium.webRTC.subscribeToChannel(user.peerId)
     if (id && !this.iridium.chat.hasConversation(id)) {
       return this.iridium.chat.createConversation({
         id,
         name: user.name,
         type: 'direct',
-        participants: [
-          { ...user },
-          { ...profile },
-        ],
+        participants: [{ ...user }, { ...profile }],
       })
     }
   }
