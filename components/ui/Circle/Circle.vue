@@ -1,9 +1,15 @@
 <template src="./Circle.html"></template>
+
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { SatelliteIcon } from 'satellite-lucide-icons'
 import { CircleType } from './types'
+import { stringToColor } from '~/utilities/Circle'
 
 export default Vue.extend({
+  components: {
+    SatelliteIcon,
+  },
   props: {
     /**
      * Pixel diameter size of the circle
@@ -67,6 +73,14 @@ export default Vue.extend({
     name: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    finalColor(): string {
+      return stringToColor(this.seed as string)
+    },
+    firstLetter(): string {
+      return this.name.charAt(0).toUpperCase()
     },
   },
 })

@@ -18,3 +18,20 @@
 .is-rounded {
   border-radius: @half;
 }
+
+.satellite-circle {
+  height: @full;
+  width: @full;
+  &:extend(.full-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: @secondary-text;
+  border-radius: @half;
+  font-weight: 500;
+  color: #fff;
+
+  svg {
+    overflow: visible;
+  }
+}
