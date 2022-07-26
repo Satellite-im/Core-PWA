@@ -135,7 +135,7 @@ export default Vue.extend({
       }
       this.isLoading = true
       await iridium.friends
-        .removeFriend((this.details as User).did, this.conversation.id)
+        .removeFriend((this.details as User).did)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
       this.isLoading = false
     },
