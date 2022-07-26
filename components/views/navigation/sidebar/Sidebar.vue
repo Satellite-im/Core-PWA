@@ -15,7 +15,7 @@ import {
 
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import type { FriendRequest } from '~/libraries/Iridium/friends/types'
+import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
   components: {
     UsersIcon,

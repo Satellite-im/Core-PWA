@@ -18,6 +18,9 @@ export default Vue.extend({
     friendsList(): Array<Friend> {
       return iridium.friends.list
     },
+    friendsRequests(): Array<FriendRequest> {
+      return iridium.friends.requestList
+    },
     incomingRequests(): Array<FriendRequest> {
       return iridium.friends.requestList.filter(
         (r: FriendRequest) => r.incoming,

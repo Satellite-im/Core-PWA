@@ -31,8 +31,16 @@ export type IridiumFriendPubsub = IridiumMessage<IridiumFriendEvent>
 
 export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   public readonly iridium: IridiumManager
-  public state: FriendState = { details: {}, requests: {}, blocked: [] }
+  public state: FriendState = {
+    details: {},
+    requests: {},
+    blocked: [],
+  }
+
+  public updatedAt: number = 0
+
   private loggerTag = 'iridium/friends'
+
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
@@ -167,10 +175,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns iridium's connector result
    */
   set(path: string, payload: any, options: IridiumSetOptions = {}) {
-    logger.info(this.loggerTag, 'path and paylaod', {
+    this.updatedAt = Date.now()
+    logger.info(this.loggerTag, 'path, paylaod and state', {
       path,
       payload,
+      state: this.state,
     })
+
     return this.iridium.connector?.set(
       `/friends${path === '/' ? '' : path}`,
       payload,
