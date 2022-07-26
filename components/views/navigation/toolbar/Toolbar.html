@@ -1,15 +1,9 @@
 <div id="toolbar">
   <div class="circle-container">
-    <!--    hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)-->
-    <!--    <UiUserState-->
-    <!--      v-if="!isGroup"-->
-    <!--      class="circle"-->
-    <!--      :user="recipient"-->
-    <!--      :src="src"-->
-    <!--      :clickHandler="openProfile"-->
-    <!--    />-->
-    <UiUserState v-if="!isGroup" class="circle" :user="details" />
-    <UiGroupIcon v-else :group="groups[conversation.id]" />
+    <template v-if="details">
+      <UiUserState v-if="!isGroup" class="circle" :user="details" />
+      <UiGroupIcon v-else :group="details" />
+    </template>
   </div>
   <div class="user-info">
     <TypographyTitle :size="6" :text="conversation.name" />
