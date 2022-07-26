@@ -64,6 +64,8 @@
   .body {
     grid-area: body;
     position: relative;
+    // conditionally change to break-all depending on locale
+    word-break: break-word;
 
     &:hover {
       &:extend(.background-semitransparent-light);
