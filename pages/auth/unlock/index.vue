@@ -39,7 +39,7 @@ export default Vue.extend({
     isDev(): boolean {
       return (
         location.href.startsWith('http://localhost') ||
-        location.href.startsWith('https://core-dev') ||
+        location.href.startsWith('https://iridium-dev') ||
         location.host.endsWith('.on.fleek.co')
       )
     },
