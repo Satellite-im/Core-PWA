@@ -337,6 +337,7 @@ export default Vue.extend({
     position: absolute;
     &:extend(.background-layer);
     &:extend(.no-select);
+    &:extend(.ellipsis);
   }
   .editable-input {
     width: 100%;

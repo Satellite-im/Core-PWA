@@ -12,7 +12,6 @@ export default Vue.extend({
       dragging: false as boolean,
     }
   },
-  computed: {},
   methods: {
     handleDrop(e: DragEvent) {
       this.$emit('handle-drop-prop', e)
