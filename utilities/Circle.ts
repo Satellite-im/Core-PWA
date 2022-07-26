@@ -23,23 +23,23 @@ function stringToHash(str: string): number {
 }
 
 const colors = [
-  '#fc5c65',
-  '#fd9644',
-  '#fed330',
-  '#26de81',
-  '#2bcbba',
-  '#eb3b5a',
-  '#fa8231',
-  '#f7b731',
-  '#20bf6b',
-  '#0fb9b1',
-  '#45aaf2',
-  '#4b7bec',
-  '#a55eea',
-  '#778ca3',
-  '#2d98da',
-  '#3867d6',
-  '#8854d0',
-  '#a5b1c2',
-  '#4b6584',
+  '#fc5c65', // Fiery Rose
+  '#fd9644', // Royal Orange
+  '#fed330', // Sunglow
+  '#26de81', // UFO Green
+  '#2bcbba', // Maximum Blue Green
+  '#eb3b5a', // Desire
+  '#fa8231', // Princeton Orange
+  '#f7b731', // Saffron
+  '#20bf6b', // Green (Crayola)
+  '#0fb9b1', // Tiffany Blue
+  '#45aaf2', // Picton Blue
+  '#4b7bec', // Blueberry
+  '#a55eea', // Lavender Indigo
+  '#778ca3', // Shadow Blue
+  '#2d98da', // Bleu De France
+  '#3867d6', // Royal Blue
+  '#8854d0', // Amethyst
+  '#a5b1c2', // Cadet Blue (Crayola)
+  '#4b6584', // Dark Electric Blue
 ]
