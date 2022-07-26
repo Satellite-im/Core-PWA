@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
 import {
   PhoneCallIcon,
   ArchiveIcon,
@@ -21,6 +20,7 @@ import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 
 export default Vue.extend({
@@ -43,7 +43,6 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
-      conversation: iridium.chat.state.conversations[this.$route.params.id],
       friends: iridium.friends.state.list,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
@@ -58,19 +57,38 @@ export default Vue.extend({
       modals: (state) => (state as RootState).ui.modals,
     }),
     ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
-    showSearchResult: {
-      set(state): void {
-        this.$store.commit('ui/showSearchResult', state)
-      },
-      get(): boolean {
-        return this.ui.showSearchResult
-      },
+    ModalWindows: () => ModalWindows,
+    conversation(): Conversation {
+      return iridium.chat.state.conversations[this.$route.params.id]
+    },
+    isGroup(): boolean {
+      return this.conversation.type === 'group'
+    },
+    details(): User | Group | undefined {
+      if (this.isGroup) {
+        return this.groups[this.conversation.id]
+      }
+      const friendDid = this.conversation.participants.find(
+        (f) => f !== iridium.connector?.id,
+      )
+      return this.friends.find((f) => f.did === friendDid)
+    },
+    groupMembers(): GroupMemberDetails[] {
+      const members = (this.details as Group).members ?? []
+      return Object.values(members)
+    },
+    subtitleText(): string {
+      if (!this.details) {
+        return ''
+      }
+      if (this.isGroup) {
+        return this.groupMembers.map((m) => m.name).join(', ')
+      }
+      return (this.details as User).status || 'offline'
     },
     enableRTC(): boolean {
       if (this.isGroup) {
-        const memberIds = (this.groupMembers as GroupMemberDetails[]).map(
-          (member) => member.id,
-        )
+        const memberIds = this.groupMembers.map((m) => m.id)
         return this.friends.some(
           (friend: Friend) =>
             memberIds.includes(friend.did) && friend.status === 'online',
@@ -82,28 +100,6 @@ export default Vue.extend({
       )
       return friend?.status === 'online'
     },
-    ModalWindows: () => ModalWindows,
-    isGroup(): boolean {
-      return this.conversation.type === 'group'
-    },
-
-    groupMembers(): GroupMemberDetails[] {
-      if (!this.isGroup) return []
-      const groupMembers = (this.details as Group).members
-      return Object.values(groupMembers ?? {})
-    },
-    subtitleText(): string {
-      if (!this.details) {
-        return ''
-      }
-      if (this.isGroup) {
-        const names = (this.groupMembers as GroupMemberDetails[])
-          .map((m) => m.name)
-          .join(', ')
-        return names ?? ''
-      }
-      return (this.details as User).status || 'offline'
-    },
     callTooltipText(): string {
       if (this.isGroup) {
         return this.$t('coming_soon.group_call') as string
@@ -111,15 +107,6 @@ export default Vue.extend({
       return this.enableRTC
         ? (this.$t('controls.call') as string)
         : (this.$t('controls.not_connected') as string)
-    },
-    details(): User | Group | undefined {
-      if (this.isGroup) {
-        return this.groups[this.conversation.id]
-      }
-      const friendDid = this.conversation.participants.find(
-        (f) => f !== iridium.connector?.id,
-      )
-      return this.friends.find((f) => f.did === friendDid)
     },
   },
   methods: {
@@ -172,7 +159,6 @@ export default Vue.extend({
     toggleModal() {
       this.isGroupInviteVisible = !this.isGroupInviteVisible
     },
-    // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
     // openProfile() {
     //   this.$store.dispatch('ui/showProfile', this.recipient)
     // },

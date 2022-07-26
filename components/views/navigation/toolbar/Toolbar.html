@@ -81,11 +81,7 @@
       <div
         v-tooltip.bottom="$t('pages.chat.archived_messages')"
         :class="ui.showPinned ? 'primary' : ''"
-        @click="
-            () => {
-              $store.commit('ui/togglePinned', !ui.showPinned)
-            }
-          "
+        @click="$store.commit('ui/togglePinned', !ui.showPinned)"
       >
         <archive-icon size="1x" class="control-icon" color="grey" />
       </div>
