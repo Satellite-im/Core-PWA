@@ -1,28 +1,26 @@
 <div
-  class="is-message"
-  :class="textile.messageLoading ? 'loading' : ''"
+  class="chat-message"
+  :class="{ 'show-header': showHeader }"
   @contextmenu="contextMenu"
 >
-  <div
-    :class="`message-container ${message.pinned ? 'pinned-message' : ''}`"
-    data-cy="message-container"
-  >
-    <div v-if="message.pinned" class="pinned-badge">
-      <archive-icon size="0.85x" />
-      Archived
+  <template v-if="showHeader">
+    <div class="avatar">
+      <UiCircle :type="src ? 'image' :'random'" :seed="address" :source="src" />
     </div>
-    <MessageActions
-      v-if="!hideActions && !messageEdit"
-      :setReplyChatbarContent="setReplyChatbarContent"
-      :emojiReaction="emojiReaction"
-      :editMessage="editMessage"
-      :message="message"
-    />
+    <div class="header">
+      <span :click="showQuickProfile">
+        <UiUserName :username="author.name" :badge="badge" />
+      </span>
+    </div>
+  </template>
+  <div class="timestamp">{{ timestamp }}</div>
+  <div class="body">
     <template v-if="!messageEdit && message.type === 'text'">
       <MessageMarkdown
-        :text="wrapEmoji(markdownToHtml(message.payload))"
-        :class="`markdown ${containsOnlyEmoji(message.payload) ? 'bigmoji' : ''}`"
-        :data-cy="`chat-message`"
+        :text="wrapEmoji(markdownToHtml(message.body))"
+        class="markdown"
+        :class="{ bigmoji: containsOnlyEmoji(message.body) }"
+        data-cy="chat-message"
       />
       <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
@@ -35,45 +33,17 @@
         ({{$t('ui.edited')}})
       </span>
     </template>
-    <MessageGlyph
-      v-if="message.type === 'glyph'"
-      :source="message.payload"
-      :pack="message.pack"
-    />
-    <!-- Only for video types we can't embed directly without doing something sketchy, like sending it to a server somewhere to extract the HTML5 video-->
-    <UiChatEmbedsEmbeddedLinkContent
-      v-if="message.type === 'text'"
-      :data="message.payload"
-    />
-    <UiChatEmbedsVideoPlayer
-      v-else-if="message.type === 'video'"
-      :data="message.payload"
-    />
-    <UiChatEmbedsAudioPlayer
-      v-else-if="message.type === 'audio'"
-      :data="message.payload"
-    />
-    <UiChatEmbedsFile
-      v-else-if="message.type === 'file'"
-      :file="message.payload"
+    <MessageActions
+      :setReplyChatbarContent="setReplyChatbarContent"
+      :emojiReaction="emojiReaction"
+      :editMessage="editMessage"
+      :message="message"
     />
     <MessageReactions
-      v-if="!hideActions && hasReactions"
+      v-if="hasReactions"
       :message="this.$props.message"
       :group="this.$props.group"
       :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
     />
   </div>
-  <MessageReply
-    :message="message"
-    :group="group"
-    v-if="!hideActions"
-    :from="from"
-  />
-  <MessageEdit
-    v-if="messageEdit"
-    :message="message.payload"
-    @commitMessage="saveMessage"
-    @cancelMessage="cancelMessage"
-  />
 </div>

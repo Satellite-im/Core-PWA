@@ -22,14 +22,6 @@ export default Vue.extend({
         payload: 'Invalid Message',
       }),
     },
-    group: {
-      type: Object as PropType<Group>,
-      default: () => {},
-    },
-    from: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {

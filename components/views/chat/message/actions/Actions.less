@@ -1,7 +1,20 @@
 .message-actions {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: -18px;
+  right: 0;
+  height: 36px;
+  padding: 0 0.25rem;
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
+  &:extend(.blur);
+
   .reply-text {
     padding: 0 0.25rem;
   }
+
   .reply-command {
     width: 35px;
     // height: 35px;
@@ -32,18 +45,4 @@
       &:extend(.font-primary);
     }
   }
-  &:extend(.bordered);
-  &:extend(.round-corners);
-  &:extend(.background-semitransparent-light);
-  &:extend(.blur);
-  position: absolute;
-  top: -18px;
-  right: 0;
-  display: none;
-  box-sizing: border-box;
-  height: 36px;
-  font-size: 14px;
-  align-items: center;
-  padding: 0 0.25rem;
-  &:extend(.first-layer);
 }
