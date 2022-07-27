@@ -24,4 +24,5 @@ export interface ChatState {
   files: { [key: Conversation['id']]: ChatFileUpload[] }
   countError: boolean
   currentChat: ICurrentChat
+  draftMessages: { [key: Conversation['id']]: string }
 }

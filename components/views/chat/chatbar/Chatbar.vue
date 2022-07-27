@@ -11,11 +11,12 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { ChatText } from '~/store/chat/types'
+import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { SettingsRoutes } from '~/store/ui/types'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const Chatbar = Vue.extend({
   components: {
@@ -24,7 +25,7 @@ const Chatbar = Vue.extend({
   computed: {
     ...mapState({
       ui: (state: RootState) => state.ui,
-      chat: (state: RootState) => state.chat,
+      chat: (state: RootState) => state.chat as ChatState,
       files(state: RootState) {
         return state.chat.files?.[this.$route.params.id] ?? []
       },
@@ -112,7 +113,14 @@ const Chatbar = Vue.extend({
           content: value,
           // userId: this.recipient?.did,
         })
+        this.$store.commit('chat/setDraftMessage', {
+          conversationId: this.conversationId,
+          message: value,
+        })
       },
+    },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
     },
     placeholder(): string {
       return !this.hasCommand && this.text === ''
@@ -121,12 +129,9 @@ const Chatbar = Vue.extend({
     },
   },
   watch: {
-    'recipient.did': {
+    conversationId: {
       handler(value) {
-        const findItem = this.chat.chatTexts.find(
-          (item: ChatText) => item.userId === value,
-        )
-        const message = findItem ? findItem.value : ''
+        const message = this.chat.draftMessages[this.conversationId]
         this.$refs.editable?.resetHistory()
         this.$store.commit('ui/setReplyChatbarContent', {
           id: '',

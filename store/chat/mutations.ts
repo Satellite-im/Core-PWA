@@ -79,6 +79,15 @@ const mutations = {
   resetCurrentChat(state: ChatState) {
     state.currentChat = initialCurrentChat
   },
+  setDraftMessage(
+    state: ChatState,
+    {
+      conversationId,
+      message,
+    }: { conversationId: Conversation['id']; message: string },
+  ) {
+    Vue.set(state.draftMessages, conversationId, message)
+  },
 }
 
 export default mutations
