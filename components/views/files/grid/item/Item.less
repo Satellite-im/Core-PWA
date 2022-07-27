@@ -6,6 +6,19 @@
   &:extend(.background-semitransparent-light);
   cursor: pointer;
 
+  .like {
+    opacity: 0;
+    transition: opacity @animation-speed ease;
+  }
+
+  &:hover,
+  &:focus,
+  &.is-liked {
+    .like {
+      opacity: 1;
+    }
+  }
+
   .quick-actions {
     width: @full;
     padding: @normal-spacing;
@@ -35,6 +48,7 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    height: 162px;
     padding-top: 36px; // half of the text area height, centers icon
   }
 

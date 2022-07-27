@@ -11,7 +11,6 @@ import {
   ImageIcon,
   FilmIcon,
 } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { RootState } from '~/types/store/store'
@@ -28,7 +27,6 @@ export default Vue.extend({
     ImageIcon,
     FilmIcon,
   },
-  mixins: [ContextMenu],
   props: {
     item: {
       type: Object as PropType<IridiumItem>,
@@ -40,7 +38,6 @@ export default Vue.extend({
       thumbnail: '',
       fileHover: false as boolean,
       linkHover: false as boolean,
-      heartHover: false as boolean,
     }
   },
   computed: {
@@ -80,7 +77,7 @@ export default Vue.extend({
         //   func: this.share,
         // },
         { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.remove },
+        { text: this.$t('context.delete'), func: this.remove, type: 'danger' },
       ]
     },
   },
@@ -105,10 +102,6 @@ export default Vue.extend({
         this.share()
         return
       }
-      if (this.heartHover) {
-        this.like()
-        return
-      }
       this.$emit('handle', this.item)
     },
     /**
@@ -122,7 +115,7 @@ export default Vue.extend({
      * @method like
      * @description Emit to like item - pages/files/browse/index.vue
      */
-    like() {
+    like(event: MouseEvent) {
       this.$emit('like', this.item)
     },
     /**

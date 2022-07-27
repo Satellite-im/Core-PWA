@@ -1,7 +1,7 @@
-<div
+<UiContextMenu
   class="chat-message"
   :class="{ 'show-header': showHeader }"
-  @contextmenu="contextMenu"
+  :items="contextMenuValues"
 >
   <template v-if="showHeader">
     <div class="avatar">
@@ -46,4 +46,4 @@
       :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
     />
   </div>
-</div>
+</UiContextMenu>

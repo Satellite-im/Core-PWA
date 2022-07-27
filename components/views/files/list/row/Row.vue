@@ -10,7 +10,6 @@ import {
   FilmIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
@@ -24,7 +23,6 @@ export default Vue.extend({
     FilmIcon,
     MoreVerticalIcon,
   },
-  mixins: [ContextMenu],
   props: {
     item: {
       type: Object as PropType<IridiumItem>,
@@ -71,7 +69,7 @@ export default Vue.extend({
         //   func: this.share,
         // },
         { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.remove },
+        { text: this.$t('context.delete'), func: this.remove, type: 'danger' },
       ]
     },
   },
@@ -113,6 +111,15 @@ export default Vue.extend({
      */
     remove() {
       this.$emit('remove', this.item)
+    },
+    openContextMenu(e: Event) {
+      e.preventDefault()
+      const contextMenuStatus = this.ui.contextMenuStatus
+      if (!contextMenuStatus) {
+        this.$store.commit('ui/toggleContextMenu', true)
+      }
+      this.$store.commit('ui/setContextMenuPosition', e)
+      this.$store.commit('ui/setContextMenuValues', this.contextMenuValues)
     },
   },
 })

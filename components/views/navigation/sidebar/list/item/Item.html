@@ -1,7 +1,7 @@
-<div
+<UiContextMenu
   class="item"
   :class="{'is-loading' : isLoading , selected : isSelected}"
-  @contextmenu="contextMenu"
+  :items="contextMenuValues"
   @click="openConversation"
   data-cy="sidebar-user"
 >
@@ -29,4 +29,4 @@
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
-</div>
+</UiContextMenu>
