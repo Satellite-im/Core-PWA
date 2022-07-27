@@ -97,6 +97,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         this.state.requests,
       )
     }
+    logger.info(this.loggerTag, 'initialized', this)
     this.emit('ready', {})
   }
 
@@ -438,6 +439,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     Vue.delete(this.state.details, didUtils.didString(did))
     await this.set(`/details`, this.state.details)
+    const id = await encoding.hash(
+      [friend.did, this.iridium.connector?.id].sort(),
+    )
+    if (id && this.iridium.chat.hasConversation(id)) {
+      Vue.delete(this.iridium.chat.state.conversations, id)
+    }
+
     logger.info(this.loggerTag, 'friend removed', { did, friend })
 
     // Announce to the remote user
