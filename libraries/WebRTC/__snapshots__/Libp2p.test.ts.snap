@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Libp2p.Peer2Peer.getInstance 0 1`] = `
-Peer2Peer {
-  "_events": Object {},
-}
-`;
