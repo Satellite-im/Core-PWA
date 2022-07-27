@@ -87,7 +87,7 @@ export default Vue.extend({
     },
     async removeFriend() {
       this.loading = true
-      await iridium.friends?.removeFriend(this.user.did)
+      await iridium.friends?.friendRemove(this.user.did)
       this.loading = false
     },
     async cancelRequest() {
