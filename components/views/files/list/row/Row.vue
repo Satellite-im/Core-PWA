@@ -112,6 +112,15 @@ export default Vue.extend({
     remove() {
       this.$emit('remove', this.item)
     },
+    openContextMenu(e: Event) {
+      e.preventDefault()
+      const contextMenuStatus = this.ui.contextMenuStatus
+      if (!contextMenuStatus) {
+        this.$store.commit('ui/toggleContextMenu', true)
+      }
+      this.$store.commit('ui/setContextMenuPosition', e)
+      this.$store.commit('ui/setContextMenuValues', this.contextMenuValues)
+    },
   },
 })
 </script>
