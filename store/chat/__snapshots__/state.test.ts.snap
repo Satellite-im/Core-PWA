@@ -16,6 +16,7 @@ Object {
     "showOlderMessagesInfo": false,
     "size": 10,
   },
+  "draftMessages": Object {},
   "files": Object {},
   "replies": Array [],
 }
