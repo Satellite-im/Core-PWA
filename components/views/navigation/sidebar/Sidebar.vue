@@ -35,12 +35,13 @@ export default Vue.extend({
   data() {
     return {
       isQuickchatVisible: false,
+      friends: iridium.friends,
     }
   },
   computed: {
     incomingRequestsLength(): number {
-      return iridium.friends.requestList.filter(
-        (r: FriendRequest) => r.incoming,
+      return this.friends.requestList.filter(
+        (r: FriendRequest) => r.status === 'pending' && r.incoming,
       ).length
     },
     ...mapState({
