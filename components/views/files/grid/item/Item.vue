@@ -116,7 +116,6 @@ export default Vue.extend({
      * @description Emit to like item - pages/files/browse/index.vue
      */
     like(event: MouseEvent) {
-      event.stopPropagation()
       this.$emit('like', this.item)
     },
     /**
