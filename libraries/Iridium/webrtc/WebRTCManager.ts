@@ -570,10 +570,11 @@ export default class WebRTCManager extends Emitter {
       },
     }
 
+    await call.createLocalTracks(kinds)
+
     this.state.incomingCall = undefined
     this.state.activeCall = { callId, peerId: this.iridium.connector.peerId }
 
-    await call.createLocalTracks(kinds)
     await call.start()
   }
 
