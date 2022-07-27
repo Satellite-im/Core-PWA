@@ -18,9 +18,6 @@ export default Vue.extend({
     friendsList(): Array<Friend> {
       return iridium.friends?.list
     },
-    friendsRequests(): Array<FriendRequest> {
-      return iridium.friends?.requestList
-    },
     incomingRequests(): Array<FriendRequest> {
       return iridium.friends?.requestList.filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
@@ -28,7 +25,7 @@ export default Vue.extend({
     },
     outgoingRequests(): Array<FriendRequest> {
       return iridium.friends?.requestList.filter(
-        (r: FriendRequest) => !r.incoming,
+        (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
     },
   },

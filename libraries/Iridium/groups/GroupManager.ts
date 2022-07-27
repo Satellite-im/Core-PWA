@@ -1,9 +1,8 @@
-import { Iridium, Emitter } from '@satellite-im/iridium'
+import { Emitter, encoding } from '@satellite-im/iridium'
 import type { IridiumMessage } from '@satellite-im/iridium/src/types'
-import * as json from 'multiformats/codecs/json'
 import { IridiumManager } from '../IridiumManager'
 import Group from './Group'
-import { GroupConfig, GroupData, GroupsError } from './types'
+import { GroupConfig, GroupsError } from './types'
 
 export default class GroupManager extends Emitter<IridiumMessage> {
   groupIds?: string[]
@@ -36,7 +35,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     if (!this.iridium.connector) {
       return ''
     }
-    const id = await Iridium.hash({
+    const id = await encoding.hash({
       timestamp: Date.now(),
       origin: this.iridium.connector?.id,
     })

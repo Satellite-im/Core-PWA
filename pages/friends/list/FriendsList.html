@@ -45,12 +45,11 @@
       containerClass="is-half"
     >
       <div class="friend-column">
-        <!-- Friends List -->
-        <div v-if="friends && friends.list">
-          <div v-for="user in friendsList" :key="user.did">
-            <FriendsFriend v-if="user" :user="user" :key="user.did" />
-          </div>
-        </div>
+        <FriendsFriend
+          v-for="user in friendsList"
+          :user="user"
+          :key="user.did"
+        />
         <!-- <div v-if="friends && blockedList" class="padded_divider">
           <FriendsFriend
             v-for="(user, did) in friends.blocked"

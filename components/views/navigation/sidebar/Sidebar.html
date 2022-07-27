@@ -38,11 +38,11 @@
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="incomingRequests"
+        v-if="incomingRequestsLength"
         class="label"
         :class="{inverted : $route.path.includes('/friends/list')}"
       >
-        {{incomingRequests.length}}
+        {{incomingRequestsLength}}
       </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files')"
