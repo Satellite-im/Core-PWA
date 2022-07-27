@@ -1,6 +1,12 @@
-import { Iridium, Emitter } from '@satellite-im/iridium'
+import Vue from 'vue'
+import {
+  IridiumPeerIdentifier,
+  Emitter,
+  didUtils,
+  encoding,
+} from '@satellite-im/iridium'
 import type {
-  IridiumPeerMessage,
+  IridiumMessage,
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
@@ -15,25 +21,41 @@ import {
 import logger from '~/plugins/local/logger'
 
 export type IridiumFriendEvent = {
-  to: string
+  to: IridiumPeerIdentifier
   status: FriendRequestStatus
   user: User
   data?: any
   at: number
 }
+export type FriendState = {
+  details: { [key: string]: Friend }
+  requests: { [key: string]: FriendRequest }
+  blocked: string[]
+}
 
-export type IridiumFriendPubsub = IridiumPeerMessage<IridiumFriendEvent>
+export type IridiumFriendPubsub = IridiumMessage<IridiumFriendEvent>
 
 export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   public readonly iridium: IridiumManager
-  public state: {
-    list: User[]
-    requests: FriendRequest[]
-  } = { list: [], requests: [] }
+  public state: FriendState = {
+    details: {},
+    requests: {},
+    blocked: [],
+  }
+
+  private loggerTag = 'iridium/friends'
 
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
+  }
+
+  get list() {
+    return Object.values(this.state.details || {})
+  }
+
+  get requestList() {
+    return Object.values(this.state.requests || {})
   }
 
   async init() {
@@ -42,47 +64,44 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     const iridium = this.iridium.connector
-    logger.log('iridium/friends', 'initializing')
-    // const pubsub = await iridium.ipfs.pubsub.ls()
-    // logger.info('iridium/friends', 'pubsub', pubsub)
+    logger.log(this.loggerTag, 'initializing')
+    const pubsub = await iridium.pubsub.subscriptions()
+    logger.info(this.loggerTag, 'pubsub', pubsub)
     await this.fetch()
-    logger.log('iridium/friends', 'friends state loaded', this.state)
-    logger.info('iridium/friends', 'subscribing to announce topic')
+    logger.log(this.loggerTag, 'friends state loaded', this.state)
+    logger.info(this.loggerTag, 'subscribing to announce topic')
     await iridium.subscribe('/friends/announce')
     // console.info('waiting for topic peer')
     // await this.iridium.connector?.waitForTopicPeer(topic)
-    this.iridium.connector?.on(
-      '/friends/announce',
-      this.onFriendActivity.bind(this),
-    )
-    logger.log('iridium/friends', 'listening for friend activity', this.state)
-
+    iridium.pubsub.on('/friends/announce', this.onFriendsAnnounce.bind(this))
+    logger.log(this.loggerTag, 'listening for friend activity', this.state)
     // connect to all friends
-    if (this.state.list) {
-      logger.info('iridium/friends', 'connecting to friends', this.state.list)
-      this.state.list.forEach(async (user) => {
-        const peerId = await Iridium.DIDToPeerId(user.did)
-        if (peerId && !iridium.hasPeer(peerId.toString())) {
+    if (this.list) {
+      logger.info(this.loggerTag, 'connecting to friends', this.list)
+      this.list.forEach(async (friend: User) => {
+        if (friend && !iridium.p2p.hasPeer(friend.did)) {
           logger.info(
-            'iridium/friends',
-            'registering friendly peerId with iridium',
-            {
-              did: user.did,
-              peerId,
-            },
+            this.loggerTag,
+            'registering friendly peer with iridium',
+            friend,
           )
-          iridium.followPeer(peerId.toString())
+          iridium.p2p.addPeer({ did: friend.did, type: 'peer' })
         }
       })
     }
 
-    if (this.state.requests.length) {
+    if (this.requestList.length) {
       logger.info(
-        'iridium/friends',
+        this.loggerTag,
         'connecting to requested friends',
         this.state.requests,
       )
     }
+    this.emit('ready', {})
+  }
+
+  async stop() {
+    await this.iridium.connector?.pubsub.unsubscribe(`/friends/announce`)
   }
 
   /**
@@ -91,9 +110,44 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns updated state
    */
   async fetch() {
-    const res = await this.get('/')
-    if ('requests' in res) {
-      this.state = { ...this.state, ...res }
+    this.state = {
+      ...this.state,
+      ...(await this.get('/')),
+    }
+    return this.state
+  }
+
+  async getRequests(): Promise<{ [key: string]: FriendRequest }> {
+    return this.state.requests || {}
+  }
+
+  async getFriends(): Promise<{ [key: string]: Friend }> {
+    return this.state.details || {}
+  }
+
+  private async onFriendsAnnounce(message: IridiumMessage<IridiumFriendEvent>) {
+    const { from, payload } = message
+    const { to, at, status, user } = payload.body
+    // if (Date.now() - at > 1000 * 60 * 60) {
+    //   logger.warn(this.loggerPrefix, 'ignoring old friend activity')
+    //   return
+    // }
+
+    if (to !== this.iridium.connector?.id) return
+    const request = await this.getRequest(from).catch(() => undefined)
+    if (!request && status === 'pending') {
+      await this.requestCreate(from, true, user)
+    } else if (request && status === 'rejected') {
+      request.incoming = false
+      request.status = status
+      await this.requestDelete(from, request)
+    } else if (request) {
+      request.status = status
+      await this.requestSave(from, request)
+    }
+    if (request && user && status === 'accepted') {
+      Vue.set(this.state.details, user.did, user)
+      await this.set(`/details/${from}`, user)
     }
     return this.state
   }
@@ -107,7 +161,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    */
   get<T = any>(path: string, options: IridiumGetOptions = {}): Promise<T> {
     if (!this.iridium.connector) {
-      logger.error('iridium/friends', 'network error')
+      logger.error(this.loggerTag, 'network error')
       throw new Error(FriendsError.NETWORK_ERROR)
     }
     return this.iridium.connector?.get<T>(
@@ -125,10 +179,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns iridium's connector result
    */
   set(path: string, payload: any, options: IridiumSetOptions = {}) {
-    logger.info('iridium/friends', 'path and paylaod', {
+    logger.info(this.loggerTag, 'path, paylaod and state', {
       path,
       payload,
+      state: this.state,
     })
+
     return this.iridium.connector?.set(
       `/friends${path === '/' ? '' : path}`,
       payload,
@@ -137,23 +193,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   /**
-   * @method getRequest
-   * @description returns request from id
-   * @param id string (required)
-   * @returns request object if found in the local state
-   */
-  getRequest(id: string): FriendRequest | undefined {
-    return this.state.requests.find((r) => r.user.did === id)
-  }
-
-  /**
    * @method isFriend
    * @description check on the local state if there's a friend with the current id
    * @param id string (required)
    * @returns boolean
    */
-  isFriend(id: string) {
-    return Boolean(this.getFriend(id))
+  isFriend(did: IridiumPeerIdentifier) {
+    return did && !!this.state?.details?.[didUtils.didString(did)]
   }
 
   /**
@@ -162,191 +208,201 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @param id string (required)
    * @returns friend data object if found in the local state
    */
-  getFriend(id: string) {
-    return this.state.list.find((f) => f.did === id)
+  getFriend(did: IridiumPeerIdentifier) {
+    return did ? this.state.details?.[didUtils.didString(did)] : undefined
   }
 
-  private async onFriendActivity(
-    message: IridiumPeerMessage<IridiumFriendEvent>,
-  ) {
-    const { from, payload, did } = message
-    const { to, status, user } = payload
-
-    if (to !== this.iridium.connector?.id) return
-    const request = this.getRequest(did)
-    if (!request && status === 'pending') {
-      await this.requestInsert(did, true, user)
-    } else if (status === 'removed') {
-      await this.removeUserFromState(did)
-    } else if (request) {
-      request.status = status
-      request.user = user
-      await this.requestSave(did, request)
-    }
+  hasRequest(did: IridiumPeerIdentifier) {
+    const str = didUtils.didString(did)
+    return (
+      this.state.requests?.[str] &&
+      this.state.requests?.[str].status !== 'rejected'
+    )
   }
 
-  /**
-   * @method send
-   * @description send broadcast event
-   * @param event iridium type event (required)
-   * @returns broadcast event
-   */
-  send(event: IridiumFriendEvent) {
-    return this.iridium.connector?.broadcast(`/friends/announce`, event, {
+  getRequest(did: IridiumPeerIdentifier): Promise<FriendRequest> {
+    return this.get<FriendRequest>(`/requests/${didUtils.didString(did)}`)
+  }
+
+  async send(event: IridiumFriendEvent) {
+    return this.iridium.connector?.publish(`/friends/announce`, event, {
       encrypt: {
-        recipients: [event.to, this.iridium.connector?.id],
+        recipients: [
+          typeof event.to === 'string' ? event.to : event.to.id,
+          this.iridium.connector?.id,
+        ],
       },
     })
   }
 
-  /**
-   * @method requestInsert
-   * @description parse a new request and add it to state
-   * @param remotePeerDID string (required)
-   * @param incoming boolean
-   * @param user object
-   * @returns request parsed object
-   */
-  async requestInsert(remotePeerDID: string, incoming = false, user: User) {
-    try {
-      if (this.isFriend(remotePeerDID)) {
-        logger.error('iridium/friends', 'already a friend', { remotePeerDID })
-        throw new Error(FriendsError.FRIEND_EXISTS)
-      }
-      if (this.getRequest(remotePeerDID)) {
-        logger.error('iridium/friends', 'request already exists')
-        throw new Error(FriendsError.REQUEST_ALREADY_SENT)
-      }
-      logger.info('iridium/friends', 'creating friend request', {
-        remotePeerDID,
-        incoming,
-      })
-      const request: FriendRequest = {
-        user: user || { did: remotePeerDID, name: remotePeerDID },
-        status: 'pending',
-        incoming,
-        at: Date.now(),
-      }
-
-      return this.requestSave(remotePeerDID, request)
-    } catch (err) {
-      this.emit('request/error', err)
-    }
+  broadcast(event: IridiumFriendEvent) {
+    return this.iridium.connector?.publish(`/friends/announce`, event)
   }
 
-  /**
-   * @method requestSave
-   * @description handle request state store, trigger broadcast event when request change
-   * @param remotePeerDID string (required)
-   * @param request request object (required)
-   * @returns request parsed object
-   */
-  async requestSave(remotePeerDID: string, request: FriendRequest) {
-    logger.info('iridium/friends', 'saving friend request', {
-      remotePeerDID,
+  async requestCreate(
+    did: IridiumPeerIdentifier,
+    incoming = false,
+    user: User = {
+      name: didUtils.didString(did),
+      did: didUtils.didString(did),
+    },
+  ) {
+    if (this.isFriend(did)) {
+      logger.error(this.loggerTag, 'already a friend', { did })
+      throw new Error(FriendsError.FRIEND_EXISTS)
+    }
+    if (this.hasRequest(did)) {
+      logger.error(this.loggerTag, 'request already exists')
+      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
+    }
+    logger.info(this.loggerTag, 'creating friend request', {
+      did,
+      incoming,
+    })
+    const request: FriendRequest = {
+      user: user || { did, name: did },
+      status: 'pending',
+      incoming,
+      at: Date.now(),
+    }
+    return this.requestSave(did, request)
+  }
+
+  async requestSave(did: IridiumPeerIdentifier, request: FriendRequest) {
+    logger.info(this.loggerTag, 'saving friend request', {
+      did,
       request,
     })
+    await this.set(`/requests/${didUtils.didString(did)}`, request)
+    Vue.set(this.state.requests, didUtils.didString(did), request)
 
-    const { user, status, incoming } = request
-    if (!(incoming && status === 'pending')) {
-      await this.requestSendUpdate(request, status)
-    }
-
-    const stateReq = this.getRequest(remotePeerDID)
-    if (stateReq) {
-      const index = this.state.requests.indexOf(stateReq)
-      this.state.requests.splice(index, 1)
+    if (!request.incoming && request.status === 'pending') {
+      await this.requestSend(did)
     }
 
-    if (status === 'pending') {
-      this.state.requests.push(request)
+    if (request.user && request.status === 'accepted') {
+      await this.add(request.user)
     }
-    if (user && status === 'accepted') {
-      await this.add(user)
-    }
-    await this.set(`/requests`, this.state.requests)
 
     return request
   }
 
-  /**
-   * @method requestSendUpdate
-   * @description updates request and send the broadcast event
-   * @param request request object (required)
-   * @param reqStatus status (required)
-   * @returns broadcast event
-   */
-  async requestSendUpdate(
-    request: FriendRequest,
-    reqStatus: FriendRequestStatus,
-  ) {
+  async requestSend(id: IridiumPeerIdentifier) {
     if (!this.iridium.connector) {
-      logger.error('iridium/friends', 'network error')
+      logger.error(this.loggerTag, 'network error')
       throw new Error(FriendsError.NETWORK_ERROR)
+    }
+    const request = await this.getRequest(id)
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
     const profile = await this.iridium.profile?.get()
     if (!profile) {
-      logger.error('iridium/friends', 'network error')
+      logger.error(this.loggerTag, 'network error')
       throw new Error(FriendsError.NETWORK_ERROR)
     }
     const payload = {
-      to: request.user.did,
+      to: id,
       ...request,
-      status: reqStatus,
       user: {
         did: this.iridium.connector.id,
-        peerId: this.iridium.connector.peerId,
         name: profile.name,
         photoHash: profile.photoHash,
       },
     }
-    logger.info('iridium/friends', 'updating friend request', {
-      remotePeerDID: request.user.did,
+    logger.info(this.loggerTag, 'sending friend request', {
+      id,
       payload,
     })
     return this.send(payload)
   }
 
-  /**
-   * @method requestReject
-   * @description reject a friend request
-   * @param remotePeerDID id (required)
-   * @returns request object
-   */
-  requestReject(remotePeerDID: string) {
-    const request = this.getRequest(remotePeerDID)
+  async requestSetUserData(id: IridiumPeerIdentifier, user: User) {
+    const request = await this.getRequest(id)
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+    request.user = user
+    return this.requestSave(id, request)
+  }
+
+  async requestReject(did: IridiumPeerIdentifier) {
+    const request = await this.getRequest(did)
     if (!request || request.status !== 'pending') {
-      logger.error('iridium/friends', 'request not found')
+      logger.error(this.loggerTag, 'request not found')
       throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
-    logger.info('iridium/friends', 'request accepted', {
-      remotePeerDID,
+    logger.info(this.loggerTag, 'request rejected', {
+      did,
     })
 
     request.status = 'rejected'
-    return this.requestSave(remotePeerDID, request)
+    return this.requestDelete(did, request)
+  }
+
+  async requestDelete(
+    did: IridiumPeerIdentifier,
+    request: FriendRequest,
+  ): Promise<void> {
+    logger.info(this.loggerTag, 'deleting friend request', {
+      did,
+      request,
+    })
+    if (!this.iridium.connector) {
+      logger.error(this.loggerTag, 'network error')
+      throw new Error(FriendsError.NETWORK_ERROR)
+    }
+    if (!request) {
+      throw new Error(FriendsError.REQUEST_NOT_FOUND)
+    }
+
+    await this.set(`/requests/${didUtils.didString(did)}`, request)
+    Vue.set(this.state.requests, didUtils.didString(did), request)
+
+    if (request.incoming) {
+      const profile = await this.iridium.profile?.get()
+      if (!profile) {
+        logger.error(this.loggerTag, 'network error')
+        throw new Error(FriendsError.NETWORK_ERROR)
+      }
+      const payload: IridiumFriendEvent = {
+        to: did,
+        ...request,
+        user: {
+          did: this.iridium.connector.id,
+          name: profile.name,
+          photoHash: profile.photoHash,
+        },
+      }
+      logger.info(this.loggerTag, 'rejecting a friend request', {
+        did,
+        payload,
+      })
+      await this.send(payload)
+    }
   }
 
   /**
    * @method requestAccept
    * @description accept a friend request
-   * @param remotePeerDID id (required)
-   * @returns request object
+   * @param did - IridiumPeerIdentifier (required)
+   * @param incoming - boolean (default=false)
+   * @returns Promise<FriendRequest>
    */
-  requestAccept(remotePeerDID: string) {
-    const request = this.getRequest(remotePeerDID)
+  async requestAccept(did: IridiumPeerIdentifier) {
+    const request = await this.getRequest(did)
     if (!request || request.status !== 'pending') {
-      logger.error('iridium/friends', 'request not found')
+      logger.error(this.loggerTag, 'request not found')
       throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
-    logger.info('iridium/friends', 'request accepted', {
-      remotePeerDID,
+    logger.info(this.loggerTag, 'request accepted', {
+      did,
     })
 
     request.status = 'accepted'
-    return this.requestSave(remotePeerDID, request)
+    return this.requestSave(did, request)
   }
 
   /**
@@ -356,28 +412,61 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    */
   async add(user: User) {
     if (!this.iridium.connector) {
-      logger.error('iridium/friends', 'network error')
+      logger.error(this.loggerTag, 'network error')
       throw new Error(FriendsError.NETWORK_ERROR)
     }
-
     if (this.getFriend(user.did)?.name === user.name) {
-      logger.error('iridium/friends', 'already a friend', { user })
+      logger.error(this.loggerTag, 'already a friend', { user })
       throw new Error(`already friends with ${user.did}`)
     }
 
-    this.state.list.push(user)
-    const pid = user.peerId || (await Iridium.DIDToPeerId(user.did))
-    await this.iridium.connector.followPeer(pid.toString())
-    await this.set('/list', this.state.list)
+    const pid = user.peerId || (await didUtils.DIDToPeerId(user.did))
+    await this.iridium.connector?.p2p?.addPeer({
+      did: user.did,
+      type: 'peer',
+    })
+    Vue.set(this.state.details, user.did, user)
+    await this.set(`/details/${user.did}`, user)
     if (!user.name) return
-    const id = await Iridium.hash([user.did, this.iridium.connector?.id].sort())
+    const id = await encoding.hash(
+      [user.did, this.iridium.connector?.id].sort(),
+    )
     if (id && !this.iridium.chat.hasConversation(id)) {
-      return this.iridium.chat.createConversation({
+      await this.iridium.chat.createConversation({
         id,
         name: user.name,
         type: 'direct',
         participants: [user.did, this.iridium.connector.id],
       })
+    }
+
+    // TODO: needs updated ChatManager
+    if (id && !this.iridium.chat.hasConversation(id)) {
+      // return this.iridium.chat?.createConversation({
+      //   name: user.name,
+      //   type: 'direct',
+      //   participants: [user.did, this.iridium.connector.id],
+      // })
+    }
+    const request = await this.getRequest(user.did)
+
+    if (request.incoming) {
+      const profile = await this.iridium.profile?.get()
+      const payload = {
+        ...request,
+        to: user.did,
+        incoming: false,
+        user: {
+          did: this.iridium.connector.id,
+          name: profile?.name,
+          photoHash: profile?.photoHash,
+        },
+      }
+      logger.info(this.loggerTag, 'sending acceptance of friend request', {
+        did: user.did,
+        payload,
+      })
+      return this.send(payload)
     }
   }
 
@@ -388,12 +477,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    */
   async removeFriend(remotePeerDID: string) {
     if (!this.iridium.connector) {
-      logger.error('iridium/friends', 'network error')
+      logger.error(this.loggerTag, 'network error')
       throw new Error(FriendsError.NETWORK_ERROR)
     }
     const profile = await this.iridium.profile?.get()
     if (!profile) {
-      logger.error('iridium/friends', 'network error')
+      logger.error(this.loggerTag, 'network error')
       throw new Error(FriendsError.NETWORK_ERROR)
     }
     const payload: IridiumFriendEvent = {
@@ -401,10 +490,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       status: 'removed',
       at: Date.now(),
       user: {
+        name: profile.name,
         did: this.iridium.connector.id,
       },
     }
-    logger.info('iridium/friends', 'removing friend', {
+    logger.info(this.loggerTag, 'removing friend', {
       remotePeerDID,
     })
     await this.send(payload)
@@ -419,15 +509,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   async removeUserFromState(remotePeerDID: string) {
     const friend = this.getFriend(remotePeerDID)
     if (!friend) {
-      logger.error('iridium/friends', 'friend not found', { remotePeerDID })
+      logger.error(this.loggerTag, 'friend not found', { remotePeerDID })
       throw new Error(FriendsError.FRIEND_NOT_FOUND)
     }
 
-    const friendIndex = this.state.list.findIndex(
-      (f) => f.did === remotePeerDID,
-    )
-    this.state.list.splice(friendIndex, 1)
-
-    await this.set('/list', this.state.list)
+    Vue.set(this.state.details, remotePeerDID, null)
+    await this.set('/details', this.state.details)
   }
 }

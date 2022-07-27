@@ -1,4 +1,4 @@
-import { IridiumDocument } from '~/../iridium/dist'
+import { IridiumDocument } from '@satellite-im/iridium'
 import Group from './Group'
 
 export type GroupMemberDetails = {

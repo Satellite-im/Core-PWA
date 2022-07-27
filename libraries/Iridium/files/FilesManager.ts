@@ -2,7 +2,7 @@ import { Emitter } from '@satellite-im/iridium'
 import type {
   IridiumGetOptions,
   IridiumSetOptions,
-} from '@satellite-im/iridium/src/types'
+} from '@satellite-im/iridium'
 import type { IPFS } from 'ipfs-core-types'
 import type { AddOptions, AddResult } from 'ipfs-core-types/root'
 import { createWriteStream } from 'streamsaver'
@@ -46,8 +46,10 @@ export default class FilesManager extends Emitter {
   }
 
   async fetch() {
-    const res = await this.iridium.connector?.get('/files')
-    if ('items' in res) {
+    const res = await this.iridium.connector?.get<{ items: IridiumItem[] }>(
+      '/files',
+    )
+    if (res && 'items' in res) {
       this.state = res
     }
     this.lastUpdated = Date.now()

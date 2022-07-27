@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import type { FriendRequest } from '~/libraries/Iridium/friends/types'
+import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   name: 'FriendsList',
@@ -11,15 +11,25 @@ export default Vue.extend({
   data() {
     return {
       route: 'active',
-      friends: iridium.friends.state,
+      friends: iridium.friends?.state,
     }
   },
   computed: {
+    friendsList(): Array<Friend> {
+      return iridium.friends?.list
+    },
+    friendsRequests(): Array<FriendRequest> {
+      return iridium.friends?.requestList
+    },
     incomingRequests(): Array<FriendRequest> {
-      return this.friends.requests.filter((r: FriendRequest) => r.incoming)
+      return iridium.friends?.requestList.filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
+      )
     },
     outgoingRequests(): Array<FriendRequest> {
-      return this.friends.requests.filter((r: FriendRequest) => !r.incoming)
+      return iridium.friends?.requestList.filter(
+        (r: FriendRequest) => !r.incoming,
+      )
     },
   },
 })

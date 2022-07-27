@@ -33,7 +33,7 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends.state.list,
+      friends: iridium.friends.list,
       groups: iridium.groups.state,
       messages: iridium.chat.messages[this.conversation.id],
     }

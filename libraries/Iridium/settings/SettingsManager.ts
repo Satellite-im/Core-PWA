@@ -46,13 +46,17 @@ export default class SettingsManager extends Emitter {
   }
 
   private async fetch() {
-    this.state = merge(initialState, (await this.get()) as Settings, {
+    const fetched = await this.get()
+    if (!fetched) {
+      return fetched
+    }
+    this.state = merge(initialState, fetched, {
       arrayMerge: overwriteMerge,
     })
   }
 
   get(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get(`/settings${path}`, options)
+    return this.iridium.connector?.get<Settings>(`/settings${path}`, options)
   }
 
   set(path: string = '', payload: any, options: any = {}) {

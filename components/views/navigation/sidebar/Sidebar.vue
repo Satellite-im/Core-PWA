@@ -15,7 +15,8 @@ import {
 
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import type { FriendRequest } from '~/libraries/Iridium/friends/types'
+import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
+import { DataStateType } from '~/store/dataState/types'
 export default Vue.extend({
   components: {
     UsersIcon,
@@ -34,14 +35,21 @@ export default Vue.extend({
   },
   data() {
     return {
-      requests: iridium.friends.state.requests,
       isQuickchatVisible: false,
+      friends: iridium.friends?.state,
     }
   },
+
   computed: {
-    incomingRequests(): number {
-      return this.requests.filter((r: FriendRequest) => r.incoming).length
+    incomingRequests(): Array<FriendRequest> {
+      return iridium.friends.requestList.filter(
+        (r: FriendRequest) => r.incoming,
+      )
     },
+    friendsList(): Array<Friend> {
+      return iridium.friends.list
+    },
+    DataStateType: () => DataStateType,
     ...mapState({
       ui: (state) => (state as RootState).ui,
     }),
