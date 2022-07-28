@@ -39,6 +39,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
     contextMenuValues(): ContextMenuItem[] {
@@ -58,7 +59,11 @@ export default Vue.extend({
           ]
         : [
             { text: this.$t('context.send'), func: this.openConversation },
-            // { text: this.$t('context.leave_group'), func: this.leaveGroup },
+            {
+              text: this.$t('context.leave_group'),
+              func: this.leaveGroup,
+              type: 'danger',
+            },
           ]
     },
     lastMessage(): ConversationMessage | undefined {
@@ -142,7 +147,7 @@ export default Vue.extend({
       this.isLoading = false
     },
     async leaveGroup() {
-      // todo
+      iridium.groups.leaveGroup(this.conversation.id)
     },
     /**
      * @method openConversation
