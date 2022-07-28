@@ -1,28 +1,18 @@
 .is-chatbar-reply {
-  min-height: 36px;
-  max-height: 36px;
   display: flex;
   justify-content: space-between;
-  width: calc(@full - 2rem);
   padding: 0.25rem 0.5rem;
   font-size: @text-size;
   font-family: @secondary-font;
-  margin: 0 1rem;
-  &:extend(.blur);
-  border-top: @light-border;
-  border-left: @light-border;
-  border-right: @light-border;
-  border-top-left-radius: @corner-rounding;
-  border-top-right-radius: @corner-rounding;
-  border: 1px solid transparent;
+  border-radius: @corner-rounding @corner-rounding 0 0;
   align-items: center;
+  &:extend(.blur);
 
   strong {
     &:extend(.font-primary);
   }
 
   .markdown {
-    width: calc(@full - @small-icon-size - 0.25rem);
     p {
       display: flex;
       align-items: center;
@@ -40,12 +30,5 @@
     font-size: @small-icon-size;
     font-family: @secondary-font;
     &:extend(.font-primary);
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .is-chatbar-reply {
-    margin: 0 @light-spacing;
-    width: calc(@full - @normal-spacing);
   }
 }
