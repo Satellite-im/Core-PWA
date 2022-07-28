@@ -48,7 +48,7 @@ p {
   }
 
   .sidebar {
-    width: @sidebar-size;
+    width: @sidebar-width;
     box-sizing: border-box;
   }
 
@@ -59,7 +59,7 @@ p {
 
     #simple-scrollbar.modal-container {
       position: relative;
-      width: calc(@full - @sidebar-size);
+      width: calc(@full - @sidebar-width);
       height: @full;
       padding: @xlarge-spacing;
       box-sizing: border-box;
@@ -109,14 +109,6 @@ p {
   .is-primary.input,
   .is-dark.input {
     background: @semitransparent-lightest-gradient !important;
-  }
-}
-
-@media only screen and (min-width: @mobile-breakpoint) {
-  .not-sidebar.swiper-slide-next {
-    .ps {
-      width: calc(100% - @sidebar-size);
-    }
   }
 }
 

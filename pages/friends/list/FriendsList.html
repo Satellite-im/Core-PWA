@@ -1,56 +1,46 @@
-<div id="friends-list" :v-scroll-lock="$device.isDesktop ? true : false">
-  <FriendsMobileList v-if="$device.isMobile" />
+<div class="friends">
   <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
-  <div class="columns" v-else>
-    <div class="column is-half">
-      <!-- Friends Add -->
-      <FriendsAdd />
-      <!-- Incoming Requests -->
-      <template v-if="incomingRequests.length">
-        <div class="padded_divider">
-          <TypographyHorizontalRuleText
-            plaintext
-            :value="$t('friends.requests')"
-          />
-        </div>
-        <FriendsFriend
-          v-for="request in incomingRequests"
-          :user='request.user || { did:request.did, name: request.user.name, status:
-          "offline" }'
-          :request="request"
-          :key="request.from"
-        />
-      </template>
-      <!-- Outgoing Requests -->
-      <template v-if="outgoingRequests.length">
-        <div class="padded_divider">
-          <TypographyHorizontalRuleText
-            plaintext
-            :value="$t('friends.outgoing')"
-          />
-        </div>
-        <FriendsFriend
-          v-for="request in outgoingRequests"
-          :user='request.user || { did:request.did, name: request.user.name, status:
-          "offline" }'
-          :request="request"
-          :key="request.from"
-        />
-      </template>
-    </div>
+  <div class="col">
+    <!-- Friends Add -->
+    <InteractablesSidebarToggle v-if="!showSidebar" />
 
-    <UiSimpleScroll
-      scrollMode="vertical"
-      scrollShow="scroll"
-      containerClass="is-half"
-    >
-      <div class="friend-column">
-        <FriendsFriend
-          v-for="user in friendsList"
-          :user="user"
-          :key="user.did"
+    <FriendsAdd />
+    <!-- Incoming Requests -->
+    <template v-if="incomingRequests.length">
+      <div class="padded_divider">
+        <TypographyHorizontalRuleText
+          plaintext
+          :value="$t('friends.requests')"
         />
-        <!-- <div v-if="friends && blockedList" class="padded_divider">
+      </div>
+      <FriendsFriend
+        v-for="request in incomingRequests"
+        :user='request.user || { did:request.did, name: request.user.name, status:
+          "offline" }'
+        :request="request"
+        :key="request.from"
+      />
+    </template>
+    <!-- Outgoing Requests -->
+    <template v-if="outgoingRequests.length">
+      <div class="padded_divider">
+        <TypographyHorizontalRuleText
+          plaintext
+          :value="$t('friends.outgoing')"
+        />
+      </div>
+      <FriendsFriend
+        v-for="request in outgoingRequests"
+        :user='request.user || { did:request.did, name: request.user.name, status:
+          "offline" }'
+        :request="request"
+        :key="request.from"
+      />
+    </template>
+  </div>
+  <div class="col">
+    <FriendsFriend v-for="user in friendsList" :user="user" :key="user.did" />
+    <!-- <div v-if="friends && blockedList" class="padded_divider">
           <FriendsFriend
             v-for="(user, did) in friends.blocked"
             :user="user"
@@ -58,7 +48,5 @@
             blocked
           />
         </div> -->
-      </div>
-    </UiSimpleScroll>
   </div>
 </div>

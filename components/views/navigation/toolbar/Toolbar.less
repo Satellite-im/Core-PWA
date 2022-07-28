@@ -1,11 +1,10 @@
 #toolbar {
   display: flex;
   align-items: center;
-  height: @toolbar-height;
-  padding: 0 @normal-spacing 0 3rem;
-  min-height: @toolbar-height;
   transition: @transition-all;
-  &:extend(.third-layer);
+  gap: @normal-spacing;
+  margin: @normal-spacing;
+  flex-shrink: 0;
 
   .vertical-divider {
     height: 30px;
@@ -17,7 +16,6 @@
 
   .notification-alert {
     position: fixed;
-    &:extend(.first-layer);
   }
 
   .toggle-alerts {
@@ -29,7 +27,6 @@
   .controls {
     display: flex;
     align-items: center;
-    margin-left: @large-spacing;
     font-size: @icon-size;
     box-shadow: @ui-shadow;
     &:extend(.light-padding);
@@ -55,7 +52,6 @@
   .user-info {
     position: relative;
     align-self: center;
-    margin-left: 0.75rem;
     flex-grow: 1;
     &:extend(.ellipsis);
     pointer-events: none;

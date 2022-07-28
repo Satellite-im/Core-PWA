@@ -1,9 +1,14 @@
-#direct {
-  &:extend(.light-padding);
-  flex-grow: 1;
-  overflow: hidden;
-  position: relative;
+.chat-container {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   justify-content: flex-end;
+  margin: @normal-spacing;
+
+  .chat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
 }

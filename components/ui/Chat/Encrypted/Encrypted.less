@@ -1,21 +1,11 @@
-#encrypted-yellow {
+.encrypted {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: @text-size;
+  font-family: @secondary-font;
+  padding: @light-spacing;
   &:extend(.color-warning);
   &:extend(.background-semitransparent-light);
   &:extend(.round-corners);
-  &:extend(.light-padding);
-  width: calc(@full - @light-spacing * 2);
-  text-align: center;
-  margin-left: 2.5%;
-  font-size: @text-size;
-  font-family: @secondary-font;
-  margin: @light-spacing;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  #encrypted-yellow {
-    min-width: 90vw;
-    margin: 16px 16px 0px 16px;
-    overflow-x: hidden;
-    width: 90%;
-  }
 }

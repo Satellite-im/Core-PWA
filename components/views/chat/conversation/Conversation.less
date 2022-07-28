@@ -1,7 +1,9 @@
 .conversation {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  flex-grow: 1;
+  overflow-y: scroll;
+  gap: @light-spacing;
 
   .separator {
     margin: @normal-spacing 3rem;

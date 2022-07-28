@@ -26,12 +26,6 @@ export default Vue.extend({
     MessageSquareIcon,
     MenuIcon,
   },
-  props: {
-    sidebar: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       isQuickchatVisible: false,
@@ -51,9 +45,6 @@ export default Vue.extend({
   methods: {
     toggleModal() {
       this.isQuickchatVisible = !this.isQuickchatVisible
-    },
-    toggleMenu() {
-      this.$store.commit('ui/showSidebar', !this.ui.showSidebar)
     },
   },
 })

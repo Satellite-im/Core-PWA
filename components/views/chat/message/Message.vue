@@ -55,7 +55,7 @@ export default Vue.extend({
     author(): User {
       // TODO: access User from iridium via did
       return {
-        id: this.message.did,
+        id: this.message.from,
         name: 'test',
       } as User
       // if (this.message.did === iridium.profile.state.

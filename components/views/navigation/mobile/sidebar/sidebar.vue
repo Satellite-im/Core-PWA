@@ -357,7 +357,7 @@ export default Vue.extend({
       position: relative;
       overflow: hidden;
       .inline-notification {
-        width: @sidebar-size - (@normal-spacing * 2);
+        width: @sidebar-width - (@normal-spacing * 2);
       }
     }
     .sidebar-search {
@@ -494,11 +494,6 @@ export default Vue.extend({
     }
   }
 
-  .desktop #sidebar {
-    width: calc(@sidebar-size-mobile - @slimbar-size);
-    min-width: calc(@sidebar-size-mobile - @slimbar-size);
-  }
-
   .quick-mobile-chat {
     position: absolute;
     width: 45px;
@@ -528,7 +523,7 @@ export default Vue.extend({
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {
   #sidebar {
-    max-width: @sidebar-size;
+    max-width: @sidebar-width;
     min-width: @sidebar-size-mobile;
     sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
