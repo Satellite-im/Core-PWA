@@ -14,6 +14,8 @@ import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/types'
+import { Conversation } from '~/store/textile/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -47,6 +49,9 @@ export default Vue.extend({
       isGroup: 'conversation/isGroup',
       getTimestamp: 'settings/getTimestamp',
     }),
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
     author(): User {
       // TODO: access User from iridium via did
       return {
@@ -131,6 +136,31 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method showQuickProfile
+     * @description Shows quickprofile component for user by setting quickProfile to true in state and setQuickProfilePosition
+     * to the current group components click event data
+     * @param e Event object from group component click
+     * @example v-on:click="showQuickProfile"
+     */
+    showQuickProfile(e: MouseEvent) {
+      const openQuickProfile = () => {
+        this.$store.dispatch('ui/showQuickProfile', {
+          textilePublicKey: this.group.from,
+          position: { x: e.x, y: e.y },
+        })
+      }
+
+      if (!this.ui.quickProfile) {
+        openQuickProfile()
+        return
+      }
+      setTimeout(() => {
+        if (!this.ui.quickProfile) {
+          openQuickProfile()
+        }
+      }, 0)
+    },
     /**
      * @method markdownToHtml
      * @description convert text markdown to html
@@ -242,19 +272,10 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent) {
-      if (this.isGroup) {
-        this.toggleModal(ModalWindows.CALL_TO_ACTION)
-        return
-      }
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
-        groupID: this.group.id,
-        messageID: this.message.id,
-        to:
-          this.message.to === myTextilePublicKey
-            ? this.message.from
-            : this.message.to,
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
       })
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
@@ -262,10 +283,10 @@ export default Vue.extend({
       })
     },
     quickReaction(emoji: EmojiUsage) {
-      this.$store.dispatch('textile/sendReactionMessage', {
-        to: this.message.to,
-        emoji: emoji.content,
-        reactTo: this.message.id,
+      iridium.chat.toggleMessageReaction({
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
+        reaction: emoji.content,
       })
     },
     /**
