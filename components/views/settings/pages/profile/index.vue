@@ -2,25 +2,34 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
-import { EditIcon } from 'satellite-lucide-icons'
+import {
+  EditIcon,
+  UserIcon,
+  AlignLeftIcon,
+  LaptopIcon,
+  InfoIcon,
+} from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
-import { ModalWindows } from '~/store/ui/types'
-import { PlatformTypeEnum } from '~/libraries/Enums/enums'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
     EditIcon,
+    UserIcon,
+    AlignLeftIcon,
+    LaptopIcon,
+    InfoIcon,
   },
   layout: 'settings',
   data() {
     return {
       image: '',
       status: '',
+      accountUrl: '',
       croppedImage: '',
+      showCropper: false,
     }
   },
   computed: {
@@ -28,13 +37,10 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore
-      if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
-        return true
-      return false
+      return this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md')
     },
     src(): string {
       if (this.croppedImage) {
@@ -43,29 +49,13 @@ export default Vue.extend({
       const hash = this.accounts?.details?.profilePicture
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
-    showCropper(): boolean {
-      return this.ui.modals[ModalWindows.CROP]
+    imageInputRef(): HTMLInputElement {
+      return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
     },
-    /**
-     * @method acceptableImageFormats
-     * @description embeddable types plus HEIC since we can convert
-     * ios doesn't support advanced <input> accept
-     * @returns {string} comma separated list of types
-     */
-    acceptableImageFormats(): string {
-      return this.$envinfo.currentPlatform === PlatformTypeEnum.IOS
-        ? 'image/*'
-        : [
-            FILE_TYPE.APNG,
-            FILE_TYPE.AVIF,
-            FILE_TYPE.GIF,
-            FILE_TYPE.JPG,
-            FILE_TYPE.PNG,
-            FILE_TYPE.WEBP,
-            FILE_TYPE.SVG,
-            FILE_TYPE.HEIC,
-          ].join(',')
-    },
+  },
+  beforeDestroy() {
+    URL.revokeObjectURL(this.croppedImage)
+    URL.revokeObjectURL(this.image)
   },
   methods: {
     /**
@@ -74,10 +64,7 @@ export default Vue.extend({
      * @example
      */
     toggleCropper() {
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CROP,
-        state: !this.ui.modals[ModalWindows.CROP],
-      })
+      this.showCropper = !this.showCropper
     },
     /**
      * @method openFileDialog DocsTODO
@@ -85,10 +72,7 @@ export default Vue.extend({
      * @example
      */
     openFileDialog() {
-      if (!this.getInitialized) return
-
-      const fileInput = this.$refs.file as HTMLElement
-      fileInput.click()
+      this.imageInputRef.click()
     },
     /**
      * @method setCroppedImage DocsTODO
@@ -96,12 +80,14 @@ export default Vue.extend({
      * @param image
      * @example
      */
-    setCroppedImage(image: any) {
-      const fileInput = this.$refs.file as HTMLInputElement
-      this.croppedImage = image
-      fileInput.value = ''
-
-      this.$store.dispatch('accounts/updateProfilePhoto', image)
+    setCroppedImage(image: Blob) {
+      this.croppedImage = URL.createObjectURL(image)
+      this.imageInputRef.value = ''
+      const img = new Image()
+      img.src = this.croppedImage
+      // TODO: Save image with iridium
+      // Note: This was used for Solana implementation
+      // this.$store.dispatch('accounts/updateProfilePhoto', image)
     },
     /**
      * @method selectProfileImage DocsTODO
@@ -110,21 +96,19 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    selectProfileImage(e: any) {
-      if (e.target && e.target.value !== null) {
-        const files = e.target.files || e.dataTransfer.files
-        if (!files.length) return
+    selectProfileImage(e: Event) {
+      const target = e.target as HTMLInputElement
+      const file = target.files?.[0]
 
-        const reader = new FileReader()
-        reader.onload = (e: any) => {
-          this.image = e.target.result
-          e.target.value = ''
-
-          this.toggleCropper()
-        }
-
-        reader.readAsDataURL(files[0])
+      if (file) {
+        this.image = URL.createObjectURL(file)
+        this.toggleCropper()
       }
+    },
+    removeProfileImage() {
+      this.croppedImage = ''
+      // TODO: Update with IPFS method
+      // this.$store.dispatch('accounts/updateProfilePhoto', '')
     },
   },
 })

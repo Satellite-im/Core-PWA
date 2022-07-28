@@ -2,38 +2,38 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
+import { RootState } from '~/types/store/store'
 
-type Route = 'active' | 'requests' | 'blocked' | 'add'
 export default Vue.extend({
   name: 'FriendsList',
-  layout: 'friends',
+  layout: 'basic',
   data() {
     return {
       route: 'active',
-      data: {
-        loading: true,
-        friends: iridium.friends?.state,
-      },
+      friends: iridium.friends?.state,
     }
   },
   computed: {
-    incomingRequests() {
-      if (!iridium.friends?.state.requests) return []
-      return Object.entries(iridium.friends?.state.requests).filter(
-        ([_key, request]) => request.incoming && request.status === 'pending',
+    ...mapState({
+      showSidebar: (state) => (state as RootState).ui.showSidebar,
+    }),
+
+    friendsList(): Array<Friend> {
+      return iridium.friends?.list
+    },
+    incomingRequests(): Array<FriendRequest> {
+      return iridium.friends?.requestList.filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },
-    outgoingRequests() {
-      if (!iridium.friends?.state.requests) return []
-      return Object.entries(iridium.friends?.state.requests).filter(
-        ([_key, request]) => !request.incoming && request.status === 'pending',
+    outgoingRequests(): Array<FriendRequest> {
+      return iridium.friends?.requestList.filter(
+        (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
     },
-  },
-  async mounted() {
-    this.data.loading = false
-    iridium.friends?.on('request/changed', () => this.$forceUpdate())
   },
 })
 </script>

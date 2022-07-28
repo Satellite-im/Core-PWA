@@ -1,0 +1,94 @@
+.file {
+  display: flex;
+  flex-direction: column;
+  min-height: 234px;
+  border-radius: @corner-rounding-smaller;
+  cursor: pointer;
+
+  background: linear-gradient(
+      163.91deg,
+      rgba(48, 52, 71, 0.5) 0%,
+      rgba(42, 54, 75, 0) 100%
+    ),
+    linear-gradient(
+      163.91deg,
+      rgba(28, 39, 58, 0.9) 0%,
+      rgba(0, 0, 0, 0.09) 100%
+    ),
+    linear-gradient(
+      359.95deg,
+      rgba(36, 40, 57, 0.9) 0.04%,
+      rgba(34, 44, 63, 0) 99.95%
+    ),
+    #121216;
+
+  .like {
+    opacity: 0;
+    transition: opacity @animation-speed ease;
+  }
+
+  &:hover,
+  &:focus,
+  &.is-liked {
+    .like {
+      opacity: 1;
+    }
+  }
+
+  .quick-actions {
+    width: @full;
+    padding: @normal-spacing;
+    position: absolute;
+
+    &:extend(.first-layer);
+
+    .like {
+      float: right;
+      &.liked {
+        color: @pink;
+      }
+    }
+
+    svg:hover {
+      opacity: 0.75;
+    }
+  }
+
+  &.disabled {
+    .quick-actions {
+      display: none;
+    }
+  }
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 162px;
+    padding-top: 36px; // half of the text area height, centers icon
+  }
+
+  .image-container {
+    overflow: hidden;
+    height: 162px;
+    filter: brightness(0.75);
+    .image-preview {
+      height: 162px;
+      width: @full;
+      object-fit: cover;
+    }
+  }
+
+  .text-container {
+    padding: @normal-spacing;
+
+    .maintext {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: pre;
+    }
+    .subtext {
+      &:extend(.font-muted);
+    }
+  }
+}

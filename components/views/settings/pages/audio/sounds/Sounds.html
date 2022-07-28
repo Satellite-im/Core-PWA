@@ -4,32 +4,32 @@
     :text="$t('pages.settings.notifications.sounds.title')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.NEW_MESSAGE)"
+    :value="sounds[Sounds.NEW_MESSAGE]"
     @toggle="toggleSound(Sounds.NEW_MESSAGE, $event)"
     :title="$t('pages.settings.notifications.sounds.message')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.CALL)"
+    :value="sounds[Sounds.CALL]"
     @toggle="toggleSound(Sounds.CALL, $event)"
     :title="$t('pages.settings.notifications.sounds.call')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.MUTE)"
+    :value="sounds[Sounds.MUTE]"
     @toggle="toggleSounds([Sounds.MUTE, Sounds.UNMUTE], $event)"
     :title="$t('pages.settings.notifications.sounds.mute')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.DEAFEN)"
+    :value="sounds[Sounds.DEAFEN]"
     @toggle="toggleSounds([Sounds.DEAFEN, Sounds.UNDEAFEN], $event)"
     :title="$t('pages.settings.notifications.sounds.deafen')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.UPLOAD)"
+    :value="sounds[Sounds.UPLOAD]"
     @toggle="toggleSound(Sounds.UPLOAD, $event)"
     :title="$t('pages.settings.notifications.sounds.upload')"
   />
   <SettingsPagesAudioSoundsItem
-    :value="sound(Sounds.CONNECTED)"
+    :value="sounds[Sounds.CONNECTED]"
     @toggle="toggleSound(Sounds.CONNECTED, $event)"
     :title="$t('pages.settings.notifications.sounds.connected')"
   />

@@ -1,7 +1,5 @@
 <template>
-  <div class="horizontal-container">
-    <div class="horizontal-rule" />
-  </div>
+  <div class="horizontal-rule" />
 </template>
 <script lang="ts">
 import Vue from 'vue'
@@ -12,11 +10,9 @@ export default Vue.extend({})
 .horizontal-rule {
   height: 1px;
   background: @splash-radial;
+  margin: @normal-spacing 0;
 }
-.horizontal-container {
-  padding: @normal-spacing 0;
-}
-.moonless-night {
+.theme-moonlessNight {
   .horizontal-rule {
     background: @lighter-splash-radial;
   }

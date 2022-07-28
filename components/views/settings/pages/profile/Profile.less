@@ -1,5 +1,73 @@
-@size: 75px;
+@size: 80px;
 @size-mobile: 55px;
+
+.profile-small-screen {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  &:extend(.full-width);
+  .profile-left {
+    padding: @normal-spacing 0;
+  }
+  .profile-layout {
+    &:extend(.full-width);
+    display: flex;
+    flex-wrap: wrap;
+    .profile-left {
+      &:extend(.full-width);
+      margin-top: 0;
+    }
+  }
+
+  .profile-right {
+    display: flex;
+    flex-direction: column;
+    gap: @xlarge-spacing;
+
+    .profile-main {
+      padding: @normal-spacing;
+
+      .profile-section {
+        display: grid;
+        grid-template-columns: auto 1fr 1fr 1fr;
+        grid-template-rows: auto 1fr auto 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+          'subtitle subtitle subtitle subtitle'
+          'photo username username username'
+          'remove-button . . .'
+          'status-input status-input status-input status-input';
+      }
+
+      .subtitle {
+        margin-bottom: @light-spacing;
+      }
+
+      .photo {
+        align-self: center;
+        margin: 0 @normal-spacing @xlight-spacing 0;
+      }
+
+      .remove-button {
+        margin-left: 0.3rem;
+        margin-top: 0;
+      }
+
+      .status-input {
+        align-self: center;
+      }
+
+      .profile-photo-column {
+        max-width: 80px;
+
+        .profile-photo {
+          height: @size-mobile;
+          width: @size-mobile;
+        }
+      }
+    }
+  }
+}
 
 .profile-layout {
   &:extend(.full-width);
@@ -10,6 +78,7 @@
 }
 
 .profile-left {
+  position: relative;
   flex-shrink: 0;
   width: 300px;
   padding: 0 @normal-spacing;
@@ -17,45 +86,161 @@
 }
 
 .profile-right {
+  display: flex;
+  flex-direction: column;
   &:extend(.half-width);
   min-width: 250px;
   flex-grow: 1;
   flex-shrink: 3;
   margin-top: @xlarge-spacing;
+  gap: @xlarge-spacing;
+}
+
+.section-icon {
+  margin-bottom: 0.25rem;
+
+  &-tooltip {
+    color: @flair-color;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.section-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: @light-spacing;
+  margin-bottom: @normal-spacing;
 }
 
 .profile-main {
   background: @midground-alt;
-  padding: @normal-spacing;
+  padding: @large-spacing;
   &:extend(.round-corners);
+  &:extend(.bordered);
+
+  .profile-section {
+    display: grid;
+    grid-template-columns: 0.3fr 1fr 1fr;
+    grid-template-rows: 0.5fr 0.5fr 0.5fr auto;
+    gap: 0px 16px;
+    grid-template-areas:
+      'subtitle subtitle subtitle'
+      'photo username username'
+      'photo status-input status-input'
+      'remove-button . .';
+  }
+
+  .subtitle {
+    grid-area: subtitle;
+  }
+
+  .photo {
+    grid-area: photo;
+  }
+
+  .remove-button {
+    display: flex;
+    grid-area: remove-button;
+    margin-top: @xlight-spacing;
+    margin-left: 1.1rem;
+    font-size: @mini-text-size;
+    &:extend(.color-danger);
+  }
+
+  .username {
+    align-self: center;
+    grid-area: username;
+  }
+
+  .status-input {
+    grid-area: status-input;
+  }
+
+  .status {
+    margin-top: @normal-spacing;
+  }
 }
 
 .profile-photo-column {
   max-width: 100px;
+
   .profile-photo {
     position: relative;
     height: @size;
     width: @size;
     cursor: pointer;
+
     .is-rounded,
     .is-square {
       max-width: @full !important;
       max-height: @full !important;
     }
+
     .plus-button {
-      &:extend(.first-layer);
       right: 0;
       top: 0;
       position: absolute;
     }
+  }
+}
 
-    &-loading {
-      cursor: progress;
+.about-main {
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  .about-subtitle {
+    display: flex;
+    justify-content: space-between;
+    gap: @normal-spacing;
+
+    .subtitle {
+      margin-bottom: 0;
+    }
+  }
+
+  .edit-button {
+    font-style: italic;
+    white-space: nowrap;
+    color: @text-muted;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.accounts-main {
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  .accounts-subtitle-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: @normal-spacing;
+
+    .accounts-subtitle {
+      display: flex;
+      justify-content: space-between;
+      gap: @normal-spacing;
+      margin-bottom: 0;
+
+      .subtitle {
+        margin-bottom: 0;
+      }
     }
   }
 }
 
 .username-column {
+  display: flex;
+  flex-direction: column;
+  gap: @light-spacing;
   overflow: hidden;
 
   .title {
@@ -81,9 +266,11 @@
   left: 0;
   right: 0;
   top: 0;
+
   .content {
     position: relative;
     width: 500px;
+
     .cropper-mask {
       &:extend(.blur-less);
       position: fixed;
@@ -94,8 +281,4 @@
       bottom: 0;
     }
   }
-}
-
-.input-file {
-  display: none;
 }

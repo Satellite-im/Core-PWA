@@ -13,11 +13,7 @@ import {
   MenuIcon,
 } from 'satellite-lucide-icons'
 
-import { DataStateType } from '~/store/dataState/types'
-import { Conversation } from '~/store/textile/types'
-import GroupInvite from '~/components/views/group/invite/Invite.vue'
 import { RootState } from '~/types/store/store'
-import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
@@ -29,64 +25,26 @@ export default Vue.extend({
     FolderIcon,
     MessageSquareIcon,
     MenuIcon,
-    GroupInvite,
   },
-  props: {
-    toggle: {
-      type: Function,
-      default: () => {},
-    },
-    showMenu: {
-      type: Function,
-      default: () => {},
-    },
-    sidebar: {
-      type: Boolean,
-      default: false,
-    },
+  data() {
+    return {
+      isQuickchatVisible: false,
+      friends: iridium.friends,
+    }
   },
   computed: {
-    incomingRequests: () =>
-      Object.values(iridium.friends?.state.requests || {}).filter(
-        (r: FriendRequest) => r.incoming,
-      ) || [],
-    DataStateType: () => DataStateType,
+    incomingRequestsLength(): number {
+      return this.friends.requestList.filter(
+        (r: FriendRequest) => r.status === 'pending' && r.incoming,
+      ).length
+    },
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      dataState: (state) => (state as RootState).dataState,
-      media: (state) => (state as RootState).media,
-      friends: () => iridium.friends?.state,
-      groups: () => iridium.groups?.state,
-      conversations: () => ({}),
     }),
   },
-  async mounted() {
-    iridium.friends?.on('request/changed', () => this.$forceUpdate())
-  },
   methods: {
-    toggleModal(type: ModalWindows.QUICK_CHAT | ModalWindows.CREATE_GROUP) {
-      this.$store.commit('ui/toggleModal', {
-        name: type,
-        state: !this.ui.modals[type],
-      })
-    },
-    closeGroupInviteModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: false },
-      })
-    },
-    gotoAddFriends() {
-      if (this.$route.name?.includes('friends-list')) {
-        if (this.$device.isMobile) {
-          this.$store.commit('ui/showSidebar', false)
-        }
-      } else {
-        this.$router.push({ path: '/friends/list' })
-      }
-    },
-    sortUserList(conversations: Conversation) {
-      this.$store.commit('friends/sortFriends', conversations)
+    toggleModal() {
+      this.isQuickchatVisible = !this.isQuickchatVisible
     },
   },
 })

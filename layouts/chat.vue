@@ -2,7 +2,7 @@
   <div
     id="app-wrap"
     :class="[
-      $store.state.ui.theme.base.class,
+      `theme-${settings.theme}`,
       showSidebar ? 'is-open' : 'is-collapsed chat-page',
       asidebar && selectedGroup ? 'is-open-aside' : 'is-collapsed-aside',
       selectedGroup ? 'active-group' : null,
@@ -36,11 +36,7 @@
             :sidebar="showSidebar"
             :show-menu="toggleMenu"
           />
-          <Sidebar
-            v-if="!$device.isMobile"
-            :sidebar="showSidebar"
-            :show-menu="toggleMenu"
-          />
+          <Sidebar v-if="!$device.isMobile" :sidebar="showSidebar" />
         </swiper-slide>
         <!-- Hide swiper slide when no friends and mobile -->
         <swiper-slide
@@ -57,7 +53,7 @@
               full-width
               @click="toggleMenu"
             />
-            <Toolbar v-if="recipient" id="toolbar" :recipient="recipient" />
+            <Toolbar id="toolbar" />
             <Media
               v-if="$device.isMobile"
               :fullscreen="ui.fullscreen"
@@ -102,8 +98,8 @@
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ flairColor[0] }}; --flair-color-secondary:
-      {{ flairColor[1] }}; --flair-color-rgb:{{ flairColor[2] }}; }
+      :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
+      {{ flair.secondary }}; --flair-color-rgb: {{ flair.primaryRGB }}; }
     </v-style>
   </div>
 </template>
@@ -117,14 +113,11 @@ import { Touch } from '~/components/mixins/Touch'
 import Layout from '~/components/mixins/Layouts/Layout'
 import useMeta from '~/components/compositions/useMeta'
 import { DataStateType } from '~/store/dataState/types'
-import { FlairColor, SettingsRoutes } from '~/store/ui/types'
-// import type { Friend } from '~/types/ui/friends'
-import type { Friend } from '~/libraries/Iridium/friends/types'
-import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
-// import { Group } from '~/store/groups/types'
+import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
+import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -147,6 +140,7 @@ export default Vue.extend({
     return {
       sidebar: !this.$device.isMobile,
       asidebar: !this.$device.isMobile,
+      settings: iridium.settings.state,
       swiperOption: {
         resistanceRatio: 0,
         slidesPerView: 'auto',
@@ -184,12 +178,9 @@ export default Vue.extend({
       groups: (state) => (state as RootState).groups,
       dataState: (state) => (state as RootState).dataState,
       conversation: (state) => (state as RootState).conversation,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
       webrtc: (state) => (state as RootState).webrtc,
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
-    ...mapGetters('textile', ['getInitialized']),
     ...mapGetters('conversation', ['recipient']),
     ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     DataStateType: () => DataStateType,
@@ -197,7 +188,7 @@ export default Vue.extend({
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
     recipient(): Friend | Group {
-      const recipient = iridium.friends?.getFriend(this.$route.params.address)
+      const recipient = iridium.friends?.getFriend(this.conversation.id)
       if (!recipient) {
         return {}
       }
@@ -218,8 +209,11 @@ export default Vue.extend({
       //       )
       // return recipient
     },
-    flairColor(): FlairColor {
-      return this.ui.theme.flair.value
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
+    flair(): Flair {
+      return flairs[((this as any).settings as Settings).flair]
     },
     showOlderMessageInfo(): boolean {
       return this.ui.showOlderMessagesInfo
@@ -278,26 +272,14 @@ export default Vue.extend({
      */
     handleDrop(e: DragEvent) {
       e.preventDefault()
-
-      if (!this.getInitialized) {
-        return
-      }
-
       if (!this.consentToScan) {
-        this.$toast.error(
-          this.$t('pages.files.errors.enable_consent') as string,
-          {
-            duration: 3000,
-          },
-        )
-        this.$store.commit('ui/toggleSettings', {
-          show: true,
-          defaultRoute: SettingsRoutes.PRIVACY,
-        })
+        this.$store.dispatch('ui/displayConsentSettings')
         return
       }
-      if (e?.dataTransfer) {
-        this.$refs.chatbar?.handleUpload(e.dataTransfer?.items, e)
+      if (e?.dataTransfer && this.$refs.chatbar) {
+        ;(this.$refs.chatbar as ChatbarRef).handleUpload([
+          ...e.dataTransfer.items,
+        ])
       }
     },
   },

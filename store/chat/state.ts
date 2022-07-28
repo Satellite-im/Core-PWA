@@ -20,6 +20,7 @@ const InitialChatState = (): ChatState => ({
   files: {},
   countError: false,
   currentChat: initialCurrentChat,
+  draftMessages: {},
 })
 
 export default InitialChatState

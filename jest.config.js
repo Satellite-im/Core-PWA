@@ -7,7 +7,7 @@ module.exports = {
     'jsdom-worker',
   ],
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
+    '**/*.{ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/*.config.js',

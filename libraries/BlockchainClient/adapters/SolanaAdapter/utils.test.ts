@@ -1,6 +1,6 @@
 import * as utils from '~/libraries/BlockchainClient/adapters/SolanaAdapter/utils'
 
-describe('utils.accountFromWallet', () => {
+describe.skip('utils.accountFromWallet', () => {
   test('0', () => {
     const result: any = utils.accountFromWallet({
       keypair: { secretKey: '$p3onyycat' },

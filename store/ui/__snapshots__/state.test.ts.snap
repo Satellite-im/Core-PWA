@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`init should return the initial settings state 1`] = `
+exports[`state.default 0 1`] = `
 Object {
   "activeChannel": undefined,
   "chatImageOverlay": undefined,
@@ -29,13 +29,6 @@ Object {
     "route": "emotes",
     "show": false,
   },
-  "fileDownloadList": Array [],
-  "filePreview": undefined,
-  "fileSort": Object {
-    "asc": true,
-    "category": "modified",
-  },
-  "filesUploadStatus": "",
   "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
@@ -63,7 +56,6 @@ Object {
     },
     "marketplace": false,
     "newfolder": false,
-    "quickchat": false,
     "renameFile": false,
     "userProfile": false,
     "wallet": false,
@@ -77,7 +69,6 @@ Object {
     "y": 0,
   },
   "recentGlyphs": Array [],
-  "renameItem": undefined,
   "replyChatbarContent": Object {
     "from": "",
     "id": "",
@@ -97,21 +88,6 @@ Object {
   "showSidebar": true,
   "showSidebarUsers": true,
   "swiperSlideIndex": 0,
-  "theme": Object {
-    "base": Object {
-      "class": "",
-      "text": "Default",
-      "value": "default",
-    },
-    "flair": Object {
-      "text": "Satellite",
-      "value": Array [
-        "#2761fd",
-        "#286CFE",
-        "39, 97, 253",
-      ],
-    },
-  },
   "unreadMessage": 0,
   "userProfile": Object {},
 }

@@ -1,0 +1,48 @@
+.keybind-input {
+  .control {
+    display: flex;
+    gap: @light-spacing;
+    align-items: center;
+    background: @midground-alt;
+    &:extend(.round-corners);
+    padding: @light-spacing;
+    padding-left: @normal-spacing;
+
+    .controls {
+      display: flex;
+      gap: @light-spacing;
+    }
+
+    .info-label {
+      color: @text-muted;
+      flex-grow: 1;
+    }
+
+    .key-list {
+      flex-grow: 1;
+      display: flex;
+      gap: @light-spacing;
+
+      &.invalid {
+        opacity: 0.75;
+      }
+
+      .key {
+        &:extend(.input-bg);
+        &:extend(.font-secondary);
+        &:extend(.round-corners);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: @xlight-spacing @light-spacing;
+        font-family: @primary-font;
+        font-size: @text-size;
+      }
+
+      .plus {
+        &:extend(.font-muted);
+      }
+    }
+  }
+}

@@ -1,42 +1,38 @@
 <template src="./Chatbar.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { throttle } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
-// import { Friend } from '~/types/ui/friends'
-import type { Friend } from '~/libraries/Iridium/friends/types'
-import type { GroupMap as Group } from '~/libraries/Iridium/groups/types'
 import {
   KeybindingEnum,
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { UploadDropItemType } from '~/types/files/file'
+import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
-import { ChatText } from '~/store/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { SettingsRoutes } from '~/store/ui/types'
+import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
-export default Vue.extend({
+const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
   },
   computed: {
-    ...mapGetters({
-      recipient: 'conversation/recipient',
-      getFiles: 'chat/getFiles',
-      isGroup: 'conversation/isGroup',
-    }),
     ...mapState({
-      ui: (state) => (state as RootState).ui,
-      friends: (state) => (state as RootState).friends,
-      webrtc: (state) => (state as RootState).webrtc,
-      chat: (state) => (state as RootState).chat,
-      textile: (state) => (state as RootState).textile,
-      conversation: (state) => (state as RootState).conversation,
+      ui: (state: RootState) => state.ui,
+      chat: (state: RootState) => state.chat as ChatState,
+      files(state: RootState) {
+        return state.chat.files?.[this.$route.params.id] ?? []
+      },
     }),
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
     /**
      * @method charlimit DocsTODO
      * @description Checks if current text is longer than the max character limit
@@ -90,7 +86,7 @@ export default Vue.extend({
     },
     isSharpCorners(): boolean {
       return (
-        Boolean(this.getFiles?.length) ||
+        Boolean(this.files.length) ||
         Boolean(this.ui.replyChatbarContent.id) ||
         this.commandPreview ||
         this.chat.countError
@@ -115,9 +111,16 @@ export default Vue.extend({
       set(value: string) {
         this.$store.dispatch('ui/setChatbarContent', {
           content: value,
-          userId: this.recipient?.did,
+          // userId: this.recipient?.did,
+        })
+        this.$store.commit('chat/setDraftMessage', {
+          conversationId: this.conversationId,
+          message: value,
         })
       },
+    },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
     },
     placeholder(): string {
       return !this.hasCommand && this.text === ''
@@ -126,12 +129,9 @@ export default Vue.extend({
     },
   },
   watch: {
-    'recipient.did': {
+    conversationId: {
       handler(value) {
-        const findItem = this.chat.chatTexts.find(
-          (item: ChatText) => item.userId === value,
-        )
-        const message = findItem ? findItem.value : ''
+        const message = this.chat.draftMessages[this.conversationId]
         this.$refs.editable?.resetHistory()
         this.$store.commit('ui/setReplyChatbarContent', {
           id: '',
@@ -208,13 +208,10 @@ export default Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
-      if (!this.recipient) {
-        return
-      }
-      // keep recipient in case user changes chats quickly after send
-      const recipient = this.recipient
+      // set id in case recipient changes during send
+      const conversationId = this.$route.params.id
       // if there are any files attached to this chat, send
-      await this.sendFiles()
+      // await this.sendFiles()
       // return if input is empty or over max length
       if (
         this.text.length > this.$Config.chat.maxChars ||
@@ -224,56 +221,52 @@ export default Vue.extend({
       }
       const value = this.text
       this.text = ''
-      if (
-        this.ui.replyChatbarContent.from &&
-        !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
-      ) {
-        this.$store.dispatch('textile/sendReplyMessage', {
-          to: (recipient as Friend).textilePubkey,
-          text: value,
-          replyTo: this.ui.replyChatbarContent.messageID,
-          replyType: MessagingTypesEnum.TEXT,
-        })
-        return
-      }
+      // we should be looking into conversation instead of passing a recipient
+      await iridium.chat?.sendMessage({
+        conversationId,
+        type: 'text',
+        body: value,
+        at: Date.now(),
+        attachments: [],
+      })
+      // if (
+      //   this.ui.replyChatbarContent.from &&
+      //   !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
+      // ) {
+      //   this.$store.dispatch('textile/sendReplyMessage', {
+      //     to: (recipient as Friend).textilePubkey,
+      //     text: value,
+      //     replyTo: this.ui.replyChatbarContent.messageID,
+      //     replyType: MessagingTypesEnum.TEXT,
+      //   })
+      //   return
+      // }
 
-      if (
-        RegExp(this.$Config.regex.uuidv4).test(
-          (this.recipient as Group)?.did?.split('|')[1],
-        )
-      ) {
-        if (this.ui.replyChatbarContent.from) {
-          this.$store.dispatch('textile/sendGroupReplyMessage', {
-            to: (recipient as Group).id,
-            text: value,
-            replyTo: this.ui.replyChatbarContent.messageID,
-            replyType: MessagingTypesEnum.TEXT,
-          })
-          this.text = ''
-          return
-        }
-        this.$store.dispatch('textile/sendGroupMessage', {
-          groupId: (recipient as Group).id,
-          message: value,
-        })
-      } else {
-        // sendMessage to friend
-
-        // await iridium.chat?.sendMessage(this.recipient.address, value)
-        await iridium.chat?.sendMessage(this.recipient?.did, {
-          from: iridium.connector.id,
-          type: 'direct',
-          body: value,
-          conversation: value,
-          at: Date.now(),
-          attachments: [],
-        })
-
-        // this.$store.dispatch('textile/sendTextMessage', {
-        //   to: (this.recipient as Friend).textilePubkey,
-        //   text: value,
-        // })
-      }
+      // if (
+      //   RegExp(this.$Config.regex.uuidv4).test(
+      //     (this.recipient as Group)?.did?.split('|')[1],
+      //   )
+      // ) {
+      //   if (this.ui.replyChatbarContent.from) {
+      //     this.$store.dispatch('textile/sendGroupReplyMessage', {
+      //       to: (recipient as Group).id,
+      //       text: value,
+      //       replyTo: this.ui.replyChatbarContent.messageID,
+      //       replyType: MessagingTypesEnum.TEXT,
+      //     })
+      //     this.text = ''
+      //     return
+      //   }
+      //   this.$store.dispatch('textile/sendGroupMessage', {
+      //     groupId: (recipient as Group).id,
+      //     message: value,
+      //   })
+      // } else {
+      //   // this.$store.dispatch('textile/sendTextMessage', {
+      //   //   to: (this.recipient as Friend).textilePubkey,
+      //   //   text: value,
+      //   // })
+      // }
     },
     /**
      * @method handlePaste
@@ -282,28 +275,30 @@ export default Vue.extend({
      * @example v-on:paste="handlePaste"
      */
     handlePaste(e: ClipboardEvent) {
-      /* Don't use event.preventDefault(). It prevent original text copy-paste */
       e.stopPropagation()
-      /* Upload if image, if not then no action */
-      this.handleUpload(e?.clipboardData?.items, e)
+      if (!e.clipboardData?.items) {
+        return
+      }
+
+      this.handleUpload([...e.clipboardData.items])
     },
     /**
      * @method handleUpload
-     * @description Takes in an array of event items and uploads the file objects
+     * @description if event has files attached
      * @param items Array of objects
      * @example this.handleUpload(someEvent.itsData.items)
      */
-    handleUpload(items: Array<object>, e: Event) {
-      const files: File[] = [...items]
-        .filter((f: any) => {
+    handleUpload(items: DataTransferItem[]) {
+      const files = items
+        .filter((f) => {
           return f.kind !== MessagingTypesEnum.STRING
         })
-        .map((f: any) => f.getAsFile())
-      if (files.length) {
-        e.preventDefault()
-        const handleFileExpectEvent = { target: { files } }
-        // @ts-ignore
-        this.$refs.upload?.handleFile(handleFileExpectEvent)
+        .map((f) => f.getAsFile())
+
+      if (files.length && this.$refs.upload) {
+        ;(this.$refs.upload as ChatbarUploadRef).handleFile({
+          target: { files },
+        })
       }
     },
     handleChatTextFromOutside(text: string) {
@@ -314,64 +309,15 @@ export default Vue.extend({
      * @description Sends action to Upload the file to textile.
      */
     async sendFiles() {
-      // keep recipient in case user changes chats
-      const recipient = this.recipient
-      for (const [index, file] of this.getFiles.entries()) {
-        if (this.isGroup) {
-          await this.$store
-            .dispatch('textile/sendGroupFileMessage', {
-              groupID: (recipient as Group)?.id,
-              file,
-              address: recipient.address,
-              index,
-            })
-            .catch((error) => {
-              if (error) {
-                this.$Logger.log('file send error', error)
-                document.body.style.cursor = PropCommonEnum.DEFAULT
-              }
-            })
-        } else {
-          await this.$store
-            .dispatch('textile/sendFileMessage', {
-              to: (recipient as Friend)?.textilePubkey,
-              file,
-              address: recipient.address,
-              index,
-            })
-            .catch((error) => {
-              if (error) {
-                this.$Logger.log('file send error', error)
-                document.body.style.cursor = PropCommonEnum.DEFAULT
-              }
-            })
-        }
-      }
+      // set id in case recipient changes during send
+      const conversationId = this.$route.params.id
+      // send files logic
       document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/deleteFiles', recipient.address)
+      this.$store.commit('chat/deleteFiles', conversationId)
     },
   },
 })
+export type ChatbarRef = InstanceType<typeof Chatbar>
+export default Chatbar
 </script>
 <style scoped lang="less" src="./Chatbar.less"></style>
-<style lang="less">
-.messageuser {
-  &.editable-container {
-    > div {
-      padding: 14px 0;
-    }
-  }
-  blockquote {
-    border-left: 4px solid @text-muted;
-    padding-left: @light-spacing;
-  }
-  p {
-    font-size: @text-size !important;
-    .chatbar-tag {
-      &:extend(.round-corners);
-      background: @midground;
-      padding: @xlight-spacing;
-    }
-  }
-}
-</style>

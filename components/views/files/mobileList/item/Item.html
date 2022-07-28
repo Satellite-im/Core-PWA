@@ -1,0 +1,78 @@
+<UiContextMenu
+  :items="contextMenuValues"
+  @click="click"
+  class="file"
+  :class="{'file-list': !gridLayout}"
+>
+  <!-- add container so blur effect doesn't go outside the dimensions of the image -->
+  <div v-if="thumbnail" class="image-container">
+    <img
+      class="image-preview"
+      :class="{'blur-image' : item.nsfw && blockNsfw}"
+      :src="thumbnail"
+      draggable="false"
+    />
+  </div>
+  <div v-else class="icon-container">
+    <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
+    <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
+    <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
+    <film-icon v-else-if="isVideo" size="4x" class="file-type-icon" />
+    <file-icon v-else size="4x" class="file-type-icon" />
+  </div>
+  <div class="body">
+    <div class="text-container">
+      <div class="maintext-container">
+        <template>
+          <folder-icon
+            v-if="item.children"
+            class="file-type-icon"
+            size="1x"
+            data-cy="folder-icon"
+          />
+          <archive-icon
+            v-else-if="isArchive"
+            size="1x"
+            class="file-type-icon"
+          />
+          <image-icon v-else-if="isImage" size="1x" class="file-type-icon" />
+          <film-icon v-else-if="isVideo" size="1x" class="file-type-icon" />
+          <file-icon
+            data-cy="file-icon"
+            size="1x"
+            v-else
+            class="file-type-icon"
+          />
+        </template>
+        <TypographyText :size="6" :text="item.name" class="maintext" />
+      </div>
+      <div class="subtext">
+        <TypographyText
+          :size="6"
+          :text="`Modified: ${$dayjs(item.modified).fromNow()}`"
+          class="subtext-primary"
+        />
+        <TypographyText
+          :size="6"
+          :text="getSubtext"
+          class="subtext-secondary"
+        />
+      </div>
+    </div>
+    <div class="quick-actions">
+      <link-icon
+        size="1x"
+        class="link"
+        @mouseover="linkHover=true"
+        @mouseleave="linkHover=false"
+      />
+      <heart-icon
+        size="1x"
+        class="like"
+        :class="{liked : item.liked}"
+        @mouseover="heartHover=true"
+        @mouseleave="heartHover=false"
+      />
+    </div>
+  </div>
+</UiContextMenu>

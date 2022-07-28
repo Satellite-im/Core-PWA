@@ -11,6 +11,7 @@ describe('settings.getters', () => {
     const actual = getters.getTimestamp(state)({ time: 1654486643615 })
     expect(actual).toMatchSnapshot()
   })
+
   test('getFullTimestamp', () => {
     const actual = getters.getTimestamp(state)({
       time: 1654486643615,

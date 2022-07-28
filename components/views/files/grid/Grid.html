@@ -1,18 +1,14 @@
-<div
-  id="grid-view"
-  :class="{'hidden-scroll' : $device.isMobile} "
-  v-scroll-lock="true"
->
+<div id="grid-view">
   <div class="files-container">
-    <!-- included counter inside of key to force reactivity (Map Vue 2 issues) -->
-    <FilesFile
-      v-for="item, i in directory"
+    <FilesGridItem
+      v-for="item in directory"
       :item="item"
-      :key="i + counter"
-      @like="like"
-      @share="share"
-      @remove="remove"
-      @handle="handle"
+      :key="item.id"
+      @like="(item) => $emit('like', item)"
+      @share="(item) => $emit('share', item)"
+      @rename="(item) => $emit('rename', item)"
+      @remove="(item) => $emit('remove', item)"
+      @handle="(item) => $emit('handle', item)"
     />
   </div>
 </div>

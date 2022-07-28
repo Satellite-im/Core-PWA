@@ -101,7 +101,6 @@ import {
 import { Dictionary } from 'lodash'
 import { DataStateType } from '~/store/dataState/types'
 import { Friend } from '~/types/ui/friends'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { RootState } from '~/types/store/store'
 import { ContextMenuItem } from '~/store/ui/types'
 
@@ -113,8 +112,7 @@ export default Vue.extend({
     UserCheckIcon,
     MoreVerticalIcon,
   },
-  mixins: [ContextMenu],
-  layout: 'friends',
+  layout: 'basic',
   data() {
     return {
       route: 'active',

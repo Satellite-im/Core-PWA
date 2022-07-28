@@ -76,7 +76,11 @@ export default defineNuxtConfig({
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/styles/framework/framework.less'],
+  css: [
+    'normalize.css/normalize.css',
+    '@/assets/styles/framework/framework.less',
+    '@/assets/styles/base.less',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -98,6 +102,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/local/mock.ts' },
     { src: '~/plugins/local/style.ts' },
     { src: '~/plugins/local/envinfo.ts' },
+    { src: '~/plugins/local/contextmenu.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -170,7 +175,7 @@ export default defineNuxtConfig({
       // enabled: true,
       runtimeCaching: [
         {
-          urlPattern: 'https://satellite.mypinata.cloud/ipfs/*',
+          urlPattern: 'https://satellite.infura-ipfs.io/ipfs/*',
           handler: 'StaleWhileRevalidate',
           method: 'GET',
           strategyOptions: {
@@ -210,6 +215,7 @@ export default defineNuxtConfig({
         child_process: 'empty',
         dgram: 'empty',
         tls: 'empty',
+        dns: 'empty',
       }
       if (process.env.ENVIRONMENT !== 'dev') {
         const testAttributes = ['data-cy']
@@ -234,7 +240,6 @@ export default defineNuxtConfig({
         }
       }
     },
-    transpile: ['libp2p', '@satellite-im/iridium'],
     babel: {
       plugins: ['lodash'],
       compact: true,
@@ -268,5 +273,6 @@ export default defineNuxtConfig({
     '**/*.test.*',
     'store/*/types.ts',
     'node_modules/@satellite-im/iridium/src/',
+    '../iridium/node_modules/',
   ],
 })

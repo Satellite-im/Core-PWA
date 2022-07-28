@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapGetters } from 'vuex'
 import {
   ClockIcon,
   TrashIcon,
@@ -10,7 +9,7 @@ import {
   FolderIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
-import { FileIconsEnum, FileAsideRouteEnum } from '~/libraries/Enums/enums'
+import { FileIconsEnum, FileRouteEnum } from '~/libraries/Enums/enums'
 import { SimpleItem } from '~/types/ui/sidebar'
 
 export default Vue.extend({
@@ -28,7 +27,6 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapGetters('ui', ['isFilesIndexLoading']),
     icons() {
       return {
         [FileIconsEnum.CLOCK]: ClockIcon,
@@ -43,9 +41,10 @@ export default Vue.extend({
     /**
      * @method setActive
      * @description set files page route (default, recent, deleted, etc...)
-     * @param {FileAsideRouteEnum} route clicked route string value
+     * @param {FileRouteEnum} route clicked route string value
      */
-    setActive(route: FileAsideRouteEnum) {
+    setActive(route: FileRouteEnum) {
+      // if invalid route, reset to default
       if (!route) {
         this.$router.push({ query: {} })
         return
@@ -55,9 +54,9 @@ export default Vue.extend({
     /**
      * @method isActiveRoute
      * @description used to set active css class on list
-     * @param {FileAsideRouteEnum} route clicked route string value
+     * @param {FileRouteEnum} route clicked route string value
      */
-    isActiveRoute(route: FileAsideRouteEnum) {
+    isActiveRoute(route: FileRouteEnum) {
       // if default route
       if (!this.$route.query.route && !route) {
         return true

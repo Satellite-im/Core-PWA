@@ -8,7 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install pnpm
+        run: brew install pnpm
+      - name: Run corepack enable
+        run: corepack enable
       - name: Install modules
-        run: yarn
+        run: yarn install --network-concurrency 1
       - name: Run tests
         run: yarn test

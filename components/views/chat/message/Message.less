@@ -8,6 +8,86 @@
   }
 }
 
+.chat-message {
+  display: grid;
+  text-align: left;
+
+  &:not(.show-header) {
+    grid-template-areas: 'timestamp body';
+    grid-template-columns: 52px;
+
+    .timestamp {
+      opacity: 0;
+    }
+
+    &:hover,
+    &:focus-within {
+      .timestamp {
+        opacity: 1;
+      }
+    }
+
+    .timestamp {
+      line-height: 24px;
+    }
+  }
+
+  &.show-header {
+    grid-template-areas:
+      'avatar header timestamp'
+      'avatar body body';
+    grid-template-columns: 52px auto 1fr;
+    margin-top: @normal-spacing;
+
+    .timestamp {
+      margin-left: @light-spacing;
+    }
+  }
+
+  .avatar {
+    grid-area: avatar;
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .timestamp {
+    grid-area: timestamp;
+    display: flex;
+    font-family: @secondary-font;
+    font-size: @micro-text-size;
+    &:extend(.font-muted);
+  }
+
+  .body {
+    grid-area: body;
+    position: relative;
+    // conditionally change to break-all depending on locale
+    word-break: break-word;
+
+    .message-actions {
+      opacity: 0;
+    }
+
+    .bigmoji {
+      font-size: 36pt;
+      animation-name: emoji-appear;
+      animation-duration: 500ms;
+    }
+  }
+
+  &:hover {
+    .markdown {
+      &:extend(.background-semitransparent-light);
+    }
+
+    .message-actions {
+      opacity: 1;
+    }
+  }
+}
+
 .is-message {
   &:extend(.font-primary);
   .pinned-message {
@@ -114,7 +194,7 @@
   not screen and (min-device-pixel-ratio: 2),
   not screen and (min-resolution: 192dpi),
   not screen and (min-resolution: 2dppx) {
-  .is-message {
+  .chat-message {
     // Chrome bug for emoji spacing on non-retina screens
     .emoji {
       letter-spacing: 4px;

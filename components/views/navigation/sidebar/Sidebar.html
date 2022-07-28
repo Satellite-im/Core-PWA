@@ -1,15 +1,8 @@
 <div id="sidebar">
   <div class="sidebar-inner">
     <div class="sidebar-search">
-      <menu-icon
-        class="toggle-sidebar"
-        data-cy="hamburger-button"
-        @click="showMenu"
-        size="1.2x"
-        full-width
-        :style="`${sidebar ? 'display: block' : 'display: none'}`"
-      />
       <UiComingSoon
+        style="flex: 1"
         :tooltipText="$t('coming_soon.sidebar_search')"
         :tooltipPosition="'bottom'"
         disabled
@@ -24,6 +17,7 @@
           full-width
         />
       </UiComingSoon>
+      <InteractablesSidebarToggle />
     </div>
     <div class="sidebar-nav">
       <InteractablesButton
@@ -32,16 +26,17 @@
         data-cy="sidebar-friends"
         :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
         size="small"
-        :action="() => { incomingRequests.length ? $router.push('/friends/list?tab=requests') : $router.push('/friends/list') }"
+        :action="() => $router.push('/friends/list')"
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="incomingRequests.length"
-        :class="$route.path.includes('/friends/list') ? 'label tag-inverted' : 'label'"
+        v-if="incomingRequestsLength"
+        class="label"
+        :class="{inverted : $route.path.includes('/friends/list')}"
       >
-        {{incomingRequests.length}}
+        {{incomingRequestsLength}}
       </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files')"
@@ -56,61 +51,14 @@
       </InteractablesButton>
     </div>
     <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
-      <plus-circle-icon size="1x" @click="()=>toggleModal('quickchat')" />
+      <plus-circle-icon size="1x" @click="toggleModal" />
       <FriendsQuick
-        v-if="ui.modals.quickchat"
-        v-click-outside="()=>toggleModal('quickchat')"
+        v-if="isQuickchatVisible"
+        v-click-outside="toggleModal"
+        @toggle="toggleModal"
       />
     </div>
-    <div class="scrolling hidden-scroll users" v-scroll-lock="true">
-      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
-        <UiLoadersAddress
-          v-if="dataState.friends === DataStateType.Loading"
-          :count="4"
-          inverted
-        />
-        <template
-          v-else-if="friends && Object.values(friends.details || {}).length"
-        >
-          <UiInlineNotification
-            v-if="ui.unreadMessage.length"
-            :text="$t('messaging.new_messages')"
-          />
-          <div v-for="friend in friends.details">
-            <User
-              v-if="friend"
-              :key="friend.did"
-              :user="friend"
-              :isTyping="ui.isTyping.address === friend.did"
-              :isSelected="friend.did === $route.params.did"
-            />
-            <!-- <GroupClickable
-              v-else
-              :group="thing"
-              :key="thing.id"
-              :isSelected="thing.id === $route.params.id"
-            /> -->
-          </div>
-        </template>
-        <div
-          v-else-if="friends && friends.list && !friends.list.length"
-          class="mascot-container"
-        >
-          <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
-          <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
-          <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
-          <InteractablesButton
-            :text="$t('friends.add') + 's'"
-            size="small"
-            type="primary"
-            :action="gotoAddFriends"
-          >
-            <user-plus-icon size="1.2x" />
-          </InteractablesButton>
-        </div>
-        <UiLoadersAddress v-else :count="4" inverted />
-      </UiSimpleScroll>
-    </div>
+    <SidebarList />
   </div>
   <div class="controls">
     <SidebarLive />

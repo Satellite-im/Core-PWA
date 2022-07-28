@@ -1,0 +1,45 @@
+.file-item {
+  width: 224px;
+  min-width: 224px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: @light-spacing;
+  border-color: @dark-gray;
+  border-radius: @corner-rounding;
+  padding: @large-spacing @normal-spacing @light-spacing @normal-spacing;
+  &:extend(.background-semitransparent-lighter);
+  &:extend(.bordered);
+  .close {
+    border: none;
+    position: absolute;
+    color: @flair-color;
+    background-color: transparent;
+    top: @xlight-spacing;
+    right: @xlight-spacing;
+    cursor: pointer;
+  }
+
+  .image-container {
+    overflow: hidden;
+    height: 110px;
+    img {
+      height: 110px;
+      width: @full;
+      object-fit: cover;
+      border-radius: @corner-rounding;
+    }
+  }
+  .icon-container {
+    height: 110px;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+  }
+  .subtitle {
+    font-size: @mini-text-size;
+    margin-bottom: 0;
+    display: block;
+  }
+}

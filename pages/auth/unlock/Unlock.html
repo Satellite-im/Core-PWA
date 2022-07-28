@@ -1,12 +1,10 @@
 <div class="container">
   <div class="decryption-body">
-    <div v-if="!accounts.pinHash" class="create_pin_section">
+    <div v-if="step === 'signup'" class="create_pin_section">
       <info-icon size="0.8x" />
       <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
-      <TypographyText text="Create a pin to protect your account." />
-      <TypographyText
-        text="The pin can be anything you want, just don't forget it."
-      />
+      <TypographyText :text="$t('pages.unlock.choose_pin_description_1')" />
+      <TypographyText :text="$t('pages.unlock.choose_pin_description_2')" />
     </div>
     <InteractablesInputGroup
       v-model="pin"
@@ -14,10 +12,10 @@
       input-kind="password"
       :type="`${error ? 'danger' : 'primary'}`"
       :data-cy="`pin-label`"
-      :label-text="accounts.pinHash ? $t('pages.unlock.decrypt') : 'Choose Your Pin'"
+      :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
       :placeholder="$t('pages.unlock.placeholder')"
-      :loading="decrypting"
-      :action="accounts.pinHash ? decrypt : create"
+      :loading="status === 'loading'"
+      :action="action"
     >
       <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
       <chevron-right-icon size="1x" v-else />
@@ -29,11 +27,20 @@
       :label="$t('pages.unlock.store_pin')"
     />
     <br />
-    <a v-if="accounts.pinHash" class="delete-link" @click="deleteAccount">
+    <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
       {{$t('pages.unlock.delete_account_label')}}
     </a>
     <div class="realm-container">
       <InteractablesRealm />
+    </div>
+    <div class="random-user-container" v-if="isDev">
+      <InteractablesButton
+        type="primary"
+        class="random-user-btn"
+        :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
+        :action="createRandom"
+        ><UiLoadersSpinner v-if="status === 'loading'" spinning
+      /></InteractablesButton>
     </div>
   </div>
   <span @click="toggleChangelogVisibility">

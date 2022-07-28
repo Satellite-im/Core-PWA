@@ -6,7 +6,7 @@
   <InteractablesUserPicker v-model="friends" height="220px" />
   <template v-if="friends.length > 1">
     <InteractablesInput
-      v-model="name"
+      v-model.trim="name"
       size="small"
       type="dark"
       input-kind="text"

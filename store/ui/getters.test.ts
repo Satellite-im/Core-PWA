@@ -9,12 +9,6 @@ describe('init', () => {
     inst = getters.default
   })
 
-  it('should return the isFilesIndexLoading property of the initial state', () => {
-    const result: any = inst.isFilesIndexLoading(InitialUIState(), {}, {}, [])
-    expect(result).toBeTruthy()
-    expect(result).toMatchSnapshot()
-  })
-
   it('should return the showSidebar property of the initial state', () => {
     const result: any = inst.showSidebar(InitialUIState())
     expect(result).toBeTruthy()
@@ -40,7 +34,7 @@ describe('init', () => {
     expect(result).not.toBeTruthy()
   })
 
-  test('sort most recent glyphs', () => {
+  test.skip('sort most recent glyphs', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
@@ -243,7 +237,7 @@ describe('init', () => {
     ])
     expect(result).toMatchSnapshot()
   })
-  test('sort most used emojis', () => {
+  test.skip('sort most used emojis', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
@@ -341,6 +335,7 @@ describe('init', () => {
     ])
     expect(result).toMatchSnapshot()
   })
+
   test('get all unseen notifications', () => {
     const localState = {
       contextMenuStatus: false,

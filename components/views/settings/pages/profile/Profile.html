@@ -1,100 +1,169 @@
 <SettingsPage>
-  <SettingsProfileBanner />
+  <div
+    id="profile-settings"
+    :class="isSmallScreen ? 'profile-small-screen' : ''"
+  >
+    <SettingsProfileBanner />
 
-  <div class="profile-layout">
-    <div class="profile-left">
-      <SettingsProfileCard :info="sampleProfileInfo" />
-    </div>
-    <div class="profile-right">
-      <div class="profile-main">
-        <div class="columns is-desktop">
-          <div class="column">
+    <div class="profile-layout">
+      <div class="profile-left">
+        <SettingsProfileCard :info="sampleProfileInfo" />
+      </div>
+      <div class="profile-right">
+        <!-- Profile -->
+        <div>
+          <div class="section-title">
+            <user-icon size=" 1.5x" class="section-icon" />
             <TypographyTitle
               :size="6"
               :text="$t('pages.settings.profile.title')"
             />
-            <TypographySubtitle
-              :size="6"
-              :text="$t('pages.settings.profile.subtitle')"
-            />
           </div>
-        </div>
 
-        <div class="profile-image-cropper" v-if="showCropper">
-          <div class="content">
-            <InteractablesImageCropper
-              :setCroppedImage="setCroppedImage"
-              :toggleCropper="toggleCropper"
-              :imageUrl="image"
-            />
-            <div class="cropper-mask"></div>
-          </div>
-        </div>
+          <div class="profile-main">
+            <div class="profile-image-cropper" v-if="showCropper">
+              <div class="content">
+                <InteractablesImageCropper
+                  v-click-outside="toggleCropper"
+                  :set-cropped-image="setCroppedImage"
+                  :image-url="image"
+                  @toggle-cropper="toggleCropper"
+                />
+                <div class="cropper-mask"></div>
+              </div>
+            </div>
 
-        <div class="columns is-mobile">
-          <div class="column profile-photo-column">
-            <div
-              :class="['profile-photo', !getInitialized ? 'profile-photo-loading' : '']"
-            >
-              <input
-                ref="file"
-                class="input-file"
-                type="file"
-                @change="selectProfileImage"
-                :accept="acceptableImageFormats"
-              />
-              <UiCircle
-                :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random' "
-                @click="openFileDialog"
-                :source="src"
-                :seed="accounts.active"
-                :size="isSmallScreen ? 55 : 75"
-              />
-              <UiCircle
-                type="icon"
-                @click="openFileDialog"
-                icon="plus"
-                color="var(--flair-color)"
-                :size="20"
-                class="plus-button"
-              />
+            <div class="profile-section">
+              <div class="subtitle">
+                <TypographySubtitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.subtitle')"
+                />
+              </div>
+              <div class="profile-photo-column photo">
+                <div :class="['profile-photo']">
+                  <InteractablesImageInput
+                    ref="imageInput"
+                    @change="selectProfileImage"
+                  />
+                  <UiCircle
+                    :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
+                    @click="openFileDialog"
+                    :source="src"
+                    :seed="accounts.active"
+                    :size="isSmallScreen ? 55 : 80"
+                  />
+                  <UiCircle
+                    type="icon"
+                    @click="openFileDialog"
+                    icon="plus"
+                    color="var(--flair-color)"
+                    :size="20"
+                    class="plus-button"
+                  />
+                </div>
+              </div>
+              <button
+                v-if="src"
+                class="remove-button"
+                @click="removeProfileImage"
+              >
+                <span>{{ $t('pages.settings.profile.remove_image') }}</span>
+              </button>
+              <div class="username">
+                <TypographyTitle :size="6" :text="accounts.details.name" />
+              </div>
+              <div class="status-input">
+                <InteractablesInputGroup
+                  v-model="status"
+                  size="small"
+                  input-kind="text"
+                  type="primary"
+                  :placeholder="$t('pages.settings.profile.status_placeholder')"
+                  :action="() => {}"
+                >
+                  <edit-icon size="1x" />
+                </InteractablesInputGroup>
+              </div>
+            </div>
+            <div v-if="!!accounts.details.status" class="status">
+              <TypographyText :text="accounts.details.status" />
             </div>
           </div>
-          <div class="column username-column">
+        </div>
+
+        <!-- About Me -->
+        <div>
+          <div class="section-title">
+            <align-left-icon size="1.5x" class="section-icon" />
             <TypographyTitle
-              :size="isSmallScreen ? 6 : 4"
-              :text="accounts.details.name"
-              :class="isSmallScreen ? 'mg-quarter' : 'mg-half'"
+              :size="6"
+              :text="$t('pages.settings.profile.about.title')"
             />
-            <!-- <InteractablesInputGroup
-              class="username"
-              v-model="status"
-              size="small"
-              input-kind="text"
-              type="primary"
-              placeholder="Enter Status"
-              :action="() => {}"
-            >
-              <edit-icon size="1x" />
-            </InteractablesInputGroup> -->
-            <TypographyText :text="accounts.details.status" />
+          </div>
+          <div class="about-main">
+            <div class="about-subtitle">
+              <TypographySubtitle
+                :size="6"
+                :text="$t('pages.settings.profile.about.subtitle')"
+              />
+              <div>
+                <button class="edit-button" @click="() => {}">
+                  {{$t('global.edit')}}
+                </button>
+              </div>
+            </div>
+            <TypographySubtitle :size="6" :text="sampleProfileInfo.about" />
+          </div>
+        </div>
+
+        <!-- Your Accounts -->
+        <div>
+          <div class="section-title">
+            <laptop-icon size="1.5x" class="section-icon" />
+            <TypographyTitle
+              :size="6"
+              :text="$t('pages.settings.profile.accounts.title')"
+            />
+          </div>
+
+          <div class="accounts-main">
+            <div class="accounts-subtitle-wrapper">
+              <div class="accounts-subtitle">
+                <TypographySubtitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.accounts.subtitle_url')"
+                  class="accounts-subtitle-text"
+                />
+                <div v-tooltip.top="$t('controls.edit')">
+                  <info-icon size="1.5x" class="section-icon-tooltip" />
+                </div>
+              </div>
+              <InteractablesInputGroup
+                v-model="accountUrl"
+                size="small"
+                input-kind="text"
+                type="primary"
+                :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
+                :action="() => {}"
+              >
+                <edit-icon size="1x" />
+              </InteractablesInputGroup>
+            </div>
+
+            <div class="accounts-subtitle-wrapper">
+              <div class="accounts-subtitle">
+                <TypographySubtitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.accounts.subtitle_accounts')"
+                />
+              </div>
+
+              <SettingsProfileAccounts />
+            </div>
           </div>
         </div>
       </div>
-
-      <UiSpacer :height="isSmallScreen ? 10 : 24" />
-      <!-- <div class="columns is-desktop">
-        <div class="column">
-          <TypographyTitle
-            :size="6"
-            :text="$t('pages.settings.profile.info.title')"
-          />
-          <TypographySubtitle
-            :size="6"
-            :text="$t('pages.settings.profile.info.subtitle')"
-          />
-        </div>
-      </div> -->
     </div>
   </div>
 </SettingsPage>

@@ -1,11 +1,10 @@
-import { IridiumDocument } from '~/../iridium/dist'
+import { IridiumDocument } from '@satellite-im/iridium'
 import Group from './Group'
 
 export type GroupMemberDetails = {
   id: string
   name: string
-  avatar: string
-  seen: Date
+  photoHash: string
 }
 
 export type GroupConfig = {

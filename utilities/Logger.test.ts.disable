@@ -167,6 +167,7 @@ describe('Logger.default.log', () => {
 
     expect(console.log).toBeCalledTimes(7) // eslint-disable-line
   })
+
   test('7, data object provided', () => {
     const debug1 = undefined!
     const tag1 = 'Oha'

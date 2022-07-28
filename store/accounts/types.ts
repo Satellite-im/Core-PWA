@@ -9,6 +9,8 @@ export enum RegistrationStatus {
 }
 
 export interface AccountsState {
+  adapter: string
+  entropyMessage: string
   initialized: boolean
   storePin: boolean
   registry: boolean

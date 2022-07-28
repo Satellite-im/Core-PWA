@@ -24,8 +24,7 @@
       <a
         v-tooltip.bottom="$t('controls.share_link')"
         class="control"
-        :class="{'disabled' : isFilesIndexLoading}"
-        v-on="isFilesIndexLoading ? {} : {click: share}"
+        @click="share"
       >
         <link-icon size="1x" />
       </a> -->
@@ -38,11 +37,8 @@
       </button>
     </div>
   </div>
-  <div v-if="file.thumbnail" class="image-container">
-    <img
-      :src="file.thumbnail"
-      :class="{'blur-image' : file.nsfw && blockNsfw}"
-    />
+  <div v-if="thumbnail" class="image-container">
+    <img :src="thumbnail" :class="{'blur-image' : file.nsfw && blockNsfw}" />
   </div>
   <div v-else class="no-preview">
     <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />

@@ -192,3 +192,30 @@
       20px 0px 0px 0px rgba(255, 255, 255, 1);
   }
 }
+
+@-webkit-keyframes fadeinout {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeinout {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.transition(@property, @duration, @function) {
+  transition: @property @duration @function;
+  -o-transition: @property @duration @function;
+  -moz-transition: @property @duration @function;
+  -webkit-transition: @property @duration @function;
+}

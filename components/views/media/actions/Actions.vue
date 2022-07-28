@@ -58,16 +58,16 @@ export default Vue.extend({
      * @description Toggles mute for outgoing audio
      * @example
      */
-    toggleMute(kind: WebRTCEnum) {
+    async toggleMute(kind: WebRTCEnum) {
       // TODO: isLoading needs to be kind specific, currently all 3 kinds show loading icon if any of them is loading.
       this.isLoading = true
       try {
         if (kind === WebRTCEnum.AUDIO) {
-          this.$store.dispatch('audio/toggleMute')
+          await this.$store.dispatch('audio/toggleMute')
         } else if (kind === WebRTCEnum.VIDEO) {
-          this.$store.dispatch('video/toggleMute')
+          await this.$store.dispatch('video/toggleMute')
         } else {
-          this.$store.dispatch(
+          await this.$store.dispatch(
             'webrtc/toggleMute',
             { kind, peerId: iridium.connector?.peerId },
             { root: true },

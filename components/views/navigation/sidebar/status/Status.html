@@ -1,6 +1,6 @@
 <div id="status">
   <UiUserState
-    :user="{address: accounts.active, state: accounts.details.state}"
+    :user="{did: accounts.active, state: accounts.details.state}"
     :src="src"
   />
   <div class="user-info" v-tooltip.top="$t('controls.copy_id')" @click="copyId">

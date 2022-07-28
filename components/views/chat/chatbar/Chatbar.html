@@ -1,39 +1,31 @@
-<div id="chatbar" ref="chatbar" v-click-outside="blurChatbar">
+<div id="chatbar" ref="chatbar">
   <Enhancers @click="handleChatTextFromOutside" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply />
-  <FilesUploadError v-if="chat.countError" />
-  <FilesUploadPreview v-if="getFiles.length" />
+  <ChatbarUploadError v-if="chat.countError" />
+  <ChatbarUploadPreview v-if="files.length" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': isSharpCorners}"
+    :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners}"
   >
-    <div class="control-wrap file-upload-wrap">
-      <FilesUpload ref="upload" />
-    </div>
-    <div
+    <ChatbarUpload ref="upload" />
+    <!-- <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
       v-if="hasCommand"
-      ref="chatbar"
     >
       <terminal-icon size="1x" />
-    </div>
+    </div> -->
     <ChatbarEditable
-      ref="editable"
       v-model="text"
+      ref="editable"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient) && !textile.messageLoading"
-      :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
+      :class="{'has-command' : hasCommand}"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-    <ChatbarControls
-      id="chatbar-controls"
-      :sendMessage="sendMessage"
-      :disabled="!recipient || charlimit"
-    />
+    <ChatbarControls :disabled="charlimit" @send="sendMessage" />
   </div>
   <ChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

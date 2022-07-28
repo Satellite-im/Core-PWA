@@ -1,0 +1,71 @@
+<div class="keybind-input" v-click-outside="cancel">
+  <TypographyLabel :text="name" />
+  <div class="control">
+    <TypographyText
+      v-if="!isListening && value === ''"
+      class="info-label"
+      :text="$t('pages.settings.keybinds.no_mapping')"
+    />
+    <TypographyText
+      v-else-if="isListening && !keys.length"
+      class="info-label"
+      :text="$t('pages.settings.keybinds.enter_new_keybind')"
+    />
+    <div
+      v-else
+      class="key-list"
+      :class="{ invalid: isReservedKeybind && !activeModifiers.length }"
+    >
+      <template v-for="key, index in keys">
+        <kbd class="key">{{key}}</kbd>
+        <div v-if="index !== keys.length - 1" class="plus">+</div>
+      </template>
+    </div>
+    <div v-show="isListening" key="editing-controls" class="controls">
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="$t('pages.settings.keybinds.cancel')"
+        :action="cancel"
+      >
+        <XIcon size="1x" />
+      </InteractablesButton>
+
+      <span
+        v-tooltip.top="$t(isReservedKeybind ? 'pages.settings.keybinds.reserved' : 'pages.settings.keybinds.save')"
+      >
+        <InteractablesButton type="primary" :action="save" :disabled="!canSave">
+          <CheckIcon size="1x" />
+        </InteractablesButton>
+      </span>
+    </div>
+
+    <div v-show="!isListening" key="normal-controls" class="controls">
+      <InteractablesButton
+        ref="editButton"
+        type="dark"
+        v-tooltip.top="$t('pages.settings.keybinds.edit')"
+        :action="edit"
+      >
+        <PencilIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="$t('pages.settings.keybinds.reset')"
+        :action="reset"
+        :disabled="!canReset"
+      >
+        <UndoIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        type="dark"
+        v-tooltip.top="$t('pages.settings.keybinds.clear')"
+        :action="clear"
+        :disabled="!canClear"
+      >
+        <XIcon size="1x" />
+      </InteractablesButton>
+    </div>
+  </div>
+</div>

@@ -1,10 +1,8 @@
-import { Iridium, Emitter } from '@satellite-im/iridium'
+import { Emitter, encoding } from '@satellite-im/iridium'
 import type { IridiumMessage } from '@satellite-im/iridium/src/types'
-import * as json from 'multiformats/codecs/json'
 import { IridiumManager } from '../IridiumManager'
 import Group from './Group'
-import { GroupConfig, GroupData, GroupsError } from './types'
-import logger from '~/plugins/local/logger'
+import { GroupConfig, GroupsError } from './types'
 
 export default class GroupManager extends Emitter<IridiumMessage> {
   groupIds?: string[]
@@ -12,37 +10,47 @@ export default class GroupManager extends Emitter<IridiumMessage> {
 
   constructor(private readonly iridium: IridiumManager) {
     super()
+    this.iridium = iridium
   }
 
   async init() {
-    logger.log('iridium/groups', 'init()')
+    const iridium = this.iridium.connector
+    if (!iridium) {
+      throw new Error('cannot initialize groups, no iridium connector')
+    }
+
+    await this.fetch()
+  }
+
+  private async fetch() {
     this.state = await this.iridium.connector?.get('/groups')
   }
 
   /**
-   * @method createGroupConversation
-   * Create a conversation with specific users
+   * @method createGroup
+   * attempt to create conversation with the provided config. if successful, create a new group too
    * @returns a string UUID of the created groupChat
    */
-  async createGroup(config: GroupConfig): Promise<string> {
-    const id = await Iridium.hash(
-      json.encode({
-        timestamp: Date.now(),
-        origin: this.iridium.connector?.id,
-      }),
-    )
+  async createGroup(config: Omit<GroupConfig, 'origin'>): Promise<string> {
+    if (!this.iridium.connector) {
+      return ''
+    }
+    const id = await encoding.hash({
+      timestamp: Date.now(),
+      origin: this.iridium.connector?.id,
+    })
 
-    const group: GroupData = {
+    await this.iridium.chat.createConversation({
       id,
+      name: config.name,
+      type: 'group',
+      participants: Object.values(config.members).map((m) => m.id),
+    })
+    await this.iridium.connector.set(`/groups/${id}`, {
+      id,
+      origin: this.iridium.connector.id,
       ...config,
-    }
-
-    const exists = await this.iridium.connector?.get(`/groups/${id}`)
-    if (exists) {
-      throw new Error(GroupsError.GROUP_ALREADY_EXISTS)
-    }
-
-    await this.iridium.connector?.set(`/groups/${id}`, group)
+    })
     return id
   }
 

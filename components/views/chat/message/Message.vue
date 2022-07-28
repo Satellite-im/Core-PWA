@@ -4,7 +4,6 @@ import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { UIMessage, Group } from '~/types/messaging'
 
 import { toHTML } from '~/libraries/ui/Markdown'
@@ -13,35 +12,21 @@ import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/types'
+import { Conversation } from '~/store/textile/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
     ArchiveIcon,
   },
-  mixins: [ContextMenu],
   props: {
     message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Message',
-      }),
+      type: Object as PropType<ConversationMessage>,
+      required: true,
     },
-    group: {
-      type: Object as PropType<Group>,
-      default: () => {},
-    },
-    from: {
-      type: String,
-      default: '',
-    },
-    index: {
-      type: Number,
-      default: -1,
-    },
-    hideActions: {
+    showHeader: {
       type: Boolean,
       default: false,
     },
@@ -62,11 +47,33 @@ export default Vue.extend({
       findFriendByAddress: 'friends/findFriendByAddress',
       getFiles: 'chat/getFiles',
       isGroup: 'conversation/isGroup',
+      getTimestamp: 'settings/getTimestamp',
     }),
-    hasReactions(): boolean {
-      return this.message.reactions && this.message.reactions.length
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
     },
-    messageEdit(): boolean {
+    author(): User {
+      // TODO: access User from iridium via did
+      return {
+        id: this.message.from,
+        name: 'test',
+      } as User
+      // if (this.message.did === iridium.profile.state.
+      // if (this.conversation.type === 'direct') {
+      //   const friendDid = this.conversation.participants.find(
+      //     (f) => f !== iridium.connector?.id,
+      //   )
+      //   return this.friends.find((f) => f.did === friendDid)
+      // }
+      // return this.groups[this.conversation.id]
+    },
+    timestamp(): string {
+      return this.getTimestamp({ time: this.message.at })
+    },
+    hasReactions(): boolean {
+      return false // this.message.reactions && this.message.reactions.length
+    },
+    isEditing(): boolean {
       return this.ui.editMessage.id === this.message.id
     },
     contextMenuValues(): ContextMenuItem[] {
@@ -115,7 +122,7 @@ export default Vue.extend({
     },
   },
   beforeDestroy() {
-    this.cancelMessage()
+    // this.cancelMessage()
   },
   async mounted() {
     if (!this.message.payload?.url) {
@@ -129,6 +136,31 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method showQuickProfile
+     * @description Shows quickprofile component for user by setting quickProfile to true in state and setQuickProfilePosition
+     * to the current group components click event data
+     * @param e Event object from group component click
+     * @example v-on:click="showQuickProfile"
+     */
+    showQuickProfile(e: MouseEvent) {
+      const openQuickProfile = () => {
+        this.$store.dispatch('ui/showQuickProfile', {
+          textilePublicKey: this.group.from,
+          position: { x: e.x, y: e.y },
+        })
+      }
+
+      if (!this.ui.quickProfile) {
+        openQuickProfile()
+        return
+      }
+      setTimeout(() => {
+        if (!this.ui.quickProfile) {
+          openQuickProfile()
+        }
+      }, 0)
+    },
     /**
      * @method markdownToHtml
      * @description convert text markdown to html
@@ -195,7 +227,7 @@ export default Vue.extend({
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         const img = new Image()
-        img.src = URL.createObjectURL(this.blob)
+        img.src = URL.createObjectURL(this.blob as Blob)
         img.onload = () => {
           canvas.width = img.naturalWidth
           canvas.height = img.naturalHeight
@@ -203,6 +235,7 @@ export default Vue.extend({
           canvas.toBlob((newBlob: Blob) => {
             resolve(newBlob)
           })
+          URL.revokeObjectURL(img.src)
         }
       })
     },
@@ -239,19 +272,10 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent) {
-      if (this.isGroup) {
-        this.toggleModal(ModalWindows.CALL_TO_ACTION)
-        return
-      }
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
-        groupID: this.group.id,
-        messageID: this.message.id,
-        to:
-          this.message.to === myTextilePublicKey
-            ? this.message.from
-            : this.message.to,
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
       })
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
@@ -259,10 +283,10 @@ export default Vue.extend({
       })
     },
     quickReaction(emoji: EmojiUsage) {
-      this.$store.dispatch('textile/sendReactionMessage', {
-        to: this.message.to,
-        emoji: emoji.content,
-        reactTo: this.message.id,
+      iridium.chat.toggleMessageReaction({
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
+        reaction: emoji.content,
       })
     },
     /**
@@ -271,7 +295,7 @@ export default Vue.extend({
      */
     editMessage() {
       const { id, payload, type, from } = this.message
-      if (type === 'text' && from === this.accounts.details.textilePubkey) {
+      if (type === 'text' && from === this.accounts.details?.textilePubkey) {
         this.$store.commit('ui/setEditMessage', {
           id,
           payload,

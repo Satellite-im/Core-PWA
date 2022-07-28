@@ -1,18 +1,13 @@
-<div id="toolbar" v-if="recipient">
+<div id="toolbar">
+  <InteractablesSidebarToggle v-if="!ui.showSidebar" />
   <div class="circle-container">
-    <!--    hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)-->
-    <!--    <UiUserState-->
-    <!--      v-if="!isGroup"-->
-    <!--      class="circle"-->
-    <!--      :user="recipient"-->
-    <!--      :src="src"-->
-    <!--      :clickHandler="openProfile"-->
-    <!--    />-->
-    <UiUserState v-if="!isGroup" class="circle" :user="recipient" :src="src" />
-    <GroupIcon v-else :group="recipient" />
+    <template v-if="details">
+      <UiUserState v-if="!isGroup" class="circle" :user="details" />
+      <UiGroupIcon v-else :group="details" />
+    </template>
   </div>
   <div class="user-info">
-    <TypographyTitle :size="6" :text="recipient.name" />
+    <TypographyTitle :size="6" :text="conversation.name" />
     <TypographySubtitle
       v-if="!$device.isMobile"
       :size="6"
@@ -30,14 +25,14 @@
         :data="allUnseenNotifications.length"
         @click="toggleAlerts"
       >
-        {{allUnseenNotifications.length}}
+        {{ allUnseenNotifications.length }}
       </UiCircle>
       <bell-icon
+        v-tooltip.bottom="$t('pages.chat.alerts')"
         size="1x"
         :class="`control-icon ${showAlerts ? 'primary' : ''}`"
         color="primary"
         @click="toggleAlerts"
-        v-tooltip.bottom="$t('pages.chat.alerts')"
       />
       <ToolbarAlerts
         v-if="showAlerts && $device.isDesktop"
@@ -49,10 +44,12 @@
       v-click-outside="toggleAlerts"
     />
     <div
-      :class="`control-button ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      v-if="conversation"
       v-tooltip.bottom="callTooltipText"
+      :class="`control-button ${
+          !enableRTC || webrtc.activeCall ? 'disabled' : ''
+        }`"
       data-cy="toolbar-enable-audio"
-      v-if="recipient"
       @click="handleCall"
     >
       <phone-call-icon
@@ -72,86 +69,82 @@
     </div> -->
     <UiComingSoon
       v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.archived')"
-      :tooltipPosition="'bottom'"
+      :tooltip-text="$t('coming_soon.archived')"
+      :tooltip-position="'bottom'"
       data-cy="toolbar-archived-messages"
     >
       <div
-        :class="ui.showPinned ? 'primary' : ''"
         v-tooltip.bottom="$t('pages.chat.archived_messages')"
-        @click="() => {
-        $store.commit('ui/togglePinned', !ui.showPinned)
-      }"
+        :class="ui.showPinned ? 'primary' : ''"
+        @click="$store.commit('ui/togglePinned', !ui.showPinned)"
       >
         <archive-icon size="1x" class="control-icon" color="grey" />
       </div>
     </UiComingSoon>
     <div
       v-if="isGroup"
-      class="control-button"
       v-tooltip.bottom="$t('pages.chat.add_member')"
+      class="control-button"
       @click="groupInvite"
     >
       <user-plus-icon size="1x" class="control-icon" />
     </div>
     <GroupInvite
-      v-if="modals.groupInvite.isOpen"
-      v-click-outside="()=>toggleModal('groupInvite')"
-      :group="recipient"
+      v-if="isGroupInviteVisible"
+      v-click-outside="(isGroupInviteVisible = false)"
     />
 
-    <div class="vertical-divider" v-if="!$device.isMobile"></div>
+    <div v-if="!$device.isMobile" class="vertical-divider"></div>
     <UiComingSoon
       v-if="!$device.isMobile"
       class="market-place control-button coming-soon"
-      @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      :tooltipText="$t('market_place.title')"
-      :tooltipPosition="'bottom'"
+      :tooltip-text="$t('market_place.title')"
+      :tooltip-position="'bottom'"
       data-cy="toolbar-marketplace"
+      @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <shopping-bag-icon class="control-icon" size="1x" color="grey" />
     </UiComingSoon>
     <UiComingSoon
       v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.wallet')"
-      :tooltipPosition="'bottom'"
+      :tooltip-text="$t('coming_soon.wallet')"
+      :tooltip-position="'bottom'"
       data-cy="toolbar-wallet"
     >
       <div
-        @click="() => toggleModal(ModalWindows.WALLET)"
         v-tooltip.bottom="$t('wallet.wallet')"
+        @click="() => toggleModal(ModalWindows.WALLET)"
       >
         <wallet-icon class="control-icon" size="1x" color="grey" />
       </div>
     </UiComingSoon>
 
-    <div class="vertical-divider" v-if="!$device.isMobile"></div>
+    <div v-if="!$device.isMobile" class="vertical-divider"></div>
     <template v-if="!$device.isMobile">
       <UiComingSoon
         v-if="isGroup"
-        :tooltipText="$t('coming_soon.group_chat_search')"
+        :tooltip-text="$t('coming_soon.group_chat_search')"
         horizontal
         tooltip-position="bottom"
       >
         <SearchInput
+          :placeholder="$t('search.search')"
+          :search-recommend="searchRecommend"
           @search="handleSearch"
           @change="handleChange"
-          :placeholder="$t('search.search')"
-          :searchRecommend="searchRecommend"
         />
       </UiComingSoon>
       <SearchInput
         v-else
+        :placeholder="$t('search.search')"
+        :search-recommend="searchRecommend"
         @search="handleSearch"
         @change="handleChange"
-        :placeholder="$t('search.search')"
-        :searchRecommend="searchRecommend"
       />
     </template>
     <SearchResult
       v-if="!$device.isMobile && searchQuery"
-      :searchQuery="searchQuery"
-      :user="recipient"
+      :search-query="searchQuery"
       @toggle="toggleSearchResult"
     />
     <ToolbarPinned v-if="ui.showPinned" />

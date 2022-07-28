@@ -1,53 +1,50 @@
-<table
-  class="table"
-  data-cy="files-table"
-  :class="{'disabled' : isFilesIndexLoading}"
->
-  <thead>
-    <th @click="setSort(FileSortEnum.NAME)">
+<div class="table" data-cy="files-table">
+  <div class="table-header">
+    <div class="table-cell" @click="sort = FileSortEnum.NAME">
       {{ $t('pages.files.browse.name') }}
       <template v-if="sort.category===FileSortEnum.NAME">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
-    </th>
-    <th @click="setSort(FileSortEnum.MODIFIED)">
+    </div>
+    <div class="table-cell" @click="sort = FileSortEnum.MODIFIED">
       {{ $t('pages.files.browse.modified') }}
       <template v-if="sort.category===FileSortEnum.MODIFIED">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
-    </th>
-    <th
+    </div>
+    <div
       v-if="!$device.isMobile"
-      @click="setSort(FileSortEnum.TYPE)"
-      class="open-sidebar-hide"
+      @click="sort = FileSortEnum.TYPE"
+      class="table-cell open-sidebar-hide"
     >
       {{ $t('pages.files.browse.type') }}
       <template v-if="sort.category===FileSortEnum.TYPE">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
-    </th>
-    <th @click="setSort(FileSortEnum.SIZE)" class="open-sidebar-hide">
+    </div>
+    <div @click="sort = FileSortEnum.SIZE" class="table-cell open-sidebar-hide">
       {{ $t('pages.files.browse.size') }}
       <template v-if="sort.category===FileSortEnum.SIZE">
         <chevron-up-icon v-if="sort.asc" size="1x" />
         <chevron-down-icon v-else size="1x" />
       </template>
-    </th>
-    <th />
-  </thead>
-  <tbody>
+    </div>
+    <div class="table-cell" />
+  </div>
+  <div class="table-body">
     <FilesListRow
-      v-for="item, i in directory"
-      :key="i + counter"
+      v-for="item in directory"
       :item="item"
+      :key="item.id + counter"
+      @like="(item) => $emit('like', item)"
+      @share="(item) => $emit('share', item)"
+      @rename="(item) => $emit('rename', item)"
+      @remove="(item) => $emit('remove', item)"
+      @handle="(item) => $emit('handle', item)"
       data-cy="files-item"
-      @like="like"
-      @share="share"
-      @remove="remove"
-      @handle="handle"
     />
-  </tbody>
-</table>
+  </div>
+</div>

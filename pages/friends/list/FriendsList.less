@@ -1,3 +1,15 @@
+.friends {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  margin: @normal-spacing @normal-spacing 0;
+  overflow-y: scroll;
+
+  .col {
+    flex-grow: 1;
+  }
+}
+
 .alpha-divider {
   &:extend(.full-width);
   display: inline-block;
@@ -6,41 +18,6 @@
   font-family: @primary-font;
 }
 
-#friends {
-  width: @full;
-  height: @full;
-  overflow: hidden;
-  padding: 3.5em 0;
-  box-sizing: border-box;
-  @media only screen and (max-width: @mobile-breakpoint) {
-    padding: @normal-spacing 0;
-  }
-
-  .columns {
-    width: @full;
-    height: @full;
-    box-sizing: border-box;
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-
-    .is-half {
-      width: @half;
-    }
-  }
-}
-
-#friends-list {
-  width: @full;
-  height: @full;
-  overflow: hidden;
-}
-
-.scrolling {
-  height: @full;
-  min-height: @full;
-}
 .loading-container {
   text-align: center;
 }

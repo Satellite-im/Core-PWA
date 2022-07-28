@@ -1,7 +1,7 @@
 <template src="./Controls.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import {
   FolderPlusIcon,
@@ -11,25 +11,15 @@ import {
 } from 'satellite-lucide-icons'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-import fileSystem from '~/libraries/Files/FilSystem'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { ItemErrors } from '~/libraries/Iridium/files/types'
 
-export default Vue.extend({
+const Controls = Vue.extend({
   components: {
     FolderPlusIcon,
     FilePlusIcon,
     AlertTriangleIcon,
     XIcon,
-  },
-  // todo - best practice would be emitting rather than passing function as a prop - AP-639
-  props: {
-    /**
-     * Switch between grid/table view
-     */
-    changeView: {
-      type: Function,
-      required: true,
-    },
   },
   data() {
     return {
@@ -39,11 +29,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      filesUploadStatus: (state) => (state as RootState).ui.filesUploadStatus,
-      consentToScan: (state) =>
-        (state as RootState).textile.userThread.consentToScan,
+      currentUpload: (state) => (state as RootState).files.currentUpload,
+      path: (state) => (state as RootState).files.path,
+      status: (state) => (state as RootState).files.status,
     }),
-    ...mapGetters('ui', ['isFilesIndexLoading']),
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
   },
   methods: {
     /**
@@ -51,20 +43,10 @@ export default Vue.extend({
      * @description Trigger click on invisible file input on button click
      */
     addFile() {
-      // comment until we have the settings store figured out. some will need to be remote across instances, some should be local only
-      // if (!this.consentToScan) {
-      //   this.$toast.error(
-      //     this.$t('pages.files.errors.enable_consent') as string,
-      //     {
-      //       duration: 3000,
-      //     },
-      //   )
-      //   this.$store.commit('ui/toggleSettings', {
-      //     show: true,
-      //     defaultRoute: SettingsRoutes.PRIVACY,
-      //   })
-      //   return
-      // }
+      if (!this.consentToScan) {
+        this.$store.dispatch('ui/displayConsentSettings')
+        return
+      }
       if (this.$refs.upload) (this.$refs.upload as HTMLButtonElement).click()
     },
 
@@ -81,24 +63,15 @@ export default Vue.extend({
      * @method addFolder
      * @description Add new folder to fileSystem
      */
-    async addFolder() {
+    addFolder() {
       this.errors = []
-      this.$store.commit(
-        'ui/setFilesUploadStatus',
-        this.$t('pages.files.status.index'),
-      )
       try {
-        fileSystem.createDirectory({ name: this.text })
+        iridium.files.addDirectory(this.text, this.path.at(-1)?.id ?? '')
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
-        this.$store.commit('ui/setFilesUploadStatus', '')
         return
       }
       this.text = ''
-      iridium.files?.exportFs()
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      this.$emit('forceRender')
     },
 
     handleInput(event: any) {
@@ -111,89 +84,67 @@ export default Vue.extend({
      * @param {File[]} originalFiles files to upload
      * @example <input @change="handleFile" />
      */
-    async handleFile(originalFiles: File[]) {
+    async handleFile(files: File[]) {
       this.errors = []
       this.$store.commit(
-        'ui/setFilesUploadStatus',
+        'files/setStatus',
         this.$t('pages.files.status.prepare'),
       )
 
       // if these files go over the storage limit, prevent upload
       if (
-        originalFiles.reduce(
+        files.reduce(
           (total, curr) => total + curr.size,
-          fileSystem.totalSize,
+          iridium.files.totalSize,
         ) > this.$Config.personalFilesLimit
       ) {
-        this.$store.commit('ui/setFilesUploadStatus', '')
-        this.errors.push(this.$t('pages.files.errors.storage_limit'))
+        this.$store.commit('files/setStatus', '')
+        this.errors.push(this.$t(ItemErrors.LIMIT))
         return
       }
-      // todo - move validation inside of file constructor
-      const invalidNameResults: File[] = originalFiles.filter(
-        (file) => !this.$Config.regex.invalid.test(file.name),
-      )
-      // filter out files with 0 bytes size
-      const emptyFileResults: File[] = invalidNameResults.filter(
-        (file) => !(file.size === 0),
-      )
-      // filter out files with the same name as another file
-      const files: File[] = emptyFileResults.filter((file) => {
-        return !fileSystem.currentDirectory.hasChild(file.name)
-      })
 
       for (const file of files) {
-        try {
-          this.$store.commit(
-            'ui/setFilesUploadStatus',
-            this.$t('pages.files.status.upload', [file.name]),
-          )
-          await iridium.files?.personalUpload(file)
-        } catch (e: any) {
-          this.errors.push(e?.message ?? '')
-        }
+        this.$store.commit('files/setCurrentUpload', {
+          name: file.name,
+          size: file.size,
+        })
+        await iridium.files
+          .addFile({
+            file,
+            parentId: this.path.at(-1)?.id ?? '',
+            options: { progress: this.setProgress },
+          })
+          .catch((e) => {
+            // ensure there aren't any duplicate error messages
+            if (!this.errors.includes(this.$t(e?.message)))
+              this.errors.push(this.$t(e?.message ?? ''))
+          })
       }
-
-      // only update index if files have been updated
-      if (files.length) {
-        this.$store.commit(
-          'ui/setFilesUploadStatus',
-          this.$t('pages.files.status.index'),
-        )
-        iridium.files?.exportFs()
-      }
-
-      this.$store.commit('ui/setFilesUploadStatus', '')
-
-      // re-render so new files show up
-      this.$emit('forceRender')
-
-      if (originalFiles.length !== invalidNameResults.length) {
-        this.errors.push(this.$t('pages.files.errors.invalid'))
-      }
-      if (invalidNameResults.length !== emptyFileResults.length) {
-        this.errors.push(this.$t('pages.files.errors.file_size'))
-      }
-      if (emptyFileResults.length !== files.length) {
-        this.errors.push(this.$t('pages.files.errors.duplicate_name'))
-      }
+      this.$store.commit('files/setStatus', '')
+      this.$store.commit('files/setCurrentUpload', undefined)
     },
     /**
      * @method setProgress
-     * @description set progress (% out of 100) while file is being pushed to textile bucket. passed as a callback
-     * we encountered a bug where % was getting set to 105, math.min fixes that
-     * @param num current progress in bytes
-     * @param size total file size in bytes
+     * @description set progress (% out of 100) while file is being pushed to ipfs
+     * @param bytes current upload progress in bytes
      */
-    setProgress(num: number, size: number, name: string) {
+    setProgress(bytes: number) {
+      if (!this.currentUpload) {
+        return
+      }
       this.$store.commit(
-        'ui/setFilesUploadStatus',
+        'files/setStatus',
         this.$t('pages.files.status.upload', [
-          `${name} - ${Math.min(Math.floor((num / size) * 100), 100)}%`,
+          `${this.currentUpload.name} - ${Math.min(
+            Math.floor((bytes / this.currentUpload.size) * 100),
+            100,
+          )}%`,
         ]),
       )
     },
   },
 })
+export type FilesControlsRef = InstanceType<typeof Controls>
+export default Controls
 </script>
 <style scoped lang="less" src="./Controls.less"></style>

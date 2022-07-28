@@ -1,22 +1,27 @@
 // eslint-disable-next-line import/named
-import { Commitment, clusterApiUrl } from '@solana/web3.js'
+import { Commitment } from '@solana/web3.js'
+
+const soundsCID = 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9'
+const syncNodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
+  '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
+]
+console.log('debug: | syncNodes', syncNodes)
 
 export const Config = {
   debug: true,
   iridium: {
-    relayId: process.env.NUXT_ENV_IRIDIUM_LOCAL_RELAY,
-    syncNodes: [
-      {
-        label: 'Satellite.im Sync Node',
-        peerId:
-          process.env.NUXT_ENV_IRIDIUM_SYNC_PEER_ID ||
-          '12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-        multiaddr:
-          process.env.NUXT_ENV_IRIDIUM_SYNC_ADDR ||
-          '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
+    syncNodes,
+    ipfs: {
+      config: {
+        Addresses: {
+          Swarm: syncNodes.map((node) => `${node}/p2p-circuit`),
+          Delegate: syncNodes,
+        },
+        Bootstrap: syncNodes,
       },
-    ],
+    },
   },
+
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
@@ -32,22 +37,21 @@ export const Config = {
     sharedBucket: 'shared-files',
   },
   ipfs: {
-    gateway: 'https://satellite.mypinata.cloud/ipfs/',
+    gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
   indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
-    newMessage:
-      'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Notification.m4a',
-    call: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Call.m4a',
-    hangup: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Unused.m4a',
-    mute: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Mute.m4a',
-    unmute: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Unmute.m4a',
-    deafen: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Deafen.m4a',
-    undeafen: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Undeafen.m4a',
-    upload: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Success.m4a',
-    connected: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Success.m4a',
+    newMessage: `${soundsCID}/Notification.m4a`,
+    call: `${soundsCID}/Call.m4a`,
+    hangup: `${soundsCID}/Unused.m4a`,
+    mute: `${soundsCID}/Mute.m4a`,
+    unmute: `${soundsCID}/Unmute.m4a`,
+    deafen: `${soundsCID}/Deafen.m4a`,
+    undeafen: `${soundsCID}/Undeafen.m4a`,
+    upload: `${soundsCID}/Success.m4a`,
+    connected: `${soundsCID}/Success.m4a`,
   },
   cacher: {
     user_lifespan: 90000,
@@ -195,9 +199,9 @@ export const Config = {
     },
   },
   cropperOptions: {
-    type: 'base64',
+    type: 'blob',
     circle: false,
-    size: { width: 600, height: 600 },
+    size: { width: 160, height: 160 },
     format: 'jpeg',
   },
   locale:
@@ -214,4 +218,5 @@ export const Config = {
   modal: {
     errorNetworkActionThrottle: 1000,
   },
+  seedPhraseCharsCount: 12,
 }

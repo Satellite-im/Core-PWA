@@ -5,6 +5,7 @@ import {
   PublicKey,
   ConfirmOptions,
 } from '@solana/web3.js'
+import { PrivateKey } from '@textile/hub'
 
 export interface RawUser {
   name: string
@@ -36,8 +37,10 @@ export interface Group {
 
 export interface Account {
   mnemonic?: string
-  privateKey: string
+  privateKey?: string
   path?: string
+  publicKey: PublicKey
+  secretKey?: Uint8Array
   address: string
 }
 
@@ -122,14 +125,17 @@ export interface OutgoingFriendRequest extends FriendAccount {
 }
 
 export interface Adapter {
+  _getConnectionStatus(): boolean
+  initUserProgram(): Promise<void>
   setPhotoHash(photoHash: string): Promise<string>
   createRandomAccount(): Promise<Account | undefined>
-  initUserProgram(): Promise<void>
-  getAccountFromMnemonic(mnemonic: string): Promise<Account | null>
+  signMessage(message: string): Promise<Uint8Array>
+
+  getAccountFromMnemonic(mnemonic?: string): Promise<Account | null>
   getAccountBalance(account: Account): Promise<number | null>
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null>
   createUser(params: CreateUserParams): Promise<boolean>
-  getActiveAccount(): Promise<Keypair | undefined>
+  getActiveAccount(): Promise<Account | undefined>
 
   getCurrentUserInfo(): Promise<User | null>
   getUserInfo(address: string): Promise<User | null>
@@ -147,7 +153,7 @@ export interface Adapter {
     from: PublicKey,
     to: PublicKey,
   ): Promise<{ request: PublicKey; first: PublicKey; second: PublicKey }>
-  getFriendsPayer(): Promise<Keypair>
+  getFriendsPayer(): Promise<Account>
   getAccountStatus(accountKey: PublicKey): Promise<FriendStatus>
   makeFriendRequest(
     request: PublicKey,
@@ -162,7 +168,7 @@ export interface Adapter {
   removeFriend(request: PublicKey): Promise<string>
   closeFriendRequest(request: PublicKey): Promise<string>
 
-  getPayerAccount(): Promise<Keypair | undefined>
+  getPayerAccount(): Promise<Account | undefined>
   createGroup(groupId: string, name: string): Promise<Group>
   getUserGroups(address: string | PublicKey): Promise<Group[]>
   getGroupsUsers(groupIds: string[]): Promise<{ id: string; users: string[] }[]>

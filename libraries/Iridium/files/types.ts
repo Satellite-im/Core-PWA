@@ -1,27 +1,41 @@
+/* eslint-disable no-use-before-define */
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export type FileUpdate = 'upload' | 'delete' | 'like' | 'share'
 
-interface ExportSharedProps {
+interface Shared {
   id: string
   name: string
   liked: boolean
   shared: boolean
-  type: FILE_TYPE | DIRECTORY_TYPE
   modified: number
-}
-export interface ExportFile extends ExportSharedProps {
   size: number
-  description: string
+  parentId: IridiumDirectory['id'] // empty string if root item
+}
+
+export interface IridiumFile extends Shared {
+  type: FILE_TYPE
+  description?: string
   thumbnail: string
   extension: string
   nsfw: boolean
 }
 
-export interface ExportDirectory extends ExportSharedProps {
-  // eslint-disable-next-line no-use-before-define
-  children: ExportItem[]
+export interface IridiumDirectory extends Shared {
+  type: DIRECTORY_TYPE
+  children: IridiumItem[]
 }
 
-export type ExportItem = ExportFile | ExportDirectory
+export type IridiumItem = IridiumFile | IridiumDirectory
+
+export enum ItemErrors {
+  // IridiumItem
+  NO_EMPTY_STRING = 'pages.files.errors.no_empty',
+  INVALID = 'pages.files.errors.invalid',
+  DUPLICATE_NAME = 'pages.files.errors.duplicate_name',
+  LEADING_DOT = 'pages.files.errors.leading_dot',
+  // IridiumFile
+  FILE_SIZE = 'pages.files.errors.file_size',
+  LIMIT = 'pages.files.errors.storage_limit',
+}

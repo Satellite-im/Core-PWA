@@ -103,7 +103,7 @@
       v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
     />
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
-    <FilesView v-if="ui.filePreview" />
+    <FilesView v-if="files.preview" />
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />

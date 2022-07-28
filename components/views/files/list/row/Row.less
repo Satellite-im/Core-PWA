@@ -1,14 +1,24 @@
-td {
+.table-row {
+  display: table-row;
   &:extend(.font-primary);
   border-bottom-color: @foreground;
   vertical-align: middle;
+  padding: @light-spacing 0;
 
-  &.filename {
+  .table-cell {
+    display: table-cell;
+    vertical-align: middle;
+    border-bottom: 1px solid @dark-gray;
+    padding: @light-spacing 0;
+  }
+
+  .filename {
     font-family: @primary-font;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 200px;
+    padding: 0 @normal-spacing 0 @light-spacing;
 
     .file-type-icon {
       width: 1em;
@@ -21,6 +31,14 @@ td {
   .swiper-slide-next {
     .open-sidebar-hide {
       display: none;
+    }
+  }
+}
+
+@media screen and (max-width: @mobile-breakpoint) {
+  .table-row {
+    .filename {
+      max-width: 120px;
     }
   }
 }

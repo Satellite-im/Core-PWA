@@ -16,6 +16,8 @@ export default {
     unencrypted: 'Unencrypted',
     upload: 'Upload',
     upload_files: 'Upload Files',
+    edit: 'edit',
+    save: 'save',
   },
   ui: {
     talk: 'Speak Freely...',
@@ -170,6 +172,7 @@ export default {
       browse: {
         files: 'Files',
         search: 'Search...',
+        sort: 'Sort',
         name: 'Name',
         modified: 'Modified',
         type: 'Type',
@@ -197,7 +200,7 @@ export default {
       errors: {
         no_empty: 'Item name must be a non empty string',
         leading_dot: 'Item name cannot begin with .',
-        invalid: 'Item name cannot contain invalid symbols',
+        invalid: 'Item name cannot contain invalid symbols (/:"*?<>|~#%&+{}\\)',
         file_size: 'File needs to have a size of 1 byte or greater',
         duplicate_name: 'Item with name already exists in this directory',
         storage_limit: 'This upload would exceed your storage limit',
@@ -213,8 +216,13 @@ export default {
       decrypt: 'Decrypt Account',
       create: 'Create Account Pin',
       placeholder: 'Enter Pin...',
+      choose_pin: 'Choose Your Pin',
+      choose_pin_description_1: 'Create a pin to protect your account.',
+      choose_pin_description_2:
+        "The pin can be anything you want, just don't forget it.",
       store_pin: 'Store Pin? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
+      generate_random_user: 'Generate a Random User (DEV)',
     },
     loading: {
       loading: 'Linking Satellites...',
@@ -226,13 +234,16 @@ export default {
       create: 'Create Account',
       or: 'Or',
       import: 'Import Account',
+      connect: 'Connect Wallet',
     },
     inputAccount: {
       title: 'Import Account',
       subtitle:
         'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
       enter: 'Enter Passphrase',
+      reset: 'Reset Passphrase',
       recover: 'Recover Account',
+      error_recover_phrase: 'Invalid passphrase',
     },
     phrase: {
       title: 'Recovery Seed',
@@ -420,21 +431,19 @@ export default {
         title: 'Default Keybinds',
         subtitle:
           'A list of the default keybinds for quickly navigating and using Satellite.',
-        mute: 'Toggle Mute',
-        settings: 'Open Settings',
-        deafen: 'Toggle Deafen',
-        call: 'Call Active Chat',
+        toggleMute: 'Toggle Mute',
+        openSettings: 'Open Settings',
+        toggleDeafen: 'Toggle Deafen',
+        callActiveChat: 'Call Active Chat',
         clear: 'Clear',
         save: 'Save',
         cancel: 'Cancel',
+        edit: 'Edit',
+        reset: 'Reset',
         reset_all: 'Reset All Keybinds',
-        singleHotkeyError: 'Single key already exist',
-        systemHotkeyError:
-          'That is browser/system shortcut. Please input other keys.',
-        existHotkeyError: 'Key already bound',
-        modifierHotkeyError:
-          'Modifiers (Shift, Tab, Option, etc.) Must come before alphanumerics',
-        editHotkeyError: 'Character Not Allowed',
+        no_mapping: 'No mapping',
+        enter_new_keybind: 'Enter a new keybinding',
+        reserved: 'Reserved keybinding, try something else',
       },
       accounts: {
         title: 'Accounts & Devices',
@@ -496,6 +505,8 @@ export default {
       profile: {
         title: 'Profile',
         subtitle: 'Update your profile photo, status, banners and more.',
+        status_placeholder: 'Some super interesting status message',
+        remove_image: 'Remove',
         info: {
           title: 'Account Info',
           subtitle:
@@ -514,6 +525,21 @@ export default {
           title: 'Recovery Phrase',
           subtitle:
             'Do not share this phrase with anyone. This phrase is used to recover your account. Anyone with access to this has access to your account.',
+        },
+        about: {
+          title: 'About Me',
+          subtitle:
+            'Let your friends know who you are! Your about me will display on your profile.',
+        },
+        accounts: {
+          title: 'Your Accounts',
+          subtitle_url: 'Share your blog, website, or portfolio URL.',
+          url_placeholder: 'Enter URL...',
+          subtitle_accounts:
+            'Link your accounts to display on your profile and have easier access to them while using Satellite.im.',
+          displayMusic: 'Display Your Music',
+          displayOnProfile: 'Display On Profile',
+          verify: 'Verify',
         },
       },
     },
@@ -602,6 +628,7 @@ export default {
       friend_info_not_found: 'Seems that this user is not registered',
       textile_not_initialized: 'Your account is not ready. Try later',
       friend_not_removed: 'Could not remove friend',
+      network: 'We are experiencing network issues, please try again later',
     },
     chat: {
       drop_file_count: 'Sorry, you can only upload 8 files at a time',
@@ -611,6 +638,8 @@ export default {
       failed_load: 'Image failed to load',
       group_name:
         'Enter a group name of at least {min} characters, up to {max}',
+      conversation_exists:
+        'A conversation with that name already exists, please choose a different name',
     },
     textile: {
       friend_not_found: 'Friend not found',
@@ -780,11 +809,12 @@ export default {
     unshare: 'Unshare',
     rename: 'Rename',
     delete: 'Delete',
-    // friends
+    // SidebarListItem
     send: 'Send Message',
     voice: 'Start Call',
     video: 'Video Call',
     remove: 'Remove Friend',
+    leave_group: 'Leave Group',
     profile: 'Profile',
     // message
     edit: 'Edit Message',

@@ -1,99 +1,58 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { ChevronDownIcon } from 'satellite-lucide-icons'
-import type { ConversationMessage } from '~/libraries/Iridium/chat/types'
-import { ScrollDirections } from '~/types/chat/chat'
-import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+
+interface ChatItem {
+  message: ConversationMessage & { id: string }
+  isSameAuthor: boolean
+  timeDiff: number
+  isNextDay: boolean
+  isFirstUnreadMessage: boolean
+}
 
 export default Vue.extend({
   components: {
     ChevronDownIcon,
   },
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    messages: {
-      type: Array,
-      default: () => [],
-    },
-    groupId: {
-      type: String,
-      default: '',
-    },
+  data() {
+    return {
+      messages: iridium.chat.messages[this.$route.params.id],
+      conversation: iridium.chat.state.conversations[this.$route.params.id],
+    }
   },
   computed: {
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-      showOlderMessageInfo: (state) =>
-        (state as RootState).ui.showOlderMessagesInfo,
-      textile: (state) => (state as RootState).textile,
-      currentChat: (state) => (state as RootState).chat.currentChat,
-      webrtc: (state) => (state as RootState).webrtc,
-      conversation: (state) => (state as RootState).conversation,
-    }),
-    options() {
-      return {
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-        rootMargin: '100px 0px 0px 0px',
-        root: this.$refs.chatScroll,
-      }
+    myDid(): string {
+      return iridium.connector?.id ?? ''
     },
-    isReversedScroll() {
-      return this.currentChat.direction === ScrollDirections.TOP
-    },
-    conversationId() {
-      return this.$route.params?.address || this.$route.params?.id
-    },
-    isActiveCall() {
-      return (
-        this.webrtc.activeCall &&
-        this.webrtc.activeCall.callId === this.conversation.id
-      )
-    },
-  },
-  beforeDestroy() {
-    this.$store.commit('chat/resetCurrentChat')
-  },
-  methods: {
-    scrollToMessage(messageId: string) {
-      if (!messageId) {
-        return
-      }
+    chatItems(): ChatItem[] {
+      return this.messages.map((message, index) => {
+        const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
+        const isSameAuthor = prevMessage
+          ? message.from === prevMessage.from
+          : false
+        const timeDiff = prevMessage ? message.at - prevMessage.at : 0
+        const isNextDay = prevMessage
+          ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
+          : false
+        const lastReadAt = this.conversation.lastReadAt
+        const isFirstUnreadMessage =
+          message.at > lastReadAt &&
+          (prevMessage ? prevMessage.at <= lastReadAt : true)
 
-      this.$nextTick(() => {
-        const messageNode = document.getElementById(messageId)
-        if (!messageNode) {
-          return
+        return {
+          message,
+          isSameAuthor,
+          timeDiff,
+          isNextDay,
+          isFirstUnreadMessage,
         }
-        messageNode.scrollIntoView({
-          block:
-            this.currentChat.direction === ScrollDirections.TOP
-              ? 'start'
-              : 'end',
-          behavior: 'auto',
-        })
       })
     },
-    loadMore() {
-      this.$store.dispatch('chat/loadMessages', this.conversationId)
-    },
-    handleIntersect({ loaded, complete }) {
-      if (this.currentChat.hasNextPage && !this.currentChat.isMessagesLoading) {
-        this.loadMore()
-        this.scrollToMessage(this.currentChat.lastLoadedMessageId)
-        loaded()
-        return
-      }
-      complete()
-    },
-    handleClick() {
-      this.$refs.chatScroll?.autoScrollToBottom()
-    },
   },
+  methods: {},
 })
 </script>
 <style scoped lang="less" src="./Conversation.less"></style>

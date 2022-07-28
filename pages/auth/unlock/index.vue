@@ -2,10 +2,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { UnlockIcon, ChevronRightIcon, InfoIcon } from 'satellite-lucide-icons'
 import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { RootState } from '~/types/store/store'
+import { AccountsError } from '~/store/accounts/types'
 
 export default Vue.extend({
   name: 'UnlockScreen',
@@ -17,10 +18,9 @@ export default Vue.extend({
   data() {
     return {
       pin: '',
+      status: 'idle' as 'idle' | 'loading',
       error: '',
-      decrypting: false,
-      peer: null,
-      showChangeLog: false,
+      step: 'signup' as 'signup' | 'login',
     }
   },
   computed: {
@@ -36,6 +36,29 @@ export default Vue.extend({
         return !this.accounts ? false : this.accounts.storePin
       },
     },
+    isDev(): boolean {
+      return (
+        location.href.startsWith('http://localhost') ||
+        location.href.startsWith('https://iridium-dev') ||
+        location.href.startsWith('https://core-dev') ||
+        location.host.endsWith('.on.fleek.co')
+      )
+    },
+  },
+  watch: {
+    error(newValue) {
+      if (newValue !== '' && this.status !== 'idle') {
+        this.status = 'idle'
+      }
+    },
+    status(newValue) {
+      if (newValue === 'loading' && this.error !== '') {
+        this.error = ''
+      }
+    },
+  },
+  beforeMount() {
+    if (this.accounts.pinHash) this.step = 'login'
   },
   mounted() {
     // This information can be useful for users to help us find and report bugs.
@@ -74,30 +97,25 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async decrypt() {
-      this.decrypting = true
-      this.error = ''
-
+    async decrypt(redirect = true, pin = undefined) {
       try {
-        await this.$store.dispatch('accounts/unlock', this.pin)
+        await this.$store.dispatch('accounts/unlock', pin ?? this.pin)
 
         if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
           try {
-            await this.$store.dispatch('settings/clearLocalStorage')
+            await this.deleteAccount()
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          this.$router.replace('/setup/disclaimer')
+          redirect && this.$router.replace('/setup/disclaimer')
         } else {
-          this.$router.replace('/')
+          redirect && this.$router.replace('/')
         }
       } catch (error: any) {
         this.error = error.message
         this.pin = ''
       }
-
-      this.decrypting = false
     },
     // Create & store a new pin, then decrypt.
     /**
@@ -115,7 +133,40 @@ export default Vue.extend({
     },
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
+    },
+    async clearAndReset() {
+      await this.deleteAccount()
       location.reload()
+    },
+    action() {
+      this.status = 'loading'
+      return this.step === 'login' ? this.decrypt() : this.create()
+    },
+    // FOR DEVELOPMENT PURPOSES ONLY
+    async createRandom() {
+      const pin = '11111'
+      try {
+        this.status = 'loading'
+        await this.deleteAccount()
+        await this.$store.dispatch('accounts/setPin', pin)
+        await this.decrypt(false, pin)
+        await this.$store.dispatch('accounts/generateWallet')
+        try {
+          await this.$store.dispatch('accounts/loadAccount')
+        } catch (error: any) {
+          if (error.message === AccountsError.USER_NOT_REGISTERED) {
+            await this.$store.dispatch('accounts/registerUser', {
+              name: (Math.random() + 1).toString(36).substring(2),
+              image: '',
+              status: 'user-status',
+            })
+          }
+        }
+
+        this.$router.replace('/')
+      } catch (error: any) {
+        this.error = error.message
+      }
     },
   },
 })

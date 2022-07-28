@@ -1,88 +1,21 @@
 #chatbar {
-  position: relative;
-  margin-top: @light-spacing;
-  &:extend(.third-layer);
-  &:extend(.full-width);
-  .chat-label {
-    font-size: @mini-text-size;
-    font-weight: bold;
-    width: 1.5rem;
-    height: 1.25rem;
-    padding: 0.15rem;
-    text-align: center;
-    align-content: center;
-    border-radius: @corner-rounding-smaller;
-    cursor: pointer;
-    align-self: flex-start;
-    margin-top: 11px;
-  }
-  textarea.has-command {
-    font-family: @primary-font;
-  }
-  .quick-upload {
-    margin-left: @normal-spacing;
-  }
-  .green {
-    background: @green;
-    &:extend(.font-white);
-  }
-  .red {
-    background: @red;
-    &:extend(.font-white);
-  }
-  .control-wrap {
-    display: flex;
-    justify-self: center;
-    align-self: flex-end;
-  }
-
-  .file-upload-wrap {
-    margin-right: @light-spacing;
-    order: 1;
-    font-size: @icon-size;
-    padding: 12px 0;
-    width: 26px;
-    height: @chatbar-input-height;
-    min-width: 26px;
-  }
+  display: flex;
+  flex-direction: column;
+  transition: height @animation-speed;
+  gap: @light-spacing;
 
   .chatbar-wrap {
-    position: relative;
-    &:extend(.background-semitransparent-light);
-    margin: 0 @normal-spacing;
-    border-radius: 20px;
-    padding: 0 16px;
-    flex-direction: row;
+    display: flex;
     align-items: flex-end;
-    width: calc(@full - (@normal-spacing * 2));
-    display: inline-flex;
+    gap: @light-spacing;
+    padding: 0 @normal-spacing;
+    position: relative;
+    border-radius: 20px;
     border: 1px solid transparent;
-
-    &.expanded {
-      border-radius: 5px;
-    }
-
-    .control-tooltip-wrap {
-      height: 16pt;
-      width: 16pt;
-      align-self: center;
-      margin: 0 0.75rem;
-      margin-left: 0;
-
-      &:nth-child(1) {
-        margin-right: 0.75rem;
-        margin-left: @light-spacing;
-      }
-    }
+    &:extend(.background-semitransparent-light);
 
     &.is-error {
-      border: 1px solid @red;
-
-      .control-icon {
-        &:nth-child(4) {
-          &:extend(.color-danger);
-        }
-      }
+      border-color: @red;
     }
 
     &.top-corners-sharp {
@@ -90,58 +23,18 @@
       border-top-right-radius: 0;
     }
 
-    .messageuser {
-      flex: 1;
-      order: 2;
-      background-color: transparent;
-      border: none;
-      font-family: 'Poppins';
-      &:extend(.font-primary);
-      outline: none;
-      resize: none;
-      font-size: @text-size;
-      word-break: break-all;
-    }
-
-    .editable-container {
-      min-height: @chatbar-input-height;
-      max-height: 50vh;
-    }
-
-    #chatbar-controls {
-      width: 150px;
-      order: 3;
-    }
-
-    .control-icon {
-      justify-self: center;
-      align-self: center;
-      font-size: @larger-icon-size;
-      margin: 0 @light-spacing;
-
-      &:nth-child(1) {
-        margin-right: 0;
-      }
-      &:nth-child(3) {
-        margin-left: 0;
-      }
-    }
-  }
-
-  .chatbar-wrap.inactive {
-    cursor: not-allowed;
-    opacity: 0.5;
-    pointer-events: none;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  #chatbar {
-    min-width: @viewport-width;
-
-    .chatbar-wrap {
-      margin: 0 @light-spacing;
-      width: calc(@full - @normal-spacing);
-    }
+    // .chat-label {
+    //   font-size: @mini-text-size;
+    //   font-weight: bold;
+    //   width: 1.5rem;
+    //   height: 1.25rem;
+    //   padding: 0.15rem;
+    //   text-align: center;
+    //   align-content: center;
+    //   border-radius: @corner-rounding-smaller;
+    //   cursor: pointer;
+    //   align-self: flex-start;
+    //   margin-top: 11px;
+    // }
   }
 }

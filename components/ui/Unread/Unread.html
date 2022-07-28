@@ -1,11 +1,11 @@
-<div
+<UiContextMenu
   class="unread"
   :class="{
    'unread--loading' : isLoading,
    'unread--active': active
   }"
   v-tooltip.right="user.name"
-  @contextmenu="contextMenu"
+  :items="contextMenuValues"
   v-on:click="navigateToUser"
 >
   <UiCircle
@@ -20,4 +20,4 @@
   <div class="unread-loader" v-if="isLoading">
     <UiLoadersSpinner spinning />
   </div>
-</div>
+</UiContextMenu>

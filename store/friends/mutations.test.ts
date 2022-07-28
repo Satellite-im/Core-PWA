@@ -528,6 +528,7 @@ describe('mutate friends', () => {
     })
     expect(InitialFriendsState.all).toMatchSnapshot()
   })
+
   test('set typing state but non-identical address', () => {
     const payload: any = {
       name: 'Yusuf Mangunwijaya',
@@ -1125,6 +1126,7 @@ describe('mutations.setNote', () => {
     mutations.setNote(localState, argument)
     expect(localState.all).toMatchSnapshot()
   })
+
   test('real but non-identical id', () => {
     const localState = {
       incomingRequests: [

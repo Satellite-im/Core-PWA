@@ -87,8 +87,6 @@ export default Vue.extend({
           return
         }
 
-        console.error('loadAccount error', error)
-
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,
           action: this.loadAccount,

@@ -1,0 +1,33 @@
+<UiContextMenu
+  class="item"
+  :class="{'is-loading' : isLoading , selected : isSelected}"
+  :items="contextMenuValues"
+  @click="openConversation"
+  data-cy="sidebar-user"
+>
+  <template v-if="details">
+    <UiUserState v-if="conversation.type === 'direct'" :user="details" />
+    <UiGroupIcon v-else :group="details" />
+  </template>
+  <div class="user-info">
+    <TypographyTitle
+      v-if="details"
+      :size="6"
+      data-cy="sidebar-user-name"
+      :text="details.name"
+    />
+    <div
+      v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
+      class="subtitle"
+      :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
+      ref="subtitle"
+    />
+  </div>
+  <div class="user-chat-details">
+    <TypographyText v-if="messages.length" :text="timestamp" :size="6" />
+    <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->
+  </div>
+  <div class="user-loader">
+    <UiLoadersSpinner :spinning="isLoading" />
+  </div>
+</UiContextMenu>

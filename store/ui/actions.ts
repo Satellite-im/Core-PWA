@@ -1,6 +1,6 @@
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
-import { Position, UIState } from './types'
+import { Position, SettingsRoutes, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
@@ -10,6 +10,7 @@ import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import { TextileError } from '~/store/textile/types'
 import { AlertState, AlertType } from '~/libraries/ui/Alerts'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 const $Sounds = new SoundManager()
 
@@ -45,10 +46,9 @@ export default {
    * @description Activates all keybindings with Mousetrap
    * @example mounted (){ activateKeybinds() }
    */
-  async activateKeybinds({ dispatch, rootState }: ActionsArguments<UIState>) {
+  async activateKeybinds({ dispatch }: ActionsArguments<UIState>) {
     const { toggleMute, toggleDeafen, openSettings, callActiveChat } =
-      // @ts-ignore
-      rootState.settings.keybinds
+      iridium.settings.state.keybinds
     Mousetrap.reset()
     Mousetrap.bind(getCorrectKeybind(toggleMute), (event: KeyboardEvent) => {
       event.preventDefault()
@@ -197,5 +197,15 @@ export default {
       commit('friends/updateFriend', friend, { root: true })
     }
     commit('setUserProfile', friend)
+  },
+
+  displayConsentSettings({ commit }: ActionsArguments<UIState>) {
+    this.$toast.error(this.$i18n.t('pages.files.errors.enable_consent'), {
+      duration: 3000,
+    })
+    commit('toggleSettings', {
+      show: true,
+      defaultRoute: SettingsRoutes.PRIVACY,
+    })
   },
 }

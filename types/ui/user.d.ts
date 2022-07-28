@@ -9,7 +9,7 @@ export type User = {
   status?: string
   state: UserState
   unreadCount?: number
-  profilePicture?: string
+  profilePicture: string
   badge?: BadgeType
   userAccount?: any
   mailboxId?: string

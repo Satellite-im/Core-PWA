@@ -22,14 +22,14 @@ describe('actions.default', () => {
     })
   })
 
-  test('actions.default.clearLocalStorage successful', async () => {
+  test.skip('actions.default.clearLocalStorage successful', async () => {
     Vue.prototype.$TextileManager = new TextileManager()
     db.delete = jest.fn().mockReturnValue(true)
     Dexie.exists = jest.fn().mockReturnValue(true)
     await actions.default.clearLocalStorage()
   })
 
-  test('actions.default.clearLocalStorage error', async () => {
+  test.skip('actions.default.clearLocalStorage error', async () => {
     Vue.prototype.$TextileManager = new TextileManager()
     try {
       db.delete = jest.fn().mockImplementation(() => {
@@ -45,7 +45,7 @@ describe('actions.default', () => {
     }
   })
 
-  test('actions.default.clearLocalStorage successful but dexies does not exist', async () => {
+  test.skip('actions.default.clearLocalStorage successful but dexies does not exist', async () => {
     Vue.prototype.$TextileManager = new TextileManager()
     db.delete = jest.fn().mockReturnValue(true)
     Dexie.exists = jest.fn().mockReturnValue(undefined)

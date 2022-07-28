@@ -1,0 +1,18 @@
+<div class="list hover-scroll">
+  <SidebarListItem v-for="c in conversations" :key="c.id" :conversation="c" />
+  <div v-if="!Object.keys(conversations).length" class="mascot-container">
+    <div class="mascot-text">
+      <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
+      <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
+    </div>
+    <img src="~/assets/svg/mascot/sad_curious.svg" draggable="false" />
+    <InteractablesButton
+      :text="$t('friends.add')"
+      size="small"
+      type="primary"
+      :action="navigateAddFriends"
+    >
+      <user-plus-icon size="1.2x" />
+    </InteractablesButton>
+  </div>
+</div>

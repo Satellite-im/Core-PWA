@@ -2,15 +2,14 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
-import { RootState } from '~/types/store/store'
+import { Friend } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'UserPicker',
   props: {
     exclude: {
-      type: Array as PropType<String[]>,
+      type: Array as PropType<Friend['did'][]>,
       default: () => [],
     },
     height: {
@@ -21,17 +20,17 @@ export default Vue.extend({
   data: () => ({
     selected: [] as Friend[],
     filter: '',
+    friendsList: iridium.friends.list,
   }),
   computed: {
-    ...mapState({
-      friends(state) {
-        const all = (state as RootState).friends.all
-        if (!this.exclude.length) {
-          return all
-        }
-        return all.filter((friend) => !this.exclude.includes(friend.address))
-      },
-    }),
+    friends() {
+      if (!this.exclude.length) {
+        return this.friendsList
+      }
+      return this.friendsList.filter(
+        (friend) => !this.exclude.includes(friend.did),
+      )
+    },
     filteredFriends(): Friend[] {
       if (!this.filter) {
         return this.friends

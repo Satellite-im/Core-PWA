@@ -6,6 +6,7 @@ import InitialAudioState from '~/store/audio/state'
 import InitialChatState from '~/store/chat/state'
 import InitialConversationState from '~/store/conversation/state'
 import InitialDataState from '~/store/dataState/state'
+import InitialFilesState from '~/store/files/state'
 import InitialFriendsState from '~/store/friends/state'
 import InitialGroupsState from '~/store/groups/state'
 import InitialMediaState from '~/store/media/state'
@@ -32,6 +33,9 @@ export const initialRootState: RootState = {
   },
   dataState: {
     ...InitialDataState(),
+  },
+  files: {
+    ...InitialFilesState(),
   },
   friends: {
     ...InitialFriendsState(),
@@ -71,6 +75,7 @@ describe('prerequisites returns', () => {
 
     expect(result).toBeFalsy()
   })
+
   test('finished init', () => {
     const state = { ...initialRootState }
     state.accounts.active = 'accountAddress'

@@ -18,7 +18,7 @@ declare module 'vue/types/vue' {
 export default Vue.extend({
   name: 'Global',
   computed: {
-    ...mapState(['ui', 'media', 'webrtc', 'conversation']),
+    ...mapState(['ui', 'media', 'webrtc', 'conversation', 'files']),
     ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     ModalWindows: () => ModalWindows,
     showBackgroundCall(): boolean {
@@ -78,7 +78,7 @@ export default Vue.extend({
      */
     async acceptCall(kinds: TrackKind[]) {
       this.$store.commit('webrtc/setStreamMuted', {
-        peerId: iridium.connector?.peerId,
+        did: iridium.connector?.peerId,
         audio: true,
         video: true,
         screen: true,

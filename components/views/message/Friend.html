@@ -1,6 +1,6 @@
-<div
+<UiContextMenu
   :class="`user ${isLoading ? 'is-loading' : ''}`"
-  @contextmenu="contextMenu"
+  :items="contextMenuValues"
   v-on:click="toggleSelect"
 >
   <UiUserState :user="user" :isTyping="isTyping" :src="src" />
@@ -17,4 +17,4 @@
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
   <input type="checkbox" v-model="checked" />
-</div>
+</UiContextMenu>

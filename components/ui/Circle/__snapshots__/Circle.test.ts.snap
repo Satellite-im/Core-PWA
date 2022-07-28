@@ -6,8 +6,8 @@ exports[`Circle.addressToNumber 1 1`] = `402`;
 
 exports[`Circle.addressToNumber 2 1`] = `NaN`;
 
-exports[`Circle.toHex 0 1`] = `"3c3f786d6c2076657273696f6e3d22312e3022203f3ea3c6120623d2263222f3ea"`;
+exports[`Circle.stringToColor 0 1`] = `"3c3f786d6c2076657273696f6e3d22312e3022203f3ea3c6120623d2263222f3ea"`;
 
-exports[`Circle.toHex 1 1`] = `"3c3f786d6c2076657273696f6e3d22312e3022203f3e3c6120623d2263222f3e"`;
+exports[`Circle.stringToColor 1 1`] = `"3c3f786d6c2076657273696f6e3d22312e3022203f3e3c6120623d2263222f3e"`;
 
-exports[`Circle.toHex 2 1`] = `""`;
+exports[`Circle.stringToColor 2 1`] = `""`;

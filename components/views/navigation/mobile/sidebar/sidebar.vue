@@ -56,10 +56,7 @@
             <users-icon size="1.2x" />
           </InteractablesButton>
           <span
-            v-if="
-              friends.incomingRequests.length &&
-              dataState.friends === DataStateType.Ready
-            "
+            v-if="friends.incomingRequests.length"
             :class="
               $route.path.includes('/friends/list')
                 ? 'label tag-inverted'
@@ -95,17 +92,13 @@
         v-scroll-lock="true"
         class="scrolling hidden-scroll users"
       >
-        <UiSimpleScroll
-          scroll-mode="vertical"
-          scroll-show="scroll"
-          :container-class="isNoFriends ? 'no-friends-scrollbar' : ''"
-        >
-          <UiLoadersAddress
+        <UiSimpleScroll scroll-mode="vertical" scroll-show="scroll">
+          <!-- <UiLoadersAddress
             v-if="dataState.friends === DataStateType.Loading"
             :count="4"
             inverted
-          />
-          <div v-else-if="users && users.length">
+          /> -->
+          <div v-if="users && users.length">
             <UiInlineNotification
               v-if="ui.unreadMessage.length"
               :text="$t('messaging.new_messages')"
@@ -227,7 +220,7 @@ export default Vue.extend({
   },
   computed: {
     DataStateType: () => DataStateType,
-    ...mapState(['ui', 'media', 'friends']),
+    ...mapState(['ui', 'media']),
     // toggleView: {
     //   get() {
     //     return this.ui.showSidebarUsers
@@ -364,7 +357,7 @@ export default Vue.extend({
       position: relative;
       overflow: hidden;
       .inline-notification {
-        width: @sidebar-size - (@normal-spacing * 2);
+        width: @sidebar-width - (@normal-spacing * 2);
       }
     }
     .sidebar-search {
@@ -501,11 +494,6 @@ export default Vue.extend({
     }
   }
 
-  .desktop #sidebar {
-    width: calc(@sidebar-size-mobile - @slimbar-size);
-    min-width: calc(@sidebar-size-mobile - @slimbar-size);
-  }
-
   .quick-mobile-chat {
     position: absolute;
     width: 45px;
@@ -535,7 +523,7 @@ export default Vue.extend({
 
 @media only screen and (max-width: @mobile-candybar-breakpoint) {
   #sidebar {
-    max-width: @sidebar-size;
+    max-width: @sidebar-width;
     min-width: @sidebar-size-mobile;
     sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);

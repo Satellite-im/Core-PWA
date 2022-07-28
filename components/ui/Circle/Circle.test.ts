@@ -17,7 +17,7 @@ describe('Circle.addressToNumber', () => {
   })
 })
 
-describe('Circle.toHex', () => {
+describe('Circle.stringToColor', () => {
   test('0', () => {
     const result: any = Circle.toHex('<?xml version="1.0" ?>\n<a b="c"/>\n')
     expect(result).toMatchSnapshot()

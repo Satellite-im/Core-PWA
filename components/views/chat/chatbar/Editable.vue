@@ -1,9 +1,5 @@
 <template>
-  <UiSimpleScroll
-    scroll-mode="vertical"
-    scroll-show="scroll"
-    container-class="editable-container"
-  >
+  <div class="editable-container">
     <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
     <div
       ref="editable"
@@ -24,7 +20,7 @@
         <span><br /></span>
       </div>
     </div>
-  </UiSimpleScroll>
+  </div>
 </template>
 
 <script lang="ts">
@@ -325,21 +321,23 @@ export default Vue.extend({
   }
 }
 .editable-container {
+  flex: 1;
+  display: flex;
+  align-self: center;
+  max-height: 50vh;
+  padding: @light-spacing 0;
   position: relative;
-  width: 100%;
-  font-size: @mini-text-size;
+  overflow-y: scroll;
   font-family: @secondary-font;
+  font-size: @text-size;
+  &:extend(.font-primary);
 
   .placeholder {
     color: @text-muted;
     position: absolute;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    left: 0;
-    right: 0;
     &:extend(.background-layer);
     &:extend(.no-select);
+    &:extend(.ellipsis);
   }
   .editable-input {
     width: 100%;
@@ -347,17 +345,18 @@ export default Vue.extend({
     overflow-wrap: break-word;
     word-break: break-word;
     white-space: break-spaces !important;
-    .chat-row-content {
-      padding-right: 5px;
-      .emoji {
-        font-style: initial;
-      }
-      .md-symbol {
-        color: @gray;
-      }
-      .md-lang {
-        color: @green;
-      }
+
+    .emoji {
+      font-style: initial;
+    }
+    .md-symbol {
+      color: @gray;
+    }
+    .md-lang {
+      color: @green;
+    }
+    .md-url {
+      &:extend(.font-flair);
     }
   }
 }

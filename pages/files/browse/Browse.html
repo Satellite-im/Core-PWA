@@ -1,46 +1,45 @@
-<div
-  id="files"
-  data-cy="files-screen"
-  class="hidden-scroll"
-  v-scroll-lock="true"
->
-  <FilesAside v-if="$device.isMobile" class="mobile-file-aside" />
-  <div class="files-top">
-    <FilesFilepath />
-  </div>
-  <div class="files-container">
-    <div class="files-left">
-      <FilesControls
-        ref="controls"
-        :changeView="changeView"
-        @forceRender="forceRender"
-      />
+<UiDroppableWrapper @handle-drop-prop="handleDrop" style="overflow-y: scroll">
+  <div class="files-container" data-cy="files-screen">
+    <div class="files-top">
+      <InteractablesSidebarToggle v-if="!showSidebar" />
+      <FilesFilepath />
+    </div>
+    <FilesControls ref="controls" class="controls" />
+    <div class="files-aside-container">
+      <FilesAside />
+    </div>
+    <div class="files-view">
       <TypographyText
         v-if="!directory.length"
         :text="$t('pages.files.empty')"
       />
-      <FilesList
-        v-else-if="view === 'list'"
+      <FilesMobileList
+        v-else-if="$device.isMobile"
         :directory="directory"
-        :counter="counter"
-        :sort="sort"
         @like="like"
         @share="share"
+        @rename="rename"
         @remove="remove"
         @handle="handle"
-        @setSort="setSort"
-        @forceRender="forceRender"
       />
       <FilesGrid
-        v-else
+        v-else-if="gridLayout"
         :directory="directory"
-        :counter="counter"
         @like="like"
         @share="share"
+        @rename="rename"
+        @remove="remove"
+        @handle="handle"
+      />
+      <FilesList
+        v-else-if="!gridLayout"
+        :directory="directory"
+        @like="like"
+        @share="share"
+        @rename="rename"
         @remove="remove"
         @handle="handle"
       />
     </div>
-    <FilesAside v-if="!$device.isMobile" class="files-right" />
   </div>
-</div>
+</UiDroppableWrapper>

@@ -1,9 +1,7 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
-  FileSort,
   Flair,
-  ModalWindows,
   Position,
   RecentGlyph,
   SettingsRoutes,
@@ -14,9 +12,6 @@ import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { FileMessage } from '~/types/textile/mailbox'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { Fil } from '~/libraries/Files/Fil'
-import modal from '~/components/views/settings/modal/Modal.vue'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -51,9 +46,6 @@ export default {
   },
   fullscreen(state: UIState, fullscreen: boolean) {
     state.fullscreen = fullscreen
-  },
-  setFilePreview(state: UIState, file: Fil) {
-    state.filePreview = file
   },
   setChatImageOverlay(state: UIState, image: FileMessage | undefined) {
     state.chatImageOverlay = image
@@ -374,25 +366,7 @@ export default {
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
   },
-  setRenameItem(state: UIState, name: Item) {
-    state.renameItem = name
-  },
-  setFileSort(state: UIState, sort: FileSort) {
-    state.fileSort = sort
-  },
   setSwiperSlideIndex(state: UIState, index: number) {
     state.swiperSlideIndex = index
-  },
-  setFilesUploadStatus(state: UIState, value: string) {
-    state.filesUploadStatus = value
-  },
-  addFileDownload(state: UIState, name: string) {
-    state.fileDownloadList.push(name)
-  },
-  removeFileDownload(state: UIState, name: string) {
-    const index = state.fileDownloadList.indexOf(name)
-    if (index > -1) {
-      state.fileDownloadList.splice(index, 1)
-    }
   },
 }

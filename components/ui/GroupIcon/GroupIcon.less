@@ -1,0 +1,73 @@
+.group-icon {
+  position: relative;
+  &.unread {
+    position: relative;
+
+    .label {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: @micro-text-size;
+      border-radius: 16px;
+      line-height: 1.2;
+      padding: 0.1rem 0.27rem;
+      text-align: center;
+      &:extend(.font-primary);
+      font-family: @primary-font;
+    }
+  }
+
+  .circle {
+    &:extend(.bordered);
+    box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .multi {
+    & > div {
+      display: flex;
+      position: absolute;
+    }
+
+    .group-el-0 {
+      right: 0;
+      top: 0;
+    }
+
+    .group-el-1 {
+      left: 0;
+      bottom: 0;
+    }
+
+    .group-el-2 {
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .double {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      position: absolute;
+    }
+
+    .group-el-0 {
+      top: 5px;
+      left: 0;
+    }
+
+    .group-el-1 {
+      bottom: 5px;
+      right: 0;
+    }
+  }
+
+  .single {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

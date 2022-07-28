@@ -1,34 +1,43 @@
 @sidebar-inner-offset: 175px;
 
 #sidebar {
-  width: @sidebar-size;
-  min-width: @sidebar-size;
-  position: relative;
-  height: @full;
   display: flex;
   flex-direction: column;
-  padding-bottom: @normal-spacing;
-  background: @background;
+  position: relative;
+  width: @sidebar-width;
+  margin: @normal-spacing 0;
+  flex-shrink: 0;
 
   .sidebar-inner {
     &:extend(.round-corners);
-    &:extend(.background-semitransparent-light);
     box-shadow: @ui-shadow;
     max-height: calc(@app-height - @sidebar-inner-offset);
     display: flex;
     flex-direction: column;
-    margin-top: @normal-spacing;
     padding: @normal-spacing;
     gap: @normal-spacing;
+    background: linear-gradient(
+        163.91deg,
+        rgba(48, 52, 71, 0.5) 0%,
+        rgba(42, 54, 75, 0) 100%
+      ),
+      linear-gradient(
+        163.91deg,
+        rgba(28, 39, 58, 0.9) 0%,
+        rgba(0, 0, 0, 0.09) 100%
+      ),
+      linear-gradient(
+        359.95deg,
+        rgba(36, 40, 57, 0.9) 0.04%,
+        rgba(34, 44, 63, 0) 99.95%
+      ),
+      #121216;
 
     .sidebar-search {
-      padding-right: @xlarge-spacing;
-
+      display: flex;
+      gap: @normal-spacing;
       .toggle-sidebar {
         cursor: pointer;
-        position: absolute;
-        top: @normal-spacing * 2.5;
-        right: @normal-spacing;
         &:extend(.filter-glow);
       }
     }
@@ -55,30 +64,7 @@
       position: relative;
       overflow: hidden;
       .inline-notification {
-        width: @sidebar-size - (@normal-spacing * 2);
-      }
-    }
-
-    .mascot-container {
-      &:extend(.full-width);
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-
-      .mascot {
-        max-width: @half;
-        padding-top: @normal-spacing;
-        pointer-events: none;
-      }
-
-      .button {
-        margin-top: @normal-spacing;
-        width: 75%;
-      }
-
-      .is-text {
-        text-align: center;
+        width: @sidebar-width - (@normal-spacing * 2);
       }
     }
   }
@@ -105,14 +91,9 @@
     font-family: @primary-font;
     &:extend(.font-primary);
     &:extend(.background-flair);
-    &.tag-inverted {
+    pointer-events: none;
+    &.inverted {
       background: @foreground;
     }
-  }
-
-  .loading-container {
-    display: inline-flex;
-    justify-content: center;
-    &:extend(.full-width);
   }
 }

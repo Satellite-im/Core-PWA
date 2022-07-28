@@ -16,7 +16,7 @@
     <SettingsUnit>
       <InteractablesSelect
         v-model="theme"
-        :options="themes"
+        :options="themeOptions"
         :label="$t('pages.settings.personalize.theme')"
         show-label
       />
@@ -29,7 +29,7 @@
         v-model="flair"
         :options="flairOptions"
         :label="$t('pages.settings.personalize.flair')"
-        :disabled="theme === ThemeNames.DEFAULT"
+        :disabled="theme === ThemeKeys.DEFAULT"
         show-label
       />
     </SettingsUnit>

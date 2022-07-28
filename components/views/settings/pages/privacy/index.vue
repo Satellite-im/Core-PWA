@@ -6,6 +6,7 @@ import { mapState, mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import { validURL } from '~/libraries/ui/Common'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'PrivacySettings',
@@ -15,6 +16,7 @@ export default Vue.extend({
       formatError: false as boolean,
       lengthError: false as boolean,
       loading: [] as string[],
+      privacySettings: iridium.settings.state.privacy,
     }
   },
   computed: {
@@ -79,42 +81,38 @@ export default Vue.extend({
     },
     embeddedLinks: {
       set(state: boolean) {
-        this.$store.commit('settings/embeddedLinks', state)
+        iridium.settings.set('/privacy/embeddedLinks', state)
       },
       get(): boolean {
-        return this.settings.embeddedLinks
+        return this.privacySettings.embeddedLinks
       },
     },
     consentScan: {
       async set(consentToScan: boolean) {
         this.loading.push('consentScan')
-        await this.$store.dispatch('textile/updateUserThreadData', {
-          consentToScan,
-        })
+        await iridium.settings.set('/privacy/consentToScan', consentToScan)
         this.loading.splice(this.loading.indexOf('consentScan'), 1)
       },
       get(): boolean {
-        return this.userThread.consentToScan
+        return this.privacySettings.consentToScan
       },
     },
     blockNsfw: {
       async set(blockNsfw: boolean) {
         this.loading.push('blockNsfw')
-        await this.$store.dispatch('textile/updateUserThreadData', {
-          blockNsfw,
-        })
+        await iridium.settings.set('/privacy/blockNsfw', blockNsfw)
         this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
       },
       get(): boolean {
-        return this.userThread.blockNsfw
+        return this.privacySettings.blockNsfw
       },
     },
     displayCurrentActivity: {
       set(state: boolean) {
-        this.$store.commit('settings/displayCurrentActivity', state)
+        iridium.settings.set('/privacy/displayCurrentActivity', state)
       },
       get(): boolean {
-        return this.settings.displayCurrentActivity
+        return this.privacySettings.displayCurrentActivity
       },
     },
   },
