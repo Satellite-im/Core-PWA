@@ -1,7 +1,7 @@
 <div>
-  <SettingsModal v-if="ui.showSettings" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
+    <SettingsModal v-if="ui.showSettings" />
     <UiModal
       v-if="ui.modals.wallet"
       :close-modal="() => toggleModal(ModalWindows.WALLET)"
