@@ -1,4 +1,5 @@
 <div id="toolbar">
+  <InteractablesSidebarToggle v-if="!ui.showSidebar" />
   <div class="circle-container">
     <template v-if="details">
       <UiUserState v-if="!isGroup" class="circle" :user="details" />
