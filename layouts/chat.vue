@@ -118,6 +118,7 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair, Settings } from '~/libraries/Iridium/settings/types'
 import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
+import { Friend } from '~/libraries/Iridium/friends/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -138,6 +139,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      webrtc: iridium.webRTC,
       sidebar: !this.$device.isMobile,
       asidebar: !this.$device.isMobile,
       settings: iridium.settings.state,
@@ -178,16 +180,14 @@ export default Vue.extend({
       groups: (state) => (state as RootState).groups,
       dataState: (state) => (state as RootState).dataState,
       conversation: (state) => (state as RootState).conversation,
-      webrtc: (state) => (state as RootState).webrtc,
     }),
     ...mapGetters('ui', ['showSidebar', 'swiperSlideIndex']),
     ...mapGetters('conversation', ['recipient']),
-    ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
     DataStateType: () => DataStateType,
     selectedGroup(): string {
       return this.$route.params.id // TODO: change with groupid - AP-400
     },
-    recipient(): Friend | Group {
+    recipient(): Friend | {} {
       const recipient = iridium.friends?.getFriend(this.$route.params.address)
       if (!recipient) {
         return {}
@@ -223,6 +223,12 @@ export default Vue.extend({
         this.dataState.friends !== this.DataStateType.Loading &&
         !this.friends.all.length
       )
+    },
+    isBackgroundCall(): boolean {
+      return this.webrtc.isBackgroundCall
+    },
+    isActiveCall(): boolean {
+      return this.webrtc.isActiveCall
     },
   },
   watch: {

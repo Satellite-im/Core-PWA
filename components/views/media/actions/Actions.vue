@@ -31,13 +31,13 @@ export default Vue.extend({
   data() {
     return {
       isLoading: false,
+      webrtc: iridium.webRTC,
     }
   },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
-      webrtc: (state) => (state as RootState).webrtc,
     }),
     audioMuted(): boolean {
       return this.audio.muted
@@ -46,9 +46,9 @@ export default Vue.extend({
       return this.video.disabled
     },
     screenMuted(): boolean {
-      return (
+      return Boolean(
         iridium.connector?.peerId &&
-        this.webrtc.streamMuted[iridium.connector?.peerId]?.screen
+          this.webrtc.state.streamMuted[iridium.connector?.peerId]?.screen,
       )
     },
   },
@@ -84,7 +84,7 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      this.$store.dispatch('webrtc/hangUp', undefined, { root: true })
+      this.webrtc.hangUp()
     },
   },
 })

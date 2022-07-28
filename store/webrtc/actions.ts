@@ -479,7 +479,7 @@ const webRTCActions = {
         return
       }
       if (
-        state.incomingCall === undefined &&
+        state.incomingCall === null &&
         (!call.active || state.activeCall?.callId !== call.callId)
       ) {
         const type = call.callId?.indexOf('|') > -1 ? 'group' : 'friend'

@@ -12,12 +12,13 @@ export interface WebRTCState {
   activeCall?: {
     callId: string
     peerId: string
-  }
+  } | null
   incomingCall?: {
     callId: string
     peerId: string
     type: 'group' | 'friend'
-  }
+  } | null
+  createdAt: number
 }
 
 export enum WebRTCError {

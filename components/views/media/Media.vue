@@ -2,11 +2,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapGetters, mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
+import { mapState } from 'vuex'
 import { User } from '~/types/ui/user'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { ConversationParticipant } from '~/store/conversation/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -34,6 +31,8 @@ export default Vue.extend({
   data() {
     return {
       componentKey: this.fullscreen,
+      webrtc: iridium.webRTC.state,
+      profile: iridium.profile.state,
     }
   },
   computed: {
@@ -42,7 +41,7 @@ export default Vue.extend({
       'accounts',
       'friends',
       'groups',
-      'webrtc',
+      // 'webrtc',
       'conversation',
     ]),
     computedUsers() {
@@ -51,16 +50,18 @@ export default Vue.extend({
         : this.users.slice(0, this.maxViewableUsers)
     },
     localParticipant() {
-      return { ...this.accounts.details, peerId: iridium.connector?.peerId }
+      return { ...this.profile, peerId: iridium.connector?.peerId }
     },
     remoteParticipants() {
-      const id = iridium.webRTC.state.activeCall?.callId
+      const id = this.webrtc.activeCall?.callId
 
       if (!id || !iridium.chat?.hasConversation(id)) {
         return []
       }
 
       const conversation = iridium.chat?.getConversation(id)
+
+      console.log('remoteParticipants conversation', conversation)
 
       return conversation?.participants.filter((participant) => {
         return participant.peerId !== iridium.connector?.peerId

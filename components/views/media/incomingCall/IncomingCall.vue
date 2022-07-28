@@ -36,11 +36,19 @@ export default Vue.extend({
       required: false,
     },
   },
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
   computed: {
     ...mapState({
       groups: (state) => (state as RootState).groups.all,
-      incomingCall: (state) => (state as RootState).webrtc.incomingCall,
+      // incomingCall: (state) => (state as RootState).webrtc.incomingCall,
     }),
+    incomingCall() {
+      return this.webrtc.incomingCall
+    },
     caller(): User | undefined {
       if (!this.incomingCall?.type) {
         return

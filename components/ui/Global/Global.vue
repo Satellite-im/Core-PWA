@@ -1,14 +1,10 @@
 <template src="./Global.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { Friend } from '~/types/ui/friends'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -18,15 +14,25 @@ declare module 'vue/types/vue' {
 
 export default Vue.extend({
   name: 'Global',
+  data() {
+    return {
+      webrtc: iridium.webRTC,
+    }
+  },
   computed: {
-    ...mapState(['ui', 'media', 'webrtc', 'conversation', 'files']),
-    ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
+    ...mapState(['ui', 'media', 'conversation', 'files']),
     ModalWindows: () => ModalWindows,
+    incomingCall() {
+      return this.webrtc.state.incomingCall
+    },
     showBackgroundCall(): boolean {
       if (!this.$device.isMobile) {
-        return this.isBackgroundCall
+        return this.webrtc.isBackgroundCall
       }
-      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
+      return (
+        this.webrtc.isBackgroundCall ||
+        (this.webrtc.isActiveCall && this.ui.showSidebar)
+      )
     },
   },
   mounted() {
@@ -79,14 +85,14 @@ export default Vue.extend({
      */
     async acceptCall(kinds: TrackKind[]) {
       try {
-        await iridium.webRTC.acceptCall(kinds)
+        await this.webrtc.acceptCall(kinds)
       } catch (error) {
         if (error instanceof Error) {
           this.$toast.error(this.$t(error.message) as string)
         }
       }
 
-      const callId = iridium.webRTC.state.activeCall?.callId
+      const callId = this.webrtc.state.activeCall?.callId
 
       if (!callId) {
         return
@@ -109,7 +115,7 @@ export default Vue.extend({
      */
     denyCall() {
       this.$store.commit('ui/fullscreen', false)
-      iridium.webRTC.denyCall()
+      this.webrtc.denyCall()
     },
     /**
      * @method hangUp
@@ -117,9 +123,8 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      this.$store.commit('webrtc/setIncomingCall', undefined, { root: true })
       this.$store.commit('ui/fullscreen', false)
-      iridium.webRTC.hangUp()
+      this.webrtc.hangUp()
     },
   },
 })

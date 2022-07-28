@@ -46,6 +46,7 @@ export default Vue.extend({
       friends: iridium.friends.state.list,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
+      webrtc: iridium.webRTC,
     }
   },
   computed: {
@@ -53,7 +54,6 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
-      webrtc: (state) => (state as RootState).webrtc,
       modals: (state) => (state as RootState).ui.modals,
     }),
     ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
@@ -170,7 +170,7 @@ export default Vue.extend({
         return
       }
       try {
-        await iridium.webRTC.call(this.details, kinds)
+        await this.webrtc.call(this.details, kinds)
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
@@ -179,7 +179,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.webrtc.activeCall) {
+      if (!this.enableRTC || this.webrtc.state.activeCall) {
         return
       }
 

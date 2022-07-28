@@ -60,13 +60,13 @@ export default Vue.extend({
   data() {
     return {
       videoSettings: iridium.settings.state.video,
+      webrtc: iridium.webRTC?.state,
     }
   },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
-      webrtc: (state) => (state as RootState).webrtc,
     }),
     call() {
       return (

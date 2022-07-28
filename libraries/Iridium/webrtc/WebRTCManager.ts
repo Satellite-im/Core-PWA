@@ -2,7 +2,6 @@ import { Emitter, Iridium } from '@satellite-im/iridium'
 import { SignalData } from 'simple-peer'
 import Vue from 'vue'
 import iridium, { IridiumManager } from '../IridiumManager'
-import { setInObject } from '../utils'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 
@@ -11,43 +10,82 @@ import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ConversationActivity } from '~/store/conversation/types'
-import Logger from '~/utilities/Logger'
+import logger from '~/plugins/local/logger'
 
 const $Sounds = new SoundManager()
 
 const announceFrequency = 5000
 
 const initialState: WebRTCState = {
-  incomingCall: undefined,
-  activeCall: undefined,
+  incomingCall: null,
+  activeCall: null,
   streamMuted: {},
+  createdAt: 0,
 }
 
 export default class WebRTCManager extends Emitter {
   public readonly iridium: IridiumManager
   public state: WebRTCState
+  private loggerTag = 'iridium/webRTC'
 
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
-    // this.state = initialState
-    this.state = new Proxy(initialState, {
-      set(target, key, value) {
-        target[key] = value
-        Vue.prototype.$nuxt.$store.commit('webrtc/setProperty', {
-          key,
-          value,
-        })
-        return true
-      },
-    })
+    this.state = initialState
   }
 
   async init() {
-    // await this.fetch()
+    await this.fetch()
     this.setupListeners()
     await this.subscribeToAnnounce()
     await this.subscribeToBroadcast()
+  }
+
+  async fetch() {
+    this.state = {
+      ...this.state,
+      ...(await this.get('/')),
+    }
+    return this.state
+  }
+
+  get isBackgroundCall() {
+    if (!this.state.activeCall?.callId) {
+      return false
+    }
+    const conversationId = $nuxt.$route.params.id
+    if (!conversationId) {
+      return true
+    }
+    return this.state.activeCall.callId !== conversationId
+  }
+
+  get isActiveCall() {
+    if (!this.state.activeCall?.callId) {
+      return false
+    }
+    const conversationId = $nuxt.$route.params.id
+    if (!conversationId) {
+      return false
+    }
+    return this.state.activeCall.callId === conversationId
+  }
+
+  get(path: string = '', options: any = {}) {
+    return this.iridium.connector?.get(`/webRTC${path}`, options)
+  }
+
+  set(path: string = '', payload: any, options: any = {}) {
+    logger.info(this.loggerTag, 'path, paylaod and state', {
+      path,
+      payload,
+      state: this.state,
+    })
+    return this.iridium.connector?.set(
+      `/webRTC${path === '/' ? '' : path}`,
+      payload,
+      options,
+    )
   }
 
   private subscribeToBroadcast = async () => {
@@ -80,7 +118,6 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:discovery',
       ({ peerId }: { peerId: string }) => {
-        const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:discovery - '
 
         if (!peerId) return
@@ -93,7 +130,7 @@ export default class WebRTCManager extends Emitter {
 
         if (!connectedFriend) return
 
-        $Logger.log(loggerPrefix, `discovered peer: ${peerId}`)
+        logger.log(loggerPrefix, `discovered peer: ${peerId}`)
 
         this.iridium.friends.updateFriend(did, {
           ...connectedFriend,
@@ -104,7 +141,6 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:connect',
       ({ peerId }: { peerId: string }) => {
-        const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:connect - '
 
         if (!peerId) return
@@ -121,7 +157,7 @@ export default class WebRTCManager extends Emitter {
             (participant) => participant.peerId === peerId,
           )
           if (connectedParticipant) {
-            $Logger.log(loggerPrefix, `connected participant: ${peerId}`)
+            logger.log(loggerPrefix, `connected participant: ${peerId}`)
             this.iridium.chat.updateConversation({
               ...conversation,
               participants: conversation.participants.map((participant) => {
@@ -141,7 +177,7 @@ export default class WebRTCManager extends Emitter {
 
         if (!connectedFriend) return
 
-        $Logger.log(loggerPrefix, `connected friend: ${peerId}`)
+        logger.log(loggerPrefix, `connected friend: ${peerId}`)
 
         this.iridium.friends.updateFriend(did, {
           ...connectedFriend,
@@ -152,7 +188,6 @@ export default class WebRTCManager extends Emitter {
     this.iridium.connector?.on(
       'peer:disconnect',
       ({ peerId }: { peerId: string }) => {
-        const $Logger: Logger = Vue.prototype.$Logger
         const loggerPrefix = 'webrtc/peer:disconnect - '
 
         if (!peerId) return
@@ -169,7 +204,7 @@ export default class WebRTCManager extends Emitter {
             (participant) => participant.peerId === peerId,
           )
           if (disconnectedParticipant) {
-            $Logger.log(loggerPrefix, `disconnected participant: ${peerId}`)
+            logger.log(loggerPrefix, `disconnected participant: ${peerId}`)
             this.iridium.chat.updateConversation({
               ...conversation,
               participants: conversation.participants.map((participant) => {
@@ -189,7 +224,7 @@ export default class WebRTCManager extends Emitter {
 
         if (!disconnectedFriend) return
 
-        $Logger.log(loggerPrefix, `discovered peer: ${peerId}`)
+        logger.log(loggerPrefix, `discovered peer: ${peerId}`)
 
         this.iridium.friends.updateFriend(did, {
           ...disconnectedFriend,
@@ -257,24 +292,6 @@ export default class WebRTCManager extends Emitter {
     }, announceFrequency)
   }
 
-  // private async fetch() {
-  //   this.state = merge(initialState, await this.get(), {
-  //     arrayMerge: overwriteMerge,
-  //   })
-  // }
-
-  get(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get(`/webrtc${path}`, options)
-  }
-
-  set(path: string = '', payload: any, options: any = {}) {
-    const didSet = setInObject(this.state, path, payload)
-    if (!didSet) {
-      return
-    }
-    return this.iridium.connector?.set(`/webrtc${path}`, payload, options)
-  }
-
   public subscribeToChannel(peerId: string) {
     // @ts-ignore
     if (!peerId || !this.iridium.connector?._peers[peerId]) {
@@ -323,37 +340,19 @@ export default class WebRTCManager extends Emitter {
 
   private onPeerCall = async (payload: any) => {
     const { peerId, callId, peers, signal } = payload
-    // update conversation participants with peers from call announcement
-    const $Logger: Logger = Vue.prototype.$Logger
-    const loggerPrefix = 'webrtc/peer:call - '
-    $Logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
 
-    // if (payload.peers) {
-    //   payload.peers.forEach((peer) => {
-    //     if (
-    //       rootState.conversation.participants.find((p) => p.peerId === peer.id)
-    //     ) {
-    //       commit(
-    //         'conversation/updateParticipant',
-    //         {
-    //           peerId: peer.id,
-    //           name: peer.name,
-    //         },
-    //         { root: true },
-    //       )
-    //     }
-    //   })
-    // }
+    const loggerPrefix = 'webrtc/peer:call - '
+    logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
 
     if (!callId) {
-      $Logger.log(loggerPrefix, `invalid callId`)
+      logger.log(loggerPrefix, `invalid callId`)
       return
     }
 
     const call = $WebRTC.getCall(callId)
 
     if (!call) {
-      $Logger.log(loggerPrefix, `create a call...`)
+      logger.log(loggerPrefix, `create a call...`)
       await this.createCall({
         peerId,
         callId,
@@ -364,12 +363,12 @@ export default class WebRTCManager extends Emitter {
     }
 
     if (this.state.activeCall?.callId !== call.callId) {
-      $Logger.log(loggerPrefix, `No active call with call id: ${call.callId}`)
+      logger.log(loggerPrefix, `No active call with call id: ${call.callId}`)
       return
     }
 
     if (!call.peerConnected[peerId] && !call.peerDialingDisabled[peerId]) {
-      $Logger.log(loggerPrefix, `initiate a call...`)
+      logger.log(loggerPrefix, `initiate a call...`)
       await call.initiateCall(peerId)
     }
   }
@@ -467,48 +466,46 @@ export default class WebRTCManager extends Emitter {
     })
   }
 
-  private onPeerMute = ({
+  private onPeerMute = async ({
     peerId,
     kind,
   }: {
     peerId: string
     kind: 'audio' | 'video' | 'screen'
   }) => {
-    this.state.streamMuted = {
+    Vue.set(this.state, 'streamMuted', {
       ...this.state.streamMuted,
       [peerId]: {
         ...this.state.streamMuted[peerId],
         [kind]: true,
       },
-    }
+    })
   }
 
-  private onPeerUnmute = ({
+  private onPeerUnmute = async ({
     peerId,
     kind,
   }: {
     peerId: string
     kind: 'audio' | 'video' | 'screen'
   }) => {
-    this.state.streamMuted = {
+    Vue.set(this.state, 'streamMuted', {
       ...this.state.streamMuted,
       [peerId]: {
         ...this.state.streamMuted[peerId],
         [kind]: false,
       },
-    }
+    })
   }
 
   public async call(recipient: Friend, kinds: TrackKind[]) {
-    const $Logger: Logger = Vue.prototype.$Logger
-
     if (!this.iridium.connector?.peerId) {
-      $Logger.error('webrtc', 'call - connector.peerId not found')
+      logger.error('webrtc', 'call - connector.peerId not found')
       return
     }
 
     if (!recipient) {
-      $Logger.error('webrtc', 'call - recipent not found')
+      logger.error('webrtc', 'call - recipent not found')
       return
     }
 
@@ -527,7 +524,7 @@ export default class WebRTCManager extends Emitter {
     const { id: callId, participants } = conversation
 
     if (!callId) {
-      $Logger.log(
+      logger.log(
         'webrtc',
         `call - conversation not initialized or id not found`,
       )
@@ -535,12 +532,12 @@ export default class WebRTCManager extends Emitter {
     }
 
     if (participants.length === 0) {
-      $Logger.log('webrtc', `call - conversation has no participants`)
+      logger.log('webrtc', `call - conversation has no participants`)
       return
     }
 
     if (!$WebRTC.calls.has(callId)) {
-      $Logger.log('webrtc', `call - call not found: ${callId}, creating...`)
+      logger.log('webrtc', `call - call not found: ${callId}, creating...`)
 
       const peers = participants.map((participant) => ({
         name: participant.name,
@@ -557,23 +554,26 @@ export default class WebRTCManager extends Emitter {
     const call = $WebRTC.getCall(callId)
 
     if (!call) {
-      $Logger.log('webrtc', `call - call not ready: ${callId}`)
+      logger.log('webrtc', `call - call not ready: ${callId}`)
       return
     }
 
-    this.state.streamMuted = {
+    Vue.set(this.state, 'streamMuted', {
       ...this.state.streamMuted,
       [this.iridium.connector.peerId]: {
         audio: !kinds.includes('audio'),
         video: !kinds.includes('video'),
         screen: !kinds.includes('screen'),
       },
-    }
+    })
 
     await call.createLocalTracks(kinds)
 
-    this.state.incomingCall = undefined
-    this.state.activeCall = { callId, peerId: this.iridium.connector.peerId }
+    Vue.set(this.state, 'incomingCall', null)
+    Vue.set(this.state, 'activeCall', {
+      callId,
+      peerId: this.iridium.connector.peerId,
+    })
 
     await call.start()
   }
@@ -589,12 +589,10 @@ export default class WebRTCManager extends Emitter {
     signal?: SignalData
     peerId?: string
   }) => {
-    const $Logger: Logger = Vue.prototype.$Logger
-
-    $Logger.log('webrtc: creating call', callId + peers)
+    logger.log('webrtc: creating call', callId + peers)
 
     if (!this.iridium.connector?.peerId) {
-      $Logger.error('webrtc', 'call - connector.peerId not found')
+      logger.error('webrtc', 'call - connector.peerId not found')
       return
     }
 
@@ -616,11 +614,11 @@ export default class WebRTCManager extends Emitter {
     )
 
     if (!call) {
-      $Logger.log('webrtc/createCall', 'call invalid')
+      logger.log('webrtc/createCall', 'call invalid')
       return
     }
 
-    const onCallIncoming = ({ peerId }: { peerId: string }) => {
+    const onCallIncoming = async ({ peerId }: { peerId: string }) => {
       call.peerDialingDisabled[peerId] = true
       if (this.state.activeCall?.callId === call.callId) {
         call.answer(peerId)
@@ -629,37 +627,39 @@ export default class WebRTCManager extends Emitter {
         return
       }
       if (
-        this.state.incomingCall === undefined &&
+        this.state.incomingCall === null &&
         (!call.active || this.state.activeCall?.callId !== call.callId)
       ) {
         const type = call.callId?.indexOf('|') > -1 ? 'group' : 'friend'
-        $Logger.log(
+        logger.log(
           'webrtc/incomingCall',
           `incoming call #${call.callId} (${type})`,
         )
-        this.state.incomingCall = {
+
+        Vue.set(this.state, 'incomingCall', {
           callId: call.callId,
           peerId,
           type,
-        }
+        })
       }
       $Sounds.playSound(Sounds.CALL)
     }
     call.on('INCOMING_CALL', onCallIncoming)
 
-    const onCallOutgoing = ({ peerId }: { peerId: string }) => {
-      this.state.incomingCall = undefined
-      this.state.activeCall = { callId, peerId }
+    const onCallOutgoing = async ({ peerId }: { peerId: string }) => {
+      Vue.set(this.state, 'incomingCall', null)
+      Vue.set(this.state, 'activeCall', { callId, peerId })
       $Sounds.playSound(Sounds.CALL)
       // commit('ui/showMedia', true, { root: true })
     }
     call.on('OUTGOING_CALL', onCallOutgoing)
 
-    const onCallConnected = ({ peerId }: { peerId: string }) => {
-      this.state.incomingCall = undefined
-      this.state.activeCall = { callId, peerId }
+    const onCallConnected = async ({ peerId }: { peerId: string }) => {
+      Vue.set(this.state, 'incomingCall', null)
+      Vue.set(this.state, 'activeCall', { callId, peerId })
+      Vue.set(this.state, 'createdAt', Date.now())
       // commit('conversation/setCalling', true, { root: true })
-      Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', Date.now())
+      // Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', Date.now())
       if (Vue.prototype.$nuxt.$store.state.audio.muted) {
         call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
       }
@@ -671,16 +671,17 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('CONNECTED', onCallConnected)
 
-    const onCallHangup = () => {
-      Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', 0)
+    const onCallHangup = async () => {
+      // Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', 0)
+      Vue.set(this.state, 'createdAt', 0)
       // commit('ui/showMedia', false, { root: true })
       // commit('conversation/setCalling', false, { root: true })
-      this.state.incomingCall = undefined
-      this.state.activeCall = undefined
+      Vue.set(this.state, 'incomingCall', null)
+      Vue.set(this.state, 'activeCall', null)
     }
     call.on('HANG_UP', onCallHangup)
 
-    const onCallTrack = ({
+    const onCallTrack = async ({
       track,
       kind,
     }: {
@@ -688,12 +689,12 @@ export default class WebRTCManager extends Emitter {
       stream: MediaStream
       kind?: string
     }) => {
-      $Logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
+      logger.log('webrtc', `local track created: ${track.kind}#${track.id}`)
 
       if (!kind) return
 
       if (!this.iridium.connector?.peerId) {
-        $Logger.error('webrtc', 'onCallTrack - connector.peerId not found')
+        logger.error('webrtc', 'onCallTrack - connector.peerId not found')
         return
       }
 
@@ -704,21 +705,17 @@ export default class WebRTCManager extends Emitter {
         muted = Vue.prototype.$nuxt.$store.state.video.disabled
       }
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [this.iridium.connector?.peerId]: {
           ...this.state.streamMuted[this.iridium.connector?.peerId],
           [kind]: muted,
         },
-      }
-
-      // if (Vue.prototype.$nuxt.$store.state.audio.muted) {
-      //   call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
-      // }
+      })
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
 
-    const onLocalTrackUnmuted = ({
+    const onLocalTrackUnmuted = async ({
       track,
       kind,
     }: {
@@ -726,25 +723,25 @@ export default class WebRTCManager extends Emitter {
       stream: MediaStream
       kind?: string | undefined
     }) => {
-      $Logger.log('webrtc', `local track unmuted: ${track.kind}#${track.id}`)
+      logger.log('webrtc', `local track unmuted: ${track.kind}#${track.id}`)
       if (!kind) return
 
       if (!this.iridium.connector?.peerId) {
-        $Logger.error('webrtc', 'onCallTrack - connector.peerId not found')
+        logger.error('webrtc', 'onCallTrack - connector.peerId not found')
         return
       }
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [this.iridium.connector?.peerId]: {
           ...this.state.streamMuted[this.iridium.connector?.peerId],
           [kind]: false,
         },
-      }
+      })
     }
     call.on('LOCAL_TRACK_UNMUTED', onLocalTrackUnmuted)
 
-    const onCallPeerTrack = ({
+    const onCallPeerTrack = async ({
       track,
       peerId,
       kind,
@@ -753,27 +750,28 @@ export default class WebRTCManager extends Emitter {
       peerId: string
       kind?: string
     }) => {
-      $Logger.log(
+      logger.log(
         'webrtc',
         `remote track received: ${track.kind}#${track.id} from ${peerId}`,
       )
 
       if (!kind) return
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [peerId]: {
           ...this.state.streamMuted[peerId],
           [kind]: false,
         },
-      }
+      })
+
       if (Vue.prototype.$nuxt.$store.state.audio.muted) {
         call.mute({ peerId: this.iridium.connector?.peerId, kind: 'audio' })
       }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
-    const onPeerTrackUnmuted = ({
+    const onPeerTrackUnmuted = async ({
       peerId,
       kind,
     }: {
@@ -783,17 +781,17 @@ export default class WebRTCManager extends Emitter {
     }) => {
       if (!kind) return
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [peerId]: {
           ...this.state.streamMuted[peerId],
           [kind]: false,
         },
-      }
+      })
     }
     call.on('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
 
-    const onRemoteTrackRemoved = ({
+    const onRemoteTrackRemoved = async ({
       track,
       peerId,
       kind,
@@ -802,22 +800,23 @@ export default class WebRTCManager extends Emitter {
       peerId: string
       kind?: string
     }) => {
-      $Logger.log(
+      logger.log(
         'webrtc',
         `remote track removed: ${track.kind}#${track.id} from ${peerId}`,
       )
       if (!kind) return
-      this.state.streamMuted = {
+
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [peerId]: {
           ...this.state.streamMuted[peerId],
           [kind]: true,
         },
-      }
+      })
     }
     call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
 
-    const onRemoteTrackMuted = ({
+    const onRemoteTrackMuted = async ({
       peerId,
       kind,
     }: {
@@ -827,17 +826,17 @@ export default class WebRTCManager extends Emitter {
     }) => {
       if (!kind) return
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [peerId]: {
           ...this.state.streamMuted[peerId],
           [kind]: true,
         },
-      }
+      })
     }
     call.on('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
 
-    const onLocalTrackRemoved = ({
+    const onLocalTrackRemoved = async ({
       track,
       kind,
     }: {
@@ -846,49 +845,56 @@ export default class WebRTCManager extends Emitter {
     }) => {
       if (!kind) return
 
-      $Logger.log('webrtc', `local track removed: ${kind}#${track.id}`)
+      logger.log('webrtc', `local track removed: ${kind}#${track.id}`)
 
       if (!this.iridium.connector?.peerId) {
-        $Logger.error(
+        logger.error(
           'webrtc',
           'onLocalTrackRemoved - connector.peerId not found',
         )
         return
       }
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [this.iridium.connector?.peerId]: {
           ...this.state.streamMuted[this.iridium.connector?.peerId],
           [kind]: true,
         },
-      }
+      })
     }
     call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
 
-    const onStream = ({ peerId, kind }: { peerId: string; kind?: string }) => {
+    const onStream = async ({
+      peerId,
+      kind,
+    }: {
+      peerId: string
+      kind?: string
+    }) => {
       if (!kind) return
 
-      this.state.streamMuted = {
+      Vue.set(this.state, 'streamMuted', {
         ...this.state.streamMuted,
         [peerId]: {
           ...this.state.streamMuted[peerId],
           [kind]: false,
         },
-      }
+      })
     }
     call.on('STREAM', onStream)
 
-    const onAnswered = ({ peerId }: { peerId: string }) => {
-      this.state.incomingCall = undefined
-      this.state.activeCall = { callId, peerId }
+    const onAnswered = async ({ peerId }: { peerId: string }) => {
+      Vue.set(this.state, 'incomingCall', null)
+      Vue.set(this.state, 'activeCall', { callId, peerId })
     }
     call.on('ANSWERED', onAnswered)
 
-    const onCallDestroy = () => {
-      this.state.incomingCall = undefined
-      this.state.activeCall = undefined
-      Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', 0)
+    const onCallDestroy = async () => {
+      Vue.set(this.state, 'incomingCall', null)
+      Vue.set(this.state, 'activeCall', null)
+      Vue.set(this.state, 'createdAt', 0)
+      // Vue.prototype.$nuxt.$store.commit('webrtc/updateCreatedAt', 0)
 
       // commit('conversation/setCalling', false, { root: true })
       // commit('ui/fullscreen', false, { root: true })
@@ -913,26 +919,24 @@ export default class WebRTCManager extends Emitter {
   }
 
   public acceptCall = async (kinds: TrackKind[]) => {
-    const $Logger: Logger = Vue.prototype.$Logger
-
     if (!this.iridium.connector?.peerId) {
-      $Logger.error('webrtc', 'acceptCall - connector.peerId not found')
+      logger.error('webrtc', 'acceptCall - connector.peerId not found')
       return
     }
 
     if (!this.state.incomingCall) {
-      $Logger.error('webrtc', 'acceptCall - no incoming call to accept')
+      logger.error('webrtc', 'acceptCall - no incoming call to accept')
       return
     }
 
-    this.state.streamMuted = {
+    Vue.set(this.state, 'streamMuted', {
       ...this.state.streamMuted,
       [this.iridium.connector?.peerId]: {
         audio: true,
         video: true,
         screen: true,
       },
-    }
+    })
 
     const { callId, peerId } = this.state.incomingCall
 
@@ -954,11 +958,11 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  public hangUp = () => {
+  public hangUp = async () => {
     if (this.state.activeCall) {
       $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
     }
-    this.state.activeCall = undefined
-    this.state.incomingCall = undefined
+    Vue.set(this.state, 'activeCall', null)
+    Vue.set(this.state, 'incomingCall', null)
   }
 }

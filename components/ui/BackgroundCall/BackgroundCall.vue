@@ -10,6 +10,7 @@ export default Vue.extend({
   data() {
     return {
       caller: null,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
@@ -20,7 +21,7 @@ export default Vue.extend({
     }),
   },
   async mounted() {
-    const id = iridium.webRTC.state.activeCall?.callId
+    const id = this.webrtc.activeCall?.callId
 
     if (!id || !iridium.chat?.hasConversation(id)) {
       return

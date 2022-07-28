@@ -98,6 +98,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isBackgroundCall: iridium.webRTC.isBackgroundCall,
       sidebar: !this.$device.isMobile,
       settings: iridium.settings.state,
       swiperOption: {
@@ -118,7 +119,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'media']),
-    ...mapGetters('webrtc', ['isActiveCall', 'isBackgroundCall']),
     swiper() {
       return this.$refs.swiper.$swiper
     },
