@@ -1,5 +1,6 @@
 <div class="conversation">
   <UiLoadersMessage :count="3" v-if="false" />
+  <UiChatEncrypted />
   <div class="messages">
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText

@@ -66,6 +66,7 @@
     "minisearch": "^4.0.3",
     "mousetrap": "^1.6.5",
     "net": "^1.0.2",
+    "normalize.css": "^8.0.1",
     "nsfwjs": "^2.4.1",
     "nuxt-edge": "latest",
     "nuxt-i18n": "^6.28.1",

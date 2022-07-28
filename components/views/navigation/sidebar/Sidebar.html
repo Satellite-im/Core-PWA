@@ -1,15 +1,8 @@
 <div id="sidebar">
   <div class="sidebar-inner">
     <div class="sidebar-search">
-      <menu-icon
-        class="toggle-sidebar"
-        data-cy="hamburger-button"
-        @click="toggleMenu"
-        size="1.2x"
-        full-width
-        :style="`${sidebar ? 'display: block' : 'display: none'}`"
-      />
       <UiComingSoon
+        style="flex: 1"
         :tooltipText="$t('coming_soon.sidebar_search')"
         :tooltipPosition="'bottom'"
         disabled
@@ -24,6 +17,7 @@
           full-width
         />
       </UiComingSoon>
+      <InteractablesSidebarToggle />
     </div>
     <div class="sidebar-nav">
       <InteractablesButton

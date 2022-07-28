@@ -1,11 +1,16 @@
 .slimbar {
   display: flex;
   flex-direction: column;
-  height: @full;
+  align-items: center;
   padding: @light-spacing;
   overflow-y: scroll;
   transition: @transition-all;
-  &:extend(.third-layer);
+  width: @slimbar-width;
+  flex-shrink: 0;
+
+  hr {
+    width: 56px;
+  }
 }
 
 .sat-icon {

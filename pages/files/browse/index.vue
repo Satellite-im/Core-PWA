@@ -8,14 +8,11 @@ import { IridiumItem } from '~/libraries/Iridium/files/types'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
 import { FileRouteEnum } from '~/libraries/Enums/enums'
-import DroppableWrapper from '~/components/ui/DroppableWrapper/DroppableWrapper.vue'
 import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 
 export default Vue.extend({
   name: 'Files',
-  components: {
-    DroppableWrapper,
-  },
+
   layout: 'basic',
   data() {
     return {
@@ -28,6 +25,7 @@ export default Vue.extend({
       path: (state) => (state as RootState).files.path,
       gridLayout: (state) => (state as RootState).files.gridLayout,
       modals: (state) => (state as RootState).ui.modals,
+      showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
     ...mapGetters({
       sortedItems: 'files/sortedItems',

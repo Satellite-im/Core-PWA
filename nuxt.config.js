@@ -76,7 +76,11 @@ export default defineNuxtConfig({
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/styles/framework/framework.less'],
+  css: [
+    'normalize.css/normalize.css',
+    '@/assets/styles/framework/framework.less',
+    '@/assets/styles/base.less',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [

@@ -1,10 +1,7 @@
-<DroppableWrapper @handle-drop-prop="handleDrop">
-  <div
-    class="files-container"
-    :class="{'files-container-mobile': $device.isMobile}"
-    data-cy="files-screen"
-  >
+<UiDroppableWrapper @handle-drop-prop="handleDrop" style="overflow-y: scroll">
+  <div class="files-container" data-cy="files-screen">
     <div class="files-top">
+      <InteractablesSidebarToggle v-if="!showSidebar" />
       <FilesFilepath />
     </div>
     <FilesControls ref="controls" class="controls" />
@@ -45,4 +42,4 @@
       />
     </div>
   </div>
-</DroppableWrapper>
+</UiDroppableWrapper>
