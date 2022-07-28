@@ -11,15 +11,15 @@ const getters = {
   showSidebar: (state: UIState) => {
     return state.showSidebar
   },
-  allUnseenNotifications: (state: UIState): Alert[] => {
-    return [...state.notifications]
-      .sort((a, b) => {
-        return b.at - a.at
-      })
-      .filter((noti) => {
-        return noti.state === AlertState.UNREAD
-      })
-  },
+  // allUnseenNotifications: (state: UIState): Alert[] => {
+  //   return [...state.notifications]
+  //     .sort((a, b) => {
+  //       return b.at - a.at
+  //     })
+  //     .filter((noti) => {
+  //       return noti.state === AlertState.UNREAD
+  //     })
+  // },
   swiperSlideIndex: (state: UIState) => {
     return state.swiperSlideIndex
   },

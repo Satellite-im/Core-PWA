@@ -15,6 +15,7 @@ export enum NotificationType {
   ACCOUNT_NOTIFICATION = 'accountNotification',
   APPLICATION_NOTIFICATION = 'applicationNotification',
   MISCELLANEOUS = 'miscellaneous',
+  EMPTY = 'EMPTY'
 }
 
 export type Notification = {
@@ -27,4 +28,16 @@ export type Notification = {
   description: string
   image?: string
   seen: boolean
+}
+
+export const EmptyNotification: Notification = {
+  at: 0,
+  id: '',
+  type: NotificationType.EMPTY,
+  fromName: '',
+  fromAddress: '',
+  title: '',
+  description: '',
+  image: '',
+  seen: false,
 }
