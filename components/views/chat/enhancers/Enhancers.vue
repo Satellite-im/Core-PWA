@@ -6,6 +6,7 @@ import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
 import { EmojiPicker } from 'vue-emoji-picker'
 import { Friend } from '~/types/ui/friends'
 import { EmojiUsage } from '~/store/ui/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -72,37 +73,20 @@ export default Vue.extend({
      * @example v-on:select="addEmoji"
      */
     addEmoji(emoji: any, emojiName: string) {
-      if (
-        RegExp(this.$Config.regex.uuidv4).test(this.recipient.textilePubkey)
-      ) {
-        if (this.ui.settingReaction.status) {
-          this.$store.dispatch('textile/sendGroupReactionMessage', {
-            to: this.ui.settingReaction.to,
-            emoji,
-            reactTo: this.ui.settingReaction.messageID,
-          })
-        } else {
-          this.$store.dispatch('ui/setChatbarContent', {
-            content: this.ui.chatbarContent + emoji,
-            userId: this.$props.recipient?.address,
-          })
-          this.$store.dispatch('ui/setChatbarFocus')
-        }
-        this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
-        this.toggleEnhancers()
+      if (this.ui.settingReaction.status) {
+        iridium.chat.toggleMessageReaction({
+          conversationId: this.ui.settingReaction.conversationId,
+          messageId: this.ui.settingReaction.messageId,
+          reaction: emoji,
+        })
       } else {
-        if (this.ui.settingReaction.status) {
-          this.$store.dispatch('textile/sendReactionMessage', {
-            to: this.ui.settingReaction.to,
-            emoji,
-            reactTo: this.ui.settingReaction.messageID,
-          })
-        } else {
-          this.$emit('click', emoji)
-        }
-        this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
-        this.toggleEnhancers()
+        this.$store.dispatch('ui/setChatbarContent', {
+          content: this.ui.chatbarContent + emoji,
+        })
+        this.$store.dispatch('ui/setChatbarFocus')
       }
+      this.toggleEnhancers()
+      this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
     },
     /**
      * @method setRoute DocsTODO

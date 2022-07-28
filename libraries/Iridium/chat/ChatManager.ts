@@ -13,6 +13,8 @@ import {
   Conversation,
   ConversationMessage,
   ChatError,
+  ConversationMessagePayload,
+  MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
@@ -182,6 +184,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return conversation
   }
 
+  getConversationMessage(
+    conversationId: string,
+    messageId: string,
+  ): ConversationMessage {
+    const conversation = this.state.conversations[conversationId]
+    if (!conversation) {
+      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+    }
+    const message = conversation.message[messageId]
+    if (!message) {
+      throw new Error(ChatError.MESSAGE_NOT_FOUND)
+    }
+    return message
+  }
+
   /**
    * @method subscribeToConversation
    * @description Adds a watcher to conversation activity
@@ -212,18 +229,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @method sendMessage
    * @description Sends a message to the given groupChat
    */
-  async sendMessage(payload: Omit<ConversationMessage, 'from'>) {
+  async sendMessage(payload: Omit<ConversationMessage, 'from' | 'reactions'>) {
     if (!this.iridium.connector) {
       return
     }
 
     const { conversationId } = payload
-
     const conversation = this.getConversation(conversationId)
-
-    const message = {
+    const message: ConversationMessage = {
       ...payload,
       from: this.iridium.connector.id,
+      reactions: {},
     }
 
     const messageID = await this.iridium.connector.store(message, {
@@ -252,9 +268,59 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       )
     ).map((pid) => pid.toString())
 
-    await this.iridium.connector.send(
-      pids,
-      { type: 'chat/message', conversationId, messageCID },
+    await this.iridium.connector.send(pids, {
+      type: 'chat/message',
+      conversationId,
+      messageCID,
+    })
+  }
+
+  async toggleMessageReaction(payload: MessageReactionPayload) {
+    if (!this.iridium.connector) {
+      return
+    }
+
+    const did = this.iridium.connector.id
+    const { conversationId, messageId } = payload
+    const conversation = this.getConversation(conversationId)
+    const message = this.getConversationMessage(conversationId, messageId)
+    const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
+    let reactions = ((await this.get(path)) ?? []) as string[]
+
+    const shouldRemove = reactions.includes(payload.reaction)
+    if (shouldRemove) {
+      reactions = reactions.filter((reaction) => reaction !== payload.reaction)
+    } else {
+      reactions.push(payload.reaction)
+    }
+
+    this.set(path, reactions)
+    Vue.set(message.reactions, did, reactions)
+
+    // broadcast the message to connected peers
+    await this.iridium.connector.publish(
+      `/chat/conversations/${conversationId}`,
+      {
+        type: 'chat/reaction',
+        conversation: conversationId,
+        messageCID: messageId,
+        userId: did,
+        reactions,
+      },
     )
+
+    const pids = (
+      await Promise.all(
+        conversation.participants.map((p) => didUtils.DIDToPeerId(p)),
+      )
+    ).map((pid) => pid.toString())
+
+    await this.iridium.connector.send(pids, {
+      type: 'chat/reaction',
+      conversationId,
+      messageCID: messageId,
+      userId: did,
+      reactions,
+    })
   }
 }

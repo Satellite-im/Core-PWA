@@ -1,19 +1,18 @@
-<div class="message-reactions" v-if="reactions">
-  <template v-for="reaction in reactions">
-    <button
-      class="reaction-button"
-      :class="{reacted : didIReact(reaction)}"
-      @click="quickReaction(reaction.emoji)"
-      data-cy="reaction-to-message"
-    >
-      <div class="reaction-details">
-        <div class="reactors-emoji">{{reaction.emoji}}</div>
-        <div>{{getReactorsList(reaction.reactors)}}</div>
-      </div>
-      <span data-cy="emoji-reaction-value">{{reaction.emoji}}</span>
-      <span data-cy="emoji-reaction-count">{{reaction.reactors.length}}</span>
-    </button>
-  </template>
+<div class="message-reactions" v-if="reactions.length">
+  <button
+    v-for="reaction in reactions"
+    class="reaction-button"
+    :class="{ reacted: didReact(reaction) }"
+    @click="quickReaction(reaction.emoji)"
+    data-cy="reaction-to-message"
+  >
+    <div class="reaction-details">
+      <div class="reactors-emoji">{{reaction.emoji}}</div>
+      <div>{{reaction.names.join(', ')}}</div>
+    </div>
+    <span data-cy="emoji-reaction-value">{{reaction.emoji}}</span>
+    <span data-cy="emoji-reaction-count">{{reaction.names.length}}</span>
+  </button>
   <button
     class="add-reaction"
     @click="emojiReaction"

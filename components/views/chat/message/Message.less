@@ -67,14 +67,6 @@
     // conditionally change to break-all depending on locale
     word-break: break-word;
 
-    &:hover {
-      &:extend(.background-semitransparent-light);
-
-      .message-actions {
-        opacity: 1;
-      }
-    }
-
     .message-actions {
       opacity: 0;
     }
@@ -83,6 +75,16 @@
       font-size: 36pt;
       animation-name: emoji-appear;
       animation-duration: 500ms;
+    }
+  }
+
+  &:hover {
+    .markdown {
+      &:extend(.background-semitransparent-light);
+    }
+
+    .message-actions {
+      opacity: 1;
     }
   }
 }

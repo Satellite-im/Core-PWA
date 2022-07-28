@@ -5,45 +5,42 @@
 >
   <template v-if="showHeader">
     <div class="avatar">
-      <UiCircle :type="src ? 'image' :'random'" :seed="address" :source="src" />
+      <UiCircle
+        :type="author.src ? 'image' :'random'"
+        :seed="author.id"
+        :source="author.src"
+      />
     </div>
     <div class="header">
       <span :click="showQuickProfile">
-        <UiUserName :username="author.name" :badge="badge" />
+        <UiUserName :username="author.name" />
       </span>
     </div>
   </template>
   <div class="timestamp">{{ timestamp }}</div>
   <div class="body">
-    <template v-if="!messageEdit && message.type === 'text'">
-      <MessageMarkdown
-        :text="wrapEmoji(markdownToHtml(message.body))"
-        class="markdown"
-        :class="{ bigmoji: containsOnlyEmoji(message.body) }"
-        data-cy="chat-message"
-      />
-      <span class="status editing" v-if="message.editingAt">
-        <UiLoadersSpinner spinning />
-      </span>
-      <span
-        class="status edited"
-        data-cy="message-edited"
-        v-else-if="message.editedAt"
-      >
-        ({{$t('ui.edited')}})
-      </span>
-    </template>
+    <MessageMarkdown
+      :text="wrapEmoji(markdownToHtml(message.body))"
+      class="markdown"
+      :class="{ bigmoji: containsOnlyEmoji(message.body) }"
+      data-cy="chat-message"
+    />
+    <span class="status editing" v-if="message.editingAt">
+      <UiLoadersSpinner spinning />
+    </span>
+    <span
+      class="status edited"
+      data-cy="message-edited"
+      v-else-if="message.editedAt"
+    >
+      ({{$t('ui.edited')}})
+    </span>
     <MessageActions
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"
       :editMessage="editMessage"
       :message="message"
     />
-    <MessageReactions
-      v-if="hasReactions"
-      :message="this.$props.message"
-      :group="this.$props.group"
-      :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
-    />
+    <MessageReactions :message="message" :emojiReaction="emojiReaction" />
   </div>
 </UiContextMenu>
