@@ -1,17 +1,16 @@
 import {
-  IridiumPeerMessage,
-  IridiumPubsubEvent,
-  Iridium,
   Emitter,
   EmitterCallback,
-  IridiumSetOptions,
   IridiumGetOptions,
+  IridiumSetOptions,
 } from '@satellite-im/iridium'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import {
+  EmptyNotification,
   Notification,
   NotificationsError,
+  NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { Notifications } from '~/utilities/Notifications'
 
@@ -38,6 +37,13 @@ export default class NotificationManager extends Emitter<Notification> {
     this.state = (await this.iridium.connector?.get('notifications')) || {
       notifications: [{}],
     }
+    // if (!this.state.notifications) {
+    //   return
+    // }
+    // this.state.notifications.map((a) => {
+    //   return a[1].type !== NotificationType.EMPTY
+    // })
+    // console.log(this.state.notifications, 'asdffffffffffffffffffffffffff')
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
@@ -59,6 +65,26 @@ export default class NotificationManager extends Emitter<Notification> {
     )
   }
 
+  async filterDeletedNotifications(): Promise<[{ [p: string]: Notification }]> {
+    this.state = (await this.iridium.connector?.get('notifications')) || {
+      notifications: [{}],
+    }
+    return this.state.notifications.sort((a: any, b: any) => {
+      return b.at - a.at
+    })
+    // .filter((noti: any) => {
+    //   console.log(noti)
+    //   return noti.type !== NotificationType.EMPTY
+    // })
+  }
+
+  async seenAll() {
+    this.state.notifications.forEach((a) => {
+      a[1].seen = true
+      this.iridium.connector?.set(`/notifications/${a[0]}`, a[1])
+    })
+  }
+
   // private async onNotificationActivity(notificationID: string) {
   //   if (!this.iridium.connector) return
   //   const noti = await this.iridium.connector.load(notificationID, {
@@ -75,6 +101,7 @@ export default class NotificationManager extends Emitter<Notification> {
     id: string,
     onNotification: EmitterCallback<Notification>,
   ) {
+    await this.fetch()
     this.on(`notifications`, onNotification)
   }
 
@@ -85,11 +112,8 @@ export default class NotificationManager extends Emitter<Notification> {
     this.off(`notifications`, onNotification)
   }
 
-  async deleteNotification(
-    Id: string,
-    onNotification: EmitterCallback<Notification>,
-  ) {
-    await this.iridium.connector?.set(`/notifications/${Id}`, onNotification)
+  async deleteNotification(Id: string) {
+    await this.iridium.connector?.set(`/notifications/${Id}`, EmptyNotification)
   }
 
   /**

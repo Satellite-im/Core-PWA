@@ -12,6 +12,7 @@
     />
     <ToolbarAlertsAlert
       v-for="notification in notifications"
+      v-if="notification[1].type !== 'EMPTY'"
       :alert="notification[1]"
       :alertDid="notification[0]"
       :key="notification.id"

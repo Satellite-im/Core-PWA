@@ -50,6 +50,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
+      notifications: () => Object.entries(iridium.notifications?.state),
       ui: (state) => (state as RootState).ui,
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,

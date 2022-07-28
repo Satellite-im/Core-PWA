@@ -1,7 +1,7 @@
 <template src="./Alerts.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, {PropType} from 'vue'
 import { mapState } from 'vuex'
 import { FlaskConicalIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -18,10 +18,13 @@ export default Vue.extend({
   computed: {
     ...mapState({
       notifications: () =>
-        Object.entries(iridium.notifications?.state).sort((a: any, b: any) => {
-          console.log(a)
-          return b.at - a.at
-        }),
+        Object.entries(iridium.notifications?.state)
+          .sort((a: any, b: any) => {
+            return b.at - a.at
+          })
+          .filter((a) => {
+            return a
+          }),
     }),
   },
   methods: {

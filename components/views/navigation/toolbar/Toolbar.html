@@ -13,15 +13,15 @@
   <div class="controls">
     <div class="toggle-alerts" data-cy="toolbar-alerts">
       <UiCircle
-        v-if="allUnseenNotifications.length"
+        v-if="notifications.length"
         class="notification-alert"
         :size="15"
         color="red"
         type="icon"
-        :data="allUnseenNotifications.length"
+        :data="notifications.length"
         @click="toggleAlerts"
       >
-        {{ allUnseenNotifications.length }}
+        {{notifications.length}}
       </UiCircle>
       <bell-icon
         v-tooltip.bottom="$t('pages.chat.alerts')"

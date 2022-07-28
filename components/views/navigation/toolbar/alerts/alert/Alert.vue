@@ -21,25 +21,6 @@ export default Vue.extend({
       required: true,
     },
   },
-  // const friendUser = await this.iridium.friends.getFriend(
-  //   this.state.conversation[conversationId].participants.find(
-  //     (friendId) => {
-  //       return friendId !== this.iridium.connector?.id
-  //     },
-  //   )!,
-  // )
-  //       const buildNotification: Partial<Notification> = {
-  //         fromName: friendUser?.name,
-  //         at: Date.now(),
-  //         fromAddress: conversationId,
-  //         title: `New message from ${friendUser?.name}`,
-  //         description:
-  //           msg.body.length > 79 ? `${msg.body.substring(0, 80)}...` : msg.body,
-  //         image: friendUser?.photoHash,
-  //         type: NotificationType.DIRECT_MESSAGE,
-  //         seen: false,
-  //       }
-  //       this.iridium.notifications?.sendNotification(buildNotification)
   computed: {
     setTranslateText(): TranslateResult | undefined {
       switch (this.alert?.type) {
@@ -64,7 +45,6 @@ export default Vue.extend({
   },
   methods: {
     removeNotification(id: string) {
-      console.log(this.alert)
       iridium.notifications.deleteNotification(this.alertDid)
     },
     notificationLink(alertType: NotificationType) {
