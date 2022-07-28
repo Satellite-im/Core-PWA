@@ -18,7 +18,6 @@
         isBackgroundCall ? 'has-background-call' : '',
       ]"
     >
-      <UiGlobal />
       <swiper
         ref="swiper"
         class="swiper"
@@ -94,6 +93,7 @@
           />
         </swiper-slide>
       </swiper>
+      <UiGlobal />
     </div>
     <MobileNav v-if="$device.isMobile" />
     <!-- Sets the global css variable for the theme flair color -->
