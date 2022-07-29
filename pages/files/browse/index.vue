@@ -29,9 +29,6 @@ export default Vue.extend({
     ...mapGetters({
       sortedItems: 'files/sortedItems',
     }),
-    consentToScan(): boolean {
-      return iridium.settings.state.privacy.consentToScan
-    },
     directory(): IridiumItem[] {
       return this.sortedItems(this.items, this.$route.query.route)
     },
