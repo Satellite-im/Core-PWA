@@ -1,5 +1,5 @@
 <div
-  id="enhancers"
+  class="enhancers"
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers"
   v-bind:style="!ui.enhancers.floating ? {
@@ -29,7 +29,7 @@
       </InteractablesButton>
     </InteractablesButtonGroup>
   </div>
-  <div id="container">
+  <div class="container">
     <UiSimpleScroll
       scrollMode="vertical"
       scrollShow="scroll"
@@ -47,7 +47,7 @@
                 v-model="search"
                 type="dark"
                 size="small"
-                placeholder="Search..."
+                :placeholder="$t('ui.search')"
               />
             </div>
             <div>
