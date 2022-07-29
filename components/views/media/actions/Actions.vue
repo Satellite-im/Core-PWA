@@ -67,11 +67,10 @@ export default Vue.extend({
         } else if (kind === WebRTCEnum.VIDEO) {
           await this.$store.dispatch('video/toggleMute')
         } else {
-          await this.$store.dispatch(
-            'webrtc/toggleMute',
-            { kind, peerId: iridium.connector?.peerId },
-            { root: true },
-          )
+          await this.webrtc.toggleMute({
+            kind,
+            peerId: iridium.connector?.peerId,
+          })
         }
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)

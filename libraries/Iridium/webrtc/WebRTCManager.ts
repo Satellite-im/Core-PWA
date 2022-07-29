@@ -929,4 +929,28 @@ export default class WebRTCManager extends Emitter {
     Vue.set(this.state, 'activeCall', null)
     Vue.set(this.state, 'incomingCall', null)
   }
+
+  public async toggleMute({
+    peerId,
+    kind,
+  }: {
+    peerId: string
+    kind: 'audio' | 'video' | 'screen'
+  }) {
+    if (!this.state.activeCall || !peerId) {
+      return
+    }
+    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    if (!call) {
+      return
+    }
+    const isMuted = this.state.streamMuted[peerId]?.[kind]
+    if (isMuted) {
+      await call.unmute({ peerId, kind })
+      $Sounds.playSound(Sounds.UNMUTE)
+      return
+    }
+    await call.mute({ peerId, kind })
+    $Sounds.playSound(Sounds.MUTE)
+  }
 }
