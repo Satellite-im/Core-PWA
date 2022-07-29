@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import dayjs from 'dayjs'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -11,17 +12,36 @@ export default Vue.extend({
     return {
       caller: null,
       webrtc: iridium.webRTC.state,
+      interval: null,
+      elapsedTime: '',
     }
   },
   computed: {
     ...mapState({
       showSettings: (state) => (state as RootState).ui.showSettings,
       friends: (state) => (state as RootState).friends.all,
-      elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
     }),
+    activeCall() {
+      return this.webrtc.activeCall
+    },
+    createdAt() {
+      return this.webrtc.createdAt
+    },
+  },
+  watch: {
+    createdAt() {
+      this.startInterval()
+    },
+  },
+  beforeDestroy() {
+    if (this.interval) {
+      clearInterval(this.interval)
+    }
   },
   async mounted() {
-    const id = this.webrtc.activeCall?.callId
+    this.startInterval()
+
+    const id = this.activeCall?.callId
 
     if (!id || !iridium.chat?.hasConversation(id)) {
       return
@@ -54,6 +74,18 @@ export default Vue.extend({
       }
 
       this.$router.push(`/chat/${id}`)
+    },
+    startInterval() {
+      if (!this.interval && this.createdAt && this.activeCall) {
+        this.interval = setInterval(this.updateElapsedTime, 1000)
+      }
+    },
+    updateElapsedTime() {
+      const duration = dayjs.duration(Date.now() - this.createdAt)
+      const hours = duration.hours()
+      this.elapsedTime = `${hours > 0 ? hours + ':' : ''}${duration.format(
+        'mm:ss',
+      )}`
     },
   },
 })

@@ -12,7 +12,7 @@ import {
 import { User } from '~/types/ui/user'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
-import { PeerMutedState } from '~/store/webrtc/types'
+import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 

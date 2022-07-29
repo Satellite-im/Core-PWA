@@ -3,6 +3,7 @@ import { Dictionary, groupBy } from 'lodash'
 import { FriendsState } from './types'
 import { Friend, OutgoingRequest } from '~/types/ui/friends'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export interface FriendsGetters {
   findFriendByKey(
@@ -90,7 +91,7 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
   ): Friend | undefined => {
     return state.all.find(
       (friend: Friend) =>
-        friend.address === rootState.webrtc.activeCall?.peerId,
+        friend.address === iridium.webRTC.state.activeCall?.peerId,
     )
   },
 
@@ -106,7 +107,7 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
   ): boolean => {
     return state.all.some(
       (friend: Friend) =>
-        friend.address === rootState.webrtc.activeCall?.peerId,
+        friend.address === iridium.webRTC.state.activeCall?.peerId,
     )
   },
 

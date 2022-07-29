@@ -473,12 +473,9 @@ export default class WebRTCManager extends Emitter {
     peerId: string
     kind: 'audio' | 'video' | 'screen'
   }) => {
-    Vue.set(this.state, 'streamMuted', {
-      ...this.state.streamMuted,
-      [peerId]: {
-        ...this.state.streamMuted[peerId],
-        [kind]: true,
-      },
+    Vue.set(this.state.streamMuted, peerId, {
+      ...this.state.streamMuted[peerId],
+      [kind]: true,
     })
   }
 
@@ -489,12 +486,9 @@ export default class WebRTCManager extends Emitter {
     peerId: string
     kind: 'audio' | 'video' | 'screen'
   }) => {
-    Vue.set(this.state, 'streamMuted', {
-      ...this.state.streamMuted,
-      [peerId]: {
-        ...this.state.streamMuted[peerId],
-        [kind]: false,
-      },
+    Vue.set(this.state.streamMuted, peerId, {
+      ...this.state.streamMuted[peerId],
+      [kind]: false,
     })
   }
 
@@ -558,13 +552,10 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    Vue.set(this.state, 'streamMuted', {
-      ...this.state.streamMuted,
-      [this.iridium.connector.peerId]: {
-        audio: !kinds.includes('audio'),
-        video: !kinds.includes('video'),
-        screen: !kinds.includes('screen'),
-      },
+    Vue.set(this.state.streamMuted, this.iridium.connector.peerId, {
+      audio: !kinds.includes('audio'),
+      video: !kinds.includes('video'),
+      screen: !kinds.includes('screen'),
     })
 
     await call.createLocalTracks(kinds)
@@ -705,12 +696,9 @@ export default class WebRTCManager extends Emitter {
         muted = Vue.prototype.$nuxt.$store.state.video.disabled
       }
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [this.iridium.connector?.peerId]: {
-          ...this.state.streamMuted[this.iridium.connector?.peerId],
-          [kind]: muted,
-        },
+      Vue.set(this.state.streamMuted, this.iridium.connector.peerId, {
+        ...this.state.streamMuted[this.iridium.connector?.peerId],
+        [kind]: muted,
       })
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
@@ -731,12 +719,9 @@ export default class WebRTCManager extends Emitter {
         return
       }
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [this.iridium.connector?.peerId]: {
-          ...this.state.streamMuted[this.iridium.connector?.peerId],
-          [kind]: false,
-        },
+      Vue.set(this.state.streamMuted, this.iridium.connector.peerId, {
+        ...this.state.streamMuted[this.iridium.connector?.peerId],
+        [kind]: false,
       })
     }
     call.on('LOCAL_TRACK_UNMUTED', onLocalTrackUnmuted)
@@ -757,12 +742,9 @@ export default class WebRTCManager extends Emitter {
 
       if (!kind) return
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [peerId]: {
-          ...this.state.streamMuted[peerId],
-          [kind]: false,
-        },
+      Vue.set(this.state.streamMuted, peerId, {
+        ...this.state.streamMuted[peerId],
+        [kind]: false,
       })
 
       if (Vue.prototype.$nuxt.$store.state.audio.muted) {
@@ -781,12 +763,9 @@ export default class WebRTCManager extends Emitter {
     }) => {
       if (!kind) return
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [peerId]: {
-          ...this.state.streamMuted[peerId],
-          [kind]: false,
-        },
+      Vue.set(this.state.streamMuted, peerId, {
+        ...this.state.streamMuted[peerId],
+        [kind]: false,
       })
     }
     call.on('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
@@ -806,12 +785,9 @@ export default class WebRTCManager extends Emitter {
       )
       if (!kind) return
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [peerId]: {
-          ...this.state.streamMuted[peerId],
-          [kind]: true,
-        },
+      Vue.set(this.state.streamMuted, peerId, {
+        ...this.state.streamMuted[peerId],
+        [kind]: true,
       })
     }
     call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
@@ -826,12 +802,9 @@ export default class WebRTCManager extends Emitter {
     }) => {
       if (!kind) return
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [peerId]: {
-          ...this.state.streamMuted[peerId],
-          [kind]: true,
-        },
+      Vue.set(this.state.streamMuted, peerId, {
+        ...this.state.streamMuted[peerId],
+        [kind]: true,
       })
     }
     call.on('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
@@ -855,12 +828,9 @@ export default class WebRTCManager extends Emitter {
         return
       }
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [this.iridium.connector?.peerId]: {
-          ...this.state.streamMuted[this.iridium.connector?.peerId],
-          [kind]: true,
-        },
+      Vue.set(this.state.streamMuted, this.iridium.connector.peerId, {
+        ...this.state.streamMuted[this.iridium.connector?.peerId],
+        [kind]: true,
       })
     }
     call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
@@ -874,12 +844,9 @@ export default class WebRTCManager extends Emitter {
     }) => {
       if (!kind) return
 
-      Vue.set(this.state, 'streamMuted', {
-        ...this.state.streamMuted,
-        [peerId]: {
-          ...this.state.streamMuted[peerId],
-          [kind]: false,
-        },
+      Vue.set(this.state.streamMuted, peerId, {
+        ...this.state.streamMuted[peerId],
+        [kind]: false,
       })
     }
     call.on('STREAM', onStream)
@@ -929,13 +896,10 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    Vue.set(this.state, 'streamMuted', {
-      ...this.state.streamMuted,
-      [this.iridium.connector?.peerId]: {
-        audio: true,
-        video: true,
-        screen: true,
-      },
+    Vue.set(this.state.streamMuted, this.iridium.connector?.peerId, {
+      audio: true,
+      video: true,
+      screen: true,
     })
 
     const { callId, peerId } = this.state.incomingCall

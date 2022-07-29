@@ -6,7 +6,6 @@ import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { WebRTCState } from '~/store/webrtc/types'
 
 export default Vue.extend({
   components: {
@@ -22,7 +21,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    // ...mapState('webrtc', ['elapsedTime']),
     activeCall() {
       return this.webrtc.activeCall
     },
@@ -65,7 +63,7 @@ export default Vue.extend({
       }
     },
     updateElapsedTime() {
-      const duration = dayjs.duration(Date.now() - this.webrtc.createdAt)
+      const duration = dayjs.duration(Date.now() - this.createdAt)
       const hours = duration.hours()
       this.elapsedTime = `${hours > 0 ? hours + ':' : ''}${duration.format(
         'mm:ss',

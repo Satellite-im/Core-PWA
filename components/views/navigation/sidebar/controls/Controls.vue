@@ -13,7 +13,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { PeerMutedState } from '~/store/webrtc/types'
+import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'

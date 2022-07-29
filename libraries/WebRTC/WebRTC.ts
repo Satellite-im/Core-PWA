@@ -4,7 +4,7 @@ import { Call, CallPeerDescriptor } from './Call'
 
 import Emitter from '~/libraries/WebRTC/Emitter'
 import { WebRTCEventListeners } from '~/libraries/WebRTC/types'
-import { WebRTCError } from '~/store/webrtc/types'
+import { WebRTCError } from '~/libraries/Iridium/webrtc/types'
 
 export default class WebRTC extends Emitter<WebRTCEventListeners> {
   // Identifier to connect to signaling server with
