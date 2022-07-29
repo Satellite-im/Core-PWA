@@ -1,9 +1,9 @@
 <div id="grid-view">
   <div class="files-container">
     <FilesGridItem
-      v-for="item in directory"
+      v-for="item, i in directory"
       :item="item"
-      :key="item.id"
+      :key="i"
       @like="(item) => $emit('like', item)"
       @share="(item) => $emit('share', item)"
       @rename="(item) => $emit('rename', item)"

@@ -3,15 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import {
-  UsersIcon,
-  UserPlusIcon,
-  PlusIcon,
-  PlusCircleIcon,
-  FolderIcon,
-  MessageSquareIcon,
-  MenuIcon,
-} from 'satellite-lucide-icons'
+import { UsersIcon, PlusIcon, FolderIcon } from 'satellite-lucide-icons'
 
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -19,12 +11,8 @@ import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
   components: {
     UsersIcon,
-    UserPlusIcon,
     PlusIcon,
-    PlusCircleIcon,
     FolderIcon,
-    MessageSquareIcon,
-    MenuIcon,
   },
   data() {
     return {

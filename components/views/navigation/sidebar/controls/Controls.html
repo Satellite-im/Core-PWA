@@ -1,4 +1,4 @@
-<div id="controls">
+<div class="call-controls">
   <InteractablesButton
     :type="audioMuted ? 'danger' : 'dark'"
     size="small"
@@ -9,12 +9,8 @@
     :loading="isLoading"
     loadingText=""
   >
-    <mic-off-icon
-      data-cy="sidebar-mic-muted"
-      v-if="audioMuted"
-      size="1x"
-    ></mic-off-icon>
-    <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x"></mic-icon>
+    <mic-off-icon data-cy="sidebar-mic-muted" v-if="audioMuted" size="1x" />
+    <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x" />
   </InteractablesButton>
   <InteractablesButton
     :type="audio.deafened ? 'danger' : 'dark'"
@@ -28,12 +24,8 @@
       data-cy="sidebar-audio-deafened"
       v-if="audio.deafened"
       size="1x"
-    ></headphones-off-icon>
-    <headphones-icon
-      data-cy="sidebar-audio-not-deafened"
-      v-else
-      size="1x"
-    ></headphones-icon>
+    />
+    <headphones-icon data-cy="sidebar-audio-not-deafened" v-else size="1x" />
   </InteractablesButton>
   <InteractablesButton
     v-if="inCall"
@@ -45,11 +37,7 @@
     :loading="isLoading"
     loadingText=""
   >
-    <video-off-icon
-      data-cy="sidebar-video-muted"
-      v-if="videoMuted"
-      size="1x"
-    ></video-off-icon>
-    <video-icon data-cy="sidebar-video-unmuted" v-else size="1x"></video-icon>
+    <video-off-icon data-cy="sidebar-video-muted" v-if="videoMuted" size="1x" />
+    <video-icon data-cy="sidebar-video-unmuted" v-else size="1x"/ >
   </InteractablesButton>
 </div>

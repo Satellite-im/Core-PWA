@@ -1,4 +1,4 @@
-<div id="sidebar">
+<div class="sidebar">
   <div class="sidebar-inner">
     <div class="sidebar-search">
       <UiComingSoon
@@ -51,8 +51,10 @@
       </InteractablesButton>
     </div>
     <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
-      <plus-circle-icon size="1x" @click="toggleModal" />
-      <FriendsQuick
+      <button @click="toggleModal">
+        <plus-icon size="1.4x" />
+      </button>
+      <SidebarQuick
         v-if="isQuickchatVisible"
         v-click-outside="toggleModal"
         @toggle="toggleModal"
