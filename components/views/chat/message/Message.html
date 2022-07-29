@@ -20,6 +20,7 @@
   <div class="timestamp">{{ timestamp }}</div>
   <div class="body">
     <MessageMarkdown
+      v-if="message.body"
       :text="wrapEmoji(markdownToHtml(message.body))"
       class="markdown"
       :class="{ bigmoji: containsOnlyEmoji(message.body) }"
@@ -35,6 +36,11 @@
     >
       ({{$t('ui.edited')}})
     </span>
+    <MessageGlyph
+      v-if="message.glyph"
+      :source="message.glyph.src"
+      :pack="message.glyph.pack"
+    />
     <MessageActions
       :setReplyChatbarContent="setReplyChatbarContent"
       :emojiReaction="emojiReaction"

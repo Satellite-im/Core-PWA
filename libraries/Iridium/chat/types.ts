@@ -1,7 +1,15 @@
+import { Glyph } from '~/types/ui/glyph'
+
+export type MessageGlyph = {
+  src: string
+  pack: Glyph
+}
+
 export type ConversationMessage = {
   conversationId: string
   from: string
-  body: string
+  body?: string
+  glyph?: MessageGlyph
   at: number
   type: 'text' | 'file' | 'group' | 'glyph' | 'divider' | 'string'
   attachments: string[]
