@@ -1,45 +1,40 @@
-<UiDroppableWrapper @handle-drop-prop="handleDrop" style="overflow-y: scroll">
-  <div class="files-container" data-cy="files-screen">
-    <div class="files-top">
-      <InteractablesSidebarToggle v-if="!showSidebar" />
-      <FilesFilepath />
-    </div>
-    <FilesControls ref="controls" class="controls" />
-    <div class="files-aside-container">
-      <FilesAside />
-    </div>
-    <div class="files-view">
-      <TypographyText
-        v-if="!directory.length"
-        :text="$t('pages.files.empty')"
-      />
-      <FilesMobileList
-        v-else-if="$device.isMobile"
-        :directory="directory"
-        @like="like"
-        @share="share"
-        @rename="rename"
-        @remove="remove"
-        @handle="handle"
-      />
-      <FilesGrid
-        v-else-if="gridLayout"
-        :directory="directory"
-        @like="like"
-        @share="share"
-        @rename="rename"
-        @remove="remove"
-        @handle="handle"
-      />
-      <FilesList
-        v-else-if="!gridLayout"
-        :directory="directory"
-        @like="like"
-        @share="share"
-        @rename="rename"
-        @remove="remove"
-        @handle="handle"
-      />
-    </div>
+<div class="files-container" data-cy="files-screen">
+  <div class="files-top">
+    <InteractablesSidebarToggle v-if="!showSidebar" />
+    <FilesFilepath />
   </div>
-</UiDroppableWrapper>
+  <FilesControls ref="controls" class="controls" />
+  <div class="files-aside-container">
+    <FilesAside />
+  </div>
+  <div class="files-view">
+    <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
+    <FilesMobileList
+      v-else-if="$device.isMobile"
+      :directory="directory"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
+      @handle="handle"
+    />
+    <FilesGrid
+      v-else-if="gridLayout"
+      :directory="directory"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
+      @handle="handle"
+    />
+    <FilesList
+      v-else-if="!gridLayout"
+      :directory="directory"
+      @like="like"
+      @share="share"
+      @rename="rename"
+      @remove="remove"
+      @handle="handle"
+    />
+  </div>
+</div>

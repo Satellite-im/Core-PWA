@@ -8,7 +8,6 @@ import { IridiumItem } from '~/libraries/Iridium/files/types'
 import { RootState } from '~/types/store/store'
 import { ModalWindows } from '~/store/ui/types'
 import { FileRouteEnum } from '~/libraries/Enums/enums'
-import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 
 export default Vue.extend({
   name: 'Files',
@@ -30,9 +29,6 @@ export default Vue.extend({
     ...mapGetters({
       sortedItems: 'files/sortedItems',
     }),
-    consentToScan(): boolean {
-      return iridium.settings.state.privacy.consentToScan
-    },
     directory(): IridiumItem[] {
       return this.sortedItems(this.items, this.$route.query.route)
     },
@@ -100,27 +96,6 @@ export default Vue.extend({
      */
     share(item: IridiumItem) {
       this.$toast.show(this.$t('todo - share') as string)
-    },
-    /**
-     * @method handleDrop
-     * @description Allows the drag and drop of files into the filesystem
-     * @param e Drop event data object
-     */
-    handleDrop(e: DragEvent) {
-      e.preventDefault()
-
-      if (!this.consentToScan) {
-        this.$store.dispatch('ui/displayConsentSettings')
-        return
-      }
-
-      // if already uploading, return to prevent bucket fast-forward crash
-      if (e.dataTransfer) {
-        const files: (File | null)[] = [...e.dataTransfer.items].map((f) =>
-          f.getAsFile(),
-        )
-        ;(this.$refs.controls as FilesControlsRef).handleFile(files)
-      }
     },
   },
 })
