@@ -24,7 +24,7 @@ export default defineNuxtConfig({
     middleware: ['authenticated'],
     extendRoutes(routes, resolve) {
       routes.push({
-        path: '/friends/:id',
+        path: '/friends',
         components: {
           default: resolve(__dirname, 'pages/friends'),
         },
@@ -80,6 +80,7 @@ export default defineNuxtConfig({
     'normalize.css/normalize.css',
     '@/assets/styles/framework/framework.less',
     '@/assets/styles/base.less',
+    '@/assets/styles/themes/moonless_night.less',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -92,7 +93,6 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/multiselect.ts' },
     { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
-    { src: '~/plugins/thirdparty/swiper.ts' },
     { src: '~/plugins/thirdparty/tooltip.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },

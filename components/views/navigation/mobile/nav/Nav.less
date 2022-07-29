@@ -1,33 +1,37 @@
-#mobile-nav {
-  right: env(safe-area-inset-right);
-  left: env(safe-area-inset-left);
-  height: @mobile-nav-size;
+.nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: @mobile-nav-height;
+  position: fixed;
+  bottom: 0;
+  transition: transform @animation-speed ease;
   background: linear-gradient(
-      180deg,
+      163.91deg,
       rgba(48, 52, 71, 0.5) 0%,
       rgba(42, 54, 75, 0) 100%
     ),
-    linear-gradient(180deg, rgba(28, 39, 58, 0.9) 0%, rgba(0, 0, 0, 0.09) 100%),
     linear-gradient(
-      360deg,
+      163.91deg,
+      rgba(28, 39, 58, 0.9) 0%,
+      rgba(0, 0, 0, 0.09) 100%
+    ),
+    linear-gradient(
+      359.95deg,
       rgba(36, 40, 57, 0.9) 0.04%,
       rgba(34, 44, 63, 0) 99.95%
     ),
     @darker;
-  position: fixed;
-  bottom: 0;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: @normal-spacing;
-  transition: transform @animation-speed ease;
-  &:extend(.first-layer);
 
-  div {
-    width: 20%;
-    display: inline-flex;
+  button {
+    height: 100%;
+    align-items: center;
     justify-content: center;
-    &:extend(.font-secondary);
+    flex: 1;
     font-size: @small-icon-size;
+    color: @text-muted;
+    &.active {
+      color: @secondary-text;
+    }
   }
 }

@@ -1,4 +1,4 @@
-<template src="./Nav.html" />
+<template src="./Nav.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -24,10 +24,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['accounts', 'ui']),
-    src(): string {
-      const hash = this.accounts.details.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    },
   },
   methods: {
     toggleModal() {
@@ -36,25 +32,8 @@ export default Vue.extend({
         state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
       })
     },
-    /**
-     * @method navigateToHome
-     * @description Navigate to chat "/chat/direct" without specific user
-     */
-    navigateToHome() {
-      this.$store.commit('ui/setSwiperSlideIndex', 1)
-      this.$router.push('/chat/direct')
-    },
-    /**
-     * @method navigateToFriend
-     * @description Navigate to chat "/friends" showing slide 1 ('friends list slide')
-     */
-    navigateToFriend() {
-      this.$store.commit('ui/setSwiperSlideIndex', 1)
-      this.$store.commit('ui/showSidebar', false)
-      this.$router.push('/friends')
-    },
-    navigateToFiles() {
-      this.$router.push('/files')
+    isActiveRoute(route: string): boolean {
+      return this.$route.path.includes(route)
     },
   },
 })
