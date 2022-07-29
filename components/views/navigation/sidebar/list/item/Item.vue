@@ -155,9 +155,8 @@ export default Vue.extend({
      */
     async openConversation() {
       if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
-        this.$store.commit('ui/showSidebar', false)
+        this.$router.push(`/mobile/chat/${this.conversation.id}`)
+        return
       }
       this.$router.push(`/chat/${this.conversation.id}`)
     },

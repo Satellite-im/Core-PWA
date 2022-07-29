@@ -11,7 +11,7 @@ import { FileRouteEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'Files',
-  layout: 'basic',
+  layout: (ctx) => (ctx.$device.isMobile ? 'mobile' : 'desktop'),
   data() {
     return {
       items: iridium.files.state.items,

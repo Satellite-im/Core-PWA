@@ -12,9 +12,9 @@
     <Slimbar :servers="$mock.servers" />
     <Sidebar />
     <UiDroppableWrapper v-if="displayDroppable" @handle-drop-prop="handleDrop">
-      <Nuxt ref="page" />
+      <Nuxt ref="page" class="page" />
     </UiDroppableWrapper>
-    <Nuxt v-else />
+    <Nuxt v-else class="page" />
     <UiGlobal />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
@@ -35,7 +35,7 @@ import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  name: 'BasicLayout',
+  name: 'Desktop',
   middleware: 'authenticated',
   setup() {
     useMeta()
@@ -92,4 +92,20 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Layout.less"></style>
+<style lang="less" scoped>
+#app {
+  display: flex;
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  transition: left @animation-speed-long ease;
+
+  &.hide-sidebars {
+    left: calc(calc(@sidebar-width + @slimbar-width) * -1);
+  }
+
+  .page {
+    padding: @normal-spacing @normal-spacing 0;
+  }
+}
+</style>

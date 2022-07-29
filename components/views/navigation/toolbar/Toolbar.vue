@@ -58,13 +58,22 @@ export default Vue.extend({
     }),
     ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
     ModalWindows: () => ModalWindows,
-    conversation(): Conversation {
-      return iridium.chat.state.conversations[this.$route.params.id]
+    conversationId(): Conversation['id'] | undefined {
+      return this.$route.params.id
+    },
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return iridium.chat.state.conversations[this.conversationId]
     },
     isGroup(): boolean {
-      return this.conversation.type === 'group'
+      return this.conversation?.type === 'group'
     },
     details(): User | Group | undefined {
+      if (!this.conversation) {
+        return undefined
+      }
       if (this.isGroup) {
         return this.groups[this.conversation.id]
       }

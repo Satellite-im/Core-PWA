@@ -478,7 +478,7 @@ export default Vue.extend({
     &:extend(.first-layer);
     width: @sidebar-size-mobile;
     min-width: @sidebar-size-mobile;
-    padding-bottom: @mobile-nav-size;
+    padding-bottom: @mobile-nav-height;
     .sidebar-inner {
       max-height: calc(var(--app-height) - @mobile-sidebar-inner-offset);
       box-shadow: none;
