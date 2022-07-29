@@ -15,6 +15,7 @@ import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -33,6 +34,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      chat: iridium.chat,
       blob: undefined as Blob | undefined,
       pngBlob: undefined as Blob | undefined,
     }
@@ -46,9 +48,15 @@ export default Vue.extend({
     ...mapGetters({
       findFriendByAddress: 'friends/findFriendByAddress',
       getFiles: 'chat/getFiles',
-      isGroup: 'conversation/isGroup',
       getTimestamp: 'settings/getTimestamp',
     }),
+    isGroup(): boolean {
+      const conversationId = this.$route.params.id
+      if (!conversationId) {
+        return false
+      }
+      return this.chat.isGroup(conversationId)
+    },
     author(): User {
       // TODO: access User from iridium via did
       return {

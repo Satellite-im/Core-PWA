@@ -37,6 +37,7 @@ import { UserInfoManager } from '~/libraries/Textile/UserManager'
 import { UserThreadData } from '~/types/textile/user'
 import { MessageGroup } from '~/types/messaging'
 import BlockchainClient from '~/libraries/BlockchainClient'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 const getGroupChatProgram = (): GroupChatsProgram => {
   const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
@@ -134,6 +135,12 @@ export default {
     // we don't update the state with old information (prevents the toolbar
     // from showing the wrong participant info when navigating between
     // different conversations rapidly)
+
+    const chatState = iridium.chat.state
+    const conversations = iridium.chat.state.conversations
+    console.log('chatState', chatState)
+    console.log('conversations', conversations)
+
     if (rootState.conversation.id !== friend.peerId) {
       return
     }

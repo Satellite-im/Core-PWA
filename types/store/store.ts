@@ -6,7 +6,6 @@ import { TextileState } from '~/store/textile/types'
 import { UIState } from '~/store/ui/types'
 import { GroupsState } from '~/store/groups/types'
 import { SettingsState } from '~/store/settings/types'
-import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
@@ -20,7 +19,6 @@ export interface RootState {
   accounts: AccountsState
   audio: AudioState
   chat: ChatState
-  conversation: ConversationState
   dataState: DataState
   files: FilesState
   friends: FriendsState

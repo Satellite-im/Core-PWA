@@ -14,6 +14,7 @@ import {
   MatchTypesEnum,
 } from '~/types/search/search'
 import { DataStateType } from '~/store/dataState/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 Vue.component('Paginate', VuejsPaginate)
 
@@ -29,6 +30,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      chat: iridium.chat,
       groupList: SearchUtil.getSearchResultGroupList(),
       query: '' as string,
       groupBy: SearchResultGroupType.Messages as SearchResultGroupType,
@@ -47,8 +49,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['dataState', 'friends', 'accounts']),
-    ...mapGetters('conversation', ['otherParticipants']),
-
     DataStateType: () => DataStateType,
     isLoading: {
       set(state: DataStateType) {
@@ -60,6 +60,13 @@ export default Vue.extend({
       get(): DataStateType {
         return this.dataState.search
       },
+    },
+    otherParticipants() {
+      const conversationId = this.$route.params.id
+      if (!conversationId) {
+        return
+      }
+      return this.chat.getOtherParticipants(conversationId)
     },
     // disabled functionality, will be refactored later
     // userOptions() {

@@ -326,19 +326,19 @@ export default {
       return
     }
 
-    dispatch(
-      'webrtc/initialize',
-      {
-        privateKeyInfo: {
-          type: 'ed25519',
-          privateKey: iridium.connector?.peerId,
-        },
-        originator: iridium.connector?.peerId,
-      },
-      {
-        root: true,
-      },
-    )
+    // dispatch(
+    //   'webrtc/initialize',
+    //   {
+    //     privateKeyInfo: {
+    //       type: 'ed25519',
+    //       privateKey: iridium.connector?.peerId,
+    //     },
+    //     originator: iridium.connector?.peerId,
+    //   },
+    //   {
+    //     root: true,
+    //   },
+    // )
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },

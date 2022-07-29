@@ -1,9 +1,5 @@
 import * as actions from '~/store/audio/actions'
 import { RegistrationStatus } from '~/store/accounts/types'
-import {
-  ConversationActivity,
-  ConversationConnection,
-} from '~/store/conversation/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'

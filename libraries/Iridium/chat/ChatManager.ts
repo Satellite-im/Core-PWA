@@ -13,6 +13,9 @@ import {
   Conversation,
   ConversationMessage,
   ChatError,
+  ConversationParticipant,
+  ConversationActivity,
+  ConversationConnection,
 } from '~/libraries/Iridium/chat/types'
 import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
@@ -266,5 +269,46 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         to: pids,
       },
     )
+  }
+
+  /**
+   * @method otherParticipants
+   * @description get participants other than yourself
+   */
+  public getOtherParticipants = (conversationId: string): Friend[] => {
+    const conversation = this.getConversation(conversationId)
+
+    return conversation.participants.filter(
+      (participant) => participant.name !== null,
+    )
+  }
+
+  /**
+   * @method typingParticipants
+   * @description array of online participants other than yourself
+   */
+  public getTypingParticipants = (conversationId: string): Friend[] => {
+    return this.getOtherParticipants(conversationId).filter(
+      (participant) => participant.activity === ConversationActivity.TYPING,
+    )
+  }
+
+  /**
+   * @method onlineParticipants
+   * @description array of online participants other than yourself
+   */
+  public getOnlineParticipants = (conversationId: string): Friend[] => {
+    return this.getOtherParticipants(conversationId).filter(
+      (participant) => participant.status === 'online',
+    )
+  }
+
+  /**
+   * @method isGroup
+   * @description is current recipient group
+   */
+  public isGroup(conversationId: string): boolean {
+    const conversation = this.getConversation(conversationId)
+    return conversation.type === 'group'
   }
 }

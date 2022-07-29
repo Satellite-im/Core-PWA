@@ -9,7 +9,7 @@ import { Friend } from '~/libraries/Iridium/friends/types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { ConversationActivity } from '~/store/conversation/types'
+import { ConversationActivity } from '~/libraries/Iridium/chat/types'
 import logger from '~/plugins/local/logger'
 
 const $Sounds = new SoundManager()

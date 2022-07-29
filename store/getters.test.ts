@@ -4,7 +4,6 @@ import { RootState } from '~/types/store/store'
 import InitialAccountsState from '~/store/accounts/state'
 import InitialAudioState from '~/store/audio/state'
 import InitialChatState from '~/store/chat/state'
-import InitialConversationState from '~/store/conversation/state'
 import InitialDataState from '~/store/dataState/state'
 import InitialFilesState from '~/store/files/state'
 import InitialFriendsState from '~/store/friends/state'
@@ -26,9 +25,6 @@ export const initialRootState: RootState = {
   },
   chat: {
     ...InitialChatState(),
-  },
-  conversation: {
-    ...InitialConversationState(),
   },
   dataState: {
     ...InitialDataState(),
