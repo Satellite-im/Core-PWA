@@ -11,7 +11,10 @@
   >
     <Slimbar :servers="$mock.servers" />
     <Sidebar />
-    <Nuxt />
+    <UiDroppableWrapper v-if="displayDroppable" @handle-drop-prop="handleDrop">
+      <Nuxt ref="page" />
+    </UiDroppableWrapper>
+    <Nuxt v-else />
     <UiGlobal />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
@@ -25,6 +28,8 @@
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import useMeta from '~/components/compositions/useMeta'
+import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
+import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import { RootState } from '~/types/store/store'
@@ -47,6 +52,41 @@ export default Vue.extend({
     ...mapGetters('webrtc', ['isBackgroundCall']),
     flair(): Flair {
       return flairs[this.settings.flair]
+    },
+    consentToScan(): boolean {
+      return iridium.settings.state.privacy.consentToScan
+    },
+    displayDroppable(): boolean {
+      return (
+        this.$route.path.includes('files') || this.$route.path.includes('chat')
+      )
+    },
+  },
+  methods: {
+    /**
+     * @method handleDrop
+     * @description Allows the drag and drop of files into the chatbar
+     * @param e Drop event data object
+     * @example v-on:drop="handleDrop"
+     */
+    handleDrop(e: DragEvent) {
+      e.preventDefault()
+      if (!e?.dataTransfer) {
+        return
+      }
+      if (!this.consentToScan) {
+        this.$store.dispatch('ui/displayConsentSettings')
+        return
+      }
+      const childRefs = (this.$refs.page as Vue).$children[0].$refs
+      if (childRefs.chatbar) {
+        ;(childRefs.chatbar as ChatbarRef).handleUpload([
+          ...e.dataTransfer.items,
+        ])
+      } else if (childRefs.controls) {
+        const files = [...e.dataTransfer.items].map((f) => f.getAsFile())
+        ;(childRefs.controls as FilesControlsRef).handleFile(files)
+      }
     },
   },
 })
