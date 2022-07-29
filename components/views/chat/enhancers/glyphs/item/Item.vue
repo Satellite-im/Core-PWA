@@ -4,6 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
 import { Glyph } from '~/types/ui/glyph'
 import loadImg from '~/assets/img/glyphLoader.webp'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
@@ -54,27 +55,36 @@ export default Vue.extend({
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
     },
-    sendGlyph() {
-      const { id, address } = this.$route.params
-      const activeFriend = this.findFriendByAddress(address)
+    async sendGlyph() {
+      const { id } = this.$route.params
 
-      if (!activeFriend && !id) {
+      if (!id) {
         return
       }
 
-      if (id) {
-        this.$store.dispatch('textile/sendGroupGlyphMessage', {
-          groupID: id,
+      console.log({
+        conversationId: id,
+        type: 'glyph',
+        glyph: {
+          pack: this.pack,
           src: this.src,
-          pack: this.pack.name,
-        })
-      } else {
-        this.$store.dispatch('textile/sendGlyphMessage', {
-          to: activeFriend?.textilePubkey,
+        },
+        at: Date.now(),
+        attachments: [],
+      })
+
+      await iridium.chat?.sendMessage({
+        conversationId: id,
+        type: 'glyph',
+        body: '',
+        glyph: {
+          pack: this.pack,
           src: this.src,
-          pack: this.pack.name,
-        })
-      }
+        },
+        at: Date.now(),
+        attachments: [],
+      })
+
       this.$store.commit('ui/updateRecentGlyphs', {
         pack: this.pack,
         url: this.src,
@@ -90,4 +100,5 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Item.less"></style>
+<style scoped lang="less" src="./Item.less">
+</style>
