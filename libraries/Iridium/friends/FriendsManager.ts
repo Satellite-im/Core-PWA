@@ -287,7 +287,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       request,
     })
     logger.info('iridium/friends', 'saving friend request', {
-      remotePeerDID,
+      did,
       request,
     })
 

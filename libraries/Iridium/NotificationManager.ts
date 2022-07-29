@@ -131,13 +131,27 @@ export default class NotificationManager extends Emitter<Notification> {
       `/notifications/${notificationCID}`,
       payload,
     )
-    await this.iridium.connector.broadcast(
-      `/notifications/${notificationCID}`,
-      {
-        action: 'notification',
-        notification: payload,
-      },
-    )
+
+    // const buildNotification: Partial<Notification> = {
+    //   fromName: friendUser?.name,
+    //   at: Date.now(),
+    //   fromAddress: conversationId,
+    //   title: `New message from ${friendUser?.name}`,
+    //   description:
+    //     msg.body.length > 79 ? `${msg.body.substring(0, 80)}...` : msg.body,
+    //   image: friendUser?.photoHash,
+    //   type: NotificationType.DIRECT_MESSAGE,
+    //   seen: false,
+    // }
+    // console.log(buildNotification)
+    // this.iridium.notifications?.sendNotification(buildNotification)
+    // await this.iridium.connector.broadcast(
+    //   `/notifications/${notificationCID}`,
+    //   {
+    //     action: 'notification',
+    //     notification: payload,
+    //   },
+    // )
     this.emit(`notifications/${notificationCID}`, {
       action: 'notification',
       message: payload,
