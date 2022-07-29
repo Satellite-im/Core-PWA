@@ -32,10 +32,6 @@ export default Vue.extend({
       type: Object as PropType<IridiumItem>,
       required: true,
     },
-    gridLayout: {
-      type: Boolean,
-      required: true,
-    },
   },
   data() {
     return {

@@ -9,7 +9,7 @@ import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'Friends',
-  layout: 'basic',
+  layout: (ctx) => (ctx.$device.isMobile ? 'mobile' : 'desktop'),
   data() {
     return {
       route: 'active',

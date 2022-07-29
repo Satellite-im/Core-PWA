@@ -112,7 +112,7 @@ export default Vue.extend({
     UserCheckIcon,
     MoreVerticalIcon,
   },
-  layout: 'basic',
+  layout: 'desktop',
   data() {
     return {
       route: 'active',

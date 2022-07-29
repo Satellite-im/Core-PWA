@@ -20,3 +20,10 @@ const flair = flairs[iridium.settings.state.flair]
 
 useMeta()
 </script>
+
+<style lang="less" scoped>
+#app {
+  display: flex;
+  height: 100%;
+}
+</style>
