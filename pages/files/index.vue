@@ -1,4 +1,4 @@
-<template src="./Browse.html"></template>
+<template src="./Files.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -11,7 +11,6 @@ import { FileRouteEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'Files',
-
   layout: 'basic',
   data() {
     return {
@@ -101,4 +100,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./Browse.less"></style>
+<style scoped lang="less" src="./Files.less"></style>

@@ -1,4 +1,4 @@
-<template src="./FriendsList.html"></template>
+<template src="./Friends.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -8,7 +8,7 @@ import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  name: 'FriendsList',
+  name: 'Friends',
   layout: 'basic',
   data() {
     return {
@@ -38,4 +38,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./FriendsList.less"></style>
+<style scoped lang="less" src="./Friends.less"></style>

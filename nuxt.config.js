@@ -24,9 +24,9 @@ export default defineNuxtConfig({
     middleware: ['authenticated'],
     extendRoutes(routes, resolve) {
       routes.push({
-        path: '/friends/list/:id',
+        path: '/friends/:id',
         components: {
-          default: resolve(__dirname, 'pages/friends/list'),
+          default: resolve(__dirname, 'pages/friends'),
         },
       })
     },

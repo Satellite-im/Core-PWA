@@ -56,7 +56,7 @@ export default Vue.extend({
   methods: {
     eventuallyRedirect() {
       if (this.accounts.lastVisited === this.$route.path) {
-        this.$router.replace('/friends/list')
+        this.$router.replace('/friends')
         return
       }
 
@@ -65,7 +65,7 @@ export default Vue.extend({
         this.$router.replace(this.accounts.lastVisited)
       }
 
-      this.$router.replace('/friends/list')
+      this.$router.replace('/friends')
     },
     /**
      * @method loadAccount

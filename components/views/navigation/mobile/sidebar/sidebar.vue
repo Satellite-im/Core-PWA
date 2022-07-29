@@ -40,15 +40,15 @@
       <div v-if="!$device.isMobile" class="sidebar-nav">
         <div style="position: relative">
           <InteractablesButton
-            :inactive="$route.path.includes('/friends/list') ? false : true"
+            :inactive="$route.path.includes('/friends') ? false : true"
             class="sidebar-full-btn"
-            :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
+            :type="$route.path.includes('/friends') ? 'primary' : 'dark'"
             size="small"
             :action="
               () => {
                 friends.incomingRequests.length
-                  ? $router.push('/friends/list?tab=requests')
-                  : $router.push('/friends/list')
+                  ? $router.push('/friends?tab=requests')
+                  : $router.push('/friends')
               }
             "
             :text="$t('friends.friends')"
@@ -58,9 +58,7 @@
           <span
             v-if="friends.incomingRequests.length"
             :class="
-              $route.path.includes('/friends/list')
-                ? 'label tag-inverted'
-                : 'label'
+              $route.path.includes('/friends') ? 'label tag-inverted' : 'label'
             "
           >
             {{ friends.incomingRequests.length }}
@@ -71,7 +69,7 @@
           class="sidebar-full-btn"
           :type="$route.path.includes('/files') ? 'primary' : 'dark'"
           size="small"
-          :action="() => $router.push('/files/browse')"
+          :action="() => $router.push('/files')"
           :text="$t('files.files')"
         >
           <folder-icon size="1.2x" />
@@ -262,14 +260,14 @@ export default Vue.extend({
     },
     /**
      * @name gotoAddFriends
-     * @description go to 'friends/list'
+     * @description go to 'friends'
      */
     gotoAddFriends() {
       this.$router.push({ path: '/friends/mobile/add' })
     },
     /**
      * @name gotoNewMessage
-     * @description go to 'friends/list'
+     * @description go to 'friends'
      */
     gotoNewMessage() {
       if (this.$device.isMobile) {
