@@ -19,7 +19,7 @@ export default Vue.extend({
           this.$store.commit('ui/showSidebar', false)
         }
       } else {
-        this.$router.push({ path: '/friends/list' })
+        this.$router.push({ path: '/friends' })
       }
     },
   },

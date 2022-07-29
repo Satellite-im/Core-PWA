@@ -21,12 +21,12 @@
     </div>
     <div class="sidebar-nav">
       <InteractablesButton
-        :inactive="!$route.path.includes('/friends/list')"
+        :inactive="!$route.path.includes('/friends')"
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
-        :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
+        :type="$route.path.includes('/friends') ? 'primary' : 'dark'"
         size="small"
-        :action="() => $router.push('/friends/list')"
+        :action="() => $router.push('/friends')"
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
@@ -34,7 +34,7 @@
       <span
         v-if="incomingRequestsLength"
         class="label"
-        :class="{inverted : $route.path.includes('/friends/list')}"
+        :class="{inverted : $route.path.includes('/friends')}"
       >
         {{incomingRequestsLength}}
       </span>
@@ -44,7 +44,7 @@
         data-cy="sidebar-files"
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
         size="small"
-        :action="() => $router.push('/files/browse')"
+        :action="() => $router.push('/files')"
         :text="$t('files.files')"
       >
         <folder-icon size="1.2x" />

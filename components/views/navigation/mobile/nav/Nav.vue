@@ -46,15 +46,15 @@ export default Vue.extend({
     },
     /**
      * @method navigateToFriend
-     * @description Navigate to chat "/friends/list" showing slide 1 ('friends list slide')
+     * @description Navigate to chat "/friends" showing slide 1 ('friends list slide')
      */
     navigateToFriend() {
       this.$store.commit('ui/setSwiperSlideIndex', 1)
       this.$store.commit('ui/showSidebar', false)
-      this.$router.push('/friends/list')
+      this.$router.push('/friends')
     },
     navigateToFiles() {
-      this.$router.push('/files/browse')
+      this.$router.push('/files')
     },
   },
 })
