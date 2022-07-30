@@ -1,10 +1,12 @@
 <template>
-  <!-- Slider main container -->
   <div ref="swiper" class="chat">
-    <!-- Additional required wrapper -->
     <div class="swiper-wrapper">
-      <!-- Slides -->
-      <div class="swiper-slide"><SidebarList /></div>
+      <div
+        class="swiper-slide"
+        :class="{ 'disable-swipe': !Boolean($route.params.id) }"
+      >
+        <SidebarList />
+      </div>
       <div class="swiper-slide">
         <Toolbar />
         <!-- <Media
@@ -22,15 +24,51 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Swiper } from 'swiper'
 import 'swiper/css'
+import { Swiper, SwiperOptions } from 'swiper'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   name: 'MobileChat',
   layout: 'mobile',
+  data: () => ({
+    swiper: undefined as Swiper | undefined,
+  }),
+  computed: {
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
+    swiperConfig(): SwiperOptions {
+      return {
+        noSwipingClass: 'disable-swipe',
+        allowSlidePrev: false,
+        on: {
+          activeIndexChange: ({ activeIndex }) => {
+            if (!this.swiper) {
+              return
+            }
+            if (activeIndex === 0) {
+              this.swiper.allowSlidePrev = false
+              this.swiper.allowSlideNext = true
+            }
+            if (activeIndex === 1) {
+              this.swiper.allowSlidePrev = true
+              this.swiper.allowSlideNext = false
+            }
+          },
+        },
+      }
+    },
+  },
+  // component is remounted anytime the route param changes
   mounted() {
-    // eslint-disable-next-line no-new
-    new Swiper(this.$refs.swiper)
+    this.swiper = new Swiper(
+      this.$refs.swiper as HTMLElement,
+      this.swiperConfig,
+    )
+    if (this.$route.params.id) {
+      this.swiper.slideNext()
+    }
   },
 })
 </script>

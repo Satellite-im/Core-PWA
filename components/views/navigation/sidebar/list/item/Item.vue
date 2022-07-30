@@ -155,7 +155,7 @@ export default Vue.extend({
      */
     async openConversation() {
       if (this.$device.isMobile) {
-        this.$router.push(`/mobile/chat/${this.conversation.id}`)
+        this.$router.push({ params: { id: this.conversation.id } })
         return
       }
       this.$router.push(`/chat/${this.conversation.id}`)
