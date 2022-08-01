@@ -6,6 +6,8 @@ import { mapState } from 'vuex'
 import dayjs from 'dayjs'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 export default Vue.extend({
   data() {
@@ -20,12 +22,41 @@ export default Vue.extend({
     ...mapState({
       showSettings: (state) => (state as RootState).ui.showSettings,
       friends: (state) => (state as RootState).friends.all,
+      audio: (state) => (state as RootState).audio,
     }),
     activeCall() {
       return this.webrtc.activeCall
     },
     createdAt() {
       return this.webrtc.createdAt
+    },
+    audioMuted() {
+      return (
+        (iridium.connector?.peerId &&
+          this.webrtc.streamMuted[iridium.connector?.peerId]?.audio) ??
+        false
+      )
+    },
+    call() {
+      return (
+        iridium.connector?.peerId &&
+        this.webrtc.activeCall?.callId &&
+        $WebRTC.getCall(this.webrtc.activeCall.callId)
+      )
+    },
+    streams() {
+      return (
+        this.call &&
+        iridium.connector?.peerId &&
+        (this.call as Call).streams[iridium.connector?.peerId]
+      )
+    },
+    audioStream() {
+      return (
+        this.call &&
+        !this.audioMuted &&
+        (this.streams as CallPeerStreams)?.audio
+      )
     },
   },
   watch: {

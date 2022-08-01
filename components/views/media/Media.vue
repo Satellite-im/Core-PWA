@@ -36,14 +36,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState([
-      'ui',
-      'accounts',
-      'friends',
-      'groups',
-      // 'webrtc',
-      'conversation',
-    ]),
+    ...mapState(['ui', 'accounts', 'friends', 'groups']),
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
@@ -60,8 +53,6 @@ export default Vue.extend({
       }
 
       const conversation = iridium.chat?.getConversation(id)
-
-      console.log('remoteParticipants conversation', conversation)
 
       return conversation?.participants.filter((participant) => {
         return participant.peerId !== iridium.connector?.peerId
@@ -210,12 +201,12 @@ export default Vue.extend({
       },
     },
   },
-  beforeMount() {
-    // TODO: Create mixin/library that will handle call rejoining and closing
-    window.onbeforeunload = (e) => {
-      this.$store.dispatch('webrtc/hangUp')
-    }
-  },
+  // beforeMount() {
+  //   // TODO: Create mixin/library that will handle call rejoining and closing
+  //   window.onbeforeunload = (e) => {
+  //     this.$store.dispatch('webrtc/hangUp')
+  //   }
+  // },
   methods: {
     /**
      * @method volumeControlValueChange DocsTODO

@@ -252,7 +252,7 @@ export default Vue.extend({
     this.$store.commit('ui/setShowOlderMessagesInfo', false)
     // reset active conversation on chat leave
     this.$store.commit('textile/setActiveConversation', '')
-    this.$store.commit('conversation/resetConversation')
+    // this.$store.commit('conversation/resetConversation')
   },
   mounted() {
     this.$Sounds.changeLevels(this.audio.volume / 100)
