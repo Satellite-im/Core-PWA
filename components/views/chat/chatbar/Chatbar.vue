@@ -10,9 +10,12 @@ import {
   MessagingTypesEnum,
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
+import Group from '~/libraries/Iridium/groups/Group'
+import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { Config } from '~/config'
 import { ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { SettingsRoutes } from '~/store/ui/types'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
@@ -21,12 +24,37 @@ const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
   },
+  data() {
+    return {
+      friends: iridium.friends.state.list,
+      groups: iridium.groups.state,
+      webrtc: iridium.webRTC,
+    }
+  },
   computed: {
     ...mapState({
       ui: (state: RootState) => state.ui,
       chat: (state: RootState) => state.chat,
       files(state: RootState) {
         return state.chat.files?.[this.$route.params.id] ?? []
+      },
+      conversation(): Conversation {
+        return iridium.chat.state.conversations[this.$route.params.id]
+      },
+      isGroup(): boolean {
+        return this.conversation.type === 'group'
+      },
+      details(): User | Group | undefined {
+        if (this.isGroup) {
+          return this.groups[this.conversation.id]
+        }
+        const participant = this.conversation.participants.find(
+          (f) => f.did !== iridium.connector?.id,
+        )
+        if (!participant) {
+          return
+        }
+        return this.friends.find((f) => f.did === participant.did)
       },
     }),
     consentToScan(): boolean {
@@ -153,15 +181,15 @@ const Chatbar = Vue.extend({
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
-    throttleTyping: throttle(function (ctx) {
-      ctx.$store.dispatch('webrtc/sendTyping')
+    throttleTyping: throttle(function () {
+      this.webrtc.sendTyping(this.details)
     }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.
      */
     smartTypingStart() {
-      this.throttleTyping(this)
+      this.throttleTyping()
     },
     /**
      * @method handleInputKeydown DocsTODO

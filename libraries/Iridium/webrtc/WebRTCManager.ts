@@ -111,6 +111,9 @@ export default class WebRTCManager extends Emitter {
       this.iridium.connector?.subscribe(
         `peer:destroy/${this.iridium.connector?.peerId}`,
       ),
+      this.iridium.connector?.subscribe(
+        `peer:typing/${this.iridium.connector?.peerId}`,
+      ),
     ])
   }
 
@@ -321,7 +324,7 @@ export default class WebRTCManager extends Emitter {
         break
       case 'peer:typing':
         console.log('peer:typing', payload)
-        await this.onPeerTyping(payload)
+        // await this.onPeerTyping(payload)
         break
       case 'peer:announce':
         console.log('peer:announce', payload)
@@ -952,5 +955,58 @@ export default class WebRTCManager extends Emitter {
     }
     await call.mute({ peerId, kind })
     $Sounds.playSound(Sounds.MUTE)
+  }
+
+  public sendTyping(recipient: Friend) {
+    if (!this.iridium.connector?.peerId) {
+      logger.error('webrtc', 'sendTyping - connector.peerId not found')
+      return
+    }
+
+    if (!recipient) {
+      logger.error('webrtc', 'sendTyping - recipent not found')
+      return
+    }
+
+    const id = iridium.chat?.directConversationIdFromDid(recipient.did)
+
+    if (!id || !this.iridium.chat?.hasConversation(id)) {
+      return
+    }
+
+    const conversation = this.iridium.chat?.getConversation(id)
+
+    if (!conversation) {
+      return
+    }
+
+    const { id: conversationId, participants } = conversation
+
+    if (!conversationId) {
+      logger.log(
+        'webrtc',
+        `sendTyping - conversation not initialized or id not found`,
+      )
+      return
+    }
+    if (participants.length === 0) {
+      logger.log('webrtc', `sendTyping - conversation has no participants`)
+    }
+
+    participants
+      .filter((p) => p.peerId && p.peerId !== iridium.connector?.peerId)
+      .forEach((p) => {
+        iridium.connector?.send(
+          {
+            module: 'webrtc',
+            type: `peer:typing/${p.peerId}`,
+            payload: {
+              peerId: p.peerId,
+            },
+            at: Date.now().valueOf(),
+          },
+          { to: [p.peerId!] },
+        )
+      })
   }
 }
