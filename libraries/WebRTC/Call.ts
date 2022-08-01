@@ -894,10 +894,6 @@ export class Call extends Emitter<CallEventListeners> {
         `peer:unmute/${iridium.connector?.peerId}`,
         this._onBusUnmute.bind(this),
       ),
-      iridium.connector?.on(
-        `peer:destroy/${iridium.connector?.peerId}`,
-        this._onBusDestroy.bind(this),
-      ),
     ])
   }
 
@@ -932,10 +928,6 @@ export class Call extends Emitter<CallEventListeners> {
       iridium.connector?.off(
         `peer:unmute/${iridium.connector?.peerId}`,
         this._onBusUnmute,
-      ),
-      iridium.connector?.off(
-        `peer:destroy/${iridium.connector?.peerId}`,
-        this._onBusDestroy,
       ),
     ])
   }
@@ -1298,13 +1290,5 @@ export class Call extends Emitter<CallEventListeners> {
       if (!track) return
       track.enabled = true
     })
-  }
-
-  /**
-   * @method _onBusMute
-   * @description Callback for the on destroy event
-   */
-  protected _onBusDestroy({ peerId }: { peerId: PeerId }) {
-    this.destroyPeer(peerId.toB58String())
   }
 }

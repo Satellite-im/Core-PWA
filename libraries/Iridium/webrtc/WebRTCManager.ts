@@ -108,9 +108,6 @@ export default class WebRTCManager extends Emitter {
       this.iridium.connector?.subscribe(
         `peer:unmute/${this.iridium.connector?.peerId}`,
       ),
-      this.iridium.connector?.subscribe(
-        `peer:destroy/${this.iridium.connector?.peerId}`,
-      ),
     ])
   }
 
