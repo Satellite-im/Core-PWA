@@ -3463,13 +3463,6 @@ describe('mutations', () => {
     })
   })
 
-  test('setSwiperSlideIndex', () => {
-    const localizedState = { ...initialState }
-    const argument = 10
-    mutations.default.setSwiperSlideIndex(localizedState, argument)
-    expect(localizedState.swiperSlideIndex).toBe(argument)
-  })
-
   test.skip('setFileSort', () => {
     const localizedState = { ...initialState }
     const argument = {
@@ -3627,7 +3620,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.sendNotification(localizedState, {
       _id: '01g2ya7w44h4c5mm4bgyedkrvy',
@@ -3772,7 +3764,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.setNotifications(localizedState, [
       // Sorted in the same order
@@ -3948,7 +3939,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.clearAllNotifications(localizedState)
     expect(localizedState.notifications).toEqual([
@@ -4101,7 +4091,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.updateGroupNotifications(localizedState)
     expect(localizedState.notifications).toEqual([
@@ -4247,7 +4236,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.removeNotification(
       localizedState,
@@ -4392,7 +4380,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
   })
 })

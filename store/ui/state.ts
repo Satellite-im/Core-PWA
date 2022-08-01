@@ -2,7 +2,6 @@ import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
-  showSidebarUsers: true,
   showSidebar: true,
   notifications: [],
   showSearchResult: false,
@@ -62,7 +61,7 @@ const InitialUIState = (): UIState => ({
   mostEmojiUsed: [],
   recentGlyphs: [],
   chatImageOverlay: undefined,
-  swiperSlideIndex: 0,
+  isMobileNavVisible: true,
 })
 
 export default InitialUIState

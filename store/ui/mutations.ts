@@ -357,16 +357,10 @@ export default {
   removeNotification(state: UIState, id: string) {
     state.notifications = state.notifications.filter((item) => item.id !== id)
   },
-  updateTheme(state: UIState, theme: Theme) {
-    state.theme.base = theme
-  },
-  updateFlair(state: UIState, flair: Flair) {
-    state.theme.flair = flair
-  },
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
   },
-  setSwiperSlideIndex(state: UIState, index: number) {
-    state.swiperSlideIndex = index
+  setIsMobileNavVisible(state: UIState, value: boolean) {
+    state.isMobileNavVisible = value
   },
 }

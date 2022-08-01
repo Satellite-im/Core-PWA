@@ -2,12 +2,12 @@
   <div ref="swiper" class="chat">
     <div class="swiper-wrapper">
       <div
-        class="swiper-slide"
+        class="swiper-slide list-slide"
         :class="{ 'disable-swipe': !Boolean($route.params.id) }"
       >
         <SidebarList />
       </div>
-      <div class="swiper-slide">
+      <div class="swiper-slide chat-slide">
         <Toolbar />
         <!-- <Media
           v-if="$device.isMobile"
@@ -24,9 +24,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import 'swiper/css'
 import { Swiper, SwiperOptions } from 'swiper'
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'MobileChat',
@@ -35,9 +36,9 @@ export default Vue.extend({
     swiper: undefined as Swiper | undefined,
   }),
   computed: {
-    conversationId(): Conversation['id'] {
-      return this.$route.params.id
-    },
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     swiperConfig(): SwiperOptions {
       return {
         noSwipingClass: 'disable-swipe',
@@ -50,14 +51,24 @@ export default Vue.extend({
             if (activeIndex === 0) {
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
+              this.isMobileNavVisible = true
             }
             if (activeIndex === 1) {
               this.swiper.allowSlidePrev = true
               this.swiper.allowSlideNext = false
+              this.isMobileNavVisible = false
             }
           },
         },
       }
+    },
+    isMobileNavVisible: {
+      get(): boolean {
+        return this.ui.isMobileNavVisible
+      },
+      set(value: boolean) {
+        this.$store.commit('ui/setIsMobileNavVisible', value)
+      },
     },
   },
   // component is remounted anytime the route param changes
@@ -75,8 +86,20 @@ export default Vue.extend({
 
 <style lang="less" scoped>
 .chat {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
   .swiper-slide {
     padding: @normal-spacing;
+    overflow-y: scroll;
+    &.chat-slide {
+      display: flex;
+      flex-direction: column;
+      #chatbar {
+        position: sticky;
+        bottom: 0;
+      }
+    }
   }
 }
 </style>

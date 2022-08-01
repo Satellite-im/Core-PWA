@@ -8,9 +8,6 @@ const getters = {
   getSortedRecentGlyphs: (state: UIState) => {
     return [...state.recentGlyphs].sort((a, b) => b.count - a.count)
   },
-  showSidebar: (state: UIState) => {
-    return state.showSidebar
-  },
   allUnseenNotifications: (state: UIState): Alert[] => {
     return [...state.notifications]
       .sort((a, b) => {
@@ -19,9 +16,6 @@ const getters = {
       .filter((noti) => {
         return noti.state === AlertState.UNREAD
       })
-  },
-  swiperSlideIndex: (state: UIState) => {
-    return state.swiperSlideIndex
   },
 }
 

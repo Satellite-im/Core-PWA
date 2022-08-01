@@ -1,5 +1,9 @@
-<nav class="nav">
-  <button data-cy="mobile-nav-home" @click="$router.push('/mobile/chat')">
+<nav class="nav" :class="{hide: !isMobileNavVisible}">
+  <button
+    :class="{active: isActiveRoute('chat')}"
+    @click="$router.push('/mobile/chat')"
+    data-cy="mobile-nav-home"
+  >
     <home-icon size="1.5x" />
   </button>
   <button
@@ -9,8 +13,8 @@
   >
     <folder-icon size="1.5x" />
   </button>
-  <button data-cy="mobile-nav-marketplace">
-    <shopping-bag-icon size="1.5x" @click="toggleModal" />
+  <button @click="toggleModal" data-cy="mobile-nav-marketplace">
+    <shopping-bag-icon size="1.5x" />
   </button>
   <button
     :class="{active: isActiveRoute('friends')}"

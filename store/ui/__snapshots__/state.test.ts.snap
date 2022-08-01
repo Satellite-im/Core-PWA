@@ -36,6 +36,7 @@ Object {
   },
   "glyphModalPack": "",
   "hoveredGlyphInfo": undefined,
+  "isMobileNavVisible": true,
   "isReacted": false,
   "isScrollOver": false,
   "isTyping": false,
@@ -86,8 +87,6 @@ Object {
   "showSearchResult": false,
   "showSettings": false,
   "showSidebar": true,
-  "showSidebarUsers": true,
-  "swiperSlideIndex": 0,
   "unreadMessage": 0,
   "userProfile": Object {},
 }

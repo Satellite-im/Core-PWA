@@ -56,7 +56,7 @@ export default Vue.extend({
       webrtc: (state) => (state as RootState).webrtc,
       modals: (state) => (state as RootState).ui.modals,
     }),
-    ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
+    ...mapGetters('ui', ['allUnseenNotifications']),
     ModalWindows: () => ModalWindows,
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id

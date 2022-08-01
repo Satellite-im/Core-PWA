@@ -5,7 +5,8 @@
   height: @mobile-nav-height;
   position: fixed;
   bottom: 0;
-  transition: transform @animation-speed ease;
+  transition: height @animation-speed-long ease;
+  z-index: 1;
   background: linear-gradient(
       163.91deg,
       rgba(48, 52, 71, 0.5) 0%,
@@ -22,6 +23,11 @@
       rgba(34, 44, 63, 0) 99.95%
     ),
     @darker;
+
+  &.hide {
+    height: 0;
+    overflow: hidden;
+  }
 
   button {
     height: 100%;
