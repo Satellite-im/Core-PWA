@@ -133,10 +133,6 @@ export default Vue.extend({
     .mobile-list {
       padding: @normal-spacing;
     }
-    #chatbar {
-      position: sticky;
-      bottom: 0;
-    }
   }
 }
 </style>
