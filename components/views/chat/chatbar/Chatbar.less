@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   transition: height @animation-speed;
-  margin-top: @normal-spacing;
+
+  @media only screen and (max-width: @mobile-breakpoint) {
+    margin: 0 @normal-spacing @normal-spacing;
+  }
 
   .chatbar-wrap {
     display: flex;

@@ -5,7 +5,7 @@
         class="swiper-slide list-slide"
         :class="{ 'disable-swipe': !Boolean($route.params.id) }"
       >
-        <SidebarList />
+        <SidebarList class="mobile-list" />
       </div>
       <div class="swiper-slide chat-slide">
         <Toolbar />
@@ -89,16 +89,20 @@ export default Vue.extend({
   display: flex;
   flex: 1;
   overflow: hidden;
-  .swiper-slide {
-    padding: @normal-spacing;
+
+  .list-slide {
     overflow-y: scroll;
-    &.chat-slide {
-      display: flex;
-      flex-direction: column;
-      #chatbar {
-        position: sticky;
-        bottom: 0;
-      }
+
+    .mobile-list {
+      padding: @normal-spacing;
+    }
+  }
+  .chat-slide {
+    display: flex;
+    flex-direction: column;
+    #chatbar {
+      position: sticky;
+      bottom: 0;
     }
   }
 }

@@ -16,4 +16,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Chat.less"></style>
+<style lang="less" src="./Chat.less" scoped></style>
