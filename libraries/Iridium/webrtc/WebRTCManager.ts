@@ -11,6 +11,7 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ConversationActivity } from '~/libraries/Iridium/chat/types'
 import logger from '~/plugins/local/logger'
+import { Config } from '~/config'
 
 const $Sounds = new SoundManager()
 
@@ -27,6 +28,7 @@ export default class WebRTCManager extends Emitter {
   public readonly iridium: IridiumManager
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
+  private timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
 
   constructor(iridium: IridiumManager) {
     super()
@@ -398,21 +400,25 @@ export default class WebRTCManager extends Emitter {
           }),
         })
       }
-    }
 
-    // clearTimeout(timeoutMap[peerId])
-    // delete timeoutMap[peerId]
-    //
-    // timeoutMap[peerId] = setTimeout(() => {
-    //   commit(
-    //     'conversation/updateParticipant',
-    //     {
-    //       peerId: peerId.toB58String(),
-    //       activity: ConversationActivity.NOT_TYPING,
-    //     },
-    //     { root: true },
-    //   )
-    // }, Config.chat.typingInputThrottle * 3)
+      clearTimeout(this.timeoutMap[peerId])
+      delete this.timeoutMap[peerId]
+
+      this.timeoutMap[peerId] = setTimeout(() => {
+        this.iridium.chat.updateConversation({
+          ...conversation,
+          participants: conversation.participants.map((participant) => {
+            if (participant.peerId === peerId) {
+              return {
+                ...participant,
+                activity: ConversationActivity.NOT_TYPING,
+              }
+            }
+            return participant
+          }),
+        })
+      }, Config.chat.typingInputThrottle * 3)
+    }
   }
 
   private onPeerAnnounce = ({
@@ -949,5 +955,23 @@ export default class WebRTCManager extends Emitter {
     }
     await call.mute({ peerId, kind })
     $Sounds.playSound(Sounds.MUTE)
+  }
+
+  /**
+   * @method sendTyping
+   * @description - send the TYPING event to the other conversation participants
+   */
+  public sendTyping = async ({ peerId }: { peerId: string }) => {
+    await this.iridium.connector?.send(
+      {
+        module: 'webrtc',
+        type: 'peer:typing',
+        payload: {
+          peerId,
+        },
+        at: Date.now().valueOf(),
+      },
+      { to: [peerId] },
+    )
   }
 }
