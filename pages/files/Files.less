@@ -2,15 +2,15 @@
   flex-grow: 1;
   display: grid;
   grid-template-columns: auto 288px;
-  grid-template-rows: min-content min-content max-content;
+  grid-template-rows: min-content min-content 1fr;
   gap: @normal-spacing;
   grid-auto-flow: row;
   grid-template-areas:
     'controls files-aside-container'
     'files-path files-aside-container'
     'files-view files-aside-container';
-  margin: @normal-spacing @normal-spacing 0;
   overflow-y: scroll;
+  padding: @normal-spacing;
 
   .files-path {
     grid-area: files-path;
@@ -27,6 +27,7 @@
 
   .files-view {
     grid-area: files-view;
+    min-width: 0; // needed so overflow works properly
   }
 
   .files-aside-container {

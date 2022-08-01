@@ -2,11 +2,15 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   justify-content: space-between;
 
   .separator {
     margin: @normal-spacing 3rem;
+  }
+
+  .messages {
+    margin: 0 @normal-spacing;
   }
 
   &-infiniteScroll.is-reversed {
@@ -39,23 +43,4 @@
       margin-right: @light-spacing;
     }
   }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .conversation {
-    padding-left: 0;
-    padding-right: 0;
-    overflow-x: hidden;
-    &:extend(.light-padding);
-    &-loader {
-      min-width: 90vw;
-      margin: 16px 16px 0 16px;
-      overflow-x: hidden;
-      width: 90%;
-    }
-  }
-}
-
-.loading-bar {
-  margin-top: -10px !important;
 }

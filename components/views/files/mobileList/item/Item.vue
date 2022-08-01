@@ -32,16 +32,10 @@ export default Vue.extend({
       type: Object as PropType<IridiumItem>,
       required: true,
     },
-    gridLayout: {
-      type: Boolean,
-      required: true,
-    },
   },
   data() {
     return {
       thumbnail: '',
-      linkHover: false as boolean,
-      heartHover: false as boolean,
     }
   },
   computed: {

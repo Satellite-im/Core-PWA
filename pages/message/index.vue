@@ -47,7 +47,6 @@ export default Vue.extend({
       // if only 1 friend, direct to DM instead
       if (this.friends.length === 1) {
         const friend = this.friends[0]
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
         this.$store.dispatch('conversation/setConversation', {
           id: friend.address,
@@ -81,7 +80,6 @@ export default Vue.extend({
             }),
           ),
         )
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
         this.$store.dispatch('conversation/setConversation', {
           id: groupId,

@@ -1,11 +1,8 @@
 import { TranslateResult } from 'vue-i18n'
 import { FileMessage } from '~/types/textile/mailbox'
-import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 import { Alert } from '~/libraries/ui/Alerts'
-import { Fil } from '~/libraries/Files/Fil'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -117,12 +114,8 @@ export interface UIState {
   }
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
-  theme: {
-    base: Theme
-    flair: Flair
-  }
   chatImageOverlay?: FileMessage
-  swiperSlideIndex: number
+  isMobileNavVisible: boolean
 }
 
 export type Position = {

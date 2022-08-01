@@ -5,7 +5,7 @@
   :class="{'file-list': !gridLayout}"
 >
   <!-- add container so blur effect doesn't go outside the dimensions of the image -->
-  <div v-if="thumbnail" class="image-container">
+  <div v-if="thumbnail && gridLayout" class="image-container">
     <img
       class="image-preview"
       :class="{'blur-image' : item.nsfw && blockNsfw}"
@@ -13,7 +13,7 @@
       draggable="false"
     />
   </div>
-  <div v-else class="icon-container">
+  <div v-else-if="gridLayout" class="icon-container">
     <folder-icon v-if="item.children" size="4x" class="file-type-icon" />
     <archive-icon v-else-if="isArchive" size="4x" class="file-type-icon" />
     <image-icon v-else-if="isImage" size="4x" class="file-type-icon" />
@@ -59,20 +59,9 @@
         />
       </div>
     </div>
-    <div class="quick-actions">
-      <link-icon
-        size="1x"
-        class="link"
-        @mouseover="linkHover=true"
-        @mouseleave="linkHover=false"
-      />
-      <heart-icon
-        size="1x"
-        class="like"
-        :class="{liked : item.liked}"
-        @mouseover="heartHover=true"
-        @mouseleave="heartHover=false"
-      />
-    </div>
+  </div>
+  <div class="icons" v-if="item.liked || item.shared">
+    <heart-icon v-if="item.liked" size="1x" class="like" />
+    <link-icon v-if="item.shared" size="1x" class="link" />
   </div>
 </UiContextMenu>

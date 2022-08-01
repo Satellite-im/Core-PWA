@@ -1,6 +1,9 @@
 <div>
   <div class="search-container">
-    <InteractablesSidebarToggle v-if="!showSidebar" class="sidebar-toggle" />
+    <InteractablesSidebarToggle
+      v-if="!showSidebar && !$device.isMobile"
+      class="sidebar-toggle"
+    />
     <UiComingSoon
       :tooltipText="this.$t('ui.coming_soon')"
       :tooltipPosition="'top'"

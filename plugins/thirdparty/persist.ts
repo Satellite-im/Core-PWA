@@ -37,6 +37,7 @@ const commonProperties = [
   'groups.groupSubscriptions',
   'ui.modals',
   'ui.isScrollOver',
+  'ui.isMobileNavVisible',
   'textile.userThread',
   'conversation.participants',
   'files',

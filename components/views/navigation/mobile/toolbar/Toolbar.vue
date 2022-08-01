@@ -4,19 +4,14 @@
 import Vue from 'vue'
 import {
   PhoneCallIcon,
-  ArchiveIcon,
-  ShoppingBagIcon,
-  BellIcon,
-  WalletIcon,
   UserPlusIcon,
+  MenuIcon,
+  VideoIcon,
 } from 'satellite-lucide-icons'
 
 import { mapState, mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import Group from '~/libraries/Iridium/groups/Group'
-import { searchRecommend } from '~/mock/search'
-import { SearchQueryItem } from '~/types/search/search'
-import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
@@ -27,22 +22,11 @@ export default Vue.extend({
   components: {
     PhoneCallIcon,
     UserPlusIcon,
-    ArchiveIcon,
-    ShoppingBagIcon,
-    WalletIcon,
-    BellIcon,
-  },
-  props: {
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
+    MenuIcon,
+    VideoIcon,
   },
   data() {
     return {
-      searchRecommend,
-      showAlerts: false,
-      searchQuery: '' as string,
       friends: iridium.friends.list,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
@@ -50,14 +34,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
-      audio: (state) => (state as RootState).audio,
-      video: (state) => (state as RootState).video,
       webrtc: (state) => (state as RootState).webrtc,
-      modals: (state) => (state as RootState).ui.modals,
     }),
     ...mapGetters('ui', ['allUnseenNotifications']),
-    ModalWindows: () => ModalWindows,
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
     },
@@ -86,15 +65,6 @@ export default Vue.extend({
       const members = (this.details as Group).members ?? []
       return Object.values(members)
     },
-    subtitleText(): string {
-      if (!this.details) {
-        return ''
-      }
-      if (this.isGroup) {
-        return this.groupMembers.map((m) => m.name).join(', ')
-      }
-      return (this.details as User).status || 'offline'
-    },
     enableRTC(): boolean {
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
@@ -109,68 +79,8 @@ export default Vue.extend({
       )
       return friend?.status === 'online'
     },
-    callTooltipText(): string {
-      if (this.isGroup) {
-        return this.$t('coming_soon.group_call') as string
-      }
-      return this.enableRTC
-        ? (this.$t('controls.call') as string)
-        : (this.$t('controls.not_connected') as string)
-    },
   },
   methods: {
-    groupInvite() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: true, group: this.details as Group },
-      })
-    },
-    toggleAlerts() {
-      this.$store.commit('ui/clearAllNotifications')
-      this.showAlerts = !this.showAlerts
-    },
-    /**
-     * @method handleChange DocsTODO
-     * @description
-     * @param value
-     * @param item
-     * @example
-     */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    handleChange(value: string, item: SearchQueryItem) {
-      this.searchQuery = ''
-    },
-    /**
-     * @method handleSearch DocsTODO
-     * @description
-     * @param value
-     * @param item
-     * @example
-     */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    handleSearch(value: string, items: SearchQueryItem[]) {
-      this.searchQuery = value
-    },
-    /**
-     * @method toggleSearchResult DocsTODO
-     * @description
-     * @example
-     */
-    toggleSearchResult() {
-      this.searchQuery = ''
-    },
-    /**
-     * @method toggleModal
-     * @param modalName - enum for which modal
-     * @description This updates the state to show/hide the specific modal you pass in
-     * @example toggleModal(ModalWindows.WALLET)
-     */
-    toggleModal() {
-      this.isGroupInviteVisible = !this.isGroupInviteVisible
-    },
-    // openProfile() {
-    //   this.$store.dispatch('ui/showProfile', this.recipient)
-    // },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC) {
         return

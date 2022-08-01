@@ -2,25 +2,11 @@
   display: flex;
   align-items: center;
   flex-direction: row;
+  gap: @normal-spacing;
   border-radius: @corner-rounding-smaller;
-  &:extend(.background-semitransparent-light);
-  width: @full;
   overflow: hidden;
-
-  .quick-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column-reverse;
-    gap: @normal-spacing;
-    &:extend(.first-layer);
-  }
-
-  &.disabled {
-    .quick-actions {
-      display: none;
-    }
-  }
+  padding-right: @normal-spacing;
+  &:extend(.background-semitransparent-light);
 
   .icon-container {
     display: flex;
@@ -40,6 +26,7 @@
     flex-shrink: 0;
     height: 80px;
     width: 80px;
+    overflow: hidden;
 
     .image-preview {
       display: block;
@@ -51,33 +38,30 @@
 
   .body {
     display: flex;
-    width: @full;
     justify-content: space-between;
-    padding: 0 @normal-spacing;
     overflow: hidden;
-    min-width: 0;
+    gap: @normal-spacing;
+    flex-grow: 1;
 
     .text-container {
-      width: 100%;
-      overflow: hidden;
-      margin-right: @normal-spacing;
+      min-width: 0;
 
       .maintext-container {
+        &:extend(.ellipsis);
         .maintext {
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
+          &:extend(.ellipsis);
         }
 
         .file-type-icon {
           display: none;
         }
       }
+    }
 
+    .subtext {
+      &:extend(.ellipsis);
       .subtext-primary {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+        &:extend(.ellipsis);
         &:extend(.font-muted);
       }
 
@@ -87,25 +71,29 @@
       }
     }
   }
+  .icons {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: @normal-spacing;
+    .like {
+      color: @pink;
+    }
+  }
 
   &-list {
     padding: 0.75rem 0;
     border-bottom: 1px solid @foreground;
     background: none;
-
-    .image-container {
-      display: none;
-    }
-
-    .icon-container {
-      display: none;
-    }
+    padding-right: unset;
 
     .body {
       padding: 0 @xlight-spacing;
 
       .text-container {
         display: flex;
+        flex: 1;
         flex-direction: column;
         margin-right: 0;
         gap: 2px;
@@ -128,10 +116,6 @@
           margin-left: @large-spacing;
         }
       }
-    }
-
-    .quick-actions {
-      display: none;
     }
   }
 }

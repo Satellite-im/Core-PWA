@@ -7,8 +7,7 @@ import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'Chat',
-  layout: 'basic',
-
+  layout: 'desktop',
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
@@ -17,4 +16,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Chat.less"></style>
+<style lang="less" src="./Chat.less" scoped></style>

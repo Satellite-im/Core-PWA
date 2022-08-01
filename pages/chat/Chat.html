@@ -1,14 +1,6 @@
-<div class="chat-container">
+<div class="chat">
   <Toolbar />
   <Media
-    v-if="$device.isMobile"
-    :fullscreen="ui.fullscreen"
-    :users="$mock.callUsers"
-    :max-viewable-users="10"
-    :fullscreen-max-viewable-users="6"
-  />
-  <Media
-    v-else
     :fullscreen="ui.fullscreen"
     :users="$mock.callUsers"
     :max-viewable-users="10"
