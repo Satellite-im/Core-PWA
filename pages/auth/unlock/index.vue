@@ -8,6 +8,8 @@ import { ConsoleWarning } from '~/utilities/ConsoleWarning'
 import { RootState } from '~/types/store/store'
 import { AccountsError } from '~/store/accounts/types'
 
+const DEV_PIN = '11111'
+
 export default Vue.extend({
   name: 'UnlockScreen',
   components: {
@@ -97,9 +99,12 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async decrypt(redirect = true, pin = undefined) {
+    async decrypt(redirect = true) {
       try {
-        await this.$store.dispatch('accounts/unlock', pin ?? this.pin)
+        await this.$store.dispatch(
+          'accounts/unlock',
+          this.pin || (this.isDev ? DEV_PIN : ''),
+        )
 
         if (this.accounts.phrase === '') {
           // manually clear local storage and indexeddb if it exists
@@ -144,12 +149,11 @@ export default Vue.extend({
     },
     // FOR DEVELOPMENT PURPOSES ONLY
     async createRandom() {
-      const pin = '11111'
       try {
         this.status = 'loading'
         await this.deleteAccount()
-        await this.$store.dispatch('accounts/setPin', pin)
-        await this.decrypt(false, pin)
+        await this.$store.dispatch('accounts/setPin', DEV_PIN)
+        await this.decrypt(false)
         await this.$store.dispatch('accounts/generateWallet')
         try {
           await this.$store.dispatch('accounts/loadAccount')
