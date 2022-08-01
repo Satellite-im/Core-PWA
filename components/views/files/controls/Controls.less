@@ -1,5 +1,11 @@
 .search-container {
   display: flex;
+  align-items: center;
+
+  .sidebar-toggle {
+    margin-right: 0.75rem;
+  }
+
   .search {
     flex-grow: 1;
   }
@@ -45,12 +51,6 @@
       cursor: pointer;
     }
   }
-}
-
-.switcher-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 @media only screen and (max-width: @mobile-small-breakpoint) {

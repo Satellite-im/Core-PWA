@@ -6,8 +6,8 @@
   gap: @normal-spacing;
   grid-auto-flow: row;
   grid-template-areas:
-    'files-top files-top'
     'controls files-aside-container'
+    'files-top files-aside-container'
     'files-view files-aside-container';
   margin: @normal-spacing @normal-spacing 0;
   overflow-y: scroll;
@@ -16,6 +16,7 @@
     grid-area: files-top;
     display: flex;
     gap: @light-spacing;
+    margin-top: @normal-spacing;
   }
 
   .controls {
@@ -28,6 +29,7 @@
   .files-view {
     min-width: 0;
     grid-area: files-view;
+    flex-grow: 1;
   }
 
   .files-aside-container {
@@ -39,13 +41,12 @@
 
   @media only screen and (max-width: @small-breakpoint) {
     grid-template-columns: auto;
-    grid-template-rows: auto auto auto auto;
-    gap: @normal-spacing;
+    grid-template-rows: auto auto auto 1fr;
+    gap: @large-spacing;
     grid-template-areas:
-      'files-container'
+      'controls'
       'files-aside-container'
       'files-top'
-      'controls'
       'files-view';
 
     .files-aside-container {

@@ -1,5 +1,6 @@
 <div>
   <div class="search-container">
+    <InteractablesSidebarToggle v-if="!showSidebar" class="sidebar-toggle" />
     <UiComingSoon
       :tooltipText="this.$t('ui.coming_soon')"
       :tooltipPosition="'top'"
@@ -57,9 +58,5 @@
       <TypographyError v-for="error in errors" :key="error" :text="error" />
     </div>
     <x-icon size="1.3x" class="close" @click="errors=[]" />
-  </div>
-  <div class="switcher-container">
-    <TypographyText :size="6" :text="$t('pages.files.browse.files')" />
-    <FilesControlsSwitch />
   </div>
 </div>

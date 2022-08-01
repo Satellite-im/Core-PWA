@@ -32,6 +32,7 @@ const Controls = Vue.extend({
       currentUpload: (state) => (state as RootState).files.currentUpload,
       path: (state) => (state as RootState).files.path,
       status: (state) => (state as RootState).files.status,
+      showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan
