@@ -4,7 +4,7 @@
     :key="c.id"
     :conversation="c"
   />
-  <div v-if="!Object.keys(conversations).length" class="mascot-container">
+  <div v-if="!sortedConversations.length" class="mascot-container">
     <div class="mascot-text">
       <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
       <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />

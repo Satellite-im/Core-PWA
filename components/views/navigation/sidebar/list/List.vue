@@ -16,11 +16,9 @@ export default Vue.extend({
   }),
   computed: {
     sortedConversations(): Conversation[] {
-      const conversations = Object.values(this.conversations)
-      conversations.sort(
+      return Object.values(this.conversations).sort(
         (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
       )
-      return conversations
     },
   },
   methods: {
@@ -35,11 +33,7 @@ export default Vue.extend({
     },
     lastMessageTimestamp(conversation: Conversation): number {
       const messages = this.messages[conversation.id]
-      if (messages.length === 0) {
-        return conversation.updatedAt || 0
-      }
-      const lastMessage = messages[messages.length - 1]
-      return lastMessage.at || 0
+      return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
     },
   },
 })
