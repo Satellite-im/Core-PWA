@@ -2,13 +2,27 @@
   <div ref="swiper" class="chat">
     <div class="swiper-wrapper">
       <div
-        class="swiper-slide list-slide"
+        class="swiper-slide"
         :class="{ 'disable-swipe': !Boolean($route.params.id) }"
       >
+        <div class="search-container">
+          <InteractablesInput
+            class="search"
+            :placeholder="`${$t('ui.search')}...`"
+            :delete-icon="true"
+            size="small"
+            input-kind="text"
+            type="dark"
+            disabled
+          />
+          <button v-if="$route.params.id" @click="swiper.slideNext()">
+            <menu-icon class="toggle-sidebar" size="1.5x" />
+          </button>
+        </div>
         <SidebarList class="mobile-list" />
       </div>
-      <div class="swiper-slide chat-slide">
-        <Toolbar />
+      <div class="swiper-slide">
+        <MobileToolbar @slidePrev="swiper.slidePrev()" />
         <!-- <Media
           v-if="$device.isMobile"
           :users="$mock.callUsers"
@@ -25,12 +39,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import 'swiper/css'
+import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
+import 'swiper/css'
 
 export default Vue.extend({
   name: 'MobileChat',
+  components: {
+    MenuIcon,
+  },
   layout: 'mobile',
   data: () => ({
     swiper: undefined as Swiper | undefined,
@@ -43,6 +61,10 @@ export default Vue.extend({
       return {
         noSwipingClass: 'disable-swipe',
         allowSlidePrev: false,
+        navigation: {
+          nextEl: '.swiper-next',
+          prevEl: '.swiper-prev',
+        },
         on: {
           activeIndexChange: ({ activeIndex }) => {
             if (!this.swiper) {
@@ -71,6 +93,7 @@ export default Vue.extend({
       },
     },
   },
+
   // component is remounted anytime the route param changes
   mounted() {
     this.swiper = new Swiper(
@@ -90,16 +113,26 @@ export default Vue.extend({
   flex: 1;
   overflow: hidden;
 
-  .list-slide {
-    overflow-y: scroll;
+  .swiper-slide {
+    display: flex;
+    flex-direction: column;
 
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: @normal-spacing;
+      padding: @normal-spacing @normal-spacing 0;
+
+      .search {
+        flex: 1;
+      }
+      button {
+        height: fit-content;
+      }
+    }
     .mobile-list {
       padding: @normal-spacing;
     }
-  }
-  .chat-slide {
-    display: flex;
-    flex-direction: column;
     #chatbar {
       position: sticky;
       bottom: 0;
