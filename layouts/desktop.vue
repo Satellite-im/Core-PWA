@@ -12,9 +12,9 @@
     <Slimbar :servers="$mock.servers" />
     <Sidebar />
     <UiDroppableWrapper v-if="displayDroppable" @handle-drop-prop="handleDrop">
-      <Nuxt ref="page" class="page" />
+      <Nuxt ref="page" />
     </UiDroppableWrapper>
-    <Nuxt v-else class="page" />
+    <Nuxt v-else />
     <UiGlobal />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
@@ -102,10 +102,6 @@ export default Vue.extend({
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);
-  }
-
-  .page {
-    padding: @normal-spacing @normal-spacing 0;
   }
 }
 </style>
