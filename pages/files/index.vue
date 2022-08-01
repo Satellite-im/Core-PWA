@@ -23,7 +23,6 @@ export default Vue.extend({
       path: (state) => (state as RootState).files.path,
       gridLayout: (state) => (state as RootState).files.gridLayout,
       modals: (state) => (state as RootState).ui.modals,
-      showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
     ...mapGetters({
       sortedItems: 'files/sortedItems',

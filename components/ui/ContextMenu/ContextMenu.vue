@@ -118,8 +118,8 @@ export default Vue.extend({
     }
 
     .action-button {
-      width: 100%;
       height: 48px;
+      align-items: center;
 
       &:not(:last-child) {
         border-bottom: 0.5px solid @foreground;
