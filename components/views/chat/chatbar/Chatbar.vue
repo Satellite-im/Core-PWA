@@ -181,9 +181,6 @@ const Chatbar = Vue.extend({
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
     throttleTyping: throttle(function (ctx) {
-      // ctx.$store.dispatch('webrtc/sendTyping')
-      // this.webrtc.sendTyping({ peerId })
-      console.log('sendTyping', this.recipient.peerId)
       this.webrtc.sendTyping({ peerId: this.recipient.peerId })
     }, Config.chat.typingInputThrottle),
     /**

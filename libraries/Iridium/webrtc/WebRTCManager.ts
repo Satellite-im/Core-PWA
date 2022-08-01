@@ -125,6 +125,30 @@ export default class WebRTCManager extends Emitter {
           did = Iridium.peerIdToDID(peerId)
         } catch (error) {}
 
+        const id = this.iridium.chat?.directConversationIdFromDid(did)
+
+        if (id && this.iridium.chat?.hasConversation(id)) {
+          const conversation = this.iridium.chat?.getConversation(id)
+          const connectedParticipant = conversation.participants.find(
+            (participant) => participant.peerId === peerId,
+          )
+          if (connectedParticipant) {
+            logger.log(loggerPrefix, `connected participant: ${peerId}`)
+            this.iridium.chat.updateConversation({
+              ...conversation,
+              participants: conversation.participants.map((participant) => {
+                if (participant.peerId === connectedParticipant.peerId) {
+                  return {
+                    ...participant,
+                    status: 'online',
+                  }
+                }
+                return participant
+              }),
+            })
+          }
+        }
+
         const connectedFriend = this.iridium.friends.getFriend(did)
 
         if (!connectedFriend) return
@@ -163,7 +187,7 @@ export default class WebRTCManager extends Emitter {
                 if (participant.peerId === connectedParticipant.peerId) {
                   return {
                     ...participant,
-                    state: 'CONNECTED',
+                    status: 'online',
                   }
                 }
                 return participant
@@ -210,7 +234,7 @@ export default class WebRTCManager extends Emitter {
                 if (participant.peerId === disconnectedParticipant.peerId) {
                   return {
                     ...participant,
-                    state: 'DISCONNECTED',
+                    status: 'offline',
                   }
                 }
                 return participant
@@ -967,7 +991,7 @@ export default class WebRTCManager extends Emitter {
         module: 'webrtc',
         type: 'peer:typing',
         payload: {
-          peerId,
+          peerId: this.iridium.connector.peerId,
         },
         at: Date.now().valueOf(),
       },

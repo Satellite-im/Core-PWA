@@ -278,9 +278,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   public getOtherParticipants = (conversationId: string): Friend[] => {
     const conversation = this.getConversation(conversationId)
 
-    return conversation.participants.filter(
-      (participant) => participant.name !== null,
-    )
+    return conversation.participants.filter((participant) => {
+      return participant.peerId !== this.iridium.connector?.peerId
+    })
   }
 
   /**
