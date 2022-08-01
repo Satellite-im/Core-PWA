@@ -2,21 +2,20 @@
   flex-grow: 1;
   display: grid;
   grid-template-columns: auto 288px;
-  grid-template-rows: min-content min-content auto;
+  grid-template-rows: min-content min-content max-content;
   gap: @normal-spacing;
   grid-auto-flow: row;
   grid-template-areas:
     'controls files-aside-container'
-    'files-top files-aside-container'
+    'files-path files-aside-container'
     'files-view files-aside-container';
   margin: @normal-spacing @normal-spacing 0;
   overflow-y: scroll;
 
-  .files-top {
-    grid-area: files-top;
+  .files-path {
+    grid-area: files-path;
     display: flex;
     gap: @light-spacing;
-    margin-top: @normal-spacing;
   }
 
   .controls {
@@ -27,13 +26,10 @@
   }
 
   .files-view {
-    min-width: 0;
     grid-area: files-view;
-    flex-grow: 1;
   }
 
   .files-aside-container {
-    height: fit-content;
     position: sticky;
     top: 0;
     grid-area: files-aside-container;
@@ -46,7 +42,7 @@
     grid-template-areas:
       'controls'
       'files-aside-container'
-      'files-top'
+      'files-path'
       'files-view';
 
     .files-aside-container {
