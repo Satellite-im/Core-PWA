@@ -1,5 +1,9 @@
 <div class="list hover-scroll">
-  <SidebarListItem v-for="c in conversations" :key="c.id" :conversation="c" />
+  <SidebarListItem
+    v-for="c in sortedConversations"
+    :key="c.id"
+    :conversation="c"
+  />
   <div v-if="!Object.keys(conversations).length" class="mascot-container">
     <div class="mascot-text">
       <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
