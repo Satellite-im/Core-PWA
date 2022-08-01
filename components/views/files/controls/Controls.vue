@@ -9,7 +9,6 @@ import {
   AlertTriangleIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ItemErrors } from '~/libraries/Iridium/files/types'

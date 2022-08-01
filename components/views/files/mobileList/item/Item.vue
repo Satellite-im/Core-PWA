@@ -36,8 +36,6 @@ export default Vue.extend({
   data() {
     return {
       thumbnail: '',
-      linkHover: false as boolean,
-      heartHover: false as boolean,
     }
   },
   computed: {

@@ -10,6 +10,7 @@
     'files-path files-aside-container'
     'files-view files-aside-container';
   overflow-y: scroll;
+  padding: @normal-spacing;
 
   .files-path {
     grid-area: files-path;
@@ -26,6 +27,7 @@
 
   .files-view {
     grid-area: files-view;
+    min-width: 0; // needed so overflow works properly
   }
 
   .files-aside-container {

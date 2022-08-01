@@ -3,7 +3,7 @@
     id="app"
     :class="[`theme-${settings.theme}`, { 'hidden-nav': !isMobileNavVisible }]"
   >
-    <Nuxt :class="{ padded: isPadded }" />
+    <Nuxt />
     <MobileNav />
     <UiGlobal />
   </div>
@@ -31,12 +31,6 @@ export default Vue.extend({
     flair(): Flair {
       return flairs[this.settings.flair]
     },
-    isPadded(): boolean {
-      return (
-        this.$route.path.includes('files') ||
-        this.$route.path.includes('friends')
-      )
-    },
   },
 })
 </script>
@@ -51,10 +45,6 @@ export default Vue.extend({
 
   &.hidden-nav {
     padding-bottom: 0;
-  }
-
-  .padded {
-    padding: @normal-spacing;
   }
 }
 </style>
