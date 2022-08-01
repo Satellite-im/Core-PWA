@@ -78,7 +78,7 @@ export default Vue.extend({
       if (!this.lastMessage) {
         return this.$t('messaging.say_hi') as string
       }
-      return this.lastMessage.body
+      return this.lastMessage.body || ''
 
       // const sender = message.from === iridium.connector?.id ? 'me' : 'user'
 

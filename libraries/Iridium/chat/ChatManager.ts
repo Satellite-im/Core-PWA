@@ -13,7 +13,6 @@ import {
   Conversation,
   ConversationMessage,
   ChatError,
-  ConversationMessagePayload,
   MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
@@ -34,6 +33,12 @@ const initialState: State = {
   conversations: {},
 }
 
+export type Message = ConversationMessage & { id: string }
+
+export type Conversations = {
+  [key: Conversation['id']]: Message[]
+}
+
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
   public subscriptions: string[] = []
@@ -41,9 +46,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     conversations: {},
   }
 
-  public messages: {
-    [key: Conversation['id']]: Array<ConversationMessage & { id: string }>
-  } = {}
+  public messages: Conversations = {}
 
   constructor(public readonly iridium: IridiumManager) {
     super()
