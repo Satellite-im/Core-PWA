@@ -35,23 +35,6 @@
     }
   }
 
-  .quick-actions {
-    width: @full;
-    padding: @normal-spacing;
-    position: absolute;
-
-    .like {
-      float: right;
-      &.liked {
-        color: @pink;
-      }
-    }
-
-    svg:hover {
-      opacity: 0.75;
-    }
-  }
-
   &.disabled {
     .quick-actions {
       display: none;
@@ -76,16 +59,36 @@
     }
   }
 
-  .text-container {
-    padding: @normal-spacing;
+  .file-info {
+    display: flex;
+    justify-content: space-between;
 
-    .maintext {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: pre;
+    .text-container {
+      padding: @normal-spacing;
+      &:extend(.ellipsis);
+
+      .maintext {
+        &:extend(.ellipsis);
+      }
+
+      .subtext {
+        &:extend(.font-muted);
+        &:extend(.ellipsis);
+      }
     }
-    .subtext {
-      &:extend(.font-muted);
+
+    .quick-actions {
+      padding: @normal-spacing;
+
+      .like {
+        &.liked {
+          color: @pink;
+        }
+      }
+
+      svg:hover {
+        opacity: 0.75;
+      }
     }
   }
 }

@@ -1,14 +1,5 @@
 <div class="file" :class="{ 'is-liked': item.liked }" @click="click">
   <UiContextMenu :items="contextMenuValues">
-    <div class="quick-actions">
-      <link-icon v-if="item.shared" size="1.25x" class="link" />
-      <heart-icon
-        size="1.25x"
-        class="like"
-        :class="{liked : item.liked}"
-        @click="like"
-      />
-    </div>
     <!-- add container so blur effect doesn't go outside the dimensions of the image -->
     <ui-image-container
       v-if="thumbnail"
@@ -24,9 +15,20 @@
       <film-icon v-else-if="isVideo" size="4x" class="file-type-icon" />
       <file-icon v-else size="4x" class="file-type-icon" />
     </div>
-    <div class="text-container">
-      <TypographyText :size="6" :text="item.name" class="maintext" />
-      <TypographyText :size="6" :text="getSubtext" class="subtext" />
+    <div class="file-info">
+      <div class="text-container">
+        <TypographyText :size="6" :text="item.name" class="maintext" />
+        <TypographyText :size="6" :text="getSubtext" class="subtext" />
+      </div>
+      <div class="quick-actions">
+        <link-icon v-if="item.shared" size="1.25x" class="link" />
+        <heart-icon
+          size="1.25x"
+          class="like"
+          :class="{liked : item.liked}"
+          @click="like"
+        />
+      </div>
     </div>
   </UiContextMenu>
 </div>
