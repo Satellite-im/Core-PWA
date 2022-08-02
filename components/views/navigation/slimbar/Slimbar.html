@@ -52,7 +52,7 @@
     <button
       data-cy="settings"
       v-tooltip.right="$t('pages.settings.settings')"
-      @click="$store.commit('ui/toggleSettings', { show: true })"
+      @click="$store.commit('ui/setSettingsRoute')"
     >
       <settings-icon size="1.8x" />
     </button>

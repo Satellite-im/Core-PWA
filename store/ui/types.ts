@@ -22,6 +22,7 @@ export enum ModalWindows {
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  SETTINGS = 'settings',
 }
 
 export interface EnhancerInfo {
@@ -47,6 +48,7 @@ export interface RecentGlyph {
 }
 
 export enum SettingsRoutes {
+  EMPTY = '',
   PERSONALIZE = 'personalize',
   PROFILE = 'profile',
   AUDIO_AND_VIDEO = 'audio & Video',
@@ -77,10 +79,7 @@ export interface UIState {
   notifications: Alert[]
   contextMenuPosition: object
   quickProfilePosition: object
-  showSettings: boolean
-  settingsSideBar: boolean
   settingsRoute: SettingsRoutes
-  showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean
   modals: {

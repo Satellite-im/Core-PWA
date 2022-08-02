@@ -2294,7 +2294,6 @@ describe('mutations', () => {
   }
   const initialState = {
     contextMenuStatus: false,
-    showSidebarUsers: true,
     showSidebar: true,
     showSearchResult: false,
     showSettings: false,
@@ -2523,12 +2522,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.toggleContextMenu(localizedState, true)
     expect(localizedState.contextMenuStatus).toBeTruthy()
-  })
-
-  test('showSidebarUsers', () => {
-    const localizedState = { ...initialState }
-    mutations.default.showSidebarUsers(localizedState, true)
-    expect(localizedState.showSidebarUsers).toBeTruthy()
   })
 
   test('showSidebar', () => {
@@ -3065,29 +3058,6 @@ describe('mutations', () => {
     ).toMatchSnapshot()
   })
 
-  test('toggleSettings with non-default route', () => {
-    const localizedState = { ...initialState }
-    mutations.default.toggleSettings(localizedState, {
-      show: true,
-      defaultRoute: 'profile',
-    })
-
-    expect(localizedState.showSettings).toBeTruthy()
-    expect(localizedState.settingsRoute).toBe('profile')
-  })
-
-  test('toggleSettings with default route', () => {
-    const localizedState = { ...initialState }
-    mutations.default.toggleSettings(localizedState, {
-      show: true,
-      // defaultRoute: 'profile',
-      // Unprovided, so that the default route 'personalize' will be used for the settingsRoute property
-    })
-
-    expect(localizedState.showSettings).toBeTruthy()
-    expect(localizedState.settingsRoute).toBe('personalize')
-  })
-
   test.skip('updateTheme', () => {
     const localizedState = { ...initialState }
     const object = {
@@ -3132,12 +3102,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setSettingsRoute(localizedState, 'profile')
     expect(localizedState.settingsRoute).toBe('profile')
-  })
-
-  test('toggleSettingsSidebar', () => {
-    const localizedState = { ...initialState }
-    mutations.default.toggleSettingsSidebar(localizedState, true)
-    expect(localizedState.settingsSideBar).toBeTruthy()
   })
 
   test('showSearchResult', () => {
@@ -3506,7 +3470,6 @@ describe('mutations', () => {
   test('send notification', () => {
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -3663,7 +3626,6 @@ describe('mutations', () => {
   test('set notification', () => {
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [],
       showSearchResult: false,
@@ -3817,7 +3779,6 @@ describe('mutations', () => {
     // previously they are unread
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -3969,7 +3930,6 @@ describe('mutations', () => {
     // previously they are unread
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -4114,7 +4074,6 @@ describe('mutations', () => {
     // previously they are unread
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -4258,7 +4217,6 @@ describe('mutations', () => {
   test('get notification that have been read (notificationSeen)', () => {
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {

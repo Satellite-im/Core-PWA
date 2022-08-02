@@ -9,7 +9,6 @@ import { RootState } from '~/types/store/store'
 export default Vue.extend({
   computed: {
     ...mapState({
-      showSettings: (state) => (state as RootState).ui.showSettings,
       friends: (state) => (state as RootState).friends.all,
       elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
       activeCall: (state) => (state as RootState).webrtc.activeCall,

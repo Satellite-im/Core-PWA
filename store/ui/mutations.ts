@@ -1,11 +1,9 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
-  Flair,
   Position,
   RecentGlyph,
   SettingsRoutes,
-  Theme,
   UIState,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
@@ -20,9 +18,7 @@ export default {
   toggleContextMenu(state: UIState, enabled: boolean) {
     state.contextMenuStatus = enabled
   },
-  showSidebarUsers(state: UIState, enabled: boolean) {
-    state.showSidebarUsers = enabled
-  },
+
   showSidebar(state: UIState, enabled: boolean) {
     state.showSidebar = enabled
   },
@@ -76,20 +72,11 @@ export default {
       route: options.route || 'emotes',
     }
   },
-  toggleSettings(
+  setSettingsRoute(
     state: UIState,
-    options: { show: boolean; defaultRoute?: SettingsRoutes },
+    route: SettingsRoutes = SettingsRoutes.PERSONALIZE,
   ) {
-    const { show, defaultRoute } = options
-
-    state.showSettings = show
-    state.settingsRoute = defaultRoute || SettingsRoutes.PERSONALIZE
-  },
-  setSettingsRoute(state: UIState, route: SettingsRoutes) {
     state.settingsRoute = route
-  },
-  toggleSettingsSidebar(state: UIState, show: boolean) {
-    state.settingsSideBar = show
   },
   toggleModal(state: UIState, modal: any) {
     // @ts-ignore

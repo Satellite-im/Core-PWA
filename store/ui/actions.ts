@@ -34,19 +34,11 @@ export default {
     commit('setActiveChannel', channel)
   },
   /**
-   * @method openSettings
-   * @description Opens setting page
-   * @example Mousetrap.bind('ctrl+s', dispatch('audio/toggleMute') )
-   */
-  openSettings({ commit, state }: any) {
-    commit('toggleSettings', { show: !state.showSettings })
-  },
-  /**
    * @method activateKeybinds
    * @description Activates all keybindings with Mousetrap
    * @example mounted (){ activateKeybinds() }
    */
-  async activateKeybinds({ dispatch }: ActionsArguments<UIState>) {
+  async activateKeybinds({ dispatch, commit }: ActionsArguments<UIState>) {
     const { toggleMute, toggleDeafen, openSettings, callActiveChat } =
       iridium.settings.state.keybinds
     Mousetrap.reset()
@@ -60,7 +52,7 @@ export default {
     })
     Mousetrap.bind(getCorrectKeybind(openSettings), (event: KeyboardEvent) => {
       event.preventDefault()
-      dispatch('openSettings')
+      commit('setSettingsRoute')
     })
     Mousetrap.bind(
       getCorrectKeybind(callActiveChat),
@@ -171,10 +163,7 @@ export default {
     commit('setQuickProfilePosition', payload.position)
     commit('quickProfile', selectedUser)
   },
-  async showProfile(
-    { commit, rootState, dispatch }: ActionsArguments<UIState>,
-    user: Friend,
-  ) {
+  async showProfile({ commit }: ActionsArguments<UIState>, user: Friend) {
     if (!user) {
       return
     }
@@ -203,9 +192,9 @@ export default {
     this.$toast.error(this.$i18n.t('pages.files.errors.enable_consent'), {
       duration: 3000,
     })
-    commit('toggleSettings', {
-      show: true,
-      defaultRoute: SettingsRoutes.PRIVACY,
-    })
+    if (this.$device.isMobile) {
+      this.$router.push('/mobile/settings')
+    }
+    commit('setSettingsRoute', SettingsRoutes.PRIVACY)
   },
 }
