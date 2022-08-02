@@ -13,7 +13,11 @@
       {{placeholderText}}
     </figcaption>
   </figure>
-  <div v-else class="image-container">
+  <div
+    v-else
+    class="image-container"
+    :class="{'image-container-nsfw': item.nsfw && blockNsfw}"
+  >
     <img
       class="is-image"
       :class="{'blur-image' : image.nsfw && blockNsfw}"

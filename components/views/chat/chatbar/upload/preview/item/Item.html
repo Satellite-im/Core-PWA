@@ -2,7 +2,11 @@
   <button class="close" @click="$emit('removeUploadItem')">
     <x-icon size="1x" />
   </button>
-  <div v-if="item.thumbnail" class="image-container">
+  <div
+    v-if="item.thumbnail"
+    class="image-container"
+    :class="{'image-container-nsfw': item.nsfw && blockNsfw}"
+  >
     <img
       :class="{'blur-image' : item.nsfw && blockNsfw}"
       :src="item.thumbnail"

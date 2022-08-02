@@ -1,6 +1,10 @@
 <div class="image-mask" @click="closeChatImageOverlay">
   <div class="size-container">
-    <div class="image-container" @click.stop>
+    <div
+      class="image-container"
+      :class="{'image-container-nsfw': chatImageOverlay.nsfw && blockNsfw}"
+      @click.stop
+    >
       <img
         :class="{'blur-image' : chatImageOverlay.nsfw && blockNsfw}"
         :src="chatImageOverlay.url"
