@@ -5,9 +5,11 @@ import QrcodeVue from 'qrcode.vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
 
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -22,6 +24,11 @@ export default Vue.extend({
       request: null as FriendRequest | null,
       user: null as User | null,
     }
+  },
+  computed: {
+    ...mapState({
+      showSidebar: (state) => (state as RootState).ui.showSidebar,
+    }),
   },
   async mounted() {
     if (this.$route.params && this.$route.params.id) {

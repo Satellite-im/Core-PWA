@@ -2,10 +2,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
-import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'Friends',
@@ -17,10 +15,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      showSidebar: (state) => (state as RootState).ui.showSidebar,
-    }),
-
     friendsList(): Array<Friend> {
       return iridium.friends?.list
     },
