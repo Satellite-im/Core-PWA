@@ -286,6 +286,22 @@ button {
 
   #custom-cursor-area {
     &:extend(.font-primary);
+
+    .spinner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 60px;
+
+      .loading-bar.button-loader-bar .bar {
+        animation: buttonloading 2s cubic-bezier(0.17, 0.37, 0.43, 0.67)
+          infinite;
+      }
+
+      .spin {
+        margin-right: @xlight-spacing;
+      }
+    }
   }
 
   &.is-dark.is-outlined {

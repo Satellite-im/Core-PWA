@@ -73,7 +73,7 @@ export default Vue.extend({
      */
     loadingText: {
       type: String,
-      default: 'Loading...',
+      default: null,
     },
     /**
      * This will make the button take up 100% of the parent container
