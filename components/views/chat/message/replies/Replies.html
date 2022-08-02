@@ -9,12 +9,14 @@
     {{ makeReplyText }}
   </div>
   <template v-else>
-    <MessageReplyItem
-      v-for="reply in replies"
-      :key="reply.id"
-      :message="message"
-      :reply="reply"
-    />
+    <div class="message-replies">
+      <Message
+        v-for="item in replyItems"
+        :message="item.message"
+        :key="item.message.id"
+        :showHeader="!item.isSameAuthor"
+      />
+    </div>
     <div @click="toggleReplies" class="toggle-button" data-cy="reply-close">
       <minus-square-icon size="1.1x" />
       {{ $t('conversation.collapse') }}

@@ -1,6 +1,5 @@
 .replies-container {
   margin: @light-spacing 0;
-  padding: @xlight-spacing @light-spacing;
   word-break: break-word;
   &:extend(.bordered);
   &:extend(.round-corners);
@@ -11,10 +10,23 @@
     align-items: center;
     cursor: pointer;
     padding: @xlight-spacing;
-    gap: @xlight-spacing;
+    gap: @light-spacing;
     font-size: @text-size;
     font-family: @secondary-font;
+    padding: @light-spacing @normal-spacing;
     &:extend(.font-secondary);
+
+    &:hover {
+      &:extend(.background-semitransparent-light);
+    }
+  }
+
+  .message-replies {
+    padding: @light-spacing;
+
+    .chat-message-container:first-child .chat-message {
+      margin-top: @light-spacing;
+    }
   }
 }
 .is-chatbar-reply {

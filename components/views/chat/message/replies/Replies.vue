@@ -1,4 +1,4 @@
-<template src="./Reply.html"></template>
+<template src="./Replies.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
@@ -6,6 +6,11 @@ import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 import { getUsernameFromState } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+
+interface ReplyItem {
+  message: ConversationMessage & { id: string }
+  isSameAuthor: boolean
+}
 
 export default Vue.extend({
   components: {
@@ -25,6 +30,18 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'chat']),
+    replyItems(): ReplyItem[] {
+      return this.replies.map((message, index) => {
+        const prevMessage = index >= 0 ? this.replies[index - 1] : undefined
+        const isSameAuthor = prevMessage
+          ? message.from === prevMessage.from
+          : false
+        return {
+          message,
+          isSameAuthor,
+        }
+      })
+    },
     setChatReply: {
       set(state) {
         this.$store.commit('chat/setChatReply', state)
@@ -132,4 +149,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less" src="./Reply.less"></style>
+<style lang="less" src="./Replies.less"></style>

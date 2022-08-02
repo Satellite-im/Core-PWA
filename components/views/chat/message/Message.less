@@ -25,18 +25,18 @@
       'timestamp footer';
     grid-template-columns: 52px;
 
-    .timestamp {
+    > .timestamp {
       opacity: 0;
     }
 
     &:hover,
     &:focus-within {
-      .timestamp {
+      > .timestamp {
         opacity: 1;
       }
     }
 
-    .timestamp {
+    > .timestamp {
       line-height: 24px;
     }
   }
@@ -98,7 +98,7 @@
       &:extend(.background-semitransparent-light);
     }
 
-    .message-actions {
+    > .body > .message-actions {
       opacity: 1;
     }
   }

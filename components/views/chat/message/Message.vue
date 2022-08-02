@@ -25,7 +25,7 @@ export default Vue.extend({
     },
     replies: {
       type: Array as PropType<(ConversationMessage & { id: string })[]>,
-      required: true,
+      default: [] as (ConversationMessage & { id: string })[],
     },
     showHeader: {
       type: Boolean,
