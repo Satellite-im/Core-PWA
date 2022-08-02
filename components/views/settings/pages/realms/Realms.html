@@ -1,23 +1,19 @@
 <SettingsPage>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.settings.realms.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.realms.subtitle')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyTitle :size="6" :text="$t('pages.settings.realms.title')" />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.realms.subtitle')"
+    />
+  </SettingsUnit>
 
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyLabel :text="$t('pages.settings.realms.chain')" />
-      <br />
-      <SettingsPagesRealmsRealm
-        v-for="realm in realms"
-        :realm="realm"
-        :key="realm.id"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyLabel :text="$t('pages.settings.realms.chain')" />
+    <br />
+    <SettingsPagesRealmsRealm
+      v-for="realm in realms"
+      :realm="realm"
+      :key="realm.id"
+    />
+  </SettingsUnit>
 </SettingsPage>
