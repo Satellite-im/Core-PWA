@@ -10,7 +10,7 @@
   </SettingsSection>
 
   <SettingsSection>
-    <SettingsUniit
+    <SettingsUnit
       v-for="[key, value] in Object.entries(settings.keybinds).filter(([key, value]) => key.length > 0)"
       :key="key"
     >
@@ -20,7 +20,7 @@
         :defaultValue="defaultKeybinds[key]"
         @change="setBinding(key, $event)"
       />
-    </SettingsUniit>
+    </SettingsUnit>
   </SettingsSection>
 
   <InteractablesButton
