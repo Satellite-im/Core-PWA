@@ -7,13 +7,9 @@
 <script>
 export default {
   props: {
-    src: {
-      type: String,
-      required: true,
-    },
     nsfw: {
       type: Boolean,
-      required: false,
+      default: false,
     },
   },
 }

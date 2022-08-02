@@ -22,24 +22,16 @@
     ),
     #121216;
 
-  .like {
-    opacity: 0;
-    transition: opacity @animation-speed ease;
-  }
-
   &:hover,
   &:focus,
   &.is-liked {
-    .like {
-      opacity: 1;
+    .quick-actions {
+      .like {
+        opacity: 1;
+      }
     }
   }
 
-  &.disabled {
-    .quick-actions {
-      display: none;
-    }
-  }
   .icon-container {
     display: flex;
     justify-content: center;
@@ -51,6 +43,7 @@
 
   .image-container {
     height: 162px;
+    filter: brightness(0.75);
 
     img {
       height: 162px;
@@ -59,36 +52,39 @@
     }
   }
 
-  .file-info {
+  .quick-actions {
     display: flex;
     justify-content: space-between;
+    flex-direction: row-reverse;
+    width: 100%;
+    padding: @normal-spacing;
+    position: absolute;
+    top: 0;
 
-    .text-container {
-      padding: @normal-spacing;
-      &:extend(.ellipsis);
-
-      .maintext {
-        &:extend(.ellipsis);
+    .like {
+      opacity: 0;
+      transition: opacity @animation-speed ease;
+      &.liked {
+        color: @pink;
+        opacity: 1;
       }
-
-      .subtext {
-        &:extend(.font-muted);
-        &:extend(.ellipsis);
-      }
-    }
-
-    .quick-actions {
-      padding: @normal-spacing;
-
-      .like {
-        &.liked {
-          color: @pink;
-        }
-      }
-
-      svg:hover {
+      &:hover {
         opacity: 0.75;
       }
+    }
+  }
+
+  .text-container {
+    padding: @normal-spacing;
+    &:extend(.ellipsis);
+
+    .maintext {
+      &:extend(.ellipsis);
+    }
+
+    .subtext {
+      &:extend(.font-muted);
+      &:extend(.ellipsis);
     }
   }
 }
