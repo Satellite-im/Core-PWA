@@ -1,72 +1,66 @@
 <SettingsPage>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.settings.storage.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.storage.subtitle')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyTitle :size="6" :text="$t('pages.settings.storage.title')" />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.storage.subtitle')"
+    />
+  </SettingsUnit>
 
-  <SettingsSection v-if="featureReadyToShow">
-    <SettingsUnit>
-      <TypographyTitle
+  <SettingsUnit v-if="false">
+    <TypographyTitle
+      :size="6"
+      :text="$t('pages.settings.storage.export.title')"
+    />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.storage.export.subtitle')"
+    />
+    <br />
+    <InteractablesButton
+      type="primary"
+      size="small"
+      :text="$t('pages.settings.storage.export.button')"
+    />
+  </SettingsUnit>
+
+  <SettingsUnit>
+    <TypographyTitle
+      :size="6"
+      :text="$t('pages.settings.storage.clear.title')"
+    />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.storage.clear.subtitle')"
+    />
+    <br />
+    <InteractablesButton
+      v-if="!deleteVerify"
+      type="danger"
+      size="small"
+      :loading="isLoading"
+      :text="$t('pages.settings.storage.clear.button')"
+      :action="() => deleteVerify = true"
+    />
+    <span v-if="deleteVerify">
+      <TypographyText
+        :text="$t('pages.settings.storage.clear.subtitle_warning1')"
+        class="detail color-danger no-bottom-pad"
         :size="6"
-        :text="$t('pages.settings.storage.export.title')"
       />
-      <TypographySubtitle
+      <TypographyText
+        :text="$t('pages.settings.storage.clear.subtitle_warning2')"
+        class="detail color-danger"
         :size="6"
-        :text="$t('pages.settings.storage.export.subtitle')"
       />
       <br />
       <InteractablesButton
-        type="primary"
-        size="small"
-        :text="$t('pages.settings.storage.export.button')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
-
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.storage.clear.title')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.storage.clear.subtitle')"
-      />
-      <br />
-      <InteractablesButton
-        v-if="!deleteVerify"
         type="danger"
         size="small"
         :loading="isLoading"
-        :text="$t('pages.settings.storage.clear.button')"
-        :action="() => deleteVerify = true"
+        :text="$t('pages.settings.storage.clear.confirm_button')"
+        :action="clearLocalStorage"
       />
-      <span v-if="deleteVerify">
-        <TypographyText
-          :text="$t('pages.settings.storage.clear.subtitle_warning1')"
-          class="detail color-danger no-bottom-pad"
-          :size="6"
-        />
-        <TypographyText
-          :text="$t('pages.settings.storage.clear.subtitle_warning2')"
-          class="detail color-danger"
-          :size="6"
-        />
-        <br />
-        <InteractablesButton
-          type="danger"
-          size="small"
-          :loading="isLoading"
-          :text="$t('pages.settings.storage.clear.confirm_button')"
-          :action="clearLocalStorage"
-        />
-      </span>
-    </SettingsUnit>
-  </SettingsSection>
+    </span>
+  </SettingsUnit>
 </SettingsPage>
