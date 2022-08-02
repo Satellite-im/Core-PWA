@@ -9,7 +9,10 @@
     <!-- If the button is in the loading state -->
     <div class="spinner" v-if="loading">
       <!-- Loading Spinner -->
-      <UiLoadersLoadingBar class="button-loader-bar" />
+      <UiLoadersSpinner
+        spinning
+        :class="`${loadingText ? 'button-icon' : ''}`"
+      />
       <!-- Loading Text -->
       <span v-if="loadingText"> {{ loadingText }} </span>
     </div>
