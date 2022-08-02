@@ -61,6 +61,8 @@ export default Vue.extend({
     return {
       videoSettings: iridium.settings.state.video,
       webrtc: iridium.webRTC.state,
+      isTalking: false,
+      requestId: null,
     }
   },
   computed: {
@@ -143,6 +145,20 @@ export default Vue.extend({
         loadVideos()
       })
     },
+    audioStream(value) {
+      if (!value && this.requestId) {
+        cancelAnimationFrame(this.requestId)
+        this.requestId = null
+        return
+      }
+      this.startVoiceDetection()
+    },
+  },
+  beforeDestroy() {
+    if (this.requestId) {
+      cancelAnimationFrame(this.requestId)
+      this.requestId = null
+    }
   },
   mounted() {
     document.querySelectorAll('.video-stream.loaded').forEach((video) => {
@@ -164,6 +180,35 @@ export default Vue.extend({
         audioStreamElement.volume = this.audio.volume / 100
       }
     }
+  },
+  methods: {
+    startVoiceDetection() {
+      if (!this.audioStream) {
+        return
+      }
+
+      const audioContext = new AudioContext()
+      const mediaStreamAudioSourceNode = audioContext.createMediaStreamSource(
+        this.audioStream,
+      )
+      const analyser = audioContext.createAnalyser()
+      mediaStreamAudioSourceNode.connect(analyser)
+
+      const pcmData = new Float32Array(analyser.fftSize)
+
+      const onFrame = () => {
+        analyser.getFloatTimeDomainData(pcmData)
+        let sumSquares = 0.0
+        for (const amplitude of pcmData) {
+          sumSquares += amplitude * amplitude
+        }
+        const volume = Math.sqrt(sumSquares / pcmData.length)
+        this.isTalking = volume > 0.01
+        console.log('volume', volume)
+        this.requestId = window.requestAnimationFrame(onFrame)
+      }
+      this.requestId = window.requestAnimationFrame(onFrame)
+    },
   },
 })
 </script>

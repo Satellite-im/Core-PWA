@@ -36,14 +36,24 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts', 'friends', 'groups']),
+    ...mapState(['ui', 'accounts', 'friends', 'groups', 'audio']),
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
         : this.users.slice(0, this.maxViewableUsers)
     },
     localParticipant() {
-      return { ...this.profile, peerId: iridium.connector?.peerId }
+      const id = this.webrtc.activeCall?.callId
+
+      if (!id || !iridium.chat?.hasConversation(id)) {
+        return []
+      }
+
+      const conversation = iridium.chat?.getConversation(id)
+
+      return conversation?.participants.find((participant) => {
+        return participant.peerId === iridium.connector?.peerId
+      })
     },
     remoteParticipants() {
       const id = this.webrtc.activeCall?.callId
@@ -58,7 +68,6 @@ export default Vue.extend({
         return participant.peerId !== iridium.connector?.peerId
       })
     },
-    ...mapState(['audio']),
   },
   watch: {
     fullscreen(value) {

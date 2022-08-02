@@ -1,4 +1,4 @@
-<div v-if="call" class="user">
+<div v-if="call" class="user" :class="{'user-talking': isTalking}">
   <div v-if="screenStream" class="video-stream-container">
     <video
       class="video-stream screen-stream"
