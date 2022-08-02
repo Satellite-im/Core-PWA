@@ -1,9 +1,6 @@
 <div class="friends">
   <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
   <div class="col">
-    <!-- Friends Add -->
-    <InteractablesSidebarToggle v-if="!showSidebar" />
-
     <FriendsAdd />
     <!-- Incoming Requests -->
     <template v-if="incomingRequests.length">
