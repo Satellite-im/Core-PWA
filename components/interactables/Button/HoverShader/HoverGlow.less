@@ -1,16 +1,13 @@
-#hover-effect-container {
+.hover-effect-container {
   position: relative;
 
   &:hover {
     &:extend(.background-semitransparent-lighter);
   }
 
-  #effect-mask {
-    width: @full;
-    height: @full;
+  .effect-mask {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
 
     transition: 250ms all ease-in-out;
     background: radial-gradient(

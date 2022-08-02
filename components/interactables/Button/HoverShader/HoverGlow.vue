@@ -11,16 +11,16 @@ export default Vue.extend({
     },
   },
   methods: {
-    mouseLeave(e: any) {
+    mouseLeave(e: MouseEvent) {
       const target = e.target
       target.style = ''
     },
-    mouseEnter(e: any) {
+    mouseEnter(e: MouseEvent) {
       const target = e.target
       const rect = target.getBoundingClientRect()
       target.style.setProperty('--circle-size', `${rect.height}px`)
     },
-    mouseMove(e: any) {
+    mouseMove(e: MouseEvent) {
       const target = e.target
 
       const rect = target.getBoundingClientRect()
