@@ -13,28 +13,27 @@
       </div>
       <div class="reply-content">
         <MessageMarkdown
-          v-if="reply.replyType === 'text'"
-          :text="markdownToHtml(reply.payload)"
+          :text="markdownToHtml(reply.body)"
           class="markdown"
           data-cy="reply-message"
         />
-        <UiChatImage
-          v-else-if="reply.replyType === 'image'"
-          :source="reply.payload.url"
-          alt=""
-        />
-        <UiChatEmbedsVideoPlayer
-          v-else-if="reply.replyType === 'video'"
-          :data="reply.payload"
-        />
-        <UiChatEmbedsAudioPlayer
-          v-else-if="reply.replyType === 'audio'"
-          :data="reply.payload"
-        />
-        <UiChatEmbedsFile
-          v-else-if="reply.replyType === 'file'"
-          :data="reply.payload"
-        />
+        <!-- <UiChatImage -->
+        <!--   v-else-if="reply.replyType === 'image'" -->
+        <!--   :source="reply.payload.url" -->
+        <!--   alt="" -->
+        <!-- /> -->
+        <!-- <UiChatEmbedsVideoPlayer -->
+        <!--   v-else-if="reply.replyType === 'video'" -->
+        <!--   :data="reply.payload" -->
+        <!-- /> -->
+        <!-- <UiChatEmbedsAudioPlayer -->
+        <!--   v-else-if="reply.replyType === 'audio'" -->
+        <!--   :data="reply.payload" -->
+        <!-- /> -->
+        <!-- <UiChatEmbedsFile -->
+        <!--   v-else-if="reply.replyType === 'file'" -->
+        <!--   :data="reply.payload" -->
+        <!-- /> -->
         <!--  Hide emojies on thread https://satellite-im.atlassian.net/browse/AP-1824-->
         <!--        <MessageActions-->
         <!--          hideReply-->

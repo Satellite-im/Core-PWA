@@ -87,7 +87,7 @@ const Chatbar = Vue.extend({
     isSharpCorners(): boolean {
       return (
         Boolean(this.files.length) ||
-        Boolean(this.ui.replyChatbarContent.id) ||
+        Boolean(this.ui.replyChatbarMessage) ||
         this.commandPreview ||
         this.chat.countError
       )
@@ -133,11 +133,7 @@ const Chatbar = Vue.extend({
       handler(value) {
         const message = this.chat.draftMessages[this.conversationId]
         this.$refs.editable?.resetHistory()
-        this.$store.commit('ui/setReplyChatbarContent', {
-          id: '',
-          payload: '',
-          from: '',
-        })
+        this.$store.commit('ui/clearReplyChatbarMessage')
         this.$store.dispatch('ui/setChatbarContent', { content: message })
         // in desktop, stay chatbar focused when switching recipient
         if (this.$device.isDesktop) {
@@ -228,6 +224,7 @@ const Chatbar = Vue.extend({
         body: value,
         at: Date.now(),
         attachments: [],
+        replyToId: this.ui.replyChatbarMessage.id,
       })
       // if (
       //   this.ui.replyChatbarContent.from &&

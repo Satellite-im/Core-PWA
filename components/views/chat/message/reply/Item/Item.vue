@@ -2,8 +2,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { UIMessage, Group } from '~/types/messaging'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import { RootState } from '~/types/store/store'
+import { toHTML } from '~/libraries/ui/Markdown'
 import {
   getUsernameFromState,
   getAddressFromState,
@@ -12,25 +13,12 @@ import {
 export default Vue.extend({
   props: {
     message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Message',
-      }),
-    },
-    group: {
-      type: Object as PropType<Group>,
-      default: () => {},
+      type: Object as PropType<ConversationMessage & { id: string }>,
+      required: true,
     },
     reply: {
-      type: Object,
-      default: () => {},
-    },
-    markdownToHtml: {
-      type: Function,
-      default: () => {},
+      type: Object as PropType<(ConversationMessage & { id: string })[]>,
+      required: true,
     },
   },
   computed: {
@@ -57,21 +45,30 @@ export default Vue.extend({
       return this.getTimestamp({ time: this.reply.at })
     },
     src(): string {
-      // To check if the sender is you we just compare the from field
-      // with your textile public key
-      if (this.reply.from === this.$TextileManager?.getIdentityPublicKey()) {
-        const myHash = this.accounts.details?.profilePicture
-        return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
-      }
-
-      // Try to find the friend you are talking to
-      const friend = this.findFriendByKey(this.reply.from)
-
-      if (friend?.profilePicture) {
-        return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
-      }
-
       return ''
+      // // To check if the sender is you we just compare the from field
+      // // with your textile public key
+      // if (this.reply.from === this.$TextileManager?.getIdentityPublicKey()) {
+      //   const myHash = this.accounts.details?.profilePicture
+      //   return myHash ? `${this.$Config.textile.browser}/ipfs/${myHash}` : ''
+      // }
+
+      // // Try to find the friend you are talking to
+      // const friend = this.findFriendByKey(this.reply.from)
+
+      // if (friend?.profilePicture) {
+      //   return `${this.$Config.textile.browser}/ipfs/${friend?.profilePicture}`
+      // }
+
+      // return ''
+    },
+  },
+  methods: {
+    markdownToHtml(text: string) {
+      return toHTML(text, { liveTyping: false })
+    },
+    setReplyChatbarMessage() {
+      this.$store.commit('ui/setReplyChatbarMessage', this.message)
     },
   },
 })

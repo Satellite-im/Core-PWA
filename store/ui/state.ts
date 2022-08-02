@@ -31,7 +31,7 @@ const InitialUIState = (): UIState => ({
   },
   glyphModalPack: '',
   chatbarContent: '',
-  replyChatbarContent: { id: '', from: '', payload: '' },
+  replyChatbarMessage: undefined,
   chatbarFocus: false,
   fullscreen: false,
   showPinned: false,

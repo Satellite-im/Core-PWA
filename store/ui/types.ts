@@ -3,6 +3,7 @@ import { FileMessage } from '~/types/textile/mailbox'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 import { Alert } from '~/libraries/ui/Alerts'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -89,11 +90,7 @@ export interface UIState {
   glyphModalPack: string
   chatbarContent: string
   chatbarFocus: boolean
-  replyChatbarContent: {
-    id: string
-    from: string
-    payload: string
-  }
+  replyChatbarMessage?: ConversationMessage & { id: string }
   showPinned: boolean
   fullscreen: boolean
   enhancers: EnhancerInfo

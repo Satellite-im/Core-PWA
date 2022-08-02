@@ -5,25 +5,13 @@
   &:extend(.bordered);
   &:extend(.round-corners);
   &:extend(.background-semitransparent-light);
-  .reply-preview {
-    padding: 0.25rem;
-    cursor: pointer;
-    font-size: @text-size;
-    font-family: @secondary-font;
-    &:extend(.font-secondary);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1.1;
-  }
 
-  .reply-close {
+  .toggle-button {
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
+    padding: @xlight-spacing;
+    gap: @xlight-spacing;
     font-size: @text-size;
     font-family: @secondary-font;
     &:extend(.font-secondary);

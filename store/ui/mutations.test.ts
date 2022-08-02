@@ -2325,7 +2325,7 @@ describe('mutations', () => {
     },
     glyphModalPack: '',
     chatbarContent: '',
-    replyChatbarContent: {
+    replyChatbarMessage: {
       from: '',
       id: '',
       payload: '',
@@ -3358,15 +3358,15 @@ describe('mutations', () => {
     expect(localizedState.activeChannel).toMatchObject(object)
   })
 
-  test('setReplyChatbarContent', () => {
+  test('setReplyChatbarMessage', () => {
     const localizedState = { ...initialState }
     const object = {
       payload: 'payload',
       id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
       from: 'Retha Larkin',
     }
-    mutations.default.setReplyChatbarContent(localizedState, object)
-    expect(localizedState.replyChatbarContent).toMatchObject(object)
+    mutations.default.setReplyChatbarMessage(localizedState, object)
+    expect(localizedState.replyChatbarMessage).toMatchObject(object)
   })
 
   test('setEditMessage', () => {
@@ -3559,7 +3559,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -3703,7 +3703,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -3878,7 +3878,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -4030,7 +4030,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -4175,7 +4175,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -4319,14 +4319,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
-        from: '',
-        id: '',
-        payload: '',
-        chatbarFocus: false,
-        fullscreen: false,
-        showPinned: false,
-      },
+      replyChatbarMessage: undefined,
       enhancers: {
         containerWidth: 0,
         defaultHeight: '30rem',

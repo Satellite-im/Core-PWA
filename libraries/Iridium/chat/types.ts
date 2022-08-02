@@ -14,6 +14,7 @@ export type ConversationMessage = {
   type: 'text' | 'file' | 'group' | 'glyph' | 'divider' | 'string'
   attachments: string[]
   reactions: { [key: string]: string[] }
+  replyToId?: string
 }
 
 export type MessageReactionPayload = {

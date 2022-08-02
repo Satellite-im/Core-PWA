@@ -1,27 +1,23 @@
-<div v-if="message.replies.length" class="replies-container">
+<div v-if="replies.length" class="replies-container">
   <div
     v-if="!showReplies"
-    class="reply-preview"
+    class="toggle-button"
     data-cy="reply-preview"
     @click="toggleReplies"
   >
     <plus-square-icon size="1.1x" />
-    &nbsp; {{ makeReplyText }}
+    {{ makeReplyText }}
   </div>
   <template v-else>
     <MessageReplyItem
-      v-for="reply in message.replies"
+      v-for="reply in replies"
       :key="reply.id"
-      :reply="reply"
       :message="message"
-      :group="group"
-      :markdownToHtml="markdownToHtml"
-      @emoji-reaction="emojiReaction"
-      @click="showQuickProfile"
+      :reply="reply"
     />
-    <div @click="toggleReplies" class="reply-close" data-cy="reply-close">
+    <div @click="toggleReplies" class="toggle-button" data-cy="reply-close">
       <minus-square-icon size="1.1x" />
-      &nbsp; {{$t('conversation.collapse')}}
+      {{ $t('conversation.collapse') }}
     </div>
   </template>
 </div>

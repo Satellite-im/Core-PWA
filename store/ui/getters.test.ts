@@ -36,7 +36,7 @@ describe('init', () => {
       },
       glyphModalPack: '',
       chatbarContent: '',
-      replyChatbarContent: { id: '', from: '', payload: '' },
+      replyChatbarMessage: { id: '', from: '', payload: '' },
       chatbarFocus: false,
       fullscreen: false,
       showPinned: false,
@@ -239,7 +239,7 @@ describe('init', () => {
       },
       glyphModalPack: '',
       chatbarContent: '',
-      replyChatbarContent: { id: '', from: '', payload: '' },
+      replyChatbarMessage: { id: '', from: '', payload: '' },
       chatbarFocus: false,
       fullscreen: false,
       showPinned: false,
@@ -380,7 +380,7 @@ describe('init', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',

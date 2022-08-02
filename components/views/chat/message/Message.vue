@@ -2,10 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import { UIMessage, Group } from '~/types/messaging'
-
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage, ModalWindows } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
@@ -23,7 +20,11 @@ export default Vue.extend({
   },
   props: {
     message: {
-      type: Object as PropType<ConversationMessage>,
+      type: Object as PropType<ConversationMessage & { id: string }>,
+      required: true,
+    },
+    replies: {
+      type: Array as PropType<(ConversationMessage & { id: string })[]>,
       required: true,
     },
     showHeader: {
@@ -67,6 +68,9 @@ export default Vue.extend({
       // }
       // return this.groups[this.conversation.id]
     },
+    isReplyingTo(): boolean {
+      return this.ui.replyChatbarMessage?.id === this.message.id
+    },
     timestamp(): string {
       return this.getTimestamp({ time: this.message.at })
     },
@@ -80,7 +84,7 @@ export default Vue.extend({
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
+        { text: this.$t('context.reply'), func: this.setReplyChatbarMessage },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
@@ -239,31 +243,8 @@ export default Vue.extend({
         }
       })
     },
-    /**
-     * @method setReplyChatbarContent DocsTODO
-     * @description
-     * @example
-     */
-    setReplyChatbarContent() {
-      if (this.isGroup) {
-        this.toggleModal(ModalWindows.CALL_TO_ACTION)
-        return
-      }
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      const { id, type, payload, to, from } = this.message
-      let finalPayload = payload
-      if (['image', 'video', 'audio', 'file'].includes(type)) {
-        finalPayload = `*${this.$t('conversation.multimedia')}*`
-      } else if (type === 'glyph') {
-        finalPayload = `<img src=${payload} width='16px' height='16px' />`
-      }
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id,
-        payload: finalPayload,
-        from: this.from,
-        messageID: this.message.id,
-        to: to === myTextilePublicKey ? from : to,
-      })
+    setReplyChatbarMessage() {
+      this.$store.commit('ui/setReplyChatbarMessage', this.message)
       this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
     },
     /**

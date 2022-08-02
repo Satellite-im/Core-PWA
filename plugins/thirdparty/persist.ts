@@ -29,7 +29,7 @@ const commonProperties = [
   'friends',
   'webrtc.activeStream',
   'webrtc.incomingCall',
-  'ui.replyChatbarContent',
+  'ui.replyChatbarMessage',
   'ui.editMessage',
   'chat.files',
   'chat.countError',

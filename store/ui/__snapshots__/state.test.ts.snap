@@ -70,11 +70,7 @@ Object {
     "y": 0,
   },
   "recentGlyphs": Array [],
-  "replyChatbarContent": Object {
-    "from": "",
-    "id": "",
-    "payload": "",
-  },
+  "replyChatbarMessage": undefined,
   "settingReaction": Object {
     "groupID": null,
     "messageID": null,

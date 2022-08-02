@@ -11,9 +11,18 @@
 .chat-message {
   display: grid;
   text-align: left;
+  // border-left: 3px solid transparent;
+  padding-left: @xlight-spacing;
+
+  &.is-replying-to {
+    background-color: fade(@satellite-color, 10%);
+    // border-left-color: @satellite-color;
+  }
 
   &:not(.show-header) {
-    grid-template-areas: 'timestamp body';
+    grid-template-areas:
+      'timestamp body'
+      'timestamp footer';
     grid-template-columns: 52px;
 
     .timestamp {
@@ -35,7 +44,8 @@
   &.show-header {
     grid-template-areas:
       'avatar header timestamp'
-      'avatar body body';
+      'avatar body body'
+      'avatar footer footer';
     grid-template-columns: 52px auto 1fr;
     margin-top: @normal-spacing;
 
@@ -77,8 +87,14 @@
     }
   }
 
-  &:hover {
-    .body {
+  .footer {
+    grid-area: footer;
+    background: none;
+    padding: 0;
+  }
+
+  &:not(.is-replying-to):hover {
+    > .body > .markdown {
       &:extend(.background-semitransparent-light);
     }
 

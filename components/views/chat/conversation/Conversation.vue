@@ -11,6 +11,7 @@ interface ChatItem {
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
+  replies: (ConversationMessage & { id: string })[]
 }
 
 export default Vue.extend({
@@ -29,28 +30,36 @@ export default Vue.extend({
       return iridium.connector?.id ?? ''
     },
     chatItems(): ChatItem[] {
-      return this.messages.map((message, index) => {
-        const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
-        const isSameAuthor = prevMessage
-          ? message.from === prevMessage.from
-          : false
-        const timeDiff = prevMessage ? message.at - prevMessage.at : 0
-        const isNextDay = prevMessage
-          ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
-          : false
-        const lastReadAt = this.conversation.lastReadAt
-        const isFirstUnreadMessage =
-          message.at > lastReadAt &&
-          (prevMessage ? prevMessage.at <= lastReadAt : true)
+      return this.messages
+        .filter((message) => message.replyToId)
+        .map((message, index) => {
+          const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
+          const isSameAuthor = prevMessage
+            ? message.from === prevMessage.from
+            : false
+          const timeDiff = prevMessage ? message.at - prevMessage.at : 0
+          const isNextDay = prevMessage
+            ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
+            : false
+          const lastReadAt = this.conversation.lastReadAt
+          const isFirstUnreadMessage =
+            message.at > lastReadAt &&
+            (prevMessage ? prevMessage.at <= lastReadAt : true)
+          const replies = this.messages.filter(
+            (replyMessage) => replyMessage.replyToId === message.id,
+          )
 
-        return {
-          message,
-          isSameAuthor,
-          timeDiff,
-          isNextDay,
-          isFirstUnreadMessage,
-        }
-      })
+          console.log('replies', replies)
+
+          return {
+            message,
+            isSameAuthor,
+            timeDiff,
+            isNextDay,
+            isFirstUnreadMessage,
+            replies,
+          }
+        })
     },
   },
   methods: {},
