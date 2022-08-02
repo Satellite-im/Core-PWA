@@ -1,6 +1,7 @@
 .enhancers {
   height: @enhancers-height;
   width: @enhancers-width;
+  max-width: @enhancers-width;
   position: absolute;
   right: @normal-spacing;
   bottom: calc(@chatbar-size + @normal-spacing + @light-spacing);
@@ -12,6 +13,11 @@
   &:extend(.round-corners);
   &:extend(.background-semitransparent-light);
   &:extend(.blur);
+
+  &-mobile {
+    width: 100%;
+    right: 0;
+  }
 
   .navbar {
     display: flex;
@@ -65,8 +71,8 @@
 }
 
 .emoji-picker .emojis div {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
 }
 
 .emoji-picker .emojis span {

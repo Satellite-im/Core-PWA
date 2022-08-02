@@ -1,5 +1,6 @@
 <div
   class="enhancers"
+  :class="{'enhancers-mobile': $device.isMobile}"
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers"
   v-bind:style="!ui.enhancers.floating ? {
