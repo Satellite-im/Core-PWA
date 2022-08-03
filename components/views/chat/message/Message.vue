@@ -47,6 +47,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
+      chat: (state) => (state as RootState).chat,
       textile: (state) => (state as RootState).textile,
       accounts: (state) => (state as RootState).accounts,
     }),
@@ -75,7 +76,7 @@ export default Vue.extend({
       // return this.groups[this.conversation.id]
     },
     isReplyingTo(): boolean {
-      return this.ui.replyChatbarMessage?.id === this.message.id
+      return this.chat.replyChatbarMessage?.id === this.message.id
     },
     timestamp(): string {
       return this.getTimestamp({ time: this.message.at })
