@@ -66,6 +66,9 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
+      if (!Object.keys(this.conversation).length) {
+        return []
+      }
       return Object.values(this.conversation.message).sort(
         (a, b) => a.at - b.at,
       )

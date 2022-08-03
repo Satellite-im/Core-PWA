@@ -29,6 +29,9 @@ export default Vue.extend({
       return iridium.connector?.id ?? ''
     },
     messages(): ConversationMessage[] {
+      if (!Object.keys(this.conversation).length) {
+        return []
+      }
       return Object.values(this.conversation.message).sort(
         (a, b) => a.at - b.at,
       )
