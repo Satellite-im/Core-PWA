@@ -3,6 +3,7 @@ import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
   notifications: [],
+  showSidebar: true,
   showSearchResult: false,
   showSettings: false,
   settingsRoute: SettingsRoutes.EMPTY,
