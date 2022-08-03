@@ -15,6 +15,7 @@
         :message="item.message"
         :key="item.message.id"
         :showHeader="!item.isSameAuthor"
+        hideReplyAction
       />
     </div>
     <div @click="toggleReplies" class="toggle-button" data-cy="reply-close">

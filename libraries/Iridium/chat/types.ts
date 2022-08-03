@@ -28,7 +28,7 @@ export type ConversationMessage = {
 
 export type ConversationMessagePayload = Omit<
   ConversationMessage,
-  'id' | 'from'
+  'id' | 'from' | 'reactions' | 'attachments'
 >
 
 export type MessageReactionPayload = {

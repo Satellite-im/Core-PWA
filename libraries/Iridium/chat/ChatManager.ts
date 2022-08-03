@@ -8,6 +8,7 @@ import {
   ConversationMessage,
   ChatError,
   MessageReactionPayload,
+  ConversationMessagePayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
@@ -224,17 +225,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @method sendMessage
    * @description Sends a message to the given groupChat
    */
-  async sendMessage(payload: Omit<ConversationMessage, 'from' | 'reactions'>) {
+  async sendMessage(payload: ConversationMessagePayload) {
     if (!this.iridium.connector) {
       return
     }
 
     const { conversationId } = payload
     const conversation = this.getConversation(conversationId)
-    const message: ConversationMessage = {
+    const message: Omit<ConversationMessage, 'id'> = {
       ...payload,
       from: this.iridium.connector.id,
       reactions: {},
+      attachments: [],
     }
 
     const messageID = await this.iridium.connector.store(message, {

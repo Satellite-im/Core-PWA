@@ -7,7 +7,10 @@ import {
   ChatText,
   ChatFileUpload,
 } from '~/store/chat/types'
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 
 const mutations = {
   chatText(state: ChatState, req: ChatText) {
@@ -87,6 +90,12 @@ const mutations = {
     }: { conversationId: Conversation['id']; message: string },
   ) {
     Vue.set(state.draftMessages, conversationId, message)
+  },
+  setReplyChatbarMessage(state: ChatState, message: ConversationMessage) {
+    state.replyChatbarMessage = message
+  },
+  clearReplyChatbarMessage(state: ChatState) {
+    state.replyChatbarMessage = undefined
   },
 }
 

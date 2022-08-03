@@ -9,11 +9,11 @@ export default Vue.extend({
     XIcon,
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['chat']),
   },
   methods: {
     clearReplyChatbarMessage() {
-      this.$store.commit('ui/clearReplyChatbarMessage')
+      this.$store.commit('chat/clearReplyChatbarMessage')
     },
   },
 })

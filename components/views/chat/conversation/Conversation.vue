@@ -31,7 +31,7 @@ export default Vue.extend({
     },
     chatItems(): ChatItem[] {
       return this.messages
-        .filter((message) => message.replyToId)
+        .filter((message) => !message.replyToId)
         .map((message, index) => {
           const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
           const isSameAuthor = prevMessage

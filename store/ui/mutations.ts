@@ -1,18 +1,15 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
-  Flair,
   Position,
   RecentGlyph,
   SettingsRoutes,
-  Theme,
   UIState,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { FileMessage } from '~/types/textile/mailbox'
 import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -168,12 +165,6 @@ export default {
   },
   setActiveChannel(state: UIState, channel: Channel) {
     state.activeChannel = channel
-  },
-  setReplyChatbarMessage(state: UIState, message: ConversationMessage) {
-    state.replyChatbarMessage = message
-  },
-  clearReplyChatbarMessage(state: UIState) {
-    state.replyChatbarMessage = undefined
   },
   settingReaction(state: UIState, status: object) {
     state.settingReaction = status // TODO: check this mutation, probably a bug

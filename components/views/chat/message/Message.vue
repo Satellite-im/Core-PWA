@@ -33,6 +33,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    hideReplyAction: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -246,7 +250,7 @@ export default Vue.extend({
       })
     },
     setReplyChatbarMessage() {
-      this.$store.commit('ui/setReplyChatbarMessage', this.message)
+      this.$store.commit('chat/setReplyChatbarMessage', this.message)
       this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
     },
     /**

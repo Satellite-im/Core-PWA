@@ -1,7 +1,7 @@
-<div v-if="ui.replyChatbarMessage" class="is-chatbar-reply">
+<div v-if="chat.replyChatbarMessage" class="is-chatbar-reply">
   <div class="markdown">
     {{ $t('conversation.reply_to') }}
-    <strong>{{ ui.replyChatbarMessage.from }}</strong>
+    <strong>{{ chat.replyChatbarMessage.from }}</strong>
   </div>
   <div class="reply-close" @click="clearReplyChatbarMessage">
     <x-icon size="1x" />

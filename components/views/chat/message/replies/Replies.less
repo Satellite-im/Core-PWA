@@ -22,10 +22,14 @@
   }
 
   .message-replies {
-    padding: @light-spacing;
+    padding: @normal-spacing;
 
     .chat-message-container:first-child .chat-message {
-      margin-top: @light-spacing;
+      margin-top: 0;
+    }
+
+    .chat-message-container:last-child .chat-message {
+      margin-bottom: 0;
     }
   }
 }
