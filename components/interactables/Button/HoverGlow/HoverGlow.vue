@@ -4,11 +4,6 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
-    action: {
-      type: Function,
-      required: false,
-      default: () => {},
-    },
     disabled: {
       type: Boolean,
       required: false,
