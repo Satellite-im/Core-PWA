@@ -156,51 +156,61 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
-    console.info('loadAccount')
+    logger.info('accounts/actions/loadAccount', 'beginning account load')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     if (state.adapter === 'Solana') {
       $BlockchainClient.setAdapter(new SolanaAdapter())
-      window.console.log('Using Solana adapter')
+      logger.info('accounts/actions/loadAccount', 'using solana adapter')
     } else {
       $BlockchainClient.setAdapter(new PhantomAdapter())
-      window.console.log('Using Phantom adapter')
+      logger.info('accounts/actions/loadAccount', 'using phantom wallet')
     }
     const mnemonic = state.phrase
     if (mnemonic === '') {
-      console.info('empty mnemonic')
+      logger.error('accounts/actions/loadAccount', 'empty mnemonic')
       throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
     }
 
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
     if (!$BlockchainClient.isPayerInitialized) {
-      console.info('payer not initialized')
+      logger.error('accounts/actions/loadAccount', 'user derivation failed')
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
     if (!iridium.ready) {
-      console.info('initializing iridium')
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'signing message for iridium',
+      )
       const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      await dispatch('iridium/initializeFromEntropy', entropy, {
-        root: true,
-      })
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'dispatching iridium/initializeFromEntropy',
+      )
+      await iridium.initFromEntropy(entropy)
     }
 
     commit('setActiveAccount', iridium.connector?.id)
-    console.info('fetching user info')
+    logger.debug('accounts/actions/loadAccount', 'fetching iridium profile')
     const userInfo = await iridium.profile?.get()
     if (!userInfo?.did) {
-      console.info('user not registered', userInfo)
+      logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
 
-    console.info('user registered, dispatching')
+    logger.debug(
+      'accounts/actions/loadAccount',
+      'user loaded, dispatching setUserDetails & setRegistrationStatus',
+      userInfo,
+    )
     commit('setUserDetails', {
       username: userInfo.name,
       ...userInfo,
     })
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+    await iridium.connector?.waitForSyncNode()
     dispatch('startup')
   },
   /**
@@ -259,6 +269,7 @@ export default {
       status: userData.status,
       photoHash: imagePath,
     }
+    await iridium.connector?.waitForSyncNode()
     await iridium.profile?.set('', profile)
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)
@@ -314,17 +325,6 @@ export default {
     rootState,
     state,
   }: ActionsArguments<AccountsState>) {
-    db.initializeSearchIndexes()
-
-    const { pin } = state
-    await dispatch('loadIridium', {
-      pin,
-    })
-
-    if (!iridium.connector?.peerId) {
-      return
-    }
-
     dispatch(
       'webrtc/initialize',
       {
@@ -340,20 +340,6 @@ export default {
     )
 
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
-  },
-  async loadIridium({ dispatch, state }: ActionsArguments<AccountsState>) {
-    if (!iridium.ready) {
-      logger.log(
-        'accounts/loadIridium',
-        'Loading Iridium from accounts startup',
-      )
-      const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-      const { entropyMessage } = state
-      const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      await dispatch('iridium/initializeFromEntropy', entropy, { root: true })
-    }
-
-    await dispatch('groups/initialize', {}, { root: true })
   },
   async connectWallet({
     commit,

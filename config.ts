@@ -3,7 +3,7 @@ import { Commitment } from '@solana/web3.js'
 
 const soundsCID = 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9'
 const syncNodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
-  '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
+  '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
 ]
 console.log('debug: | syncNodes', syncNodes)
 
@@ -14,7 +14,10 @@ export const Config = {
     ipfs: {
       config: {
         Addresses: {
-          Swarm: syncNodes.map((node) => `${node}/p2p-circuit`),
+          Swarm: [
+            '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+            '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+          ],
           Delegate: syncNodes,
         },
         Bootstrap: syncNodes,

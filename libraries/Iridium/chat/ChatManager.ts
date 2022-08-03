@@ -1,11 +1,5 @@
 import Vue from 'vue'
-import {
-  IridiumMessage,
-  Iridium,
-  Emitter,
-  didUtils,
-  encoding,
-} from '@satellite-im/iridium'
+import { IridiumMessage, Emitter, didUtils } from '@satellite-im/iridium'
 import type { EmitterCallback } from '@satellite-im/iridium'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
@@ -13,11 +7,11 @@ import {
   Conversation,
   ConversationMessage,
   ChatError,
-  ConversationMessagePayload,
   MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
-import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
+import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
+import logger from '~/plugins/local/logger'
 
 export type ConversationPubsubEvent = IridiumMessage<{
   type: string
@@ -45,22 +39,28 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     [key: Conversation['id']]: Array<ConversationMessage & { id: string }>
   } = {}
 
+  private _intervals: { [key: string]: any } = {}
+
   constructor(public readonly iridium: IridiumManager) {
     super()
   }
 
   async init() {
     await this.fetch()
-    await Promise.all(
-      Object.keys(this.state.conversations).map(async (id) => {
-        // this.iridium.connector?.on(
-        //   `/chat/conversations/${id}`,
-        //   this.onConversationMessage.bind(this, id),
-        // )
-        await this.iridium.connector?.subscribe(`/chat/conversations/${id}`)
-      }),
-    )
-
+    await this.iridium.connector?.subscribe(`/chat/conversations`)
+    // this.iridium.connector?.p2p.on('/peer/connect', async (peer) => {
+    //   const conversations = Object.values(this.state.conversations).filter(
+    //     (conversation) =>
+    //       conversation.participants.includes(peer.did) &&
+    //       !this.subscriptions.includes(conversation.id),
+    //   )
+    //   for (const conversation of conversations) {
+    //     this.subscriptions.push(conversation.id)
+    //     await this.iridium.connector?.subscribe(`/chat/conversations`, {
+    //       handler: this.onConversationMessage.bind(this, conversation.id),
+    //     })
+    //   }
+    // })
     this.ready = true
     this.emit('ready', {})
   }
@@ -89,40 +89,41 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
 
-  // async onConversationMessage(
-  //   conversationId: string,
-  //   message: ConversationPubsubEvent,
-  // ) {
-  //   if (!this.iridium.connector) return
-  //   const { from, did, payload } = message
-  //   const conversation = await this.getConversation(conversationId)
-  //   if (!conversation || !conversation.participants.includes(did)) {
-  //     throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-  //   }
-  //   const { type, message: messageCID } = payload
-  //   if (type === 'chat/message' && messageCID) {
-  //     // TODO: type check the message?
-  //     const msg = await this.iridium.connector.load(messageCID, {
-  //       decrypt: true,
-  //     })
-  //     if (msg) {
-  //       conversation.messages.push(messageCID)
-  //       conversation.message[messageCID] = msg
-  //       this.state.conversation[conversationId] = conversation
-  //       await this.set(
-  //         `/conversations/${conversationId}/messages`,
-  //         conversation.messages,
-  //       )
-  //       await this.set(
-  //         `/conversations/${conversationId}/message/${messageCID}`,
-  //         msg,
-  //       )
-  //       await this.saveConversation(conversation)
-  //     }
-  //   }
+  async onConversationMessage(
+    conversationId: string,
+    message: ConversationPubsubEvent,
+  ) {
+    console.info('onConversationMessage', message)
+    // if (!this.iridium.connector) return
+    // const { from, did, payload } = message
+    // const conversation = await this.getConversation(conversationId)
+    // if (!conversation || !conversation.participants.includes(did)) {
+    //   throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+    // }
+    // const { type, message: messageCID } = payload
+    // if (type === 'chat/message' && messageCID) {
+    //   // TODO: type check the message?
+    //   const msg = await this.iridium.connector.load(messageCID, {
+    //     decrypt: true,
+    //   })
+    //   if (msg) {
+    //     conversation.messages.push(messageCID)
+    //     conversation.message[messageCID] = msg
+    //     this.state.conversation[conversationId] = conversation
+    //     await this.set(
+    //       `/conversations/${conversationId}/messages`,
+    //       conversation.messages,
+    //     )
+    //     await this.set(
+    //       `/conversations/${conversationId}/message/${messageCID}`,
+    //       msg,
+    //     )
+    //     await this.saveConversation(conversation)
+    //   }
+    // }
 
-  //   this.emit(`conversations/${conversationId}`, payload)
-  // }
+    // this.emit(`conversations/${conversationId}`, payload)
+  }
 
   hasConversation(id: string) {
     return Object.keys(this.state.conversations).includes(id)
@@ -173,7 +174,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // )
     Vue.set(this.messages, id, [])
     Vue.set(this.state.conversations, id, conversation)
-    await this.iridium.connector?.subscribe(`/chat/conversations/${id}`)
   }
 
   getConversation(id: string): Conversation {
@@ -253,26 +253,23 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.set(`/conversations/${conversationId}/message/${messageCID}`, message)
 
     // broadcast the message to connected peers
-    await this.iridium.connector.publish(
-      `/chat/conversations/${conversationId}`,
-      {
-        type: 'chat/message',
-        conversation: conversationId,
-        message: messageCID,
-      },
-    )
-
-    const pids = (
-      await Promise.all(
-        conversation.participants.map((p) => didUtils.DIDToPeerId(p)),
-      )
-    ).map((pid) => pid.toString())
-
-    await this.iridium.connector.send(pids, {
+    await this.iridium.connector.publish(`/chat/conversations`, {
       type: 'chat/message',
-      conversationId,
-      messageCID,
+      conversation: conversationId,
+      message: messageCID,
     })
+
+    // const pids = (
+    //   await Promise.all(
+    //     conversation.participants.map((p) => didUtils.DIDToPeerId(p)),
+    //   )
+    // ).map((pid) => pid.toString())
+
+    // await this.iridium.connector.send(pids, {
+    //   type: 'chat/message',
+    //   conversationId,
+    //   messageCID,
+    // })
   }
 
   async toggleMessageReaction(payload: MessageReactionPayload) {
@@ -282,7 +279,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const did = this.iridium.connector.id
     const { conversationId, messageId } = payload
-    const conversation = this.getConversation(conversationId)
     const message = this.getConversationMessage(conversationId, messageId)
     const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
     let reactions = ((await this.get(path)) ?? []) as string[]
@@ -298,26 +294,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     Vue.set(message.reactions, did, reactions)
 
     // broadcast the message to connected peers
-    await this.iridium.connector.publish(
-      `/chat/conversations/${conversationId}`,
-      {
-        type: 'chat/reaction',
-        conversation: conversationId,
-        messageCID: messageId,
-        userId: did,
-        reactions,
-      },
-    )
-
-    const pids = (
-      await Promise.all(
-        conversation.participants.map((p) => didUtils.DIDToPeerId(p)),
-      )
-    ).map((pid) => pid.toString())
-
-    await this.iridium.connector.send(pids, {
+    await this.iridium.connector.publish(`/chat/conversations`, {
       type: 'chat/reaction',
-      conversationId,
+      conversation: conversationId,
       messageCID: messageId,
       userId: did,
       reactions,
