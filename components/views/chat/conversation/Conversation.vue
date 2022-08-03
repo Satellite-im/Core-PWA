@@ -49,8 +49,6 @@ export default Vue.extend({
             (replyMessage) => replyMessage.replyToId === message.id,
           )
 
-          console.log('replies', replies)
-
           return {
             message,
             isSameAuthor,
