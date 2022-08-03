@@ -119,7 +119,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         handler: this.onConversationMessage.bind(this, conversationId),
       })
       subscription.connected = true
+      return
     }
+    logger.warn(
+      'iridium/chatmanager/onSyncSubscriptionResponse',
+      'sync node failed to subscribe',
+      message,
+    )
   }
 
   async fetch() {
@@ -225,10 +231,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
-    // this.iridium.connector?.on(
-    //   `/chat/conversations/${id}`,
-    //   this.onConversationMessage.bind(this, id),
-    // )
+    // ask the sync node to subscribe to this topic
+    this._subscriptions[conversation.id] = {
+      topic: `/chat/conversations/${id}`,
+      connected: false,
+    }
+    if (this.iridium.connector?.p2p.primaryNodeID) {
+      await this.iridium.connector?.p2p.send(
+        this.iridium.connector?.p2p.primaryNodeID,
+        {
+          type: 'sync/subscribe',
+          topic: `/chat/conversations/${id}`,
+        },
+      )
+    }
+
     Vue.set(this.messages, id, [])
     Vue.set(this.state.conversations, id, conversation)
   }
