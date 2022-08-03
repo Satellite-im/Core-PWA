@@ -531,15 +531,7 @@ export default {
       throw new Error(TextileError.FRIEND_NOT_FOUND)
     }
 
-    commit(
-      'ui/setReplyChatbarContent',
-      {
-        id: '',
-        payload: '',
-        from: '',
-      },
-      { root: true },
-    )
+    commit('chat/clearReplyChatbarMessage')
 
     const $MailboxManager: MailboxManager = $TextileManager.mailboxManager
     const result = await $MailboxManager.sendMessage<'reply'>(
@@ -1045,15 +1037,7 @@ export default {
     }
 
     commit('setMessageLoading', { loading: true })
-    commit(
-      'ui/setReplyChatbarContent',
-      {
-        id: '',
-        payload: '',
-        from: '',
-      },
-      { root: true },
-    )
+    commit('chat/clearReplyChatbarMessage')
 
     const result = await $GroupChatManager.sendMessage<'reply'>(to, {
       to,

@@ -89,11 +89,6 @@ export interface UIState {
   glyphModalPack: string
   chatbarContent: string
   chatbarFocus: boolean
-  replyChatbarContent: {
-    id: string
-    from: string
-    payload: string
-  }
   showPinned: boolean
   fullscreen: boolean
   enhancers: EnhancerInfo

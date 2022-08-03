@@ -15,7 +15,7 @@
     class="reply-command"
     :class="{'coming-soon': isGroup}"
     v-tooltip.top="$t(isGroup ? 'ui.coming_soon' : 'messaging.reply')"
-    @click="setReplyChatbarContent"
+    @click="setReplyChatbarMessage"
   >
     <corner-down-right-icon size="1x" :class="'control-icon'" />
   </div>

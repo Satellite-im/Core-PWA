@@ -1,11 +1,5 @@
 import Vue from 'vue'
-import {
-  IridiumMessage,
-  Iridium,
-  Emitter,
-  didUtils,
-  encoding,
-} from '@satellite-im/iridium'
+import { IridiumMessage, Emitter, didUtils } from '@satellite-im/iridium'
 import type { EmitterCallback } from '@satellite-im/iridium'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
@@ -14,8 +8,9 @@ import {
   ConversationMessage,
   ChatError,
   MessageReactionPayload,
+  ConversationMessagePayload,
 } from '~/libraries/Iridium/chat/types'
-import { Friend, FriendsError } from '~/libraries/Iridium/friends/types'
+import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 
 export type ConversationPubsubEvent = IridiumMessage<{
@@ -33,10 +28,8 @@ const initialState: State = {
   conversations: {},
 }
 
-export type Message = ConversationMessage & { id: string }
-
 export type Conversations = {
-  [key: Conversation['id']]: Message[]
+  [key: Conversation['id']]: ConversationMessage[]
 }
 
 export default class ChatManager extends Emitter<ConversationMessage> {
@@ -232,17 +225,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @method sendMessage
    * @description Sends a message to the given groupChat
    */
-  async sendMessage(payload: Omit<ConversationMessage, 'from' | 'reactions'>) {
+  async sendMessage(payload: ConversationMessagePayload) {
     if (!this.iridium.connector) {
       return
     }
 
     const { conversationId } = payload
     const conversation = this.getConversation(conversationId)
-    const message: ConversationMessage = {
+    const message: Omit<ConversationMessage, 'id'> = {
       ...payload,
       from: this.iridium.connector.id,
       reactions: {},
+      attachments: [],
     }
 
     const messageID = await this.iridium.connector.store(message, {

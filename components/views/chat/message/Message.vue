@@ -2,19 +2,18 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import { UIMessage, Group } from '~/types/messaging'
-
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage, ModalWindows } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/types'
-import { Conversation } from '~/store/textile/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -26,7 +25,15 @@ export default Vue.extend({
       type: Object as PropType<ConversationMessage>,
       required: true,
     },
+    replies: {
+      type: Array as PropType<ConversationMessage[]>,
+      default: [] as ConversationMessage[],
+    },
     showHeader: {
+      type: Boolean,
+      default: false,
+    },
+    hideReplyAction: {
       type: Boolean,
       default: false,
     },
@@ -40,6 +47,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
+      chat: (state) => (state as RootState).chat,
       textile: (state) => (state as RootState).textile,
       accounts: (state) => (state as RootState).accounts,
     }),
@@ -67,6 +75,12 @@ export default Vue.extend({
       // }
       // return this.groups[this.conversation.id]
     },
+    isReplyingTo(): boolean {
+      return (
+        this.chat.replyChatbarMessages[this.conversationId]?.id ===
+        this.message.id
+      )
+    },
     timestamp(): string {
       return this.getTimestamp({ time: this.message.at })
     },
@@ -80,7 +94,7 @@ export default Vue.extend({
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
+        { text: this.$t('context.reply'), func: this.setReplyChatbarMessage },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
@@ -239,30 +253,10 @@ export default Vue.extend({
         }
       })
     },
-    /**
-     * @method setReplyChatbarContent DocsTODO
-     * @description
-     * @example
-     */
-    setReplyChatbarContent() {
-      if (this.isGroup) {
-        this.toggleModal(ModalWindows.CALL_TO_ACTION)
-        return
-      }
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      const { id, type, payload, to, from } = this.message
-      let finalPayload = payload
-      if (['image', 'video', 'audio', 'file'].includes(type)) {
-        finalPayload = `*${this.$t('conversation.multimedia')}*`
-      } else if (type === 'glyph') {
-        finalPayload = `<img src=${payload} width='16px' height='16px' />`
-      }
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id,
-        payload: finalPayload,
-        from: this.from,
-        messageID: this.message.id,
-        to: to === myTextilePublicKey ? from : to,
+    setReplyChatbarMessage() {
+      this.$store.commit('chat/setReplyChatbarMessage', {
+        conversationId: this.message.conversationId,
+        message: this.message,
       })
       this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
     },

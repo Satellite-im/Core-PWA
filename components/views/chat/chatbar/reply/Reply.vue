@@ -3,26 +3,22 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { XIcon } from 'satellite-lucide-icons'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   components: {
     XIcon,
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState(['chat']),
+    replyChatbarMessage(): ConversationMessage {
+      return this.chat.replyChatbarMessages[this.$route.params.id]
+    },
   },
   methods: {
-    /**
-     * @method setReplyChatbarContent
-     * @description Adds message reply by committing chatbar content to setReplyChatbarContent in state
-     * @example @click="setReplyChatbarContent"
-     */
-    setReplyChatbarContent() {
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id: '',
-        payload: '',
-        from: '',
-      })
+    clearReplyChatbarMessage() {
+      const conversationId = this.$route.params.id
+      this.$store.commit('chat/clearReplyChatbarMessage', { conversationId })
     },
   },
 })

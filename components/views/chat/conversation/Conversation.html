@@ -9,9 +9,10 @@
       />
       <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
       <Message
-        :message="item.message"
         :key="item.message.id"
+        :message="item.message"
         :showHeader="!item.isSameAuthor"
+        :replies="item.replies"
       />
     </template>
   </div>

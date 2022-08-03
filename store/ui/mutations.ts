@@ -1,11 +1,9 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
-  Flair,
   Position,
   RecentGlyph,
   SettingsRoutes,
-  Theme,
   UIState,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
@@ -167,16 +165,6 @@ export default {
   },
   setActiveChannel(state: UIState, channel: Channel) {
     state.activeChannel = channel
-  },
-  setReplyChatbarContent(
-    state: UIState,
-    message: {
-      id: string
-      from: string
-      payload: string
-    },
-  ) {
-    state.replyChatbarContent = message
   },
   settingReaction(state: UIState, status: object) {
     state.settingReaction = status // TODO: check this mutation, probably a bug

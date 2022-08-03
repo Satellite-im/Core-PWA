@@ -1,11 +1,16 @@
-<template src="./Reply.html"></template>
+<template src="./Replies.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
-import { UIMessage, Group } from '~/types/messaging'
 import { getUsernameFromState } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+
+interface ReplyItem {
+  message: ConversationMessage
+  isSameAuthor: boolean
+}
 
 export default Vue.extend({
   components: {
@@ -13,14 +18,9 @@ export default Vue.extend({
     MinusSquareIcon,
   },
   props: {
-    message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Message',
-      }),
+    replies: {
+      type: Array as PropType<ConversationMessage[]>,
+      required: true,
     },
   },
   data() {
@@ -30,6 +30,18 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui', 'chat']),
+    replyItems(): ReplyItem[] {
+      return this.replies.map((message, index) => {
+        const prevMessage = index >= 0 ? this.replies[index - 1] : undefined
+        const isSameAuthor = prevMessage
+          ? message.from === prevMessage.from
+          : false
+        return {
+          message,
+          isSameAuthor,
+        }
+      })
+    },
     setChatReply: {
       set(state) {
         this.$store.commit('chat/setChatReply', state)
@@ -46,7 +58,7 @@ export default Vue.extend({
       const LIMIT = 2
       const SEPARATOR = this.$t('conversation.replies_separator')
 
-      const replies = this.$props.message.replies
+      const replies = this.replies
 
       const uniqueRepliers = [
         ...new Set(replies.map((reply: any) => reply.from)),
@@ -76,15 +88,6 @@ export default Vue.extend({
         leftCount: uniqueRepliers.length - LIMIT,
       })
     },
-  },
-  mounted() {
-    const findItem = this.setChatReply.find(
-      (item: any) => item.replyId === this.$props.message.id,
-    )
-
-    if (findItem) {
-      this.$data.showReplies = findItem.value
-    }
   },
   methods: {
     /**
@@ -138,12 +141,12 @@ export default Vue.extend({
     toggleReplies() {
       this.$data.showReplies = !this.$data.showReplies
 
-      this.setChatReply = {
-        replyId: this.$props.message.id,
-        value: this.$data.showReplies,
-      }
+      //       this.setChatReply = {
+      //         replyId: this.$props.message.id,
+      //         value: this.$data.showReplies,
+      //       }
     },
   },
 })
 </script>
-<style lang="less" src="./Reply.less"></style>
+<style lang="less" src="./Replies.less"></style>

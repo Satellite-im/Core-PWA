@@ -19,5 +19,6 @@ Object {
   "draftMessages": Object {},
   "files": Object {},
   "replies": Array [],
+  "replyChatbarMessages": Object {},
 }
 `;
