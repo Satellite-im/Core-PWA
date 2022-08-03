@@ -1,5 +1,11 @@
 import Vue from 'vue'
-import { IridiumMessage, Emitter, didUtils } from '@satellite-im/iridium'
+import {
+  IridiumMessage,
+  Emitter,
+  didUtils,
+  IridiumPubsubMessage,
+} from '@satellite-im/iridium'
+import type { SyncSubscriptionResponse } from '@satellite-im/iridium/src/sync/agent'
 import type { EmitterCallback } from '@satellite-im/iridium'
 // Iridium import above has static function called hash, use to hash this user id and the name of the chat
 
@@ -30,7 +36,6 @@ const initialState: State = {
 
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
-  public subscriptions: string[] = []
   public state: State = {
     conversations: {},
   }
@@ -40,6 +45,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   } = {}
 
   private _intervals: { [key: string]: any } = {}
+  private _subscriptions: {
+    [key: string]: { topic: string; connected: boolean }
+  } = {}
 
   constructor(public readonly iridium: IridiumManager) {
     super()
@@ -47,22 +55,71 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async init() {
     await this.fetch()
-    await this.iridium.connector?.subscribe(`/chat/conversations`)
-    // this.iridium.connector?.p2p.on('/peer/connect', async (peer) => {
-    //   const conversations = Object.values(this.state.conversations).filter(
-    //     (conversation) =>
-    //       conversation.participants.includes(peer.did) &&
-    //       !this.subscriptions.includes(conversation.id),
-    //   )
-    //   for (const conversation of conversations) {
-    //     this.subscriptions.push(conversation.id)
-    //     await this.iridium.connector?.subscribe(`/chat/conversations`, {
-    //       handler: this.onConversationMessage.bind(this, conversation.id),
-    //     })
-    //   }
-    // })
-    this.ready = true
-    this.emit('ready', {})
+    const conversations = Object.values(this.state.conversations)
+    // listen for sync node subscription responses
+    this.iridium.connector?.p2p.on<
+      IridiumPubsubMessage<SyncSubscriptionResponse>
+    >('sync/message/sync/subscribe', this.onSyncSubscriptionResponse.bind(this))
+
+    this.iridium.connector?.p2p.on('ready', async () => {
+      if (!this.iridium.connector?.p2p.primaryNodeID) {
+        throw new Error('not connected to primary node')
+      }
+      logger.info('iridium/chatmanager/init', 'p2p ready, initializing chat...')
+
+      for (const conversation of conversations) {
+        if (this._subscriptions[conversation.id] !== undefined) continue
+        const topic = `/chat/conversations/${conversation.id}`
+        this._subscriptions[conversation.id] = { topic, connected: false }
+
+        logger.info(
+          'iridium/chatmanager/init',
+          `requesting sync subscription to ${topic}`,
+        )
+        // ask the sync node to subscribe to this topic
+        await this.iridium.connector?.p2p.send(
+          this.iridium.connector?.p2p.primaryNodeID,
+          {
+            type: 'sync/subscribe',
+            topic,
+          },
+        )
+      }
+      this.ready = true
+      this.emit('ready', {})
+    })
+  }
+
+  /**
+   * @param message - pubsub message from the sync node
+   * @description - handle a sync subscription response from the sync node
+   */
+  async onSyncSubscriptionResponse(
+    message: IridiumPubsubMessage<SyncSubscriptionResponse>,
+  ) {
+    if (!message.payload.body.topic) {
+      throw new Error('no topic in sync subscription response')
+    }
+    const [conversationId, subscription] =
+      Object.entries(this._subscriptions).find(
+        ([, { topic }]) => topic === message.payload.body.topic,
+      ) || []
+    if (!conversationId || !subscription) {
+      throw new Error('subscription not requested')
+    }
+    if (subscription?.connected) {
+      throw new Error('subscription already connected')
+    }
+    if (message.payload.body.success) {
+      logger.info(
+        'iridium/chatmanager/onSyncSubscriptionResponse',
+        `sync node subscribed to ${message.payload.body.topic}`,
+      )
+      await this.iridium.connector?.subscribe(message.topic, {
+        handler: this.onConversationMessage.bind(this, conversationId),
+      })
+      subscription.connected = true
+    }
   }
 
   async fetch() {
@@ -242,6 +299,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions: {},
     }
 
+    if (!this._subscriptions[conversationId]) {
+      // we're not subscribed yet
+      throw new Error(`not yet subscribed to conversation ${conversationId}`)
+    }
+
     const messageID = await this.iridium.connector.store(message, {
       encrypt: { recipients: conversation.participants },
     })
@@ -253,23 +315,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.set(`/conversations/${conversationId}/message/${messageCID}`, message)
 
     // broadcast the message to connected peers
-    await this.iridium.connector.publish(`/chat/conversations`, {
-      type: 'chat/message',
-      conversation: conversationId,
-      message: messageCID,
-    })
-
-    // const pids = (
-    //   await Promise.all(
-    //     conversation.participants.map((p) => didUtils.DIDToPeerId(p)),
-    //   )
-    // ).map((pid) => pid.toString())
-
-    // await this.iridium.connector.send(pids, {
-    //   type: 'chat/message',
-    //   conversationId,
-    //   messageCID,
-    // })
+    await this.iridium.connector.publish(
+      `/chat/conversations/${conversationId}`,
+      {
+        type: 'chat/message',
+        conversation: conversationId,
+        message: messageCID,
+      },
+      {
+        encrypt: { recipients: conversation.participants },
+      },
+    )
   }
 
   async toggleMessageReaction(payload: MessageReactionPayload) {
@@ -280,6 +336,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const did = this.iridium.connector.id
     const { conversationId, messageId } = payload
     const message = this.getConversationMessage(conversationId, messageId)
+
+    if (!this._subscriptions[conversationId]) {
+      // we're not subscribed yet
+      throw new Error(`not yet subscribed to conversation ${conversationId}`)
+    }
+
     const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
     let reactions = ((await this.get(path)) ?? []) as string[]
 
@@ -294,12 +356,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     Vue.set(message.reactions, did, reactions)
 
     // broadcast the message to connected peers
-    await this.iridium.connector.publish(`/chat/conversations`, {
-      type: 'chat/reaction',
-      conversation: conversationId,
-      messageCID: messageId,
-      userId: did,
-      reactions,
-    })
+    await this.iridium.connector.publish(
+      `/chat/conversations/${conversationId}`,
+      {
+        type: 'chat/reaction',
+        conversation: conversationId,
+        messageCID: messageId,
+        userId: did,
+        reactions,
+      },
+    )
   }
 }

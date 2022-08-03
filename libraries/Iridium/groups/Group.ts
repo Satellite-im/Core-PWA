@@ -66,6 +66,7 @@ export default class Group extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.GROUP_NOT_INITIALIZED)
     }
 
+    console.info('sending group message')
     return this.iridium.connector?.send(payload, {
       to: this.state?.members,
     })
