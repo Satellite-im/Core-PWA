@@ -1,0 +1,11 @@
+<div class="preview-call">
+  <MediaUser
+    :id="`remote_video_${ participant.peerId }`"
+    class="preview-call-user"
+    data-cy="remote-video"
+    :user="participant"
+    :calling="!participant"
+    :isLocal="false"
+  />
+  <MediaActions class="preview-call-actions" />
+</div>

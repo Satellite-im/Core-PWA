@@ -9,8 +9,9 @@
         height: `${elHeight}px`,
       }"
       :class="{ pointer: isDragging }"
-      @mousedown="mouseDown"
+      @mousedown.stop="mouseDown"
     >
+      <slot />
       <!-- <div class="content-container">
         <div class="content-item"></div>
         <div class="content-item"></div>
@@ -171,11 +172,12 @@ export default Vue.extend({
   box-sizing: border-box;
   cursor: pointer;
   z-index: 1000;
+  overflow: hidden;
 }
 
-.pointer {
-  pointer-events: none;
-}
+//.pointer {
+//  pointer-events: none;
+//}
 
 .grid-container {
   user-select: none;

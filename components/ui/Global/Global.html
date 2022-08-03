@@ -92,4 +92,7 @@
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
   <UiBackgroundCall v-if="showBackgroundCall" />
+  <UiPip v-if="showBackgroundCall">
+    <PreviewCall />
+  </UiPip>
 </div>

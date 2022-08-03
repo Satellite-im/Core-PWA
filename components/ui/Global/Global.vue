@@ -5,6 +5,7 @@ import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import PreviewCall from '~/components/views/media/previewCall/PreviewCall.vue'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -14,6 +15,9 @@ declare module 'vue/types/vue' {
 
 export default Vue.extend({
   name: 'Global',
+  components: {
+    PreviewCall,
+  },
   data() {
     return {
       webrtc: iridium.webRTC,
