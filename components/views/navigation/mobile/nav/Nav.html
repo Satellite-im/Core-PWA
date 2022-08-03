@@ -25,6 +25,7 @@
   </button>
   <button
     :class="{active: isActiveRoute('settings')}"
+    @click="$router.push('/mobile/settings')"
     data-cy="mobile-nav-settings"
   >
     <UiUserState :user="accounts.details" />

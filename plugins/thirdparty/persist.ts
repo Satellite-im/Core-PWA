@@ -38,7 +38,7 @@ const commonProperties = [
   'ui.modals',
   'ui.isScrollOver',
   'ui.isMobileNavVisible',
-  'textile.userThread',
+  'ui.settingsRoute',
   'conversation.participants',
   'files',
 ]

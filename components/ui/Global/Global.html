@@ -1,7 +1,7 @@
 <div>
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
-    <SettingsModal v-if="ui.showSettings" />
+    <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
     <UiModal
       v-if="ui.modals.wallet"
       :close-modal="() => toggleModal(ModalWindows.WALLET)"

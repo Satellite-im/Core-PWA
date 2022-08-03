@@ -1,45 +1,38 @@
 <UiModal :closeModal="closeModal" nopad>
   <div class="settings">
-    <SettingsSidebar
-      class="sidebar"
-      :title="$t('pages.settings.settings')"
-      :toggle="toggleSidebar"
-      :handleRouteChange="changeRoute"
-    />
+    <SettingsSidebar class="sidebar" />
     <div class="page">
       <SettingsPagesPersonalize
-        v-if="this.ui.settingsRoute === SettingsRoutes.PERSONALIZE"
+        v-if="ui.settingsRoute === SettingsRoutes.PERSONALIZE"
       />
       <SettingsPagesAccounts
-        v-if="this.ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
+        v-if="ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
       />
       <SettingsPagesAudio
-        v-if="this.ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
+        v-if="ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
       />
       <SettingsPagesDeveloper
-        v-if="this.ui.settingsRoute === SettingsRoutes.DEVELOPER"
+        v-if="ui.settingsRoute === SettingsRoutes.DEVELOPER"
       />
-      <SettingsPagesInfo v-if="this.ui.settingsRoute === SettingsRoutes.INFO" />
+      <SettingsPagesInfo v-if="ui.settingsRoute === SettingsRoutes.INFO" />
       <SettingsPagesKeybinds
-        v-if="this.ui.settingsRoute === SettingsRoutes.KEY_BINDS"
+        v-if="ui.settingsRoute === SettingsRoutes.KEY_BINDS"
       />
       <SettingsPagesNotifications
-        v-if="this.ui.settingsRoute === SettingsRoutes.NOTIFICATIONS"
+        v-if="ui.settingsRoute === SettingsRoutes.NOTIFICATIONS"
       />
       <SettingsPagesProfile
-        v-if="this.ui.settingsRoute === SettingsRoutes.PROFILE"
+        v-if="ui.settingsRoute === SettingsRoutes.PROFILE"
       />
       <SettingsPagesStorage
-        v-if="this.ui.settingsRoute === SettingsRoutes.STORAGE"
+        v-if="ui.settingsRoute === SettingsRoutes.STORAGE"
       />
       <SettingsPagesNetwork
-        v-if="this.ui.settingsRoute === SettingsRoutes.NETWORK"
+        v-if="ui.settingsRoute === SettingsRoutes.NETWORK"
       />
-      <SettingsPagesRealms
-        v-if="this.ui.settingsRoute === SettingsRoutes.REALMS"
-      />
+      <SettingsPagesRealms v-if="ui.settingsRoute === SettingsRoutes.REALMS" />
       <SettingsPagesPrivacy
-        v-if="this.ui.settingsRoute === SettingsRoutes.PRIVACY"
+        v-if="ui.settingsRoute === SettingsRoutes.PRIVACY"
       />
     </div>
     <InteractablesClose data-cy="settings-close-button" :action="closeModal" />
