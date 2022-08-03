@@ -21,7 +21,7 @@ const InitialChatState = (): ChatState => ({
   countError: false,
   currentChat: initialCurrentChat,
   draftMessages: {},
-  replyChatbarMessage: undefined,
+  replyChatbarMessages: {},
 })
 
 export default InitialChatState

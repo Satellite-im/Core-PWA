@@ -28,5 +28,5 @@ export interface ChatState {
   countError: boolean
   currentChat: ICurrentChat
   draftMessages: { [key: Conversation['id']]: string }
-  replyChatbarMessage?: ConversationMessage
+  replyChatbarMessages: { [key: Conversation['id']]: ConversationMessage }
 }

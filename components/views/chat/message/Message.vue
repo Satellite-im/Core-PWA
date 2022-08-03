@@ -76,7 +76,10 @@ export default Vue.extend({
       // return this.groups[this.conversation.id]
     },
     isReplyingTo(): boolean {
-      return this.chat.replyChatbarMessage?.id === this.message.id
+      return (
+        this.chat.replyChatbarMessages[this.conversationId]?.id ===
+        this.message.id
+      )
     },
     timestamp(): string {
       return this.getTimestamp({ time: this.message.at })
@@ -251,7 +254,10 @@ export default Vue.extend({
       })
     },
     setReplyChatbarMessage() {
-      this.$store.commit('chat/setReplyChatbarMessage', this.message)
+      this.$store.commit('chat/setReplyChatbarMessage', {
+        conversationId: this.message.conversationId,
+        message: this.message,
+      })
       this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
     },
     /**

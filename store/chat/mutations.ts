@@ -91,11 +91,20 @@ const mutations = {
   ) {
     Vue.set(state.draftMessages, conversationId, message)
   },
-  setReplyChatbarMessage(state: ChatState, message: ConversationMessage) {
-    state.replyChatbarMessage = message
+  setReplyChatbarMessage(
+    state: ChatState,
+    {
+      conversationId,
+      message,
+    }: { conversationId: Conversation['id']; message: ConversationMessage },
+  ) {
+    Vue.set(state.replyChatbarMessages, conversationId, message)
   },
-  clearReplyChatbarMessage(state: ChatState) {
-    state.replyChatbarMessage = undefined
+  clearReplyChatbarMessage(
+    state: ChatState,
+    { conversationId }: { conversationId: Conversation['id'] },
+  ) {
+    Vue.delete(state.replyChatbarMessages, conversationId)
   },
 }
 

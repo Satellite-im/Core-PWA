@@ -90,7 +90,7 @@ const Chatbar = Vue.extend({
     isSharpCorners(): boolean {
       return (
         Boolean(this.files.length) ||
-        Boolean(this.chat.replyChatbarMessage) ||
+        Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
         this.commandPreview ||
         this.chat.countError
       )
@@ -136,7 +136,9 @@ const Chatbar = Vue.extend({
       handler(value) {
         const message = this.chat.draftMessages[this.conversationId]
         this.$refs.editable?.resetHistory()
-        this.$store.commit('chat/clearReplyChatbarMessage')
+        this.$store.commit('chat/clearReplyChatbarMessage', {
+          conversationId: this.conversationId,
+        })
         this.$store.dispatch('ui/setChatbarContent', { content: message })
         // in desktop, stay chatbar focused when switching recipient
         if (this.$device.isDesktop) {
@@ -228,13 +230,13 @@ const Chatbar = Vue.extend({
         at: Date.now(),
       }
 
-      if (this.chat.replyChatbarMessage) {
-        payload.replyToId = this.chat.replyChatbarMessage.id
+      if (this.chat.replyChatbarMessages[conversationId]) {
+        payload.replyToId = this.chat.replyChatbarMessages[conversationId].id
+
+        this.$store.commit('chat/clearReplyChatbarMessage', { conversationId })
       }
 
       await iridium.chat?.sendMessage(payload)
-
-      this.$store.commit('chat/clearReplyChatbarMessage')
     },
     /**
      * @method handlePaste
