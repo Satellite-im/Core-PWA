@@ -7,99 +7,49 @@
   <!-- Mobile Context Menu -->
   <div v-else v-contextmenu="showMenu" @click="handleClick">
     <slot />
-    <div
-      v-if="isVisible"
-      ref="contextMenu"
-      v-click-outside="hideMenu"
-      class="context-menu-container"
-      data-cy="context-menu"
-    >
+    <div v-if="isVisible" ref="contextMenu" v-click-outside="hideMenu" class="context-menu-container"
+      data-cy="context-menu">
       <!-- Quick Reactions -->
       <div class="actions-group">
         <template v-for="item in items">
-          <div
-            v-if="item.text === 'quickReaction' && mostUsedEmojis.length"
-            :key="String(item.text) + '-action'"
-            class="quick-reaction-container"
-          >
-            <p
-              v-for="reaction of mostUsedEmojis"
-              :key="reaction.content"
-              data-cy="quick-reaction"
+          <div v-if="item.text === 'quickReaction' && mostUsedEmojis.length" :key="String(item.text) + '-action'"
+            class="quick-reaction-container">
+            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
               @click="
                 (e) =>
                   handleAction(e, () => {
                     item.func(reaction)
                   })
-              "
-            >
+              ">
               {{ reaction.content }}
-            </p>
-            <p
-              v-for="reaction of mostUsedEmojis"
-              :key="reaction.content"
-              data-cy="quick-reaction"
+            </div>
+            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
               @click="
                 (e) =>
                   handleAction(e, () => {
                     item.func(reaction)
                   })
-              "
-            >
+              ">
               {{ reaction.content }}
-            </p>
-            <p
-              v-for="reaction of mostUsedEmojis"
-              :key="reaction.content"
-              data-cy="quick-reaction"
+            </div>
+            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
               @click="
                 (e) =>
                   handleAction(e, () => {
                     item.func(reaction)
                   })
-              "
-            >
+              ">
               {{ reaction.content }}
-            </p>
-            <p
-              v-for="reaction of mostUsedEmojis"
-              :key="reaction.content"
-              data-cy="quick-reaction"
+            </div>
+            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
               @click="
                 (e) =>
                   handleAction(e, () => {
                     item.func(reaction)
                   })
-              "
-            >
+              ">
               {{ reaction.content }}
-            </p>
-            <p
-              v-for="reaction of mostUsedEmojis"
-              :key="reaction.content"
-              data-cy="quick-reaction"
-              @click="
-                (e) =>
-                  handleAction(e, () => {
-                    item.func(reaction)
-                  })
-              "
-            >
-              {{ reaction.content }}
-            </p>
-            <p
-              v-for="reaction of mostUsedEmojis"
-              :key="reaction.content"
-              data-cy="quick-reaction"
-              @click="
-                (e) =>
-                  handleAction(e, () => {
-                    item.func(reaction)
-                  })
-              "
-            >
-              {{ reaction.content }}
-            </p>
+            </div>
           </div>
         </template>
       </div>
@@ -107,18 +57,9 @@
       <!-- Item Buttons -->
       <div class="actions-group">
         <template v-for="item in items">
-          <button
-            v-if="item.text !== 'quickReaction'"
-            :key="String(item.text) + '-action'"
-            class="action-button"
-            :class="{ danger: item.type === 'danger' }"
-            @click="(e) => handleAction(e, item.func)"
-          >
-            <TypographySubtitle
-              :text="item.text"
-              :size="6"
-              :class="{ danger: item.type === 'danger' }"
-            />
+          <button v-if="item.text !== 'quickReaction'" :key="String(item.text) + '-action'" class="action-button"
+            :class="{ danger: item.type === 'danger' }" @click="(e) => handleAction(e, item.func)">
+            <TypographySubtitle :text="item.text" :size="6" :class="{ danger: item.type === 'danger' }" />
           </button>
         </template>
       </div>
@@ -126,11 +67,7 @@
       <!-- Cancel Button -->
       <div class="actions-group">
         <button class="action-button" @click="hideMenu">
-          <TypographySubtitle
-            :text="$t('ui.cancel')"
-            :size="6"
-            class="danger"
-          />
+          <TypographySubtitle :text="$t('ui.cancel')" :size="6" class="danger" />
         </button>
       </div>
     </div>
@@ -234,29 +171,21 @@ export default Vue.extend({
     }
 
     .quick-reaction-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
-      grid-template-rows: auto;
-      grid-auto-rows: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+      height: 64px;
       overflow: hidden;
-      overflow-y: hidden;
-      width: @full;
-      padding: @light-spacing;
 
-      p {
+      .reaction {
         display: flex;
-        flex-grow: 1;
-        font-size: 1.25rem;
+        flex: 1 0 20%;
         justify-content: center;
         align-items: center;
-        border-radius: unset;
-
-        &:first-of-type {
-          border-radius: @corner-rounding 0 0 @corner-rounding;
-        }
-        &:last-of-type {
-          border-radius: 0 @corner-rounding @corner-rounding 0;
-        }
+        height: 100%;
+        font-size: 24px;
       }
     }
   }
