@@ -8,4 +8,11 @@
     :isLocal="false"
   />
   <MediaActions class="preview-call-actions" />
+  <button
+    class="preview-call-button"
+    v-tooltip.top="$t('controls.back_to_call')"
+    @click="navigateToActiveConversation"
+  >
+    <corner-up-left-icon size="1.25x" />
+  </button>
 </div>
