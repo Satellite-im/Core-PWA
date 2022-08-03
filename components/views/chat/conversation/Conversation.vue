@@ -20,14 +20,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      messages: iridium.chat.messages?.[this.$route.params.id] ?? [],
       conversation:
-        iridium.chat.state.conversations?.[this.$route.params.id] ?? [],
+        iridium.chat.state.conversations?.[this.$route.params.id] ?? {},
     }
   },
   computed: {
     myDid(): string {
       return iridium.connector?.id ?? ''
+    },
+    messages(): ConversationMessage[] {
+      return Object.values(this.conversation.message).sort(
+        (a, b) => a.at - b.at,
+      )
     },
     chatItems(): ChatItem[] {
       return this.messages

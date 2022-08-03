@@ -33,7 +33,6 @@ export default Vue.extend({
       timeoutId: undefined as NodeJS.Timeout | undefined,
       friends: iridium.friends.list,
       groups: iridium.groups.state,
-      messages: iridium.chat.messages[this.conversation.id],
     }
   },
   computed: {
@@ -66,19 +65,18 @@ export default Vue.extend({
             },
           ]
     },
-    lastMessage(): ConversationMessage | undefined {
-      if (!this.messages.length) {
-        return undefined
-      }
-
-      return this.messages[this.messages.length - 1]
+    messages(): ConversationMessage[] {
+      return Object.values(this.conversation.message).sort(
+        (a, b) => a.at - b.at,
+      )
     },
 
     lastMessageDisplay(): string {
-      if (!this.lastMessage) {
+      const lastMessage = this.messages.at(-1)
+      if (!lastMessage) {
         return this.$t('messaging.say_hi') as string
       }
-      return this.lastMessage.body || ''
+      return lastMessage.body || ''
 
       // const sender = message.from === iridium.connector?.id ? 'me' : 'user'
 

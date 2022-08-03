@@ -39,8 +39,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     conversations: {},
   }
 
-  public messages: Conversations = {}
-
   constructor(public readonly iridium: IridiumManager) {
     super()
   }
@@ -63,18 +61,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async fetch() {
     this.state = ((await this.get()) as State) ?? initialState
-    for (const conversation of Object.values(this.state.conversations)) {
-      Vue.set(
-        this.messages,
-        conversation.id,
-        Object.entries(conversation.message)
-          .map(([key, value]) => ({
-            ...value,
-            id: key,
-          }))
-          .sort((a, b) => a.at - b.at),
-      )
-    }
   }
 
   get(path: string = '', options: any = {}) {
@@ -167,7 +153,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     //   `/chat/conversations/${id}`,
     //   this.onConversationMessage.bind(this, id),
     // )
-    Vue.set(this.messages, id, [])
     Vue.set(this.state.conversations, id, conversation)
     await this.iridium.connector?.subscribe(`/chat/conversations/${id}`)
   }
@@ -232,21 +217,33 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const { conversationId } = payload
     const conversation = this.getConversation(conversationId)
-    const message: Omit<ConversationMessage, 'id'> = {
-      ...payload,
-      from: this.iridium.connector.id,
-      reactions: {},
-      attachments: [],
-    }
-
-    const messageID = await this.iridium.connector.store(message, {
-      encrypt: { recipients: conversation.participants },
-    })
+    const messageID = await this.iridium.connector.store(
+      {
+        ...payload,
+        from: this.iridium.connector.id,
+        reactions: {},
+        attachments: [],
+      },
+      {
+        encrypt: { recipients: conversation.participants },
+      },
+    )
     if (!messageID) {
       throw new Error(ChatError.MESSAGE_NOT_SENT)
     }
     const messageCID = messageID.toString()
-    this.messages[conversationId].push({ ...message, id: messageCID })
+    const message: ConversationMessage = {
+      ...payload,
+      from: this.iridium.connector.id,
+      reactions: {},
+      attachments: [],
+      id: messageCID,
+    }
+    Vue.set(
+      this.state.conversations[conversationId].message,
+      messageCID,
+      message,
+    )
     this.set(`/conversations/${conversationId}/message/${messageCID}`, message)
 
     // broadcast the message to connected peers
