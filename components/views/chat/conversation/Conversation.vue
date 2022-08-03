@@ -6,12 +6,12 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 interface ChatItem {
-  message: ConversationMessage & { id: string }
+  message: ConversationMessage
   isSameAuthor: boolean
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
-  replies: (ConversationMessage & { id: string })[]
+  replies: ConversationMessage[]
 }
 
 export default Vue.extend({

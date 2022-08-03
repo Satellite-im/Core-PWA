@@ -9,9 +9,11 @@ import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/types'
-import { Conversation } from '~/store/textile/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -20,12 +22,12 @@ export default Vue.extend({
   },
   props: {
     message: {
-      type: Object as PropType<ConversationMessage & { id: string }>,
+      type: Object as PropType<ConversationMessage>,
       required: true,
     },
     replies: {
-      type: Array as PropType<(ConversationMessage & { id: string })[]>,
-      default: [] as (ConversationMessage & { id: string })[],
+      type: Array as PropType<ConversationMessage[]>,
+      default: [] as ConversationMessage[],
     },
     showHeader: {
       type: Boolean,

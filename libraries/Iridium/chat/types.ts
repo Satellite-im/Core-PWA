@@ -5,17 +5,31 @@ export type MessageGlyph = {
   pack: Glyph
 }
 
+export type ConversationMessageType =
+  | 'text'
+  | 'file'
+  | 'group'
+  | 'glyph'
+  | 'divider'
+  | 'string'
+
 export type ConversationMessage = {
+  id: string
   conversationId: string
   from: string
+  type: ConversationMessageType
+  at: number
   body?: string
   glyph?: MessageGlyph
-  at: number
-  type: 'text' | 'file' | 'group' | 'glyph' | 'divider' | 'string'
   attachments: string[]
   reactions: { [key: string]: string[] }
   replyToId?: string
 }
+
+export type ConversationMessagePayload = Omit<
+  ConversationMessage,
+  'id' | 'from'
+>
 
 export type MessageReactionPayload = {
   conversationId: string

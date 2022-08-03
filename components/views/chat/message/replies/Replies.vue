@@ -8,7 +8,7 @@ import { toHTML } from '~/libraries/ui/Markdown'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 interface ReplyItem {
-  message: ConversationMessage & { id: string }
+  message: ConversationMessage
   isSameAuthor: boolean
 }
 
@@ -19,7 +19,7 @@ export default Vue.extend({
   },
   props: {
     replies: {
-      type: Array as PropType<(ConversationMessage & { id: string })[]>,
+      type: Array as PropType<ConversationMessage[]>,
       required: true,
     },
   },

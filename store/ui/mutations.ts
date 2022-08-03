@@ -169,10 +169,7 @@ export default {
   setActiveChannel(state: UIState, channel: Channel) {
     state.activeChannel = channel
   },
-  setReplyChatbarMessage(
-    state: UIState,
-    message: ConversationMessage & { id: string },
-  ) {
+  setReplyChatbarMessage(state: UIState, message: ConversationMessage) {
     state.replyChatbarMessage = message
   },
   clearReplyChatbarMessage(state: UIState) {
