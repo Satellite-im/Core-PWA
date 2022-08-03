@@ -36,6 +36,7 @@ export default Vue.extend({
       userDeniedVideoAccess: false,
       browserAllowsAudioOut: true,
       micLevel: 0,
+      requestId: null,
       stream: null,
       featureReadyToShow: false,
       updateInterval: null,
@@ -181,6 +182,10 @@ export default Vue.extend({
         })
     }
     clearInterval(this.$data.updateInterval)
+    if (this.requestId !== null) {
+      cancelAnimationFrame(this.requestId)
+      this.requestId = null
+    }
   },
   methods: {
     ...UserPermissions.methods,
@@ -212,7 +217,7 @@ export default Vue.extend({
           this.audio.inputVolume / 100,
           audioContext.currentTime,
         )
-        requestAnimationFrame(draw)
+        this.requestId = requestAnimationFrame(draw)
 
         analyser.getByteFrequencyData(array)
         let values = 0

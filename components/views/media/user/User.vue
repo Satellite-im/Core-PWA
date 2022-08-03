@@ -145,13 +145,16 @@ export default Vue.extend({
         loadVideos()
       })
     },
-    audioStream(value) {
-      if (!value && this.requestId) {
+    audioStream(stream) {
+      if (this.requestId) {
         cancelAnimationFrame(this.requestId)
         this.requestId = null
+      }
+      if (!stream) {
+        this.isTalking = false
         return
       }
-      this.startVoiceDetection()
+      this.getMicLevel(stream)
     },
   },
   beforeDestroy() {
@@ -182,32 +185,45 @@ export default Vue.extend({
     }
   },
   methods: {
-    startVoiceDetection() {
-      if (!this.audioStream) {
-        return
-      }
-
+    getMicLevel(stream: MediaStream) {
       const audioContext = new AudioContext()
-      const mediaStreamAudioSourceNode = audioContext.createMediaStreamSource(
-        this.audioStream,
-      )
+      const gainNode = audioContext.createGain()
       const analyser = audioContext.createAnalyser()
-      mediaStreamAudioSourceNode.connect(analyser)
+      const microphone = audioContext.createMediaStreamSource(stream)
+      const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1)
 
-      const pcmData = new Float32Array(analyser.fftSize)
+      analyser.smoothingTimeConstant = 0
 
-      const onFrame = () => {
-        analyser.getFloatTimeDomainData(pcmData)
-        let sumSquares = 0.0
-        for (const amplitude of pcmData) {
-          sumSquares += amplitude * amplitude
+      microphone.connect(gainNode)
+      gainNode.connect(analyser)
+      analyser.connect(javascriptNode)
+      javascriptNode.connect(audioContext.destination)
+
+      const array = new Uint8Array(analyser.frequencyBinCount)
+
+      const detect = () => {
+        // Update gain based on inputVolume
+        gainNode.gain.setValueAtTime(
+          this.audio.inputVolume / 100,
+          audioContext.currentTime,
+        )
+        this.requestId = requestAnimationFrame(detect)
+
+        analyser.getByteFrequencyData(array)
+        let values = 0
+
+        const length = array.length
+        for (let i = 0; i < length; i++) {
+          values += array[i]
         }
-        const volume = Math.sqrt(sumSquares / pcmData.length)
-        this.isTalking = volume > 0.01
-        console.log('volume', volume)
-        this.requestId = window.requestAnimationFrame(onFrame)
+
+        const average = values / length
+
+        // The micLevel can range between 0 and 100 approximately
+        this.isTalking = Math.round(average) > 5
       }
-      this.requestId = window.requestAnimationFrame(onFrame)
+
+      detect()
     },
   },
 })
