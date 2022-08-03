@@ -7,47 +7,33 @@
   <!-- Mobile Context Menu -->
   <div v-else v-contextmenu="showMenu" @click="handleClick">
     <slot />
-    <div v-if="isVisible" ref="contextMenu" v-click-outside="hideMenu" class="context-menu-container"
-      data-cy="context-menu">
+    <div
+      v-if="isVisible"
+      ref="contextMenu"
+      v-click-outside="hideMenu"
+      class="context-menu-container"
+      data-cy="context-menu"
+    >
       <!-- Quick Reactions -->
       <div class="actions-group">
         <template v-for="item in items">
-          <div v-if="item.text === 'quickReaction' && mostUsedEmojis.length" :key="String(item.text) + '-action'"
-            class="quick-reaction-container">
-            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
+          <div
+            v-if="item.text === 'quickReaction' && mostUsedEmojis.length"
+            :key="String(item.text) + '-action'"
+            class="quick-reaction-container"
+          >
+            <div
+              v-for="reaction of mostUsedEmojis"
+              :key="reaction.content"
+              class="reaction"
+              data-cy="quick-reaction"
               @click="
                 (e) =>
                   handleAction(e, () => {
                     item.func(reaction)
                   })
-              ">
-              {{ reaction.content }}
-            </div>
-            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
-              @click="
-                (e) =>
-                  handleAction(e, () => {
-                    item.func(reaction)
-                  })
-              ">
-              {{ reaction.content }}
-            </div>
-            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
-              @click="
-                (e) =>
-                  handleAction(e, () => {
-                    item.func(reaction)
-                  })
-              ">
-              {{ reaction.content }}
-            </div>
-            <div v-for="reaction of mostUsedEmojis" :key="reaction.content" class="reaction" data-cy="quick-reaction"
-              @click="
-                (e) =>
-                  handleAction(e, () => {
-                    item.func(reaction)
-                  })
-              ">
+              "
+            >
               {{ reaction.content }}
             </div>
           </div>
@@ -57,9 +43,18 @@
       <!-- Item Buttons -->
       <div class="actions-group">
         <template v-for="item in items">
-          <button v-if="item.text !== 'quickReaction'" :key="String(item.text) + '-action'" class="action-button"
-            :class="{ danger: item.type === 'danger' }" @click="(e) => handleAction(e, item.func)">
-            <TypographySubtitle :text="item.text" :size="6" :class="{ danger: item.type === 'danger' }" />
+          <button
+            v-if="item.text !== 'quickReaction'"
+            :key="String(item.text) + '-action'"
+            class="action-button"
+            :class="{ danger: item.type === 'danger' }"
+            @click="(e) => handleAction(e, item.func)"
+          >
+            <TypographySubtitle
+              :text="item.text"
+              :size="6"
+              :class="{ danger: item.type === 'danger' }"
+            />
           </button>
         </template>
       </div>
@@ -67,7 +62,11 @@
       <!-- Cancel Button -->
       <div class="actions-group">
         <button class="action-button" @click="hideMenu">
-          <TypographySubtitle :text="$t('ui.cancel')" :size="6" class="danger" />
+          <TypographySubtitle
+            :text="$t('ui.cancel')"
+            :size="6"
+            class="danger"
+          />
         </button>
       </div>
     </div>
