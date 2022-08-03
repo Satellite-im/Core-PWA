@@ -70,7 +70,6 @@ Object {
     "y": 0,
   },
   "recentGlyphs": Array [],
-  "replyChatbarMessage": undefined,
   "settingReaction": Object {
     "groupID": null,
     "messageID": null,

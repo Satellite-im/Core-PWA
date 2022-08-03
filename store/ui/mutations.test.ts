@@ -3358,17 +3358,6 @@ describe('mutations', () => {
     expect(localizedState.activeChannel).toMatchObject(object)
   })
 
-  test('setReplyChatbarMessage', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      payload: 'payload',
-      id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
-      from: 'Retha Larkin',
-    }
-    mutations.default.setReplyChatbarMessage(localizedState, object)
-    expect(localizedState.replyChatbarMessage).toMatchObject(object)
-  })
-
   test('setEditMessage', () => {
     const localizedState = { ...initialState }
     const object = {
