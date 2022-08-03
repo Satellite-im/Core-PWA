@@ -14,24 +14,49 @@
       class="context-menu-container"
       data-cy="context-menu"
     >
-      <!-- Item Buttons -->
+      <!-- Quick Reactions -->
       <div class="actions-group">
-        <button
-          v-for="item in items"
-          :key="String(item.text)"
-          class="action-button"
-          :class="{ danger: item.type === 'danger' }"
-          @click="(e) => handleAction(e, item.func)"
-        >
-          {{ item.text }}
-        </button>
+        <template v-for="item in items">
+          <div
+            v-if="item.text === 'quickReaction' && mostUsedEmojis.length"
+            :key="String(item.text) + '-action'"
+            class="quick-reaction-container"
+          >
+            <div
+              v-for="reaction of mostUsedEmojis"
+              :key="reaction.content"
+              class="reaction"
+              data-cy="quick-reaction"
+              @click="
+                (e) =>
+                  handleAction(e, () => {
+                    item.func(reaction)
+                  })
+              "
+            >
+              {{ reaction.content }}
+            </div>
+          </div>
+        </template>
       </div>
 
-      <!-- Cancel Button -->
+      <!-- Item Buttons -->
       <div class="actions-group">
-        <button class="action-button danger" @click="hideMenu">
-          <TypographyText text="Cancel">Cancel</TypographyText>
-        </button>
+        <template v-for="item in items">
+          <button
+            v-if="item.text !== 'quickReaction'"
+            :key="String(item.text) + '-action'"
+            class="action-button"
+            :class="{ danger: item.type === 'danger' }"
+            @click="(e) => handleAction(e, item.func)"
+          >
+            <TypographySubtitle
+              :text="item.text"
+              :size="6"
+              :class="{ danger: item.type === 'danger' }"
+            />
+          </button>
+        </template>
       </div>
     </div>
   </div>
@@ -39,8 +64,9 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { ContextMenuItem } from '~/store/ui/types'
+import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 
 export default Vue.extend({
   mixins: [ContextMenu],
@@ -56,6 +82,10 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapGetters('ui', ['getSortedMostUsedEmojis']),
+    mostUsedEmojis(): EmojiUsage[] {
+      return this.getSortedMostUsedEmojis || []
+    },
     contextMenuValues(): ContextMenuItem[] {
       return this.items
     },
@@ -89,8 +119,7 @@ export default Vue.extend({
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
-  padding: 0 @normal-spacing;
-  padding-bottom: 100px;
+  padding: 0 @normal-spacing @normal-spacing;
   &:extend(.fourth-layer);
   position: fixed;
   width: 100%;
@@ -118,11 +147,32 @@ export default Vue.extend({
     }
 
     .action-button {
-      height: 48px;
+      height: 56px;
+      justify-content: center;
       align-items: center;
+      width: @full;
 
       &:not(:last-child) {
         border-bottom: 0.5px solid @foreground;
+      }
+    }
+
+    .quick-reaction-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+      height: 64px;
+      overflow: hidden;
+
+      .reaction {
+        display: flex;
+        flex: 1 0 20%;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: 24px;
       }
     }
   }

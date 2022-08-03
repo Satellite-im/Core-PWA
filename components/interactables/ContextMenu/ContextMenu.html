@@ -11,7 +11,7 @@
     <p
       v-if="item.text !== 'quickReaction'"
       data-cy="context-menu-option"
-      :class="{'red' : item.type === 'danger'}"
+      :class="{'red': item.type === 'danger'}"
       @click="handle(item.func)"
     >
       {{ item.text }}
