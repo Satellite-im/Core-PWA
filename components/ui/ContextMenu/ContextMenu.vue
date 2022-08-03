@@ -58,17 +58,6 @@
           </button>
         </template>
       </div>
-
-      <!-- Cancel Button -->
-      <div class="actions-group">
-        <button class="action-button" @click="hideMenu">
-          <TypographySubtitle
-            :text="$t('ui.cancel')"
-            :size="6"
-            class="danger"
-          />
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -130,8 +119,7 @@ export default Vue.extend({
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
-  padding: 0 @normal-spacing;
-  padding-bottom: 100px;
+  padding: 0 @normal-spacing @normal-spacing;
   &:extend(.fourth-layer);
   position: fixed;
   width: 100%;
@@ -159,7 +147,7 @@ export default Vue.extend({
     }
 
     .action-button {
-      height: 48px;
+      height: 56px;
       justify-content: center;
       align-items: center;
       width: @full;
