@@ -11,6 +11,7 @@ import type { IridiumManager } from '../IridiumManager'
 import logger from '~/plugins/local/logger'
 import {
   IridiumDirectory,
+  IridiumFile,
   IridiumItem,
   ItemErrors,
 } from '~/libraries/Iridium/files/types'
@@ -159,7 +160,7 @@ export default class FilesManager extends Emitter {
    * @description Removes the item from the file system index.
    * @param {IridiumItem} item
    */
-  removeFromFileSystem(item: IridiumItem) {
+  private removeFromFileSystem(item: IridiumItem) {
     // if root item
     if (!item.parentId) {
       const index = this.state.items.indexOf(item)
@@ -183,14 +184,11 @@ export default class FilesManager extends Emitter {
    * @description Unpins the item file from IPFS.
    * @param {IridiumItem} item
    */
-  unpinItem(item: IridiumItem) {
-    // if file, unpin from ipfs
-    if ('thumbnail' in item) {
-      // TODO - confirm this actually works when we can connect to ipfs
-      this.iridium.connector?.ipfs.pin.rm(item.id)
-      if (item.thumbnail) {
-        this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
-      }
+  private unpinItem(item: IridiumFile) {
+    // TODO - confirm this actually works when we can connect to ipfs
+    this.iridium.connector?.ipfs.pin.rm(item.id)
+    if (item.thumbnail && item.thumbnail !== item.id) {
+      this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
     }
   }
 
@@ -199,9 +197,13 @@ export default class FilesManager extends Emitter {
    * @param {IridiumItem} item
    */
   removeItem(item: IridiumItem) {
-    const instances = this.flat.filter((e) => e.id === item.id)
-    if (instances.length <= 1) {
-      this.unpinItem(item)
+    // if file, unpin from ipfs
+    if ('thumbnail' in item) {
+      // if no other items share the same file, unpin it
+      const instances = this.flat.filter((e) => e.id === item.id)
+      if (instances.length <= 1) {
+        this.unpinItem(item)
+      }
     }
     this.removeFromFileSystem(item)
   }
