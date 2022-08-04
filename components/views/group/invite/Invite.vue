@@ -50,7 +50,6 @@ export default Vue.extend({
 
         await Promise.all(
           this.recipients.map(async (recipient) => {
-            console.log('add', recipient.did, groupId)
             await iridium.groups.addMemberToGroup(groupId, recipient.did)
           }),
         )
