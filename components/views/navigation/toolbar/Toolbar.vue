@@ -166,7 +166,10 @@ export default Vue.extend({
      * @example toggleModal(ModalWindows.WALLET)
      */
     toggleModal() {
-      this.isGroupInviteVisible = !this.isGroupInviteVisible
+      this.$store.commit('ui/toggleModal', {
+        name: 'groupInvite',
+        state: { isOpen: !this.modals.groupInvite.isOpen },
+      })
     },
     // openProfile() {
     //   this.$store.dispatch('ui/showProfile', this.recipient)
