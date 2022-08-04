@@ -20,7 +20,7 @@
     <FilesMobileListItem
       v-for="item in directory"
       :item="item"
-      :key="item.id"
+      :key="item.id + item.modified.toString() + counter.toString()"
       @like="(item) => $emit('like', item)"
       @share="(item) => $emit('share', item)"
       @rename="(item) => $emit('rename', item)"

@@ -5,6 +5,12 @@
   flex-direction: column;
   padding: @normal-spacing;
   gap: @normal-spacing;
+  position: sticky;
+  top: 0;
+
+  @media only screen and (max-width: @small-breakpoint) {
+    position: relative;
+  }
 
   .upper {
     display: flex;
