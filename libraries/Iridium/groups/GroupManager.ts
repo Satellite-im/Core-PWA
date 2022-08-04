@@ -219,4 +219,46 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       members,
     })
   }
+
+  async addMemberToGroup(groupId: string, remotePeerDID: string) {
+    if (!this.iridium.connector) {
+      logger.error(this.loggerTag, 'network error')
+      throw new Error(GroupsError.NETWORK_ERROR)
+    }
+
+    const group = await this.getGroup(groupId)
+    const members = group.members
+    if (!members) {
+      logger.error(this.loggerTag, 'members is undefined')
+      throw new Error(GroupsError.CANNOT_ADD_MEMBER)
+    }
+
+    const member = this.iridium.friends.getFriend(remotePeerDID)
+    if (!member) {
+      logger.error(this.loggerTag, 'friend not found')
+      throw new Error(GroupsError.CANNOT_ADD_MEMBER)
+    }
+
+    const details: GroupMemberDetails = {
+      id: remotePeerDID,
+      name: member.name,
+      photoHash: member.photoHash ?? '',
+    }
+
+    Vue.set(members, remotePeerDID, details)
+
+    const conversation = this.iridium.chat.getConversation(groupId)
+    conversation.participants.push(remotePeerDID)
+
+    await this.iridium.connector.set(
+      `/groups/${groupId}/members/${remotePeerDID}`,
+      details,
+    )
+
+    logger.info(this.loggerTag, 'member added to group', {
+      groupId,
+      memberDid: remotePeerDID,
+      members,
+    })
+  }
 }
