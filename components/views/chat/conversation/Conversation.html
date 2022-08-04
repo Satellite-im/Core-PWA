@@ -1,7 +1,5 @@
 <div class="conversation">
   <div class="messages">
-    <UiLoadersMessage :count="3" v-if="false" />
-    <UiChatEncrypted />
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText
         v-if="item.isNextDay"
@@ -16,4 +14,6 @@
       />
     </template>
   </div>
+  <UiChatEncrypted />
+  <UiLoadersMessage :count="3" v-if="false" />
 </div>
