@@ -69,13 +69,6 @@ export default Vue.extend({
      */
     loading: Boolean,
     /**
-     * This text will be displayed if the button is in the loading state (loading prop provided)
-     */
-    loadingText: {
-      type: String,
-      default: null,
-    },
-    /**
      * This will make the button take up 100% of the parent container
      */
     fullWidth: Boolean,
