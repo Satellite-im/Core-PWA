@@ -11,10 +11,9 @@ import {
   VideoOffIcon,
 } from 'satellite-lucide-icons'
 import { Iridium } from '../../../../../iridium'
-import { Group } from '~/store/groups/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { User } from '~/libraries/Iridium/types'
+import { User } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -61,10 +60,12 @@ export default Vue.extend({
       try {
         did = Iridium.peerIdToDID(this.incomingCall.peerId)
       } catch (error) {}
-      const friend = iridium.friends.getFriend(did)
-      return friend
+      return iridium.friends.getFriend(did)
     },
     callerAvatar(): string {
+      if (!this.caller) {
+        return ''
+      }
       const hash = this.caller?.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },

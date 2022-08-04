@@ -9,7 +9,7 @@ import {
   MicIcon,
   MicOffIcon,
 } from 'satellite-lucide-icons'
-import { User } from '~/types/ui/user'
+import { User } from '~/libraries/Iridium/friends/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
 import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
@@ -115,8 +115,15 @@ export default Vue.extend({
       )
     },
     src(): string {
-      const hash = this.user.profilePicture
+      const hash = this.user.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    isPending(): boolean {
+      return Boolean(
+        this.user.peerId !== iridium.connector?.peerId &&
+          this.call &&
+          !this.webrtc.createdAt,
+      )
     },
   },
   watch: {

@@ -20,16 +20,17 @@
     ></video>
   </div>
 
-  <div class="media-user" v-else-if="user">
+  <div class="media-user" :class="{pending: isPending}" v-else-if="user">
     <UiCircle
       :type="src ? 'image' : 'random'"
-      :seed="user.address"
+      :seed="user.did"
       :size="$device.isMobile ? 36 : 65"
       data-cy="media-user-circle"
       :class="{calling: audioStream}"
       :source="src"
       color="transparent"
     />
+    <UiLoadersScaleLoader v-if="isPending" class="media-user-loader" />
     <TypographyTag :text="user.name" :title="user.name" inverted />
   </div>
 
