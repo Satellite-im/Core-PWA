@@ -14,6 +14,7 @@ export const Config = {
     ipfs: {
       config: {
         Addresses: {
+          Swarm: syncNodes,
           Delegate: syncNodes,
         },
         Bootstrap: syncNodes,

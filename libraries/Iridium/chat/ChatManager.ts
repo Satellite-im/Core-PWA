@@ -59,9 +59,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // listen for sync node subscription responses
     this.iridium.connector?.p2p.on<
       IridiumPubsubMessage<SyncSubscriptionResponse>
-    >('sync/message/sync/subscribe', this.onSyncSubscriptionResponse.bind(this))
+    >('node/message/sync/subscribe', this.onSyncSubscriptionResponse.bind(this))
 
     this.iridium.connector?.p2p.on('ready', async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5000))
       if (!this.iridium.connector?.p2p.primaryNodeID) {
         throw new Error('not connected to primary node')
       }
@@ -97,6 +98,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   async onSyncSubscriptionResponse(
     message: IridiumPubsubMessage<SyncSubscriptionResponse>,
   ) {
+    logger.info(
+      'iridium/chatmanager/onSyncSubscriptionResponse',
+      'message received from sync node',
+      message,
+    )
     if (!message.payload.body.topic) {
       throw new Error('no topic in sync subscription response')
     }
@@ -115,7 +121,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         'iridium/chatmanager/onSyncSubscriptionResponse',
         `sync node subscribed to ${message.payload.body.topic}`,
       )
-      await this.iridium.connector?.subscribe(message.topic, {
+      await this.iridium.connector?.subscribe(message.payload.body.topic, {
         handler: this.onConversationMessage.bind(this, conversationId),
       })
       subscription.connected = true

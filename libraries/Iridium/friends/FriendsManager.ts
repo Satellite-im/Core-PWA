@@ -402,7 +402,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         type: 'peer',
       })
     }
-    if (!this.iridium.connector?.p2p.getPeer(did)?.connected) {
+    const peer = this.iridium.connector?.p2p.getPeer(did)
+    if (!peer.connected) {
       await this.iridium.connector?.p2p.connect(did)
     }
 
