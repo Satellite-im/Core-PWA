@@ -11,6 +11,7 @@ import type { IridiumManager } from '../IridiumManager'
 import logger from '~/plugins/local/logger'
 import {
   IridiumDirectory,
+  IridiumFile,
   IridiumItem,
   ItemErrors,
 } from '~/libraries/Iridium/files/types'
@@ -156,18 +157,10 @@ export default class FilesManager extends Emitter {
   }
 
   /**
-   * @description unpin file from ipfs and remove from file system index
+   * @description Removes the item from the file system index.
    * @param {IridiumItem} item
    */
-  removeItem(item: IridiumItem) {
-    // if file, unpin from ipfs
-    if ('thumbnail' in item) {
-      // TODO - confirm this actually works when we can connect to ipfs
-      this.iridium.connector?.ipfs.pin.rm(item.id)
-      if (item.thumbnail) {
-        this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
-      }
-    }
+  private removeFromFileSystem(item: IridiumItem) {
     // if root item
     if (!item.parentId) {
       const index = this.state.items.indexOf(item)
@@ -178,14 +171,41 @@ export default class FilesManager extends Emitter {
     const parent = this.flat.find((e) => e.id === item.parentId) as
       | IridiumDirectory
       | undefined
-    if (!parent) {
-      return
+    if (parent) {
+      const index = parent.children.indexOf(item)
+      if (index > -1) {
+        parent.children.splice(index, 1)
+      }
+      this.set('/items', this.state.items)
     }
-    const index = parent.children.indexOf(item)
-    if (index > -1) {
-      parent.children.splice(index, 1)
+  }
+
+  /**
+   * @description Unpins the item file from IPFS.
+   * @param {IridiumItem} item
+   */
+  private unpinItem(item: IridiumFile) {
+    // TODO - confirm this actually works when we can connect to ipfs
+    this.iridium.connector?.ipfs.pin.rm(item.id)
+    if (item.thumbnail && item.thumbnail !== item.id) {
+      this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
     }
-    this.set('/items', this.state.items)
+  }
+
+  /**
+   * @description Removes the item from the file system index and unpins the file from IPFS if no other items share the same file.
+   * @param {IridiumItem} item
+   */
+  removeItem(item: IridiumItem) {
+    // if file, unpin from ipfs
+    if ('thumbnail' in item) {
+      // if no other items share the same file, unpin it
+      const instances = this.flat.filter((e) => e.id === item.id)
+      if (instances.length <= 1) {
+        this.unpinItem(item)
+      }
+    }
+    this.removeFromFileSystem(item)
   }
 
   /**
