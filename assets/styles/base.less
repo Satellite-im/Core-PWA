@@ -82,6 +82,8 @@ p {
 }
 // Scrollbars
 * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
   &::-webkit-scrollbar {
     width: @scroll-bar-size;
     height: @scroll-bar-size;
@@ -220,43 +222,6 @@ a.link {
   }
 }
 
-.menu-list {
-  a {
-    &:extend(.font-primary);
-
-    &.is-active {
-      &:extend(.background-flair-gradient);
-      &:extend(.glow-flair);
-    }
-
-    &:hover:not(.is-active) {
-      &:extend(.background-semitransparent-light);
-      &:extend(.font-primary);
-    }
-  }
-
-  li {
-    font-family: @secondary-font;
-    &.is-active {
-      &:extend(.background-flair-gradient);
-      &:extend(.glow-flair);
-    }
-
-    a.is-active {
-      &:extend(.background-flair-gradient);
-      &:extend(.glow-flair);
-    }
-
-    &:hover:not(.is-active) {
-      &:extend(.background-semitransparent-light);
-    }
-  }
-}
-
-.menu-label {
-  &:extend(.font-muted);
-}
-
 .simple-menu {
   .active {
     &:extend(.background-flair);
@@ -287,6 +252,7 @@ button {
   border: none;
   cursor: pointer;
   background: transparent;
+  display: flex;
   &:extend(.font-primary);
 }
 .button {

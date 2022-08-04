@@ -1,0 +1,25 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: @large-spacing;
+  margin: @normal-spacing;
+
+  .title {
+    margin: 0;
+    font-size: @title-text;
+    &:extend(.ellipsis);
+  }
+
+  .phone {
+    margin-left: auto;
+  }
+}
+
+/* Only for Safari to fix lack resolution of svgs */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    #toolbar svg {
+      transform: translateZ(0);
+    }
+  }
+}

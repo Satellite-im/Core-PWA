@@ -1,46 +1,51 @@
-<UiContextMenu
-  class="chat-message"
-  :class="{ 'show-header': showHeader }"
-  :items="contextMenuValues"
->
-  <template v-if="showHeader">
-    <div class="avatar">
-      <UiCircle
-        :type="author.src ? 'image' :'random'"
-        :seed="author.id"
-        :source="author.src"
+<UiContextMenu class="chat-message-container" :items="contextMenuValues">
+  <div
+    class="chat-message"
+    :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo }"
+  >
+    <template v-if="showHeader">
+      <div class="avatar">
+        <UiCircle
+          :type="author.src ? 'image' :'random'"
+          :seed="author.id"
+          :source="author.src"
+        />
+      </div>
+      <div class="header">
+        <span :click="showQuickProfile">
+          <UiUserName :username="author.name" />
+        </span>
+      </div>
+    </template>
+    <div class="timestamp">{{ timestamp }}</div>
+    <div class="body">
+      <MessageMarkdown
+        :text="wrapEmoji(markdownToHtml(message.body))"
+        class="markdown"
+        :class="{ bigmoji: containsOnlyEmoji(message.body) }"
+        data-cy="chat-message"
+      />
+      <span class="status editing" v-if="message.editingAt">
+        <UiLoadersSpinner spinning />
+      </span>
+      <span
+        class="status edited"
+        data-cy="message-edited"
+        v-else-if="message.editedAt"
+      >
+        ({{$t('ui.edited')}})
+      </span>
+      <MessageActions
+        :setReplyChatbarMessage="setReplyChatbarMessage"
+        :emojiReaction="emojiReaction"
+        :editMessage="editMessage"
+        :message="message"
+        :hideReply="hideReplyAction"
       />
     </div>
-    <div class="header">
-      <span :click="showQuickProfile">
-        <UiUserName :username="author.name" />
-      </span>
+    <div class="footer">
+      <MessageReactions :message="message" :emojiReaction="emojiReaction" />
+      <MessageReplies :replies="replies" />
     </div>
-  </template>
-  <div class="timestamp">{{ timestamp }}</div>
-  <div class="body">
-    <MessageMarkdown
-      :text="wrapEmoji(markdownToHtml(message.body))"
-      class="markdown"
-      :class="{ bigmoji: containsOnlyEmoji(message.body) }"
-      data-cy="chat-message"
-    />
-    <span class="status editing" v-if="message.editingAt">
-      <UiLoadersSpinner spinning />
-    </span>
-    <span
-      class="status edited"
-      data-cy="message-edited"
-      v-else-if="message.editedAt"
-    >
-      ({{$t('ui.edited')}})
-    </span>
-    <MessageActions
-      :setReplyChatbarContent="setReplyChatbarContent"
-      :emojiReaction="emojiReaction"
-      :editMessage="editMessage"
-      :message="message"
-    />
-    <MessageReactions :message="message" :emojiReaction="emojiReaction" />
   </div>
 </UiContextMenu>

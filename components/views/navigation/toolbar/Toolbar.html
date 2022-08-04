@@ -7,12 +7,8 @@
     </template>
   </div>
   <div class="user-info">
-    <TypographyTitle :size="6" :text="conversation.name" />
-    <TypographySubtitle
-      v-if="!$device.isMobile"
-      :size="6"
-      :text="subtitleText"
-    />
+    <TypographyTitle :size="6" v-if="conversation" :text="conversation.name" />
+    <TypographySubtitle :size="6" :text="subtitleText" />
   </div>
   <div class="controls">
     <div class="toggle-alerts" data-cy="toolbar-alerts">
@@ -81,18 +77,19 @@
         <archive-icon size="1x" class="control-icon" color="grey" />
       </div>
     </UiComingSoon>
-    <div
-      v-if="isGroup"
-      v-tooltip.bottom="$t('pages.chat.add_member')"
-      class="control-button"
-      @click="groupInvite"
-    >
-      <user-plus-icon size="1x" class="control-icon" />
+    <div class="button-wrapper" v-if="isGroup">
+      <div
+        v-tooltip.bottom="!modals.groupInvite.isOpen ? $t('pages.chat.add_member') : ''"
+        class="control-button"
+        @click="toggleModal"
+      >
+        <user-plus-icon size="1x" class="control-icon" />
+      </div>
+      <GroupInvite
+        v-if="modals.groupInvite.isOpen"
+        v-click-outside="toggleModal"
+      />
     </div>
-    <GroupInvite
-      v-if="isGroupInviteVisible"
-      v-click-outside="(isGroupInviteVisible = false)"
-    />
 
     <div v-if="!$device.isMobile" class="vertical-divider"></div>
     <UiComingSoon

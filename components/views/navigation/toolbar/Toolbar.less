@@ -3,7 +3,7 @@
   align-items: center;
   transition: @transition-all;
   gap: @normal-spacing;
-  margin: @normal-spacing;
+  margin-bottom: @normal-spacing;
   flex-shrink: 0;
 
   .vertical-divider {
@@ -32,6 +32,10 @@
     &:extend(.light-padding);
     &:extend(.background-semitransparent-light);
     &:extend(.round-corners);
+
+    .button-wrapper {
+      position: relative;
+    }
 
     .control-icon {
       margin: 0 @light-spacing;
@@ -71,44 +75,7 @@
   }
 }
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #toolbar {
-    min-width: @viewport-width;
-    padding-right: @normal-spacing;
-    min-height: @toolbar-height;
-    padding-top: @light-spacing;
-
-    .circle-container {
-      order: 1;
-      margin-left: 24px;
-      height: auto;
-    }
-
-    .controls {
-      background: none;
-      box-shadow: unset;
-      .control-button {
-        padding: 2px;
-        width: 24px;
-        min-width: 24px;
-        height: 24px;
-        margin-left: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .control-icon {
-        display: block;
-        margin: 0;
-        width: 18px;
-        height: 18px;
-      }
-    }
-  }
-}
-
 /* Only for Safari to fix lack resolution of svgs */
-
 @media not all and (min-resolution: 0.001dpcm) {
   @supports (-webkit-appearance: none) {
     #toolbar .controls svg {

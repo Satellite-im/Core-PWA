@@ -9,7 +9,6 @@ import {
   AlertTriangleIcon,
   XIcon,
 } from 'satellite-lucide-icons'
-import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ItemErrors } from '~/libraries/Iridium/files/types'
@@ -32,6 +31,7 @@ const Controls = Vue.extend({
       currentUpload: (state) => (state as RootState).files.currentUpload,
       path: (state) => (state as RootState).files.path,
       status: (state) => (state as RootState).files.status,
+      showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan

@@ -76,7 +76,7 @@ export default Vue.extend({
   methods: {
     /**
      * @method handle
-     * @description Emit to handle item - pages/files/browse/index.vue
+     * @description Emit to handle item - pages/files/index.vue
      */
     handle() {
       if (this.$data.menuHover) {
@@ -86,28 +86,28 @@ export default Vue.extend({
     },
     /**
      * @method rename
-     * @description Emit to rename item - pages/files/browse/index.vue
+     * @description Emit to rename item - pages/files/index.vue
      */
     rename() {
       this.$emit('rename', this.item)
     },
     /**
      * @method like
-     * @description Emit to like item - pages/files/browse/index.vue
+     * @description Emit to like item - pages/files/index.vue
      */
     like() {
       this.$emit('like', this.item)
     },
     /**
      * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @description Emit to share item - pages/files/index.vue
      */
     share() {
       this.$emit('share', this.item)
     },
     /**
      * @method remove
-     * @description Emit to delete item - pages/files/browse/index.vue
+     * @description Emit to delete item - pages/files/index.vue
      */
     remove() {
       this.$emit('remove', this.item)

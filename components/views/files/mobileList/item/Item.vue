@@ -32,16 +32,10 @@ export default Vue.extend({
       type: Object as PropType<IridiumItem>,
       required: true,
     },
-    gridLayout: {
-      type: Boolean,
-      required: true,
-    },
   },
   data() {
     return {
       thumbnail: '',
-      linkHover: false as boolean,
-      heartHover: false as boolean,
     }
   },
   computed: {
@@ -85,7 +79,7 @@ export default Vue.extend({
         //   func: this.share,
         // },
         { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.remove },
+        { text: this.$t('context.delete'), func: this.remove, type: 'danger' },
       ]
     },
   },
@@ -118,28 +112,28 @@ export default Vue.extend({
     },
     /**
      * @method rename
-     * @description Emit to rename item - pages/files/browse/index.vue
+     * @description Emit to rename item - pages/files/index.vue
      */
     rename() {
       this.$emit('rename', this.item)
     },
     /**
      * @method like
-     * @description Emit to like item - pages/files/browse/index.vue
+     * @description Emit to like item - pages/files/index.vue
      */
     like() {
       this.$emit('like', this.item)
     },
     /**
      * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @description Emit to share item - pages/files/index.vue
      */
     share() {
       this.$emit('share', this.item)
     },
     /**
      * @method remove
-     * @description Emit to delete item - pages/files/browse/index.vue
+     * @description Emit to delete item - pages/files/index.vue
      */
     remove() {
       this.$emit('remove', this.item)

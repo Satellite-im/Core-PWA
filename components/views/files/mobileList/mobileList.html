@@ -1,23 +1,26 @@
 <div id="mobile-list" :class="{'mobile-list-flat': !gridLayout}">
-  <div class="sort-container">
-    <InteractablesSelect
-      v-if="directory.length"
-      v-model="sort"
-      :options="sortOptions"
-      :label="$t('pages.files.browse.sort')"
-      small
-      class="sort-selection"
-    />
-    <button @click="sort = sort" class="sort-button">
-      <sort-asc-icon v-if="isSortAsc" size="1x" />
-      <sort-desc-icon v-else size="1x" />
-    </button>
+  <div class="file-controls">
+    <FilesAsideList :items="quickAccessOptions" />
+    <div class="sort-container">
+      <InteractablesSelect
+        v-if="directory.length"
+        v-model="sort"
+        :options="sortOptions"
+        :label="$t('pages.files.browse.sort')"
+        small
+        class="sort-selection"
+      />
+      <button @click="sort = sort" class="sort-button">
+        <sort-asc-icon v-if="isSortAsc" size="1x" />
+        <sort-desc-icon v-else size="1x" />
+      </button>
+    </div>
   </div>
   <div class="files-container">
     <FilesMobileListItem
       v-for="item in directory"
       :item="item"
-      :key="item.id"
+      :key="item.id + item.modified.toString() + counter.toString()"
       @like="(item) => $emit('like', item)"
       @share="(item) => $emit('share', item)"
       @rename="(item) => $emit('rename', item)"

@@ -2294,7 +2294,6 @@ describe('mutations', () => {
   }
   const initialState = {
     contextMenuStatus: false,
-    showSidebarUsers: true,
     showSidebar: true,
     showSearchResult: false,
     showSettings: false,
@@ -2325,7 +2324,7 @@ describe('mutations', () => {
     },
     glyphModalPack: '',
     chatbarContent: '',
-    replyChatbarContent: {
+    replyChatbarMessage: {
       from: '',
       id: '',
       payload: '',
@@ -2523,12 +2522,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.toggleContextMenu(localizedState, true)
     expect(localizedState.contextMenuStatus).toBeTruthy()
-  })
-
-  test('showSidebarUsers', () => {
-    const localizedState = { ...initialState }
-    mutations.default.showSidebarUsers(localizedState, true)
-    expect(localizedState.showSidebarUsers).toBeTruthy()
   })
 
   test('showSidebar', () => {
@@ -3065,29 +3058,6 @@ describe('mutations', () => {
     ).toMatchSnapshot()
   })
 
-  test('toggleSettings with non-default route', () => {
-    const localizedState = { ...initialState }
-    mutations.default.toggleSettings(localizedState, {
-      show: true,
-      defaultRoute: 'profile',
-    })
-
-    expect(localizedState.showSettings).toBeTruthy()
-    expect(localizedState.settingsRoute).toBe('profile')
-  })
-
-  test('toggleSettings with default route', () => {
-    const localizedState = { ...initialState }
-    mutations.default.toggleSettings(localizedState, {
-      show: true,
-      // defaultRoute: 'profile',
-      // Unprovided, so that the default route 'personalize' will be used for the settingsRoute property
-    })
-
-    expect(localizedState.showSettings).toBeTruthy()
-    expect(localizedState.settingsRoute).toBe('personalize')
-  })
-
   test.skip('updateTheme', () => {
     const localizedState = { ...initialState }
     const object = {
@@ -3132,12 +3102,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setSettingsRoute(localizedState, 'profile')
     expect(localizedState.settingsRoute).toBe('profile')
-  })
-
-  test('toggleSettingsSidebar', () => {
-    const localizedState = { ...initialState }
-    mutations.default.toggleSettingsSidebar(localizedState, true)
-    expect(localizedState.settingsSideBar).toBeTruthy()
   })
 
   test('showSearchResult', () => {
@@ -3358,17 +3322,6 @@ describe('mutations', () => {
     expect(localizedState.activeChannel).toMatchObject(object)
   })
 
-  test('setReplyChatbarContent', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      payload: 'payload',
-      id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
-      from: 'Retha Larkin',
-    }
-    mutations.default.setReplyChatbarContent(localizedState, object)
-    expect(localizedState.replyChatbarContent).toMatchObject(object)
-  })
-
   test('setEditMessage', () => {
     const localizedState = { ...initialState }
     const object = {
@@ -3463,13 +3416,6 @@ describe('mutations', () => {
     })
   })
 
-  test('setSwiperSlideIndex', () => {
-    const localizedState = { ...initialState }
-    const argument = 10
-    mutations.default.setSwiperSlideIndex(localizedState, argument)
-    expect(localizedState.swiperSlideIndex).toBe(argument)
-  })
-
   test.skip('setFileSort', () => {
     const localizedState = { ...initialState }
     const argument = {
@@ -3513,7 +3459,6 @@ describe('mutations', () => {
   test('send notification', () => {
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -3566,7 +3511,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -3627,7 +3572,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.sendNotification(localizedState, {
       _id: '01g2ya7w44h4c5mm4bgyedkrvy',
@@ -3671,7 +3615,6 @@ describe('mutations', () => {
   test('set notification', () => {
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [],
       showSearchResult: false,
@@ -3711,7 +3654,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -3772,7 +3715,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.setNotifications(localizedState, [
       // Sorted in the same order
@@ -3826,7 +3768,6 @@ describe('mutations', () => {
     // previously they are unread
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -3887,7 +3828,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -3948,7 +3889,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.clearAllNotifications(localizedState)
     expect(localizedState.notifications).toEqual([
@@ -3979,7 +3919,6 @@ describe('mutations', () => {
     // previously they are unread
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -4040,7 +3979,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -4101,7 +4040,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.updateGroupNotifications(localizedState)
     expect(localizedState.notifications).toEqual([
@@ -4125,7 +4063,6 @@ describe('mutations', () => {
     // previously they are unread
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -4186,7 +4123,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
+      replyChatbarMessage: {
         from: '',
         id: '',
         payload: '',
@@ -4247,7 +4184,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
     mutations.default.removeNotification(
       localizedState,
@@ -4270,7 +4206,6 @@ describe('mutations', () => {
   test('get notification that have been read (notificationSeen)', () => {
     const localizedState = {
       contextMenuStatus: false,
-      showSidebarUsers: true,
       showSidebar: true,
       notifications: [
         {
@@ -4331,14 +4266,7 @@ describe('mutations', () => {
         glyphModalPack: '',
         chatbarContent: '',
       },
-      replyChatbarContent: {
-        from: '',
-        id: '',
-        payload: '',
-        chatbarFocus: false,
-        fullscreen: false,
-        showPinned: false,
-      },
+      replyChatbarMessage: undefined,
       enhancers: {
         containerWidth: 0,
         defaultHeight: '30rem',
@@ -4392,7 +4320,6 @@ describe('mutations', () => {
         asc: true,
         category: 'modified',
       },
-      swiperSlideIndex: 0,
     }
   })
 })

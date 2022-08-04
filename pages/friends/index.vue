@@ -1,15 +1,13 @@
-<template src="./FriendsList.html"></template>
+<template src="./Friends.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
-import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  name: 'FriendsList',
-  layout: 'basic',
+  name: 'Friends',
+  layout: (ctx) => (ctx.$device.isMobile ? 'mobile' : 'desktop'),
   data() {
     return {
       route: 'active',
@@ -17,10 +15,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      showSidebar: (state) => (state as RootState).ui.showSidebar,
-    }),
-
     friendsList(): Array<Friend> {
       return iridium.friends?.list
     },
@@ -38,4 +32,4 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped lang="less" src="./FriendsList.less"></style>
+<style scoped lang="less" src="./Friends.less"></style>

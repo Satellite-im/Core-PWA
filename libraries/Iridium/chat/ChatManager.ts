@@ -14,6 +14,7 @@ import {
   ConversationMessage,
   ChatError,
   MessageReactionPayload,
+  ConversationMessagePayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
@@ -34,15 +35,17 @@ const initialState: State = {
   conversations: {},
 }
 
+export type Conversations = {
+  [key: Conversation['id']]: ConversationMessage[]
+}
+
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
   public state: State = {
     conversations: {},
   }
 
-  public messages: {
-    [key: Conversation['id']]: Array<ConversationMessage & { id: string }>
-  } = {}
+  public messages: Conversations = {}
 
   private _intervals: { [key: string]: any } = {}
   private _subscriptions: {
@@ -309,17 +312,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * @method sendMessage
    * @description Sends a message to the given groupChat
    */
-  async sendMessage(payload: Omit<ConversationMessage, 'from' | 'reactions'>) {
+  async sendMessage(payload: ConversationMessagePayload) {
     if (!this.iridium.connector) {
       return
     }
 
     const { conversationId } = payload
     const conversation = this.getConversation(conversationId)
-    const message: ConversationMessage = {
+    const message: Omit<ConversationMessage, 'id'> = {
       ...payload,
       from: this.iridium.connector.id,
       reactions: {},
+      attachments: [],
     }
 
     if (!this._subscriptions[conversationId]) {

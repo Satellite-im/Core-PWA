@@ -1,0 +1,26 @@
+<div v-if="replies.length" class="replies-container">
+  <div
+    v-if="!showReplies"
+    class="toggle-button"
+    data-cy="reply-preview"
+    @click="toggleReplies"
+  >
+    <plus-square-icon size="1.1x" />
+    {{ makeReplyText }}
+  </div>
+  <template v-else>
+    <div class="message-replies">
+      <Message
+        v-for="item in replyItems"
+        :message="item.message"
+        :key="item.message.id"
+        :showHeader="!item.isSameAuthor"
+        hideReplyAction
+      />
+    </div>
+    <div @click="toggleReplies" class="toggle-button" data-cy="reply-close">
+      <minus-square-icon size="1.1x" />
+      {{ $t('conversation.collapse') }}
+    </div>
+  </template>
+</div>

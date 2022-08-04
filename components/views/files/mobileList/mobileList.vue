@@ -4,8 +4,13 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { SortAscIcon, SortDescIcon } from 'satellite-lucide-icons'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
-import { FileSortEnum } from '~/libraries/Enums/enums'
+import {
+  FileSortEnum,
+  FileRouteEnum,
+  FileIconsEnum,
+} from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
+import { SimpleItem } from '~/types/ui/sidebar'
 import { SelectOption } from '~/types/ui/inputs'
 
 export default Vue.extend({
@@ -34,6 +39,20 @@ export default Vue.extend({
       gridLayout: (state) => (state as RootState).files.gridLayout,
     }),
     FileSortEnum: () => FileSortEnum,
+    quickAccessOptions(): SimpleItem[] {
+      return [
+        {
+          text: this.$t('pages.files.aside.default'),
+          route: FileRouteEnum.DEFAULT,
+          icon: FileIconsEnum.FOLDER,
+        },
+        {
+          text: this.$t('pages.files.aside.recent'),
+          route: FileRouteEnum.RECENT,
+          icon: FileIconsEnum.CLOCK,
+        },
+      ]
+    },
     sortOptions(): SelectOption[] {
       return [
         {

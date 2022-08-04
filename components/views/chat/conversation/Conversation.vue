@@ -6,11 +6,12 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 interface ChatItem {
-  message: ConversationMessage & { id: string }
+  message: ConversationMessage
   isSameAuthor: boolean
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
+  replies: ConversationMessage[]
 }
 
 export default Vue.extend({
@@ -19,8 +20,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      messages: iridium.chat.messages[this.$route.params.id],
-      conversation: iridium.chat.state.conversations[this.$route.params.id],
+      messages: iridium.chat.messages?.[this.$route.params.id] ?? [],
+      conversation:
+        iridium.chat.state.conversations?.[this.$route.params.id] ?? [],
     }
   },
   computed: {
@@ -28,28 +30,34 @@ export default Vue.extend({
       return iridium.connector?.id ?? ''
     },
     chatItems(): ChatItem[] {
-      return this.messages.map((message, index) => {
-        const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
-        const isSameAuthor = prevMessage
-          ? message.from === prevMessage.from
-          : false
-        const timeDiff = prevMessage ? message.at - prevMessage.at : 0
-        const isNextDay = prevMessage
-          ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
-          : false
-        const lastReadAt = this.conversation.lastReadAt
-        const isFirstUnreadMessage =
-          message.at > lastReadAt &&
-          (prevMessage ? prevMessage.at <= lastReadAt : true)
+      return this.messages
+        .filter((message) => !message.replyToId)
+        .map((message, index) => {
+          const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
+          const isSameAuthor = prevMessage
+            ? message.from === prevMessage.from
+            : false
+          const timeDiff = prevMessage ? message.at - prevMessage.at : 0
+          const isNextDay = prevMessage
+            ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
+            : false
+          const lastReadAt = this.conversation.lastReadAt
+          const isFirstUnreadMessage =
+            message.at > lastReadAt &&
+            (prevMessage ? prevMessage.at <= lastReadAt : true)
+          const replies = this.messages.filter(
+            (replyMessage) => replyMessage.replyToId === message.id,
+          )
 
-        return {
-          message,
-          isSameAuthor,
-          timeDiff,
-          isNextDay,
-          isFirstUnreadMessage,
-        }
-      })
+          return {
+            message,
+            isSameAuthor,
+            timeDiff,
+            isNextDay,
+            isFirstUnreadMessage,
+            replies,
+          }
+        })
     },
   },
   methods: {},

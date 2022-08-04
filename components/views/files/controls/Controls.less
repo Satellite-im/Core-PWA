@@ -1,5 +1,8 @@
 .search-container {
   display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
   .search {
     flex-grow: 1;
   }
@@ -43,22 +46,6 @@
     &.close {
       margin-left: auto;
       cursor: pointer;
-    }
-  }
-}
-
-.switcher-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-@media only screen and (max-width: @mobile-small-breakpoint) {
-  .add-container {
-    height: auto; // todo: temp remove after global button/input height adjustments
-    flex-wrap: wrap;
-    .button {
-      flex-grow: 1;
     }
   }
 }

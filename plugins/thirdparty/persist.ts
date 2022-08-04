@@ -29,7 +29,7 @@ const commonProperties = [
   'friends',
   'webrtc.activeStream',
   'webrtc.incomingCall',
-  'ui.replyChatbarContent',
+  'chat.replyChatbarMessage',
   'ui.editMessage',
   'chat.files',
   'chat.countError',
@@ -37,7 +37,8 @@ const commonProperties = [
   'groups.groupSubscriptions',
   'ui.modals',
   'ui.isScrollOver',
-  'textile.userThread',
+  'ui.isMobileNavVisible',
+  'ui.settingsRoute',
   'conversation.participants',
   'files',
 ]

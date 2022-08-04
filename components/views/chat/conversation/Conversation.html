@@ -1,6 +1,4 @@
 <div class="conversation">
-  <UiLoadersMessage :count="3" v-if="false" />
-  <UiChatEncrypted />
   <div class="messages">
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText
@@ -9,10 +7,13 @@
       />
       <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
       <Message
-        :message="item.message"
         :key="item.message.id"
+        :message="item.message"
         :showHeader="!item.isSameAuthor"
+        :replies="item.replies"
       />
     </template>
   </div>
+  <UiChatEncrypted />
+  <UiLoadersMessage :count="3" v-if="false" />
 </div>

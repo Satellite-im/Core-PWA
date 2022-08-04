@@ -1,11 +1,13 @@
-<div id="add-friend">
-  <TypographyTitle :size="6" :text="$t('friends.add')" />
-  <TypographyText :text="$t('friends.add_description')" />
-  <UiSpacer :height="10" />
-  <!-- max size of solana public key is 44 https://docs.solana.com/cli/transfer-tokens#receive-tokens -->
+<div class="add">
+  <div class="title-container">
+    <InteractablesSidebarToggle v-if="!showSidebar" />
+    <div>
+      <TypographyTitle :size="6" :text="$t('friends.add')" />
+      <TypographyText :text="$t('friends.add_description')" />
+    </div>
+  </div>
   <InteractablesInput
     v-model="friendId"
-    class="search-container"
     type="primary"
     size="small"
     :placeholder="$t('friends.search_placeholder')"
@@ -21,12 +23,10 @@
     @requestSent="onFriendRequestSent"
     isPreview
   />
-  <!-- <UiSpacer :height="10" />
+  <!--
     <TypographyHorizontalRuleText plaintext value="OR" />
-    <UiSpacer :height="10" />
     <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
     <TypographyText :text="$t('friends.add_qrcode_description')" />
-    <UiSpacer :height="10" />
     <div class="card">
       <div class="card-content">
         <div class="content">
