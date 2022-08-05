@@ -1,14 +1,12 @@
 <SettingsPage>
   <SettingsSection>
     <SettingsUnit>
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.personalize.title')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.personalize.subtitle')"
-      />
+      <TypographyText as="h2" color="light" font="heading" weight="700">
+        {{$t('pages.settings.personalize.title')}}
+      </TypographyText>
+      <TypographyText as="h2" color="dark">
+        {{$t('pages.settings.personalize.subtitle')}}
+      </TypographyText>
     </SettingsUnit>
   </SettingsSection>
 

@@ -1,4 +1,4 @@
-<label class="switch-container" :class="{'is-small': small}">
+<label class="switch-container">
   <input
     type="checkbox"
     :checked="isEnabled"
@@ -10,5 +10,7 @@
     data-cy="switch-button"
     :class="{ enabled: isEnabled, locked: isLocked }"
   />
-  <span v-if="label" class="switch-label">{{ label }}</span>
+  <TypographyText v-if="label" as="label" color="light" small>
+    {{ label }}
+  </TypographyText>
 </label>

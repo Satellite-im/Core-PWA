@@ -21,12 +21,6 @@ export default Vue.extend({
       default: 'null',
     },
     /**
-     * Size of the switch
-     *
-     * @remarks - currently supports 'normal' and 'small'
-     */
-    small: Boolean,
-    /**
      * If provided, a label will be attached to the right of the switch
      */
     label: {

@@ -1,11 +1,13 @@
 <div class="listbox" :value="value" ref="listbox">
-  <span
+  <TypographyText
     :id="`${label}-label`"
     :class="{ hidden : !showLabel }"
     class="listbox-label"
+    color="light"
+    uppercase
   >
     {{ label }}
-  </span>
+  </TypographyText>
   <select
     v-if="$device.isMobile"
     class="mobile-select"

@@ -20,10 +20,9 @@
             />
           </div>
           <div class="column align">
-            <TypographyText
-              class="set-photo-title"
-              :text="$t('user.registration.photo_text')"
-            />
+            <TypographyText as="p" color="dark" style="margin-bottom: 1.5rem">
+              {{ $t('user.registration.photo_text') }}
+            </TypographyText>
             <InteractablesImageInput ref="imageInput" @change="selectImage" />
             <InteractablesButton
               :action="() => imageInputRef.click()"
