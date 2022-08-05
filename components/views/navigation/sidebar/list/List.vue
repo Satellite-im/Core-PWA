@@ -22,14 +22,10 @@ export default Vue.extend({
     },
   },
   methods: {
-    navigateAddFriends(): void {
-      if (this.$route.name?.includes('friends-list')) {
-        if (this.$device.isMobile) {
-          this.$store.commit('ui/showSidebar', false)
-        }
-      } else {
-        this.$router.push({ path: '/friends' })
-      }
+    navigateAddFriends() {
+      this.$router.push({
+        path: this.$device.isMobile ? '/mobile/friends' : '/friends',
+      })
     },
     lastMessageTimestamp(conversation: Conversation): number {
       const messages = this.messages[conversation.id]
