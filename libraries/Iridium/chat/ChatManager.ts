@@ -156,7 +156,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     const { type, message } = payload.body
     if (type === 'chat/message' && message) {
-      console.log(message)
       Vue.set(
         this.state.conversations[conversationId].message,
         message.id,
