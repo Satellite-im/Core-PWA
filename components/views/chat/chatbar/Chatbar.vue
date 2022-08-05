@@ -132,7 +132,7 @@ const Chatbar = Vue.extend({
     },
   },
   mounted() {
-    const message = this.chat.draftMessages[this.conversationId]
+    const message = this.chat.draftMessages[this.conversationId] ?? ''
     this.$store.commit('chat/clearReplyChatbarMessage', {
       conversationId: this.conversationId,
     })
