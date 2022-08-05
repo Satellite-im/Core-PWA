@@ -1,24 +1,12 @@
 <template src="./InfiniteScroll.html"></template>
 
 <script lang="ts">
-import { PropType } from 'vue'
-
-const defaultOptions = {
-  threshold: 0 as number | number[],
-  rootMargin: '0px',
-  root: null,
-}
-
-declare interface BaseComponentData {
-  scrollObserver?: IntersectionObserver
-}
-
 export default {
   name: 'InfiniteScroll',
   props: {
-    offset: {
-      type: String,
-      default: undefined,
+    threshold: {
+      type: Number,
+      default: 0,
     },
     isLoading: {
       type: Boolean,
@@ -29,31 +17,31 @@ export default {
       default: false,
     },
   },
-  data(): BaseComponentData {
-    return {}
+  computed: {
+    parentElement(): HTMLElement {
+      return (this.$refs.root as HTMLElement).parentElement as HTMLElement
+    },
   },
   mounted() {
-    this.scrollObserver = new IntersectionObserver(
-      () => {
-        if (this.isLoading || this.noMore) {
-          return
-        }
-        this.$emit('loadMore')
-      },
-      {
-        root: (this.$refs.root as Element).parentElement,
-        rootMargin: this.offset,
-      },
-    )
-
-    if (this.$refs.root) {
-      this.scrollObserver.observe(this.$refs.root as Element)
-    }
+    this.parentElement.addEventListener('wheel', this.scrollHandler)
+    this.parentElement.addEventListener('touchmove', this.scrollHandler)
   },
   beforeDestroy() {
-    if (this.scrollObserver) {
-      this.scrollObserver.disconnect()
-    }
+    this.parentElement.removeEventListener('wheel', this.scrollHandler)
+    this.parentElement.removeEventListener('touchmove', this.scrollHandler)
+  },
+  methods: {
+    scrollHandler() {
+      const offset =
+        this.parentElement.scrollHeight +
+        this.parentElement.scrollTop -
+        this.parentElement.getBoundingClientRect().height
+
+      if (this.isLoading || this.noMore || offset > this.threshold) {
+        return
+      }
+      this.$emit('loadMore')
+    },
   },
 }
 </script>

@@ -18,7 +18,7 @@
   <UiChatInfiniteScroll
     :isLoading="isLoadingMore"
     :noMore="noMore"
-    offset="100%"
+    threshold="1000"
     @loadMore="loadMore"
   />
   <UiLoadersMessage :count="3" v-if="false" />

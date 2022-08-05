@@ -14,7 +14,7 @@ interface ChatItem {
   replies: ConversationMessage[]
 }
 
-const MESSAGE_PAGE_SIZE = 20
+const MESSAGE_PAGE_SIZE = 50
 
 export default Vue.extend({
   components: {
@@ -75,8 +75,11 @@ export default Vue.extend({
     loadMore() {
       // TODO: we'll want to instead call iridium in this method once paginated
       // fetching is added, for now we'll just take a slice.
-      console.log('loadMore')
-      this.numMessages += MESSAGE_PAGE_SIZE
+      this.isLoadingMore = true
+      setTimeout(() => {
+        this.numMessages += MESSAGE_PAGE_SIZE
+        this.isLoadingMore = false
+      }, 200)
     },
   },
 })
