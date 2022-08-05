@@ -14,22 +14,14 @@ import {
   ChatError,
   MessageReactionPayload,
   ConversationMessagePayload,
-  ConversationMessageType,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 
 export type ConversationPubsubEvent = IridiumMessage<{
-  from: ConversationMessage['from']
-  payload: {
-    body: {
-      conversation: Conversation['id']
-      message: ConversationMessage['id']
-      type: ConversationMessageType
-    }
-  }
-  topic: string
+  messageCID: ConversationMessage['id']
+  type: 'chat/message'
 }>
 
 export type State = {
@@ -157,30 +149,42 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       return
     }
     const { from, payload } = message
-    const conversation = await this.getConversation(conversationId)
-    if (!conversation || !conversation.participants.includes(did)) {
+    const conversation = this.getConversation(conversationId)
+    if (
+      !conversation ||
+      !conversation.participants.includes(didUtils.didString(from))
+    ) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
-    const { type, message: messageCID } = payload
+    const { type, messageCID } = payload.body
     if (type === 'chat/message' && messageCID) {
+      console.log('made it')
+
+      const x = await this.iridium.connector.load(messageCID, { decrypt: true })
+      console.log(x)
+      // Vue.set(
+      //   this.state.conversations[conversationId].message,
+      //   messageCID,
+      //   message,
+      // )
       // TODO: type check the message?
-      const msg = await this.iridium.connector.load(messageCID, {
-        decrypt: true,
-      })
-      if (msg) {
-        conversation.messages.push(messageCID)
-        conversation.message[messageCID] = msg
-        this.state.conversation[conversationId] = conversation
-        await this.set(
-          `/conversations/${conversationId}/messages`,
-          conversation.messages,
-        )
-        await this.set(
-          `/conversations/${conversationId}/message/${messageCID}`,
-          msg,
-        )
-        await this.saveConversation(conversation)
-      }
+      // const msg = await this.iridium.connector.load(messageCID, {
+      //   decrypt: true,
+      // })
+      // if (msg) {
+      //   conversation.messages.push(messageCID)
+      //   conversation.message[messageCID] = msg
+      //   this.state.conversation[conversationId] = conversation
+      //   await this.set(
+      //     `/conversations/${conversationId}/messages`,
+      //     conversation.messages,
+      //   )
+      //   await this.set(
+      //     `/conversations/${conversationId}/message/${messageCID}`,
+      //     msg,
+      //   )
+      //   await this.saveConversation(conversation)
+      // }
     }
 
     this.emit(`conversations/${conversationId}`, payload)
@@ -347,8 +351,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/message',
-        conversation: conversationId,
-        message: messageCID,
+        messageCID,
       },
       {
         encrypt: { recipients: conversation.participants },
