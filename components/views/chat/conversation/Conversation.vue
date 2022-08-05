@@ -14,6 +14,8 @@ interface ChatItem {
   replies: ConversationMessage[]
 }
 
+const MESSAGE_PAGE_SIZE = 20
+
 export default Vue.extend({
   components: {
     ChevronDownIcon,
@@ -23,6 +25,8 @@ export default Vue.extend({
       messages: iridium.chat.messages?.[this.$route.params.id] ?? [],
       conversation:
         iridium.chat.state.conversations?.[this.$route.params.id] ?? [],
+      numMessages: MESSAGE_PAGE_SIZE,
+      isLoadingMore: false,
     }
   },
   computed: {
@@ -32,6 +36,7 @@ export default Vue.extend({
     chatItems(): ChatItem[] {
       return this.messages
         .filter((message) => !message.replyToId)
+        .slice(-this.numMessages)
         .map((message, index) => {
           const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
           const isSameAuthor = prevMessage
@@ -59,8 +64,21 @@ export default Vue.extend({
           }
         })
     },
+    noMore(): boolean {
+      return (
+        this.numMessages >=
+        this.messages.filter((message) => !message.replyToId).length
+      )
+    },
   },
-  methods: {},
+  methods: {
+    loadMore() {
+      // TODO: we'll want to instead call iridium in this method once paginated
+      // fetching is added, for now we'll just take a slice.
+      console.log('loadMore')
+      this.numMessages += MESSAGE_PAGE_SIZE
+    },
+  },
 })
 </script>
 <style scoped lang="less" src="./Conversation.less"></style>
