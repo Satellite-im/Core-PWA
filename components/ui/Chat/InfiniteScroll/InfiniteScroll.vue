@@ -4,10 +4,6 @@
 export default {
   name: 'InfiniteScroll',
   props: {
-    threshold: {
-      type: Number,
-      default: 0,
-    },
     isLoading: {
       type: Boolean,
       required: true,
@@ -20,6 +16,9 @@ export default {
   computed: {
     parentElement(): HTMLElement {
       return (this.$refs.root as HTMLElement).parentElement as HTMLElement
+    },
+    threshold(): number {
+      return window.innerHeight
     },
   },
   mounted() {
