@@ -12,7 +12,6 @@ export default Vue.extend({
   },
   data: () => ({
     conversations: iridium.chat.state.conversations,
-    messages: iridium.chat.messages,
   }),
   computed: {
     sortedConversations(): Conversation[] {
@@ -28,7 +27,9 @@ export default Vue.extend({
       })
     },
     lastMessageTimestamp(conversation: Conversation): number {
-      const messages = this.messages[conversation.id]
+      const messages = Object.values(
+        this.conversations[conversation.id].message,
+      ).sort((a, b) => a.at - b.at)
       return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
     },
   },
