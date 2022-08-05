@@ -20,7 +20,7 @@ import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 
 export type ConversationPubsubEvent = IridiumMessage<{
-  messageCID: ConversationMessage['id']
+  message: ConversationMessage
   type: 'chat/message'
 }>
 
@@ -142,13 +142,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async onConversationMessage(
     conversationId: string,
-    message: ConversationPubsubEvent,
+    { from, payload }: ConversationPubsubEvent,
   ) {
-    console.info('onConversationMessage', message, conversationId)
     if (!this.iridium.connector) {
       return
     }
-    const { from, payload } = message
     const conversation = this.getConversation(conversationId)
     if (
       !conversation ||
@@ -156,38 +154,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     ) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
-    const { type, messageCID } = payload.body
-    if (type === 'chat/message' && messageCID) {
-      console.log('made it')
-
-      const x = await this.iridium.connector.load(messageCID, { decrypt: true })
-      console.log(x)
-      // Vue.set(
-      //   this.state.conversations[conversationId].message,
-      //   messageCID,
-      //   message,
-      // )
-      // TODO: type check the message?
-      // const msg = await this.iridium.connector.load(messageCID, {
-      //   decrypt: true,
-      // })
-      // if (msg) {
-      //   conversation.messages.push(messageCID)
-      //   conversation.message[messageCID] = msg
-      //   this.state.conversation[conversationId] = conversation
-      //   await this.set(
-      //     `/conversations/${conversationId}/messages`,
-      //     conversation.messages,
-      //   )
-      //   await this.set(
-      //     `/conversations/${conversationId}/message/${messageCID}`,
-      //     msg,
-      //   )
-      //   await this.saveConversation(conversation)
-      // }
+    const { type, message } = payload.body
+    if (type === 'chat/message' && message) {
+      console.log(message)
+      Vue.set(
+        this.state.conversations[conversationId].message,
+        message.id,
+        message,
+      )
+      this.set(
+        `/conversations/${conversationId}/message/${message.id}`,
+        message,
+      )
     }
-
-    this.emit(`conversations/${conversationId}`, payload)
   }
 
   hasConversation(id: string) {
@@ -351,7 +330,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/message',
-        messageCID,
+        message,
       },
       {
         encrypt: { recipients: conversation.participants },
