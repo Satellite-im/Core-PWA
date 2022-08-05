@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-bar">
+  <div class="loading-bar" :class="short ? 'short' : ''">
     <div class="bar" :style="`height: ${height}px`" />
   </div>
 </template>
@@ -11,6 +11,10 @@ export default Vue.extend({
     height: {
       type: Number,
       default: 6,
+    },
+    short: {
+      type: Boolean,
+      default: false,
     },
   },
 })
@@ -24,6 +28,13 @@ export default Vue.extend({
     width: 5px;
     height: 6px;
     border-radius: 2px;
+    background: @white;
+  }
+  &.short {
+    width: 60px;
+    .bar {
+      animation: shorterloading 2s cubic-bezier(0.17, 0.37, 0.43, 0.67) infinite;
+    }
   }
   display: inline-flex;
 }

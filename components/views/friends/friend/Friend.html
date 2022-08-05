@@ -16,7 +16,7 @@
   <div class="spacer"></div>
   <div class="controls" v-if="user && !request && isPreview">
     <div class="loader-container" v-if="loading">
-      <UiLoadersLoadingBar />
+      <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-else
@@ -34,7 +34,7 @@
     v-if="request && request.incoming && request.status === 'pending'"
   >
     <div class="loader-container" v-if="loading">
-      <UiLoadersLoadingBar />
+      <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-if="!loading"
@@ -58,7 +58,7 @@
   </div>
   <div class="controls" v-else-if="blocked">
     <div class="loader-container" v-if="loading">
-      <UiLoadersLoadingBar />
+      <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-else
@@ -75,7 +75,7 @@
     v-else-if="request && !request.incoming && request.status === 'pending'"
   >
     <div class="loader-container" v-if="loading">
-      <UiLoadersLoadingBar />
+      <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-else
@@ -90,7 +90,7 @@
   </div>
   <div class="controls" v-else-if="user && !request && !isPreview">
     <div class="loader-container" v-if="loading">
-      <UiLoadersLoadingBar />
+      <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-if="!loading"
