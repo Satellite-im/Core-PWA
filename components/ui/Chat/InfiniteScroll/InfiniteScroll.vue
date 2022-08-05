@@ -1,4 +1,4 @@
-<template src="./InfiniteScroll.html" />
+<template src="./InfiniteScroll.html"></template>
 
 <script lang="ts">
 import { PropType } from 'vue'
@@ -10,57 +10,52 @@ const defaultOptions = {
 }
 
 declare interface BaseComponentData {
-  scrollObserver: IntersectionObserver | null
-  isIntersecting: boolean
-  isComplete: boolean
-  debounceTimeout: ReturnType<typeof setTimeout> | null
+  scrollObserver?: IntersectionObserver
 }
 
 export default {
   name: 'InfiniteScroll',
   props: {
-    options: {
-      type: Object as PropType<typeof defaultOptions>,
-      default: () => defaultOptions,
-      required: false,
+    offset: {
+      type: String,
+      default: undefined,
+    },
+    isLoading: {
+      type: Boolean,
+      required: true,
+    },
+    noMore: {
+      type: Boolean,
+      default: false,
     },
   },
-  emits: ['intersect'],
   data(): BaseComponentData {
-    return {
-      scrollObserver: null,
-      isIntersecting: false,
-      isComplete: false,
-      debounceTimeout: null,
-    }
+    return {}
   },
   mounted() {
-    this.scrollObserver = new IntersectionObserver(([entry]) => {
-      clearTimeout(this.debounceTimeout)
-      if (entry && entry.isIntersecting && this.$refs.root) {
-        this.isIntersecting = true
-        this.scrollObserver.unobserve(this.$refs.root)
-        this.$emit('intersect', {
-          loaded: () => {
-            this.debounceTimeout = setTimeout(() => {
-              this.scrollObserver.observe(this.$refs.root)
-            }, 100)
-          },
-          complete: () => {
-            this.scrollObserver?.disconnect()
-            this.isIntersecting = false
-            this.isComplete = true
-          },
-        })
-      }
-    }, this.options)
+    this.scrollObserver = new IntersectionObserver(
+      () => {
+        if (this.isLoading || this.noMore) {
+          return
+        }
+        this.$emit('loadMore')
+      },
+      {
+        root: (this.$refs.root as Element).parentElement,
+        rootMargin: this.offset,
+      },
+    )
 
     if (this.$refs.root) {
-      this.scrollObserver.observe(this.$refs.root)
+      this.scrollObserver.observe(this.$refs.root as Element)
     }
   },
   beforeDestroy() {
-    if (this.scrollObserver) this.scrollObserver.disconnect()
+    if (this.scrollObserver) {
+      this.scrollObserver.disconnect()
+    }
   },
 }
 </script>
+
+<style scoped lang="less" src="./InfiniteScroll.less"></style>
