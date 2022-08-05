@@ -1,8 +1,8 @@
 <template>
   <div class="list">
     <FriendsMobileListItem
-      v-for="e in list"
-      :key="e.user.did"
+      v-for="e in list.map((e) => e.user)"
+      :key="e.did"
       :user="e"
       :type="type"
     />
@@ -27,7 +27,6 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .list {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1rem;

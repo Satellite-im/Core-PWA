@@ -26,15 +26,23 @@
           <!-- todo improve typography with new component -->
           <div>{{ $t(`friends.${route}`) }}</div>
         </div>
-        <template v-if="route === 'request'">
-          <div>incoming</div>
-          <FriendsMobileRequestList :list="incomingRequests" type="incoming" />
-          <div>outgoing</div>
-          <FriendsMobileRequestList :list="outgoingRequests" type="outgoing" />
-        </template>
-        <template v-else-if="route === 'add'">
-          <div>{{ $t('friends.add_description') }}</div>
-        </template>
+        <div class="bottom">
+          <template v-if="route === 'request'">
+            <div>{{ $t('friends.received') }}</div>
+            <FriendsMobileRequestList
+              :list="incomingRequests"
+              type="incoming"
+            />
+            <div>{{ $t('friends.sent') }}</div>
+            <FriendsMobileRequestList
+              :list="outgoingRequests"
+              type="outgoing"
+            />
+          </template>
+          <template v-else-if="route === 'add'">
+            <div>{{ $t('friends.add_description') }}</div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -156,6 +164,14 @@ export default Vue.extend({
       .arrow {
         color: @flair-color;
       }
+    }
+    .bottom {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 0 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
   }
 }

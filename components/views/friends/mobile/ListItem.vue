@@ -3,7 +3,7 @@
     <UiUserState :user="user" class="state" />
     <div class="text-container">
       <div class="name">{{ user.name }}</div>
-      <div class="status">{{ user.status }}</div>
+      <div v-if="user.status" class="status">{{ user.status }}</div>
     </div>
     <div class="button-container">
       <template v-if="type === 'friend'">
