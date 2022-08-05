@@ -131,21 +131,15 @@ const Chatbar = Vue.extend({
         : ''
     },
   },
-  watch: {
-    conversationId: {
-      handler(value) {
-        const message = this.chat.draftMessages[this.conversationId]
-        this.$refs.editable?.resetHistory()
-        this.$store.commit('chat/clearReplyChatbarMessage', {
-          conversationId: this.conversationId,
-        })
-        this.$store.dispatch('ui/setChatbarContent', { content: message })
-        // in desktop, stay chatbar focused when switching recipient
-        if (this.$device.isDesktop) {
-          this.$store.dispatch('ui/setChatbarFocus')
-        }
-      },
-    },
+  mounted() {
+    const message = this.chat.draftMessages[this.conversationId]
+    this.$store.commit('chat/clearReplyChatbarMessage', {
+      conversationId: this.conversationId,
+    })
+    this.$store.dispatch('ui/setChatbarContent', { content: message })
+    if (this.$device.isDesktop) {
+      this.$store.dispatch('ui/setChatbarFocus')
+    }
   },
   methods: {
     /**
