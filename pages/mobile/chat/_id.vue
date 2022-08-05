@@ -10,10 +10,8 @@
             class="search"
             :placeholder="`${$t('ui.search')}...`"
             :delete-icon="true"
-            size="small"
             input-kind="text"
             type="dark"
-            disabled
           />
           <button v-if="$route.params.id" @click="swiper.slideNext()">
             <menu-icon class="toggle-sidebar" size="1.5x" />

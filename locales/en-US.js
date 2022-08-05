@@ -742,6 +742,7 @@ export default {
     message: 'Message',
     options: 'Options',
     cancel: 'Cancel request',
+    request: 'Requests',
   },
   market_place: {
     title: 'Marketplace\nComing soon',
