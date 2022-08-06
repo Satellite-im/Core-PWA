@@ -30,7 +30,6 @@ export class IridiumManager extends Emitter {
     this.chat = new ChatManager(this)
     this.files = new FilesManager(this)
     this.settings = new SettingsManager(this)
-    window.i = this
   }
 
   /**
