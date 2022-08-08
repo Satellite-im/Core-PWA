@@ -1,15 +1,9 @@
 .hover-effect-container {
   position: relative;
 
-  &:hover {
-    &:extend(.background-semitransparent-lighter);
-  }
-
   .effect-mask {
     position: absolute;
     inset: 0;
-
-    transition: 250ms all ease-in-out;
     background: radial-gradient(
       var(--circle-size) circle at var(--mouse-x) var(--mouse-y),
       rgba(255, 255, 255, 0.15) 0%,

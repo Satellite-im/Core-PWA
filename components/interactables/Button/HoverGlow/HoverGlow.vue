@@ -4,6 +4,11 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
+    action: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
     disabled: {
       type: Boolean,
       required: false,
@@ -12,13 +17,15 @@ export default Vue.extend({
   },
   methods: {
     mouseLeave(e: MouseEvent) {
-      const target = e.target
+      const target = e?.target
+
       target.style = ''
     },
     mouseEnter(e: MouseEvent) {
       const target = e.target
+
       const rect = target.getBoundingClientRect()
-      target.style.setProperty('--circle-size', `${rect.height}px`)
+      target.style.setProperty('--circle-size', `${rect.height * 2}px`)
     },
     mouseMove(e: MouseEvent) {
       const target = e.target

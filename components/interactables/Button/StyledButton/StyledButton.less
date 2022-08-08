@@ -1,0 +1,211 @@
+.styled-button {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  border-radius: 4px;
+
+  font-size: 1rem;
+  justify-content: flex-start;
+  line-height: 1.5;
+
+  position: relative;
+  vertical-align: top;
+
+  border: none;
+  cursor: pointer;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+
+  transition: all @animation-speed ease-in-out;
+
+  &:extend(.inline-flex-centered);
+  min-width: 35px;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    box-shadow: none !important;
+    &:extend(.font-secondary);
+
+    &.is-loading {
+      .hover-effect-container {
+        &:extend(.background-semitransparent-disabled);
+      }
+    }
+
+    &.is-disabled {
+      background: @text-muted;
+    }
+  }
+
+  .content {
+    border-radius: 4px;
+    height: 2.5em;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(0.5em - 1px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    .spin {
+      margin-right: 0.5rem;
+
+      &.no-spinner-margin {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .feather {
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.5rem;
+  }
+
+  .no-text-feather {
+    margin-right: 0;
+  }
+
+  &.is-small {
+    font-size: 0.75rem;
+  }
+
+  &.is-small:not(.is-rounded) {
+    border-radius: 2px;
+  }
+
+  &.is-normal {
+    font-size: 1rem;
+  }
+
+  &.is-medium {
+    font-size: 1.25rem;
+  }
+
+  &.is-large {
+    font-size: 1.5rem;
+  }
+
+  &.font-primary {
+    font-family: @primary-font;
+  }
+
+  &.font-secondary {
+    font-family: @secondary-font;
+  }
+
+  &.is-primary:not(.is-outlined) {
+    &:extend(.background-flair-gradient);
+    &:extend(.font-primary);
+    &:extend(.glow-flair);
+  }
+
+  &.is-dark:not(.is-outlined) {
+    &:extend(.background-semitransparent-lighter);
+    &:extend(.font-secondary);
+
+    &:hover:not(.is-loading) {
+      &:extend(.background-grey);
+      &:extend(.font-secondary);
+    }
+  }
+
+  &.is-danger:not(.is-outlined) {
+    &:extend(.glow-danger);
+    &:extend(.background-danger-gradient);
+  }
+
+  &.is-success:not(.is-outlined) {
+    &:extend(.glow-success);
+    &:extend(.background-success-gradient);
+  }
+
+  &.is-outlined {
+    .content {
+      border: 2px;
+    }
+
+    &.is-primary {
+      .content {
+        border-color: @flair-color;
+      }
+
+      background: transparent;
+      &:extend(.font-flair);
+
+      &:hover:not(.is-loading) {
+        &:extend(.background-flair-gradient);
+        &:extend(.font-secondary);
+      }
+    }
+
+    &.is-dark {
+      .content {
+        border-color: @dark-gray;
+      }
+
+      &:extend(.background-semitransparent-lighter);
+      &:extend(.font-primary);
+
+      &:hover:not(.is-loading) {
+        &:extend(.background-semitransparent-lightest);
+        &:extend(.font-secondary);
+      }
+    }
+
+    &.is-danger {
+      .content {
+        border-color: @red;
+      }
+
+      &:extend(.color-danger);
+
+      &:hover:not(.is-loading) {
+        &:extend(.background-danger-gradient);
+        &:extend(.font-secondary);
+        &:extend(.glow-danger);
+      }
+    }
+
+    &.is-success {
+      .content {
+        border-color: @green;
+      }
+
+      &:extend(.color-success);
+
+      &:hover:not(.is-loading) {
+        &:extend(.background-success-gradient);
+        &:extend(.font-secondary);
+        &:extend(.glow-success);
+      }
+    }
+  }
+
+  &.is-full-width {
+    width: 100%;
+  }
+}

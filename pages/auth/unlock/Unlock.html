@@ -43,11 +43,10 @@
     </div>
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
-        class="random-user-btn"
         :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
         :action="createRandom"
-        ><UiLoadersSpinner v-if="status === 'loading'" spinning
-      /></InteractablesButton>
+        loading="status === 'loading'"
+      />
     </div>
   </div>
   <span @click="toggleChangelogVisibility">
