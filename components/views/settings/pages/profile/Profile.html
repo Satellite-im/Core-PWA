@@ -76,11 +76,9 @@
               <div class="status-input">
                 <InteractablesInputGroup
                   v-model="status"
-                  size="small"
-                  input-kind="text"
-                  type="primary"
+                  size="xs"
+                  type="text"
                   :placeholder="$t('pages.settings.profile.status_placeholder')"
-                  :action="() => {}"
                 >
                   <edit-icon size="1x" />
                 </InteractablesInputGroup>
@@ -141,11 +139,9 @@
               </div>
               <InteractablesInputGroup
                 v-model="accountUrl"
-                size="small"
-                input-kind="text"
-                type="primary"
+                size="xs"
+                type="text"
                 :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
-                :action="() => {}"
               >
                 <edit-icon size="1x" />
               </InteractablesInputGroup>

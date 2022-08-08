@@ -35,9 +35,8 @@
     <InteractablesInputGroup
       v-model="text"
       class="name"
-      size="small"
-      type="primary"
-      :action="addFolder"
+      size="xs"
+      @submit="addFolder"
       :placeholder="$t('pages.files.controls.name_folder')"
     >
       <folder-plus-icon size="1.3x" />

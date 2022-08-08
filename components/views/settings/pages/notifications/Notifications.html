@@ -49,22 +49,20 @@
         <InteractablesInputGroup
           v-if="NotificationStatus === 'granted' || Platform === PlatformTypeEnum.ELECTRON"
           class="modal-input"
-          size="small"
-          type="primary"
+          size="xs"
           v-model="$data.NotificationText"
           :placeholder="$t('pages.settings.notifications.send_placeholder')"
-          :action="sendNotification"
+          @submit="sendNotification"
         >
           <arrow-right-icon size="1x" />
         </InteractablesInputGroup>
       </span>
       <span v-if="Platform === PlatformTypeEnum.ANDROID">
         <InteractablesInputGroup
-          class="modal-input"
-          size="small"
-          type="primary"
           v-model="NotificationText"
-          :action="sendNotification"
+          class="modal-input"
+          size="xs"
+          @submit="sendNotification"
         >
           <arrow-right-icon size="1x" />
         </InteractablesInputGroup>

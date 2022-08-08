@@ -24,10 +24,9 @@
   <template v-if="!isMe">
     <UiHorizontalRule />
     <InteractablesInputGroup
-      type="primary"
       v-model="text"
       :placeholder="`${$t('friends.message')} ${user.name}...`"
-      :action="sendMessage"
+      @submit="sendMessage"
       :maxLength="$Config.chat.maxChars"
       showLimit
     >

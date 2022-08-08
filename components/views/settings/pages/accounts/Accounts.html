@@ -11,9 +11,8 @@
     <TypographyLabel :text="$t('pages.settings.accounts.active')" />
     <InteractablesInputGroup
       readonly
-      type="primary"
-      :action="copyAddress"
       :text="accounts.active"
+      @submit="copyAddress"
     >
       <clipboard-icon size="1x" />
     </InteractablesInputGroup>

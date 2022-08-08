@@ -192,17 +192,16 @@
             <p>Grouped Input</p>
             <InteractablesInputGroup
               v-model="input2Text"
-              size="small"
-              input-kind="number"
-              type="primary"
+              size="sm"
+              type="number"
               :label-text="input2Text.toString()"
               :loading="inputGroupLoading"
-              :action="
+              :icon="{ style: 'far', name: 'lock-open' }"
+              @submit="
                 () => {
                   inputGroupLoading = !inputGroupLoading
                 }
               "
-              :icon="{ style: 'far', name: 'lock-open' }"
             />
           </div>
         </div>

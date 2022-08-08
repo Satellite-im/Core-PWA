@@ -6,13 +6,12 @@
   <UiSpacer :height="45" />
   <div class="flex-row">
     <InteractablesInputGroup
-      class="input-container"
-      type="primary"
-      size="small"
-      :placeholder="$t('friends.search_placeholder')"
-      :action="searchFriend"
       v-model="accountID"
+      class="input-container"
+      size="xs"
+      :placeholder="$t('friends.search_placeholder')"
       :loading="searching"
+      @submit="searchFriend"
     >
       <check-circle-2-icon size="1x" />
     </InteractablesInputGroup>
