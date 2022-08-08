@@ -2,7 +2,7 @@
   <component
     :is="as"
     :class="[
-      `color-${getColor} font-${getFont} font-size-${getSize}`,
+      `color-${getColor} font-color-${getFont} font-size-${getSize}`,
       { uppercase: uppercase },
       getWeight,
     ]"
@@ -12,11 +12,7 @@
 </template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
-type Color = 'body' | 'light' | 'dark' | 'flair'
-type Font = 'heading' | 'body'
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
-type Weight = 'regular' | 'bold'
+import { Font, Size, TextColor, Weight } from '~/types/typography'
 
 export default Vue.extend({
   props: {
@@ -25,7 +21,7 @@ export default Vue.extend({
       default: 'div',
     },
     color: {
-      type: String as PropType<Color>,
+      type: String as PropType<TextColor>,
       default: '',
     },
     font: {
@@ -86,31 +82,6 @@ export default Vue.extend({
 })
 </script>
 <style scoped lang="less">
-@heading-font: 'SpaceMono', monospace;
-@body-font: 'Poppins';
-
-.color {
-  &-body {
-    color: @body;
-  }
-  &-light {
-    color: @light;
-  }
-  &-dark {
-    color: @dark;
-  }
-  &-flair {
-    color: @flair-color;
-  }
-}
-.font {
-  &-heading {
-    font-family: @heading-font;
-  }
-  &-body {
-    font-family: @body-font;
-  }
-}
 .bold {
   font-weight: 700;
 }
