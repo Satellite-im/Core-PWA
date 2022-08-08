@@ -1,7 +1,7 @@
 <div class="settings-unit" @click="$emit('click', $event)">
   <div class="text">
-    <TypographyTitle v-if="title.length" :size="6" :text="title" />
-    <TypographyText v-if="text.length" :text="text" />
+    <TypographyText v-if="title.length" as="h3"> {{ title }} </TypographyText>
+    <TypographyText v-if="text.length"> {{ text }} </TypographyText>
   </div>
   <slot></slot>
 </div>

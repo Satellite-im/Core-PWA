@@ -17,7 +17,7 @@
     />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
-  <TypographyText color="dark" small>
+  <TypographyText color="dark" size="sm">
     {{ user.publicKey ? `${user.publicKey.substr(0, 23)}...` : `` }}
   </TypographyText>
   <TypographyText> {{ user.status }} </TypographyText>

@@ -43,16 +43,12 @@
       :action="() => deleteVerify = true"
     />
     <span v-if="deleteVerify">
-      <TypographyText
-        :text="$t('pages.settings.storage.clear.subtitle_warning1')"
-        class="detail color-danger no-bottom-pad"
-        :size="6"
-      />
-      <TypographyText
-        :text="$t('pages.settings.storage.clear.subtitle_warning2')"
-        class="detail color-danger"
-        :size="6"
-      />
+      <TypographyText class="detail color-danger no-bottom-pad">
+        {{ $t('pages.settings.storage.clear.subtitle_warning1') }}
+      </TypographyText>
+      <TypographyText class="detail color-danger">
+        {{ $t('pages.settings.storage.clear.subtitle_warning2') }}
+      </TypographyText>
       <br />
       <InteractablesButton
         type="danger"

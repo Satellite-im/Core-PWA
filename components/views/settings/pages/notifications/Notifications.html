@@ -13,7 +13,8 @@
   </SettingsSection>
   <TypographyLabel
     :text="$t('pages.settings.notifications.labels.current_platform')"
-  /><TypographyText :text="Platform" />
+  />
+  <TypographyText> {{ Platform }} </TypographyText>
   <br />
 
   <SettingsSection>
@@ -24,14 +25,12 @@
         <span v-if="Platform === PlatformTypeEnum.WEB">
           <TypographyLabel :text="$t('pages.settings.notifications.enabled')" />
           <br />
-          <TypographyText
-            v-if="NotificationStatus === 'granted'"
-            :text="$t('pages.settings.notifications.web.granted')"
-          />
-          <TypographyText
-            v-if="NotificationStatus === 'denied'"
-            :text="$t('pages.settings.notifications.web.denied')"
-          />
+          <TypographyText v-if="NotificationStatus === 'granted'">
+            {{ $t('pages.settings.notifications.web.granted') }}
+          </TypographyText>
+          <TypographyText v-if="NotificationStatus === 'denied'">
+            {{ $t('pages.settings.notifications.web.denied') }}
+          </TypographyText>
         </span>
 
         <!-- 

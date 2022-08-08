@@ -2,15 +2,17 @@
   <div class="about">
     <div>
       <TypographyTitle :text="$t('modal.profile.about.me')" :size="6" />
-      <TypographyText text="Lorem ipsum dolor" />
+      <TypographyText>Lorem ipsum dolor</TypographyText>
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.location')" :size="6" />
-      <TypographyText text="Lorem ipsum dolor" />
+      <TypographyText>Lorem ipsum dolor</TypographyText>
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
-      <TypographyText v-if="!getInitialized" :text="note" class="loading" />
+      <TypographyText v-if="!getInitialized" class="loading">
+        {{ note }}
+      </TypographyText>
       <InteractablesClickToEdit
         v-show="getInitialized"
         ref="noteRef"

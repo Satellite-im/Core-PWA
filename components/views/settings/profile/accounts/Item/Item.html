@@ -28,19 +28,15 @@
   </div>
   <div v-if="account.isVerified" class="display-details">
     <div class="display-row">
-      <TypographyText
-        :size="6"
-        :text="$t('pages.settings.profile.accounts.displayMusic')"
-        class="music-label"
-      />
+      <TypographyText class="music-label">
+        {{ $t('pages.settings.profile.accounts.displayMusic') }}
+      </TypographyText>
       <InteractablesSwitch v-model="account.displayMusic" />
     </div>
     <div class="display-row">
-      <TypographyText
-        :size="6"
-        :text="$t('pages.settings.profile.accounts.displayOnProfile')"
-        class="music-label"
-      />
+      <TypographyText class="music-label">
+        {{ $t('pages.settings.profile.accounts.displayOnProfile') }}
+      </TypographyText>
       <InteractablesSwitch v-model="account.displayOnProfile" />
     </div>
   </div>

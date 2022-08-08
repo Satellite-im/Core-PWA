@@ -4,6 +4,6 @@
     v-if="account.type === 'credit-card' || account.type === 'debit-card'"
   />
   <binary-icon size="1x" v-else />
-  <TypographyText :text="account.name" />
-  <TypographyText :text="`●●●● ●●●● ${account.number}`" />
+  <TypographyText> {{account.name}} </TypographyText>
+  <TypographyText> {{ `●●●● ●●●● ${account.number}` }} </TypographyText>
 </div>
