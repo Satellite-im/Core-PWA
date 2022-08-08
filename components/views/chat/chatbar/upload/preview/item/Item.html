@@ -13,7 +13,7 @@
     <file-icon size="3x" class="control-icon" />
   </div>
   <div>
-    <TypographyText :size="6" data-cy="file-item-filename" class="ellipsis">
+    <TypographyText data-cy="file-item-filename" class="ellipsis">
       {{ item.file.name }}
     </TypographyText>
     <div v-if="item.progress > 0 && item.progress <= 100">

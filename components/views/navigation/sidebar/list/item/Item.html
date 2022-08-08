@@ -10,18 +10,27 @@
     <UiGroupIcon v-else :group="details" />
   </template>
   <div class="user-info">
-    <TypographyText v-if="details" as="h2" data-cy="sidebar-user-name">
+    <TypographyText
+      v-if="details"
+      class="ellipsis"
+      color="light"
+      font="heading"
+      weight="bold"
+      data-cy="sidebar-user-name"
+    >
       {{ details.name }}
     </TypographyText>
-    <div
-      v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
-      class="subtitle"
-      :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
-      ref="subtitle"
-    />
+    <TypographyText v-if="details" size="sm" data-cy="sidebar-user-name">
+      <div
+        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
+        class="ellipsis"
+        :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
+        ref="subtitle"
+      />
+    </TypographyText>
   </div>
   <div class="user-chat-details">
-    <TypographyText v-if="messages.length" color="dark" small>
+    <TypographyText v-if="messages.length" color="dark" size="xs">
       {{ timestamp }}
     </TypographyText>
     <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->

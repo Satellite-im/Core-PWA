@@ -2,10 +2,9 @@
   <component
     :is="as"
     :class="[
-      getWeight,
-      `color-${getColor} font-${getFont}`,
+      `color-${getColor} font-${getFont} font-size-${getSize}`,
       { uppercase: uppercase },
-      { small: small || as === 'label' },
+      getWeight,
     ]"
   >
     <slot />
@@ -16,6 +15,7 @@ import Vue, { PropType } from 'vue'
 
 type Color = 'body' | 'light' | 'dark' | 'flair'
 type Font = 'heading' | 'body'
+type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 type Weight = 'regular' | 'bold'
 
 export default Vue.extend({
@@ -32,15 +32,15 @@ export default Vue.extend({
       type: String as PropType<Font>,
       default: '',
     },
+    size: {
+      type: String as PropType<Size>,
+      default: '',
+    },
     weight: {
       type: String as PropType<Weight>,
       default: '',
     },
     uppercase: {
-      type: Boolean,
-      default: false,
-    },
-    small: {
       type: Boolean,
       default: false,
     },
@@ -51,7 +51,7 @@ export default Vue.extend({
       if (this.color) {
         return this.color
       }
-      if (this.as.match('h[1-2]|label')) {
+      if (this.as.match('h[1-3]|label')) {
         return 'light'
       }
       return 'body'
@@ -60,16 +60,34 @@ export default Vue.extend({
       if (this.font) {
         return this.font
       }
-      if (this.as.match('h[1-2]')) {
+      if (this.as.match('h[1-3]')) {
         return 'heading'
       }
       return 'body'
+    },
+    getSize(): string {
+      if (this.size) {
+        return this.size
+      }
+      if (this.as === 'h1') {
+        return '2xl'
+      }
+      if (this.as === 'h2') {
+        return 'xl'
+      }
+      if (this.as === 'h3') {
+        return 'lg'
+      }
+      if (this.as === 'label') {
+        return 'sm'
+      }
+      return 'md'
     },
     getWeight(): string {
       if (this.weight) {
         return this.weight
       }
-      if (this.as.match('h[1-2]')) {
+      if (this.as.match('h[1-3]')) {
         return 'bold'
       }
       return ''
@@ -108,16 +126,9 @@ export default Vue.extend({
 }
 
 h1 {
-  font-size: 1.5rem;
   margin-bottom: 1rem;
-}
-h2 {
-  font-size: 1rem;
 }
 .uppercase {
   text-transform: uppercase;
-}
-.small {
-  font-size: 0.875rem;
 }
 </style>
