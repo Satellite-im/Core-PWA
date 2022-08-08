@@ -25,6 +25,9 @@ const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
   },
+  data() {
+    return { peerNotActive: true }
+  },
   computed: {
     ...mapState({
       ui: (state: RootState) => state.ui,
@@ -140,6 +143,11 @@ const Chatbar = Vue.extend({
     if (this.$device.isDesktop) {
       this.$store.dispatch('ui/setChatbarFocus')
     }
+    iridium.connector?.p2p.on('peer/connected', (peer) => {
+      if (peer) {
+        this.peerNotActive = false
+      }
+    })
   },
   methods: {
     /**
