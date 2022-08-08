@@ -1,20 +1,10 @@
-#add-friend {
-  .card {
-    &:extend(.background-semitransparent-light);
-    &:extend(.bordered);
-    &:extend(.font-primary);
-  }
-  .search-container {
-    margin: @light-spacing @light-spacing;
-  }
-  .error {
-    margin: 0 @normal-spacing;
-  }
-  padding-top: 0;
-}
+.add {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #add-friend {
-    min-width: @viewport-width;
+  .title-container {
+    display: flex;
+    gap: 0.75rem;
   }
 }

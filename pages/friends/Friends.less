@@ -1,0 +1,32 @@
+.friends {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  padding: @normal-spacing;
+  gap: 16px;
+
+  .col {
+    flex: 1;
+  }
+
+  .friends-list {
+    min-width: 320px;
+  }
+}
+
+.alpha-divider {
+  &:extend(.full-width);
+  display: inline-block;
+  padding-left: @normal-spacing;
+  font-size: @mini-text-size;
+  font-family: @primary-font;
+}
+
+.loading-container {
+  text-align: center;
+}
+
+.padded_divider {
+  padding: @light-spacing @normal-spacing;
+}

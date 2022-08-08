@@ -8,7 +8,7 @@
     <satellite-icon size="0.75x" />
   </UiCircle>
 
-  <UiHorizontalRule
+  <hr
     v-if="friendsWithUnreadMessages.length && friendsDS !== DataStateType.Loading"
   />
 
@@ -25,7 +25,7 @@
       />
     </div>
 
-    <UiHorizontalRule />
+    <hr />
 
     <UiComingSoon :tooltipText="$t('coming_soon.communities')">
       <div class="circle-group">
@@ -41,7 +41,7 @@
       </div>
     </UiComingSoon>
   </template>
-  <UiHorizontalRule />
+  <hr />
   <div class="circle-group">
     <button
       v-tooltip.right="$t('servers.new_server')"
@@ -52,7 +52,7 @@
     <button
       data-cy="settings"
       v-tooltip.right="$t('pages.settings.settings')"
-      @click="$store.commit('ui/toggleSettings', { show: true })"
+      @click="$store.commit('ui/setSettingsRoute')"
     >
       <settings-icon size="1.8x" />
     </button>

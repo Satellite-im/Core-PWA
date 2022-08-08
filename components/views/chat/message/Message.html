@@ -1,21 +1,24 @@
-<div
-  class="chat-message"
-  :class="{ 'show-header': showHeader }"
-  @contextmenu="contextMenu"
->
-  <template v-if="showHeader">
-    <div class="avatar">
-      <UiCircle :type="src ? 'image' :'random'" :seed="address" :source="src" />
-    </div>
-    <div class="header">
-      <span :click="showQuickProfile">
-        <UiUserName :username="author.name" :badge="badge" />
-      </span>
-    </div>
-  </template>
-  <div class="timestamp">{{ timestamp }}</div>
-  <div class="body">
-    <template v-if="!messageEdit && message.type === 'text'">
+<UiContextMenu class="chat-message-container" :items="contextMenuValues">
+  <div
+    class="chat-message"
+    :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo }"
+  >
+    <template v-if="showHeader">
+      <div class="avatar">
+        <UiCircle
+          :type="author.src ? 'image' :'random'"
+          :seed="author.id"
+          :source="author.src"
+        />
+      </div>
+      <div class="header">
+        <span :click="showQuickProfile">
+          <UiUserName :username="author.name" />
+        </span>
+      </div>
+    </template>
+    <div class="timestamp">{{ timestamp }}</div>
+    <div class="body">
       <MessageMarkdown
         :text="wrapEmoji(markdownToHtml(message.body))"
         class="markdown"
@@ -32,18 +35,17 @@
       >
         ({{$t('ui.edited')}})
       </span>
-    </template>
-    <MessageActions
-      :setReplyChatbarContent="setReplyChatbarContent"
-      :emojiReaction="emojiReaction"
-      :editMessage="editMessage"
-      :message="message"
-    />
-    <MessageReactions
-      v-if="hasReactions"
-      :message="this.$props.message"
-      :group="this.$props.group"
-      :key="`${this.$props.message.id}-${hasReactions ? this.$props.message.reactions.length : 0}`"
-    />
+      <MessageActions
+        :setReplyChatbarMessage="setReplyChatbarMessage"
+        :emojiReaction="emojiReaction"
+        :editMessage="editMessage"
+        :message="message"
+        :hideReply="hideReplyAction"
+      />
+    </div>
+    <div class="footer">
+      <MessageReactions :message="message" :emojiReaction="emojiReaction" />
+      <MessageReplies :replies="replies" />
+    </div>
   </div>
-</div>
+</UiContextMenu>

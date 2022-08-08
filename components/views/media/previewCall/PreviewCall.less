@@ -32,12 +32,12 @@
     visibility: hidden;
     transition: 0.2s ease-in-out;
   }
-  ::v-deep .indicators {
+  :deep(.indicators) {
     opacity: 0;
     visibility: hidden;
     transition: 0.2s ease-in-out;
   }
-  ::v-deep .tag {
+  :deep(.tag) {
     &:extend(.font-secondary);
     &:extend(.round-corners);
     &:extend(.bordered);
@@ -49,7 +49,7 @@
   }
   &:hover {
     .preview-call-button,
-    ::v-deep .indicators {
+    :deep(.indicators) {
       visibility: visible;
       opacity: 0.5;
     }

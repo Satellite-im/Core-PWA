@@ -20,7 +20,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      showSettings: (state) => (state as RootState).ui.showSettings,
       friends: (state) => (state as RootState).friends.all,
       audio: (state) => (state as RootState).audio,
     }),
@@ -92,7 +91,6 @@ export default Vue.extend({
 
       if (this.$device.isMobile) {
         // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
       }
 

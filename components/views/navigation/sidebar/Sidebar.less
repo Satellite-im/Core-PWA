@@ -1,34 +1,40 @@
-@sidebar-inner-offset: 175px;
+@sidebar-gradient: linear-gradient(
+    163.91deg,
+    rgba(48, 52, 71, 0.5) 0%,
+    rgba(42, 54, 75, 0) 100%
+  ),
+  linear-gradient(163.91deg, rgba(28, 39, 58, 0.9) 0%, rgba(0, 0, 0, 0.09) 100%),
+  linear-gradient(
+    359.95deg,
+    rgba(36, 40, 57, 0.9) 0.04%,
+    rgba(34, 44, 63, 0) 99.95%
+  ),
+  @darker;
 
-#sidebar {
-  width: @sidebar-size;
-  min-width: @sidebar-size;
-  position: relative;
-  height: @full;
+.sidebar {
   display: flex;
   flex-direction: column;
-  padding-bottom: @normal-spacing;
-  background: @background;
+  justify-content: space-between;
+  position: relative;
+  width: @sidebar-width;
+  margin: @normal-spacing 0;
+  flex-shrink: 0;
 
   .sidebar-inner {
-    &:extend(.round-corners);
-    &:extend(.background-semitransparent-light);
-    box-shadow: @ui-shadow;
-    max-height: calc(@app-height - @sidebar-inner-offset);
     display: flex;
     flex-direction: column;
-    margin-top: @normal-spacing;
-    padding: @normal-spacing;
     gap: @normal-spacing;
+    padding: @normal-spacing;
+    box-shadow: @ui-shadow;
+    max-height: calc(100% - @sidebar-controls-height);
+    &:extend(.round-corners);
+    background: @sidebar-gradient;
 
     .sidebar-search {
-      padding-right: @xlarge-spacing;
-
+      display: flex;
+      gap: @normal-spacing;
       .toggle-sidebar {
         cursor: pointer;
-        position: absolute;
-        top: @normal-spacing * 2.5;
-        right: @normal-spacing;
         &:extend(.filter-glow);
       }
     }
@@ -41,12 +47,15 @@
     }
 
     .quick-toggle {
-      display: flex;
       align-self: flex-end;
-      padding-left: @light-spacing;
       position: relative;
-      svg {
-        cursor: pointer;
+      button {
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+        background-color: @foreground-alt;
       }
     }
 
@@ -55,17 +64,21 @@
       position: relative;
       overflow: hidden;
       .inline-notification {
-        width: @sidebar-size - (@normal-spacing * 2);
+        width: @sidebar-width - (@normal-spacing * 2);
       }
     }
   }
 
   .controls {
-    &:extend(.background-semitransparent-light);
-    &:extend(.round-corners);
-    padding: @light-spacing @normal-spacing @normal-spacing @normal-spacing;
+    display: flex;
+    flex-direction: column;
+    gap: @normal-spacing;
+    height: @sidebar-controls-height;
+    padding: @normal-spacing;
     box-shadow: @ui-shadow;
-    margin-top: auto;
+    flex-shrink: 0;
+    &:extend(.round-corners);
+    background: @sidebar-gradient;
   }
 
   .label {

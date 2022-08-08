@@ -1,9 +1,8 @@
 #view-file {
   display: flex;
-  position: fixed;
+  position: absolute;
+  inset: 0;
   background: rgba(0, 0, 0, 0.75);
-  width: @full;
-  height: @full;
   &:extend(.first-layer);
   padding: @normal-spacing;
 
@@ -51,8 +50,7 @@
     max-width: 80vw;
     max-height: 60vh;
     &:extend(.round-corners);
-    overflow: hidden;
-    background-color: @background;
+
     img {
       height: 100%;
       width: 100%;

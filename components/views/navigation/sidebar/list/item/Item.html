@@ -1,17 +1,20 @@
-<div
+<UiContextMenu
   class="item"
   :class="{'is-loading' : isLoading , selected : isSelected}"
-  @contextmenu="contextMenu"
-  @click="navigateToUser"
+  :items="contextMenuValues"
+  @click="openConversation"
   data-cy="sidebar-user"
 >
-  <UiUserState v-if="conversation.type === 'direct'" :user="details" />
-  <UiGroupIcon v-else :group="details" />
+  <template v-if="details">
+    <UiUserState v-if="conversation.type === 'direct'" :user="details" />
+    <UiGroupIcon v-else :group="details" />
+  </template>
   <div class="user-info">
     <TypographyTitle
+      v-if="details"
       :size="6"
       data-cy="sidebar-user-name"
-      :text="conversation.name"
+      :text="details.name"
     />
     <div
       v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
@@ -27,4 +30,4 @@
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
-</div>
+</UiContextMenu>

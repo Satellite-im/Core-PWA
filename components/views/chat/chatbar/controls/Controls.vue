@@ -33,21 +33,16 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(route: string) {
-      if (!this.disabled) {
-        if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
-          this.$store.commit('ui/toggleEnhancers', {
-            show: true,
-            floating: true,
-            route,
-          })
-          return
-        }
-        this.$store.commit('ui/toggleEnhancers', {
-          show: !this.ui.enhancers.show,
-          floating: true,
-          route,
-        })
+      if (this.disabled) {
+        return
       }
+      this.$store.commit('ui/toggleEnhancers', {
+        show:
+          (this.ui.enhancers.show && this.ui.enhancers.route !== route) ||
+          !this.ui.enhancers.show,
+        floating: true,
+        route,
+      })
     },
     toggleMiniWallet() {
       if (!this.disabled) {

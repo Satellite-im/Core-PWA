@@ -107,10 +107,6 @@ export default Vue.extend({
       if (this.$route.path !== callingPath) {
         this.$router.push(callingPath)
       }
-
-      if (this.ui.showSettings) {
-        this.$store.commit('ui/toggleSettings', { show: false })
-      }
     },
     /**
      * @method denyCall DocsTODO

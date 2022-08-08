@@ -29,12 +29,6 @@ export default class Group extends Emitter<IridiumMessage> {
     return this.state?.members
   }
 
-  static async getById(id: string, iridium: IridiumManager) {
-    const group = new Group(id, iridium)
-    await group.load()
-    return group
-  }
-
   async load() {
     if (!this.iridium.connector) {
       throw new Error(GroupsError.GROUP_NOT_INITIALIZED)
@@ -43,6 +37,10 @@ export default class Group extends Emitter<IridiumMessage> {
     this.state = await this.iridium.connector?.get(`/groups/${this.id}`)
     this.iridium.connector.on(`/groups/${this.id}`, this._onWireMessage)
     await this.iridium.connector.subscribe(`/groups/${this.id}`)
+  }
+
+  async unsubscribe() {
+    this.off(`/groups/${this.id}`, this._onWireMessage)
   }
 
   private _onWireMessage(message: IridiumPeerMessage<IridiumChannelEvent>) {
@@ -66,6 +64,7 @@ export default class Group extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.GROUP_NOT_INITIALIZED)
     }
 
+    console.info('sending group message')
     return this.iridium.connector?.send(payload, {
       to: this.state?.members,
     })

@@ -1,14 +1,18 @@
 #chatbar {
   display: flex;
   flex-direction: column;
-  margin: @light-spacing 0 @normal-spacing;
   transition: height @animation-speed;
+
+  @media only screen and (max-width: @mobile-breakpoint) {
+    margin: 0 @normal-spacing @normal-spacing;
+    position: sticky;
+    bottom: 0;
+  }
 
   .chatbar-wrap {
     display: flex;
     align-items: flex-end;
     gap: @light-spacing;
-    margin: 0 @normal-spacing;
     padding: 0 @normal-spacing;
     position: relative;
     border-radius: 20px;

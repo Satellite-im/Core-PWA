@@ -11,7 +11,6 @@ import {
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
 import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -23,7 +22,6 @@ export default Vue.extend({
     CircleIcon,
     SmartphoneIcon,
   },
-  mixins: [ContextMenu],
   props: {
     user: {
       type: Object as PropType<User>,
@@ -55,7 +53,13 @@ export default Vue.extend({
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
-      return [{ text: this.$t('context.remove'), func: this.removeFriend }]
+      return [
+        {
+          text: this.$t('context.remove'),
+          func: this.removeFriend,
+          type: 'danger',
+        },
+      ]
     },
     requestIncoming() {
       return this.request && this.request.to === iridium.connector?.id
@@ -67,7 +71,7 @@ export default Vue.extend({
   methods: {
     async createFriendRequest() {
       this.loading = true
-      await iridium.friends?.requestInsert(this.user.did)
+      await iridium.friends?.requestCreate(this.user.did)
       this.loading = false
       this.$emit('requestSent')
     },
@@ -83,7 +87,7 @@ export default Vue.extend({
     },
     async removeFriend() {
       this.loading = true
-      await iridium.friends?.removeFriend(this.user.did)
+      await iridium.friends?.friendRemove(this.user.did)
       this.loading = false
     },
     async cancelRequest() {

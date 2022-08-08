@@ -155,7 +155,7 @@ export default class WebRTCManager extends Emitter {
 
         logger.log(loggerPrefix, `discovered peer: ${peerId}`)
 
-        this.iridium.friends.updateFriend(did, {
+        this.iridium.friends.updateFriend({
           ...connectedFriend,
           status: 'online',
         })
@@ -202,7 +202,7 @@ export default class WebRTCManager extends Emitter {
 
         logger.log(loggerPrefix, `connected friend: ${peerId}`)
 
-        this.iridium.friends.updateFriend(did, {
+        this.iridium.friends.updateFriend({
           ...connectedFriend,
           status: 'online',
         })
@@ -249,7 +249,7 @@ export default class WebRTCManager extends Emitter {
 
         logger.log(loggerPrefix, `discovered peer: ${peerId}`)
 
-        this.iridium.friends.updateFriend(did, {
+        this.iridium.friends.updateFriend({
           ...disconnectedFriend,
           status: 'offline',
         })
@@ -293,7 +293,7 @@ export default class WebRTCManager extends Emitter {
           })
       }
 
-      const friends = this.iridium.friends.getFriends()
+      const friends = this.iridium.friends.list
 
       friends
         .filter((friend) => friend.peerId && friend.status !== 'online')
@@ -487,7 +487,7 @@ export default class WebRTCManager extends Emitter {
 
     if (!requestFriend) return
 
-    this.iridium.friends.updateFriend(did, {
+    this.iridium.friends.updateFriend({
       ...requestFriend,
       status: 'online',
     })

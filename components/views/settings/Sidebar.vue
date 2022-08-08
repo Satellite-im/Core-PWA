@@ -1,37 +1,34 @@
 <template>
-  <InteractablesAsideMenu
-    :menu-content="sidebarLayout"
-    :title="title"
-    :toggle="toggle"
-    :active="ui.settingsRoute"
-    custom
-    :custom-action="customAction"
-  />
+  <aside class="menu">
+    <div v-for="group in menuOptions" :key="group.title">
+      <p class="menu-label">{{ group.title }}</p>
+      <ul class="menu-list">
+        <li v-for="link in group.links" :key="link.to">
+          <a
+            :class="{ active: settingsRoute === link.to }"
+            @click="navigateTo(link.to)"
+          >
+            {{ link.text }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
 </template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SidebarGrouping, SidebarLink } from '~/types/ui/sidebar'
+import { SidebarGrouping } from '~/types/ui/sidebar'
 import { SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  props: {
-    toggle: {
-      type: Function,
-      default: () => {},
-    },
-    title: {
-      type: String,
-      default: 'Title',
-    },
-    handleRouteChange: {
-      type: Function,
-      default: () => () => {},
-    },
-  },
-  data() {
-    return {
-      sidebarLayout: [
+  computed: {
+    ...mapState({
+      settingsRoute: (state) => (state as RootState).ui.settingsRoute,
+    }),
+    menuOptions(): SidebarGrouping[] {
+      return [
         {
           title: 'General',
           links: [
@@ -59,8 +56,8 @@ export default Vue.extend({
               to: SettingsRoutes.PRIVACY,
               text: 'Privacy',
             },
-          ] as Array<SidebarLink>,
-        } as SidebarGrouping,
+          ],
+        },
         {
           title: 'Realms & Security',
           links: [
@@ -76,8 +73,8 @@ export default Vue.extend({
               to: SettingsRoutes.NETWORK,
               text: 'Network',
             },
-          ] as Array<SidebarLink>,
-        } as SidebarGrouping,
+          ],
+        },
         {
           title: 'Developer',
           links: [
@@ -93,25 +90,51 @@ export default Vue.extend({
               to: SettingsRoutes.INFO,
               text: 'App Info',
             },
-          ] as Array<SidebarLink>,
-        } as SidebarGrouping,
-      ],
-    }
-  },
-  computed: {
-    ...mapState(['ui']),
+          ],
+        },
+      ]
+    },
   },
   methods: {
-    /**
-     * @method customAction DocsTODO
-     * @description
-     * @param link
-     * @example
-     */
-    customAction(link: string) {
-      this.$props.handleRouteChange(link)
+    navigateTo(link: string) {
+      this.$store.commit('ui/setSettingsRoute', link)
     },
   },
 })
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.menu {
+  -webkit-user-drag: none;
+  &:extend(.no-select);
+
+  .menu-label {
+    &:extend(.font-muted);
+  }
+
+  .menu-list {
+    margin-bottom: @normal-spacing;
+
+    li {
+      font-family: @secondary-font;
+      &:hover {
+        &:extend(.background-semitransparent-light);
+      }
+      a {
+        -webkit-user-drag: none;
+        font-family: @secondary-font;
+        &:extend(.no-select);
+        &:extend(.font-primary);
+
+        &:hover {
+          &:extend(.background-semitransparent-light);
+          &:extend(.font-primary);
+        }
+        &.active {
+          &:extend(.background-flair-gradient);
+          &:extend(.glow-flair);
+        }
+      }
+    }
+  }
+}
+</style>

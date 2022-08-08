@@ -1,4 +1,7 @@
 .breadcrumb {
+  flex-grow: 1;
+  margin-bottom: 0;
+
   ul {
     align-items: center;
   }
@@ -22,12 +25,5 @@
     &.disabled a {
       cursor: not-allowed;
     }
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .breadcrumb {
-    min-width: @full;
-    padding-top: @light-spacing;
   }
 }

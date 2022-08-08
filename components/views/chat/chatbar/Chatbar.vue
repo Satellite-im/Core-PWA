@@ -11,13 +11,16 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { ChatText } from '~/store/chat/types'
+import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
-import { Conversation } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
 import Group from '~/libraries/Iridium/groups/Group'
+import {
+  Conversation,
+  ConversationMessagePayload,
+} from '~/libraries/Iridium/chat/types'
 
 const Chatbar = Vue.extend({
   components: {
@@ -25,7 +28,7 @@ const Chatbar = Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends.state.list,
+      friends: iridium.friends.list,
       groups: iridium.groups.state,
       webrtc: iridium.webRTC,
     }
@@ -113,7 +116,7 @@ const Chatbar = Vue.extend({
     isSharpCorners(): boolean {
       return (
         Boolean(this.files.length) ||
-        Boolean(this.ui.replyChatbarContent.id) ||
+        Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
         this.commandPreview ||
         this.chat.countError
       )
@@ -139,7 +142,14 @@ const Chatbar = Vue.extend({
           content: value,
           // userId: this.recipient?.did,
         })
+        this.$store.commit('chat/setDraftMessage', {
+          conversationId: this.conversationId,
+          message: value,
+        })
       },
+    },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
     },
     placeholder(): string {
       return !this.hasCommand && this.text === ''
@@ -147,26 +157,15 @@ const Chatbar = Vue.extend({
         : ''
     },
   },
-  watch: {
-    'recipient.did': {
-      handler(value) {
-        const findItem = this.chat.chatTexts.find(
-          (item: ChatText) => item.userId === value,
-        )
-        const message = findItem ? findItem.value : ''
-        this.$refs.editable?.resetHistory()
-        this.$store.commit('ui/setReplyChatbarContent', {
-          id: '',
-          payload: '',
-          from: '',
-        })
-        this.$store.dispatch('ui/setChatbarContent', { content: message })
-        // in desktop, stay chatbar focused when switching recipient
-        if (this.$device.isDesktop) {
-          this.$store.dispatch('ui/setChatbarFocus')
-        }
-      },
-    },
+  mounted() {
+    const message = this.chat.draftMessages[this.conversationId] ?? ''
+    this.$store.commit('chat/clearReplyChatbarMessage', {
+      conversationId: this.conversationId,
+    })
+    this.$store.dispatch('ui/setChatbarContent', { content: message })
+    if (this.$device.isDesktop) {
+      this.$store.dispatch('ui/setChatbarFocus')
+    }
   },
   methods: {
     /**
@@ -243,52 +242,21 @@ const Chatbar = Vue.extend({
       }
       const value = this.text
       this.text = ''
-      // we should be looking into conversation instead of passing a recipient
-      await iridium.chat?.sendMessage({
+
+      const payload: ConversationMessagePayload = {
         conversationId,
         type: 'text',
         body: value,
         at: Date.now(),
-        attachments: [],
-      })
-      // if (
-      //   this.ui.replyChatbarContent.from &&
-      //   !RegExp(this.$Config.regex.uuidv4).test((this.recipient as Group)?.did)
-      // ) {
-      //   this.$store.dispatch('textile/sendReplyMessage', {
-      //     to: (recipient as Friend).textilePubkey,
-      //     text: value,
-      //     replyTo: this.ui.replyChatbarContent.messageID,
-      //     replyType: MessagingTypesEnum.TEXT,
-      //   })
-      //   return
-      // }
+      }
 
-      // if (
-      //   RegExp(this.$Config.regex.uuidv4).test(
-      //     (this.recipient as Group)?.did?.split('|')[1],
-      //   )
-      // ) {
-      //   if (this.ui.replyChatbarContent.from) {
-      //     this.$store.dispatch('textile/sendGroupReplyMessage', {
-      //       to: (recipient as Group).id,
-      //       text: value,
-      //       replyTo: this.ui.replyChatbarContent.messageID,
-      //       replyType: MessagingTypesEnum.TEXT,
-      //     })
-      //     this.text = ''
-      //     return
-      //   }
-      //   this.$store.dispatch('textile/sendGroupMessage', {
-      //     groupId: (recipient as Group).id,
-      //     message: value,
-      //   })
-      // } else {
-      //   // this.$store.dispatch('textile/sendTextMessage', {
-      //   //   to: (this.recipient as Friend).textilePubkey,
-      //   //   text: value,
-      //   // })
-      // }
+      if (this.chat.replyChatbarMessages[conversationId]) {
+        payload.replyToId = this.chat.replyChatbarMessages[conversationId].id
+
+        this.$store.commit('chat/clearReplyChatbarMessage', { conversationId })
+      }
+
+      await iridium.chat?.sendMessage(payload)
     },
     /**
      * @method handlePaste

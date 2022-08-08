@@ -1,4 +1,7 @@
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import { ICurrentChat } from '~/types/chat/chat'
 
 export interface ChatReply {
@@ -24,4 +27,6 @@ export interface ChatState {
   files: { [key: Conversation['id']]: ChatFileUpload[] }
   countError: boolean
   currentChat: ICurrentChat
+  draftMessages: { [key: Conversation['id']]: string }
+  replyChatbarMessages: { [key: Conversation['id']]: ConversationMessage }
 }

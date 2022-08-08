@@ -43,7 +43,7 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
-      friends: iridium.friends.state.list,
+      friends: iridium.friends.list,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC,
@@ -56,15 +56,24 @@ export default Vue.extend({
       video: (state) => (state as RootState).video,
       modals: (state) => (state as RootState).ui.modals,
     }),
-    ...mapGetters('ui', ['showSidebar', 'allUnseenNotifications']),
+    ...mapGetters('ui', ['allUnseenNotifications']),
     ModalWindows: () => ModalWindows,
-    conversation(): Conversation {
-      return iridium.chat.state.conversations[this.$route.params.id]
+    conversationId(): Conversation['id'] | undefined {
+      return this.$route.params.id
+    },
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return iridium.chat.state.conversations[this.conversationId]
     },
     isGroup(): boolean {
-      return this.conversation.type === 'group'
+      return this.conversation?.type === 'group'
     },
     details(): User | Group | undefined {
+      if (!this.conversation) {
+        return undefined
+      }
       if (this.isGroup) {
         return this.groups[this.conversation.id]
       }
@@ -160,7 +169,10 @@ export default Vue.extend({
      * @example toggleModal(ModalWindows.WALLET)
      */
     toggleModal() {
-      this.isGroupInviteVisible = !this.isGroupInviteVisible
+      this.$store.commit('ui/toggleModal', {
+        name: 'groupInvite',
+        state: { isOpen: !this.modals.groupInvite.isOpen },
+      })
     },
     // openProfile() {
     //   this.$store.dispatch('ui/showProfile', this.recipient)

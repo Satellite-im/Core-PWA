@@ -1,0 +1,50 @@
+<div class="friends">
+  <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
+  <div class="col">
+    <FriendsAdd />
+    <!-- Incoming Requests -->
+    <template v-if="incomingRequests.length">
+      <div class="padded_divider">
+        <TypographyHorizontalRuleText
+          plaintext
+          :value="$t('friends.requests')"
+        />
+      </div>
+      <FriendsFriend
+        v-for="request in incomingRequests"
+        :user='request.user || { did:request.did, name: request.user.name, status:
+          "offline" }'
+        :request="request"
+        :key="request.from"
+      />
+    </template>
+    <!-- Outgoing Requests -->
+    <template v-if="outgoingRequests.length">
+      <div class="padded_divider">
+        <TypographyHorizontalRuleText
+          plaintext
+          :value="$t('friends.outgoing')"
+        />
+      </div>
+      <FriendsFriend
+        v-for="request in outgoingRequests"
+        :user='request.user || { did:request.did, name: request.user.name, status:
+          "offline" }'
+        :request="request"
+        :key="request.from"
+      />
+    </template>
+  </div>
+  <div class="col friends-list">
+    <TypographyTitle :size="6" :text="$t('friends.friends')" />
+    <FriendsFriend v-for="user in friendsList" :user="user" :key="user.did" />
+    <!-- <div v-if="friends && blockedList" class="padded_divider">
+          <FriendsFriend
+            v-for="(user, did) in friends.blocked"
+            :user="user"
+            :key="did"
+            blocked
+          />
+        </div> -->
+  </div>
+</div>

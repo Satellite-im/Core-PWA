@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { PlusCircleIcon } from 'satellite-lucide-icons'
+import { PlusCircleIcon, TrashIcon } from 'satellite-lucide-icons'
 import * as bip39 from 'bip39'
 
 declare module 'vue/types/vue' {
@@ -16,13 +16,21 @@ export default Vue.extend({
   name: 'ImportAccountScreen',
   components: {
     PlusCircleIcon,
+    TrashIcon,
   },
-  data(): { error: string; phrases: string[]; bipList: string[] } {
+  data(): { error: string; phrases: string[] } {
     return {
       error: '',
       phrases: [],
-      bipList: bip39.wordlists.english,
     }
+  },
+  computed: {
+    bipList(): Array<string> {
+      return bip39.wordlists.english
+    },
+    seedPhraseCharsCount(): number {
+      return this.$Config.seedPhraseCharsCount
+    },
   },
   methods: {
     /**
@@ -50,14 +58,29 @@ export default Vue.extend({
       this.error = ''
     },
     onSelected(item: string) {
-      if (this.phrases.length < 12) this.phrases.push(item)
+      if (this.phrases.length < this.seedPhraseCharsCount)
+        this.phrases.push(item)
     },
     onMultipleSelected(items: string[]) {
       const filteredItems = items.filter((item) => this.bipList.includes(item))
 
-      if (filteredItems.length !== 12) return false
+      if (filteredItems.length !== this.seedPhraseCharsCount) return false
 
       this.phrases = filteredItems
+    },
+    onMatch(items: string[]) {
+      this.phrases = [...this.phrases, ...items]
+    },
+    resetPassphrase() {
+      this.phrases = []
+    },
+    onRecoverPhraseError(error: Boolean) {
+      if (error) {
+        this.error = 'pages.inputAccount.error_recover_phrase'
+        return
+      }
+
+      this.error = ''
     },
   },
 })

@@ -1,15 +1,8 @@
-<div id="sidebar">
+<div class="sidebar">
   <div class="sidebar-inner">
     <div class="sidebar-search">
-      <menu-icon
-        class="toggle-sidebar"
-        data-cy="hamburger-button"
-        @click="toggleMenu"
-        size="1.2x"
-        full-width
-        :style="`${sidebar ? 'display: block' : 'display: none'}`"
-      />
       <UiComingSoon
+        style="flex: 1"
         :tooltipText="$t('coming_soon.sidebar_search')"
         :tooltipPosition="'bottom'"
         disabled
@@ -24,25 +17,26 @@
           full-width
         />
       </UiComingSoon>
+      <InteractablesSidebarToggle />
     </div>
     <div class="sidebar-nav">
       <InteractablesButton
-        :inactive="!$route.path.includes('/friends/list')"
+        :inactive="!$route.path.includes('/friends')"
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
-        :type="$route.path.includes('/friends/list') ? 'primary' : 'dark'"
+        :type="$route.path.includes('/friends') ? 'primary' : 'dark'"
         size="small"
-        :action="() => $router.push('/friends/list')"
+        :action="() => $router.push('/friends')"
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
       </InteractablesButton>
       <span
-        v-if="incomingRequests"
+        v-if="incomingRequestsLength"
         class="label"
-        :class="{inverted : $route.path.includes('/friends/list')}"
+        :class="{inverted : $route.path.includes('/friends')}"
       >
-        {{incomingRequests}}
+        {{incomingRequestsLength}}
       </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files')"
@@ -50,15 +44,17 @@
         data-cy="sidebar-files"
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
         size="small"
-        :action="() => $router.push('/files/browse')"
+        :action="() => $router.push('/files')"
         :text="$t('files.files')"
       >
         <folder-icon size="1.2x" />
       </InteractablesButton>
     </div>
     <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
-      <plus-circle-icon size="1x" @click="toggleModal" />
-      <FriendsQuick
+      <button @click="toggleModal">
+        <plus-icon size="1.4x" />
+      </button>
+      <SidebarQuick
         v-if="isQuickchatVisible"
         v-click-outside="toggleModal"
         @toggle="toggleModal"

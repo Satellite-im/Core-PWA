@@ -13,14 +13,16 @@
       {{placeholderText}}
     </figcaption>
   </figure>
-  <div v-else class="image-container">
+  <ui-image-container
+    v-else
+    class="image-container"
+    :nsfw="image.nsfw && blockNsfw"
+  >
     <img
-      class="is-image"
-      :class="{'blur-image' : image.nsfw && blockNsfw}"
       :src="image.url"
       @click="clickHandler"
       @error="onImageError"
       data-cy="chat-image"
     />
-  </div>
+  </ui-image-container>
 </div>

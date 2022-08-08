@@ -2,18 +2,17 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { UIMessage, Group } from '~/types/messaging'
-
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage, ModalWindows } from '~/store/ui/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
 import { RootState } from '~/types/store/store'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -21,20 +20,26 @@ export default Vue.extend({
   components: {
     ArchiveIcon,
   },
-  mixins: [ContextMenu],
   props: {
     message: {
       type: Object as PropType<ConversationMessage>,
       required: true,
     },
+    replies: {
+      type: Array as PropType<ConversationMessage[]>,
+      default: [] as ConversationMessage[],
+    },
     showHeader: {
+      type: Boolean,
+      default: false,
+    },
+    hideReplyAction: {
       type: Boolean,
       default: false,
     },
   },
   data() {
     return {
-      chat: iridium.chat,
       blob: undefined as Blob | undefined,
       pngBlob: undefined as Blob | undefined,
     }
@@ -42,6 +47,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
+      chat: (state) => (state as RootState).chat,
       textile: (state) => (state as RootState).textile,
       accounts: (state) => (state as RootState).accounts,
     }),
@@ -50,17 +56,22 @@ export default Vue.extend({
       getFiles: 'chat/getFiles',
       getTimestamp: 'settings/getTimestamp',
     }),
-    isGroup(): boolean {
-      const conversationId = this.$route.params.id
-      if (!conversationId) {
-        return false
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
       }
-      return this.chat.isGroup(conversationId)
+      return iridium.chat.state.conversations[this.conversationId]
+    },
+    isGroup(): boolean {
+      return this.conversation?.type === 'group'
     },
     author(): User {
       // TODO: access User from iridium via did
       return {
-        id: this.message.did,
+        id: this.message.from,
         name: 'test',
       } as User
       // if (this.message.did === iridium.profile.state.
@@ -71,6 +82,12 @@ export default Vue.extend({
       //   return this.friends.find((f) => f.did === friendDid)
       // }
       // return this.groups[this.conversation.id]
+    },
+    isReplyingTo(): boolean {
+      return (
+        this.chat.replyChatbarMessages[this.conversationId]?.id ===
+        this.message.id
+      )
     },
     timestamp(): string {
       return this.getTimestamp({ time: this.message.at })
@@ -85,7 +102,7 @@ export default Vue.extend({
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
+        { text: this.$t('context.reply'), func: this.setReplyChatbarMessage },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
@@ -141,6 +158,31 @@ export default Vue.extend({
     }
   },
   methods: {
+    /**
+     * @method showQuickProfile
+     * @description Shows quickprofile component for user by setting quickProfile to true in state and setQuickProfilePosition
+     * to the current group components click event data
+     * @param e Event object from group component click
+     * @example v-on:click="showQuickProfile"
+     */
+    showQuickProfile(e: MouseEvent) {
+      const openQuickProfile = () => {
+        this.$store.dispatch('ui/showQuickProfile', {
+          textilePublicKey: this.group.from,
+          position: { x: e.x, y: e.y },
+        })
+      }
+
+      if (!this.ui.quickProfile) {
+        openQuickProfile()
+        return
+      }
+      setTimeout(() => {
+        if (!this.ui.quickProfile) {
+          openQuickProfile()
+        }
+      }, 0)
+    },
     /**
      * @method markdownToHtml
      * @description convert text markdown to html
@@ -219,30 +261,10 @@ export default Vue.extend({
         }
       })
     },
-    /**
-     * @method setReplyChatbarContent DocsTODO
-     * @description
-     * @example
-     */
-    setReplyChatbarContent() {
-      if (this.isGroup) {
-        this.toggleModal(ModalWindows.CALL_TO_ACTION)
-        return
-      }
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      const { id, type, payload, to, from } = this.message
-      let finalPayload = payload
-      if (['image', 'video', 'audio', 'file'].includes(type)) {
-        finalPayload = `*${this.$t('conversation.multimedia')}*`
-      } else if (type === 'glyph') {
-        finalPayload = `<img src=${payload} width='16px' height='16px' />`
-      }
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id,
-        payload: finalPayload,
-        from: this.from,
-        messageID: this.message.id,
-        to: to === myTextilePublicKey ? from : to,
+    setReplyChatbarMessage() {
+      this.$store.commit('chat/setReplyChatbarMessage', {
+        conversationId: this.message.conversationId,
+        message: this.message,
       })
       this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
     },
@@ -252,19 +274,10 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent) {
-      if (this.isGroup) {
-        this.toggleModal(ModalWindows.CALL_TO_ACTION)
-        return
-      }
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
-        groupID: this.group.id,
-        messageID: this.message.id,
-        to:
-          this.message.to === myTextilePublicKey
-            ? this.message.from
-            : this.message.to,
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
       })
       this.$store.commit('ui/toggleEnhancers', {
         show: !this.ui.enhancers.show,
@@ -272,10 +285,10 @@ export default Vue.extend({
       })
     },
     quickReaction(emoji: EmojiUsage) {
-      this.$store.dispatch('textile/sendReactionMessage', {
-        to: this.message.to,
-        emoji: emoji.content,
-        reactTo: this.message.id,
+      iridium.chat.toggleMessageReaction({
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
+        reaction: emoji.content,
       })
     },
     /**

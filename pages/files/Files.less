@@ -1,0 +1,47 @@
+.files-container {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: auto 288px;
+  grid-template-rows: min-content min-content 1fr;
+  gap: @normal-spacing;
+  grid-auto-flow: row;
+  grid-template-areas:
+    'controls files-aside-container'
+    'files-path files-aside-container'
+    'files-view files-aside-container';
+  overflow-y: scroll;
+  padding: @normal-spacing;
+
+  .files-path {
+    grid-area: files-path;
+    display: flex;
+    gap: @light-spacing;
+  }
+
+  .controls {
+    grid-area: controls;
+    display: flex;
+    flex-direction: column;
+    gap: @normal-spacing;
+  }
+
+  .files-view {
+    grid-area: files-view;
+    min-width: 0; // needed so overflow works properly
+  }
+
+  .files-aside-container {
+    grid-area: files-aside-container;
+  }
+
+  @media only screen and (max-width: @small-breakpoint) {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto 1fr;
+    gap: @large-spacing;
+    grid-template-areas:
+      'controls'
+      'files-aside-container'
+      'files-path'
+      'files-view';
+  }
+}

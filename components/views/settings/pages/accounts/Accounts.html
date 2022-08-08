@@ -1,27 +1,23 @@
 <SettingsPage>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.settings.accounts.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.accounts.subtitle')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyTitle :size="6" :text="$t('pages.settings.accounts.title')" />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.accounts.subtitle')"
+    />
+  </SettingsUnit>
 
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyLabel :text="$t('pages.settings.accounts.active')" />
-      <InteractablesInputGroup
-        readonly
-        type="primary"
-        :action="copyAddress"
-        :text="accounts.active"
-      >
-        <clipboard-icon size="1x" />
-      </InteractablesInputGroup>
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyLabel :text="$t('pages.settings.accounts.active')" />
+    <InteractablesInputGroup
+      readonly
+      type="primary"
+      :action="copyAddress"
+      :text="accounts.active"
+    >
+      <clipboard-icon size="1x" />
+    </InteractablesInputGroup>
+  </SettingsUnit>
 
   <!-- <SettingsSection>
     <SettingsUnit>
@@ -30,51 +26,44 @@
     </SettingsUnit>
   </SettingsSection> -->
 
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.accounts.devices')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.accounts.no_devices')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyTitle :size="6" :text="$t('pages.settings.accounts.devices')" />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.accounts.no_devices')"
+    />
+  </SettingsUnit>
 
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.profile.phrase.title')"
+  <SettingsUnit>
+    <TypographyTitle
+      :size="6"
+      :text="$t('pages.settings.profile.phrase.title')"
+    />
+    <TypographySubtitle
+      :size="6"
+      :text="$t('pages.settings.profile.phrase.subtitle')"
+    />
+    <div class="button-container">
+      <InteractablesButton
+        :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
+        size="normal"
+        type="primary"
+        :action="togglePhrase"
       />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.profile.phrase.subtitle')"
+      <InteractablesButton
+        :text="$t('pages.settings.accounts.copy_phrase')"
+        size="normal"
+        type="primary"
+        :action="copyPhrase"
       />
-      <div class="button-container">
-        <InteractablesButton
-          :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
-          size="normal"
-          type="primary"
-          :action="togglePhrase"
-        />
-        <InteractablesButton
-          :text="$t('pages.settings.accounts.copy_phrase')"
-          size="normal"
-          type="primary"
-          :action="copyPhrase"
-        />
-      </div>
-      <div v-if="showPhrase" class="tag-wrap">
-        <TypographyNumberedWord
-          v-for="word, i in splitPhrase"
-          :key="i"
-          :word="word"
-          :number="i + 1"
-        />
-      </div>
-    </SettingsUnit>
-  </SettingsSection>
+    </div>
+    <div v-if="showPhrase" class="tag-wrap">
+      <TypographyNumberedWord
+        v-for="word, i in splitPhrase"
+        :key="i"
+        :word="word"
+        :number="i + 1"
+      />
+    </div>
+  </SettingsUnit>
 </SettingsPage>

@@ -1,4 +1,4 @@
-<template src="./Nav.html" />
+<template src="./Nav.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -12,6 +12,7 @@ import {
   ShoppingBagIcon,
 } from 'satellite-lucide-icons'
 import { ModalWindows } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -23,10 +24,17 @@ export default Vue.extend({
     ShoppingBagIcon,
   },
   computed: {
-    ...mapState(['accounts', 'ui']),
-    src(): string {
-      const hash = this.accounts.details.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+      ui: (state) => (state as RootState).ui,
+    }),
+    isMobileNavVisible: {
+      get(): boolean {
+        return this.ui.isMobileNavVisible
+      },
+      set(value: boolean) {
+        this.$store.commit('ui/setIsMobileNavVisible', value)
+      },
     },
   },
   methods: {
@@ -36,25 +44,8 @@ export default Vue.extend({
         state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
       })
     },
-    /**
-     * @method navigateToHome
-     * @description Navigate to chat "/chat/direct" without specific user
-     */
-    navigateToHome() {
-      this.$store.commit('ui/setSwiperSlideIndex', 1)
-      this.$router.push('/chat/direct')
-    },
-    /**
-     * @method navigateToFriend
-     * @description Navigate to chat "/friends/list" showing slide 1 ('friends list slide')
-     */
-    navigateToFriend() {
-      this.$store.commit('ui/setSwiperSlideIndex', 1)
-      this.$store.commit('ui/showSidebar', false)
-      this.$router.push('/friends/list')
-    },
-    navigateToFiles() {
-      this.$router.push('/files/browse')
+    isActiveRoute(route: string): boolean {
+      return this.$route.path.includes(route)
     },
   },
 })

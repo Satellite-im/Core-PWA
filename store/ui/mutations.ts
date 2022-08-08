@@ -1,11 +1,9 @@
 import { without } from 'lodash'
 import {
   EnhancerInfo,
-  Flair,
   Position,
   RecentGlyph,
   SettingsRoutes,
-  Theme,
   UIState,
 } from './types'
 import { MessageGroup } from '~/types/messaging'
@@ -20,9 +18,7 @@ export default {
   toggleContextMenu(state: UIState, enabled: boolean) {
     state.contextMenuStatus = enabled
   },
-  showSidebarUsers(state: UIState, enabled: boolean) {
-    state.showSidebarUsers = enabled
-  },
+
   showSidebar(state: UIState, enabled: boolean) {
     state.showSidebar = enabled
   },
@@ -76,20 +72,11 @@ export default {
       route: options.route || 'emotes',
     }
   },
-  toggleSettings(
+  setSettingsRoute(
     state: UIState,
-    options: { show: boolean; defaultRoute?: SettingsRoutes },
+    route: SettingsRoutes = SettingsRoutes.PERSONALIZE,
   ) {
-    const { show, defaultRoute } = options
-
-    state.showSettings = show
-    state.settingsRoute = defaultRoute || SettingsRoutes.PERSONALIZE
-  },
-  setSettingsRoute(state: UIState, route: SettingsRoutes) {
     state.settingsRoute = route
-  },
-  toggleSettingsSidebar(state: UIState, show: boolean) {
-    state.settingsSideBar = show
   },
   toggleModal(state: UIState, modal: any) {
     // @ts-ignore
@@ -167,16 +154,6 @@ export default {
   },
   setActiveChannel(state: UIState, channel: Channel) {
     state.activeChannel = channel
-  },
-  setReplyChatbarContent(
-    state: UIState,
-    message: {
-      id: string
-      from: string
-      payload: string
-    },
-  ) {
-    state.replyChatbarContent = message
   },
   settingReaction(state: UIState, status: object) {
     state.settingReaction = status // TODO: check this mutation, probably a bug
@@ -357,16 +334,10 @@ export default {
   removeNotification(state: UIState, id: string) {
     state.notifications = state.notifications.filter((item) => item.id !== id)
   },
-  updateTheme(state: UIState, theme: Theme) {
-    state.theme.base = theme
-  },
-  updateFlair(state: UIState, flair: Flair) {
-    state.theme.flair = flair
-  },
   setChatbarFocus(state: UIState, status: boolean) {
     state.chatbarFocus = status
   },
-  setSwiperSlideIndex(state: UIState, index: number) {
-    state.swiperSlideIndex = index
+  setIsMobileNavVisible(state: UIState, value: boolean) {
+    state.isMobileNavVisible = value
   },
 }

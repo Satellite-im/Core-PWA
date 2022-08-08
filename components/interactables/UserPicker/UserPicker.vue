@@ -20,7 +20,7 @@ export default Vue.extend({
   data: () => ({
     selected: [] as Friend[],
     filter: '',
-    friendsList: iridium.friends.state.list,
+    friendsList: iridium.friends.list,
   }),
   computed: {
     friends() {

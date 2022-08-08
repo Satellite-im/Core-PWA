@@ -4,6 +4,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
 import { User } from '~/types/ui/user'
+import { SettingsRoutes } from '~/store/ui/types'
 
 export default Vue.extend({
   components: {
@@ -101,10 +102,7 @@ export default Vue.extend({
 
         if (isMe) {
           this.close()
-          this.$store.commit('ui/toggleSettings', {
-            show: true,
-            defaultRoute: 'profile',
-          })
+          this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
           // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
           // return
         }

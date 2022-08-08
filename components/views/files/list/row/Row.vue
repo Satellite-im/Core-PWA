@@ -10,7 +10,6 @@ import {
   FilmIcon,
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
@@ -24,7 +23,6 @@ export default Vue.extend({
     FilmIcon,
     MoreVerticalIcon,
   },
-  mixins: [ContextMenu],
   props: {
     item: {
       type: Object as PropType<IridiumItem>,
@@ -71,14 +69,14 @@ export default Vue.extend({
         //   func: this.share,
         // },
         { text: this.$t('context.rename'), func: this.rename },
-        { text: this.$t('context.delete'), func: this.remove },
+        { text: this.$t('context.delete'), func: this.remove, type: 'danger' },
       ]
     },
   },
   methods: {
     /**
      * @method handle
-     * @description Emit to handle item - pages/files/browse/index.vue
+     * @description Emit to handle item - pages/files/index.vue
      */
     handle() {
       if (this.$data.menuHover) {
@@ -88,31 +86,40 @@ export default Vue.extend({
     },
     /**
      * @method rename
-     * @description Emit to rename item - pages/files/browse/index.vue
+     * @description Emit to rename item - pages/files/index.vue
      */
     rename() {
       this.$emit('rename', this.item)
     },
     /**
      * @method like
-     * @description Emit to like item - pages/files/browse/index.vue
+     * @description Emit to like item - pages/files/index.vue
      */
     like() {
       this.$emit('like', this.item)
     },
     /**
      * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @description Emit to share item - pages/files/index.vue
      */
     share() {
       this.$emit('share', this.item)
     },
     /**
      * @method remove
-     * @description Emit to delete item - pages/files/browse/index.vue
+     * @description Emit to delete item - pages/files/index.vue
      */
     remove() {
       this.$emit('remove', this.item)
+    },
+    openContextMenu(e: Event) {
+      e.preventDefault()
+      const contextMenuStatus = this.ui.contextMenuStatus
+      if (!contextMenuStatus) {
+        this.$store.commit('ui/toggleContextMenu', true)
+      }
+      this.$store.commit('ui/setContextMenuPosition', e)
+      this.$store.commit('ui/setContextMenuValues', this.contextMenuValues)
     },
   },
 })

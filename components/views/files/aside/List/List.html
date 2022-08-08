@@ -5,6 +5,6 @@
     @click="setActive(item.route)"
   >
     <component v-if="item.icon" :is="icons[item.icon]" size="1x" />
-    {{item.text}}
+    <p v-if="!$device.isMobile">{{item.text}}</p>
   </li>
 </ul>

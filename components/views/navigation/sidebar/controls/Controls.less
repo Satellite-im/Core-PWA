@@ -1,13 +1,7 @@
-#controls {
+.call-controls {
   display: flex;
-  flex-direction: row;
-  padding: 0.25rem 0;
-  margin: @light-spacing 0;
-
-  .button {
-    flex: 1;
-    &:nth-child(2) {
-      margin: 0 0.25rem;
-    }
+  gap: @light-spacing;
+  button {
+    flex-grow: 1;
   }
 }

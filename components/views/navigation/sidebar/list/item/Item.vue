@@ -5,7 +5,6 @@ import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
@@ -16,13 +15,11 @@ import {
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
 import Group from '~/libraries/Iridium/groups/Group'
-import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 
 export default Vue.extend({
   components: {
     VueMarkdown,
   },
-  mixins: [ContextMenu],
   props: {
     conversation: {
       type: Object as PropType<Conversation>,
@@ -34,54 +31,55 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends.state.list,
+      friends: iridium.friends.list,
       groups: iridium.groups.state,
-      messages: iridium.chat.messages[this.conversation.id],
     }
   },
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
     contextMenuValues(): ContextMenuItem[] {
-      // return this.user.status === 'online'
-      //   ? [
-      //       { text: this.$t('context.send'), func: this.navigateToUser },
-      //       { text: this.$t('context.voice'), func: this.testFunc },
-      //       { text: this.$t('context.video'), func: this.testFunc },
-      //       // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
-      //       // { text: this.$t('context.profile'), func: this.handleShowProfile },
-      //       { text: this.$t('context.remove'), func: this.removeUser },
-      //     ]
-      //   : [
-      //       { text: this.$t('context.send'), func: this.navigateToUser },
-      //       // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
-      //       //   { text: this.$t('context.profile'), func: this.handleShowProfile },
-      //       { text: this.$t('context.remove'), func: this.removeUser },
-      //     ]
-      return [
-        { text: this.$t('context.send'), func: this.navigateToUser },
-        {
-          text: this.$t('context.profile'),
-          func: () => this.$store.dispatch('ui/showProfile', this.conversation),
-        },
-        { text: this.$t('context.remove'), func: this.removeUser },
-      ]
+      return this.conversation.type === 'direct'
+        ? [
+            { text: this.$t('context.send'), func: this.openConversation },
+            {
+              text: this.$t('context.profile'),
+              func: () =>
+                this.$store.dispatch('ui/showProfile', this.conversation),
+            },
+            {
+              text: this.$t('context.remove'),
+              func: this.removeFriend,
+              type: 'danger',
+            },
+          ]
+        : [
+            { text: this.$t('context.send'), func: this.openConversation },
+            {
+              text: this.$t('context.leave_group'),
+              func: this.leaveGroup,
+              type: 'danger',
+            },
+          ]
     },
-    lastMessage(): ConversationMessage | undefined {
-      if (!this.messages.length) {
-        return undefined
+    messages(): ConversationMessage[] {
+      if (!Object.keys(this.conversation).length) {
+        return []
       }
-
-      return this.messages[this.messages.length - 1]
+      return Object.values(this.conversation.message).sort(
+        (a, b) => a.at - b.at,
+      )
     },
 
     lastMessageDisplay(): string {
-      if (!this.lastMessage) {
+      const lastMessage = this.messages.at(-1)
+      if (!lastMessage) {
         return this.$t('messaging.say_hi') as string
       }
-      return this.lastMessage.body
+      return lastMessage.body || ''
 
       // const sender = message.from === iridium.connector?.id ? 'me' : 'user'
 
@@ -143,29 +141,27 @@ export default Vue.extend({
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
-    async removeUser() {
-      this.isLoading = true
-      try {
-        await this.$store.dispatch('friends/removeFriend', this.conversation)
-      } catch (e) {
-        this.$toast.error(
-          this.$t('errors.friends.friend_not_removed') as string,
-        )
-      } finally {
-        this.isLoading = false
+    async removeFriend() {
+      if (!(this.details as User)?.did) {
+        return
       }
+      this.isLoading = true
+      await iridium.friends
+        .friendRemove((this.details as User).did)
+        .catch((e) => this.$toast.error(this.$t(e.message) as string))
+      this.isLoading = false
+    },
+    async leaveGroup() {
+      iridium.groups.leaveGroup(this.conversation.id)
     },
     /**
-     * @method navigateToUser
-     * @description Navigates to chat with specific user by pushing "/chat/direct/" + users ID to the router
-     * Pretty sure this is just a placeholder for what will be the actual function?
-     * @example ---
+     * @method openConversation
+     * @description Navigates to user or group conversation
      */
-    async navigateToUser() {
+    async openConversation() {
       if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
-        this.$store.commit('ui/showSidebar', false)
+        this.$router.push({ params: { id: this.conversation.id } })
+        return
       }
       this.$router.push(`/chat/${this.conversation.id}`)
     },

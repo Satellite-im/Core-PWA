@@ -16,3 +16,18 @@ li {
     margin-right: @light-spacing;
   }
 }
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .menu-list {
+    display: flex;
+    gap: @light-spacing;
+  }
+
+  li {
+    margin: 0;
+
+    svg {
+      margin-right: 0;
+    }
+  }
+}

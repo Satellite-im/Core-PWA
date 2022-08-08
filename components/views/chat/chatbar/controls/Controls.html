@@ -36,6 +36,7 @@
     />
   </button>
   <button
+    v-if="!$device.isMobile"
     v-tooltip.top="$t('ui.send')"
     class="control-tooltip-wrap send-message-btn"
     :disabled="disabled"

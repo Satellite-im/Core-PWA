@@ -1,19 +1,13 @@
 <SettingsPage>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.settings.info.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.info.subtitle')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsUnit>
+    <TypographyTitle :size="6" :text="$t('pages.settings.info.title')" />
+    <TypographySubtitle :size="6" :text="$t('pages.settings.info.subtitle')" />
+  </SettingsUnit>
 
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyLabel :text="$t('pages.settings.app_info')" />
-      <br />
-      <pre>
+  <SettingsUnit>
+    <TypographyLabel :text="$t('pages.settings.app_info')" />
+    <br />
+    <pre>
         App Version: {{ this.$config.clientVersion }}
         Browser:     {{ this.$envinfo.navigator.vendor }}, {{ this.$envinfo.navigator.product }}
         Language:    {{ this.$envinfo.navigator.product }}
@@ -21,15 +15,12 @@
         <span v-if="renderer">Processor:   {{renderer}}</span>
         Online:      {{ this.$envinfo.navigator.onLine }}
       </pre>
-    </SettingsUnit>
-  </SettingsSection>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyLabel :text="$t('pages.settings.changelog')" />
-      <br />
-      <pre>
+  </SettingsUnit>
+  <SettingsUnit>
+    <TypographyLabel :text="$t('pages.settings.changelog')" />
+    <br />
+    <pre>
         <vue-markdown :source="releaseData && releaseData.body" :breaks="false"/>
       </pre>
-    </SettingsUnit>
-  </SettingsSection>
+  </SettingsUnit>
 </SettingsPage>

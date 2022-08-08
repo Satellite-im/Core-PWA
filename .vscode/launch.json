@@ -34,7 +34,6 @@
       "request": "launch",
       "url": "http://localhost:3000",
       "reAttach": true,
-      "profile": "debug",
       "keepProfileChanges": true,
       "profileDir": "${workspaceRoot}/.vscode/firefox",
       "webRoot": "${workspaceFolder}",

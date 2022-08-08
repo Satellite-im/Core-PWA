@@ -24,7 +24,7 @@ export default Vue.extend({
     MoreVerticalIcon,
   },
   props: {
-    setReplyChatbarContent: {
+    setReplyChatbarMessage: {
       type: Function,
       default: () => () => {},
     },

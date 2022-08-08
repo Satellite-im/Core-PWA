@@ -1,11 +1,8 @@
 import { TranslateResult } from 'vue-i18n'
 import { FileMessage } from '~/types/textile/mailbox'
-import { FileSortEnum } from '~/libraries/Enums/enums'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 import { Alert } from '~/libraries/ui/Alerts'
-import { Fil } from '~/libraries/Files/Fil'
-import { Item } from '~/libraries/Files/abstracts/Item.abstract'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -25,6 +22,7 @@ export enum ModalWindows {
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  GROUP_INVITE = 'groupInvite',
 }
 
 export interface EnhancerInfo {
@@ -50,6 +48,7 @@ export interface RecentGlyph {
 }
 
 export enum SettingsRoutes {
+  EMPTY = '',
   PERSONALIZE = 'personalize',
   PROFILE = 'profile',
   AUDIO_AND_VIDEO = 'audio & Video',
@@ -64,9 +63,12 @@ export enum SettingsRoutes {
   REALMS = 'realms',
 }
 
+export type ContextMenuItemTypes = 'primary' | 'danger'
+
 export interface ContextMenuItem {
   text: string | TranslateResult
   func: Function
+  type?: ContextMenuItemTypes
 }
 
 export interface UIState {
@@ -77,10 +79,7 @@ export interface UIState {
   notifications: Alert[]
   contextMenuPosition: object
   quickProfilePosition: object
-  showSettings: boolean
-  settingsSideBar: boolean
   settingsRoute: SettingsRoutes
-  showSidebarUsers: boolean
   showSearchResult: boolean
   showSidebar: boolean
   modals: {
@@ -89,11 +88,6 @@ export interface UIState {
   glyphModalPack: string
   chatbarContent: string
   chatbarFocus: boolean
-  replyChatbarContent: {
-    id: string
-    from: string
-    payload: string
-  }
   showPinned: boolean
   fullscreen: boolean
   enhancers: EnhancerInfo
@@ -114,12 +108,8 @@ export interface UIState {
   }
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
-  theme: {
-    base: Theme
-    flair: Flair
-  }
   chatImageOverlay?: FileMessage
-  swiperSlideIndex: number
+  isMobileNavVisible: boolean
 }
 
 export type Position = {

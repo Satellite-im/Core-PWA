@@ -1,11 +1,12 @@
 <div class="image-mask" @click="closeChatImageOverlay">
   <div class="size-container">
-    <div class="image-container" @click.stop>
-      <img
-        :class="{'blur-image' : chatImageOverlay.nsfw && blockNsfw}"
-        :src="chatImageOverlay.url"
-      />
-    </div>
+    <ui-image-container
+      class="image-container"
+      :nsfw="chatImageOverlay.nsfw && blockNsfw"
+      @click.stop
+    >
+      <img :src="chatImageOverlay.url" />
+    </ui-image-container>
     <a :href="chatImageOverlay.url" target="_blank">
       {{ $t('files.view_original') }}
     </a>

@@ -3,62 +3,88 @@
   flex-direction: column;
   min-height: 234px;
   border-radius: @corner-rounding-smaller;
-  &:extend(.background-semitransparent-light);
   cursor: pointer;
 
-  .quick-actions {
-    width: @full;
-    padding: @normal-spacing;
-    position: absolute;
+  background: linear-gradient(
+      163.91deg,
+      rgba(48, 52, 71, 0.5) 0%,
+      rgba(42, 54, 75, 0) 100%
+    ),
+    linear-gradient(
+      163.91deg,
+      rgba(28, 39, 58, 0.9) 0%,
+      rgba(0, 0, 0, 0.09) 100%
+    ),
+    linear-gradient(
+      359.95deg,
+      rgba(36, 40, 57, 0.9) 0.04%,
+      rgba(34, 44, 63, 0) 99.95%
+    ),
+    #121216;
 
-    &:extend(.first-layer);
-
-    .like {
-      float: right;
-      &.liked {
-        color: @pink;
+  &:hover,
+  &:focus,
+  &.is-liked {
+    .quick-actions {
+      .like {
+        opacity: 1;
       }
     }
-
-    svg:hover {
-      opacity: 0.75;
-    }
   }
 
-  &.disabled {
-    .quick-actions {
-      display: none;
-    }
-  }
   .icon-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    height: 162px;
     padding-top: 36px; // half of the text area height, centers icon
   }
 
   .image-container {
-    overflow: hidden;
     height: 162px;
     filter: brightness(0.75);
-    .image-preview {
+
+    img {
       height: 162px;
       width: @full;
       object-fit: cover;
     }
   }
 
+  .quick-actions {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    width: 100%;
+    padding: @normal-spacing;
+    position: absolute;
+    top: 0;
+
+    .like {
+      opacity: 0;
+      transition: opacity @animation-speed ease;
+      &.liked {
+        color: @pink;
+        opacity: 1;
+      }
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+
   .text-container {
     padding: @normal-spacing;
+    &:extend(.ellipsis);
 
     .maintext {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: pre;
+      &:extend(.ellipsis);
     }
+
     .subtext {
       &:extend(.font-muted);
+      &:extend(.ellipsis);
     }
   }
 }

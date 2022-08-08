@@ -1,31 +1,33 @@
-<div id="mobile-nav">
-  <div data-cy="mobile-nav-home">
-    <home-icon size="1x" @click="navigateToHome" />
-  </div>
-  <div
-    :class="`${$route.path.includes('/files') ? 'active' : ''}`"
+<nav class="nav" :class="{hide: !isMobileNavVisible}">
+  <button
+    :class="{active: isActiveRoute('chat')}"
+    @click="$router.push('/mobile/chat')"
+    data-cy="mobile-nav-home"
+  >
+    <home-icon size="1.5x" />
+  </button>
+  <button
+    :class="{active: isActiveRoute('files')}"
+    @click="$router.push('/files')"
     data-cy="mobile-nav-files"
   >
-    <folder-icon size="1x" @click="navigateToFiles" />
-  </div>
-  <div data-cy="mobile-nav-marketplace">
-    <shopping-bag-icon size="1x" @click="toggleModal" />
-  </div>
-  <div
-    :class="`${$route.path.includes('/friends') ? 'active' : ''}`"
+    <folder-icon size="1.5x" />
+  </button>
+  <button @click="toggleModal" data-cy="mobile-nav-marketplace">
+    <shopping-bag-icon size="1.5x" />
+  </button>
+  <button
+    :class="{active: isActiveRoute('friends')}"
+    @click="$router.push('/mobile/friends')"
     data-cy="mobile-nav-friends"
   >
-    <users-icon size="1x" @click="navigateToFriend" />
-  </div>
-  <div
-    :class="`${$route.path.includes('/settings') ? 'active' : ''}`"
+    <users-icon size="1.5x" />
+  </button>
+  <button
+    :class="{active: isActiveRoute('settings')}"
+    @click="$router.push('/mobile/settings')"
     data-cy="mobile-nav-settings"
   >
-    <div @click="$store.commit('ui/toggleSettings',  { show: true })">
-      <UiUserState
-        :user="{address: accounts.active, state: accounts.details.state}"
-        :src="src"
-      />
-    </div>
-  </div>
-</div>
+    <UiUserState :user="accounts.details" />
+  </button>
+</nav>

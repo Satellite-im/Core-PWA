@@ -3,12 +3,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { User } from '~/types/ui/user'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
 import { ContextMenuItem } from '~/store/ui/types'
 
 export default Vue.extend({
   name: 'Unread',
-  mixins: [ContextMenu],
   props: {
     user: {
       type: Object as PropType<User>,
@@ -36,7 +34,11 @@ export default Vue.extend({
         { text: this.$t('context.video'), func: this.testFunc },
         // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
         // { text: this.$t('context.profile'), func: this.handleShowProfile },
-        { text: this.$t('context.remove'), func: this.removeUser },
+        {
+          text: this.$t('context.remove'),
+          func: this.removeUser,
+          type: 'danger',
+        },
       ]
     },
   },

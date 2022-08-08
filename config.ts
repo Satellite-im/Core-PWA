@@ -1,44 +1,27 @@
 // eslint-disable-next-line import/named
-import { Commitment, clusterApiUrl } from '@solana/web3.js'
+import { Commitment } from '@solana/web3.js'
 
 const soundsCID = 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9'
+const syncNodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
+  '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
+]
+console.log('debug: | syncNodes', syncNodes)
 
 export const Config = {
   debug: true,
   iridium: {
-    relayId: process.env.NUXT_ENV_IRIDIUM_LOCAL_RELAY,
-    syncNodes: [
-      {
-        label: 'Satellite.im Sync Node',
-        peerId:
-          process.env.NUXT_ENV_IRIDIUM_SYNC_PEER_ID ||
-          '12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-        multiaddr:
-          process.env.NUXT_ENV_IRIDIUM_SYNC_ADDR ||
-          '/ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWQ3jkKp2rm42mC5h4mH5hjg9MfBUad8kjQkLokB2uXmd1',
-      },
-    ],
+    syncNodes,
     ipfs: {
       config: {
         Addresses: {
-          API: '/dns4/ipfs.infura.io/tcp/5001/https',
-          Gateway: '/dns4/satellite.infura-ipfs.io/tcp/443/https',
-          RemotePinning: ['/dns4/satellite.infura-ipfs.io/tcp/443/https'],
-          Swarm: [
-            '/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star',
-            '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
-            '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
-          ],
+          Swarm: syncNodes,
+          Delegate: syncNodes,
         },
-        Bootstrap: [
-          '/ip4/127.0.0.1/tcp/15003/ws/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
-          '/ip4/127.0.0.1/tcp/8000/p2p/QmekhznL3jS9HgHViLkQ3VWY6XmgierxHrUL4JXLFqgAap',
-          '/ip4/127.0.0.1/tcp/9090/ws/p2p-webrtc-star',
-          '/dns4/relay.satellite.im/tcp/443/wss/p2p-webrtc-star',
-        ],
+        Bootstrap: syncNodes,
       },
     },
   },
+
   textile: {
     localURI: 'http://localhost:6007',
     key: process.env.NUXT_ENV_TEXTILE_API_KEY,
@@ -235,4 +218,5 @@ export const Config = {
   modal: {
     errorNetworkActionThrottle: 1000,
   },
+  seedPhraseCharsCount: 12,
 }
