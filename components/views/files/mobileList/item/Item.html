@@ -21,7 +21,7 @@
   </div>
   <div class="body">
     <div class="text-container">
-      <div class="maintext-container">
+      <div class="ellipsis">
         <template>
           <folder-icon
             v-if="item.children"
@@ -43,19 +43,17 @@
             class="file-type-icon"
           />
         </template>
-        <TypographyText :size="6" :text="item.name" class="maintext" />
+        <TypographyText class="ellipsis" color="light" small>
+          {{ item.name }}
+        </TypographyText>
       </div>
-      <div class="subtext">
-        <TypographyText
-          :size="6"
-          :text="`Modified: ${$dayjs(item.modified).fromNow()}`"
-          class="subtext-primary"
-        />
-        <TypographyText
-          :size="6"
-          :text="getSubtext"
-          class="subtext-secondary"
-        />
+      <div class="ellipsis">
+        <TypographyText class="ellpisis" color="dark" small>
+          {{ `Modified: ${$dayjs(item.modified).fromNow()}` }}
+        </TypographyText>
+        <TypographyText class="ellipsis" color="dark" small>
+          {{ subtext }}
+        </TypographyText>
       </div>
     </div>
   </div>

@@ -6,8 +6,12 @@
   />
   <div v-if="!sortedConversations.length" class="mascot-container">
     <div class="mascot-text">
-      <TypographyTitle :text="$t('pages.chat.no_friends_yet')" :size="6" />
-      <TypographyText :text="$t('pages.chat.no_friends_yet_text')" />
+      <TypographyText as="h2">
+        {{ $t('pages.chat.no_friends_yet') }}
+      </TypographyText>
+      <TypographyText>
+        {{ $t('pages.chat.no_friends_yet_text') }}
+      </TypographyText>
     </div>
     <img src="~/assets/svg/mascot/sad_curious.svg" draggable="false" />
     <InteractablesButton

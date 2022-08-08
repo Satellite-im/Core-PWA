@@ -10,7 +10,5 @@
     data-cy="switch-button"
     :class="{ enabled: isEnabled, locked: isLocked }"
   />
-  <TypographyText v-if="label" as="label" color="light" small>
-    {{ label }}
-  </TypographyText>
+  <TypographyText v-if="label" as="label"> {{ label }} </TypographyText>
 </label>

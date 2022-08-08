@@ -13,12 +13,9 @@
     <file-icon size="3x" class="control-icon" />
   </div>
   <div>
-    <TypographyText
-      :size="6"
-      :text="item.file.name"
-      data-cy="file-item-filename"
-      class="ellipsis"
-    />
+    <TypographyText :size="6" data-cy="file-item-filename" class="ellipsis">
+      {{ item.file.name }}
+    </TypographyText>
     <div v-if="item.progress > 0 && item.progress <= 100">
       <UiProgress :progress="item.progress" />
       <TypographySubtitle :text="`${item.progress}% Uploaded...`" />

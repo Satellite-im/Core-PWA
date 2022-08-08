@@ -47,7 +47,7 @@ export default Vue.extend({
     /**
      * @returns {string} if directory, child count. if file, size
      */
-    getSubtext(): string {
+    subtext(): string {
       return 'children' in this.item
         ? this.$tc('pages.files.item_count', this.item.children.length)
         : this.$filesize(this.item.size)

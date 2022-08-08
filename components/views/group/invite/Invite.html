@@ -1,6 +1,8 @@
 <div id="group-invite" class="group-invite">
-  <TypographySubtitle :size="6" :text="$t('pages.chat.group_invite')" />
-  <TypographyText :text="$t('pages.chat.group_invite_description')" />
+  <TypographyText as="h3"> {{ $t('pages.chat.group_invite') }} </TypographyText>
+  <TypographyText small>
+    {{ $t('pages.chat.group_invite_description') }}
+  </TypographyText>
   <InteractablesUserPicker
     v-model="recipients"
     :exclude="groupMembers"

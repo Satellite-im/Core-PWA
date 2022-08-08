@@ -3,7 +3,9 @@
     <clock-icon class="control-icon" size="1x" />
   </div>
   <div class="pack-list">
-    <TypographyText v-if="!ui.recentGlyphs.length" :text="$t('glyphs.try')" />
+    <TypographyText v-if="!ui.recentGlyphs.length">
+      {{ $t('glyphs.try') }}
+    </TypographyText>
     <template v-else v-for="glyph in recentGlyphs">
       <EnhancersGlyphsItem
         :key="glyph.url"

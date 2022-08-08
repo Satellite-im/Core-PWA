@@ -10,12 +10,9 @@
     <UiGroupIcon v-else :group="details" />
   </template>
   <div class="user-info">
-    <TypographyTitle
-      v-if="details"
-      :size="6"
-      data-cy="sidebar-user-name"
-      :text="details.name"
-    />
+    <TypographyText v-if="details" as="h2" data-cy="sidebar-user-name">
+      {{ details.name }}
+    </TypographyText>
     <div
       v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
       class="subtitle"
@@ -24,7 +21,9 @@
     />
   </div>
   <div class="user-chat-details">
-    <TypographyText v-if="messages.length" :text="timestamp" :size="6" />
+    <TypographyText v-if="messages.length" color="dark" small>
+      {{ timestamp }}
+    </TypographyText>
     <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->
   </div>
   <div class="user-loader">

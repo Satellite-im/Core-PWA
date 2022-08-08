@@ -2,11 +2,11 @@
   <component
     :is="as"
     :class="[
-      `color-${color} font-${font}`,
+      getWeight,
+      `color-${getColor} font-${getFont}`,
       { uppercase: uppercase },
-      { small: small },
+      { small: small || as === 'label' },
     ]"
-    :style="`font-weight: ${weight}`"
   >
     <slot />
   </component>
@@ -16,6 +16,7 @@ import Vue, { PropType } from 'vue'
 
 type Color = 'body' | 'light' | 'dark' | 'flair'
 type Font = 'heading' | 'body'
+type Weight = 'regular' | 'bold'
 
 export default Vue.extend({
   props: {
@@ -25,15 +26,15 @@ export default Vue.extend({
     },
     color: {
       type: String as PropType<Color>,
-      default: 'body',
+      default: '',
     },
     font: {
       type: String as PropType<Font>,
-      default: 'body',
+      default: '',
     },
     weight: {
-      type: Number,
-      default: 400,
+      type: String as PropType<Weight>,
+      default: '',
     },
     uppercase: {
       type: Boolean,
@@ -42,6 +43,36 @@ export default Vue.extend({
     small: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    // These reduce the number of props you need to pass in common situations, while still allowing the ability to override with props as needed
+    getColor(): string {
+      if (this.color) {
+        return this.color
+      }
+      if (this.as.match('h[1-2]|label')) {
+        return 'light'
+      }
+      return 'body'
+    },
+    getFont(): string {
+      if (this.font) {
+        return this.font
+      }
+      if (this.as.match('h[1-2]')) {
+        return 'heading'
+      }
+      return 'body'
+    },
+    getWeight(): string {
+      if (this.weight) {
+        return this.weight
+      }
+      if (this.as.match('h[1-2]')) {
+        return 'bold'
+      }
+      return ''
     },
   },
 })
@@ -72,9 +103,13 @@ export default Vue.extend({
     font-family: @body-font;
   }
 }
+.bold {
+  font-weight: 700;
+}
 
 h1 {
   font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 h2 {
   font-size: 1rem;

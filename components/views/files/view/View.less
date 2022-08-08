@@ -4,20 +4,16 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
   &:extend(.first-layer);
-  padding: @normal-spacing;
+  padding: 16px;
 
   .file-nav {
-    width: calc(@full - @xlarge-spacing); //to account for margin
+    width: calc(100% - 32px); //to account for padding
     display: flex;
     position: absolute;
+    gap: 16px;
 
     .file-info {
-      max-width: 50vw;
-      .title {
-        &:extend(.font-secondary);
-        &:extend(.ellipsis);
-        line-height: 1.25;
-      }
+      flex: 1;
     }
 
     .controls {
@@ -25,6 +21,7 @@
       height: fit-content;
       margin-left: auto;
       gap: @normal-spacing;
+      flex-shrink: 0;
 
       .control {
         display: flex;

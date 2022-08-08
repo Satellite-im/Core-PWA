@@ -6,7 +6,7 @@
       :text="user.name || user.did"
       data-cy="friend-name"
     />
-    <TypographyText :text="user.status || 'offline'" />
+    <TypographyText> {{ user.status || 'offline' }} </TypographyText>
   </div>
   <div class="spacer"></div>
   <div class="controls" v-if="user && !request && isPreview">

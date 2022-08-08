@@ -10,10 +10,9 @@
       <div v-if="featuredGlyph.isSale" class="badge-sale">
         {{ $t('glyphs.sale') }}
       </div>
-      <TypographyText
-        :text="`${featuredGlyph.glyph.stickerURLs.length} glyphs`"
-        :size="6"
-      />
+      <TypographyText>
+        {{ `${featuredGlyph.glyph.stickerURLs.length} glyphs` }}
+      </TypographyText>
     </div>
   </div>
   <div class="glyph-content">
@@ -21,7 +20,7 @@
       <div class="glyph-name">
         <TypographySubtitle :size="6" :text="featuredGlyph.glyph.name" />
       </div>
-      <TypographyText :text="featuredGlyph.glyph.description" :size="6" />
+      <TypographyText> {{ featuredGlyph.glyph.description }} </TypographyText>
     </div>
     <div class="glyph-list">
       <EnhancersGlyphsItem
@@ -30,7 +29,7 @@
         :src="url"
         :width="48"
         :height="48"
-      ></EnhancersGlyphsItem>
+      />
     </div>
   </div>
   <div class="glyph-footer">

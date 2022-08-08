@@ -53,7 +53,7 @@
             </div>
             <div>
               <div v-for="(emojiGroup, category) in emojis" :key="category">
-                <TypographyText :text="category" />
+                <TypographyText> {{ category }} </TypographyText>
                 <div class="emojis">
                   <div
                     v-if="category === 'Frequently used' && mostUsedEmojis.length"

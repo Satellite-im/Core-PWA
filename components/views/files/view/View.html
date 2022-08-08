@@ -1,10 +1,12 @@
 <div id="view-file" @keydown.esc="close" tabindex="1" ref="modal">
   <div class="file-nav">
-    <div class="file-info">
-      <TypographyTitle :text="file.name" :size="6" />
-      <TypographyText :text="file.type" :size="6" />
-      <TypographyText :text="$filesize(file.size)" :size="6" />
-      <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
+    <div class="file-info ellipsis">
+      <TypographyText as="h2" class="ellipsis">
+        {{ file.name }}
+      </TypographyText>
+      <TypographyText> {{ file.type }} </TypographyText>
+      <TypographyText> {{ $filesize(file.size) }} </TypographyText>
+      <TypographyText> {{ $dayjs(file.modified).fromNow() }} </TypographyText>
     </div>
     <div class="controls">
       <UiLoadersSpinner
@@ -49,7 +51,7 @@
     <button v-else @click="download" v-tooltip.top="$t('controls.download')">
       <download-icon size="1x" class="file-icon" />
     </button>
-    <TypographyTitle :size="4" :text="file.name" />
+    <TypographyText as="h1"> {{ file.name }} </TypographyText>
     <TypographySubtitle :size="6" :text="file.type" />
     <TypographySubtitle :text="$filesize(file.size)" :size="6" />
     <TypographySubtitle :text="$dayjs(file.modified).fromNow()" :size="6" />
