@@ -69,19 +69,9 @@ export default Vue.extend({
       if (this.size) {
         return this.size
       }
-      if (this.as === 'h1') {
-        return '2xl'
-      }
-      if (this.as === 'h2') {
-        return 'xl'
-      }
-      if (this.as === 'h3') {
-        return 'lg'
-      }
-      if (this.as === 'label') {
-        return 'sm'
-      }
-      return 'md'
+      const map = new Map()
+      map.set('h1', '2xl').set('h2', 'xl').set('h3', 'lg').set('label', 'sm')
+      return map.get(this.as) || 'md'
     },
     getWeight(): string {
       if (this.weight) {
