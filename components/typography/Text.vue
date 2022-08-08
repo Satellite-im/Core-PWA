@@ -2,7 +2,7 @@
   <component
     :is="as"
     :class="[
-      `color-${getColor} font-color-${getFont} font-size-${getSize}`,
+      `font-${getFont} font-color-${getColor} font-size-${getSize}`,
       { uppercase: uppercase },
       getWeight,
     ]"
@@ -20,12 +20,12 @@ export default Vue.extend({
       type: String as PropType<keyof HTMLElementTagNameMap>,
       default: 'div',
     },
-    color: {
-      type: String as PropType<TextColor>,
-      default: '',
-    },
     font: {
       type: String as PropType<Font>,
+      default: '',
+    },
+    color: {
+      type: String as PropType<TextColor>,
       default: '',
     },
     size: {
@@ -43,21 +43,21 @@ export default Vue.extend({
   },
   computed: {
     // These reduce the number of props you need to pass in common situations, while still allowing the ability to override with props as needed
-    getColor(): string {
-      if (this.color) {
-        return this.color
-      }
-      if (this.as.match('h[1-3]|label')) {
-        return 'light'
-      }
-      return 'body'
-    },
     getFont(): string {
       if (this.font) {
         return this.font
       }
       if (this.as.match('h[1-3]')) {
         return 'heading'
+      }
+      return 'body'
+    },
+    getColor(): string {
+      if (this.color) {
+        return this.color
+      }
+      if (this.as.match('h[1-3]|label')) {
+        return 'light'
       }
       return 'body'
     },
