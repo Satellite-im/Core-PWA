@@ -36,6 +36,7 @@
     </template>
   </div>
   <div class="col friends-list">
+    <TypographyTitle :size="6" :text="$t('friends.friends')" />
     <FriendsFriend v-for="user in friendsList" :user="user" :key="user.did" />
     <!-- <div v-if="friends && blockedList" class="padded_divider">
           <FriendsFriend
