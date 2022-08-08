@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-bar" :class="short ? 'short' : ''">
+  <div class="loading-bar" :class="{ short: short }">
     <div class="bar" :style="`height: ${height}px`" />
   </div>
 </template>
