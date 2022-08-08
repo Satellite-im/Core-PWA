@@ -1,7 +1,9 @@
 <div class="files-aside">
   <div class="upper">
     <div class="flex">
-      <TypographyText :size="6" :text="$t('pages.files.aside.free_tier')" />
+      <TypographyText color="light">
+        {{ $t('pages.files.aside.free_tier') }}
+      </TypographyText>
       <InteractablesButton
         :text="$t('pages.files.aside.upgrade')"
         size="small"
@@ -10,14 +12,16 @@
       />
     </div>
     <UiProgress :progress="percentageUsed" />
-    <div class="usage-text">
+    <TypographyText color="light" size="sm">
       <span :class="sizeColor">{{totalSize}}</span>
-      <span>of {{sizeLimit}}</span>
-    </div>
+      of {{sizeLimit}}
+    </TypographyText>
   </div>
 
   <div v-if="!$device.isMobile">
-    <TypographyText :size="6" :text="$t('pages.files.aside.quick_access')" />
+    <TypographyText color="light">
+      {{ $t('pages.files.aside.quick_access') }}
+    </TypographyText>
     <FilesAsideList :items="quickAccessOptions" />
   </div>
   <!-- <div>

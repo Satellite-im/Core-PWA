@@ -18,9 +18,12 @@
   <div class="users" :style="{ height: height }">
     <TypographyText
       v-if="!filteredFriends.length"
-      :text="$t('servers.create.user_picker_empty')"
       class="empty-results-text"
-    />
+      color="dark"
+      size="sm"
+    >
+      {{ $t('servers.create.user_picker_empty') }}
+    </TypographyText>
     <InteractablesUserPickerListItem
       v-else
       v-for="friend in filteredFriends"

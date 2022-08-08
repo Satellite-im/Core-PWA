@@ -13,7 +13,9 @@
     <UiLoadersLoadingBar v-else-if="searching" />
     <div v-else-if="!friendId" class="id-container">
       <button class="id-button" @click="copyId">
-        <TypographyText :text="$t('friends.copy_your_id')" class="id" />
+        <TypographyText class="id" color="dark">
+          {{ $t('friends.copy_your_id') }}
+        </TypographyText>
       </button>
     </div>
     <FriendsFriend
@@ -123,7 +125,6 @@ export default Vue.extend({
   .id-button {
     .id {
       white-space: nowrap;
-      color: @text-muted;
       padding: 4px 8px;
 
       &:hover {

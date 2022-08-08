@@ -13,24 +13,25 @@
   />
   <ul>
     <li>
-      <TypographyText :text="$t('modal.call_to_action.item1')" />
+      <TypographyText> {{ $t('modal.call_to_action.item1') }} </TypographyText>
     </li>
     <li>
-      <TypographyText :text="$t('modal.call_to_action.item2')" />
+      <TypographyText> {{ $t('modal.call_to_action.item2') }} </TypographyText>
     </li>
     <li>
-      <TypographyText :text="$t('modal.call_to_action.item3')" />
+      <TypographyText> {{ $t('modal.call_to_action.item3') }} </TypographyText>
     </li>
     <li>
-      <TypographyText :text="$t('modal.call_to_action.item4')" />
+      <TypographyText> {{ $t('modal.call_to_action.item4') }} </TypographyText>
     </li>
     <li>
-      <TypographyText :text="$t('modal.call_to_action.item5')" />
+      <TypographyText> {{ $t('modal.call_to_action.item5') }} </TypographyText>
     </li>
   </ul>
   <UiHorizontalRule />
-
-  <TypographyText :text="$t('modal.call_to_action.description')" />
+  <TypographyText>
+    {{ $t('modal.call_to_action.description') }}
+  </TypographyText>
   <InteractablesButton
     type="primary"
     :text="$t('modal.call_to_action.btn')"

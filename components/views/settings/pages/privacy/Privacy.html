@@ -53,7 +53,9 @@
       />
     </SettingsUnit>
   </SettingsSection>
-  <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
+  <TypographyText v-if="loading.length">
+    {{ $t('pages.privacy.updating') }}
+  </TypographyText>
   <!-- <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
@@ -82,32 +84,19 @@
         :placeholder="$t('pages.privacy.ownInfo.placeholder')"
         class="ownInfo-input"
       />
-      <TypographyText
-        class="color-danger"
-        type="danger"
-        :size="6"
-        :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
-        v-if="lengthError"
-      />
+      <TypographyText v-if="lengthError" class="color-danger">
+        {{ $t('pages.privacy.ownInfo.lengthErrorMsg') }}
+      </TypographyText>
       <span v-if="formatError">
-        <TypographyText
-          class="color-danger"
-          type="danger"
-          :size="6"
-          :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
-        />
-        <TypographyText
-          class="color-danger ml-3"
-          type="danger"
-          :size="6"
-          :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
-        />
-        <TypographyText
-          class="color-danger ml-3"
-          type="danger"
-          :size="6"
-          :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
-        />
+        <TypographyText class="color-danger">
+          {{ $t('pages.privacy.ownInfo.formatErrorMsg') }}
+        </TypographyText>
+        <TypographyText class="color-danger ml-3">
+          {{ $t('pages.privacy.ownInfo.errorSampleUrl1') }}
+        </TypographyText>
+        <TypographyText class="color-danger ml-3">
+          {{ $t('pages.privacy.ownInfo.errorSampleUrl2') }}
+        </TypographyText>
       </span>
     </SettingsUnit>
   </SettingsSection>

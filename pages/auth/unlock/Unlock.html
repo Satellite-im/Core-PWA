@@ -1,10 +1,18 @@
 <div class="container">
   <div class="decryption-body">
     <div v-if="step === 'signup'" class="create_pin_section">
-      <info-icon size="0.8x" />
-      <TypographySubtitle :size="6" :text="$t('pages.unlock.create')" />
-      <TypographyText :text="$t('pages.unlock.choose_pin_description_1')" />
-      <TypographyText :text="$t('pages.unlock.choose_pin_description_2')" />
+      <div class="heading">
+        <info-icon size="1.5x" />
+        <TypographyText as="h2" color="light" font="heading">
+          {{$t('pages.unlock.create')}}
+        </TypographyText>
+      </div>
+      <TypographyText color="light">
+        {{$t('pages.unlock.choose_pin_description_1')}}
+      </TypographyText>
+      <TypographyText color="light">
+        {{$t('pages.unlock.choose_pin_description_2')}}
+      </TypographyText>
     </div>
     <InteractablesInputGroup
       v-model="pin"
@@ -23,7 +31,6 @@
     <TypographyError v-if="error" :text="$t(error)" />
     <InteractablesSwitch
       v-model="storePin"
-      small
       :label="$t('pages.unlock.store_pin')"
     />
     <br />

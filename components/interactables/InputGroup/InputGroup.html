@@ -1,5 +1,5 @@
 <div>
-  <TypographyLabel v-if="label.length" :text="label" />
+  <TypographyText v-if="label" as="label" uppercase> {{label}} </TypographyText>
   <div class="input-wrapper">
     <input
       ref="input"

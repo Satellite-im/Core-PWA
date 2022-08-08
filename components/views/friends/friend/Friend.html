@@ -1,12 +1,17 @@
 <div class="friend" data-cy="friend">
   <UiUserState :user="user" :src="src" />
   <div class="description">
-    <TypographySubtitle
-      :size="6"
-      :text="user.name || user.did"
+    <TypographyText
+      color="light"
+      font="heading"
+      weight="bold"
       data-cy="friend-name"
-    />
-    <TypographyText :text="user.status || 'offline'" />
+    >
+      {{ user.name || user.did }}
+    </TypographyText>
+    <TypographyText v-if="user.status" size="sm">
+      {{ user.status }}
+    </TypographyText>
   </div>
   <div class="spacer"></div>
   <div class="controls" v-if="user && !request && isPreview">

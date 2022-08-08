@@ -26,8 +26,12 @@
       <link-icon v-if="item.shared" size="1.25x" class="link" />
     </div>
     <div class="text-container">
-      <TypographyText :size="6" :text="item.name" class="maintext" />
-      <TypographyText :size="6" :text="getSubtext" class="subtext" />
+      <TypographyText class="ellipsis" color="light" size="sm">
+        {{ item.name }}
+      </TypographyText>
+      <TypographyText class="ellpisis" color="dark" size="sm">
+        {{ subtext }}
+      </TypographyText>
     </div>
   </UiContextMenu>
 </div>

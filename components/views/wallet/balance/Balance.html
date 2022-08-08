@@ -1,12 +1,12 @@
 <div id="wallet-balance">
   <div class="balance-heading">
     <coins-icon size="1.2x" />
-    <TypographyText :text="$t('wallet.balance.balance')" />
+    <TypographyText> {{ $t('wallet.balance.balance') }} </TypographyText>
   </div>
   <div class="wallet-body">
     <div class="wallet-body-left">
       <TypographyTitle :size="5" text="123,456.78" />
-      <TypographyText :size="6" text="Last Updated: Today" />
+      <TypographyText> Last Updated: Today </TypographyText>
       <div class="inline">
         <InteractablesInputGroup
           class="modal-input"
@@ -37,9 +37,10 @@
       </div>
     </div>
     <div class="wallet-body-right">
-      <TypographyText
-        :text="`Account: *******${accounts.active.slice(accounts.active.length - 7, accounts.active.length)}`"
-      />
+      <TypographyText>
+        {{ `Account: *******${accounts.active.slice(accounts.active.length - 7,
+        accounts.active.length)}` }}
+      </TypographyText>
     </div>
   </div>
 </div>

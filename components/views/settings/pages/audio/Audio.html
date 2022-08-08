@@ -205,5 +205,7 @@
     :value="$t('pages.settings.notifications.title')"
   />
   <SettingsPagesAudioSounds />
-  <TypographyText v-if="loading.length" :text="$t('pages.privacy.updating')" />
+  <TypographyText v-if="loading.length">
+    {{ $t('pages.privacy.updating') }}
+  </TypographyText>
 </SettingsPage>

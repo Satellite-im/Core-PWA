@@ -2,20 +2,25 @@
   <div>
     <TypographyHorizontalRuleText plaintext value="OR" />
     <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
-    <TypographyText :text="$t('friends.add_qrcode_description')" />
+    <TypographyText>
+      {{ $t('friends.add_qrcode_description') }}
+    </TypographyText>
     <div class="card">
       <div class="qr-container">
         <div class="qr-section">
-          <TypographyText :text="$t('friends.scan_code')" />
+          <TypographyText>
+            {{ $t('friends.scan_code') }}
+          </TypographyText>
           <InteractablesButton
             type="primary"
             size="small"
             :text="$t('friends.camera_scan')"
           />
         </div>
-
         <div class="qr-section">
-          <TypographyText :text="$t('friends.friend_code')" />
+          <TypographyText>
+            {{ $t('friends.friend_code') }}
+          </TypographyText>
           <qrcode-vue
             :value="friendInviteUrl"
             :size="150"

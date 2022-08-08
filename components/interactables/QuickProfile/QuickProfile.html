@@ -17,12 +17,10 @@
     />
   </div>
   <TypographyTitle :text="user.name" :size="6" />
-  <TypographyText
-    :text="user.publicKey ? `${user.publicKey.substr(0, 23)}...` : ``"
-    :size="6"
-    class="address"
-  />
-  <TypographyText :text="user.status" :size="6" />
+  <TypographyText color="dark" size="sm">
+    {{ user.publicKey ? `${user.publicKey.substr(0, 23)}...` : `` }}
+  </TypographyText>
+  <TypographyText> {{ user.status }} </TypographyText>
   <template v-if="!isMe">
     <UiHorizontalRule />
     <InteractablesInputGroup

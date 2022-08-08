@@ -2,5 +2,7 @@
   :class="`loading-inline ${muted ? 'muted' : ''} ${spaced ? 'spaced' : ''}`"
 >
   <loader-icon size="1x" class="spin" />
-  <TypographyText class="loading-text" :text="text" />
+  <TypographyText class="loading-text" font="heading">
+    {{ text }}
+  </TypographyText>
 </div>

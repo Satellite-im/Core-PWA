@@ -3,7 +3,7 @@
     <InteractablesSidebarToggle v-if="!showSidebar" />
     <div>
       <TypographyTitle :size="6" :text="$t('friends.add')" />
-      <TypographyText :text="$t('friends.add_description')" />
+      <TypographyText> {{ $t('friends.add_description') }} </TypographyText>
     </div>
   </div>
   <FriendsSearch />

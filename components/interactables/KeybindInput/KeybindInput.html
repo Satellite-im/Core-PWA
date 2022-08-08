@@ -1,16 +1,12 @@
 <div class="keybind-input" v-click-outside="cancel">
   <TypographyLabel :text="name" />
   <div class="control">
-    <TypographyText
-      v-if="!isListening && value === ''"
-      class="info-label"
-      :text="$t('pages.settings.keybinds.no_mapping')"
-    />
-    <TypographyText
-      v-else-if="isListening && !keys.length"
-      class="info-label"
-      :text="$t('pages.settings.keybinds.enter_new_keybind')"
-    />
+    <TypographyText v-if="!isListening && value === ''" class="info-label">
+      {{$t('pages.settings.keybinds.no_mapping')}}
+    </TypographyText>
+    <TypographyText v-else-if="isListening && !keys.length" class="info-label">
+      {{$t('pages.settings.keybinds.enter_new_keybind')}}
+    </TypographyText>
     <div
       v-else
       class="key-list"

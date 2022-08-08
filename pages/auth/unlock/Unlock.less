@@ -14,15 +14,15 @@
 
   .create_pin_section {
     margin-bottom: @normal-spacing;
+    .heading {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
     &:extend(.background-semitransparent-dark);
     &:extend(.round-corners);
     &:extend(.bordered);
     &:extend(.more-pad-sides);
-
-    .subtitle {
-      margin: 0;
-      &:extend(.font-secondary);
-    }
   }
 
   .decryption-body {

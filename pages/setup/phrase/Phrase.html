@@ -1,7 +1,9 @@
 <div class="container">
   <div class="phrase-body">
-    <TypographyTitle :size="4" :text="$t('pages.phrase.title')" />
-    <TypographySubtitle :size="6" :text="$t('pages.phrase.write_down')" />
+    <TypographyText as="h1"> {{ $t('pages.phrase.title') }} </TypographyText>
+    <TypographyText as="p" color="dark" style="margin-bottom: 1.5rem">
+      {{ $t('pages.phrase.write_down') }}
+    </TypographyText>
     <div class="columns is-mobile">
       <div class="column">
         <div v-for="word, i in splitPhrase" class="tag-container">
