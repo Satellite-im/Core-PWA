@@ -7,7 +7,6 @@
     data-cy="sidebar-mic-button"
     :text="$t('controls.mic')"
     :loading="isLoading"
-    loadingText=""
   >
     <mic-off-icon data-cy="sidebar-mic-muted" v-if="audioMuted" size="1x" />
     <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x" />
@@ -35,7 +34,6 @@
     :text="$t('controls.video')"
     :action="() => toggleMute('video')"
     :loading="isLoading"
-    loadingText=""
   >
     <video-off-icon data-cy="sidebar-video-muted" v-if="videoMuted" size="1x" />
     <video-icon data-cy="sidebar-video-unmuted" v-else size="1x"/ >

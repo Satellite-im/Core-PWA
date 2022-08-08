@@ -15,11 +15,14 @@
   </div>
   <div class="spacer"></div>
   <div class="controls" v-if="user && !request && isPreview">
+    <div class="loader-container" v-if="loading">
+      <UiLoadersLoadingBar short />
+    </div>
     <InteractablesButton
+      v-else
       type="success"
       size="small"
       v-tooltip.bottom="$t('friends.send')"
-      :loading="loading"
       :disabled="loadCheck"
       :action="createFriendRequest"
     >
@@ -30,28 +33,35 @@
     class="controls"
     v-if="request && request.incoming && request.status === 'pending'"
   >
+    <div class="loader-container" v-if="loading">
+      <UiLoadersLoadingBar short />
+    </div>
     <InteractablesButton
+      v-if="!loading"
       type="success"
       size="small"
       v-tooltip.bottom="$t('friends.accept')"
-      :loading="loading"
       :disabled="loadCheck"
       :action="acceptFriendRequest"
     >
       <check-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
+      v-if="!loading"
       type="danger"
       size="small"
       v-tooltip.bottom="$t('friends.decline')"
-      :loading="loading"
       :action="rejectFriendRequest"
     >
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
+    <div class="loader-container" v-if="loading">
+      <UiLoadersLoadingBar short />
+    </div>
     <InteractablesButton
+      v-else
       type="danger"
       size="small"
       v-tooltip.bottom="$t('friends.unblock')"
@@ -64,7 +74,11 @@
     class="controls"
     v-else-if="request && !request.incoming && request.status === 'pending'"
   >
+    <div class="loader-container" v-if="loading">
+      <UiLoadersLoadingBar short />
+    </div>
     <InteractablesButton
+      v-else
       type="danger"
       size="small"
       v-tooltip.bottom="$t('friends.cancel')"
@@ -75,7 +89,11 @@
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="user && !request && !isPreview">
+    <div class="loader-container" v-if="loading">
+      <UiLoadersLoadingBar short />
+    </div>
     <InteractablesButton
+      v-if="!loading"
       type="primary"
       size="small"
       data-cy="friend-send-message"
@@ -85,10 +103,10 @@
       <message-square-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
+      v-if="!loading"
       type="primary"
       size="small"
       v-tooltip.bottom="$t('friends.options')"
-      :loading="loading"
     >
       <more-vertical-icon size="1x" />
     </InteractablesButton>
