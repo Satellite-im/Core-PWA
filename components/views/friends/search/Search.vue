@@ -118,7 +118,6 @@ export default Vue.extend({
 .id-container {
   display: flex;
   justify-content: flex-end;
-  width: 100%;
   user-select: none;
 
   .id-button {
