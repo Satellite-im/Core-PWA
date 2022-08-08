@@ -6,45 +6,6 @@
       <TypographyText :text="$t('friends.add_description')" />
     </div>
   </div>
-  <InteractablesInput
-    v-model="friendId"
-    type="primary"
-    size="small"
-    :placeholder="$t('friends.search_placeholder')"
-    @update="_searchFriend"
-    ref="input"
-    autofocus
-  />
-  <TypographyError v-if="error" :text="$t(error)" />
-  <UiLoadersLoadingBar v-else-if="searching" />
-  <FriendsFriend
-    v-else-if="user && user.did"
-    :user="user"
-    @requestSent="onFriendRequestSent"
-    isPreview
-  />
-  <!--
-    <TypographyHorizontalRuleText plaintext value="OR" />
-    <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
-    <TypographyText :text="$t('friends.add_qrcode_description')" />
-    <div class="card">
-      <div class="card-content">
-        <div class="content">
-          <div class="columns">
-            <div class="column">
-              <TypographyText :text="$t('friends.scan_code')" />
-              <InteractablesButton
-                type="primary"
-                size="small"
-                :text="$t('friends.camera_scan')"
-              />
-            </div>
-            <div class="column">
-              <TypographyText :text="$t('friends.friend_code')" />
-              <qrcode-vue :value="friendInviteUrl" :size="150" level="H" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
+  <FriendsSearch />
+  <FriendsQrSection />
 </div>

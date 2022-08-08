@@ -743,6 +743,7 @@ export default {
     options: 'Options',
     cancel: 'Cancel request',
     request: 'Requests',
+    copy_your_id: 'Copy your ID',
   },
   market_place: {
     title: 'Marketplace\nComing soon',
