@@ -1,0 +1,10 @@
+<div id="hover-effect-container">
+  <div
+    id="effect-mask"
+    v-if="!disabled"
+    @mouseleave="mouseLeave"
+    @mousemove="mouseMove"
+    @mouseenter="mouseEnter"
+  />
+  <slot />
+</div>

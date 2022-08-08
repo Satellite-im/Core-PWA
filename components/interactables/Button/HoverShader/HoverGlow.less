@@ -1,0 +1,27 @@
+#hover-effect-container {
+  position: relative;
+
+  &:hover {
+    &:extend(.background-semitransparent-lighter);
+  }
+
+  #effect-mask {
+    width: @full;
+    height: @full;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    transition: 250ms all ease-in-out;
+    background: radial-gradient(
+      var(--circle-size) circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0.025) 60%,
+      rgba(255, 255, 255, 0.005) 80%,
+      transparent 100%
+    );
+    z-index: 1;
+    cursor: pointer;
+  }
+}
