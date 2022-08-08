@@ -2,9 +2,13 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { DeleteIcon } from 'satellite-lucide-icons'
 import { InputType, InputColor, InputSize } from './types'
 
 export default Vue.extend({
+  components: {
+    DeleteIcon,
+  },
   model: {
     prop: 'text',
     event: 'change',
@@ -58,6 +62,20 @@ export default Vue.extend({
       type: Number,
       default: 256,
     },
+    showClear: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      value: this.text ?? '',
+    }
+  },
+  computed: {
+    isEmpty() {
+      return !this.value.length
+    },
   },
   mounted() {
     if (this.autofocus) {
@@ -70,6 +88,20 @@ export default Vue.extend({
         return
       }
       this.$emit('submit', event)
+    },
+    handleInput(event: InputEvent) {
+      if (!event.target) {
+        return
+      }
+      const target = event.target as HTMLInputElement
+      this.value = target.value
+      this.$emit('change', target.value)
+    },
+    clearInput() {
+      const input = this.$refs.input as HTMLInputElement
+      this.value = ''
+      input.value = ''
+      input.focus()
     },
   },
 })
