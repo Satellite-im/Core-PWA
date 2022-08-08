@@ -1,6 +1,6 @@
 <div class="friends">
   <!--<FriendsNav :setRoute="setRoute" :route="route" />-->
-  <div class="col main-content">
+  <div class="col">
     <FriendsAdd />
     <!-- Incoming Requests -->
     <template v-if="incomingRequests.length">
@@ -35,7 +35,7 @@
       />
     </template>
   </div>
-  <div class="col friends-list">
+  <div class="col">
     <FriendsFriend v-for="user in friendsList" :user="user" :key="user.did" />
     <!-- <div v-if="friends && blockedList" class="padded_divider">
           <FriendsFriend
