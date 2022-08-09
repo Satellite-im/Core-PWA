@@ -1,36 +1,49 @@
-<div>
-  <TypographyLabel
-    class="input-label"
-    v-if="labelText.length"
-    :text="labelText"
-  />
-  <div
-    :class="{'search-box': true, 'right-icon': deleteIcon && internalText.length}"
-  >
-    <input
-      v-model="internalText"
-      class="input"
-      :class="{invalid : invalid, [`is-${size} is-${type}`]: true}"
-      :readonly="readonly"
-      :disabled="disabled"
-      :type="inputKind"
-      :placeholder="placeholder"
-      @input="update"
-      ref="input"
-      :maxLength="maxLength"
-      :minLength="minLength"
-      @keydown.space="preventLeadingSpace"
-      @paste="preventEmptyPaste"
-      @keydown.enter="submitEnter"
-      @focus="$emit('focus', $event)"
-      @blur="$emit('blur', $event)"
-    />
+<div class="input-group">
+  <TypographyLabel v-if="label" class="input-label" :text="label" />
+  <div class="input-outer">
+    <div class="input-inner">
+      <input
+        ref="input"
+        class="input font-color-light"
+        :class="[
+          `font-size-${size} is-${color}`,
+          {
+            'show-clear-button': showClear,
+            'is-danger': error || invalid
+          }
+        ]"
+        :value="text"
+        :type="type"
+        :readonly="readonly"
+        :placeholder="placeholder"
+        :minLength="minLength"
+        :maxLength="maxLength"
+        :disabled="disabled"
+        @keydown.enter="handleSubmit"
+        @input="handleInput"
+        data-cy="input-group"
+      />
+      <button
+        v-if="showClear && !isEmpty"
+        class="clear-button"
+        @click="clearInput"
+      >
+        <delete-icon size="1x" />
+      </button>
+    </div>
     <button
-      v-if="deleteIcon && internalText.length"
-      class="search-clear"
-      @click="clearSearch"
+      v-if="$slots.default"
+      class="button font-color-light"
+      :class="[`font-size-${size} is-${color}`, {disabled: disabled}]"
+      @click="handleSubmit"
+      data-cy="submit-input"
     >
-      <delete-icon size="1x" />
+      <UiLoadersSpinner v-if="loading" spinning />
+      <slot v-else></slot>
     </button>
   </div>
+  <span v-if="showLimit" class="char-limit">
+    {{ text.length }}/{{ maxLength }}
+  </span>
+  <TypographyError v-if="error" class="error" :text="error" small />
 </div>

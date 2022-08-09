@@ -6,9 +6,7 @@
       :tooltipPosition="'top'"
     >
       <InteractablesInput
-        size="small"
-        input-kind="text"
-        type="dark"
+        size="xs"
         :placeholder="$t('pages.files.browse.search')"
         class="search"
       />
@@ -32,16 +30,15 @@
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
-    <InteractablesInputGroup
+    <InteractablesInput
       v-model="text"
       class="name"
-      size="small"
-      type="primary"
-      :action="addFolder"
+      size="xs"
+      @submit="addFolder"
       :placeholder="$t('pages.files.controls.name_folder')"
     >
       <folder-plus-icon size="1.3x" />
-    </InteractablesInputGroup>
+    </InteractablesInput>
     <input
       ref="upload"
       type="file"

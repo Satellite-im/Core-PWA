@@ -74,16 +74,14 @@
                 <TypographyTitle :size="6" :text="accounts.details.name" />
               </div>
               <div class="status-input">
-                <InteractablesInputGroup
+                <InteractablesInput
                   v-model="status"
-                  size="small"
-                  input-kind="text"
-                  type="primary"
+                  size="xs"
+                  type="text"
                   :placeholder="$t('pages.settings.profile.status_placeholder')"
-                  :action="() => {}"
                 >
                   <edit-icon size="1x" />
-                </InteractablesInputGroup>
+                </InteractablesInput>
               </div>
             </div>
             <div v-if="!!accounts.details.status" class="status">
@@ -139,16 +137,14 @@
                   <info-icon size="1.5x" class="section-icon-tooltip" />
                 </div>
               </div>
-              <InteractablesInputGroup
+              <InteractablesInput
                 v-model="accountUrl"
-                size="small"
-                input-kind="text"
-                type="primary"
+                size="xs"
+                type="text"
                 :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
-                :action="() => {}"
               >
                 <edit-icon size="1x" />
-              </InteractablesInputGroup>
+              </InteractablesInput>
             </div>
 
             <div class="accounts-subtitle-wrapper">

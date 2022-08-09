@@ -1,9 +1,9 @@
-export type InputTypes = 'text' | 'number' | 'password'
-export type InputStyle =
+export type InputType = 'text' | 'number' | 'password'
+export type InputColor =
   | 'primary'
   | 'link'
   | 'info'
   | 'success'
   | 'warning'
   | 'danger'
-export type InputSize = 'small' | 'normal' | 'medium' | 'large'
+  | null

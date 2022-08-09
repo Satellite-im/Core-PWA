@@ -183,26 +183,20 @@
           <div class="content">
             <InteractablesInput v-model="input1Text" :label-text="input1Text" />
             <p>Text: {{ input2Text }}</p>
+            <InteractablesInput v-model="input2Text" size="xs" type="number" />
+            <p>Grouped Input</p>
             <InteractablesInput
               v-model="input2Text"
-              size="small"
-              input-kind="number"
-              type="primary"
-            />
-            <p>Grouped Input</p>
-            <InteractablesInputGroup
-              v-model="input2Text"
-              size="small"
-              input-kind="number"
-              type="primary"
-              :label-text="input2Text.toString()"
+              size="sm"
+              type="number"
+              :label="input2Text.toString()"
               :loading="inputGroupLoading"
-              :action="
+              :icon="{ style: 'far', name: 'lock-open' }"
+              @submit="
                 () => {
                   inputGroupLoading = !inputGroupLoading
                 }
               "
-              :icon="{ style: 'far', name: 'lock-open' }"
             />
           </div>
         </div>

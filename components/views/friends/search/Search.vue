@@ -1,13 +1,10 @@
 <template>
   <div>
     <InteractablesInput
-      ref="input"
       v-model="friendId"
-      type="primary"
-      size="small"
       :placeholder="$t('friends.search_placeholder')"
       autofocus
-      @update="_searchFriend"
+      @change="_searchFriend"
     />
     <TypographyError v-if="error" :text="$t(error)" />
     <UiLoadersLoadingBar v-else-if="searching" />
@@ -97,9 +94,6 @@ export default Vue.extend({
       this.request = null
       this.user = null
       this.friendId = ''
-      // @ts-ignore
-      const input = this.$refs.input.$refs.input as HTMLInputElement
-      input.value = ''
       // @ts-ignore
       this.$toast.show(this.$t('friends.request_sent') as string)
     },

@@ -17,9 +17,7 @@
   <template v-if="friends.length > 1">
     <InteractablesInput
       v-model="name"
-      size="small"
-      type="dark"
-      input-kind="text"
+      size="xs"
       :placeholder="$t('pages.chat.new_group_name')"
       :minLength="$Config.chat.groupNameMinLength"
       :maxLength="$Config.chat.groupNameMaxLength"
