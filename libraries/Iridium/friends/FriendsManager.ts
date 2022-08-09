@@ -50,10 +50,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     this.iridium = iridium
   }
 
-  get list() {
-    return Object.values(this.state.details || {})
-  }
-
   get requestList() {
     return Object.values(this.state.requests || {})
   }
@@ -77,22 +73,20 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     this.iridium.connector?.p2p.on('ready', async () => {
       // connect to all friends
-      if (this.list) {
-        logger.info(this.loggerTag, 'connecting to friends', this.list)
-        await Promise.all(
-          this.list.map(async (friend: User) => {
-            if (friend && !iridium.p2p.hasPeer(friend.did)) {
-              logger.info(
-                this.loggerTag,
-                'registering friend as peer with iridium',
-                friend,
-              )
-              await iridium.p2p.addPeer({ did: friend.did, type: 'peer' })
-              await iridium.p2p.connect(friend.did)
-            }
-          }),
-        )
-      }
+      logger.info(this.loggerTag, 'connecting to friends', this.state.details)
+      await Promise.all(
+        Object.values(this.state.details).map(async (friend: User) => {
+          if (friend && !iridium.p2p.hasPeer(friend.did)) {
+            logger.info(
+              this.loggerTag,
+              'registering friend as peer with iridium',
+              friend,
+            )
+            await iridium.p2p.addPeer({ did: friend.did, type: 'peer' })
+            await iridium.p2p.connect(friend.did)
+          }
+        }),
+      )
 
       if (this.requestList.length) {
         logger.info(
@@ -420,9 +414,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     request.status = 'accepted'
-    await this.set(`/details/${user.did}`, user)
     Vue.set(this.state.details, user.did, user)
     Vue.delete(this.state.requests, didUtils.didString(did))
+    await this.set(`/details/${user.did}`, user)
     await this.set(`/requests`, this.state.requests)
 
     logger.info(this.loggerTag, 'request accepted', { did, request })

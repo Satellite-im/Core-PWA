@@ -31,7 +31,7 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends.list,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
     }
   },
@@ -101,7 +101,10 @@ export default Vue.extend({
         const friendDid = this.conversation.participants.find(
           (f) => f !== iridium.connector?.id,
         )
-        return this.friends.find((f) => f.did === friendDid)
+        if (!friendDid) {
+          return
+        }
+        return this.friends[friendDid]
       }
       return this.groups[this.conversation.id]
     },

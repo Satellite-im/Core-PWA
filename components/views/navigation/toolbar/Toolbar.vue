@@ -43,7 +43,7 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
-      friends: iridium.friends.list,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
     }
@@ -80,7 +80,10 @@ export default Vue.extend({
       const friendDid = this.conversation.participants.find(
         (f) => f !== iridium.connector?.id,
       )
-      return this.friends.find((f) => f.did === friendDid)
+      if (!friendDid) {
+        return
+      }
+      return this.friends[friendDid]
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -96,18 +99,20 @@ export default Vue.extend({
       return (this.details as User).status || 'offline'
     },
     enableRTC(): boolean {
-      if (this.isGroup) {
-        const memberIds = this.groupMembers.map((m) => m.id)
-        return this.friends.some(
-          (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
-        )
-      }
-      // Check current recipient is on the user's friends list
-      const friend = this.friends.find(
-        (f) => f.did === (this.details as User)?.did,
-      )
-      return friend?.status === 'online'
+      return false
+      // todo- move to usermanager
+      // if (this.isGroup) {
+      //   const memberIds = this.groupMembers.map((m) => m.id)
+      //   return this.friends.some(
+      //     (friend: Friend) =>
+      //       memberIds.includes(friend.did) && friend.status === 'online',
+      //   )
+      // }
+      // // Check current recipient is on the user's friends list
+      // const friend = this.friends.find(
+      //   (f) => f.did === (this.details as User)?.did,
+      // )
+      // return friend?.status === 'online'
     },
     callTooltipText(): string {
       if (this.isGroup) {
@@ -158,18 +163,6 @@ export default Vue.extend({
      */
     toggleSearchResult() {
       this.searchQuery = ''
-    },
-    /**
-     * @method toggleModal
-     * @param modalName - enum for which modal
-     * @description This updates the state to show/hide the specific modal you pass in
-     * @example toggleModal(ModalWindows.WALLET)
-     */
-    toggleModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: !this.modals.groupInvite.isOpen },
-      })
     },
     // openProfile() {
     //   this.$store.dispatch('ui/showProfile', this.recipient)
