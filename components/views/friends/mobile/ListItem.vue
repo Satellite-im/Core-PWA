@@ -21,7 +21,6 @@
           :disabled="loading"
           @click="acceptFriendRequest"
         >
-          >
           <user-plus-icon />
         </button>
         <button :disabled="loading" @click="cancelRequest">
