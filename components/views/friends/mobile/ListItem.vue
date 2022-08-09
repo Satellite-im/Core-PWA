@@ -18,12 +18,13 @@
       <template v-else>
         <button
           v-if="type === 'incoming'"
-          :class="{ 'button-loading': loading }"
+          :disabled="loading"
           @click="acceptFriendRequest"
         >
+          >
           <user-plus-icon />
         </button>
-        <button :class="{ 'button-loading': loading }" @click="cancelRequest">
+        <button :disabled="loading" @click="cancelRequest">
           <trash-icon />
         </button>
       </template>
@@ -107,7 +108,7 @@ export default Vue.extend({
     gap: 1rem;
   }
 
-  .button-loading {
+  button:disabled {
     opacity: 0.5;
   }
 }
