@@ -1,20 +1,12 @@
 <template src="./Invite.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { Friend } from '~/types/ui/friends'
-import { Group } from '~/store/groups/types'
+import Vue from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Friend } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
-  name: 'GroupInvite',
-  props: {
-    group: {
-      type: Object as PropType<Group>,
-      required: true,
-    },
-  },
   data() {
     return {
       recipients: [] as Friend[],
@@ -42,27 +34,21 @@ export default Vue.extend({
       if (!this.recipients.length) {
         return
       }
-      try {
-        this.error = ''
-        this.isLoading = true
+      this.error = ''
+      this.isLoading = true
 
-        const groupId = this.$route.params.id
-
-        await Promise.all(
-          this.recipients.map(async (recipient) => {
-            await iridium.groups.addMemberToGroup(groupId, recipient.did)
-          }),
-        )
-
-        this.$store.commit('ui/toggleModal', {
-          name: 'groupInvite',
-          state: { isOpen: false },
-        })
-      } catch (e: any) {
-        this.error = e.message
-      } finally {
-        this.isLoading = false
+      await Promise.all(
+        this.recipients.map(async (recipient) => {
+          await iridium.groups.addMemberToGroup(
+            this.$route.params.id,
+            recipient.did,
+          )
+        }),
+      ).catch((e) => (this.error = e.message))
+      if (this.error) {
+        return
       }
+      this.$emit('close')
     },
   },
 })
