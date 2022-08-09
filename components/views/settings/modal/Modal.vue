@@ -17,9 +17,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    verticalScroll(): boolean {
-      return !this.ui.modals.crop
-    },
   },
   methods: {
     /**

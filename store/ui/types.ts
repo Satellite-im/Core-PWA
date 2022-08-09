@@ -22,7 +22,6 @@ export enum ModalWindows {
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
-  GROUP_INVITE = 'groupInvite',
 }
 
 export interface EnhancerInfo {
