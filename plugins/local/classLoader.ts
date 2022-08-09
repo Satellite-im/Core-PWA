@@ -8,8 +8,6 @@ import SoundManager from '~/libraries/SoundManager/SoundManager'
 import Crypto from '~/libraries/Crypto/Crypto'
 import Security from '~/libraries/Security/Security'
 import { RootStore } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import { TextileFileSystem } from '~/libraries/Files/TextileFileSystem'
 // Utils
 import Logger from '~/utilities/Logger'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -23,7 +21,6 @@ declare module 'vue/types/vue' {
     $Crypto: Crypto
     $Security: Security
     $typedStore: RootStore
-    $TextileManager: TextileManager
     $Logger: Logger
   }
 }
@@ -36,7 +33,6 @@ declare module '@nuxt/types' {
     $Crypto: Crypto
     $Security: Security
     $typedStore: RootStore
-    $TextileManager: TextileManager
     $Logger: Logger
   }
 }
@@ -45,7 +41,6 @@ Vue.prototype.$SolanaManager = new SolanaManager()
 Vue.prototype.$Sounds = new SoundManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$Security = new Security()
-Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Config = Config
 Vue.prototype.$Logger = new Logger(Vue.prototype.$Config.debug)
 Vue.prototype.$BlockchainClient = BlockchainClient.getInstance()

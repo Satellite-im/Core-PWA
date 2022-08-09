@@ -22,7 +22,7 @@ module.exports = {
     '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
     '^[@|~]/(.*)$': '<rootDir>/$1',
-    skaler: '<rootDir>/store/textile/__mocks__/skaler.js',
+    skaler: '<rootDir>/store/__mocks__/skaler.js',
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   coveragePathIgnorePatterns: [

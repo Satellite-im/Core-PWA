@@ -10,7 +10,6 @@ import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
 import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
-import Crypto from '~/libraries/Crypto/Crypto'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
