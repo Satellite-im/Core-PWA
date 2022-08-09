@@ -18,12 +18,12 @@ export default Vue.extend({
     friendsList(): Friend[] {
       return Object.values(this.friends.details)
     },
-    incomingRequests(): Array<FriendRequest> {
+    incomingRequests(): FriendRequest[] {
       return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },
-    outgoingRequests(): Array<FriendRequest> {
+    outgoingRequests(): FriendRequest[] {
       return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
