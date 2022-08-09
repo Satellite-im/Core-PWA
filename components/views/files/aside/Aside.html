@@ -4,12 +4,13 @@
       <TypographyText color="light">
         {{ $t('pages.files.aside.free_tier') }}
       </TypographyText>
-      <InteractablesButton
-        :text="$t('pages.files.aside.upgrade')"
-        size="small"
-        class="disabled"
-        v-tooltip.bottom="$t('pages.files.aside.coming_soon')"
-      />
+      <div v-tooltip.bottom="$t('pages.files.aside.coming_soon')">
+        <InteractablesButton
+          :text="$t('pages.files.aside.upgrade')"
+          size="small"
+          disabled
+        />
+      </div>
     </div>
     <UiProgress :progress="percentageUsed" />
     <TypographyText color="light" size="sm">

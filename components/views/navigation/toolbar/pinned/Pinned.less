@@ -62,17 +62,19 @@
       &:extend(.round-corners);
       &:extend(.bordered);
 
-      .button {
+      .styled-button {
         padding: 0 @light-spacing;
         height: unset;
         float: right;
         position: absolute;
         top: @light-spacing;
         right: @light-spacing;
+
+        &.is-dark {
+          right: 2rem;
+        }
       }
-      .button.is-dark {
-        right: 2rem;
-      }
+
       svg {
         position: absolute;
         right: @light-spacing;

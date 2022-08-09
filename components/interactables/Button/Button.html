@@ -1,17 +1,15 @@
 <button
-  :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
-  v-on:click="action"
-  :disabled="loading"
+  :class="`styled-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} ${disabled ? 'is-disabled' : ''} ${fullWidth ? 'is-full-width' : ''} font-${font}`"
+  :disabled="disabled || loading"
   :type="htmlType"
-  ref="button"
+  @click="action"
+  ref="styled-button"
 >
-  <UiGlowingCursorArea :hide="!!$attrs['data-popper-shown']">
-    <!-- If the button is in the loading state -->
+  <InteractablesButtonHoverGlow :disabled="disabled || loading">
     <div class="spinner" v-if="loading">
-      <!-- Loading Spinner -->
       <UiLoadersSpinner spinning />
     </div>
-    <!-- Default button state -->
+
     <div v-else class="content">
       <div
         :class="`feather ${text.length ? '' : 'no-text-feather'}`"
@@ -21,5 +19,5 @@
       </div>
       <span v-if="text.length">{{ text }}</span>
     </div>
-  </UiGlowingCursorArea>
+  </InteractablesButtonHoverGlow>
 </button>

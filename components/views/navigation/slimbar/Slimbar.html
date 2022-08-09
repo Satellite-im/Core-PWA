@@ -44,12 +44,14 @@
   <hr />
   <div class="circle-group">
     <button
+      class="circle-button"
       v-tooltip.right="$t('servers.new_server')"
       @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <plus-icon size="1.8x" />
     </button>
     <button
+      class="circle-button"
       data-cy="settings"
       v-tooltip.right="$t('pages.settings.settings')"
       @click="$store.commit('ui/setSettingsRoute')"

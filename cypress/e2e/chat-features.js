@@ -122,7 +122,7 @@ describe('Chat Features Tests', () => {
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
     // Emoji picker is displayed  when clicking on its button
     cy.get('#emoji-toggle').click()
-    cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
+    cy.get('.navbar > .button-group > .styled-button > .content').should(
       'contain',
       'Emoji',
     )

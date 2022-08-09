@@ -25,6 +25,7 @@
         size="small"
         :action="() => $router.push('/friends')"
         :text="$t('friends.friends')"
+        fullWidth
       >
         <users-icon size="1.2x" />
       </InteractablesButton>
@@ -43,12 +44,13 @@
         size="small"
         :action="() => $router.push('/files')"
         :text="$t('files.files')"
+        fullWidth
       >
         <folder-icon size="1.2x" />
       </InteractablesButton>
     </div>
     <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
-      <button @click="toggleModal">
+      <button @click="toggleModal" class="quick-toggle-button">
         <plus-icon size="1.4x" />
       </button>
       <SidebarQuick

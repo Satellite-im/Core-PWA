@@ -135,7 +135,6 @@
               type="dark"
               :action="() => {}"
               :loading="true"
-              loading-text="Loading..."
             />
           </div>
         </div>

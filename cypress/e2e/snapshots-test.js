@@ -61,7 +61,7 @@ describe.skip('Snapshots Testing', () => {
   it('Import account - Click on emojis', () => {
     cy.get('#emoji-toggle').click()
     cy.snapshotTestGet(
-      '.navbar > .button-group > .active > #custom-cursor-area',
+      '.navbar > .button-group > .styled-button > .content',
       'Emoji',
     )
     cy.get('#emoji-toggle').click()

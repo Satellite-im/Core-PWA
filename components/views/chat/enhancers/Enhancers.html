@@ -14,10 +14,10 @@
       :fullWidth="true"
       :values="['glyphs','emotes','gif']"
     >
-      <InteractablesButton type="dark" size="small" text="Glyphs">
+      <InteractablesButton type="dark" size="small" text="Glyphs" fullWidth>
         <grid-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton type="dark" size="small" text="Emoji">
+      <InteractablesButton type="dark" size="small" text="Emoji" fullWidth>
         <smile-icon size="1x" />
       </InteractablesButton>
       <InteractablesButton
@@ -25,6 +25,7 @@
         size="small"
         text="Gifs"
         v-if="featureReadyToShow"
+        fullWidth
       >
         <image-icon size="1x" />
       </InteractablesButton>

@@ -60,7 +60,8 @@ export default Vue.extend({
       if ((event.target as HTMLElement).getAttribute('role') === 'option') {
         this.focusItem(event.target)
         this.hideListbox()
-        if (this.$refs.button) (this.$refs.button as HTMLElement).focus()
+        if (this.$refs.styled - button)
+          ((this.$refs.styled - button) as HTMLElement).focus()
       }
     },
     /**

@@ -146,7 +146,8 @@
     >
       <!-- Ask for permissions block -->
       <InteractablesButton
-        v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess"
+        v-if="!userHasGivenVideoAccess &&
+      !userDeniedVideoAccess"
         :text="$t('pages.settings.audio.sources.permissionButtonText')"
         size="small"
         type="primary"

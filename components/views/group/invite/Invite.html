@@ -14,7 +14,8 @@
     size="small"
     :text="$t('pages.chat.add_member')"
     :action="confirm"
+    :disabled="!recipients.length"
     :loading="isLoading"
-    full-width
+    fullWidth
   />
 </div>

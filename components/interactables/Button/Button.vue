@@ -2,8 +2,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { ButtonType, ButtonSize } from './types.d'
-import { Icon } from '@/types/ui/icons'
+import { ButtonType, ButtonSize, ButtonFonts } from './types'
 
 export default Vue.extend({
   props: {
@@ -39,17 +38,6 @@ export default Vue.extend({
       default: () => {},
     },
     /**
-     * Supported fontawesome icon
-     * @deprecated provide icons as slot
-     * @remarks
-     * You must make sure we have imported the icon before using it. See /plugins/fontawesome.ts
-     */
-    // eslint-disable-next-line vue/require-default-prop
-    icon: {
-      type: Object as PropType<Icon>,
-      required: false,
-    },
-    /**
      * Button body text
      *
      * @remarks
@@ -62,17 +50,42 @@ export default Vue.extend({
     /**
      * Should this button be outlined
      */
-    outlined: Boolean,
+    outlined: {
+      type: Boolean,
+      default: false,
+    },
     /**
      * Add a loading state to the button
      * Useful for buttons that kick off async tasks
      */
-    loading: Boolean,
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     /**
-     * This will make the button take up 100% of the parent container
+     * This will disable the button
      */
-    fullWidth: Boolean,
-    inactive: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * Make the button take up 100% of the parent container
+     */
+    fullWidth: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * This will make the button switch font family when needed
+     */
+    font: {
+      type: String as PropType<ButtonFonts>,
+      default: 'secondary',
+    },
+    /**
+     * Change html button's type
+     */
     htmlType: {
       type: String,
       default: 'button',

@@ -9,6 +9,6 @@ describe('Create Account and add friend', () => {
     cy.get('.search-container > .search-box > .input')
       .click()
       .type('5CXGsRDw8iU8HxYXLHLB62RfaJryWyQuksSLus6EPWn1')
-    cy.get('.controls > .button').click()
+    cy.get('.controls > .styled-button').click()
   })
 })

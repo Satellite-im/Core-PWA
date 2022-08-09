@@ -9,21 +9,22 @@
   </div>
   <div class="buttons">
     <InteractablesButton
-      full-width
+      fullWidth
       data-cy="create-account-button"
       :text="$t('pages.disclaimer.create')"
       :action="generateWallet"
       :loading="isLoading"
     />
     <InteractablesButton
-      full-width
+      fullWidth
       data-cy="create-account-button"
       type="dark"
-      :action="() => { connectAccount() }"
+      :action="() => {
+    connectAccount() }"
       :text="$t('pages.disclaimer.connect')"
     />
     <InteractablesButton
-      full-width
+      fullWidth
       data-cy="import-account-button"
       type="dark"
       :action="() => { importAccount() }"

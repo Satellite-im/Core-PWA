@@ -7,6 +7,7 @@
     data-cy="sidebar-mic-button"
     :text="$t('controls.mic')"
     :loading="isLoading"
+    fullWidth
   >
     <mic-off-icon data-cy="sidebar-mic-muted" v-if="audioMuted" size="1x" />
     <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x" />
@@ -18,6 +19,7 @@
     v-tooltip.top="audio.deafened ? $t('controls.undeafen') : $t('controls.deafen')"
     :action="() => toggleDeafen()"
     :text="$t('controls.headphones')"
+    fullWidth
   >
     <headphones-off-icon
       data-cy="sidebar-audio-deafened"
@@ -34,6 +36,7 @@
     :text="$t('controls.video')"
     :action="() => toggleMute('video')"
     :loading="isLoading"
+    fullWidth
   >
     <video-off-icon data-cy="sidebar-video-muted" v-if="videoMuted" size="1x" />
     <video-icon data-cy="sidebar-video-unmuted" v-else size="1x"/ >

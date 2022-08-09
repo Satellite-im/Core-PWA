@@ -6,7 +6,12 @@
       <TypographyText color="light" style="margin-top: 8px">
         {{ $t('popups.error_network.subtitle') }}
       </TypographyText>
-      <InteractablesButton type="primary" class="action" :action="tryAgain">
+      <InteractablesButton
+        type="primary"
+        class="action"
+        :action="tryAgain"
+        fullWidth
+      >
         <refresh-cw-icon size="1.5x" />
         <TypographyText class="text">
           {{ $t('popups.error_network.action') }}

@@ -88,9 +88,11 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .submit-container {
-    .is-button {
-      min-width: @full !important;
-      &:extend(.full-width);
+    .styled-button {
+      content {
+        min-width: @full !important;
+        &:extend(.full-width);
+      }
     }
   }
 }

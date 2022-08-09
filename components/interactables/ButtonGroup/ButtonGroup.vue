@@ -34,7 +34,7 @@ export default Vue.extend({
     activeClass: {
       type: String,
       required: false,
-      default: 'active',
+      default: 'is-active',
     },
     fullWidth: Boolean,
   },
@@ -54,7 +54,7 @@ export default Vue.extend({
   },
   methods: {
     initElements(attachEvent: boolean) {
-      this.$el.querySelectorAll('.button').forEach((button, index) => {
+      this.$el.querySelectorAll('.styled-button').forEach((button, index) => {
         const text = button.querySelector('span')?.textContent
         const value = (this.values ? this.values[index] : text) as String
         if (value === this.value) {

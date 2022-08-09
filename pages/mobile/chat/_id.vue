@@ -11,7 +11,11 @@
             :placeholder="`${$t('ui.search')}...`"
             show-clear
           />
-          <button v-if="$route.params.id" @click="swiper.slideNext()">
+          <button
+            v-if="$route.params.id"
+            class="toggle-sidebar-button"
+            @click="swiper.slideNext()"
+          >
             <menu-icon class="toggle-sidebar" size="1.5x" />
           </button>
         </div>
@@ -118,7 +122,7 @@ export default Vue.extend({
       .search {
         flex: 1;
       }
-      button {
+      .toggle-sidebar-button {
         height: fit-content;
       }
     }

@@ -24,6 +24,7 @@
     :text="$t('pages.chat.chat_now')"
     :action="confirm"
     :loading="isLoading"
-    full-width
+    :disabled="!friends.length"
+    fullWidth
   />
 </div>
