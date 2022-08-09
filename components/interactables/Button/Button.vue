@@ -14,7 +14,7 @@ export default Vue.extend({
      */
     size: {
       type: String as PropType<ButtonSize>,
-      default: 'normal',
+      default: 'sm',
     },
     /**
      * Determines the type of the button

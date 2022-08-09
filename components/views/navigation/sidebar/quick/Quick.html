@@ -19,8 +19,9 @@
     />
   </template>
   <InteractablesButton
+    class="chat-now-btn"
     :type="friends.length ? 'primary' : 'dark'"
-    size="small"
+    size="xs"
     :text="$t('pages.chat.chat_now')"
     :action="confirm"
     :loading="isLoading"

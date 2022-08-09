@@ -1,5 +1,5 @@
 .button-group {
-  .styled-button {
+  button {
     &:first-child {
       border-radius: @corner-rounding 0px 0px @corner-rounding;
     }
@@ -12,7 +12,7 @@
     border: none;
   }
   &.is-normal-width {
-    .styled-button {
+    button {
       &:not(:first-child) {
         margin: 0 -1.5px;
         border-left: none;
@@ -22,7 +22,7 @@
   }
   &.is-full-width {
     &:extend(.full-width);
-    .styled-button {
+    button {
       flex-grow: 1;
     }
     display: flex;

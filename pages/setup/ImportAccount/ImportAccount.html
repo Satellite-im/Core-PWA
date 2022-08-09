@@ -52,6 +52,7 @@
           :text="$t('pages.inputAccount.reset')"
           :disabled="phrases.length === 0"
           :action="resetPassphrase"
+          class="recover-account-btn"
         >
           <trash-icon size="1x" />
         </InteractablesButton>
@@ -62,6 +63,7 @@
           :text="$t('pages.inputAccount.recover')"
           :disabled="phrases.length<12"
           :action="recoverAccount"
+          class="recover-account-btn"
         />
       </div>
     </div>

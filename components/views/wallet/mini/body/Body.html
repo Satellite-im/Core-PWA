@@ -23,16 +23,16 @@
   </div>
   <div id="send-payment">
     <InteractablesButton
-      type="primary"
-      size="small"
+      class="payment-btn"
+      size="xs"
       :text="$t('wallet.mini_wallet.send_money')"
       :action="updateMethod('send')"
     >
       <send-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
-      type="primary"
-      size="small"
+      class="payment-btn"
+      size="xs"
       :text="$t('wallet.mini_wallet.request_money')"
       :action="updateMethod('request')"
     >

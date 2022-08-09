@@ -10,8 +10,9 @@
   />
   <small v-if="error" class="error has-text-danger error">{{error}}</small>
   <InteractablesButton
+    class="invite-btn"
     :type="recipients.length ? 'primary' : 'dark'"
-    size="small"
+    size="xs"
     :text="$t('pages.chat.add_member')"
     :action="confirm"
     :disabled="!recipients.length"

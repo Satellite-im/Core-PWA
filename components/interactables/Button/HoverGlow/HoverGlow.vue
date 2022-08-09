@@ -12,9 +12,7 @@ export default Vue.extend({
   },
   methods: {
     mouseLeave(e: MouseEvent) {
-      const target = e?.target
-
-      target.style = ''
+      e.target.style = ''
     },
     mouseEnter(e: MouseEvent) {
       const target = e.target

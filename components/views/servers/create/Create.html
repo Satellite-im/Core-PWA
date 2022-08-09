@@ -26,8 +26,7 @@
           />
           <InteractablesButton
             :action="() => $refs.file.click()"
-            type="primary"
-            size="small"
+            size="xs"
             :text="$t('servers.create.photo_button')"
           />
         </div>
@@ -58,11 +57,9 @@
 
     <div class="submit-container">
       <InteractablesButton
-        type="primary"
-        size="small"
+        size="xs"
         fullWidth
         :text="$t('servers.create.create_server')"
-        class="create-server-btn"
         :action="confirm"
       />
     </div>

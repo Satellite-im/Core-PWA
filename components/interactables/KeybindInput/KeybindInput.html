@@ -29,7 +29,7 @@
       <span
         v-tooltip.top="$t(isReservedKeybind ? 'pages.settings.keybinds.reserved' : 'pages.settings.keybinds.save')"
       >
-        <InteractablesButton type="primary" :action="save" :disabled="!canSave">
+        <InteractablesButton :action="save" :disabled="!canSave">
           <CheckIcon size="1x" />
         </InteractablesButton>
       </span>

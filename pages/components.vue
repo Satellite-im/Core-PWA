@@ -114,24 +114,14 @@
       <div class="card">
         <div class="card-content">
           <div class="content">
+            <InteractablesButton text="Test Button" :action="testAction" />
             <InteractablesButton
               text="Test Button"
-              size="normal"
-              type="primary"
-              :outlined="true"
-              :action="testAction"
-            />
-            <InteractablesButton
-              text="Test Button"
-              size="normal"
-              type="primary"
               :icon="{ style: 'far', name: 'arrow-circle-right' }"
-              :outlined="false"
               :action="testAction"
             />
             <InteractablesButton
               text="Test Button"
-              size="normal"
               type="dark"
               :action="() => {}"
               :loading="true"

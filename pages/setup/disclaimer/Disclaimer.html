@@ -14,6 +14,7 @@
       :text="$t('pages.disclaimer.create')"
       :action="generateWallet"
       :loading="isLoading"
+      class="create-account-btn"
     />
     <InteractablesButton
       fullWidth
@@ -22,6 +23,7 @@
       :action="() => {
     connectAccount() }"
       :text="$t('pages.disclaimer.connect')"
+      class="create-account-btn"
     />
     <InteractablesButton
       fullWidth
@@ -29,6 +31,7 @@
       type="dark"
       :action="() => { importAccount() }"
       :text="$t('pages.disclaimer.import')"
+      class="create-account-btn"
     />
   </div>
 </div>

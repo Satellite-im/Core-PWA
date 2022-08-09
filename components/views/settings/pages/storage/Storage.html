@@ -18,8 +18,7 @@
     />
     <br />
     <InteractablesButton
-      type="primary"
-      size="small"
+      size="xs"
       :text="$t('pages.settings.storage.export.button')"
     />
   </SettingsUnit>
@@ -37,7 +36,7 @@
     <InteractablesButton
       v-if="!deleteVerify"
       type="danger"
-      size="small"
+      size="xs"
       :loading="isLoading"
       :text="$t('pages.settings.storage.clear.button')"
       :action="() => deleteVerify = true"
@@ -52,7 +51,7 @@
       <br />
       <InteractablesButton
         type="danger"
-        size="small"
+        size="xs"
         :loading="isLoading"
         :text="$t('pages.settings.storage.clear.confirm_button')"
         :action="clearLocalStorage"

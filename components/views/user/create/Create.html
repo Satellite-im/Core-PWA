@@ -26,8 +26,7 @@
             <InteractablesImageInput ref="imageInput" @change="selectImage" />
             <InteractablesButton
               :action="() => imageInputRef.click()"
-              type="primary"
-              size="small"
+              size="xs"
               :text="$t('servers.create.photo_button')"
             />
           </div>
@@ -73,8 +72,7 @@
 
       <div class="submit-container">
         <InteractablesButton
-          type="primary"
-          size="small"
+          size="xs"
           :text="$t('user.registration.sign_in')"
           :loading="isLoading"
           class="create-server-btn"

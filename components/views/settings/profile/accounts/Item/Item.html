@@ -11,9 +11,9 @@
       />
     </div>
     <InteractablesButton
+      class="item-btn"
       v-if="!account.isVerified"
-      type="primary"
-      size="small"
+      size="xs"
       :action="() => {}"
       :text="$t('pages.settings.profile.accounts.verify')"
     />

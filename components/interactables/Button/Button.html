@@ -1,5 +1,6 @@
 <button
-  :class="`styled-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} ${disabled ? 'is-disabled' : ''} ${fullWidth ? 'is-full-width' : ''} font-${font}`"
+  class="styled-button"
+  :class="[{'is-disabled': disabled, 'is-full-width': fullWidth}, `${size} is-${type} font-${font} is-${outlined ? 'outlined' : 'contained'}`]"
   :disabled="disabled || loading"
   :type="htmlType"
   @click="action"

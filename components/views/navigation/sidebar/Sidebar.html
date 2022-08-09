@@ -22,7 +22,7 @@
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
         :type="$route.path.includes('/friends') ? 'primary' : 'dark'"
-        size="small"
+        size="xs"
         :action="() => $router.push('/friends')"
         :text="$t('friends.friends')"
         fullWidth
@@ -41,7 +41,7 @@
         class="sidebar-full-btn"
         data-cy="sidebar-files"
         :type="$route.path.includes('/files') ? 'primary' : 'dark'"
-        size="small"
+        size="xs"
         :action="() => $router.push('/files')"
         :text="$t('files.files')"
         fullWidth

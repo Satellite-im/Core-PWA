@@ -1,19 +1,21 @@
 <div id="friends-nav">
   <div v-if="$device.isMobile" class="spacer"></div>
   <InteractablesButton
-    size="small"
+    size="xs"
     :text="$device.isMobile ? '' : 'Active'"
     :type="route === 'active' ? 'primary': 'dark'"
     :action="() => setRoute('active')"
+    class="friends-nav-btn"
   >
     <user-icon size="1x" />
   </InteractablesButton>
   <InteractablesButton
-    size="small"
+    size="xs"
     :text="$device.isMobile ? '' : 'Requests'"
     :type="route === 'requests' ? 'primary' : 'dark'"
     :action="() => setRoute('requests')"
     :style="`padding-right: ${friendRequestPadding}px`"
+    class="friends-nav-btn"
   >
     <user-check-icon size="1x" />
     <span
@@ -24,18 +26,20 @@
     </span>
   </InteractablesButton>
   <InteractablesButton
-    size="small"
+    size="xs"
     :text="$device.isMobile ? '' : 'Blocked'"
     :type="route === 'blocked' ? 'primary' : 'dark'"
     :action="() => setRoute('blocked')"
+    class="friends-nav-btn"
   >
     <user-x-icon size="1x" />
   </InteractablesButton>
   <InteractablesButton
-    size="small"
+    size="xs"
     :text="$device.isMobile ? 'Add' : 'Add Friend'"
     :type="route === 'add' ? 'primary' : 'dark'"
     :action="() => setRoute('add')"
+    class="friends-nav-btn"
   >
     <user-plus-icon size="1x" />
   </InteractablesButton>

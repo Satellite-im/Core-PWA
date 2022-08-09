@@ -4,9 +4,9 @@
     v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
   >
     <InteractablesButton
-      class="left"
+      class="left action-btn"
       :type="videoMuted ? 'danger' : 'dark'"
-      size="small"
+      size="xs"
       :action="() => toggleMute('video')"
       :loading="isLoading"
     >
@@ -16,8 +16,9 @@
   </div>
   <div v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')">
     <InteractablesButton
+      class="action-btn"
       :type="audioMuted ? 'danger' : 'dark'"
-      size="small"
+      size="xs"
       data-cy="call-audio"
       :action="() => toggleMute('audio')"
       :loading="isLoading"
@@ -30,8 +31,9 @@
     v-tooltip.top="screenMuted ? $t('controls.screen') : $t('controls.stop_streaming')"
   >
     <InteractablesButton
+      class="action-btn"
       :type="screenMuted ? 'danger' : 'dark'"
-      size="small"
+      size="xs"
       data-cy="call-screen-share"
       :action="() => toggleMute('screen')"
       :loading="isLoading"
@@ -46,10 +48,10 @@
   </div>
   <div v-tooltip.top="$t('controls.hang_up')">
     <InteractablesButton
-      class="right"
+      class="right left action-btn"
       type="danger"
       data-cy="call-hangup"
-      size="small"
+      size="xs"
       :action="() => hangUp()"
     >
       <phone-off-icon size="1.2x" />

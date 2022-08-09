@@ -33,22 +33,21 @@
         <TypographyText> {{ popularGlyph.glyph.description }} </TypographyText>
         <div class="btns">
           <InteractablesButton
-            type="primary"
-            size="small"
+            size="xs"
             :text="$t('glyphs.shop_now')"
             :action="shopGlyph"
           />
           <div class="navigator">
             <InteractablesButton
               type="dark"
-              size="small"
+              size="xs"
               :action="() => { navigateGlyph('prev') }"
             >
               <chevron-left-icon size="1.5x"></chevron-left-icon>
             </InteractablesButton>
             <InteractablesButton
               type="dark"
-              size="small"
+              size="xs"
               :action="() => { navigateGlyph('next') }"
             >
               <chevron-right-icon size="1.5x"></chevron-right-icon>

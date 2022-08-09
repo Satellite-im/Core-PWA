@@ -21,7 +21,7 @@
     <InteractablesButton
       v-else
       type="success"
-      size="small"
+      size="xs"
       v-tooltip.bottom="$t('friends.send')"
       :disabled="loadCheck"
       :action="createFriendRequest"
@@ -39,7 +39,7 @@
     <InteractablesButton
       v-if="!loading"
       type="success"
-      size="small"
+      size="xs"
       v-tooltip.bottom="$t('friends.accept')"
       :disabled="loadCheck"
       :action="acceptFriendRequest"
@@ -49,7 +49,7 @@
     <InteractablesButton
       v-if="!loading"
       type="danger"
-      size="small"
+      size="xs"
       v-tooltip.bottom="$t('friends.decline')"
       :action="rejectFriendRequest"
     >
@@ -63,7 +63,7 @@
     <InteractablesButton
       v-else
       type="danger"
-      size="small"
+      size="xs"
       v-tooltip.bottom="$t('friends.unblock')"
       :action="() => {}"
     >
@@ -80,7 +80,7 @@
     <InteractablesButton
       v-else
       type="danger"
-      size="small"
+      size="xs"
       v-tooltip.bottom="$t('friends.cancel')"
       :loading="loading"
       :action="cancelRequest"
@@ -94,8 +94,7 @@
     </div>
     <InteractablesButton
       v-if="!loading"
-      type="primary"
-      size="small"
+      size="xs"
       data-cy="friend-send-message"
       v-tooltip.bottom="$t('friends.message')"
       :action="sendMessageRequest"
@@ -104,8 +103,7 @@
     </InteractablesButton>
     <InteractablesButton
       v-if="!loading"
-      type="primary"
-      size="small"
+      size="xs"
       v-tooltip.bottom="$t('friends.options')"
     >
       <more-vertical-icon size="1x" />
