@@ -4,7 +4,7 @@
     <div class="input-inner">
       <input
         ref="input"
-        class="input"
+        class="input font-color-light"
         :class="[
           `font-size-${size} is-${color}`,
           {
@@ -33,7 +33,7 @@
     </div>
     <button
       v-if="$slots.default"
-      class="button"
+      class="button font-color-light"
       :class="[`font-size-${size} is-${color}`, {disabled: disabled}]"
       @click="handleSubmit"
       data-cy="submit-input"
