@@ -7,4 +7,3 @@ export type InputColor =
   | 'warning'
   | 'danger'
   | null
-export type InputSize = 'sm' | 'md' | 'lg' | 'xl'

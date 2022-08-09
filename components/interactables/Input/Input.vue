@@ -3,7 +3,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DeleteIcon } from 'satellite-lucide-icons'
-import { InputType, InputColor, InputSize } from './types'
+import { InputType, InputColor } from './types'
+import { Size } from '~/types/typography'
 
 export default Vue.extend({
   components: {
@@ -31,7 +32,7 @@ export default Vue.extend({
       default: 'text',
     },
     size: {
-      type: String as PropType<InputSize>,
+      type: String as PropType<Size>,
       default: 'md',
     },
     color: {
@@ -86,12 +87,7 @@ export default Vue.extend({
   },
   computed: {
     isEmpty() {
-      return !this.value.length
-    },
-  },
-  watch: {
-    text(value) {
-      this.value = value
+      return !this.text.length
     },
   },
   mounted() {
@@ -111,14 +107,10 @@ export default Vue.extend({
         return
       }
       const target = event.target as HTMLInputElement
-      this.value = target.value
       this.$emit('change', target.value)
     },
     clearInput() {
-      const input = this.$refs.input as HTMLInputElement
-      this.value = ''
-      input.value = ''
-      input.focus()
+      this.$emit('change', '')
     },
   },
 })
