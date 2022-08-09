@@ -1,21 +1,25 @@
-.control:nth-child(1) {
-  &:extend(.full-width);
-}
-.input-wrapper {
+.input-container {
   display: flex;
-  &:extend(.bordered);
-  &:extend(.round-corners);
-}
+  flex-direction: column;
 
-.input.is-normal,
-.button.is-normal {
-  height: 2.3rem;
-  font-size: @text-size;
-}
-.char-limit {
-  float: right;
-  margin-right: @light-spacing;
-  font-size: @mini-text-size;
-  &:extend(.font-muted);
-  margin-left: auto;
+  .input-wrapper {
+    display: flex;
+    align-items: stretch;
+
+    &:extend(.bordered);
+    &:extend(.round-corners);
+
+    .button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .char-limit {
+    float: right;
+    margin-right: @light-spacing;
+    font-size: @mini-text-size;
+    &:extend(.font-muted);
+    margin-left: auto;
+  }
 }

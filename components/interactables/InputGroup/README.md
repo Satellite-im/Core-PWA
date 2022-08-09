@@ -7,11 +7,10 @@ Generic input group component.
 ```vue
 <InteractablesInputGroup
   v-model="input2Text"
-  size="small"
-  input-kind="number"
-  type="dark"
+  size="xs"
+  type="number"
   :loading="inputGroupLoading"
-  :action="
+  @submit="
     () => {
       inputGroupLoading = true
     }

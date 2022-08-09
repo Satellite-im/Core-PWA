@@ -1,29 +1,33 @@
-<div>
-  <TypographyText v-if="label" as="label" uppercase> {{label}} </TypographyText>
+<div class="input-container">
+  <TypographyText v-if="label" as="label" uppercase class="input-label">
+    {{ label }}
+  </TypographyText>
   <div class="input-wrapper">
     <input
       ref="input"
       class="input"
-      :class="`is-${size} is-${type}`"
+      :class="`font-size-${size} is-${color}`"
       :value="text"
-      :type="inputKind"
+      :type="type"
       :readonly="readonly"
       :placeholder="placeholder"
       :maxLength="maxLength"
-      :disabled="disabled || loading"
-      @keydown.enter="action"
+      :disabled="disabled"
+      @keydown.enter="handleSubmit"
       @input="$emit('change', $event.target.value)"
       data-cy="input-group"
     />
     <button
       class="button"
-      :class="[`is-${type} is-${size}`, {disabled: disabled}]"
-      @click="disabled || loading ? null : action()"
+      :class="[`font-size-${size} is-${color}`, {disabled: disabled}]"
+      @click="handleSubmit"
       data-cy="submit-input"
     >
       <UiLoadersSpinner v-if="loading" spinning />
       <slot v-else></slot>
     </button>
   </div>
-  <span v-if="showLimit" class="char-limit"> {{ textLength }} </span>
+  <span v-if="showLimit" class="char-limit">
+    {{ text.length }}/{{ maxLength }}
+  </span>
 </div>
