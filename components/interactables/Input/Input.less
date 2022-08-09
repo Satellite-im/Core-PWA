@@ -17,9 +17,8 @@
         flex-grow: 1;
         padding: 0.5rem;
         box-shadow: none;
-        background: @input-gradient;
-        background-size: calc(100% + 2px) calc(100% + 2px);
-        background-position: center;
+        background: @input-gradient 100% center;
+        border: none;
         &:extend(.round-corners);
 
         &.show-clear-button {
@@ -50,8 +49,10 @@
     }
 
     .button {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-radius: 0 4px 4px 0;
+      padding: 0.25em 0.75em;
+      display: flex;
+      align-items: center;
     }
   }
 

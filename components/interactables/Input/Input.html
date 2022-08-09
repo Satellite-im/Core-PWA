@@ -1,10 +1,12 @@
 <div class="input-group">
-  <TypographyLabel v-if="label" class="input-label" :text="label" />
+  <TypographyText v-if="label" as="label" uppercase>
+    {{ label }}
+  </TypographyText>
   <div class="input-outer">
     <div class="input-inner">
       <input
         ref="input"
-        class="input font-color-light"
+        class="input font-body font-color-light"
         :class="[
           `font-size-${size} is-${color}`,
           {

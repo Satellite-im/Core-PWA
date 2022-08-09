@@ -1,0 +1,65 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body,
+#__nuxt,
+#__layout {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+html:focus-within {
+  scroll-behavior: smooth;
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+ul,
+li {
+  padding: 0;
+  list-style: none;
+}
+/* #__nuxt {
+  isolation: isolate;
+} */
+
+/* @media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+} */
