@@ -208,6 +208,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     }
+    Vue.set(this.state.conversations, id, conversation)
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
@@ -225,8 +226,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         },
       )
     }
-
-    Vue.set(this.state.conversations, id, conversation)
   }
 
   getConversation(id: Conversation['id']): Conversation {
