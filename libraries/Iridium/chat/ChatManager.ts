@@ -173,8 +173,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   /**
-   * @param {string} name new item name
-   * @param {IridiumDirectory} parent empty string if root element
+   * @param {string} friendDid
    * @description fetch direct conversation id based on friend did.
    * significantly faster than Iridium.hash until about 5,000,000 conversation records
    */
@@ -226,6 +225,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         },
       )
     }
+  }
+
+  async deleteConversation(id: Conversation['id']) {
+    if (!this.hasConversation(id)) {
+      return
+    }
+    Vue.delete(this.state.conversations, id)
+    this.set('/conversations', this.state.conversations)
+    // todo - do we need to unsubscribe too?
   }
 
   getConversation(id: Conversation['id']): Conversation {
