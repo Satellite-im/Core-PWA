@@ -80,11 +80,6 @@ export default Vue.extend({
       default: '',
     },
   },
-  data() {
-    return {
-      value: this.text ?? '',
-    }
-  },
   computed: {
     isEmpty() {
       return !this.text.length
