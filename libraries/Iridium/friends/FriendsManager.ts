@@ -468,15 +468,14 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       throw new Error(FriendsError.FRIEND_NOT_FOUND)
     }
 
-    Vue.delete(this.state.details, didUtils.didString(did))
-    await this.set(`/details`, this.state.details)
-    const id = await encoding.hash(
-      [friend.did, this.iridium.connector?.id].sort(),
-    )
-    if (id && this.iridium.chat.hasConversation(id)) {
-      Vue.delete(this.iridium.chat.state.conversations, id)
-    }
+    const didString = didUtils.didString(did)
 
+    Vue.delete(this.state.details, didString)
+    await this.set(`/details`, this.state.details)
+    const id = this.iridium.chat.directConversationIdFromDid(didString)
+    if (id) {
+      this.iridium.chat.deleteConversation(id)
+    }
     logger.info(this.loggerTag, 'friend removed', { did, friend })
 
     // Announce to the remote user
