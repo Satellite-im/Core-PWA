@@ -15,13 +15,19 @@
 
       .input {
         flex-grow: 1;
-        padding: @light-spacing;
-        &:extend(.input-bg);
-        &:extend(.round-corners);
+        padding: 0.5rem;
         box-shadow: none;
+        background: @input-gradient;
+        background-size: calc(100% + 2px) calc(100% + 2px);
+        background-position: center;
+        &:extend(.round-corners);
 
         &.show-clear-button {
           padding-right: 2rem;
+        }
+
+        &:focus {
+          background-image: @semitransparent-lightest-gradient;
         }
       }
 
@@ -32,7 +38,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: @light-spacing;
+        padding: 0.5rem;
         color: @text-muted;
       }
 
@@ -51,14 +57,14 @@
 
   .char-limit {
     float: right;
-    margin-right: @light-spacing;
+    margin-right: 0.5rem;
     font-size: @mini-text-size;
     &:extend(.font-muted);
     margin-left: auto;
   }
 
   .error {
-    margin-top: @light-spacing;
+    margin-top: 0.5rem;
   }
 
   // TODO: remove after removing bulma
