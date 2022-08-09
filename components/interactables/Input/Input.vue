@@ -1,10 +1,9 @@
 <template src="./Input.html"></template>
+
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
 import { DeleteIcon } from 'satellite-lucide-icons'
-
-import { InputTypes, InputStyle, InputSize } from './types.d'
+import { InputType, InputColor, InputSize } from './types'
 
 export default Vue.extend({
   components: {
@@ -12,112 +11,87 @@ export default Vue.extend({
   },
   model: {
     prop: 'text',
-    event: 'update',
+    event: 'change',
   },
   props: {
-    /**
-     * If enabled, the button will take up 100% of the parent container
-     */
-    fullWidth: Boolean,
-    /**
-     * If enabled, delete text icon will appear
-     */
-    deleteIcon: Boolean,
-    /**
-     * Default text can be included here
-     */
     text: {
-      type: [String, Number],
+      type: String,
       default: '',
     },
-    /**
-     * Used for display only inputs
-     */
     readonly: {
       type: Boolean,
       default: false,
     },
-    /**
-     * Used for set disabled status
-     */
-    disabled: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    /**
-     * Abstraction of native "type"
-     */
-    inputKind: {
-      type: String as PropType<InputTypes>,
-      default: 'text',
-    },
-    /**
-     * Placeholder text for blank inputs
-     */
-    placeholder: {
-      type: String,
-      default: 'Placeholder...',
-    },
-    /**
-     * Size of the input, reference InputSize types or Bulma.io
-     */
-    size: {
-      type: String as PropType<InputSize>,
-      default: 'normal',
-    },
-    /**
-     * Style of the input, reference InputStyle types or Bulma.io
-     */
-    type: {
-      type: String as PropType<InputStyle>,
-      default: 'normal',
-    },
-    /**
-     * Add a label to the top of the input
-     */
-    labelText: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    /**
-     * Autofocus when page loads
-     */
     autofocus: {
       type: Boolean,
-      required: false,
       default: false,
     },
-    maxLength: {
-      type: Number,
-      default: 256,
+    type: {
+      type: String as PropType<InputType>,
+      default: 'text',
+    },
+    size: {
+      type: String as PropType<InputSize>,
+      default: 'md',
+    },
+    color: {
+      type: String as PropType<InputColor>,
+      default: 'primary',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
+    showLimit: {
+      type: Boolean,
+      default: false,
     },
     minLength: {
       type: Number,
       default: 0,
     },
+    maxLength: {
+      type: Number,
+      default: 256,
+    },
+    showClear: {
+      type: Boolean,
+      default: false,
+    },
     invalid: {
       type: Boolean,
       default: false,
     },
-    // if there is a :watchEnter true on the parent component, it will trigger the parent method on @watchEnter
-    watchEnter: {
-      type: Boolean,
-      required: false,
-      default: false,
+    error: {
+      type: String,
+      default: '',
     },
   },
   data() {
     return {
-      internalText: this.text ? this.text : '',
+      value: this.text ?? '',
     }
   },
+  computed: {
+    isEmpty() {
+      return !this.value.length
+    },
+  },
   watch: {
-    internalText(val) {
-      if (!val.trim().length) {
-        this.internalText = ''
-      }
+    text(value) {
+      this.value = value
     },
   },
   mounted() {
@@ -126,53 +100,28 @@ export default Vue.extend({
     }
   },
   methods: {
-    /**
-     * @method submitEnter
-     * @description emits @watchEnter in the parent if :watchEnter is true,
-     *   useful for allowing enter input on some inputs
-     */
-    submitEnter() {
-      if (this.watchEnter) {
-        this.$emit('watchEnter', this.watchEnter)
+    handleSubmit(event: InputEvent) {
+      if (this.disabled || this.loading || this.error || this.invalid) {
+        return
       }
+      this.$emit('submit', event)
     },
-    /**
-     * @method update
-     * @description Emits the update event with updated internalText string
-     */
-    update() {
-      this.$emit('update', this.internalText)
-    },
-    /**
-     * @method clearSearch
-     * @description Sets internalText in data to an empty string
-     */
-    clearSearch() {
-      this.internalText = ''
-      this.update()
-    },
-    /**
-     * @method preventLeadingSpace
-     * @description Prevent space if empty input
-     */
-    preventLeadingSpace(event: KeyboardEvent) {
-      if (!this.internalText.toString().length) {
-        event.preventDefault()
+    handleInput(event: InputEvent) {
+      if (!event.target) {
+        return
       }
+      const target = event.target as HTMLInputElement
+      this.value = target.value
+      this.$emit('change', target.value)
     },
-    /**
-     * @method preventEmptyPaste
-     * @description Prevent space if empty input
-     */
-    preventEmptyPaste(event: ClipboardEvent) {
-      if (
-        event.clipboardData &&
-        !event.clipboardData.getData('Text').trim().length
-      ) {
-        event.preventDefault()
-      }
+    clearInput() {
+      const input = this.$refs.input as HTMLInputElement
+      this.value = ''
+      input.value = ''
+      input.focus()
     },
   },
 })
 </script>
+
 <style scoped lang="less" src="./Input.less"></style>

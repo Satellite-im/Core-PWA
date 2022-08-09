@@ -46,7 +46,7 @@
         <TypographyLabel
           :text="$t('pages.settings.notifications.send_label')"
         />
-        <InteractablesInputGroup
+        <InteractablesInput
           v-if="NotificationStatus === 'granted' || Platform === PlatformTypeEnum.ELECTRON"
           class="modal-input"
           size="xs"
@@ -55,17 +55,17 @@
           @submit="sendNotification"
         >
           <arrow-right-icon size="1x" />
-        </InteractablesInputGroup>
+        </InteractablesInput>
       </span>
       <span v-if="Platform === PlatformTypeEnum.ANDROID">
-        <InteractablesInputGroup
+        <InteractablesInput
           v-model="NotificationText"
           class="modal-input"
           size="xs"
           @submit="sendNotification"
         >
           <arrow-right-icon size="1x" />
-        </InteractablesInputGroup>
+        </InteractablesInput>
       </span>
     </SettingsUnit>
   </SettingsSection>

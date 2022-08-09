@@ -9,13 +9,9 @@
 
   <SettingsUnit>
     <TypographyLabel :text="$t('pages.settings.accounts.active')" />
-    <InteractablesInputGroup
-      readonly
-      :text="accounts.active"
-      @submit="copyAddress"
-    >
+    <InteractablesInput readonly :text="accounts.active" @submit="copyAddress">
       <clipboard-icon size="1x" />
-    </InteractablesInputGroup>
+    </InteractablesInput>
   </SettingsUnit>
 
   <!-- <SettingsSection>

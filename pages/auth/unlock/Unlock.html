@@ -14,7 +14,7 @@
         {{$t('pages.unlock.choose_pin_description_2')}}
       </TypographyText>
     </div>
-    <InteractablesInputGroup
+    <InteractablesInput
       v-model="pin"
       size="xs"
       type="password"
@@ -25,10 +25,11 @@
       :loading="status === 'loading'"
       autofocus
       @submit="action"
+      showClear
     >
       <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
       <chevron-right-icon size="1x" v-else />
-    </InteractablesInputGroup>
+    </InteractablesInput>
     <TypographyError v-if="error" :text="$t(error)" />
     <InteractablesSwitch
       v-model="storePin"

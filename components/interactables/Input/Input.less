@@ -1,51 +1,69 @@
-.input-label {
-  text-align: left;
-}
-.is-full-width {
-  &:extend(.full-width);
-}
-.search-box {
-  &.right-icon {
-    input {
-      padding-right: 34px;
-    }
-  }
-  .search-clear {
-    &:extend(.font-primary);
-    &:focus {
-      background: @background;
-    }
-    position: absolute;
-    font-size: @tiny-icon-size;
-    top: 0;
-    right: 0;
-    width: 34px;
-    height: @full;
-    background: transparent;
-    border-color: transparent;
-    cursor: pointer;
-    &:extend(.first-layer);
-  }
-  position: relative;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
-  .input {
-    font-size: @mini-text-size;
-    font-family: @secondary-font;
-    &.is-normal {
-      height: 2.3rem;
-    }
-    &:disabled {
-      &::placeholder {
-        /* without !important it does not work */
-        color: grey !important;
+  .input-outer {
+    display: flex;
+    align-items: stretch;
+    flex-grow: 1;
+
+    .input-inner {
+      position: relative;
+      display: flex;
+      flex-grow: 1;
+
+      .input {
+        flex-grow: 1;
+        padding: @light-spacing;
+        &:extend(.input-bg);
+        &:extend(.round-corners);
+        box-shadow: none;
+        color: @white;
+
+        &.show-clear-button {
+          padding-right: 2rem;
+        }
+      }
+
+      .clear-button {
+        position: absolute;
+        inset: 0 0 0 auto;
+        font-size: @tiny-icon-size;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: @light-spacing;
+        color: @text-muted;
+      }
+
+      &:not(:last-child) .input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 0;
       }
     }
-    &.invalid {
-      border: 1px solid @red;
-    }
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    .button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  .char-limit {
+    float: right;
+    margin-right: @light-spacing;
+    font-size: @mini-text-size;
+    &:extend(.font-muted);
+    margin-left: auto;
+  }
+
+  .error {
+    margin-top: @light-spacing;
+  }
+
+  // TODO: remove after removing bulma
+  .is-primary:not(.is-danger) {
+    border-color: transparent;
   }
 }

@@ -715,32 +715,8 @@ button {
   }
 }
 
-//Inputs
-.input {
-  &:extend(.input-bg);
-  &:extend(.font-primary);
-  box-shadow: none !important;
-  &:active,
-  &:focus {
-    background: @semitransparent-lightest-gradient !important;
-  }
-}
-
 ::placeholder {
   color: @text-muted !important;
-}
-
-.is-primary.input,
-.is-dark.input {
-  &:extend(.input-bg);
-  &:extend(.font-primary);
-  border-color: transparent;
-
-  &:active,
-  &:focus {
-    border: none;
-    outline: none;
-  }
 }
 
 //Search Input

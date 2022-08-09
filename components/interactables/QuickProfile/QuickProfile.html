@@ -23,7 +23,7 @@
   <TypographyText> {{ user.status }} </TypographyText>
   <template v-if="!isMe">
     <UiHorizontalRule />
-    <InteractablesInputGroup
+    <InteractablesInput
       v-model="text"
       :placeholder="`${$t('friends.message')} ${user.name}...`"
       @submit="sendMessage"
@@ -31,7 +31,7 @@
       showLimit
     >
       <arrow-right-icon size="1x" />
-    </InteractablesInputGroup>
+    </InteractablesInput>
     <TypographyError
       v-if="isEmptyMessage"
       :text="$t('errors.chat.empty_message_error')"

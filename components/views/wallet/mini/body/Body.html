@@ -5,7 +5,7 @@
   </div>
   <UiSpacer :height="45" />
   <div class="flex-row">
-    <InteractablesInputGroup
+    <InteractablesInput
       v-model="accountID"
       class="input-container"
       size="xs"
@@ -14,7 +14,7 @@
       @submit="searchFriend"
     >
       <check-circle-2-icon size="1x" />
-    </InteractablesInputGroup>
+    </InteractablesInput>
     <InteractablesSelect
       v-model="paymentOption"
       :options="[{ text: 'USD', value: 'usd' }]"

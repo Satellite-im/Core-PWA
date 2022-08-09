@@ -9,17 +9,14 @@
   <template v-if="friends.length > 1">
     <InteractablesInput
       v-model.trim="name"
-      size="small"
-      type="dark"
-      input-kind="text"
+      size="xs"
       :placeholder="$t('pages.chat.new_group_name')"
       :minLength="$Config.chat.groupNameMinLength"
       :maxLength="$Config.chat.groupNameMaxLength"
       :invalid="isInvalidName && Boolean(error)"
-      :watchEnter="true"
-      @watchEnter="confirm"
+      @submit="confirm"
+      :error="error"
     />
-    <TypographyError v-if="error" :text="error" small />
   </template>
   <InteractablesButton
     :type="friends.length ? 'primary' : 'dark'"

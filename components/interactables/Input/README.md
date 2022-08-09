@@ -6,11 +6,15 @@ Generic input component.
 
 ```vue
 <InteractablesInput
-  v-model="something"
-  delete-icon="true"
-  size="small"
-  input-kind="number"
-  type="dark"
+  v-model="input2Text"
+  size="xs"
+  type="number"
+  :loading="inputGroupLoading"
+  @submit="
+    () => {
+      inputGroupLoading = true
+    }
+  "
 />
 ```
 
@@ -18,10 +22,18 @@ Generic input component.
 
 **text** Input display text
 
-**delete-icon** Show delete text icon
-
 **size** Input display size, honors bulma.io sizes
 
 **input-kind** Abstracts generic input type attribute
 
+**disabled** Disables the input button
+
+**action** Action that should happen when the attached button is pressed
+
+**icon** Provide in component slot
+
+**buttonText** Optional attached button text
+
 **label-text** Optional label appended to input
+
+**copy-content** If provided, the button will also copy the content to clipboard
