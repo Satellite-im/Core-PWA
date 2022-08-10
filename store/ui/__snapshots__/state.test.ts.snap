@@ -45,16 +45,12 @@ Object {
     "callToAction": false,
     "changelog": false,
     "createServer": false,
-    "crop": false,
     "error": false,
     "errorNetwork": Object {
       "action": null,
       "isOpen": false,
     },
     "glyph": false,
-    "groupInvite": Object {
-      "isOpen": false,
-    },
     "marketplace": false,
     "newfolder": false,
     "renameFile": false,

@@ -78,16 +78,17 @@
       </div>
     </UiComingSoon>
     <div class="button-wrapper" v-if="isGroup">
-      <div
+      <button
         v-tooltip.bottom="isGroupInviteVisible ? '' : $t('pages.chat.add_member')"
         class="control-button"
-        @click="isGroupInviteVisible = false"
+        @click="isGroupInviteVisible = !isGroupInviteVisible"
       >
         <user-plus-icon size="1x" class="control-icon" />
-      </div>
+      </button>
       <GroupInvite
         v-if="isGroupInviteVisible"
         v-click-outside="() => isGroupInviteVisible = false"
+        @close="isGroupInviteVisible = false"
       />
     </div>
 

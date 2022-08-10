@@ -1,24 +1,21 @@
 .group-icon {
   position: relative;
-  &.unread {
-    position: relative;
 
-    .label {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      font-size: @micro-text-size;
-      border-radius: 16px;
-      line-height: 1.2;
-      padding: 0.1rem 0.27rem;
-      text-align: center;
-      &:extend(.font-primary);
-      font-family: @primary-font;
-    }
+  .label {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: @micro-text-size;
+    border-radius: 16px;
+    line-height: 1.2;
+    padding: 0.1rem 0.27rem;
+    text-align: center;
+    &:extend(.font-primary);
+    font-family: @primary-font;
   }
 
   .circle {
-    &:extend(.bordered);
+    border: @light-border;
     box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
   }
 

@@ -1,8 +1,4 @@
-<div
-  class="group-icon"
-  :class="{unread : members.length > 3 }"
-  :style="`width:${size}px; height:${size}px`"
->
+<div class="group-icon" :style="`width:${size}px; height:${size}px`">
   <div :class="groupClass">
     <div v-for="(member, i) in members.slice(0, 3)" :class="`group-el-${i}`">
       <UiCircle
@@ -13,7 +9,5 @@
       />
     </div>
   </div>
-  <span v-if="members.length > 3" class="label">
-    {{group.members.length}}
-  </span>
+  <!-- <span v-if="members.length > 3" class="label"> {{ members.length }} </span> -->
 </div>
