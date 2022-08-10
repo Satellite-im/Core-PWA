@@ -173,7 +173,7 @@ describe('mutations', () => {
       wallet: false,
       walletMini: false,
     },
-    glyphModalPack: '',
+    glyphModalPackId: '',
     chatbarContent: '',
     replyChatbarMessage: {
       from: '',
@@ -189,7 +189,7 @@ describe('mutations', () => {
       defaultWidth: '24rem',
       floating: false,
       position: [0, 0],
-      route: 'emotes',
+      route: 'emoji',
       show: false,
     },
     address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
@@ -946,10 +946,10 @@ describe('mutations', () => {
     expect(localizedState.showSearchResult).toBeTruthy()
   })
 
-  test('setGlyphModalPack', () => {
+  test('setGlyphModalPackId', () => {
     const localizedState = { ...initialState }
-    mutations.default.setGlyphModalPack(localizedState, 'string')
-    expect(localizedState.glyphModalPack).toBe('string')
+    mutations.default.setGlyphModalPackId(localizedState, 'string')
+    expect(localizedState.glyphModalPackId).toBe('string')
   })
 
   test('toggleModal', () => {
@@ -1344,7 +1344,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -1361,7 +1361,7 @@ describe('mutations', () => {
         defaultWidth: '24rem',
         floating: false,
         position: [0, 0],
-        route: 'emotes',
+        route: 'emoji',
         show: false,
         messages: [],
         unreadMessage: 0,
@@ -1487,7 +1487,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -1504,7 +1504,7 @@ describe('mutations', () => {
         defaultWidth: '24rem',
         floating: false,
         position: [0, 0],
-        route: 'emotes',
+        route: 'emoji',
         show: false,
         messages: [],
         unreadMessage: 0,
@@ -1661,7 +1661,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -1678,7 +1678,7 @@ describe('mutations', () => {
         defaultWidth: '24rem',
         floating: false,
         position: [0, 0],
-        route: 'emotes',
+        route: 'emoji',
         show: false,
         messages: [],
         unreadMessage: 0,
@@ -1812,7 +1812,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -1829,7 +1829,7 @@ describe('mutations', () => {
         defaultWidth: '24rem',
         floating: false,
         position: [0, 0],
-        route: 'emotes',
+        route: 'emoji',
         show: false,
         messages: [],
         unreadMessage: 0,
@@ -1956,7 +1956,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -1973,7 +1973,7 @@ describe('mutations', () => {
         defaultWidth: '24rem',
         floating: false,
         position: [0, 0],
-        route: 'emotes',
+        route: 'emoji',
         show: false,
         messages: [],
         unreadMessage: 0,
@@ -2099,7 +2099,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: undefined,
@@ -2109,7 +2109,7 @@ describe('mutations', () => {
         defaultWidth: '24rem',
         floating: false,
         position: [0, 0],
-        route: 'emotes',
+        route: 'emoji',
         show: false,
         messages: [],
         unreadMessage: 0,

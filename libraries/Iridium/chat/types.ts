@@ -1,8 +1,8 @@
 import { Glyph } from '~/types/ui/glyph'
 
 export type MessageGlyph = {
+  packId: string
   src: string
-  pack: Glyph
 }
 
 export type ConversationMessageType =

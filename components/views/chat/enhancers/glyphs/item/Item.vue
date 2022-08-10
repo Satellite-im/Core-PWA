@@ -62,27 +62,15 @@ export default Vue.extend({
         return
       }
 
-      console.log({
-        conversationId: id,
-        type: 'glyph',
-        glyph: {
-          pack: this.pack,
-          src: this.src,
-        },
-        at: Date.now(),
-        attachments: [],
-      })
-
       await iridium.chat?.sendMessage({
         conversationId: id,
         type: 'glyph',
         body: '',
         glyph: {
-          pack: this.pack,
+          packId: this.pack.id,
           src: this.src,
         },
         at: Date.now(),
-        attachments: [],
       })
 
       this.$store.commit('ui/updateRecentGlyphs', {
@@ -100,5 +88,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Item.less">
-</style>
+<style scoped lang="less" src="./Item.less"></style>

@@ -1,19 +1,21 @@
 .pack-group {
-  margin-top: @light-spacing;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
   .pack-title {
     display: flex;
     align-items: center;
-    font-family: @secondary-font;
+    color: @light;
+    user-select: none;
+    font-size: 0.75rem;
     cursor: pointer;
-    padding-left: @light-spacing;
-    span {
-      margin: 0 @light-spacing;
-    }
+    gap: 0.5rem;
   }
+
   .glyph-list-box {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
     gap: 1rem;
-    margin-top: @light-spacing;
   }
 }

@@ -11,7 +11,15 @@ const lamHash = 'QmbXPoYQcdr96jz2VADQKDG9mFrBeGydReQBD5pqHaKk2W'
 const starWarsHash = 'QmdPyDrRexEcA1EUpeJsm7eaguyqXhM7ugXyY1j1kSJbpc'
 const birdsHash = 'QmVrha8MYr4LEAJDz8ZsW7sywpofUPoxJQC75ntaFxnnwK'
 
-export const Glyphs = {
+export type Pack = {
+  id: string
+  name: string
+  description: string
+  artist: string
+  stickerURLs: string[]
+}
+
+export const Glyphs: { [key: string]: Pack } = {
   astrobunny: {
     name: 'Astrobunny',
     description: 'Short description can go here. Lorem ipsum.',

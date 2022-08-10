@@ -26,13 +26,13 @@
   </button>
   <button
     id="emoji-toggle"
-    v-tooltip.top="$t('ui.emotes')"
-    @click="toggleEnhancers('emotes')"
+    v-tooltip.top="$t('ui.emoji')"
+    @click="toggleEnhancers('emoji')"
     class="control-tooltip-wrap"
   >
     <smile-icon
       size="1x"
-      :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emotes'  ? 'primary' : ''}`"
+      :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emoji'  ? 'primary' : ''}`"
     />
   </button>
   <button
