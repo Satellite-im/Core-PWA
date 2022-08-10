@@ -14,7 +14,22 @@ export default Vue.extend({
     return {
       FriendsTabs,
       friends: iridium.friends.state,
-      tabs: [
+    }
+  },
+  computed: {
+    friendsList(): Friend[] {
+      return Object.values(this.friends.details)
+    },
+    activeTab(): FriendsTabs {
+      return this.$store.state.friends.activeTab
+    },
+    incomingRequests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
+      )
+    },
+    tabs(): Tab[] {
+      return [
         {
           text: this.$t('friends.friends'),
           route: FriendsTabs.Friends,
@@ -30,25 +45,7 @@ export default Vue.extend({
             (r: FriendRequest) => r.incoming && r.status !== 'accepted',
           ).length,
         },
-      ] as Tab[],
-    }
-  },
-  computed: {
-    friendsList(): Friend[] {
-      return Object.values(this.friends.details)
-    },
-    activeTab(): FriendsTabs {
-      return this.$store.state.friends.activeTab
-    },
-    incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-      )
-    },
-  },
-  watch: {
-    incomingRequests(requests: FriendRequest[]) {
-      this.tabs[2].badge = requests.length
+      ]
     },
   },
   methods: {

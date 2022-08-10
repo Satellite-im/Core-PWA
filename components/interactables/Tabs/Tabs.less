@@ -1,4 +1,4 @@
-#tabs {
+.tabs {
   display: flex;
   gap: 32px;
   margin-right: auto;
@@ -14,7 +14,7 @@
 
     &.active {
       color: @secondary-text;
-      border-bottom: 2px solid @flair-color !important;
+      border-bottom: 2px solid @flair-color;
       padding-bottom: calc(@normal-spacing - 2px;);
     }
 
@@ -28,7 +28,7 @@
         content: attr(data-badge);
         text-align: center;
         font-size: 9pt;
-        background-color: var(--flair-color);
+        background-color: @flair-color;
         border-radius: 2px;
         line-height: 0.5;
         padding: 0.25rem 0.15rem;
