@@ -74,6 +74,15 @@ export default class SoundManager {
     this.sounds[sound].stop()
   }
 
+  /** @function
+   * Stops every sound
+   * @name stopEveryPlayingSound
+   * @returns null
+   */
+  stopEveryPlayingSound() {
+    Object.values(this.sounds).map((sound: Howl) => sound.stop())
+  }
+
   setMuteSounds(flag: boolean) {
     Howler.mute(flag)
   }
