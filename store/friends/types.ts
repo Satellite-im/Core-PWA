@@ -1,9 +1,15 @@
-import { PublicKey } from '@solana/web3.js'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 import { FriendAccount } from '~/libraries/Solana/FriendsProgram/FriendsProgram.types'
 import { UserInfo } from '~/libraries/Solana/UsersProgram/UsersProgram'
 
+export enum FriendsTabs {
+  Friends = 'friends',
+  Add = 'add',
+  Requests = 'requests',
+}
+
 export interface FriendsState {
+  activeTab: FriendsTabs
   incomingRequests: IncomingRequest[]
   outgoingRequests: OutgoingRequest[]
   all: Friend[]

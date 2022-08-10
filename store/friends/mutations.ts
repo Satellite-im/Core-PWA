@@ -1,5 +1,5 @@
 import { Conversation } from '../textile/types'
-import { FriendsState } from './types'
+import { FriendsState, FriendsTabs } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
 
 const mutations = {
@@ -104,6 +104,9 @@ const mutations = {
         return user
       })
       .sort((user1, user2) => user2.lastUpdate - user1.lastUpdate)
+  },
+  setActiveTab(state: FriendsState, tab: FriendsTabs) {
+    state.activeTab = tab
   },
 }
 
