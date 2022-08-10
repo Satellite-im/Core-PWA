@@ -101,6 +101,7 @@ export default Vue.extend({
       return (this.details as User).status || 'offline'
     },
     enableRTC(): boolean {
+      // todo- hook up to usermanager
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
         return Object.values(this.friends.state.details).some(
@@ -163,18 +164,6 @@ export default Vue.extend({
      */
     toggleSearchResult() {
       this.searchQuery = ''
-    },
-    /**
-     * @method toggleModal
-     * @param modalName - enum for which modal
-     * @description This updates the state to show/hide the specific modal you pass in
-     * @example toggleModal(ModalWindows.WALLET)
-     */
-    toggleModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: !this.modals.groupInvite.isOpen },
-      })
     },
     // openProfile() {
     //   this.$store.dispatch('ui/showProfile', this.recipient)

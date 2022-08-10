@@ -9,16 +9,17 @@
     </div>
     <div>
       <TypographySubtitle :size="6" :text="transaction.user.name" />
-      <TypographyText
-        :text="`${transaction.state.toUpperCase()} ${transaction.memo ? ' - ' + transaction.memo : ''}`"
-      />
+      <TypographyText>
+        {{ `${transaction.state.toUpperCase()} ${transaction.memo ? ' - ' +
+        transaction.memo : ''}` }}
+      </TypographyText>
     </div>
   </div>
   <div class="tx-amount">
-    <TypographyText
-      :class="getTransactionColor(transaction)"
-      :text="`${transaction.state === 'sent' ? '-' : '+'}${transaction.amount * 0.10}.00`"
-    />
-    <TypographyText text="just now" />
+    <TypographyText :class="getTransactionColor(transaction)">
+      {{ `${transaction.state === 'sent' ? '-' : '+'}${transaction.amount *
+      0.10}.00` }}
+    </TypographyText>
+    <TypographyText> just now </TypographyText>
   </div>
 </div>

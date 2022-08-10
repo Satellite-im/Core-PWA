@@ -29,34 +29,31 @@
       </div>
       <span @click="resetAspectRatio(index, 4, 3)">
         <TypographyText
-          :size="5"
-          :text="' 4:3 '"
           class="subtext aspect-ratio-switcher-option"
           :class="[item.aspectRatioClass === 'iframe-container-4-3' ? 'selected-aspect-ratio-switcher-option' : '']"
-        />
+        >
+          4:3
+        </TypographyText>
       </span>
       <span @click="resetAspectRatio(index, 16, 9)">
         <TypographyText
-          :size="5"
-          :text="' 16:9 '"
           class="subtext aspect-ratio-switcher-option"
           :class="[item.aspectRatioClass === 'iframe-container-16-9' ? 'selected-aspect-ratio-switcher-option' : '']"
-        />
+        >
+          16:9
+        </TypographyText>
       </span>
       <span @click="resetAspectRatio(index, 1, 1)">
         <TypographyText
-          :size="5"
-          :text="' 1:1 '"
           class="subtext aspect-ratio-switcher-option"
           :class="[item.aspectRatioClass === 'iframe-container-1-1' ? 'selected-aspect-ratio-switcher-option' : '']"
-        />
+        >
+          1:1
+        </TypographyText>
       </span>
-
-      <TypographyText
-        :size="5"
-        :text="$t('pages.settings.aspect_ratio_label')"
-        class="subtext aspect-ratio-switcher"
-      />
+      <TypographyText :size="5" class="subtext aspect-ratio-switcher">
+        {{ $t('pages.settings.aspect_ratio_label') }}
+      </TypographyText>
     </div>
     <br />
   </div>

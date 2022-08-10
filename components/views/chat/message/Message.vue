@@ -233,11 +233,11 @@ export default Vue.extend({
       this.$toast.show(this.$t('ui.copied') as string)
     },
     saveImage() {
-      this.$TextileManager.sharedBucket?.pullFile(
-        this.message.payload.id,
-        this.message.payload.name,
-        this.message.payload.size,
-      )
+      // this.$TextileManager.sharedBucket?.pullFile(
+      //   this.message.payload.id,
+      //   this.message.payload.name,
+      //   this.message.payload.size,
+      // )
     },
     /**
      * @method toPng

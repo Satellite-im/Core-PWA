@@ -105,7 +105,6 @@ export default Vue.extend({
      * @example
      */
     emojiReaction(e: MouseEvent, replyID: string) {
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
       this.$store.commit('ui/settingReaction', {
         status: true,
         groupID: this.$props.group.id,

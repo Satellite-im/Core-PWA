@@ -50,7 +50,7 @@ export default Vue.extend({
     /**
      * @returns {string} if directory, child count. if file, size
      */
-    getSubtext(): string {
+    subtext(): string {
       return 'children' in this.item
         ? this.$tc('pages.files.item_count', this.item.children.length)
         : `${this.item.type}┃${this.$filesize(this.item.size)}`
@@ -100,14 +100,6 @@ export default Vue.extend({
      * @description handle file click depending on various hover statuses
      */
     click() {
-      if (this.linkHover) {
-        this.share()
-        return
-      }
-      if (this.heartHover) {
-        this.like()
-        return
-      }
       this.$emit('handle', this.item)
     },
     /**

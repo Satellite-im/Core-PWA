@@ -4,29 +4,51 @@
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
+import { Tab } from '~/types/ui/tab'
+import { FriendsTabs } from '~/store/friends/types'
 
 export default Vue.extend({
   name: 'Friends',
   layout: (ctx) => (ctx.$device.isMobile ? 'mobile' : 'desktop'),
   data() {
     return {
-      route: 'active',
-      friends: iridium.friends?.state,
+      FriendsTabs,
+      friends: iridium.friends.state,
     }
   },
   computed: {
-    friendsList(): Array<Friend> {
-      return iridium.friends?.list
+    friendsList(): Friend[] {
+      return Object.values(this.friends.details)
     },
-    incomingRequests(): Array<FriendRequest> {
-      return iridium.friends?.requestList.filter(
+    activeTab(): FriendsTabs {
+      return this.$store.state.friends.activeTab
+    },
+    incomingRequests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },
-    outgoingRequests(): Array<FriendRequest> {
-      return iridium.friends?.requestList.filter(
-        (r: FriendRequest) => !r.incoming && r.status === 'pending',
-      )
+    tabs(): Tab[] {
+      return [
+        {
+          text: this.$t('friends.friends'),
+          route: FriendsTabs.Friends,
+        },
+        {
+          text: this.$t('friends.add'),
+          route: FriendsTabs.Add,
+        },
+        {
+          text: this.$t('friends.incoming'),
+          route: FriendsTabs.Requests,
+          badge: this.incomingRequests.length,
+        },
+      ]
+    },
+  },
+  methods: {
+    setRoute(route: FriendsTabs): void {
+      this.$store.commit('friends/setActiveTab', route)
     },
   },
 })

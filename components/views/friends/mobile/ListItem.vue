@@ -10,15 +10,20 @@
         <button @click="openChat">
           <message-circle-icon />
         </button>
-        <button>
+        <!-- TODO: Enable when implementing additional options -->
+        <!-- <button>
           <more-vertical-icon />
-        </button>
+        </button> -->
       </template>
       <template v-else>
-        <button v-if="type === 'incoming'" @click="acceptFriendRequest">
+        <button
+          v-if="type === 'incoming'"
+          :disabled="loading"
+          @click="acceptFriendRequest"
+        >
           <user-plus-icon />
         </button>
-        <button>
+        <button :disabled="loading" @click="cancelRequest">
           <trash-icon />
         </button>
       </template>
@@ -29,7 +34,6 @@
 import Vue, { PropType } from 'vue'
 import {
   MessageCircleIcon,
-  MoreVerticalIcon,
   TrashIcon,
   UserPlusIcon,
 } from 'satellite-lucide-icons'
@@ -39,7 +43,6 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     MessageCircleIcon,
-    MoreVerticalIcon,
     TrashIcon,
     UserPlusIcon,
   },
@@ -53,6 +56,11 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      loading: false,
+    }
+  },
   methods: {
     openChat() {
       const conversationId = iridium.chat.directConversationIdFromDid(
@@ -60,7 +68,16 @@ export default Vue.extend({
       )
       this.$router.push(`/mobile/chat/${conversationId}`)
     },
-    acceptFriendRequest() {},
+    async acceptFriendRequest() {
+      this.loading = true
+      await iridium.friends?.requestAccept(this.user.did)
+      this.loading = false
+    },
+    async cancelRequest() {
+      this.loading = true
+      await iridium.friends?.requestReject(this.user.did)
+      this.loading = false
+    },
   },
 })
 </script>
@@ -73,6 +90,7 @@ export default Vue.extend({
   .state {
     flex-shrink: 0;
   }
+
   .text-container {
     flex-grow: 1;
     &:extend(.ellipsis);
@@ -82,10 +100,15 @@ export default Vue.extend({
       &:extend(.ellipsis);
     }
   }
+
   .button-container {
     display: flex;
     flex-shrink: 0;
     gap: 1rem;
+  }
+
+  button:disabled {
+    opacity: 0.5;
   }
 }
 </style>

@@ -1,19 +1,18 @@
 <template>
   <div>
     <InteractablesInput
-      ref="input"
       v-model="friendId"
-      type="primary"
-      size="small"
       :placeholder="$t('friends.search_placeholder')"
       autofocus
-      @update="_searchFriend"
+      @change="_searchFriend"
     />
     <TypographyError v-if="error" :text="$t(error)" />
     <UiLoadersLoadingBar v-else-if="searching" />
     <div v-else-if="!friendId" class="id-container">
       <button class="id-button" @click="copyId">
-        <TypographyText :text="$t('friends.copy_your_id')" class="id" />
+        <TypographyText class="id" color="dark">
+          {{ $t('friends.copy_your_id') }}
+        </TypographyText>
       </button>
     </div>
     <FriendsFriend
@@ -96,9 +95,6 @@ export default Vue.extend({
       this.user = null
       this.friendId = ''
       // @ts-ignore
-      const input = this.$refs.input.$refs.input as HTMLInputElement
-      input.value = ''
-      // @ts-ignore
       this.$toast.show(this.$t('friends.request_sent') as string)
     },
     copyId() {
@@ -123,7 +119,6 @@ export default Vue.extend({
   .id-button {
     .id {
       white-space: nowrap;
-      color: @text-muted;
       padding: 4px 8px;
 
       &:hover {

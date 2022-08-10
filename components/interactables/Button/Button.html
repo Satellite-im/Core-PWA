@@ -1,5 +1,5 @@
 <button
-  :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
+  :class="`button is-button font-size-sm is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
   v-on:click="action"
   :disabled="loading"
   :type="htmlType"
@@ -9,12 +9,7 @@
     <!-- If the button is in the loading state -->
     <div class="spinner" v-if="loading">
       <!-- Loading Spinner -->
-      <UiLoadersSpinner
-        spinning
-        :class="`${loadingText ? 'button-icon' : ''}`"
-      />
-      <!-- Loading Text -->
-      <span v-if="loadingText"> {{ loadingText }} </span>
+      <UiLoadersSpinner spinning />
     </div>
     <!-- Default button state -->
     <div v-else class="content">

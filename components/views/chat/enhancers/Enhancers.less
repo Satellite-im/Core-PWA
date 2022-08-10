@@ -32,61 +32,6 @@
   }
 }
 
-.emoji-picker {
-  font-family: 'Montserrat', sans-serif;
-  &:extend(.full-width);
-  padding: @normal-spacing;
-  box-sizing: border-box;
-  border-radius: 0.5rem;
-}
-.emoji-picker__search {
-  display: flex;
-  margin-bottom: @normal-spacing;
-}
-.input,
-.search-box,
-.emoji-picker__search div {
-  flex: 1;
-  width: @full !important;
-}
-
-.emoji-picker h5 {
-  margin-bottom: 0;
-  color: #b1b1b1;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  cursor: default;
-}
-.emoji-picker .emojis {
-  font-size: 1.5rem;
-  justify-content: space-between;
-
-  & > div {
-    max-width: 100%;
-  }
-}
-.emoji-picker .emojis:after {
-  content: '';
-  flex: auto;
-}
-
-.emoji-picker .emojis div {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
-}
-
-.emoji-picker .emojis span {
-  display: inline-block;
-  cursor: pointer;
-  &:extend(.no-select);
-  padding: 0.2rem;
-  border-radius: 5px;
-}
-.emoji-picker .emojis span:hover {
-  &:extend(.background-semitransparent-dark);
-  cursor: pointer;
-}
-
 @media only screen and (max-width: @mobile-breakpoint) {
   #enhancers {
     width: calc(100vw - @normal-spacing*2);

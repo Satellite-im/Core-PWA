@@ -22,7 +22,6 @@ export enum ModalWindows {
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
-  GROUP_INVITE = 'groupInvite',
 }
 
 export interface EnhancerInfo {
@@ -85,7 +84,7 @@ export interface UIState {
   modals: {
     [key in ModalWindows]: boolean | object
   }
-  glyphModalPack: string
+  glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
   showPinned: boolean

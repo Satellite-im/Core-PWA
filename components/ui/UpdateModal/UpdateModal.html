@@ -15,10 +15,9 @@
         <UiLoadersSpinner spinning />
       </div>
 
-      <TypographyText
-        v-if="requiresUpdate"
-        :text="$t('modal.update_modal.update_required')"
-      />
+      <TypographyText v-if="requiresUpdate">
+        {{ $t('modal.update_modal.update_required') }}
+      </TypographyText>
 
       <UiSpacer :height="50" />
       <div>

@@ -1,51 +1,76 @@
-.input-label {
-  text-align: left;
-}
-.is-full-width {
-  &:extend(.full-width);
-}
-.search-box {
-  &.right-icon {
-    input {
-      padding-right: 34px;
-    }
-  }
-  .search-clear {
-    &:extend(.font-primary);
-    &:focus {
-      background: @background;
-    }
-    position: absolute;
-    font-size: @tiny-icon-size;
-    top: 0;
-    right: 0;
-    width: 34px;
-    height: @full;
-    background: transparent;
-    border-color: transparent;
-    cursor: pointer;
-    &:extend(.first-layer);
-  }
-  position: relative;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
-  .input {
-    font-size: @mini-text-size;
-    font-family: @secondary-font;
-    &.is-normal {
-      height: 2.3rem;
-    }
-    &:disabled {
-      &::placeholder {
-        /* without !important it does not work */
-        color: grey !important;
+  .input-outer {
+    display: flex;
+    align-items: stretch;
+    flex-grow: 1;
+
+    .input-inner {
+      position: relative;
+      display: flex;
+      flex-grow: 1;
+
+      .input {
+        flex-grow: 1;
+        padding: 0.5rem;
+        box-shadow: none;
+        background: @input-gradient 100% center;
+        border: none;
+        border-radius: @corner-rounding;
+        border: 1px solid transparent;
+
+        &.is-danger {
+          border-color: @red;
+        }
+
+        &.show-clear-button {
+          padding-right: 2rem;
+        }
+
+        &:focus {
+          background-image: @semitransparent-lightest-gradient;
+        }
+      }
+
+      .clear-button {
+        position: absolute;
+        inset: 0 0 0 auto;
+        font-size: @tiny-icon-size;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        color: @text-muted;
+      }
+
+      &:not(:last-child) .input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 0;
       }
     }
-    &.invalid {
-      border: 1px solid @red;
-    }
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    .button {
+      border-radius: 0 4px 4px 0;
+      padding: 0.25em 0.75em;
+      display: flex;
+      align-items: center;
+      border-color: transparent;
+    }
+  }
+
+  .char-limit {
+    float: right;
+    margin-right: 0.5rem;
+    font-size: @mini-text-size;
+    &:extend(.font-muted);
+    margin-left: auto;
+  }
+
+  .error {
+    margin-top: 0.5rem;
   }
 }

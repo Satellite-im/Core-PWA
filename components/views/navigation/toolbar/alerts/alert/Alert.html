@@ -7,13 +7,13 @@
   <div class="info-container">
     <div class="head">
       <TypographySubtitle :size="6" :text="alert.content.title" />
-      <TypographyText :text="$dayjs(alert.at).fromNow()" class="timestamp" />
+      <TypographyText color="dark" size="xs">
+        {{ $dayjs(alert.at).fromNow() }}
+      </TypographyText>
     </div>
-    <TypographyText
-      :text="setTranslateText"
-      :title="setTranslateText"
-      class="description"
-    />
+    <TypographyText class="ellipsis" :title="setTranslateText">
+      {{ setTranslateText }}
+    </TypographyText>
   </div>
   <InteractablesClose :action="removeNotification" />
 </div>

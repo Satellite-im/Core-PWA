@@ -1,29 +1,29 @@
 .breadcrumb {
   flex-grow: 1;
-  margin-bottom: 0;
 
   ul {
+    display: flex;
     align-items: center;
-  }
-  a {
-    display: block; // ellipsis only works on block elements
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 200px;
-  }
-  li {
-    font-family: @primary-font;
-    font-size: @text-size;
+    gap: 0.375rem;
 
-    + li::before {
-      &:extend(.font-primary);
-    }
-    &.is-active a {
-      &:extend(.font-muted);
-    }
-    &.disabled a {
-      cursor: not-allowed;
+    li {
+      display: flex;
+      color: @flair-color;
+      + li::before {
+        color: @light;
+        content: '\02192';
+        margin-right: 0.375rem;
+      }
+      &.active {
+        color: @dark;
+      }
+      a {
+        &:extend(.ellipsis);
+        max-width: 200px;
+        svg {
+          color: @flair-color;
+        }
+      }
     }
   }
 }

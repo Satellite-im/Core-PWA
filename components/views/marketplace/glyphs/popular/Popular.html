@@ -11,10 +11,9 @@
         <div v-if="popularGlyph.isSale" class="badge-sale">
           {{ $t('glyphs.sale') }}
         </div>
-        <TypographyText
-          :text="`${popularGlyph.glyph.stickerURLs.length} glyphs`"
-          :size="6"
-        />
+        <TypographyText>
+          {{ `${popularGlyph.glyph.stickerURLs.length} glyphs` }}
+        </TypographyText>
       </div>
     </div>
     <div class="glyph-content">
@@ -31,7 +30,7 @@
         <div class="glyph-name">
           <TypographySubtitle :size="6" :text="popularGlyph.glyph.name" />
         </div>
-        <TypographyText :text="popularGlyph.glyph.description" :size="6" />
+        <TypographyText> {{ popularGlyph.glyph.description }} </TypographyText>
         <div class="btns">
           <InteractablesButton
             type="primary"

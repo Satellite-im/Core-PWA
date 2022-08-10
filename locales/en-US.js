@@ -28,7 +28,7 @@ export default {
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
-    emotes: 'Emoji',
+    emoji: 'Emoji',
     coming_soon: 'Coming Soon',
     glyphs: 'Glyphs',
     fullscreen: 'Fullscreen',
@@ -745,6 +745,8 @@ export default {
     cancel: 'Cancel request',
     request: 'Requests',
     copy_your_id: 'Copy your ID',
+    no_requests: 'No requests found',
+    no_requests_subtitle: 'You have no pending friend requests',
   },
   market_place: {
     title: 'Marketplace\nComing soon',

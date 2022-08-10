@@ -27,7 +27,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends.list,
+      friends: iridium.friends,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC,
@@ -60,25 +60,29 @@ export default Vue.extend({
       if (!participant) {
         return
       }
-      return this.friends.find((f) => f.did === participant.did)
+      return Object.values(this.friends.state.details).find(
+        (f) => f.did === participant.did,
+      )
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
       return Object.values(members)
     },
     enableRTC(): boolean {
-      if (this.isGroup) {
-        const memberIds = this.groupMembers.map((m) => m.id)
-        return this.friends.some(
-          (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
-        )
-      }
-      // Check current recipient is on the user's friends list
-      const friend = this.friends.find(
-        (f) => f.did === (this.details as User)?.did,
-      )
-      return friend?.status === 'online'
+      // todo- hook up to usermanager
+      return false
+      // if (this.isGroup) {
+      //   const memberIds = this.groupMembers.map((m) => m.id)
+      //   return this.friends.some(
+      //     (friend: Friend) =>
+      //       memberIds.includes(friend.did) && friend.status === 'online',
+      //   )
+      // }
+      // // Check current recipient is on the user's friends list
+      // const friend = this.friends.find(
+      //   (f) => f.did === (this.details as User)?.did,
+      // )
+      // return friend?.status === 'online'
     },
   },
   methods: {

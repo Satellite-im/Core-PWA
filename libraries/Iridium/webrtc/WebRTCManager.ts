@@ -399,7 +399,7 @@ export default class WebRTCManager extends Emitter {
           })
       }
 
-      const friends = this.iridium.friends.list
+      const friends = Object.values(this.iridium.friends.state.details)
 
       friends
         .filter((friend) => friend.did && friend.status !== 'online')

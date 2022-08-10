@@ -9,7 +9,6 @@
       size="small"
       :action="() => toggleMute('video')"
       :loading="isLoading"
-      loadingText=""
     >
       <video-icon data-cy="video-unmuted" v-if="!videoMuted" size="1.2x" />
       <video-off-icon data-cy="video-muted" v-else size="1.2x" />
@@ -22,7 +21,6 @@
       data-cy="call-audio"
       :action="() => toggleMute('audio')"
       :loading="isLoading"
-      loadingText=""
     >
       <mic-icon data-cy="audio-unmuted" v-if="!audioMuted" size="1.2x" />
       <mic-off-icon data-cy="audio-muted" v-else size="1.2x" />
@@ -37,7 +35,6 @@
       data-cy="call-screen-share"
       :action="() => toggleMute('screen')"
       :loading="isLoading"
-      loadingText=""
     >
       <screen-share-icon
         data-cy="screen-unmuted"

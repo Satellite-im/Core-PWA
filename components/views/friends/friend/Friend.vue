@@ -61,7 +61,7 @@ export default Vue.extend({
         },
       ]
     },
-    requestIncoming() {
+    requestIncoming(): boolean | null {
       return this.request && this.request.to === iridium.connector?.id
     },
   },

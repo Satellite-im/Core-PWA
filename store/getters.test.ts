@@ -12,7 +12,6 @@ import InitialMediaState from '~/store/media/state'
 import InitialMetaState from '~/store/meta/state'
 import InitialSettingsState from '~/store/settings/state'
 import InitialSoundsState from '~/store/sounds/state'
-import InitialTextileState from '~/store/textile/state'
 import InitialUiState from '~/store/ui/state'
 import InitialVideoState from '~/store/video/state'
 
@@ -49,9 +48,6 @@ export const initialRootState: RootState = {
   },
   sounds: {
     ...InitialSoundsState(),
-  },
-  textile: {
-    ...InitialTextileState(),
   },
   ui: {
     ...InitialUiState(),

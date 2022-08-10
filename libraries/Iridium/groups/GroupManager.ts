@@ -119,6 +119,11 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       type: 'group',
       participants: Object.values(config.members),
     })
+    Vue.set(this.state, id, {
+      id,
+      origin: this.iridium.connector.id,
+      ...config,
+    })
     await this.iridium.connector.set(`/groups/${id}`, {
       id,
       origin: this.iridium.connector.id,

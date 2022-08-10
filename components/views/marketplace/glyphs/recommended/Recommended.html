@@ -4,10 +4,9 @@
       <div class="badges">
         <div v-if="item.isNew" class="badge-new">{{ $t('glyphs.new') }}</div>
         <div v-if="item.isSale" class="badge-sale">{{ $t('glyphs.sale') }}</div>
-        <TypographyText
-          :size="6"
-          :text="`${item.glyph.stickerURLs.length} glyphs`"
-        />
+        <TypographyText>
+          {{ `${item.glyph.stickerURLs.length} glyphs` }}
+        </TypographyText>
       </div>
       <div class="favorite">
         <heart-icon size="1x" />

@@ -13,13 +13,7 @@
     <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.developer.identifier')" />
       <br />
-      <InteractablesInput
-        size="small"
-        input-kind="text"
-        type="dark"
-        readonly
-        v-model="accounts.active"
-      />
+      <InteractablesInput size="xs" readonly v-model="accounts.active" />
     </SettingsUnit>
   </SettingsSection>
 </SettingsPage>

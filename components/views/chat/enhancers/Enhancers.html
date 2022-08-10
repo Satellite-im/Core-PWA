@@ -12,7 +12,7 @@
     <InteractablesButtonGroup
       v-model="route"
       :fullWidth="true"
-      :values="['glyphs','emotes','gif']"
+      :values="['glyphs','emoji','gif']"
     >
       <InteractablesButton type="dark" size="small" text="Glyphs">
         <grid-icon size="1x" />
@@ -31,58 +31,7 @@
     </InteractablesButtonGroup>
   </div>
   <div class="container">
-    <UiSimpleScroll
-      scrollMode="vertical"
-      scrollShow="scroll"
-      v-if="ui.enhancers.route === 'emotes'"
-    >
-      <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
-        <div
-          slot="emoji-picker"
-          ref="emojiPicker"
-          slot-scope="{ emojis, insert }"
-        >
-          <div class="emoji-picker">
-            <div class="emoji-picker__search">
-              <InteractablesInput
-                v-model="search"
-                type="dark"
-                size="small"
-                :placeholder="$t('ui.search')"
-              />
-            </div>
-            <div>
-              <div v-for="(emojiGroup, category) in emojis" :key="category">
-                <TypographyText :text="category" />
-                <div class="emojis">
-                  <div
-                    v-if="category === 'Frequently used' && mostUsedEmojis.length"
-                  >
-                    <span
-                      v-for="(emoji, index) in mostUsedEmojis"
-                      :key="index"
-                      @click="addEmoji(emoji.content, emoji.code)"
-                      :title="index"
-                    >
-                      {{ emoji.content }}
-                    </span>
-                  </div>
-                  <div v-else>
-                    <span
-                      v-for="(emoji, emojiName) in emojiGroup"
-                      :key="emojiName"
-                      @click="addEmoji(emoji, emojiName)"
-                      :title="emojiName"
-                      >{{ emoji }}</span
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </emoji-picker>
-    </UiSimpleScroll>
+    <EnhancersEmoji v-if="ui.enhancers.route === 'emoji'" />
     <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'" />
   </div>
 </div>

@@ -4,6 +4,8 @@ import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export type FileUpdate = 'upload' | 'delete' | 'like' | 'share'
 
+export type DirectoryType = 'default'
+
 interface Shared {
   id: string
   name: string

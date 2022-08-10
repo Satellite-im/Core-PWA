@@ -21,11 +21,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    navigateAddFriends() {
-      this.$router.push({
-        path: this.$device.isMobile ? '/mobile/friends' : '/friends',
-      })
-    },
     lastMessageTimestamp(conversation: Conversation): number {
       const messages = Object.values(
         this.conversations[conversation.id].message,

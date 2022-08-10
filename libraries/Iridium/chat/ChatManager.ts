@@ -177,8 +177,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   /**
-   * @param {string} name new item name
-   * @param {IridiumDirectory} parent empty string if root element
+   * @param {string} friendDid
    * @description fetch direct conversation id based on friend did.
    * significantly faster than Iridium.hash until about 5,000,000 conversation records
    */
@@ -213,6 +212,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     }
+    Vue.set(this.state.conversations, id, conversation)
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
@@ -230,8 +230,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         },
       )
     }
+  }
 
-    Vue.set(this.state.conversations, id, conversation)
+  async deleteConversation(id: Conversation['id']) {
+    if (!this.hasConversation(id)) {
+      return
+    }
+    Vue.delete(this.state.conversations, id)
+    this.set('/conversations', this.state.conversations)
+    // todo - do we need to unsubscribe too?
   }
 
   getConversation(id: Conversation['id']): Conversation {
@@ -371,8 +378,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions.push(payload.reaction)
     }
 
-    this.set(path, reactions)
     Vue.set(message.reactions, did, reactions)
+    this.set(path, reactions)
 
     // broadcast the message to connected peers
     await this.iridium.connector.publish(

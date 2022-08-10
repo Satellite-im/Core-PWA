@@ -3,6 +3,7 @@
 exports[`init should return the initial settings state 1`] = `
 Object {
   "activeConversation": undefined,
+  "activeTab": "add",
   "all": Array [],
   "incomingRequests": Array [],
   "outgoingRequests": Array [],

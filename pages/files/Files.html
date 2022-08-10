@@ -8,7 +8,9 @@
     <FilesControlsSwitch />
   </div>
   <div class="files-view">
-    <TypographyText v-if="!directory.length" :text="$t('pages.files.empty')" />
+    <TypographyText v-if="!directory.length">
+      {{ $t('pages.files.empty') }}
+    </TypographyText>
     <FilesMobileList
       v-else-if="$device.isMobile"
       :directory="directory"

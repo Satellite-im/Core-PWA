@@ -101,6 +101,7 @@ export default Vue.extend({
      */
     async decrypt(redirect = true) {
       try {
+        this.status = 'loading'
         await this.$store.dispatch(
           'accounts/unlock',
           this.pin || (this.isDev ? DEV_PIN : ''),
@@ -118,8 +119,10 @@ export default Vue.extend({
           redirect && this.$router.replace('/')
         }
       } catch (error: any) {
-        this.error = error.message
         this.pin = ''
+        this.error = error.message
+      } finally {
+        this.status = 'idle'
       }
     },
     // Create & store a new pin, then decrypt.
@@ -130,10 +133,13 @@ export default Vue.extend({
      */
     async create() {
       try {
+        this.status = 'loading'
         await this.$store.dispatch('accounts/setPin', this.pin)
         await this.decrypt()
       } catch (error: any) {
         this.error = error.message
+      } finally {
+        this.status = 'idle'
       }
     },
     async deleteAccount() {
@@ -144,8 +150,11 @@ export default Vue.extend({
       location.reload()
     },
     action() {
-      this.status = 'loading'
-      return this.step === 'login' ? this.decrypt() : this.create()
+      if (this.step === 'login') {
+        this.decrypt()
+        return
+      }
+      this.create()
     },
     // FOR DEVELOPMENT PURPOSES ONLY
     async createRandom() {

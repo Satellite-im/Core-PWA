@@ -1,7 +1,9 @@
 <template>
   <div class="voice-user">
     <UiCircle type="random" :seed="user.address" :size="25" />
-    <TypographyText :text="user.name" class="voice-user-name" />
+    <TypographyText class="voice-user-name">
+      {{ user.name }}
+    </TypographyText>
   </div>
 </template>
 

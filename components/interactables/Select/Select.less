@@ -2,11 +2,7 @@
   display: flex;
   flex-direction: column;
   .listbox-label {
-    font-family: @secondary-font;
-    font-size: 12px;
-    text-transform: uppercase;
     padding-bottom: @xlight-spacing;
-    display: inline-block;
   }
 }
 
@@ -52,6 +48,7 @@ li {
   display: block;
   padding: @light-spacing @xlarge-spacing @light-spacing @normal-spacing;
   position: relative;
+  user-select: none;
   &:focus,
   &:hover,
   &[aria-selected='true'] {

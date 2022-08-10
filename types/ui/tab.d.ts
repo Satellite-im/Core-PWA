@@ -1,4 +1,7 @@
+import { TranslateResult } from 'vue-i18n'
+
 export interface Tab {
-  text: string
+  text: string | TranslateResult
   route: string
+  badge?: number
 }

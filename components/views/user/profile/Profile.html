@@ -14,7 +14,7 @@
         <div class="intro">
           <div>
             <TypographyTitle :text="ui.userProfile.name" :size="6" />
-            <TypographyText :text="ui.userProfile.status" :size="6" />
+            <TypographyText>{{ ui.userProfile.status }}</TypographyText>
           </div>
           <!-- todo: add real badges and conditional -->
           <div class="badges">
@@ -64,9 +64,9 @@
 
       <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
         <UserProfileAbout v-if="route === 'about'" />
-        <UserProfileAccounts v-if="route==='accounts'" />
-        <div v-if="route==='activity'">activity</div>
-        <div v-if="route==='mutual'">mutual</div>
+        <UserProfileAccounts v-if="route === 'accounts'" />
+        <div v-if="route === 'activity'">activity</div>
+        <div v-if="route === 'mutual'">mutual</div>
       </UiSimpleScroll>
     </div>
   </div>

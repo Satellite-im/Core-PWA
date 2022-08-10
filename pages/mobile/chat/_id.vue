@@ -9,9 +9,7 @@
           <InteractablesInput
             class="search"
             :placeholder="`${$t('ui.search')}...`"
-            :delete-icon="true"
-            input-kind="text"
-            type="dark"
+            show-clear
           />
           <button v-if="$route.params.id" @click="swiper.slideNext()">
             <menu-icon class="toggle-sidebar" size="1.5x" />

@@ -5,17 +5,16 @@
   </div>
   <UiSpacer :height="45" />
   <div class="flex-row">
-    <InteractablesInputGroup
-      class="input-container"
-      type="primary"
-      size="small"
-      :placeholder="$t('friends.search_placeholder')"
-      :action="searchFriend"
+    <InteractablesInput
       v-model="accountID"
+      class="input-container"
+      size="xs"
+      :placeholder="$t('friends.search_placeholder')"
       :loading="searching"
+      @submit="searchFriend"
     >
       <check-circle-2-icon size="1x" />
-    </InteractablesInputGroup>
+    </InteractablesInput>
     <InteractablesSelect
       v-model="paymentOption"
       :options="[{ text: 'USD', value: 'usd' }]"
@@ -45,26 +44,21 @@
     :value="$t('wallet.mini_wallet.details')"
   />
   <div class="details">
-    <TypographyText
-      :size="6"
-      :text="$t('wallet.mini_wallet.to') + '0x0000000...'"
-    />
-    <TypographyText
-      :size="6"
-      :text="$t('wallet.mini_wallet.from') + '0x0000000...'"
-    />
-    <TypographyText
-      :size="6"
-      :text="$t('wallet.mini_wallet.amount') + '0.00'"
-    />
-    <TypographyText
-      :size="6"
-      :text="$t('wallet.mini_wallet.currency') + 'USDC'"
-    />
+    <TypographyText>
+      {{ $t('wallet.mini_wallet.to') + '0x0000000...' }}
+    </TypographyText>
+    <TypographyText>
+      {{ $t('wallet.mini_wallet.from') + '0x0000000...' }}
+    </TypographyText>
+    <TypographyText>
+      {{ $t('wallet.mini_wallet.amount') + '0.00' }}
+    </TypographyText>
+    <TypographyText>
+      {{ $t('wallet.mini_wallet.currency') + 'USDC' }}
+    </TypographyText>
     <br />
-    <TypographyText
-      :size="6"
-      :text="$t('wallet.mini_wallet.txid') + 'AU28CC012ECX0Z'"
-    />
+    <TypographyText>
+      {{ $t('wallet.mini_wallet.txid') + 'AU28CC012ECX0Z' }}
+    </TypographyText>
   </div>
 </div>

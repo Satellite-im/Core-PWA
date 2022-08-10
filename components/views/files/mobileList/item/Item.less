@@ -6,7 +6,7 @@
   border-radius: @corner-rounding-smaller;
   overflow: hidden;
   padding-right: @normal-spacing;
-  &:extend(.background-semitransparent-light);
+  background: @file-background;
 
   .icon-container {
     display: flex;
@@ -44,28 +44,8 @@
     .text-container {
       min-width: 0;
 
-      .maintext-container {
-        &:extend(.ellipsis);
-        .maintext {
-          &:extend(.ellipsis);
-        }
-
-        .file-type-icon {
-          display: none;
-        }
-      }
-    }
-
-    .subtext {
-      &:extend(.ellipsis);
-      .subtext-primary {
-        &:extend(.ellipsis);
-        &:extend(.font-muted);
-      }
-
-      .subtext-secondary {
-        white-space: nowrap;
-        &:extend(.font-muted);
+      .file-type-icon {
+        display: none;
       }
     }
   }
