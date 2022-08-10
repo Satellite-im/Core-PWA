@@ -31,11 +31,11 @@ export default Vue.extend({
   },
   methods: {
     download() {
-      this.$TextileManager.sharedBucket?.pullFile(
-        this.file.id,
-        this.file.name,
-        this.file.size,
-      )
+      // this.$TextileManager.sharedBucket?.pullFile(
+      //   this.file.id,
+      //   this.file.name,
+      //   this.file.size,
+      // )
     },
   },
 })

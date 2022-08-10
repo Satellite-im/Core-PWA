@@ -1,15 +1,11 @@
 import Mousetrap from 'mousetrap'
-import Vue from 'vue'
 import { Position, SettingsRoutes, UIState } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
-import TextileManager from '~/libraries/Textile/TextileManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
 import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
-import { TextileError } from '~/store/textile/types'
-import { AlertState, AlertType } from '~/libraries/ui/Alerts'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 const $Sounds = new SoundManager()
@@ -63,61 +59,6 @@ export default {
     )
   },
   /**
-   * @method setNotifications
-   * @description Collects all existing notifications for a user
-   */
-  async setNotifications({ commit }: ActionsArguments<UIState>) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-    if (!$TextileManager.notificationManager?.isInitialized()) {
-      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
-    }
-    const notifications =
-      await $TextileManager.notificationManager?.getnotifications()
-    commit('setNotifications', notifications)
-  },
-  async sendNotification(
-    { commit, rootState }: ActionsArguments<UIState>,
-    payload: {
-      message: string
-      from: string
-      groupName?: string
-      id: string
-      groupId?: string
-      groupURL?: string
-      fromAddress?: string
-      imageHash: string
-      activeUser?: string
-      title: string
-      type: AlertType
-    },
-  ) {
-    const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-
-    if (!$TextileManager.notificationManager?.isInitialized()) {
-      throw new Error(TextileError.MAILBOX_MANAGER_NOT_INITIALIZED)
-    }
-    if (rootState.textile.activeConversation !== payload.fromAddress) {
-      const userId = $TextileManager.getIdentityPublicKey()
-      if (userId !== payload.fromAddress) {
-        const notificationResponse =
-          await $TextileManager.notificationManager?.sendNotification({
-            from: payload.from,
-            title: payload.title,
-            groupName: payload.groupName,
-            groupId: payload.groupId,
-            id: payload.id,
-            notificationState: AlertState.UNREAD,
-            fromAddress: payload.fromAddress,
-            imageHash: payload.imageHash,
-            message: payload.message,
-            type: payload.type,
-          })
-        commit('sendNotification', notificationResponse)
-      }
-    }
-  },
-  /**
    * @method clearKeybinds
    * @description Unbinds all current keybindings with Mousetrap
    * @example destroyed (){ clearKeybinds() }
@@ -164,28 +105,11 @@ export default {
     commit('quickProfile', selectedUser)
   },
   async showProfile({ commit }: ActionsArguments<UIState>, user: Friend) {
-    if (!user) {
-      return
-    }
-    let metadata = null
-    if (!user.metadata) {
-      const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-      metadata = await $TextileManager.metadataManager?.getFriendMetadata(
-        user.address,
-      )
-    }
     commit('toggleModal', {
       name: 'userProfile',
       state: true,
     })
-    const friend = {
-      ...user,
-    }
-    if (metadata) {
-      friend.metadata = metadata
-      commit('friends/updateFriend', friend, { root: true })
-    }
-    commit('setUserProfile', friend)
+    commit('setUserProfile', user)
   },
 
   displayConsentSettings({ commit }: ActionsArguments<UIState>) {

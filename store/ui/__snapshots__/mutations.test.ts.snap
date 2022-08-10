@@ -99,15 +99,3 @@ Array [
   },
 ]
 `;
-
-exports[`mutations.default.sendMessage 0 1`] = `undefined`;
-
-exports[`mutations.default.sendMessage 1 1`] = `undefined`;
-
-exports[`mutations.default.sendMessage 2 1`] = `undefined`;
-
-exports[`mutations.default.sendMessage 3 1`] = `undefined`;
-
-exports[`mutations.default.sendMessage 4 1`] = `undefined`;
-
-exports[`mutations.default.sendMessage 5 1`] = `undefined`;
