@@ -100,5 +100,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Item.less">
-</style>
+<style scoped lang="less" src="./Item.less"></style>

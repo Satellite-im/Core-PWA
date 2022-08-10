@@ -3,9 +3,13 @@
   align-items: center;
   justify-content: space-around;
   gap: @light-spacing;
-  .timer {
-    &:extend(.background-semitransparent-dark);
-    padding: @xlight-spacing @light-spacing;
+  .timer,
+  .market-place {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    height: 100%;
     &:extend(.round-corners);
   }
   .pack-list {
