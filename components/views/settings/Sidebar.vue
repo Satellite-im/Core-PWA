@@ -104,6 +104,7 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .menu {
+  overflow-y: auto;
   &:extend(.no-select);
 
   .menu-label {

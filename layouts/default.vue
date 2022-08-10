@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="`theme-${iridium.settings.state.theme}`">
-    <UiModal v-if="$store.state.ui.modals.errorNetwork.isOpen" nopad>
+    <UiModal v-if="$store.state.ui.modals.errorNetwork.isOpen">
       <UiPopupsErrorNetwork />
     </UiModal>
     <Nuxt />
@@ -24,6 +24,8 @@ useMeta()
 <style lang="less" scoped>
 #app {
   display: flex;
+  justify-content: center;
   height: 100%;
+  overflow-y: auto;
 }
 </style>

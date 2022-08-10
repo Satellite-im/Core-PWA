@@ -15,7 +15,7 @@
         :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
       />
     </UiModal> -->
-    <UiModal
+    <!-- <UiModal
       v-if="ui.modals.error"
       :title="$t('popups.error.title')"
       @close="toggleModal(ModalWindows.ERROR)"
@@ -25,7 +25,7 @@
         :close-modal="() => toggleModal(ModalWindows.ERROR)"
         :set-close-timeout="5000"
       />
-    </UiModal>
+    </UiModal> -->
     <UiModal v-if="webrtc.incomingCall">
       <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
     </UiModal>
