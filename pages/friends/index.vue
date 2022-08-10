@@ -11,20 +11,20 @@ export default Vue.extend({
   data() {
     return {
       route: 'active',
-      friends: iridium.friends?.state,
+      friends: iridium.friends.state,
     }
   },
   computed: {
-    friendsList(): Array<Friend> {
-      return iridium.friends?.list
+    friendsList(): Friend[] {
+      return Object.values(this.friends.details)
     },
-    incomingRequests(): Array<FriendRequest> {
-      return iridium.friends?.requestList.filter(
+    incomingRequests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },
-    outgoingRequests(): Array<FriendRequest> {
-      return iridium.friends?.requestList.filter(
+    outgoingRequests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
     },
