@@ -19,7 +19,12 @@
         box-shadow: none;
         background: @input-gradient 100% center;
         border: none;
-        &:extend(.round-corners);
+        border-radius: @corner-rounding;
+        border: 1px solid transparent;
+
+        &.is-danger {
+          border-color: @red;
+        }
 
         &.show-clear-button {
           padding-right: 2rem;
@@ -53,6 +58,7 @@
       padding: 0.25em 0.75em;
       display: flex;
       align-items: center;
+      border-color: transparent;
     }
   }
 
@@ -66,10 +72,5 @@
 
   .error {
     margin-top: 0.5rem;
-  }
-
-  // TODO: remove after removing bulma
-  .is-primary:not(.is-danger) {
-    border-color: transparent;
   }
 }
