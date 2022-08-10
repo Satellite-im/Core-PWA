@@ -1,8 +1,8 @@
 <template>
   <div>
     <TypographyHorizontalRuleText plaintext value="OR" />
-    <TypographyTitle :size="6" :text="$t('friends.add_via_qr')" />
-    <TypographyText>
+    <TypographyText as="h3"> {{ $t('friends.add_via_qr') }} </TypographyText>
+    <TypographyText as="h4">
       {{ $t('friends.add_qrcode_description') }}
     </TypographyText>
     <div class="card">

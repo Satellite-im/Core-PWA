@@ -1,17 +1,12 @@
 .friends {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
   padding: @normal-spacing;
-  gap: 16px;
+  width: 100%;
 
-  .col {
-    flex: 1;
-  }
-
-  .friends-list {
-    min-width: 320px;
+  .main-content {
+    display: flex;
+    overflow-y: scroll;
+    gap: 16px;
+    max-width: 1250px;
   }
 }
 
@@ -29,4 +24,29 @@
 
 .padded_divider {
   padding: @light-spacing @normal-spacing;
+}
+
+.tab-container {
+  padding: 0 @large-spacing;
+  border-bottom: 1px solid rgba(@gray, 0.5);
+}
+
+.buttons {
+  padding-bottom: @normal-spacing;
+  margin-left: auto;
+}
+
+.empty-friends-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0;
+
+  .empty-friends {
+    max-width: 320px;
+
+    &-side {
+      max-width: 240px;
+    }
+  }
 }

@@ -744,6 +744,8 @@ export default {
     cancel: 'Cancel request',
     request: 'Requests',
     copy_your_id: 'Copy your ID',
+    no_requests: 'No requests found',
+    no_requests_subtitle: 'You have no pending friend requests',
   },
   market_place: {
     title: 'Marketplace\nComing soon',

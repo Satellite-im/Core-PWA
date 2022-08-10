@@ -2,8 +2,10 @@
   <div class="title-container">
     <InteractablesSidebarToggle v-if="!showSidebar" />
     <div>
-      <TypographyTitle :size="6" :text="$t('friends.add')" />
-      <TypographyText> {{ $t('friends.add_description') }} </TypographyText>
+      <TypographyText as="h3"> {{$t('friends.add') }} </TypographyText>
+      <TypographyText as="h4">
+        {{ $t('friends.add_description') }}
+      </TypographyText>
     </div>
   </div>
   <FriendsSearch />
