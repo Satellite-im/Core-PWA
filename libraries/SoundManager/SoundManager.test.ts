@@ -60,7 +60,7 @@ describe('Manage sounds', () => {
 
   test('sound stops', () => {
     const spy = jest.spyOn(inst.sounds[Sounds.CALL], 'stop')
-    const result: any = inst.stopSound(Sounds.CALL)
+    const result: any = inst.stopSounds([Sounds.CALL])
 
     expect(spy).toHaveBeenCalled()
     expect(result).toMatchSnapshot()

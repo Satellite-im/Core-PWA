@@ -14,12 +14,24 @@ export default {
     const status = state[call]
     if (status) $Sounds.playSound(call)
   },
-  stopSound({ state }: ActionsArguments<SoundsState>, call: Sounds) {
-    const status = state[call]
-    if (status) $Sounds.stopSound(call)
+  /**
+   * @method stopSounds
+   * @description stops the specified sounds
+   * @param soundList sounds list to stop
+   */
+  stopSounds(
+    { state }: ActionsArguments<SoundsState>,
+    soundList: Array<Sounds>,
+  ) {
+    if (soundList.length) $Sounds.stopSounds(soundList)
   },
-  stopEveryPlayingSound({ state }: ActionsArguments<SoundsState>) {
-    $Sounds.stopEveryPlayingSound()
+  /**
+   * @method playingSounds
+   * @description detects which sound is played
+   * @return returns an array with the sounds that are currently playing
+   */
+  playingSounds({ state }: ActionsArguments<SoundsState>) {
+    return $Sounds.playingSounds()
   },
   setMuteSounds({ state }: ActionsArguments<SoundsState>, flag: boolean) {
     $Sounds.setMuteSounds(flag)

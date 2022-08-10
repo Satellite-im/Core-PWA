@@ -14,7 +14,7 @@ export default {
     const { activeCall } = iridium.webRTC.state
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
 
-    dispatch('sounds/stopEveryPlayingSound', null, { root: true })
+    dispatch('sounds/stopSounds', [Sounds.MUTE, Sounds.UNMUTE], { root: true })
     dispatch('sounds/playSound', state.muted ? Sounds.MUTE : Sounds.UNMUTE, {
       root: true,
     })
@@ -39,13 +39,17 @@ export default {
    */
   toggleDeafen({ commit, dispatch, state }: any) {
     const deafened = state.deafened
-    dispatch('sounds/stopEveryPlayingSound', null, { root: true })
+    dispatch(
+      'sounds/stopSounds',
+      [Sounds.MUTE, Sounds.UNMUTE, Sounds.DEAFEN, Sounds.UNDEAFEN],
+      { root: true },
+    )
     if (!deafened) {
       dispatch('sounds/playSound', Sounds.DEAFEN, { root: true })
       dispatch('sounds/setMuteSounds', true, { root: true })
     } else {
-      dispatch('sounds/setMuteSounds', false, { root: true })
       dispatch('sounds/playSound', Sounds.UNDEAFEN, { root: true })
+      dispatch('sounds/setMuteSounds', false, { root: true })
     }
     commit('deafen')
   },

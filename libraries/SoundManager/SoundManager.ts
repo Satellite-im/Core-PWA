@@ -58,29 +58,30 @@ export default class SoundManager {
    */
   playSound(sound: Sounds) {
     this.existsSound(sound)
-
     this.sounds[sound].play()
   }
 
   /** @function
-   * Stops a specified sound
-   * @name stop
-   * @argument sound Name of the sound file to play.
+   * Stops specified sounds
+   * @name stopSounds
+   * @argument soundList Array of the sound file to stop.
    * @returns null
    */
-  stopSound(sound: Sounds) {
-    this.existsSound(sound)
-
-    this.sounds[sound].stop()
+  stopSounds(soundList: Array<Sounds>) {
+    soundList.map((sound: Sounds) => {
+      this.existsSound(sound)
+      this.sounds[sound].stop()
+      return null
+    })
   }
 
   /** @function
-   * Stops every sound
-   * @name stopEveryPlayingSound
-   * @returns null
+   * Pauses specified sounds
+   * @name playingSounds
+   * @returns array of sounds that are currently playing
    */
-  stopEveryPlayingSound() {
-    Object.values(this.sounds).map((sound: Howl) => sound.stop())
+  playingSounds() {
+    return Object.keys(this.sounds).filter((s: string) => this.isPlaying(s))
   }
 
   setMuteSounds(flag: boolean) {
