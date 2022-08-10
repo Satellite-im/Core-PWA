@@ -113,7 +113,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ([, { topic }]) => topic === message.payload.body.topic,
       ) || []
     if (!conversationId || !subscription) {
-      throw new Error('subscription not requested')
+      return
     }
     if (subscription?.connected) {
       throw new Error('subscription already connected')
@@ -395,7 +395,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const conversation = this.getConversation(conversationId)
 
     return conversation.participants.filter((participant) => {
-      return participant.peerId !== this.iridium.connector?.peerId
+      return participant.did !== this.iridium.connector?.id
     })
   }
 

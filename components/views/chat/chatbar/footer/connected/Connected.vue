@@ -7,6 +7,7 @@ import { CircleIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import { ConversationParticipant } from '~/store/conversation/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   components: {
@@ -21,19 +22,20 @@ export default Vue.extend({
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
     }),
+    conversationId(): Conversation['id'] | undefined {
+      return this.$route.params.id
+    },
     otherParticipants() {
-      const conversationId = this.$route.params.id
-      if (!conversationId) {
+      if (!this.conversationId) {
         return
       }
-      return this.chat.getOtherParticipants(conversationId)
+      return this.chat.getOtherParticipants(this.conversationId)
     },
     onlineParticipants() {
-      const conversationId = this.$route.params.id
-      if (!conversationId) {
+      if (!this.conversationId) {
         return
       }
-      return this.chat.getOnlineParticipants(conversationId)
+      return this.chat.getOnlineParticipants(this.conversationId)
     },
     /**
      * @method participantsText

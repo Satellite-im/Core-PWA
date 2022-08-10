@@ -265,7 +265,6 @@ export default {
     const imagePath = await uploadPicture(userData.image)
     const profile = {
       did: iridium.connector?.id,
-      peerId: iridium.connector?.peerId,
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
@@ -326,17 +325,6 @@ export default {
     rootState,
     state,
   }: ActionsArguments<AccountsState>) {
-    db.initializeSearchIndexes()
-
-    const { pin } = state
-    await dispatch('loadIridium', {
-      pin,
-    })
-
-    if (!iridium.connector?.peerId) {
-      return
-    }
-
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
   async connectWallet({

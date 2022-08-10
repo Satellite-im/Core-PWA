@@ -13,7 +13,6 @@
     <video
       class="video-stream"
       data-cy="video-stream"
-      :class="{flip: flipVideo && isLocal}"
       :src-object.prop="videoStream"
       playsinline
       :id="`${isLocal ? 'local' : 'remote'}-video-${user.address}`"

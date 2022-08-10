@@ -52,7 +52,7 @@ export default Vue.extend({
       const conversation = iridium.chat?.getConversation(id)
 
       return conversation?.participants.find((participant) => {
-        return participant.peerId === iridium.connector?.peerId
+        return participant.did === iridium.connector?.id
       })
     },
     remoteParticipants() {
@@ -65,7 +65,7 @@ export default Vue.extend({
       const conversation = iridium.chat?.getConversation(id)
 
       return conversation?.participants.filter((participant) => {
-        return participant.peerId !== iridium.connector?.peerId
+        return participant.did !== iridium.connector?.id
       })
     },
   },

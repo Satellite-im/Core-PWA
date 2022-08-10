@@ -11,11 +11,11 @@ export interface WebRTCState {
   streamMuted: StreamMutedState
   activeCall?: {
     callId: string
-    peerId: string
+    did: string
   } | null
   incomingCall?: {
     callId: string
-    peerId: string
+    did: string
     type: 'group' | 'friend'
   } | null
   createdAt: number

@@ -74,7 +74,6 @@ export enum ConversationActivity {
 }
 
 export type ConversationParticipant = {
-  peerId?: string
   address: string
   name?: string // will be undefined for self
   profilePicture?: string

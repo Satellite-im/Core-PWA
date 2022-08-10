@@ -1,59 +1,54 @@
 <template>
-  <div class="test">
-    <div
-      ref="pip"
-      class="container"
-      :style="{
-        transform: transform,
-        width: `${elWidth}px`,
-        height: `${elHeight}px`,
-      }"
-      :class="{ pointer: isDragging }"
-      @mousedown.stop="mouseDown"
-    >
-      <slot />
-      <!-- <div class="content-container">
-        <div class="content-item"></div>
-        <div class="content-item"></div>
-        <div class="content-item"></div>
-        <div class="content-item"></div>
-      </div> -->
-    </div>
-    <!-- <div class="grid-container">
-      <div class="grid-item">1</div>
-      <div class="grid-item">2</div>
-      <div class="grid-item">3</div>
-      <div class="grid-item">4</div>
-      <div class="grid-item">5</div>
-      <div class="grid-item">6</div>
-      <div class="grid-item">7</div>
-      <div class="grid-item">8</div>
-    </div> -->
+  <div
+    ref="pip"
+    class="pip-container"
+    :style="{
+      transform: transform,
+      width: `${elWidth}px`,
+      height: `${elHeight}px`,
+    }"
+    :class="{ dragging: isDragging }"
+    @mousedown.stop="mouseDown"
+    @dblclick="doubleClick"
+  >
+    <slot :dragging="isDragging" />
   </div>
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { throttle } from 'lodash'
-import Vue, { PropType } from 'vue'
+import { Config } from '~/config'
+
+type ColumnType = typeof Config.pip.columns[number]
+type RowType = typeof Config.pip.rows[number]
 
 type QuarterType = {
-  x: 0 | 1
-  y: 0 | 1 | 2 | 3
+  x: ColumnType
+  y: RowType
 }
 
-const MARGIN = 80
+function isLeftButton(e: MouseEvent) {
+  const evt = e || window.event
+  if ('buttons' in evt) {
+    return evt.buttons === 1
+  }
+  const button = evt.which || evt.button
+  return button === 1
+}
 
 export default Vue.extend({
   data() {
     return {
-      isDragging: false,
-      x: MARGIN,
-      y: MARGIN,
+      x: Config.pip.windowMargin,
+      y: Config.pip.windowMargin,
       offsetX: 0,
       offsetY: 0,
       elWidth: 320,
       elHeight: 180,
-      quarter: { x: 0, y: 0 } as QuarterType,
+      quarter: { x: Config.pip.columns.length - 1, y: 0 } as QuarterType,
+      isDragging: false,
+      isEnlarged: false,
     }
   },
   computed: {
@@ -70,8 +65,8 @@ export default Vue.extend({
   },
   methods: {
     calcPosition() {
-      const blockWidth = window.innerWidth / 2
-      const blockHeight = window.innerHeight / 4
+      const blockWidth = window.innerWidth / Config.pip.columns.length
+      const blockHeight = window.innerHeight / Config.pip.rows.length
 
       const containerCenter = {
         x: this.x + this.elWidth / 2,
@@ -84,41 +79,43 @@ export default Vue.extend({
       }
     },
     moveToQuarter(quarter: QuarterType) {
-      const blockHeight = window.innerHeight / 4
-      const refHeight = Math.max(blockHeight, this.elHeight)
-      switch (quarter.x) {
-        case 0:
-          this.x = MARGIN
+      const blockHeight = window.innerHeight / Config.pip.rows.length
+      switch (quarter.x > Config.pip.columns.length / 2 - 1) {
+        case false:
+          this.x = Config.pip.windowMargin
           this.y =
             // take into account smaller window height
             blockHeight > this.elHeight
               ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
-              : quarter.y > 1
-              ? window.innerHeight - this.elHeight - MARGIN
-              : MARGIN
+              : quarter.y > Config.pip.rows.length / 2 - 1
+              ? window.innerHeight - this.elHeight - Config.pip.windowMargin
+              : Config.pip.windowMargin
           break
-        case 1:
-          this.x = window.innerWidth - this.elWidth - MARGIN
+        case true:
+          this.x = window.innerWidth - this.elWidth - Config.pip.windowMargin
           this.y =
             // take into account smaller window height
             blockHeight > this.elHeight
               ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
-              : quarter.y > 1
-              ? window.innerHeight - this.elHeight - MARGIN
-              : MARGIN
-          break
-        default:
-          this.x = MARGIN
-          this.y = MARGIN
+              : quarter.y > Config.pip.rows.length / 2 - 1
+              ? window.innerHeight - this.elHeight - Config.pip.windowMargin
+              : Config.pip.windowMargin
           break
       }
     },
     mouseDown(e: MouseEvent) {
+      if (!isLeftButton(e)) return
+      const winOffsetX = (this.$refs.pip as HTMLElement).getBoundingClientRect()
+        .x
+      const winOffsetY = (this.$refs.pip as HTMLElement).getBoundingClientRect()
+        .y
+
       this.isDragging = true
-      this.offsetX = e.offsetX
-      this.offsetY = e.offsetY
+      this.offsetX = e.clientX - winOffsetX
+      this.offsetY = e.clientY - winOffsetY
       document.addEventListener('mouseup', this.mouseUp)
       document.addEventListener('mousemove', this.mouseMove)
+      // TODO: document.body.style.pointerEvents = 'none'
     },
     mouseUp() {
       this.isDragging = false
@@ -126,6 +123,7 @@ export default Vue.extend({
       document.removeEventListener('mousemove', this.mouseMove)
       this.quarter = this.calcPosition() as QuarterType
       this.moveToQuarter(this.quarter)
+      // TODO: document.body.style.pointerEvents = 'auto'
     },
     mouseMove: throttle(
       function (e) {
@@ -146,67 +144,50 @@ export default Vue.extend({
         this.x = finalX
         this.y = finalY
       },
-      100,
+      Config.pip.throttleTime,
       { trailing: false },
     ),
     onResize: throttle(function () {
       this.moveToQuarter(this.quarter)
-    }, 100),
+    }, Config.pip.throttleTime),
+    doubleClick() {
+      this.elWidth =
+        this.elWidth *
+        (!this.isEnlarged
+          ? Config.pip.enlargeFactor
+          : 1 / Config.pip.enlargeFactor)
+      this.elHeight =
+        this.elHeight *
+        (!this.isEnlarged
+          ? Config.pip.enlargeFactor
+          : 1 / Config.pip.enlargeFactor)
+      this.isEnlarged = !this.isEnlarged
+      this.moveToQuarter(this.quarter)
+    },
   },
 })
 </script>
 
 <style scoped lang="less">
-.test {
+.pip-container {
   position: absolute;
-  height: 100%;
-  width: 100%;
-}
-.container {
-  position: absolute;
+  inset: 0;
   /* transition: transform 800ms ease-out; cubic-bezier(0.2, 0.57, 0.67, 1.53)*/
-  transition: transform 500ms cubic-bezier(0.2, 0.885, 0.32, 1.5);
+  transition: all 400ms cubic-bezier(0.2, 0.885, 0.32, 1.5);
   transition-delay: 1ms;
   border-radius: 5px;
-  border: 1px solid;
   box-sizing: border-box;
-  cursor: pointer;
-  z-index: 1000;
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
   overflow: hidden;
+  &:extend(.no-select);
 }
 
-//.pointer {
-//  pointer-events: none;
-//}
-
-.grid-container {
-  user-select: none;
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto auto;
-
-  .grid-item {
-    box-sizing: border-box;
-    border: 1px dashed red;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
-.content-container {
-  user-select: none;
-  pointer-events: none;
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto auto;
-
-  .content-item {
-    box-sizing: border-box;
-    border: 1px dashed orange;
-  }
+.dragging {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 </style>

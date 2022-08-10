@@ -56,11 +56,7 @@ export default Vue.extend({
         return
         // return this.groups.find((g: Group) => g.id === this.callId)
       }
-      let did
-      try {
-        did = Iridium.peerIdToDID(this.incomingCall.peerId)
-      } catch (error) {}
-      return iridium.friends.getFriend(did)
+      return iridium.friends.getFriend(this.incomingCall.did)
     },
     callerAvatar(): string {
       if (!this.caller) {

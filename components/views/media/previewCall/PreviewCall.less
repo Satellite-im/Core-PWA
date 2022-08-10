@@ -32,11 +32,6 @@
     visibility: hidden;
     transition: 0.2s ease-in-out;
   }
-  :deep(.indicators) {
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.2s ease-in-out;
-  }
   :deep(.tag) {
     &:extend(.font-secondary);
     &:extend(.round-corners);
@@ -47,9 +42,8 @@
     padding: 0 @light-spacing;
     background: @semitransparent-dark-gradient;
   }
-  &:hover {
-    .preview-call-button,
-    :deep(.indicators) {
+  &:hover:not(.dragging) {
+    .preview-call-button {
       visibility: visible;
       opacity: 0.5;
     }

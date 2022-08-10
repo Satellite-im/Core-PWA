@@ -109,7 +109,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   /**
    * @method exists
    * @description Check if we are connected to a given peer by ID
-   * @param peerId identifier of peer we're seeking
+   * @param callId identifier of peer we're seeking
    * @returns
    * @example
    */
@@ -120,7 +120,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   /**
    * @method getCall
    * @description Get a Call from the list of connected calls
-   * @param peerId identifier of group or peer we're seeking
+   * @param callId identifier of group or peer we're seeking
    * @returns
    * @example
    */
@@ -131,7 +131,7 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
   /**
    * @method destroyCall
    * @description Remove a call from the list of connected calls
-   * @param peerId identifier of group or peer we're seeking
+   * @param callId identifier of group or peer we're seeking
    */
   destroyCall(callId: string) {
     const call = this.calls.get(callId)

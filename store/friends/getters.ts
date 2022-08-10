@@ -91,7 +91,7 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
   ): Friend | undefined => {
     return state.all.find(
       (friend: Friend) =>
-        friend.address === iridium.webRTC.state.activeCall?.peerId,
+        friend.address === iridium.webRTC.state.activeCall?.did,
     )
   },
 
@@ -107,7 +107,7 @@ const getters: GetterTree<FriendsState, RootState> & FriendsGetters = {
   ): boolean => {
     return state.all.some(
       (friend: Friend) =>
-        friend.address === iridium.webRTC.state.activeCall?.peerId,
+        friend.address === iridium.webRTC.state.activeCall?.did,
     )
   },
 

@@ -1,6 +1,6 @@
-<div class="preview-call">
+<div class="preview-call" :class="{ dragging: dragging }">
   <MediaUser
-    :id="`remote_video_${ participant.peerId }`"
+    :id="`remote_video_${ participant.did }`"
     class="preview-call-user"
     data-cy="remote-video"
     :user="participant"

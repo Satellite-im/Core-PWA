@@ -47,8 +47,8 @@ export default Vue.extend({
     },
     screenMuted(): boolean {
       return Boolean(
-        iridium.connector?.peerId &&
-          this.webrtc.state.streamMuted[iridium.connector?.peerId]?.screen,
+        iridium.connector?.id &&
+          this.webrtc.state.streamMuted[iridium.connector?.id]?.screen,
       )
     },
   },
@@ -69,7 +69,7 @@ export default Vue.extend({
         } else {
           await this.webrtc.toggleMute({
             kind,
-            peerId: iridium.connector?.peerId,
+            did: iridium.connector?.id,
           })
         }
       } catch (e: any) {

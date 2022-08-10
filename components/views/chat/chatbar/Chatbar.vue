@@ -28,7 +28,7 @@ const Chatbar = Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends.list,
+      friends: iridium.friends,
       groups: iridium.groups.state,
       webrtc: iridium.webRTC,
     }
@@ -57,7 +57,9 @@ const Chatbar = Vue.extend({
       if (!participant) {
         return
       }
-      return this.friends.find((f) => f.did === participant.did)
+      return Object.values(this.friends.state.details).find(
+        (f) => f.did === participant.did,
+      )
     },
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan
@@ -180,7 +182,7 @@ const Chatbar = Vue.extend({
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
     throttleTyping: throttle(function (ctx) {
-      this.webrtc.sendTyping({ peerId: this.recipient.peerId })
+      this.webrtc.sendTyping({ did: this.recipient.did })
     }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart

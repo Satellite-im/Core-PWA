@@ -47,8 +47,8 @@ export default Vue.extend({
     },
     screenMuted(): boolean {
       return Boolean(
-        iridium.connector?.peerId &&
-          this.webrtc.streamMuted[iridium.connector?.peerId]?.screen,
+        iridium.connector?.id &&
+          this.webrtc.streamMuted[iridium.connector?.id]?.screen,
       )
     },
     inCall(): boolean {

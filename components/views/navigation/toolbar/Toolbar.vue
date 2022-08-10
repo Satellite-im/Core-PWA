@@ -43,7 +43,7 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
-      friends: iridium.friends.list,
+      friends: iridium.friends,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC,
@@ -83,7 +83,9 @@ export default Vue.extend({
       if (!participant) {
         return
       }
-      return this.friends.find((f) => f.did === participant.did)
+      return Object.values(this.friends.state.details).find(
+        (f) => f.did === participant.did,
+      )
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -101,13 +103,13 @@ export default Vue.extend({
     enableRTC(): boolean {
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
-        return this.friends.some(
+        return Object.values(this.friends.state.details).some(
           (friend: Friend) =>
             memberIds.includes(friend.did) && friend.status === 'online',
         )
       }
       // Check current recipient is on the user's friends list
-      const friend = this.friends.find(
+      const friend = Object.values(this.friends.state.details).find(
         (f) => f.did === (this.details as User)?.did,
       )
       return friend?.status === 'online'
@@ -191,7 +193,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.webrtc.state.activeCall) {
+      if (!this.enableRTC || this.webrtc.isActiveCall) {
         return
       }
 

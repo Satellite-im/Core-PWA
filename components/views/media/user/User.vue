@@ -72,14 +72,14 @@ export default Vue.extend({
     }),
     call() {
       return (
-        this.user?.peerId &&
+        this.user?.did &&
         this.webrtc.activeCall?.callId &&
         $WebRTC.getCall(this.webrtc.activeCall.callId)
       )
     },
     muted() {
       return (
-        (this.user?.peerId && this.webrtc.streamMuted[this.user.peerId]) ?? {
+        (this.user?.did && this.webrtc.streamMuted[this.user.did]) ?? {
           audio: true,
           video: true,
           screen: true,
@@ -89,8 +89,8 @@ export default Vue.extend({
     streams() {
       return (
         this.call &&
-        this.user?.peerId &&
-        (this.call as Call).streams[(this.user as User).peerId as string]
+        this.user?.did &&
+        (this.call as Call).streams[(this.user as User).did as string]
       )
     },
     videoStream() {
@@ -120,7 +120,7 @@ export default Vue.extend({
     },
     isPending(): boolean {
       return Boolean(
-        this.user.peerId !== iridium.connector?.peerId &&
+        this.user.did !== iridium.connector?.id &&
           this.call &&
           !this.webrtc.createdAt,
       )

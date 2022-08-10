@@ -9,16 +9,15 @@
       :isLocal="true"
     />
 
-    <div v-for="participant in remoteParticipants">
-      <MediaUser
-        :id="`remote_video_${ participant.peerId }`"
-        data-cy="remote-video"
-        @dblclick="handleDoubleClick('remote_video')"
-        :user="participant"
-        :calling="!participant"
-        :isLocal="false"
-      />
-    </div>
+    <MediaUser
+      v-for="participant in remoteParticipants"
+      :id="`remote_video_${ participant.did }`"
+      data-cy="remote-video"
+      @dblclick="handleDoubleClick('remote_video')"
+      :user="participant"
+      :calling="!participant"
+      :isLocal="false"
+    />
 
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"

@@ -31,14 +31,14 @@ export default Vue.extend({
     },
     audioMuted() {
       return (
-        (iridium.connector?.peerId &&
-          this.webrtc.streamMuted[iridium.connector?.peerId]?.audio) ??
+        (iridium.connector?.id &&
+          this.webrtc.streamMuted[iridium.connector?.id]?.audio) ??
         false
       )
     },
     call() {
       return (
-        iridium.connector?.peerId &&
+        iridium.connector?.id &&
         this.webrtc.activeCall?.callId &&
         $WebRTC.getCall(this.webrtc.activeCall.callId)
       )
@@ -46,8 +46,8 @@ export default Vue.extend({
     streams() {
       return (
         this.call &&
-        iridium.connector?.peerId &&
-        (this.call as Call).streams[iridium.connector?.peerId]
+        iridium.connector?.id &&
+        (this.call as Call).streams[iridium.connector?.id]
       )
     },
     audioStream() {
@@ -68,7 +68,7 @@ export default Vue.extend({
       clearInterval(this.interval)
     }
   },
-  async mounted() {
+  mounted() {
     this.startInterval()
 
     const id = this.activeCall?.callId
@@ -80,7 +80,7 @@ export default Vue.extend({
     const conversation = iridium.chat?.getConversation(id)
 
     this.caller = conversation?.participants.find((participant) => {
-      return participant.peerId !== iridium.connector?.peerId
+      return participant.did !== iridium.connector?.id
     })
   },
   methods: {

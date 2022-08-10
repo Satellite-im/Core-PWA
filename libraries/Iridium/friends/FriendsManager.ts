@@ -87,7 +87,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
                 'registering friend as peer with iridium',
                 friend,
               )
-              await iridium.p2p.addPeer({ did: friend.did, type: 'peer' })
+              await iridium.p2p.addPeer({
+                did: friend.did,
+                type: 'peer',
+              })
               await iridium.p2p.connect(friend.did)
             }
           }),
@@ -108,8 +111,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
                 'registering requested friend as peer with iridium',
                 request,
               )
-              await iridium.p2p.addPeer({ did: request.user.did, type: 'peer' })
-              await iridium.p2p.connect(request.user.did)
+              // await iridium.p2p.addPeer({ did: request.user.did, type: 'peer' })
+              // await iridium.p2p.connect(request.user.did)
             }
           }),
         )

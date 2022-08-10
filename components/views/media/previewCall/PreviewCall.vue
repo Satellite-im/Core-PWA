@@ -9,6 +9,12 @@ export default Vue.extend({
   components: {
     CornerUpLeftIcon,
   },
+  props: {
+    dragging: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       chat: iridium.chat,
@@ -24,7 +30,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    async navigateToActiveConversation() {
+    navigateToActiveConversation() {
       if (!this.conversationId) {
         return
       }
