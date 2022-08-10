@@ -1,12 +1,14 @@
 <div class="input-group">
-  <TypographyLabel v-if="label" class="input-label" :text="label" />
-  <div class="input-outer">
+  <TypographyText v-if="label" as="label" uppercase>
+    {{ label }}
+  </TypographyText>
+  <div class="input-outer" :class="`font-size-${size}`">
     <div class="input-inner">
       <input
         ref="input"
-        class="input font-color-light"
+        class="input font-body font-color-light"
         :class="[
-          `font-size-${size} is-${color}`,
+          `is-${color}`,
           {
             'show-clear-button': showClear,
             'is-danger': error || invalid
@@ -34,7 +36,7 @@
     <button
       v-if="$slots.default"
       class="button font-color-light"
-      :class="[`font-size-${size} is-${color}`, {disabled: disabled}]"
+      :class="[`is-${color}`, {disabled: disabled}]"
       @click="handleSubmit"
       data-cy="submit-input"
     >

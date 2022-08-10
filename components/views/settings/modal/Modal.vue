@@ -24,7 +24,7 @@ export default Vue.extend({
      * @description
      * @example
      */
-    closeModal() {
+    close() {
       this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
     },
   },

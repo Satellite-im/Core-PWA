@@ -77,7 +77,7 @@ export default defineNuxtConfig({
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'normalize.css/normalize.css',
+    '@/assets/styles/reset.css',
     '@/assets/styles/framework/framework.less',
     '@/assets/styles/base.less',
     '@/assets/styles/themes/moonless_night.less',

@@ -2,15 +2,10 @@
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
-    <UiModal
-      v-if="ui.modals.wallet"
-      :close-modal="() => toggleModal(ModalWindows.WALLET)"
-      nopad
-      v-click-outside="() => toggleModal(ModalWindows.WALLET)"
-    >
+    <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
       <WalletPopup />
     </UiModal>
-    <UiModal
+    <!-- <UiModal
       v-if="ui.modals.createServer"
       :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
       :title="$t('servers.create.heading')"
@@ -19,25 +14,24 @@
         v-click-outside="() => toggleModal(ModalWindows.CREATE_SERVER)"
         :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
       />
-    </UiModal>
-    <UiModal
+    </UiModal> -->
+    <!-- <UiModal
       v-if="ui.modals.error"
-      :close-modal="() => toggleModal(ModalWindows.ERROR)"
       :title="$t('popups.error.title')"
+      @close="toggleModal(ModalWindows.ERROR)"
     >
       <UiPopupsError
         v-click-outside="() => toggleModal(ModalWindows.ERROR)"
         :close-modal="() => toggleModal(ModalWindows.ERROR)"
         :set-close-timeout="5000"
       />
-    </UiModal>
-    <UiModal v-if="webrtc.incomingCall" nopad>
+    </UiModal> -->
+    <UiModal v-if="webrtc.incomingCall">
       <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
     </UiModal>
     <UiModal
       v-if="ui.modals.marketplace"
-      :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
-      nopad
+      @close="toggleModal(ModalWindows.MARKETPLACE)"
     >
       <Marketplace
         v-click-outside="() => toggleModal(ModalWindows.MARKETPLACE)"
@@ -47,8 +41,7 @@
     <UiModal
       v-if="ui.modals.glyph"
       :close-modal="() => toggleModal(ModalWindows.GLYPH)"
-      nopad
-      v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
+      @close="() => toggleModal(ModalWindows.GLYPH)"
       small
     >
       <Glyphs
@@ -58,9 +51,7 @@
     </UiModal>
     <UiModal
       v-if="ui.modals.userProfile"
-      :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)"
-      nopad
-      v-click-outside="() => toggleModal(ModalWindows.USER_PROFILE)"
+      @close="() => toggleModal(ModalWindows.USER_PROFILE)"
     >
       <UserProfile
         :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)"
@@ -68,9 +59,7 @@
     </UiModal>
     <UiModal
       v-if="ui.modals.callToAction"
-      :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      nopad
-      v-click-outside="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
       <CallToAction
         :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
@@ -78,29 +67,13 @@
     </UiModal>
     <UiModal
       v-if="ui.modals.renameFile"
-      :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)"
-      v-click-outside="() => toggleModal(ModalWindows.RENAME_FILE)"
-      small
-      nopad
+      @close="toggleModal(ModalWindows.RENAME_FILE)"
     >
       <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
     <UiUpdateModal
       v-if="ui.modals.changelog"
-      v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
-    />
-    <UiModal
-      v-if="ui.modals.renameFile"
-      :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)"
-      v-click-outside="() => toggleModal(ModalWindows.RENAME_FILE)"
-      small
-      nopad
-    >
-      <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
-    </UiModal>
-    <UiUpdateModal
-      v-if="ui.modals.changelog"
-      v-click-outside="() => toggleModal(ModalWindows.CHANGELOG)"
+      @close="() => toggleModal(ModalWindows.CHANGELOG)"
     />
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
     <FilesView v-if="files.preview" />

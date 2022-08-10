@@ -104,7 +104,7 @@ export default Vue.extend({
 </script>
 <style scoped lang="less">
 .menu {
-  -webkit-user-drag: none;
+  overflow-y: auto;
   &:extend(.no-select);
 
   .menu-label {
@@ -115,13 +115,13 @@ export default Vue.extend({
     margin-bottom: @normal-spacing;
 
     li {
-      font-family: @secondary-font;
       &:hover {
         &:extend(.background-semitransparent-light);
       }
       a {
+        display: block;
+        padding: 0.5em 0.75em;
         -webkit-user-drag: none;
-        font-family: @secondary-font;
         &:extend(.no-select);
         &:extend(.font-primary);
 

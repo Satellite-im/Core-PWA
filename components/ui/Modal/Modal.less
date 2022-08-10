@@ -1,65 +1,34 @@
-.modal-card-head {
-  &:extend(.full-width);
-  .title {
-    font-size: @title-text;
-  }
-  background: transparent;
-  border-bottom: none;
-  font-size: @text-size;
-}
-
-.modal-background {
-  &:extend(.blur-less);
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.modal-card-body {
-  &:extend(.round-corners);
-  font-weight: normal;
-  font-size: @text-size;
-  width: fit-content;
-  text-align: left;
-  padding: @normal-spacing;
-  background: transparent;
-  overflow: hidden;
-}
-
-.nopad {
-  padding: 0;
-}
-
-.modal-card {
-  width: fit-content;
-  box-shadow: @ui-shadow;
-  transform-origin: 50% 200%;
-}
-
-.modal-container {
-  &:extend(.sixth-layer);
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
+  inset: 0;
+  backdrop-filter: @light-blur;
+
+  .modal {
+    position: relative;
+    box-shadow: @ui-shadow;
+    border-radius: @corner-rounding;
+    &:extend(.background-semitransparent-dark);
+  }
 }
 
-.close {
-  position: absolute;
-  right: @large-spacing;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  height: 30px;
-  font-size: 14pt;
-  cursor: pointer;
-
-  &:extend(.first-layer);
+.modal-enter-active,
+.modal-leave-active {
+  &,
+  .modal {
+    transition: all @animation-speed-long ease;
+  }
 }
 
-.label {
-  padding: 0;
-}
-
-.modal-card {
-  &:extend(.round-corners);
-  &:extend(.blur-more);
-  &:extend(.background-semitransparent-dark);
+.modal-enter,
+.modal-leave-to {
+  .modal {
+    opacity: 0;
+    transform: perspective(880px) rotateX(0.5deg);
+    filter: @light-blur;
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
@@ -77,14 +46,6 @@
     max-height: @full;
   }
 
-  .modal-card-body {
-    &:extend(.full-width);
-    width: 100vw;
-    & > div {
-      height: @full;
-    }
-  }
-
   .mobile-modal-background {
     width: 100%;
     height: 100%;
@@ -93,28 +54,5 @@
     &:extend(.first-layer);
     background: transparent;
     backdrop-filter: @light-blur;
-  }
-}
-
-.modal-enter-active,
-.modal-leave-active {
-  &,
-  .modal-background,
-  .modal-card {
-    transition: all @animation-speed-long ease;
-  }
-}
-
-.modal-enter,
-.modal-leave-to {
-  .modal-background {
-    background-color: transparent;
-    backdrop-filter: blur(0px);
-  }
-
-  .modal-card {
-    opacity: 0;
-    transform: perspective(880px) rotateX(0.5deg);
-    filter: @light-blur;
   }
 }

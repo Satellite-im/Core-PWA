@@ -16,15 +16,15 @@
     </div>
     <InteractablesInput
       v-model="pin"
-      size="xs"
       type="password"
       :color="error ? 'danger' : 'primary'"
-      data-cy="pin-label"
       :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
       :placeholder="$t('pages.unlock.placeholder')"
       :loading="status === 'loading'"
+      size="sm"
       autofocus
       @submit="action"
+      data-cy="pin-label"
     >
       <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
       <chevron-right-icon size="1x" v-else />
@@ -51,8 +51,6 @@
       /></InteractablesButton>
     </div>
   </div>
-  <span @click="toggleChangelogVisibility">
-    <UiVersion name version />
-  </span>
+  <UiVersion name version @click="toggleChangelogVisibility" />
   <UiUpdateModal v-if="ui.modals.changelog" />
 </div>

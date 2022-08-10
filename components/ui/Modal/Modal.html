@@ -1,15 +1,10 @@
-<div class="modal-container">
-  <div v-if="small" class="mobile-modal-background"></div>
-  <div class="modal is-active" :class="small ? 'small' : '' ">
-    <div class="modal-background" v-on:click="close"></div>
-    <div class="modal-card">
-      <header v-if="title" class="modal-card-head">
-        <span class="close" v-on:click="close">×</span>
-        <TypographyTitle :text="title" :size="6" />
-      </header>
-      <section :class="`modal-card-body ${nopad ? 'nopad' : ''}`">
-        <slot />
-      </section>
-    </div>
+<div class="container">
+  <div
+    class="modal"
+    :class="{small: small}"
+    v-click-outside="() => $emit('close')"
+  >
+    <TypographyTitle v-if="title" :text="title" :size="6" />
+    <slot />
   </div>
 </div>
