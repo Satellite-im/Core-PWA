@@ -1,4 +1,4 @@
-<UiModal :closeModal="closeModal" nopad>
+<UiModal @close="close">
   <div class="settings">
     <SettingsSidebar class="sidebar" />
     <div class="page">
@@ -35,6 +35,6 @@
         v-if="ui.settingsRoute === SettingsRoutes.PRIVACY"
       />
     </div>
-    <InteractablesClose data-cy="settings-close-button" :action="closeModal" />
+    <InteractablesClose data-cy="settings-close-button" :action="close" />
   </div>
 </UiModal>

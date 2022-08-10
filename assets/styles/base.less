@@ -37,13 +37,8 @@ body {
   font-variant-ligatures: none;
   overscroll-behavior: contain;
   caret-color: @flair-color;
-  background: linear-gradient(
-      180deg,
-      rgba(27, 38, 56, 0.25) 0%,
-      rgba(0, 0, 0, 0.17) 100%
-    ),
-    linear-gradient(252.44deg, #1c273a 0%, rgba(0, 0, 0, 0.1) 100%),
-    linear-gradient(107.56deg, #1c273a 0%, rgba(0, 0, 0, 0.1) 100%), #121216;
+  background: @background;
+  color: @body;
 }
 
 hr {
@@ -217,7 +212,7 @@ button {
   cursor: pointer;
   background: transparent;
   display: flex;
-  &:extend(.font-primary);
+  color: inherit;
 }
 .button {
   border: none;
