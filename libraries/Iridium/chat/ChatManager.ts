@@ -368,8 +368,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions.push(payload.reaction)
     }
 
-    this.set(path, reactions)
     Vue.set(message.reactions, did, reactions)
+    this.set(path, reactions)
 
     // broadcast the message to connected peers
     await this.iridium.connector.publish(
