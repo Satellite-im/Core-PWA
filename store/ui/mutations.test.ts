@@ -2322,7 +2322,7 @@ describe('mutations', () => {
       wallet: false,
       walletMini: false,
     },
-    glyphModalPack: '',
+    glyphModalPackId: '',
     chatbarContent: '',
     replyChatbarMessage: {
       from: '',
@@ -3110,10 +3110,10 @@ describe('mutations', () => {
     expect(localizedState.showSearchResult).toBeTruthy()
   })
 
-  test('setGlyphModalPack', () => {
+  test('setGlyphModalPackId', () => {
     const localizedState = { ...initialState }
-    mutations.default.setGlyphModalPack(localizedState, 'string')
-    expect(localizedState.glyphModalPack).toBe('string')
+    mutations.default.setGlyphModalPackId(localizedState, 'string')
+    expect(localizedState.glyphModalPackId).toBe('string')
   })
 
   test('toggleModal', () => {
@@ -3508,7 +3508,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -3651,7 +3651,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -3825,7 +3825,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -3976,7 +3976,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -4120,7 +4120,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: {
@@ -4263,7 +4263,7 @@ describe('mutations', () => {
         userProfile: false,
         wallet: false,
         walletMini: false,
-        glyphModalPack: '',
+        glyphModalPackId: '',
         chatbarContent: '',
       },
       replyChatbarMessage: undefined,

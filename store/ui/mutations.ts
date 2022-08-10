@@ -89,8 +89,8 @@ export default {
     // @ts-ignore
     state.modals.errorNetwork = { isOpen: modal.state, action: modal.action }
   },
-  setGlyphModalPack(state: UIState, pack: string) {
-    state.glyphModalPack = pack
+  setGlyphModalPackId(state: UIState, packId: string) {
+    state.glyphModalPackId = packId
   },
   showSearchResult(state: UIState, enabled: boolean) {
     state.showSearchResult = enabled

@@ -20,11 +20,13 @@
     <div class="timestamp">{{ timestamp }}</div>
     <div class="body">
       <MessageMarkdown
+        v-if="message.body"
         :text="wrapEmoji(markdownToHtml(message.body))"
         class="markdown"
         :class="{ bigmoji: containsOnlyEmoji(message.body) }"
         data-cy="chat-message"
       />
+      <MessageGlyph v-if="message.glyph" :glyph="message.glyph" />
       <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
       </span>

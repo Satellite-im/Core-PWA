@@ -34,7 +34,7 @@ Object {
     "shopId": null,
     "view": "home",
   },
-  "glyphModalPack": "",
+  "glyphModalPackId": undefined,
   "hoveredGlyphInfo": undefined,
   "isMobileNavVisible": true,
   "isReacted": false,

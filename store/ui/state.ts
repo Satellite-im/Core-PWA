@@ -28,7 +28,7 @@ const InitialUIState = (): UIState => ({
     crop: false,
     errorNetwork: { isOpen: false, action: null },
   },
-  glyphModalPack: '',
+  glyphModalPackId: undefined,
   chatbarContent: '',
   chatbarFocus: false,
   fullscreen: false,

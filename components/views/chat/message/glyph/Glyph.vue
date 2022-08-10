@@ -1,37 +1,44 @@
-<template src="./Glyph.html" />
+<template src="./Glyph.html"></template>
+
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
+import { Glyphs, Pack } from '~/mock/glyphs'
+import { MessageGlyph } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   props: {
-    source: {
-      type: String,
-      default: '',
-    },
-    pack: {
-      type: String,
-      default: '',
+    glyph: {
+      type: Object as PropType<MessageGlyph>,
+      required: true,
     },
   },
   computed: {
     ...mapState(['ui']),
-    getSource(): string {
-      if (this.source.includes('/$1/')) {
-        return this.source.replace('$1', 'small')
-      }
-      return this.source
+    src(): string {
+      return this.glyph.src.replace('$1', 'small')
+    },
+    pack(): Pack | undefined {
+      const p = Object.values(Glyphs).find(
+        (pack) => pack.id === this.glyph.packId,
+      )
+      console.log(p)
+      return p
     },
   },
   methods: {
     openModal() {
+      if (!this.pack) {
+        return
+      }
       this.$store.commit('ui/toggleModal', {
         name: 'glyph',
         state: !this.ui.modals.glyph,
       })
-      this.$store.commit('ui/setGlyphModalPack', this.pack)
+      this.$store.commit('ui/setGlyphModalPackId', this.pack.id)
     },
   },
 })
 </script>
+
 <style scoped lang="less" src="./Glyph.less"></style>
