@@ -69,7 +69,7 @@ export default {
         typeof options.containerWidth !== 'undefined'
           ? options.containerWidth
           : state.enhancers.containerWidth,
-      route: options.route || 'emotes',
+      route: options.route || 'emoji',
     }
   },
   setSettingsRoute(

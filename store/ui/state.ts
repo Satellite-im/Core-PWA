@@ -40,7 +40,7 @@ const InitialUIState = (): UIState => ({
     defaultWidth: '24rem',
     defaultHeight: '30rem',
     containerWidth: 0,
-    route: 'emotes',
+    route: 'emoji',
   },
   messages: [],
   unreadMessage: 0,

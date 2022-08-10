@@ -28,7 +28,7 @@ export default {
     home: 'Home',
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
-    emotes: 'Emoji',
+    emoji: 'Emoji',
     coming_soon: 'Coming Soon',
     glyphs: 'Glyphs',
     fullscreen: 'Fullscreen',

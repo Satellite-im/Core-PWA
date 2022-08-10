@@ -1,0 +1,47 @@
+.container {
+  height: 100%;
+}
+
+.emoji-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.search {
+  padding: 1rem 1rem 1rem;
+}
+
+.emoji-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: scroll;
+  flex-grow: 0;
+  padding: 0 1rem 1rem;
+
+  .emoji-section {
+    gap: 0.25rem;
+
+    .section-heading {
+      color: @text-muted;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .emojis {
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+
+      .emoji {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        aspect-ratio: 1;
+        cursor: pointer;
+      }
+    }
+  }
+}

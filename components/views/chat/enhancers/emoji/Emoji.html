@@ -1,0 +1,54 @@
+<emoji-picker
+  class="container"
+  @emoji="addEmoji"
+  :search="search.toLowerCase()"
+>
+  <div
+    class="emoji-container"
+    slot="emoji-picker"
+    slot-scope="{ emojis, insert }"
+  >
+    <div class="search">
+      <InteractablesInput
+        v-model="search"
+        size="xs"
+        showClear
+        :placeholder="$t('ui.search')"
+      />
+    </div>
+    <div class="emoji-list">
+      <div v-for="(emojiGroup, category) in emojis" :key="category">
+        <TypographyText size="xs" color="light">
+          {{ category }}
+        </TypographyText>
+        <div class="emoji-section">
+          <div
+            class="emojis"
+            v-if="category === 'Frequently used' && mostUsedEmojis.length"
+          >
+            <div
+              v-for="(emoji, index) in mostUsedEmojis"
+              class="emoji"
+              :key="index"
+              @click="addEmoji(emoji.content, emoji.code)"
+              :title="index"
+            >
+              {{ emoji.content }}
+            </div>
+          </div>
+          <div class="emojis" v-else>
+            <div
+              v-for="(emoji, emojiName) in emojiGroup"
+              :key="emojiName"
+              class="emoji"
+              @click="addEmoji(emoji, emojiName)"
+              :title="emojiName"
+            >
+              {{ emoji }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</emoji-picker>
