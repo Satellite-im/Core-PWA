@@ -3,11 +3,10 @@
     class="tab"
     v-for="tab in tabs"
     @click="setRoute(tab.route)"
-    :class="route === tab.route ? 'active' : ''"
+    :class="{active: route === tab.route}"
     :data-badge="tab.badge || null"
   >
     {{tab.text}}
   </button>
-
-  <slot v-if="$slots.default"></slot>
+  <slot />
 </div>

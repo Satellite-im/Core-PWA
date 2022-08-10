@@ -4,8 +4,5 @@
     :key="c.id"
     :conversation="c"
   />
-  <FriendsEmptyMessage
-    v-if="!sortedConversations.length"
-    :displayImage="true"
-  />
+  <FriendsEmptyMessage v-if="!sortedConversations.length" displayImage />
 </div>
