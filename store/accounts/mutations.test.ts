@@ -169,7 +169,7 @@ describe('init', () => {
     })
   })
 
-  it('should setUserPeerId', () => {
+  it.skip('should setUserPeerId', () => {
     const localStateForUnitTest = { ...state }
     inst.setUserPeerId(localStateForUnitTest, 'peerId')
 
@@ -180,7 +180,7 @@ describe('init', () => {
     })
   })
 
-  it('should setUserPeerId without state.details', () => {
+  it.skip('should setUserPeerId without state.details', () => {
     const localStateForUnitTest = { ...state }
     localStateForUnitTest.details = undefined
     inst.setUserPeerId(localStateForUnitTest, 'peerId')

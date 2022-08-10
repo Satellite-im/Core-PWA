@@ -9,10 +9,10 @@ import {
   MicIcon,
   MicOffIcon,
 } from 'satellite-lucide-icons'
-import { User } from '~/types/ui/user'
+import { User } from '~/libraries/Iridium/friends/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
-import { PeerMutedState } from '~/store/webrtc/types'
+import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -60,24 +60,26 @@ export default Vue.extend({
   data() {
     return {
       videoSettings: iridium.settings.state.video,
+      webrtc: iridium.webRTC.state,
+      isTalking: false,
+      requestId: null,
     }
   },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
-      webrtc: (state) => (state as RootState).webrtc,
     }),
     call() {
       return (
-        this.user?.peerId &&
+        this.user?.did &&
         this.webrtc.activeCall?.callId &&
         $WebRTC.getCall(this.webrtc.activeCall.callId)
       )
     },
     muted() {
       return (
-        (this.user?.peerId && this.webrtc.streamMuted[this.user.peerId]) ?? {
+        (this.user?.did && this.webrtc.streamMuted[this.user.did]) ?? {
           audio: true,
           video: true,
           screen: true,
@@ -87,8 +89,8 @@ export default Vue.extend({
     streams() {
       return (
         this.call &&
-        this.user?.peerId &&
-        (this.call as Call).streams[(this.user as User).peerId as string]
+        this.user?.did &&
+        (this.call as Call).streams[(this.user as User).did as string]
       )
     },
     videoStream() {
@@ -113,8 +115,15 @@ export default Vue.extend({
       )
     },
     src(): string {
-      const hash = this.user.profilePicture
+      const hash = this.user.photoHash
       return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+    },
+    isPending(): boolean {
+      return Boolean(
+        this.user.did !== iridium.connector?.id &&
+          this.call &&
+          !this.webrtc.createdAt,
+      )
     },
   },
   watch: {
@@ -143,6 +152,23 @@ export default Vue.extend({
         loadVideos()
       })
     },
+    audioStream(stream) {
+      if (this.requestId) {
+        cancelAnimationFrame(this.requestId)
+        this.requestId = null
+      }
+      if (!stream) {
+        this.isTalking = false
+        return
+      }
+      this.getMicLevel(stream)
+    },
+  },
+  beforeDestroy() {
+    if (this.requestId) {
+      cancelAnimationFrame(this.requestId)
+      this.requestId = null
+    }
   },
   mounted() {
     document.querySelectorAll('.video-stream.loaded').forEach((video) => {
@@ -164,6 +190,48 @@ export default Vue.extend({
         audioStreamElement.volume = this.audio.volume / 100
       }
     }
+  },
+  methods: {
+    getMicLevel(stream: MediaStream) {
+      const audioContext = new AudioContext()
+      const gainNode = audioContext.createGain()
+      const analyser = audioContext.createAnalyser()
+      const microphone = audioContext.createMediaStreamSource(stream)
+      const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1)
+
+      analyser.smoothingTimeConstant = 0
+
+      microphone.connect(gainNode)
+      gainNode.connect(analyser)
+      analyser.connect(javascriptNode)
+      javascriptNode.connect(audioContext.destination)
+
+      const array = new Uint8Array(analyser.frequencyBinCount)
+
+      const detect = () => {
+        // Update gain based on inputVolume
+        gainNode.gain.setValueAtTime(
+          this.audio.inputVolume / 100,
+          audioContext.currentTime,
+        )
+        this.requestId = requestAnimationFrame(detect)
+
+        analyser.getByteFrequencyData(array)
+        let values = 0
+
+        const length = array.length
+        for (let i = 0; i < length; i++) {
+          values += array[i]
+        }
+
+        const average = values / length
+
+        // The micLevel can range between 0 and 100 approximately
+        this.isTalking = Math.round(average) > 5
+      }
+
+      detect()
+    },
   },
 })
 </script>

@@ -43,6 +43,7 @@ export default Vue.extend({
   data() {
     return {
       settings: iridium.settings.state,
+      webrtc: iridium.webRTC,
     }
   },
   computed: {
@@ -60,6 +61,9 @@ export default Vue.extend({
       return (
         this.$route.path.includes('files') || this.$route.path.includes('chat')
       )
+    },
+    isBackgroundCall(): boolean {
+      return this.webrtc.isBackgroundCall
     },
   },
   methods: {
@@ -102,6 +106,11 @@ export default Vue.extend({
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);
+  }
+
+  &.has-background-call {
+    position: relative;
+    padding-top: @background-call-height;
   }
 }
 </style>

@@ -4,7 +4,6 @@ import { RootState } from '~/types/store/store'
 import InitialAccountsState from '~/store/accounts/state'
 import InitialAudioState from '~/store/audio/state'
 import InitialChatState from '~/store/chat/state'
-import InitialConversationState from '~/store/conversation/state'
 import InitialDataState from '~/store/dataState/state'
 import InitialFilesState from '~/store/files/state'
 import InitialFriendsState from '~/store/friends/state'
@@ -15,7 +14,6 @@ import InitialSettingsState from '~/store/settings/state'
 import InitialSoundsState from '~/store/sounds/state'
 import InitialUiState from '~/store/ui/state'
 import InitialVideoState from '~/store/video/state'
-import InitialWebRTCState from '~/store/webrtc/state'
 
 export const initialRootState: RootState = {
   accounts: {
@@ -26,9 +24,6 @@ export const initialRootState: RootState = {
   },
   chat: {
     ...InitialChatState(),
-  },
-  conversation: {
-    ...InitialConversationState(),
   },
   dataState: {
     ...InitialDataState(),
@@ -60,9 +55,6 @@ export const initialRootState: RootState = {
   video: {
     ...InitialVideoState(),
   },
-  webrtc: {
-    ...InitialWebRTCState(),
-  },
 }
 
 describe('prerequisites returns', () => {
@@ -75,7 +67,7 @@ describe('prerequisites returns', () => {
   test('finished init', () => {
     const state = { ...initialRootState }
     state.accounts.active = 'accountAddress'
-    state.webrtc.initialized = true
+    // state.webrtc.initialized = true
 
     const result = getters.allPrerequisitesReady(state)
     expect(result).toBeTruthy()

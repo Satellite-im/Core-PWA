@@ -5,9 +5,10 @@ const getters = {
     console.info(
       'checking ready state',
       state.accounts.active,
-      state.webrtc.initialized,
+      // state.webrtc.initialized,
     )
-    return Boolean(state.accounts.active) && state.webrtc.initialized
+    // return Boolean(state.accounts.active) && state.webrtc.initialized
+    return Boolean(state.accounts.active)
   },
 }
 

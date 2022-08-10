@@ -13,6 +13,7 @@ import { mapState } from 'vuex'
 import { UIMessage } from '~/types/messaging'
 import { ModalWindows } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -53,6 +54,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      chat: iridium.chat,
       hasMoreSettings: false,
       featureReadyToShow: false,
     }
@@ -61,13 +63,19 @@ export default Vue.extend({
     ...mapState({
       ui: (state) => (state as RootState).ui,
       accounts: (state) => (state as RootState).accounts,
-      isGroup: (state) => (state as RootState).conversation.type === 'group',
     }),
     isEditable(): boolean {
       return (
         this.message.from === this.accounts.details?.textilePubkey &&
         !(this.message.type === 'glyph' || this.message.type === 'file')
       )
+    },
+    isGroup(): boolean {
+      const conversationId = this.$route.params.id
+      if (!conversationId) {
+        return false
+      }
+      return this.chat.isGroup(conversationId)
     },
     ModalWindows: () => ModalWindows,
   },

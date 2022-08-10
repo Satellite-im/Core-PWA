@@ -19,12 +19,12 @@
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
-        <!-- <Media
-          v-if="$device.isMobile"
+        <Media
+          v-if="isActiveCall"
           :users="$mock.callUsers"
           :max-viewable-users="10"
           :fullscreen-max-viewable-users="6"
-        /> -->
+        />
         <Conversation />
         <Chatbar ref="chatbar" />
       </div>
@@ -38,6 +38,7 @@ import { mapState } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 import 'swiper/css'
 
 export default Vue.extend({
@@ -47,6 +48,7 @@ export default Vue.extend({
   },
   layout: 'mobile',
   data: () => ({
+    webrtc: iridium.webRTC,
     swiper: undefined as Swiper | undefined,
   }),
   computed: {
@@ -83,6 +85,9 @@ export default Vue.extend({
       set(value: boolean) {
         this.$store.commit('ui/setIsMobileNavVisible', value)
       },
+    },
+    isActiveCall(): boolean {
+      return this.webrtc.isActiveCall
     },
   },
 

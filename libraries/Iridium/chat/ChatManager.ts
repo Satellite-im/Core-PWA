@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import {
+
+import Iridium, {
   IridiumMessage,
   Emitter,
   didUtils,
@@ -12,6 +13,9 @@ import {
   Conversation,
   ConversationMessage,
   ChatError,
+  ConversationParticipant,
+  ConversationActivity,
+  ConversationConnection,
   MessageReactionPayload,
   ConversationMessagePayload,
 } from '~/libraries/Iridium/chat/types'
@@ -109,7 +113,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ([, { topic }]) => topic === message.payload.body.topic,
       ) || []
     if (!conversationId || !subscription) {
-      throw new Error('subscription not requested')
+      return
     }
     if (subscription?.connected) {
       throw new Error('subscription already connected')
@@ -150,7 +154,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const conversation = this.getConversation(conversationId)
     if (
       !conversation ||
-      !conversation.participants.includes(didUtils.didString(from))
+      !conversation.participants.some((p) => p.did === didUtils.didString(from))
     ) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
@@ -179,7 +183,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    */
   directConversationIdFromDid(friendDid: Friend['did']): string | undefined {
     return Object.values(this.state.conversations).find(
-      (c) => c.type === 'direct' && c.participants.includes(friendDid),
+      (c) =>
+        c.type === 'direct' && c.participants.some((p) => p.did === friendDid),
     )?.id
   }
 
@@ -244,6 +249,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return conversation
   }
 
+  public updateConversation(conversation: Conversation) {
+    Vue.set(this.state.conversations, conversation.id, conversation)
+  }
+
   getConversationMessage(
     conversationId: string,
     messageId: string,
@@ -296,6 +305,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const { conversationId } = payload
     const conversation = this.getConversation(conversationId)
+    const pids = conversation.participants.map((p) => p.did)
     const messageID = await this.iridium.connector.store(
       {
         ...payload,
@@ -304,7 +314,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         attachments: [],
       },
       {
-        encrypt: { recipients: conversation.participants },
+        encrypt: { recipients: pids },
       },
     )
     if (!messageID) {
@@ -339,7 +349,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         message,
       },
       {
-        encrypt: { recipients: conversation.participants },
+        encrypt: { recipients: pids },
       },
     )
   }
@@ -382,5 +392,46 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         reactions,
       },
     )
+  }
+
+  /**
+   * @method otherParticipants
+   * @description get participants other than yourself
+   */
+  public getOtherParticipants = (conversationId: string): Friend[] => {
+    const conversation = this.getConversation(conversationId)
+
+    return conversation.participants.filter((participant) => {
+      return participant.did !== this.iridium.connector?.id
+    })
+  }
+
+  /**
+   * @method typingParticipants
+   * @description array of online participants other than yourself
+   */
+  public getTypingParticipants = (conversationId: string): Friend[] => {
+    return this.getOtherParticipants(conversationId).filter(
+      (participant) => participant.activity === ConversationActivity.TYPING,
+    )
+  }
+
+  /**
+   * @method onlineParticipants
+   * @description array of online participants other than yourself
+   */
+  public getOnlineParticipants = (conversationId: string): Friend[] => {
+    return this.getOtherParticipants(conversationId).filter(
+      (participant) => participant.status === 'online',
+    )
+  }
+
+  /**
+   * @method isGroup
+   * @description is current recipient group
+   */
+  public isGroup(conversationId: string): boolean {
+    const conversation = this.getConversation(conversationId)
+    return conversation.type === 'group'
   }
 }

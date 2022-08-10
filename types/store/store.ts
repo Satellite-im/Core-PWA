@@ -4,10 +4,8 @@ import { DataState } from '~/store/dataState/types'
 import { FriendsState } from '~/store/friends/types'
 import { TextileState } from '~/store/textile/types'
 import { UIState } from '~/store/ui/types'
-import { WebRTCState } from '~/store/webrtc/types'
 import { GroupsState } from '~/store/groups/types'
 import { SettingsState } from '~/store/settings/types'
-import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
@@ -20,7 +18,6 @@ export interface RootState {
   accounts: AccountsState
   audio: AudioState
   chat: ChatState
-  conversation: ConversationState
   dataState: DataState
   files: FilesState
   friends: FriendsState
@@ -32,7 +29,6 @@ export interface RootState {
   ui: UIState
   textile: TextileState
   video: VideoState
-  webrtc: WebRTCState
 }
 
 export type RootStore = Store<RootState>
