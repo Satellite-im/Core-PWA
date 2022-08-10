@@ -41,9 +41,7 @@ export default Vue.extend({
         {
           text: this.$t('friends.incoming'),
           route: FriendsTabs.Requests,
-          badge: Object.values(iridium.friends.state.requests).filter(
-            (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-          ).length,
+          badge: this.incomingRequests.length,
         },
       ]
     },
