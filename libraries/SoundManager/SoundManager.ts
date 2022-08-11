@@ -68,10 +68,9 @@ export default class SoundManager {
    * @returns null
    */
   stopSounds(soundList: Array<Sounds>) {
-    soundList.map((sound: Sounds) => {
+    soundList.forEach((sound: Sounds) => {
       this.existsSound(sound)
       this.sounds[sound].stop()
-      return null
     })
   }
 
