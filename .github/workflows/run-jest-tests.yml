@@ -14,5 +14,8 @@ jobs:
         run: corepack enable
       - name: Install modules
         run: yarn install --network-concurrency 1
+      - name: cd
+        run: cd Core-pwa
       - name: Run tests
         run: yarn test
+
