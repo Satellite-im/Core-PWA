@@ -4,11 +4,12 @@
   justify-content: center;
   position: fixed;
   inset: 0;
-  backdrop-filter: @light-blur;
+  backdrop-filter: @light-blur brightness(80%);
 
   .modal {
+    transform-origin: 50% 200%;
     position: relative;
-    box-shadow: @ui-shadow;
+    box-shadow: @ui-shadow-large;
     border-radius: @corner-rounding;
     &:extend(.background-semitransparent-dark);
   }
@@ -24,6 +25,8 @@
 
 .modal-enter,
 .modal-leave-to {
+  backdrop-filter: blur(0px);
+
   .modal {
     opacity: 0;
     transform: perspective(880px) rotateX(0.5deg);
