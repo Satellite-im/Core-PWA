@@ -27,7 +27,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC,
@@ -60,9 +60,7 @@ export default Vue.extend({
       if (!participant) {
         return
       }
-      return Object.values(this.friends.state.details).find(
-        (f) => f.did === participant.did,
-      )
+      return Object.values(this.friends).find((f) => f.did === participant.did)
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []

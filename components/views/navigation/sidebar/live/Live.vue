@@ -19,7 +19,7 @@ export default Vue.extend({
   data() {
     return {
       webrtc: iridium.webRTC,
-      friends: iridium.friends,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
     }
   },
@@ -32,7 +32,7 @@ export default Vue.extend({
       return false // TODO : Fix later
     },
     selUserName(): string {
-      const sUser = Object.values(this.friends.state.details).find(
+      const sUser = Object.values(this.friends).find(
         (friend) => friend.did === this.webrtc.state.activeCall?.did,
       )
       return sUser?.name ?? ''
@@ -62,9 +62,7 @@ export default Vue.extend({
       if (!participant) {
         return
       }
-      return Object.values(this.friends.state.details).find(
-        (f) => f.did === participant.did,
-      )
+      return Object.values(this.friends).find((f) => f.did === participant.did)
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -73,13 +71,13 @@ export default Vue.extend({
     enableRTC(): boolean {
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
-        return Object.values(this.friends.state.details).some(
+        return Object.values(this.friends).some(
           (friend: Friend) =>
             memberIds.includes(friend.did) && friend.status === 'online',
         )
       }
       // Check current recipient is on the user's friends list
-      const friend = Object.values(this.friends.state.details).find(
+      const friend = Object.values(this.friends).find(
         (f) => f.did === (this.details as User)?.did,
       )
       return friend?.status === 'online'
