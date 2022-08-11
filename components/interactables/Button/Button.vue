@@ -77,7 +77,9 @@ export default Vue.extend({
   computed: {
     cursorGlowStyle() {
       return {
-        transform: `translate(${this.cursorX}px, ${this.cursorY}px)`,
+        backgroundPosition: `left ${this.cursorX - 150}px top ${
+          this.cursorY - 150
+        }px`,
         opacity: this.showCursorGlow ? 1 : 0,
       }
     },
@@ -94,7 +96,6 @@ export default Vue.extend({
     },
     handleMouseMove(e: MouseEvent) {
       const bounds = (this.$refs.button as HTMLElement).getBoundingClientRect()
-      console.log(e)
       this.cursorX = e.clientX - bounds.left
       this.cursorY = e.clientY - bounds.top
     },

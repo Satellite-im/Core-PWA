@@ -13,19 +13,29 @@
       v-model="route"
       :values="['glyphs','emoji','gif']"
     >
-      <InteractablesButton text="Glyphs">
+      <InteractablesButton
+        text="Glyphs"
+        :color="ui.enhancers.route === 'glyphs' ? 'primary' : ''"
+      >
         <grid-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton text="Emoji">
+      <InteractablesButton
+        text="Emoji"
+        :color="ui.enhancers.route === 'emoji' ? 'primary' : ''"
+      >
         <smile-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton text="Gifs" v-if="featureReadyToShow">
+      <InteractablesButton
+        text="Gifs"
+        :color="ui.enhancers.route === 'gifs' ? 'primary' : ''"
+        v-if="featureReadyToShow"
+      >
         <image-icon size="1x" />
       </InteractablesButton>
     </InteractablesButtonGroup>
   </div>
   <div class="container">
-    <EnhancersEmoji v-if="ui.enhancers.route === 'emoji'" />
     <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'" />
+    <EnhancersEmoji v-if="ui.enhancers.route === 'emoji'" />
   </div>
 </div>
