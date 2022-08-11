@@ -16,4 +16,3 @@ jobs:
         run: yarn install --ignore-scripts --network-concurrency 1
       - name: Run tests
         run: yarn test
-
