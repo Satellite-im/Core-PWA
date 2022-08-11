@@ -26,9 +26,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { UserPlusIcon } from 'satellite-lucide-icons'
 import { FriendsTabs } from '~/store/friends/types'
 
 export default Vue.extend({
+  components: {
+    UserPlusIcon,
+  },
   props: {
     displayImage: {
       type: Boolean,
