@@ -1,25 +1,27 @@
 <button
-  :class="`button is-button font-size-sm is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
-  v-on:click="action"
+  :class="[`button size-${size} color-${color}`, {
+    'outlined': outlined,
+    'disabled': disabled,
+  }]"
   :disabled="loading"
   :type="htmlType"
   ref="button"
+  @click="handleClick"
+  @mousemove.stop="handleMouseMove"
+  @mouseenter="handleMouseEnter"
+  @mouseleave="handleMouseLeave"
 >
-  <UiGlowingCursorArea :hide="!!$attrs['data-popper-shown']">
-    <!-- If the button is in the loading state -->
-    <div class="spinner" v-if="loading">
-      <!-- Loading Spinner -->
-      <UiLoadersSpinner spinning />
+  <div class="spinner" v-if="loading">
+    <UiLoadersSpinner spinning />
+  </div>
+  <div v-else class="content">
+    <div
+      :class="`feather ${text.length ? '' : 'no-text-feather'}`"
+      v-if="$slots.default"
+    >
+      <slot></slot>
     </div>
-    <!-- Default button state -->
-    <div v-else class="content">
-      <div
-        :class="`feather ${text.length ? '' : 'no-text-feather'}`"
-        v-if="$slots.default"
-      >
-        <slot></slot>
-      </div>
-      <span v-if="text.length">{{ text }}</span>
-    </div>
-  </UiGlowingCursorArea>
+    <span v-if="text.length">{{ text }}</span>
+  </div>
+  <div class="cursor-glow" :style="cursorGlowStyle"></div>
 </button>

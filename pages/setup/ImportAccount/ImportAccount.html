@@ -48,20 +48,18 @@
     <div class="container-actions">
       <div class="action">
         <InteractablesButton
-          full-width
           :text="$t('pages.inputAccount.reset')"
           :disabled="phrases.length === 0"
-          :action="resetPassphrase"
+          @click="resetPassphrase"
         >
           <trash-icon size="1x" />
         </InteractablesButton>
       </div>
       <div class="action">
         <InteractablesButton
-          full-width
           :text="$t('pages.inputAccount.recover')"
           :disabled="phrases.length<12"
-          :action="recoverAccount"
+          @click="recoverAccount"
         />
       </div>
     </div>

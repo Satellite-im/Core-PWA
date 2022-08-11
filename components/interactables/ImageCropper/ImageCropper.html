@@ -9,9 +9,8 @@
     :viewport="{ width: 200, height: 200, type: 'circle' }"
   />
   <InteractablesButton
-    :action="crop"
-    type="primary"
-    size="normal"
+    @click="crop"
+    color="primary"
     :text="$t('controls.crop')"
     class="button is-primary create-server-btn"
   />

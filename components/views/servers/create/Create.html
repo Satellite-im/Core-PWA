@@ -25,9 +25,8 @@
             accept="image/*"
           />
           <InteractablesButton
-            :action="() => $refs.file.click()"
-            type="primary"
-            size="small"
+            @click="() => $refs.file.click()"
+            color="primary"
             :text="$t('servers.create.photo_button')"
           />
         </div>
@@ -47,7 +46,6 @@
         <SettingsPagesUserSearch
           v-model="friends"
           :placeholder="$t('servers.create.select_friends_placeholder')"
-          size="small"
           type="primary"
           drop="top"
         />
@@ -58,12 +56,10 @@
 
     <div class="submit-container">
       <InteractablesButton
-        type="primary"
-        size="small"
-        fullwidth
+        color="primary"
         :text="$t('servers.create.create_server')"
         class="create-server-btn"
-        :action="confirm"
+        @click="confirm"
       />
     </div>
   </div>

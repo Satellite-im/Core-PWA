@@ -41,9 +41,7 @@
         </InteractablesButton> -->
         <InteractablesButton
           v-if="!requiresUpdate"
-          type="primary"
-          size="small"
-          :action="skipVersion"
+          @click="skipVersion"
           :text="$t('modal.update_modal.got_it')"
         >
           <refresh-cw-icon size="1x" />

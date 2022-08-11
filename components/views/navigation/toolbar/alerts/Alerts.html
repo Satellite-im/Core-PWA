@@ -5,10 +5,9 @@
   </div>
   <template v-if="notifications.length">
     <InteractablesButton
-      size="small"
-      :action="clearNotifications"
+      @click="clearNotifications"
       class="alerts-clear-button"
-      type="primary"
+      color="primary"
       :text="$t('ui.clear_all')"
     />
     <ToolbarAlertsAlert

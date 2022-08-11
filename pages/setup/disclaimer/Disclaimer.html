@@ -9,24 +9,19 @@
   </div>
   <div class="buttons">
     <InteractablesButton
-      full-width
       data-cy="create-account-button"
       :text="$t('pages.disclaimer.create')"
-      :action="generateWallet"
+      @click="generateWallet"
       :loading="isLoading"
     />
     <InteractablesButton
-      full-width
       data-cy="create-account-button"
-      type="dark"
-      :action="() => { connectAccount() }"
+      @click="connectAccount"
       :text="$t('pages.disclaimer.connect')"
     />
     <InteractablesButton
-      full-width
       data-cy="import-account-button"
-      type="dark"
-      :action="() => { importAccount() }"
+      @click="importAccount"
       :text="$t('pages.disclaimer.import')"
     />
   </div>

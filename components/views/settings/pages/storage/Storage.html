@@ -18,8 +18,7 @@
     />
     <br />
     <InteractablesButton
-      type="primary"
-      size="small"
+      color="primary"
       :text="$t('pages.settings.storage.export.button')"
     />
   </SettingsUnit>
@@ -36,11 +35,10 @@
     <br />
     <InteractablesButton
       v-if="!deleteVerify"
-      type="danger"
-      size="small"
+      color="danger"
       :loading="isLoading"
       :text="$t('pages.settings.storage.clear.button')"
-      :action="() => deleteVerify = true"
+      @click="() => deleteVerify = true"
     />
     <span v-if="deleteVerify">
       <TypographyText class="detail color-danger no-bottom-pad">
@@ -51,11 +49,10 @@
       </TypographyText>
       <br />
       <InteractablesButton
-        type="danger"
-        size="small"
+        color="danger"
         :loading="isLoading"
         :text="$t('pages.settings.storage.clear.confirm_button')"
-        :action="clearLocalStorage"
+        @click="clearLocalStorage"
       />
     </span>
   </SettingsUnit>

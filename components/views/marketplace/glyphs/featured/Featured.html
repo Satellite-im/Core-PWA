@@ -34,26 +34,13 @@
   </div>
   <div class="glyph-footer">
     <div class="btns">
-      <InteractablesButton
-        type="primary"
-        size="small"
-        :text="$t('glyphs.shop_all')"
-        :action="shopAllGlyphs"
-      >
+      <InteractablesButton :text="$t('glyphs.shop_all')" @click="shopAllGlyphs">
       </InteractablesButton>
       <div class="navigator">
-        <InteractablesButton
-          type="dark"
-          size="small"
-          :action="() => { navigateGlyph('prev') }"
-        >
+        <InteractablesButton @click="() => { navigateGlyph('prev') }">
           <chevron-left-icon size="1.5x"></chevron-left-icon>
         </InteractablesButton>
-        <InteractablesButton
-          type="dark"
-          size="small"
-          :action="() => { navigateGlyph('next') }"
-        >
+        <InteractablesButton @click="() => { navigateGlyph('next') }">
           <chevron-right-icon size="1.5x"></chevron-right-icon>
         </InteractablesButton>
       </div>

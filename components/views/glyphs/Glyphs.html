@@ -6,9 +6,8 @@
   <GlyphsSample :glyphUrls="samplePackUrls" />
   <InteractablesButton
     class="button"
-    size="small"
     :text="$t('glyphs.view_pack')"
-    :action="openMarketplace"
+    @click="openMarketplace"
   >
     <shopping-bag-icon size="1.2x" />
   </InteractablesButton>

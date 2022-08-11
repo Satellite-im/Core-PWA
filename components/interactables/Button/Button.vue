@@ -23,20 +23,9 @@ export default Vue.extend({
      * @remarks
      * Determines the type of the button. See Bumla.io for available sizes
      */
-    type: {
+    color: {
       type: String as PropType<ButtonType>,
-      default: 'primary',
-    },
-    /**
-     * Callable function when button is clicked
-     *
-     * @remarks
-     * This should usually be a store mutation or UI change.
-     */
-    action: {
-      type: Function,
-      required: false,
-      default: () => {},
+      default: '',
     },
     /**
      * Supported fontawesome icon
@@ -76,6 +65,38 @@ export default Vue.extend({
     htmlType: {
       type: String,
       default: 'button',
+    },
+  },
+  data() {
+    return {
+      cursorX: 0,
+      cursorY: 0,
+      showCursorGlow: false,
+    }
+  },
+  computed: {
+    cursorGlowStyle() {
+      return {
+        transform: `translate(${this.cursorX}px, ${this.cursorY}px)`,
+        opacity: this.showCursorGlow ? 1 : 0,
+      }
+    },
+  },
+  methods: {
+    handleClick(event: MouseEvent) {
+      this.$emit('click', event)
+    },
+    handleMouseEnter() {
+      this.showCursorGlow = true
+    },
+    handleMouseLeave() {
+      this.showCursorGlow = false
+    },
+    handleMouseMove(e: MouseEvent) {
+      const bounds = (this.$refs.button as HTMLElement).getBoundingClientRect()
+      console.log(e)
+      this.cursorX = e.clientX - bounds.left
+      this.cursorY = e.clientY - bounds.top
     },
   },
 })

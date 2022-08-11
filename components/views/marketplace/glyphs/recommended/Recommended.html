@@ -18,10 +18,9 @@
     <div class="description">{{ item.glyph.description }}</div>
     <div class="glyph-img">
       <InteractablesButton
-        type="primary"
-        size="small"
+        color="primary"
         :text="$t('glyphs.shop_now')"
-        :action="goToShopItem"
+        @click="goToShopItem"
       >
       </InteractablesButton>
       <EnhancersGlyphsItem

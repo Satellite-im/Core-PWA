@@ -41,15 +41,13 @@
     <div class="button-container">
       <InteractablesButton
         :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
-        size="normal"
-        type="primary"
-        :action="togglePhrase"
+        color="primary"
+        @click="togglePhrase"
       />
       <InteractablesButton
         :text="$t('pages.settings.accounts.copy_phrase')"
-        size="normal"
-        type="primary"
-        :action="copyPhrase"
+        color="primary"
+        @click="copyPhrase"
       />
     </div>
     <div v-if="showPhrase" class="tag-wrap">

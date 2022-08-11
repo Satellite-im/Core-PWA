@@ -8,10 +8,9 @@
     />
   </div>
   <InteractablesButton
-    type="danger"
-    size="small"
+    color="danger"
     :text="$t('controls.end_stream')"
-    :action="hangUp"
+    @click="hangUp"
   >
     <x-icon size="1x"></x-icon>
   </InteractablesButton>

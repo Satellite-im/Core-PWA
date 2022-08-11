@@ -20,11 +20,10 @@
     </div>
     <InteractablesButton
       v-else
-      type="success"
-      size="small"
+      color="success"
       v-tooltip.bottom="$t('friends.send')"
       :disabled="loadCheck"
-      :action="createFriendRequest"
+      @click="createFriendRequest"
     >
       <check-icon size="1x" />
     </InteractablesButton>
@@ -38,22 +37,20 @@
     </div>
     <InteractablesButton
       v-if="!loading"
-      type="success"
-      size="small"
-      v-tooltip.bottom="$t('friends.accept')"
-      :disabled="loadCheck"
-      :action="acceptFriendRequest"
+      color="danger"
+      v-tooltip.bottom="$t('friends.decline')"
+      @click="rejectFriendRequest"
     >
-      <check-icon size="1x" />
+      <x-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       v-if="!loading"
-      type="danger"
-      size="small"
-      v-tooltip.bottom="$t('friends.decline')"
-      :action="rejectFriendRequest"
+      color="success"
+      v-tooltip.bottom="$t('friends.accept')"
+      :disabled="loadCheck"
+      @click="acceptFriendRequest"
     >
-      <x-icon size="1x" />
+      <check-icon size="1x" />
     </InteractablesButton>
   </div>
   <div class="controls" v-else-if="blocked">
@@ -62,10 +59,8 @@
     </div>
     <InteractablesButton
       v-else
-      type="danger"
-      size="small"
+      color="danger"
       v-tooltip.bottom="$t('friends.unblock')"
-      :action="() => {}"
     >
       <x-icon size="1x" />
     </InteractablesButton>
@@ -79,11 +74,10 @@
     </div>
     <InteractablesButton
       v-else
-      type="danger"
-      size="small"
+      color="danger"
       v-tooltip.bottom="$t('friends.cancel')"
       :loading="loading"
-      :action="cancelRequest"
+      @click="cancelRequest"
     >
       <x-icon size="1x" />
     </InteractablesButton>
@@ -94,18 +88,16 @@
     </div>
     <InteractablesButton
       v-if="!loading"
-      type="primary"
-      size="small"
+      color="primary"
       data-cy="friend-send-message"
       v-tooltip.bottom="$t('friends.message')"
-      :action="sendMessageRequest"
+      @click="sendMessageRequest"
     >
       <message-square-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       v-if="!loading"
-      type="primary"
-      size="small"
+      color="primary"
       v-tooltip.bottom="$t('friends.options')"
     >
       <more-vertical-icon size="1x" />

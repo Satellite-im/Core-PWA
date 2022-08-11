@@ -12,8 +12,7 @@
             {{ $t('friends.scan_code') }}
           </TypographyText>
           <InteractablesButton
-            type="primary"
-            size="small"
+            color="primary"
             :text="$t('friends.camera_scan')"
           />
         </div>

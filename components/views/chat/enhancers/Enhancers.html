@@ -11,21 +11,15 @@
   <div class="navbar">
     <InteractablesButtonGroup
       v-model="route"
-      :fullWidth="true"
       :values="['glyphs','emoji','gif']"
     >
-      <InteractablesButton type="dark" size="small" text="Glyphs">
+      <InteractablesButton text="Glyphs">
         <grid-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton type="dark" size="small" text="Emoji">
+      <InteractablesButton text="Emoji">
         <smile-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton
-        type="dark"
-        size="small"
-        text="Gifs"
-        v-if="featureReadyToShow"
-      >
+      <InteractablesButton text="Gifs" v-if="featureReadyToShow">
         <image-icon size="1x" />
       </InteractablesButton>
     </InteractablesButtonGroup>

@@ -1,9 +1,8 @@
 <div class="call-controls">
   <InteractablesButton
-    :type="audioMuted ? 'danger' : 'dark'"
-    size="small"
+    :color="audioMuted ? 'danger' : 'dark'"
     v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')"
-    :action="() => toggleMute('audio')"
+    @click="() => toggleMute('audio')"
     data-cy="sidebar-mic-button"
     :text="$t('controls.mic')"
     :loading="isLoading"
@@ -12,11 +11,10 @@
     <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x" />
   </InteractablesButton>
   <InteractablesButton
-    :type="audio.deafened ? 'danger' : 'dark'"
+    :color="audio.deafened ? 'danger' : 'dark'"
     data-cy="sidebar-audio-button"
-    size="small"
     v-tooltip.top="audio.deafened ? $t('controls.undeafen') : $t('controls.deafen')"
-    :action="() => toggleDeafen()"
+    @click="() => toggleDeafen()"
     :text="$t('controls.headphones')"
   >
     <headphones-off-icon
@@ -28,11 +26,10 @@
   </InteractablesButton>
   <InteractablesButton
     v-if="inCall"
-    :type="videoMuted ? 'danger' : 'dark'"
-    size="small"
+    :color="videoMuted ? 'danger' : 'dark'"
     v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
     :text="$t('controls.video')"
-    :action="() => toggleMute('video')"
+    @click="() => toggleMute('video')"
     :loading="isLoading"
   >
     <video-off-icon data-cy="sidebar-video-muted" v-if="videoMuted" size="1x" />
