@@ -4,7 +4,7 @@ import { Profile } from './types'
 
 export default class IridiumProfile extends Emitter {
   public readonly iridium: IridiumManager
-  public state: Profile
+  public state: Profile = {}
 
   constructor(iridium: IridiumManager) {
     super()
@@ -22,7 +22,7 @@ export default class IridiumProfile extends Emitter {
   }
 
   private async fetch() {
-    this.state = await this.iridium.connector?.get('/profile')
+    Object.assign(this.state, await this.iridium.connector?.get('/profile'))
     // TODO: verify schema of profile data, recover from invalid data
   }
 

@@ -51,7 +51,7 @@ export default class FilesManager extends Emitter {
       '/files',
     )
     if (res && 'items' in res) {
-      this.state = res
+      Object.assign(this.state, res)
     }
     this.lastUpdated = Date.now()
   }

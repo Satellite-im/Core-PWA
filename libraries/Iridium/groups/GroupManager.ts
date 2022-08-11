@@ -49,7 +49,10 @@ export default class GroupManager extends Emitter<IridiumMessage> {
   }
 
   private async fetch() {
-    this.state = (await this.iridium.connector?.get('/groups')) || {}
+    Object.assign(
+      this.state,
+      (await this.iridium.connector?.get('/groups')) || {},
+    )
   }
 
   /**

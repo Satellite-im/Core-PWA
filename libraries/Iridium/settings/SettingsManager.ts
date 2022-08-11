@@ -50,9 +50,12 @@ export default class SettingsManager extends Emitter {
     if (!fetched) {
       return fetched
     }
-    this.state = merge(initialState, fetched, {
-      arrayMerge: overwriteMerge,
-    })
+    Object.assign(
+      this.state,
+      merge(initialState, fetched, {
+        arrayMerge: overwriteMerge,
+      }),
+    )
   }
 
   get(path: string = '', options: any = {}) {

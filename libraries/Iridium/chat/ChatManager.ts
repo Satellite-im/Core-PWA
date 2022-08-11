@@ -42,9 +42,7 @@ export type Conversations = {
 
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
-  public state: State = {
-    conversations: {},
-  }
+  public state: State = initialState
 
   private _intervals: { [key: string]: any } = {}
   private _subscriptions: {
@@ -56,7 +54,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async init() {
-    this.state = ((await this.get()) as State) ?? initialState
+    await this.fetch()
     const conversations = Object.values(this.state.conversations)
     // listen for sync node subscription responses
     this.iridium.connector?.p2p.on<
@@ -91,6 +89,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       this.ready = true
       this.emit('ready', {})
     })
+  }
+
+  async fetch() {
+    Object.assign(this.state, await this.get())
   }
 
   /**

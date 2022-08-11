@@ -117,11 +117,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns updated state
    */
   async fetch() {
-    this.state = {
-      ...this.state,
-      ...(await this.get('/')),
-    }
-    return this.state
+    Object.assign(this.state, await this.get('/'))
   }
 
   private async onFriendsAnnounce(message: IridiumMessage<IridiumFriendEvent>) {

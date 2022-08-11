@@ -27,7 +27,7 @@ const initialState: WebRTCState = {
 
 export default class WebRTCManager extends Emitter {
   public readonly iridium: IridiumManager
-  public state: WebRTCState
+  public state: WebRTCState = initialState
   private loggerTag = 'iridium/webRTC'
   private timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
 
@@ -38,7 +38,6 @@ export default class WebRTCManager extends Emitter {
   constructor(iridium: IridiumManager) {
     super()
     this.iridium = iridium
-    this.state = initialState
   }
 
   async init() {
@@ -157,11 +156,7 @@ export default class WebRTCManager extends Emitter {
   }
 
   async fetch() {
-    this.state = {
-      ...this.state,
-      ...(await this.get('/')),
-    }
-    return this.state
+    Object.assign(this.state, await this.get('/'))
   }
 
   get isBackgroundCall() {
