@@ -46,6 +46,7 @@ export type Conversation = {
   participants: Friend[]
   createdAt: number
   updatedAt: number
+  lastReadAt: number
   message: {
     [key: string]: ConversationMessage
   }

@@ -534,7 +534,7 @@ export default class WebRTCManager extends Emitter {
 
       this.timeoutMap[did] = setTimeout(() => {
         this.iridium.chat.updateConversation({
-          ...conversation,
+          ...this.iridium.chat?.getConversation(id),
           participants: conversation.participants.map((participant) => {
             if (participant.did === did) {
               return {

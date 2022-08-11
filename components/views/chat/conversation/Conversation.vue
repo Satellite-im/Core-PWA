@@ -33,12 +33,15 @@ export default Vue.extend({
       return iridium.connector?.id ?? ''
     },
     messages(): ConversationMessage[] {
-      if (!Object.keys(this.conversation).length) {
+      if (
+        !Object.keys(iridium.chat.state.conversations?.[this.$route.params.id])
+          .length
+      ) {
         return []
       }
-      return Object.values(this.conversation.message).sort(
-        (a, b) => a.at - b.at,
-      )
+      return Object.values(
+        iridium.chat.state.conversations?.[this.$route.params.id].message,
+      ).sort((a, b) => a.at - b.at)
     },
     chatItems(): ChatItem[] {
       return this.messages
@@ -53,7 +56,8 @@ export default Vue.extend({
           const isNextDay = prevMessage
             ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
             : false
-          const lastReadAt = this.conversation.lastReadAt
+          const lastReadAt =
+            iridium.chat.state.conversations?.[this.$route.params.id].lastReadAt
           const isFirstUnreadMessage =
             message.at > lastReadAt &&
             (prevMessage ? prevMessage.at <= lastReadAt : true)

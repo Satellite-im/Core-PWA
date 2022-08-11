@@ -42,9 +42,7 @@ export type Conversations = {
 
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
-  public state: State = {
-    conversations: {},
-  }
+  public state: State = initialState
 
   private _intervals: { [key: string]: any } = {}
   private _subscriptions: {
@@ -160,11 +158,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     const { type, message } = payload.body
     if (type === 'chat/message' && message) {
-      Vue.set(
-        this.state.conversations[conversationId].message,
-        message.id,
-        message,
-      )
+      this.state.conversations[conversationId].message = {
+        ...this.state.conversations[conversationId].message,
+        [message.id]: message,
+      }
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
         message,
@@ -211,8 +208,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       message: {},
       createdAt: Date.now(),
       updatedAt: Date.now(),
+      lastReadAt: Date.now(),
     }
-    Vue.set(this.state.conversations, id, conversation)
+    this.state.conversations = {
+      ...this.state.conversations,
+      [id]: conversation,
+    }
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
@@ -250,7 +251,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   public updateConversation(conversation: Conversation) {
-    Vue.set(this.state.conversations, conversation.id, conversation)
+    this.state.conversations = {
+      ...this.state.conversations,
+      [conversation.id]: conversation,
+    }
   }
 
   getConversationMessage(
@@ -334,12 +338,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       attachments: [],
       id: messageCID,
     }
-    Vue.set(
-      this.state.conversations[conversationId].message,
-      messageCID,
-      message,
-    )
-    this.set(`/conversations/${conversationId}/message/${messageCID}`, message)
+    conversation.lastReadAt = message.at
+    conversation.message = { ...conversation.message, [messageCID]: message }
+    this.state.conversations[conversationId] = conversation
+    this.set(`/conversations/${conversationId}`, conversation)
 
     // broadcast the message to connected peers
     await this.iridium.connector.publish(
@@ -378,7 +380,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions.push(payload.reaction)
     }
 
-    Vue.set(message.reactions, did, reactions)
+    message.reactions = { ...message.reactions, [did]: reactions }
     this.set(path, reactions)
 
     // broadcast the message to connected peers

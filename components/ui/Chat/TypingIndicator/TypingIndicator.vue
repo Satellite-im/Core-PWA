@@ -6,18 +6,13 @@ import { ConversationParticipant } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
-  data() {
-    return {
-      chat: iridium.chat,
-    }
-  },
   computed: {
     typingParticipants() {
       const conversationId = this.$route.params.id
       if (!conversationId) {
         return
       }
-      return this.chat.getTypingParticipants(conversationId)
+      return iridium.chat.getTypingParticipants(conversationId)
     },
     text(): string {
       if (!this.typingParticipants.length) {
