@@ -1,21 +1,8 @@
 <template>
   <div>
-    <div
-      v-if="!incomingRequests.length && !outgoingRequests.length"
-      class="no-results"
-    >
-      <TypographyText class="no-results-icon">
-        <message-circle-icon />
-      </TypographyText>
-      <div class="no-results-text">
-        <TypographyText class="no-results-title">
-          {{ $t('friends.no_requests') }}
-        </TypographyText>
-        <TypographyText class="no-results-subtitle">
-          {{ $t('friends.no_requests_subtitle') }}
-        </TypographyText>
-      </div>
-    </div>
+    <template v-if="!incomingRequests.length && !outgoingRequests.length">
+      <FriendsRequestsEmptyMessage />
+    </template>
 
     <!-- Incoming Requests -->
     <template v-if="incomingRequests.length">
@@ -65,15 +52,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MessageCircleIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   name: 'FriendRequests',
-  components: {
-    MessageCircleIcon,
-  },
   data() {
     return {
       friends: iridium.friends.state,
@@ -94,13 +77,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" scoped>
-.no-results {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 16px;
-  padding: 16px 0;
-}
-</style>
+<style lang="less" scoped></style>
