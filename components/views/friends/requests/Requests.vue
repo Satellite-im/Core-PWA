@@ -74,19 +74,14 @@ export default Vue.extend({
   components: {
     MessageCircleIcon,
   },
-  data() {
-    return {
-      friends: iridium.friends.state,
-    }
-  },
   computed: {
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
+      return Object.values(iridium.friends.state.requests).filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },
     outgoingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
+      return Object.values(iridium.friends.state.requests).filter(
         (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
     },

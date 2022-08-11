@@ -13,18 +13,17 @@ export default Vue.extend({
   data() {
     return {
       FriendsTabs,
-      friends: iridium.friends.state,
     }
   },
   computed: {
     friendsList(): Friend[] {
-      return Object.values(this.friends.details)
+      return Object.values(iridium.friends.state.details)
     },
     activeTab(): FriendsTabs {
       return this.$store.state.friends.activeTab
     },
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
+      return Object.values(iridium.friends.state.requests).filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
     },

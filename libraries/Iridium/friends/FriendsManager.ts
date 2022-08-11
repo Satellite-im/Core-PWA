@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import {
   IridiumPeerIdentifier,
   Emitter,
@@ -228,7 +227,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const friend = this.getFriend(user.did)
     if (!friend) return
 
-    Vue.set(this.state.details, user.did, user)
+    this.state.details = { ...this.state.details, [user.did]: user }
   }
 
   async send(event: IridiumFriendEvent) {
@@ -289,7 +288,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       at: Date.now(),
     }
 
-    Vue.set(this.state.requests, did, request)
+    this.state.requests = { ...this.state.requests, [did]: request }
     await this.set(`/requests/${did}`, request)
     logger.info(this.loggerTag, 'friend request created', {
       did,
@@ -333,7 +332,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
-    Vue.delete(this.state.requests, didUtils.didString(did))
+    delete this.state.requests[didUtils.didString(did)]
     await this.set(`/requests`, this.state.requests)
     logger.info(this.loggerTag, 'request rejected', {
       did,
@@ -415,8 +414,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     request.status = 'accepted'
-    Vue.set(this.state.details, user.did, user)
-    Vue.delete(this.state.requests, didUtils.didString(did))
+    this.state.details = { ...this.state.details, [user.did]: user }
+    delete this.state.requests[didUtils.didString(did)]
+
     await this.set(`/details/${user.did}`, user)
     await this.set(`/requests`, this.state.requests)
 
@@ -471,7 +471,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     const didString = didUtils.didString(did)
 
-    Vue.delete(this.state.details, didString)
+    delete this.state.details[didString]
     await this.set(`/details`, this.state.details)
     const id = this.iridium.chat.directConversationIdFromDid(didString)
     if (id) {
