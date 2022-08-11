@@ -13,6 +13,8 @@ jobs:
       - name: Run corepack enable
         run: corepack enable
       - name: Install modules
-        run: yarn install --ignore-scripts --network-concurrency 1
+        run: yarn install --network-concurrency 1
+      - name: link
+        run: yarn link
       - name: Run tests
         run: yarn test
