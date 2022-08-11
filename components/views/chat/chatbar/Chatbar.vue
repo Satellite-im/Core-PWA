@@ -28,7 +28,7 @@ const Chatbar = Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
       webrtc: iridium.webRTC,
     }
@@ -57,9 +57,7 @@ const Chatbar = Vue.extend({
       if (!participant) {
         return
       }
-      return Object.values(this.friends.state.details).find(
-        (f) => f.did === participant.did,
-      )
+      return Object.values(this.friends).find((f) => f.did === participant.did)
     },
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan

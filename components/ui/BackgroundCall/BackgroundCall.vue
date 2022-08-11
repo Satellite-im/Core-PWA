@@ -20,7 +20,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      friends: (state) => (state as RootState).friends.all,
       audio: (state) => (state as RootState).audio,
     }),
     activeCall() {
