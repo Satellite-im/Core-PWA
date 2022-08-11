@@ -10,12 +10,9 @@ export default Vue.extend({
   components: {
     UserPlusIcon,
   },
-  data: () => ({
-    conversations: iridium.chat.state.conversations,
-  }),
   computed: {
     sortedConversations(): Conversation[] {
-      return Object.values(this.conversations).sort(
+      return Object.values(iridium.chat.state.conversations).sort(
         (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
       )
     },
@@ -23,7 +20,7 @@ export default Vue.extend({
   methods: {
     lastMessageTimestamp(conversation: Conversation): number {
       const messages = Object.values(
-        this.conversations[conversation.id].message,
+        iridium.chat.state.conversations[conversation.id].message,
       ).sort((a, b) => a.at - b.at)
       return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
     },
