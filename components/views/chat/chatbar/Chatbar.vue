@@ -19,6 +19,7 @@ import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.
 import {
   Conversation,
   ConversationMessagePayload,
+  MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
 
 const Chatbar = Vue.extend({
@@ -196,6 +197,22 @@ const Chatbar = Vue.extend({
       }
       this.smartTypingStart()
     },
+    async uploadAttachments(): Promise<MessageAttachment[]> {
+      const conversationId = this.$route.params.id
+      return await Promise.all(
+        this.files.map(async (file, index) => {
+          return await iridium.chat.addFile(file, {
+            progress: (bytes) => {
+              this.$store.commit('chat/setFileProgress', {
+                id: conversationId,
+                index,
+                progress: Math.floor((bytes / file.file.size) * 100),
+              })
+            },
+          })
+        }),
+      )
+    },
     /**
      * @method sendMessage
      * @description Sends message by calling the sendMessage action with current data and
@@ -203,25 +220,27 @@ const Chatbar = Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
-      // set id in case recipient changes during send
-      const conversationId = this.$route.params.id
-      // if there are any files attached to this chat, send
-      // await this.sendFiles()
-      // return if input is empty or over max length
       if (
-        this.text.length > this.$Config.chat.maxChars ||
-        !this.text.trim().length
+        !this.files.length &&
+        (this.text.length > this.$Config.chat.maxChars ||
+          !this.text.trim().length)
       ) {
         return
       }
       const value = this.text
       this.text = ''
 
+      const conversationId = this.$route.params.id
+      const attachments = await this.uploadAttachments()
+
+      this.$store.commit('chat/deleteFiles', conversationId)
+
       const payload: ConversationMessagePayload = {
         conversationId,
         type: 'text',
         body: value,
         at: Date.now(),
+        attachments,
       }
 
       if (this.chat.replyChatbarMessages[conversationId]) {

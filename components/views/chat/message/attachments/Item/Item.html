@@ -1,0 +1,33 @@
+<div class="message-attachments-item">
+  <UiChatImage v-if="isEmbeddable" :image="attachment" :alt="attachment.name" />
+  <template v-else>
+    <div class="details" @click="download">
+      <file-icon size="2x" class="file-icon" />
+      <div class="file-info">
+        <TypographyText class="ellipsis">
+          {{ attachment.name }}
+        </TypographyText>
+        <TypographyText font="heading" color="dark" size="sm">
+          {{ $filesize(attachment.size) }} - {{ attachment.type }}
+        </TypographyText>
+      </div>
+      <InteractablesButton
+        @click="download"
+        color="primary"
+        data-cy="chat-file"
+        :rel="$t('controls.download')"
+      >
+        <download-icon size="1x" />
+      </InteractablesButton>
+    </div>
+    <a
+      class="download-link"
+      ref="download"
+      download
+      :href="attachment.src"
+      :rel="$t('controls.download')"
+      noopener
+      noreferrer
+    ></a>
+  </template>
+</div>
