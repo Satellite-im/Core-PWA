@@ -18,7 +18,7 @@
     </div>
     <div class="sidebar-nav">
       <InteractablesButton
-        :inactive="$route.path.includes('/files')"
+        :disabled="$route.path.includes('/files')"
         class="sidebar-full-btn"
         data-cy="sidebar-files"
         :color="$route.path.includes('/files') ? 'primary' : 'dark'"
@@ -28,7 +28,7 @@
         <folder-icon size="1.2x" />
       </InteractablesButton>
       <InteractablesButton
-        :inactive="!$route.path.includes('/friends')"
+        :disabled="$route.path.includes('/friends')"
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
         :color="$route.path.includes('/friends') ? 'primary' : 'dark'"

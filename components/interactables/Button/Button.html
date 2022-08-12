@@ -1,10 +1,9 @@
 <button
   :class="[`button size-${size} color-${color}`, {
     'outlined': outlined,
-    'disabled': disabled,
   }]"
   :disabled="loading"
-  :type="htmlType"
+  :type="type"
   ref="button"
   @click="handleClick"
   @mousemove.stop="handleMouseMove"

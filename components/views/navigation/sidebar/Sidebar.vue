@@ -22,7 +22,6 @@ export default Vue.extend({
   },
   computed: {
     incomingRequestsLength(): number {
-      return 69
       return Object.values(this.requests).filter(
         (r: FriendRequest) => r.status === 'pending' && r.incoming,
       ).length
