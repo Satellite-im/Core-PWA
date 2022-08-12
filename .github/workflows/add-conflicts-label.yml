@@ -2,7 +2,7 @@ name: Add Conflicts Label
 on:
   push:
     branches:
-      - dev
+      - iridium-dev
 jobs:
   triage:
     runs-on: ubuntu-latest
