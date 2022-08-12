@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`state.default 0 1`] = `
+Object {
+  "calling": false,
+  "id": "",
+  "participants": Array [],
+  "type": "friend",
+}
+`;

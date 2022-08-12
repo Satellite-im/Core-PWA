@@ -31,7 +31,7 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
     }
   },
@@ -98,17 +98,14 @@ export default Vue.extend({
 
     details(): User | Group | undefined {
       if (this.conversation.type === 'direct') {
-        const participant = this.conversation.participants.find(
-          (f) => f.did !== iridium.connector?.id,
+        const friendDid = this.conversation.participants.find(
+          (f) => f !== iridium.connector?.id,
         )
-        if (!participant) {
+        if (!friendDid) {
           return
         }
-        return Object.values(this.friends.state.details).find(
-          (f) => f.did === participant.did,
-        )
+        return this.friends[friendDid]
       }
-
       return this.groups[this.conversation.id]
     },
 

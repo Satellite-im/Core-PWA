@@ -195,7 +195,6 @@ export default {
     commit('setActiveAccount', iridium.connector?.id)
     logger.debug('accounts/actions/loadAccount', 'fetching iridium profile')
     const userInfo = await iridium.profile?.get()
-    console.log('userInfo', userInfo)
     if (!userInfo?.did) {
       logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
@@ -265,6 +264,7 @@ export default {
     const imagePath = await uploadPicture(userData.image)
     const profile = {
       did: iridium.connector?.id,
+      peerId: iridium.connector?.peerId,
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
@@ -325,6 +325,20 @@ export default {
     rootState,
     state,
   }: ActionsArguments<AccountsState>) {
+    dispatch(
+      'webrtc/initialize',
+      {
+        privateKeyInfo: {
+          type: 'ed25519',
+          privateKey: iridium.connector?.peerId,
+        },
+        originator: iridium.connector?.peerId,
+      },
+      {
+        root: true,
+      },
+    )
+
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
   async connectWallet({

@@ -31,13 +31,13 @@ export default Vue.extend({
   data() {
     return {
       isLoading: false,
-      webrtc: iridium.webRTC,
     }
   },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
+      webrtc: (state) => (state as RootState).webrtc,
     }),
     audioMuted(): boolean {
       return this.audio.muted
@@ -46,9 +46,9 @@ export default Vue.extend({
       return this.video.disabled
     },
     screenMuted(): boolean {
-      return Boolean(
-        iridium.connector?.id &&
-          this.webrtc.state.streamMuted[iridium.connector?.id]?.screen,
+      return (
+        iridium.connector?.peerId &&
+        this.webrtc.streamMuted[iridium.connector?.peerId]?.screen
       )
     },
   },
@@ -67,10 +67,11 @@ export default Vue.extend({
         } else if (kind === WebRTCEnum.VIDEO) {
           await this.$store.dispatch('video/toggleMute')
         } else {
-          await this.webrtc.toggleMute({
-            kind,
-            did: iridium.connector?.id,
-          })
+          await this.$store.dispatch(
+            'webrtc/toggleMute',
+            { kind, peerId: iridium.connector?.peerId },
+            { root: true },
+          )
         }
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
@@ -83,7 +84,7 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      this.webrtc.hangUp()
+      this.$store.dispatch('webrtc/hangUp', undefined, { root: true })
     },
   },
 })

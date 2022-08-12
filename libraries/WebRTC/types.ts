@@ -10,18 +10,18 @@ import {
 } from './Encoders'
 
 export interface WireEventListeners {
-  ERROR: (data: { did: string; error: Error }) => void
+  ERROR: (data: { peerId: string; error: Error }) => void
   TRACKER_CONNECT: (data: { tracker: string }) => void
-  CONNECT: (data: { did: string }) => void
-  DATA: (data: { did: string; data: any }) => void
-  RAW_DATA: (data: { did: string; data: any }) => void
-  CLOSE: (data: { did: string }) => void
-  IDENTIFICATION: (data: { did: string }) => void
-  SIGNAL: (data: { did: string; data: SignalData }) => void
-  REFUSE: (data: { did: string }) => void
+  CONNECT: (data: { peerId: string }) => void
+  DATA: (data: { peerId: string; data: any }) => void
+  RAW_DATA: (data: { peerId: string; data: any }) => void
+  CLOSE: (data: { peerId: string }) => void
+  IDENTIFICATION: (data: { peerId: string }) => void
+  SIGNAL: (data: { peerId: string; data: SignalData }) => void
+  REFUSE: (data: { peerId: string }) => void
   TYPING_STATE: (data: {
     state: TypeOf<typeof KeyboardStates>
-    did: string
+    peerId: string
   }) => void
 }
 
@@ -54,43 +54,43 @@ export type Tracks = {
 export type TrackKind = keyof Tracks
 
 export interface CallEventListeners {
-  INCOMING_CALL: (data: { did: string; callId?: string }) => void
-  OUTGOING_CALL: (data: { did: string; callId?: string }) => void
-  CONNECTED: (data: { did: string; callId?: string }) => void
-  HANG_UP: (data: { did: string; callId?: string }) => void
-  ERROR: (data: { did: string; error: Error; callId?: string }) => void
+  INCOMING_CALL: (data: { peerId: string; callId?: string }) => void
+  OUTGOING_CALL: (data: { peerId: string; callId?: string }) => void
+  CONNECTED: (data: { peerId: string; callId?: string }) => void
+  HANG_UP: (data: { peerId: string; callId?: string }) => void
+  ERROR: (data: { peerId: string; error: Error; callId?: string }) => void
   REMOTE_TRACK_RECEIVED: (data: {
-    did: string
+    peerId: string
     callId?: string
     kind?: string
     track: MediaStreamTrack
     stream: MediaStream
   }) => void
   REMOTE_TRACK_UNMUTED: (data: {
-    did: string
+    peerId: string
     kind?: string
     trackId: string
   }) => void
   REMOTE_TRACK_REMOVED: (data: {
-    did: string
+    peerId: string
     callId?: string
     kind?: string
     track: MediaStreamTrack
     stream: MediaStream
   }) => void
   REMOTE_TRACK_MUTED: (data: {
-    did: string
+    peerId: string
     kind?: string
     trackId: string
   }) => void
   STREAM: (data: {
-    did: string
+    peerId: string
     callId?: string
     kind?: string
     stream: MediaStream
   }) => void
   TRACK_MUTE_CHANGED: (data: {
-    did: string
+    peerId: string
     callId?: string
     kind: string
   }) => void
@@ -104,13 +104,8 @@ export interface CallEventListeners {
     stream: MediaStream
     kind?: string
   }) => void
-  LOCAL_TRACK_UNMUTED: (data: {
-    track: MediaStreamTrack
-    stream: MediaStream
-    kind?: string
-  }) => void
-  DESTROY: (data: { did: string; callId?: string }) => void
-  ANSWERED: (data: { did: string; callId?: string }) => void
+  DESTROY: (data: { peerId: string; callId?: string }) => void
+  ANSWERED: (data: { peerId: string; callId?: string }) => void
 }
 
 export type CallEvents = keyof CallEventListeners
@@ -119,10 +114,10 @@ export interface WebRTCEventListeners {
   INIT: () => void
   KILL: () => void
   ERROR: (data: { error: Error }) => void
-  TRACKER_CONNECT: (data: { did: string; tracker: string }) => void
-  PEER_CONNECT: (data: { did: string }) => void
-  PEER_DISCONNECT: (data: { did: string }) => void
-  PEER_DATA: (data: { did: string; data: any }) => void
+  TRACKER_CONNECT: (data: { peerId: string; tracker: string }) => void
+  PEER_CONNECT: (data: { peerId: string }) => void
+  PEER_DISCONNECT: (data: { peerId: string }) => void
+  PEER_DATA: (data: { peerId: string; data: any }) => void
 }
 
 export type WebRTCEvent = keyof WebRTCEventListeners

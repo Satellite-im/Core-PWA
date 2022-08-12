@@ -5,14 +5,14 @@
   <TypographyTitle :size="6" v-if="conversation" :text="conversation.name" />
   <button
     class="phone"
-    :class="{'disabled' : !enableRTC || webrtc.isActiveCall}"
+    :class="{'disabled' : !enableRTC || webrtc.activeCall}"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >
     <phone-call-icon size="1.4x" :color="isGroup ? 'grey' : ''" />
   </button>
   <button
-    :class="{'disabled' : !enableRTC || webrtc.isActiveCall}"
+    :class="{'disabled' : !enableRTC || webrtc.activeCall}"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >

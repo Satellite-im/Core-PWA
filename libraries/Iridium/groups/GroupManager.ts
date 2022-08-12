@@ -117,7 +117,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       id,
       name: config.name,
       type: 'group',
-      participants: Object.values(config.members),
+      participants: Object.values(config.members).map((m) => m.id),
     })
     Vue.set(this.state, id, {
       id,
