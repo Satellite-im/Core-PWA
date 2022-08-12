@@ -12,9 +12,7 @@
     </div>
     <InteractablesButton
       v-if="!account.isVerified"
-      type="primary"
-      size="small"
-      :action="() => {}"
+      color="primary"
       :text="$t('pages.settings.profile.accounts.verify')"
     />
     <div v-else class="controls">

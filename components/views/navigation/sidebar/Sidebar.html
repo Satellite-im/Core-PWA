@@ -18,12 +18,21 @@
     </div>
     <div class="sidebar-nav">
       <InteractablesButton
-        :inactive="!$route.path.includes('/friends')"
+        :disabled="$route.path.includes('/files')"
+        class="sidebar-full-btn"
+        data-cy="sidebar-files"
+        :color="$route.path.includes('/files') ? 'primary' : 'dark'"
+        @click="() => $router.push('/files')"
+        :text="$t('files.files')"
+      >
+        <folder-icon size="1.2x" />
+      </InteractablesButton>
+      <InteractablesButton
+        :disabled="$route.path.includes('/friends')"
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
-        :type="$route.path.includes('/friends') ? 'primary' : 'dark'"
-        size="small"
-        :action="() => $router.push('/friends')"
+        :color="$route.path.includes('/friends') ? 'primary' : 'dark'"
+        @click="() => $router.push('/friends')"
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
@@ -36,17 +45,6 @@
             {{incomingRequestsLength}}
           </TypographyText>
         </span>
-      </InteractablesButton>
-      <InteractablesButton
-        :inactive="$route.path.includes('/files')"
-        class="sidebar-full-btn"
-        data-cy="sidebar-files"
-        :type="$route.path.includes('/files') ? 'primary' : 'dark'"
-        size="small"
-        :action="() => $router.push('/files')"
-        :text="$t('files.files')"
-      >
-        <folder-icon size="1.2x" />
       </InteractablesButton>
     </div>
     <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">

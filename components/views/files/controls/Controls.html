@@ -23,10 +23,9 @@
   </div>
   <div class="add-container">
     <InteractablesButton
-      type="primary"
+      color="primary"
       :text="$t('pages.files.controls.new_file')"
-      size="small"
-      :action="addFile"
+      @click="addFile"
     >
       <file-plus-icon size="1.3x" />
     </InteractablesButton>

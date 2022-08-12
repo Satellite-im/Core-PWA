@@ -33,16 +33,17 @@
         <delete-icon size="1x" />
       </button>
     </div>
-    <button
+    <InteractablesButton
       v-if="$slots.default"
-      class="button font-color-light"
-      :class="[`is-${color}`, {disabled: disabled}]"
+      class="button"
+      :color="color"
+      :disabled="disabled"
       @click="handleSubmit"
       data-cy="submit-input"
     >
       <UiLoadersSpinner v-if="loading" spinning />
       <slot v-else></slot>
-    </button>
+    </InteractablesButton>
   </div>
   <span v-if="showLimit" class="char-limit">
     {{ text.length }}/{{ maxLength }}

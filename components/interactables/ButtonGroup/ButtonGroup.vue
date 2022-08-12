@@ -36,7 +36,6 @@ export default Vue.extend({
       required: false,
       default: 'active',
     },
-    fullWidth: Boolean,
   },
   data() {
     return {

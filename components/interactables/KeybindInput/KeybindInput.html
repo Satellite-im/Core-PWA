@@ -19,9 +19,8 @@
     </div>
     <div v-show="isListening" key="editing-controls" class="controls">
       <InteractablesButton
-        type="dark"
         v-tooltip.top="$t('pages.settings.keybinds.cancel')"
-        :action="cancel"
+        @click="cancel"
       >
         <XIcon size="1x" />
       </InteractablesButton>
@@ -29,7 +28,7 @@
       <span
         v-tooltip.top="$t(isReservedKeybind ? 'pages.settings.keybinds.reserved' : 'pages.settings.keybinds.save')"
       >
-        <InteractablesButton type="primary" :action="save" :disabled="!canSave">
+        <InteractablesButton color="primary" @click="save" :disabled="!canSave">
           <CheckIcon size="1x" />
         </InteractablesButton>
       </span>
@@ -38,26 +37,23 @@
     <div v-show="!isListening" key="normal-controls" class="controls">
       <InteractablesButton
         ref="editButton"
-        type="dark"
         v-tooltip.top="$t('pages.settings.keybinds.edit')"
-        :action="edit"
+        @click="edit"
       >
         <PencilIcon size="1x" />
       </InteractablesButton>
 
       <InteractablesButton
-        type="dark"
         v-tooltip.top="$t('pages.settings.keybinds.reset')"
-        :action="reset"
+        @click="reset"
         :disabled="!canReset"
       >
         <UndoIcon size="1x" />
       </InteractablesButton>
 
       <InteractablesButton
-        type="dark"
         v-tooltip.top="$t('pages.settings.keybinds.clear')"
-        :action="clear"
+        @click="clear"
         :disabled="!canClear"
       >
         <XIcon size="1x" />

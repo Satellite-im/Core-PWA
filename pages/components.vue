@@ -116,25 +116,20 @@
           <div class="content">
             <InteractablesButton
               text="Test Button"
-              size="normal"
-              type="primary"
-              :outlined="true"
-              :action="testAction"
+              color="primary"
+              outlined
+              @click="testAction"
             />
             <InteractablesButton
               text="Test Button"
-              size="normal"
-              type="primary"
+              color="primary"
               :icon="{ style: 'far', name: 'arrow-circle-right' }"
               :outlined="false"
-              :action="testAction"
+              @click="testAction"
             />
             <InteractablesButton
               text="Test Button"
-              size="normal"
-              type="dark"
-              :action="() => {}"
-              :loading="true"
+              loading
               loading-text="Loading..."
             />
           </div>

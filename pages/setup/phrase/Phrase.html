@@ -26,19 +26,14 @@
     <div class="columns is-mobile">
       <div class="column">
         <InteractablesButton
-          full-width
           :text="$t('pages.settings.accounts.copy_phrase')"
-          :action="copyPhrase"
+          @click="copyPhrase"
         >
           <clipboard-icon size="1x" />
         </InteractablesButton>
       </div>
       <div class="column">
-        <InteractablesButton
-          full-width
-          :text="$t('pages.phrase.done')"
-          :action="confirm"
-        />
+        <InteractablesButton :text="$t('pages.phrase.done')" @click="confirm" />
       </div>
     </div>
   </div>

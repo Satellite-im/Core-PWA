@@ -1,21 +1,11 @@
-#custom-cursor-area {
-  &:extend(.full-width);
+.custom-cursor-area {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: @corner-rounding;
+  pointer-events: none;
+
   > * {
     pointer-events: none;
   }
-  height: @full;
-}
-
-#custom-cursor {
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 0px;
-  height: 0px;
-  pointer-events: none;
-  &:extend(.third-layer);
-  &:extend(.no-select);
-  backface-visibility: hidden;
-  will-change: transform;
-  box-shadow: 0 0 30px 30px rgba(255, 255, 255, 0.1);
 }

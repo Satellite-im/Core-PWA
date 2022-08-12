@@ -2,7 +2,7 @@
   <div class="heading">
     <wallet-icon size="1.2x" />
     <TypographySubtitle :size="6" :text="$t('wallet.wallet')" />
-    <InteractablesClose class="close" :action="toggleWallet" />
+    <InteractablesClose class="close" @click="toggleWallet" />
   </div>
   <WalletBalance />
   <div class="more-info">

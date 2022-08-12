@@ -15,22 +15,15 @@ export default Vue.extend({
   },
   computed: {
     cursorPoint(): string {
-      return `transform: translateX(${this.xChild + 10}px) translateY(${
-        this.yChild + 4
-      }px) translateZ(0) translate3d(0, 0, 0);`
+      return `
+        transform: translate(${this.xChild}px, ${this.yChild}px);
+        opacity: ${this.hideCursor || this.hide ? 0 : 1};
+      `
     },
   },
   methods: {
-    /**
-     * @method moveCursor DocsTODO
-     * @description
-     * @param e
-     * @returns
-     * @example
-     */
-    moveCursor(e: Event | any) {
-      const bounds = e.target.getBoundingClientRect()
-
+    moveCursor(e: MouseEvent) {
+      const bounds = (e.target as HTMLElement).getBoundingClientRect()
       this.xChild = e.clientX - bounds.left
       this.yChild = e.clientY - bounds.top
     },

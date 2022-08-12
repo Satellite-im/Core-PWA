@@ -1,4 +1,8 @@
 .button-group {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
   .button {
     &:first-child {
       border-radius: @corner-rounding 0px 0px @corner-rounding;
@@ -10,21 +14,9 @@
     border-radius: 0;
     margin: 0;
     border: none;
-  }
-  &.is-normal-width {
-    .button {
-      &:not(:first-child) {
-        margin: 0 -1.5px;
-        border-left: none;
-      }
+
+    &:not(.color-primary) {
+      box-shadow: none;
     }
-    display: inline;
-  }
-  &.is-full-width {
-    &:extend(.full-width);
-    .button {
-      flex-grow: 1;
-    }
-    display: flex;
   }
 }

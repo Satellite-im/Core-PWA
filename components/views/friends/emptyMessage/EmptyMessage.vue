@@ -15,9 +15,8 @@
     />
     <InteractablesButton
       :text="$t('friends.add')"
-      size="small"
-      type="primary"
-      :action="navigateAddFriends"
+      color="primary"
+      @click="navigateAddFriends"
     >
       <user-plus-icon size="1.2x" />
     </InteractablesButton>
