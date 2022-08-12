@@ -1,4 +1,3 @@
-import { Friend } from '~/libraries/Iridium/friends/types'
 import { Glyph } from '~/types/ui/glyph'
 
 export type MessageGlyph = {
@@ -43,7 +42,7 @@ export type Conversation = {
   id: string
   type: 'direct' | 'group'
   name?: string
-  participants: Friend[]
+  participants: string[]
   createdAt: number
   updatedAt: number
   message: {
@@ -56,36 +55,4 @@ export const ChatError = {
   CONVERSATION_NOT_FOUND: 'errors.chat.conversation_not_found',
   MESSAGE_NOT_FOUND: 'errors.chat.message_not_found',
   MESSAGE_NOT_SENT: 'errors.chat.message_not_sent',
-}
-
-export enum ConversationConnection {
-  CONNECTED = 'CONNECTED',
-  CONNECTING = 'CONNECTING',
-  DISCONNECTED = 'DISCONNECTED',
-  DISCONNECTING = 'DISCONNECTING',
-  ERROR = 'ERROR',
-}
-
-export enum ConversationActivity {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  TYPING = 'TYPING',
-  NOT_TYPING = 'NOT_TYPING',
-}
-
-export type ConversationParticipant = {
-  address: string
-  name?: string // will be undefined for self
-  profilePicture?: string
-  state?: ConversationConnection
-  activity?: ConversationActivity
-  updatedAt?: number
-  textilePubkey?: string // will be undefined for self
-}
-
-export type ConversationState = {
-  id: string
-  type: 'friend' | 'group'
-  calling: boolean
-  participants: Array<ConversationParticipant>
 }

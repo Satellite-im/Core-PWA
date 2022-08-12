@@ -1,4 +1,9 @@
-<div id="mediastream" data-cy="mediastream" ref="mediastream">
+<div
+  id="mediastream"
+  data-cy="mediastream"
+  ref="mediastream"
+  v-if="isActiveCall"
+>
   <MediaHeading />
   <div id="media" ref="media">
     <MediaUser
@@ -9,15 +14,16 @@
       :isLocal="true"
     />
 
-    <MediaUser
-      v-for="participant in remoteParticipants"
-      :id="`remote_video_${ participant.did }`"
-      data-cy="remote-video"
-      @dblclick="handleDoubleClick('remote_video')"
-      :user="participant"
-      :calling="!participant"
-      :isLocal="false"
-    />
+    <div v-for="participant in remoteParticipants" v-if="participant">
+      <MediaUser
+        :id="`remote_video_${ participant.peerId }`"
+        data-cy="remote-video"
+        @dblclick="handleDoubleClick('remote_video')"
+        :user="participant"
+        :calling="!participant"
+        :isLocal="false"
+      />
+    </div>
 
     <div
       v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"

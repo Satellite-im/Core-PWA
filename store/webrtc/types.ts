@@ -8,17 +8,21 @@ export type StreamMutedState = {
 }
 
 export interface WebRTCState {
+  initialized: boolean
   streamMuted: StreamMutedState
+  originator: string
   activeCall?: {
     callId: string
-    did: string
-  } | null
+    peerId: string
+  }
   incomingCall?: {
     callId: string
-    did: string
+    peerId: string
     type: 'group' | 'friend'
-  } | null
+  }
   createdAt: number
+  elapsedTime: string
+  interval: ReturnType<typeof setInterval> | null
 }
 
 export enum WebRTCError {

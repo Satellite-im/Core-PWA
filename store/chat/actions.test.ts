@@ -6,7 +6,7 @@ import { ScrollDirections } from '~/types/chat/chat'
 import {
   ConversationActivity,
   ConversationConnection,
-} from '~/libraries/Iridium/chat/types'
+} from '~/store/conversation/types'
 import actions from '~/store/chat/actions'
 
 describe('actions.setChatText', () => {

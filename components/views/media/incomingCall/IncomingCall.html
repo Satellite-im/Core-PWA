@@ -4,7 +4,7 @@
     <div
       v-if="Boolean(caller)"
       class="caller"
-      :class="incomingCall.type === 'friend' ? 'caller--user' : 'caller--group'"
+      :class="callType === 'friend' ? 'caller--user' : 'caller--group'"
     >
       <div
         v-if="callerAvatar"
@@ -15,7 +15,7 @@
         v-else
         class="user-profile-placeholder"
         type="random"
-        :seed="caller.did"
+        :seed="caller.address"
         :size="120"
       />
       <div class="user-info">

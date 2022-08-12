@@ -26,7 +26,7 @@
         :set-close-timeout="5000"
       />
     </UiModal> -->
-    <UiModal v-if="incomingCall">
+    <UiModal v-if="webrtc.incomingCall">
       <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
     </UiModal>
     <UiModal
@@ -82,7 +82,4 @@
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
   <UiBackgroundCall v-if="showBackgroundCall" />
-  <UiPip v-if="showBackgroundCall" v-slot="{ dragging }">
-    <PreviewCall :dragging="dragging" />
-  </UiPip>
 </div>

@@ -218,19 +218,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     return this.get<FriendRequest>(`/requests/${didUtils.didString(did)}`)
   }
 
-  /**
-   * @method updateFriend
-   * @description check if there's a friend with the current did and change it with new user object
-   * @param did string (required)
-   * @param user User (required)
-   */
-  updateFriend(user: User): void {
-    const friend = this.getFriend(user.did)
-    if (!friend) return
-
-    Vue.set(this.state.details, user.did, user)
-  }
-
   async send(event: IridiumFriendEvent) {
     return this.iridium.connector?.publish(`/friends/announce`, event, {
       encrypt: {
@@ -400,8 +387,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       await this.iridium.connector?.p2p.connect(did)
     }
 
-    const profile = await this.iridium?.profile.get()
-
     const id = await encoding.hash(
       [user.did, this.iridium.connector?.id].sort(),
     )
@@ -410,7 +395,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         id,
         name: user.name,
         type: 'direct',
-        participants: [{ ...user }, { ...profile }],
+        participants: [user.did, this.iridium.connector.id],
       })
     }
 

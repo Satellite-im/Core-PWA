@@ -27,13 +27,15 @@ export default Vue.extend({
   },
   data() {
     return {
-      friends: iridium.friends,
+      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
-      webrtc: iridium.webRTC,
     }
   },
   computed: {
+    ...mapState({
+      webrtc: (state) => (state as RootState).webrtc,
+    }),
     ...mapGetters('ui', ['allUnseenNotifications']),
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
@@ -54,15 +56,13 @@ export default Vue.extend({
       if (this.isGroup) {
         return this.groups[this.conversation.id]
       }
-      const participant = this.conversation.participants.find(
-        (f) => f.did !== iridium.connector?.id,
+      const friendDid = this.conversation.participants.find(
+        (f) => f !== iridium.connector?.id,
       )
-      if (!participant) {
+      if (!friendDid) {
         return
       }
-      return Object.values(this.friends.state.details).find(
-        (f) => f.did === participant.did,
-      )
+      return this.friends[friendDid]
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -87,11 +87,13 @@ export default Vue.extend({
   },
   methods: {
     async call(kinds: TrackKind[]) {
-      if (!this.enableRTC || !this.details) {
+      if (!this.enableRTC) {
         return
       }
       try {
-        await this.webrtc.call(this.details, kinds)
+        await this.$store.dispatch('webrtc/call', {
+          kinds,
+        })
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
@@ -100,7 +102,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.webrtc.isActiveCall) {
+      if (!this.enableRTC || this.webrtc.activeCall) {
         return
       }
       await this.call(['audio'])

@@ -20,7 +20,7 @@ export default {
 
     // if conversations are empty or found conversation does not have groupedMessages
     if (!conversation?.groupedMessages) {
-      commit('setCurrentChat', { isMessagesLoading: false, hasNextPage: false })
+      commit('setCurrentChat', { isMessagesLoading: false })
       return
     }
 

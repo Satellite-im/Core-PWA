@@ -1,4 +1,4 @@
-<div v-if="call" class="user" :class="{'user-talking': isTalking}">
+<div v-if="call" class="user">
   <div v-if="screenStream" class="video-stream-container">
     <video
       class="video-stream screen-stream"
@@ -13,23 +13,23 @@
     <video
       class="video-stream"
       data-cy="video-stream"
+      :class="{flip: flipVideo && isLocal}"
       :src-object.prop="videoStream"
       playsinline
       :id="`${isLocal ? 'local' : 'remote'}-video-${user.address}`"
     ></video>
   </div>
 
-  <div class="media-user" :class="{pending: isPending}" v-else-if="user">
+  <div class="media-user" v-else-if="user">
     <UiCircle
       :type="src ? 'image' : 'random'"
-      :seed="user.did"
+      :seed="user.address"
       :size="$device.isMobile ? 36 : 65"
       data-cy="media-user-circle"
       :class="{calling: audioStream}"
       :source="src"
       color="transparent"
     />
-    <UiLoadersScaleLoader v-if="isPending" class="media-user-loader" />
     <TypographyTag :text="user.name" :title="user.name" inverted />
   </div>
 

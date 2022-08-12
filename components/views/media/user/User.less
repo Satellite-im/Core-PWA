@@ -2,10 +2,6 @@
 
 .user {
   position: relative;
-  border-radius: @corner-rounding;
-  &-talking {
-    box-shadow: 0 0 3px 3px rgba(0, 184, 148, 0.9);
-  }
 }
 
 .video-stream-container {
@@ -75,15 +71,6 @@
     display: inline-block;
     line-height: 2em;
     max-width: calc(100% - @indicator-size - @light-spacing);
-  }
-  &.pending {
-    background: @gray;
-  }
-  &-loader {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
   }
   width: 100%;
   height: 100%;

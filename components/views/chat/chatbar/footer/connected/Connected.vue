@@ -6,37 +6,16 @@ import { mapState, mapGetters } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import { ConversationParticipant } from '~/store/conversation/types'
-import iridium from '~/libraries/Iridium/IridiumManager'
-import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   components: {
     CircleIcon,
   },
-  data() {
-    return {
-      chat: iridium.chat,
-    }
-  },
   computed: {
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
     }),
-    conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
-    },
-    otherParticipants() {
-      if (!this.conversationId) {
-        return
-      }
-      return this.chat.getOtherParticipants(this.conversationId)
-    },
-    onlineParticipants() {
-      if (!this.conversationId) {
-        return
-      }
-      return this.chat.getOnlineParticipants(this.conversationId)
-    },
+    ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
     /**
      * @method participantsText
      * @description builds translated string for online/offline status

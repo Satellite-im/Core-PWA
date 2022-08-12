@@ -14,9 +14,8 @@ import { Config } from '~/config'
 import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { SettingsRoutes } from '~/store/ui/types'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
-import { User } from '~/libraries/Iridium/friends/types'
-import Group from '~/libraries/Iridium/groups/Group'
 import {
   Conversation,
   ConversationMessagePayload,
@@ -26,13 +25,6 @@ const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
   },
-  data() {
-    return {
-      friends: iridium.friends,
-      groups: iridium.groups.state,
-      webrtc: iridium.webRTC,
-    }
-  },
   computed: {
     ...mapState({
       ui: (state: RootState) => state.ui,
@@ -41,26 +33,6 @@ const Chatbar = Vue.extend({
         return state.chat.files?.[this.$route.params.id] ?? []
       },
     }),
-    conversation(): Conversation {
-      return iridium.chat.state.conversations[this.$route.params.id]
-    },
-    isGroup(): boolean {
-      return this.conversation.type === 'group'
-    },
-    recipient(): User | Group | undefined {
-      if (this.isGroup) {
-        return this.groups[this.conversation.id]
-      }
-      const participant = this.conversation.participants.find(
-        (f) => f.did !== iridium.connector?.id,
-      )
-      if (!participant) {
-        return
-      }
-      return Object.values(this.friends.state.details).find(
-        (f) => f.did === participant.did,
-      )
-    },
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan
     },
@@ -182,7 +154,7 @@ const Chatbar = Vue.extend({
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
     throttleTyping: throttle(function (ctx) {
-      this.webrtc.sendTyping({ did: this.recipient.did })
+      ctx.$store.dispatch('webrtc/sendTyping')
     }, Config.chat.typingInputThrottle),
     /**
      * @method smartTypingStart

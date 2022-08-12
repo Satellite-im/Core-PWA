@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { keys } from 'libp2p-crypto'
-// import { createFromPubKey } from 'peer-id'
+import { createFromPubKey } from 'peer-id'
 import Vue from 'vue'
 import { uniqBy, find } from 'lodash'
 import {

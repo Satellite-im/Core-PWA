@@ -2,8 +2,11 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import { Friend } from '~/types/ui/friends'
 import { User } from '~/types/ui/user'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
+import { ConversationParticipant } from '~/store/conversation/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -31,43 +34,38 @@ export default Vue.extend({
   data() {
     return {
       componentKey: this.fullscreen,
-      webrtc: iridium.webRTC.state,
-      profile: iridium.profile.state,
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts', 'friends', 'groups', 'audio']),
+    ...mapState([
+      'ui',
+      'accounts',
+      'friends',
+      'groups',
+      'webrtc',
+      'conversation',
+    ]),
+    ...mapGetters('webrtc', ['isActiveCall']),
     computedUsers() {
       return this.fullscreen
         ? this.users.slice(0, this.fullscreenMaxViewableUsers)
         : this.users.slice(0, this.maxViewableUsers)
     },
     localParticipant() {
-      const id = this.webrtc.activeCall?.callId
-
-      if (!id || !iridium.chat?.hasConversation(id)) {
-        return []
-      }
-
-      const conversation = iridium.chat?.getConversation(id)
-
-      return conversation?.participants.find((participant) => {
-        return participant.did === iridium.connector?.id
-      })
+      return { ...this.accounts.details, peerId: iridium.connector?.peerId }
     },
     remoteParticipants() {
-      const id = this.webrtc.activeCall?.callId
-
-      if (!id || !iridium.chat?.hasConversation(id)) {
-        return []
-      }
-
-      const conversation = iridium.chat?.getConversation(id)
-
-      return conversation?.participants.filter((participant) => {
-        return participant.did !== iridium.connector?.id
-      })
+      return this.conversation.participants.filter(
+        (participant: ConversationParticipant) =>
+          participant.peerId !== iridium.connector?.peerId,
+      )
     },
+    activeCall() {
+      const { activeCall } = this.webrtc
+      const call = $WebRTC.getCall(activeCall.callId)
+      return call
+    },
+    ...mapState(['audio']),
   },
   watch: {
     fullscreen(value) {
@@ -210,12 +208,12 @@ export default Vue.extend({
       },
     },
   },
-  // beforeMount() {
-  //   // TODO: Create mixin/library that will handle call rejoining and closing
-  //   window.onbeforeunload = (e) => {
-  //     this.$store.dispatch('webrtc/hangUp')
-  //   }
-  // },
+  beforeMount() {
+    // TODO: Create mixin/library that will handle call rejoining and closing
+    window.onbeforeunload = (e) => {
+      this.$store.dispatch('webrtc/hangUp')
+    }
+  },
   methods: {
     /**
      * @method volumeControlValueChange DocsTODO

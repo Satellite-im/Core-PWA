@@ -26,7 +26,6 @@ export default Vue.extend({
   data() {
     return {
       settings: iridium.settings.state,
-      isBackgroundCall: iridium.webRTC.isBackgroundCall,
     }
   },
   computed: {
@@ -50,11 +49,6 @@ export default Vue.extend({
 
   &.hidden-nav {
     padding-bottom: 0;
-  }
-
-  &.has-background-call {
-    position: relative;
-    padding-top: @background-call-height;
   }
 }
 </style>
