@@ -5,19 +5,27 @@ import {
   didUtils,
   IridiumPubsubMessage,
 } from '@satellite-im/iridium'
+import type { AddOptions, AddResult } from 'ipfs-core-types/root'
+import type { IPFS } from 'ipfs-core-types'
 import type { SyncSubscriptionResponse } from '@satellite-im/iridium/src/sync/agent'
 import type { EmitterCallback } from '@satellite-im/iridium'
-
+import { ItemErrors } from '../files/types'
 import {
   Conversation,
   ConversationMessage,
   ChatError,
   MessageReactionPayload,
   ConversationMessagePayload,
+  MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
+import { ChatFileUpload } from '~/store/chat/types'
+import createThumbnail from '~/utilities/Thumbnail'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
+import { blobToStream } from '~/utilities/BlobManip'
+import isNSFW from '~/utilities/NSFW'
 
 export type ConversationPubsubEvent = IridiumMessage<{
   message: ConversationMessage
@@ -285,6 +293,36 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.off(`conversations/${id}`, onMessage)
   }
 
+  async addFile(
+    upload: ChatFileUpload,
+    options?: AddOptions,
+  ): Promise<MessageAttachment> {
+    if (upload.file.size === 0) {
+      throw new Error('TODO')
+    }
+    const thumbnailBlob = await createThumbnail(upload.file, 400)
+
+    return {
+      id: (await this.upload(upload.file, options)).path,
+      name: upload.file.name,
+      size: upload.file.size,
+      nsfw: await isNSFW(upload.file),
+      type: Object.values(FILE_TYPE).includes(upload.file.type as FILE_TYPE)
+        ? (upload.file.type as FILE_TYPE)
+        : FILE_TYPE.GENERIC,
+      thumbnail: thumbnailBlob
+        ? (await this.upload(thumbnailBlob, options)).path
+        : '',
+    }
+  }
+
+  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
+    return await (this.iridium.connector?.ipfs as IPFS).add(
+      blobToStream(file),
+      options,
+    )
+  }
+
   /**
    * @method sendMessage
    * @description Sends a message to the given groupChat
@@ -301,7 +339,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ...payload,
         from: this.iridium.connector.id,
         reactions: {},
-        attachments: [],
+        attachments: payload.attachments,
       },
       {
         encrypt: { recipients: conversation.participants },
@@ -321,7 +359,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       ...payload,
       from: this.iridium.connector.id,
       reactions: {},
-      attachments: [],
+      attachments: payload.attachments,
       id: messageCID,
     }
     Vue.set(

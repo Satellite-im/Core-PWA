@@ -1,8 +1,17 @@
-import { Glyph } from '~/types/ui/glyph'
+import { FILE_TYPE } from '~/libraries/Files/types/file'
 
 export type MessageGlyph = {
   packId: string
   src: string
+}
+
+export type MessageAttachment = {
+  id: string
+  name: string
+  type: FILE_TYPE
+  size: number
+  thumbnail: string
+  nsfw: boolean
 }
 
 export type ConversationMessageType =
@@ -21,14 +30,14 @@ export type ConversationMessage = {
   at: number
   body?: string
   glyph?: MessageGlyph
-  attachments: string[]
+  attachments: MessageAttachment[]
   reactions: { [key: string]: string[] }
   replyToId?: string
 }
 
 export type ConversationMessagePayload = Omit<
   ConversationMessage,
-  'id' | 'from' | 'reactions' | 'attachments'
+  'id' | 'from' | 'reactions'
 >
 
 export type MessageReactionPayload = {
