@@ -5,6 +5,7 @@
   position: fixed;
   inset: 0;
   backdrop-filter: @light-blur brightness(80%);
+  &:extend(.sixth-layer);
 
   .modal {
     transform-origin: 50% 200%;
@@ -37,6 +38,7 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   .modal {
     height: @full;
+
     &.small {
       height: auto;
       top: inherit;

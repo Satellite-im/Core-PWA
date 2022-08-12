@@ -23,21 +23,27 @@
           <button @click="previous">
             <arrow-left-icon class="arrow" />
           </button>
-          <!-- todo improve typography with new component -->
-          <div>{{ $t(`friends.${route}`) }}</div>
+          <TypographyText>{{ $t(`friends.${route}`) }}</TypographyText>
         </div>
         <div class="bottom">
           <template v-if="route === 'request'">
-            <div>{{ $t('friends.received') }}</div>
-            <FriendsMobileRequestList
-              :list="incomingRequests"
-              type="incoming"
+            <FriendsRequestsEmptyMessage
+              v-if="!incomingRequests.length && !outgoingRequests.length"
             />
-            <div>{{ $t('friends.sent') }}</div>
-            <FriendsMobileRequestList
-              :list="outgoingRequests"
-              type="outgoing"
-            />
+            <div v-if="incomingRequests.length" class="list-wrapper">
+              <TypographyText>{{ $t('friends.received') }}</TypographyText>
+              <FriendsMobileRequestList
+                :list="incomingRequests"
+                type="incoming"
+              />
+            </div>
+            <div v-if="outgoingRequests.length" class="list-wrapper">
+              <TypographyText>{{ $t('friends.sent') }}</TypographyText>
+              <FriendsMobileRequestList
+                :list="outgoingRequests"
+                type="outgoing"
+              />
+            </div>
           </template>
           <template v-else-if="route === 'add'">
             <div>{{ $t('friends.add_description') }}</div>
@@ -173,7 +179,13 @@ export default Vue.extend({
       padding: 0 1rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 32px;
+
+      .list-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
     }
   }
 }

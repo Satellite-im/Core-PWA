@@ -11,151 +11,162 @@
       </div>
       <div class="profile-right">
         <!-- Profile -->
-        <div>
-          <div class="section-title">
-            <user-icon size=" 1.5x" class="section-icon" />
-            <TypographyTitle
-              :size="6"
-              :text="$t('pages.settings.profile.title')"
-            />
-          </div>
-
-          <div class="profile-main">
-            <div class="profile-image-cropper" v-if="showCropper">
-              <div class="content">
-                <InteractablesImageCropper
-                  v-click-outside="toggleCropper"
-                  :set-cropped-image="setCroppedImage"
-                  :image-url="image"
-                  @toggle-cropper="toggleCropper"
+        <div class="profile-section">
+          <div>
+            <div class="section-title">
+              <div class="title-wrapper">
+                <user-icon size=" 1.5x" class="section-icon" />
+                <TypographyTitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.title')"
                 />
-                <div class="cropper-mask"></div>
               </div>
             </div>
 
-            <div class="profile-section">
-              <div class="subtitle">
-                <TypographySubtitle
-                  :size="6"
-                  :text="$t('pages.settings.profile.subtitle')"
-                />
-              </div>
-              <div class="profile-photo-column photo">
-                <div :class="['profile-photo']">
-                  <InteractablesImageInput
-                    ref="imageInput"
-                    @change="selectProfileImage"
+            <div class="profile-main">
+              <div class="profile-image-cropper" v-if="showCropper">
+                <div class="content">
+                  <InteractablesImageCropper
+                    v-click-outside="toggleCropper"
+                    :set-cropped-image="setCroppedImage"
+                    :image-url="image"
+                    @toggle-cropper="toggleCropper"
                   />
-                  <UiCircle
-                    :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
-                    @click="openFileDialog"
-                    :source="src"
-                    :seed="accounts.active"
-                    :size="isSmallScreen ? 55 : 80"
-                  />
-                  <UiCircle
-                    type="icon"
-                    @click="openFileDialog"
-                    icon="plus"
-                    color="var(--flair-color)"
-                    :size="20"
-                    class="plus-button"
-                  />
+                  <div class="cropper-mask"></div>
                 </div>
               </div>
-              <button
-                v-if="src"
-                class="remove-button"
-                @click="removeProfileImage"
-              >
-                <span>{{ $t('pages.settings.profile.remove_image') }}</span>
-              </button>
-              <div class="username">
-                <TypographyTitle :size="6" :text="accounts.details.name" />
+
+              <div class="profile-section">
+                <div class="subtitle">
+                  <TypographySubtitle
+                    :size="6"
+                    :text="$t('pages.settings.profile.subtitle')"
+                  />
+                </div>
+                <div class="profile-photo-column photo">
+                  <div :class="['profile-photo']">
+                    <InteractablesImageInput
+                      ref="imageInput"
+                      @change="selectProfileImage"
+                    />
+                    <UiCircle
+                      :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
+                      @click="openFileDialog"
+                      :source="src"
+                      :seed="accounts.active"
+                      :size="isSmallScreen ? 55 : 80"
+                    />
+                    <UiCircle
+                      type="icon"
+                      @click="openFileDialog"
+                      icon="plus"
+                      color="var(--flair-color)"
+                      :size="20"
+                      class="plus-button"
+                    />
+                  </div>
+                </div>
+                <button
+                  v-if="src"
+                  class="remove-button"
+                  @click="removeProfileImage"
+                >
+                  <span>{{ $t('pages.settings.profile.remove_image') }}</span>
+                </button>
+                <div class="username">
+                  <TypographyTitle :size="6" :text="accounts.details.name" />
+                </div>
+                <div class="status-input">
+                  <InteractablesInput
+                    v-model="status"
+                    size="xs"
+                    type="text"
+                    :placeholder="$t('pages.settings.profile.status_placeholder')"
+                  >
+                    <edit-icon size="1x" />
+                  </InteractablesInput>
+                </div>
+                <div v-if="!!accounts.details.status" class="status">
+                  <TypographyText as="h6">Current Status</TypographyText>
+                  <TypographyText>
+                    {{ accounts.details.status }}
+                  </TypographyText>
+                </div>
               </div>
-              <div class="status-input">
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <!-- About Me -->
+          <div>
+            <div class="section-title">
+              <div class="title-wrapper">
+                <align-left-icon size="1.5x" class="section-icon" />
+                <TypographyTitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.about.title')"
+                />
+              </div>
+              <button class="edit-button" @click="() => {}">
+                {{$t('global.edit')}}
+              </button>
+            </div>
+            <div class="about-main">
+              <div class="about-subtitle">
+                <TypographySubtitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.about.subtitle')"
+                />
+              </div>
+              <TypographySubtitle :size="6" :text="sampleProfileInfo.about" />
+            </div>
+          </div>
+
+          <!-- Your Accounts -->
+          <div>
+            <div class="section-title">
+              <div class="title-wrapper">
+                <laptop-icon size="1.5x" class="section-icon" />
+                <TypographyTitle
+                  :size="6"
+                  :text="$t('pages.settings.profile.accounts.title')"
+                />
+              </div>
+            </div>
+
+            <div class="accounts-main">
+              <div class="accounts-subtitle-wrapper">
+                <div class="accounts-subtitle">
+                  <TypographySubtitle
+                    :size="6"
+                    :text="$t('pages.settings.profile.accounts.subtitle_url')"
+                    class="accounts-subtitle-text"
+                  />
+                  <div v-tooltip.top="$t('controls.edit')">
+                    <info-icon size="1.5x" class="section-icon-tooltip" />
+                  </div>
+                </div>
                 <InteractablesInput
-                  v-model="status"
+                  v-model="accountUrl"
                   size="xs"
                   type="text"
-                  :placeholder="$t('pages.settings.profile.status_placeholder')"
+                  :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
                 >
                   <edit-icon size="1x" />
                 </InteractablesInput>
               </div>
-            </div>
-            <div v-if="!!accounts.details.status" class="status">
-              <TypographyText> {{ accounts.details.status }} </TypographyText>
-            </div>
-          </div>
-        </div>
 
-        <!-- About Me -->
-        <div>
-          <div class="section-title">
-            <align-left-icon size="1.5x" class="section-icon" />
-            <TypographyTitle
-              :size="6"
-              :text="$t('pages.settings.profile.about.title')"
-            />
-          </div>
-          <div class="about-main">
-            <div class="about-subtitle">
-              <TypographySubtitle
-                :size="6"
-                :text="$t('pages.settings.profile.about.subtitle')"
-              />
-              <div>
-                <button class="edit-button" @click="() => {}">
-                  {{$t('global.edit')}}
-                </button>
-              </div>
-            </div>
-            <TypographySubtitle :size="6" :text="sampleProfileInfo.about" />
-          </div>
-        </div>
-
-        <!-- Your Accounts -->
-        <div>
-          <div class="section-title">
-            <laptop-icon size="1.5x" class="section-icon" />
-            <TypographyTitle
-              :size="6"
-              :text="$t('pages.settings.profile.accounts.title')"
-            />
-          </div>
-
-          <div class="accounts-main">
-            <div class="accounts-subtitle-wrapper">
-              <div class="accounts-subtitle">
-                <TypographySubtitle
-                  :size="6"
-                  :text="$t('pages.settings.profile.accounts.subtitle_url')"
-                  class="accounts-subtitle-text"
-                />
-                <div v-tooltip.top="$t('controls.edit')">
-                  <info-icon size="1.5x" class="section-icon-tooltip" />
+              <div class="accounts-subtitle-wrapper">
+                <div class="accounts-subtitle">
+                  <TypographySubtitle
+                    :size="6"
+                    :text="$t('pages.settings.profile.accounts.subtitle_accounts')"
+                  />
                 </div>
-              </div>
-              <InteractablesInput
-                v-model="accountUrl"
-                size="xs"
-                type="text"
-                :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
-              >
-                <edit-icon size="1x" />
-              </InteractablesInput>
-            </div>
 
-            <div class="accounts-subtitle-wrapper">
-              <div class="accounts-subtitle">
-                <TypographySubtitle
-                  :size="6"
-                  :text="$t('pages.settings.profile.accounts.subtitle_accounts')"
-                />
+                <SettingsProfileAccounts />
               </div>
-
-              <SettingsProfileAccounts />
             </div>
           </div>
         </div>

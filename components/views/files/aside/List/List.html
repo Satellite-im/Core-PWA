@@ -1,4 +1,4 @@
-<ul class="menu-list">
+<ul :class="{'menu-list-mobile': $device.isMobile}">
   <li
     v-for="item in items"
     :class="{'is-active' : isActiveRoute(item.route)}"

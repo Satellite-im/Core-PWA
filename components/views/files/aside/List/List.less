@@ -1,3 +1,22 @@
+.menu-list-mobile {
+  display: flex;
+  gap: @light-spacing;
+
+  li {
+    padding: 4px;
+
+    svg {
+      &:extend(.font-muted);
+    }
+
+    &.is-active {
+      svg {
+        &:extend(.font-secondary);
+      }
+    }
+  }
+}
+
 li {
   cursor: pointer;
   padding: @xlight-spacing @light-spacing;
@@ -18,11 +37,6 @@ li {
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  .menu-list {
-    display: flex;
-    gap: @light-spacing;
-  }
-
   li {
     margin: 0;
 

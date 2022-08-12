@@ -81,23 +81,31 @@
     background: @sidebar-gradient;
   }
 
-  .label {
+  .label-container {
+    display: flex;
+    align-items: center;
     position: absolute;
-    text-align: center;
-    top: 0.25rem;
-    right: 0.25rem;
-    font-size: @mini-text-size;
-    background-color: @flair-color;
-    border-radius: 2px;
-    line-height: 1;
-    padding: 0.25rem;
-    min-width: 18px;
-    font-family: @primary-font;
-    &:extend(.font-primary);
-    &:extend(.background-flair);
-    pointer-events: none;
-    &.inverted {
-      background: @foreground;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding: 8px;
+
+    .label {
+      text-align: center;
+      font-size: @mini-text-size;
+      background-color: @flair-color;
+      border-radius: 2px;
+      line-height: 1;
+      padding: 0.25rem;
+      min-width: 18px;
+      font-family: @primary-font;
+      &:extend(.font-primary);
+      &:extend(.background-flair);
+      pointer-events: none;
+
+      &.inverted {
+        background: @foreground;
+      }
     }
   }
 }

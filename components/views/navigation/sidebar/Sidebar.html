@@ -27,14 +27,16 @@
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
+        <span v-if="incomingRequestsLength" class="label-container">
+          <TypographyText
+            size="xs"
+            class="label"
+            :class="{inverted : $route.path.includes('/friends')}"
+          >
+            {{incomingRequestsLength}}
+          </TypographyText>
+        </span>
       </InteractablesButton>
-      <span
-        v-if="incomingRequestsLength"
-        class="label"
-        :class="{inverted : $route.path.includes('/friends')}"
-      >
-        {{incomingRequestsLength}}
-      </span>
       <InteractablesButton
         :inactive="$route.path.includes('/files')"
         class="sidebar-full-btn"

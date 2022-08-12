@@ -1,7 +1,13 @@
 <template>
-  <button data-cy="hamburger-button" @click="toggleMenu">
-    <menu-icon class="toggle-sidebar" size="1.2x" />
-  </button>
+  <div class="sidebar-toggle">
+    <button
+      data-cy="hamburger-button"
+      class="toggle-button"
+      @click="toggleMenu"
+    >
+      <menu-icon class="button-icon" size="1.2x" />
+    </button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -26,4 +32,15 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less"></style>
+
+<style scoped lang="less">
+.sidebar-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .toggle-button {
+    align-items: center;
+  }
+}
+</style>

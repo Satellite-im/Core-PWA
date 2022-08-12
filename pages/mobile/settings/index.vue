@@ -109,7 +109,7 @@ export default Vue.extend({
 
   .swiper-slide {
     display: flex;
-    padding: @normal-spacing;
+    padding: 8px;
     overflow-y: scroll;
 
     .sidebar {

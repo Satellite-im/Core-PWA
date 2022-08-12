@@ -82,5 +82,6 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   gap: @large-spacing;
+  padding-bottom: 18px;
 }
 </style>
