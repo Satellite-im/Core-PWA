@@ -214,163 +214,6 @@ button {
   display: flex;
   color: inherit;
 }
-.button {
-  border: none;
-  &.active {
-    &:extend(.background-flair-gradient);
-    &:extend(.glow-flair);
-    &:extend(.font-primary);
-
-    &[disabled] {
-      &:extend(.background-flair-gradient);
-    }
-
-    &.disabled {
-      background: @text-muted;
-    }
-
-    &:focus {
-      &:extend(.background-flair-gradient);
-      &:extend(.glow-flair);
-      &:extend(.font-primary);
-    }
-  }
-
-  &.is-primary {
-    &:extend(.background-flair-gradient);
-    &:extend(.glow-flair);
-
-    &[disabled] {
-      &:extend(.background-flair-gradient);
-    }
-
-    &.disabled {
-      background: @text-muted;
-    }
-  }
-
-  &.is-primary.is-outlined {
-    &:extend(.font-flair);
-  }
-
-  #custom-cursor-area {
-    &:extend(.font-primary);
-  }
-
-  &.is-dark.is-outlined {
-    &:extend(.font-primary);
-    border-color: @foreground;
-
-    &:hover,
-    &.active {
-      background: @foreground;
-      border-color: @foreground;
-      &:extend(.font-secondary);
-    }
-
-    &.active {
-      &:extend(.background-flair-gradient);
-      border-color: @foreground;
-      &:extend(.font-secondary);
-    }
-  }
-
-  &.is-dark {
-    &:extend(.background-semitransparent-lighter);
-    &:extend(.font-secondary);
-
-    &:hover:not(.active) {
-      background: @foreground-alt;
-      &:extend(.font-secondary);
-    }
-
-    .active {
-      &:extend(.glow-flair);
-    }
-  }
-
-  &.is-danger,
-  .is-danger {
-    &:extend(.glow-danger);
-    &:extend(.background-danger-gradient);
-
-    &:hover,
-    &:focus:not(:active) {
-      &:extend(.background-danger-gradient);
-      box-shadow: @danger-glow !important;
-    }
-  }
-
-  &.is-success,
-  .is-success {
-    &:extend(.glow-success);
-    &:extend(.background-success-gradient);
-
-    &:hover,
-    &:focus:not(:active) {
-      &:extend(.background-success-gradient);
-      box-shadow: @success-glow !important;
-    }
-  }
-
-  &.is-danger.is-outlined {
-    &:extend(.color-danger);
-    &:extend(.glow-danger);
-
-    &:hover,
-    &:focus:not(:active) {
-      &:extend(.background-danger-gradient);
-      box-shadow: @danger-glow !important;
-    }
-  }
-}
-
-.tabs {
-  overflow: unset !important;
-}
-
-//Selects
-.select select {
-  background: @midground;
-  &:extend(.font-primary);
-}
-.select.is-primary select {
-  &:extend(.background-flair-gradient);
-  border: none;
-  outline: none;
-  &:extend(.glow-flair);
-  &::after,
-  &::before {
-    border-color: @secondary-text;
-  }
-}
-
-.select.is-primary:not(:hover)::after,
-.select:not(.is-multiple):not(.is-loading):hover::after {
-  border-color: @secondary-text;
-  &:extend(.first-layer);
-}
-
-.select.is-primary:hover::after,
-.select.is-primary:active::after,
-.select.is-primary selec:hover {
-  border-color: @secondary-text;
-}
-
-.is-primary {
-  .custom-select {
-    font-family: @secondary-font;
-    &:extend(.font-primary);
-    .selected {
-      &:extend(.background-flair-gradient);
-      &:extend(.glow-flair);
-
-      &:hover {
-        &:extend(.glow-flair-secondary);
-      }
-    }
-  }
-}
 
 ::selection {
   &:extend(.font-secondary);
@@ -384,29 +227,6 @@ button {
     ::selection {
       background: rgba(var(--flair-color-rgb), 0.99) !important;
     }
-  }
-}
-
-//Multiselect & chip items
-.multiselect {
-  .multiselect__input {
-    &:extend(.font-primary);
-    &:extend(.background-flair);
-  }
-
-  .multiselect__content-wrapper {
-    &:extend(.border-flair-small);
-    &:extend(.glow-flair);
-  }
-
-  .multiselect__tags {
-    &:extend(.background-flair);
-    &:extend(.border-flair-small);
-  }
-
-  .multiselect__tag-icon:focus,
-  .multiselect__tag-icon:hover {
-    &:extend(.background-flair);
   }
 }
 
@@ -465,36 +285,6 @@ button {
       }
     }
   }
-}
-
-//Toggle sidebar
-.toggle-sidebar,
-.toggle--sidebar,
-.menu-toggle {
-  &:extend(.font-flair);
-}
-
-//Sidebar
-.side-bar-inner {
-  .body {
-    .category-tree {
-      .category-item {
-        &.active,
-        :hover {
-          &:extend(.font-flair);
-        }
-      }
-    }
-  }
-}
-
-//Scrollbar
-.auto-scroll {
-  &::-webkit-scrollbar-thumb {
-    &:extend(.background-flair);
-  }
-
-  scrollbar-color: @flair-color transparent;
 }
 
 //Media
@@ -583,47 +373,6 @@ button {
   &:extend(.background-flair);
 }
 
-//Friends
-#friends-nav {
-  .label {
-    &:extend(.background-flair);
-  }
-}
-
-#friends-list {
-  .user-check-container {
-    .label {
-      &:extend(.background-flair);
-    }
-  }
-}
-
-//Group
-.group-icon {
-  &.unread {
-    .label {
-      &:extend(.background-flair);
-    }
-  }
-}
-
-.group {
-  & .group-item {
-    &.active {
-      border-color: @flair-color;
-    }
-  }
-}
-
-// Server labels
-#list-container {
-  .unread {
-    .label {
-      &:extend(.background-flair);
-    }
-  }
-}
-
 .unread {
   .label {
     &:extend(.background-flair);
@@ -638,17 +387,6 @@ button {
 }
 .info-toggle {
   &:extend(.font-flair);
-}
-
-//Message
-.is-message {
-  .pinned-message {
-    &:extend(.border-flair-small);
-
-    .pinned-badge {
-      &:extend(.background-flair);
-    }
-  }
 }
 
 //Quick profile
@@ -689,10 +427,6 @@ button {
     transform: none;
     transition: transform 0.15s;
   }
-}
-
-::placeholder {
-  color: @text-muted !important;
 }
 
 //Search Input
@@ -779,29 +513,10 @@ button {
   }
 }
 
-.mg-none {
-  margin: 0 !important;
-}
-
-.mg-quarter {
-  margin: 0.25rem 0 !important;
-}
-
-.mg-half {
-  margin: @light-spacing 0 !important;
-}
-
 .locked,
 .disabled,
 .disabled * {
   cursor: not-allowed !important;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .dynamic-content {
-    min-width: 100vw;
-    background: transparent;
-  }
 }
 
 .spin {

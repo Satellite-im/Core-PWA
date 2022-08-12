@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
+import { Size } from '~/types/typography'
 
 export interface SelectOption {
   value: string
@@ -35,6 +36,10 @@ export default Vue.extend({
     disabled: {
       type: Boolean,
       default: false,
+    },
+    size: {
+      type: String as PropType<Size>,
+      default: 'sm',
     },
   },
   data: () => ({

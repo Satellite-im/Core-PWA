@@ -9,11 +9,10 @@
 button,
 select {
   min-width: 150px;
-  font-size: 0.75rem;
   text-align: left;
   position: relative;
   border-radius: 4rem;
-  padding: @light-spacing 2.5rem @light-spacing @normal-spacing;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
   color: @white;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>')
     no-repeat right 13px center @flair-color;
@@ -36,19 +35,19 @@ select {
 }
 ul {
   min-width: 150px;
-  max-height: 325px;
+  max-height: 350px;
   overflow-y: auto;
   position: absolute;
-  margin-top: @xlight-spacing;
-  margin-top: @xlight-spacing;
+  margin-top: 0.25rem;
   &:extend(.background-dark-gradient);
   &:extend(.fifth-layer);
 }
 li {
   display: block;
-  padding: @light-spacing @xlarge-spacing @light-spacing @normal-spacing;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
   position: relative;
   user-select: none;
+  color: @white;
   &:focus,
   &:hover,
   &[aria-selected='true'] {

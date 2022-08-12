@@ -1,4 +1,4 @@
-<div class="listbox" :value="value" ref="listbox">
+<div class="listbox" :class="`font-size-${size}`" :value="value" ref="listbox">
   <TypographyText
     :id="`${label}-label`"
     :class="{ hidden : !showLabel }"
