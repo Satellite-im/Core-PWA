@@ -4,7 +4,7 @@
     <div
       v-if="Boolean(caller)"
       class="caller"
-      :class="callType === 'friend' ? 'caller--user' : 'caller--group'"
+      :class="incomingCall.type === 'friend' ? 'caller--user' : 'caller--group'"
     >
       <div
         v-if="callerAvatar"
@@ -15,7 +15,7 @@
         v-else
         class="user-profile-placeholder"
         type="random"
-        :seed="caller.address"
+        :seed="caller.did"
         :size="120"
       />
       <div class="user-info">
@@ -25,25 +25,19 @@
     </div>
   </div>
   <footer class="modal-card-foot">
-    <button
-      class="button is-success"
+    <InteractablesButton
+      color="success"
+      @click="() => acceptCall(['audio'])"
       data-cy="incoming-call-accept"
-      v-on:click="() => acceptCall(['audio'])"
     >
       <phone-icon size="1x" class="button-icon" />
-    </button>
-    <!-- <button
-      class="button is-success"
-      v-on:click="() => acceptCall(['audio', 'video'])"
-    >
-      <video-icon size="1x" class="button-icon" />
-    </button> -->
-    <button
-      class="button is-danger"
+    </InteractablesButton>
+    <InteractablesButton
+      color="danger"
+      @click="denyCall"
       data-cy="incoming-call-deny"
-      v-on:click="denyCall"
     >
       <phone-off-icon size="1x" class="button-icon" />
-    </button>
+    </InteractablesButton>
   </footer>
 </div>

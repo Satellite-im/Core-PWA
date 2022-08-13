@@ -13,7 +13,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { PeerMutedState } from '~/store/webrtc/types'
+import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -30,13 +30,13 @@ export default Vue.extend({
   data() {
     return {
       isLoading: false,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
-      webrtc: (state) => (state as RootState).webrtc,
       accounts: (state) => (state as RootState).accounts,
     }),
     audioMuted(): boolean {
@@ -46,13 +46,13 @@ export default Vue.extend({
       return this.inCall ? this.video.disabled : false
     },
     screenMuted(): boolean {
-      return (
-        iridium.connector?.peerId &&
-        this.webrtc.streamMuted[iridium.connector?.peerId]?.screen
+      return Boolean(
+        iridium.connector?.id &&
+          this.webrtc.streamMuted[iridium.connector?.id]?.screen,
       )
     },
     inCall(): boolean {
-      return this.webrtc.activeCall !== undefined
+      return this.webrtc.activeCall !== null
     },
   },
   methods: {

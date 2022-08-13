@@ -1,29 +1,30 @@
 <div v-if="call" class="user">
   <div v-if="screenStream" class="video-stream-container">
     <video
+      :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
       class="video-stream screen-stream"
       data-cy="screen-stream"
       :src-object.prop="screenStream"
       playsinline
-      :id="`${isLocal ? 'local' : 'remote'}-screen-${user.address}`"
+      autoplay
     ></video>
   </div>
 
   <div v-else-if="videoStream" class="video-stream-container">
     <video
+      :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
       class="video-stream"
       data-cy="video-stream"
-      :class="{flip: flipVideo && isLocal}"
       :src-object.prop="videoStream"
       playsinline
-      :id="`${isLocal ? 'local' : 'remote'}-video-${user.address}`"
+      autoplay
     ></video>
   </div>
 
   <div class="media-user" v-else-if="user">
     <UiCircle
       :type="src ? 'image' : 'random'"
-      :seed="user.address"
+      :seed="user.did"
       :size="$device.isMobile ? 36 : 65"
       data-cy="media-user-circle"
       :class="{calling: audioStream}"

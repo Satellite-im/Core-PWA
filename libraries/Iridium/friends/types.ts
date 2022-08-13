@@ -1,7 +1,6 @@
 export type User = {
   did: string
   name: string
-  peerId?: string
   status?: 'online' | 'offline' | 'busy' | 'away'
   seen?: number
   photoHash?: string
