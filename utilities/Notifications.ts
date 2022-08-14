@@ -136,8 +136,8 @@ export const Notifications = class Notifications {
       await new Notification(`${type} ${titleText}`, {
         tag: String(new Date().getTime()),
         body: message,
-        icon: `${this.$Config.textile.browser}/ipfs/${image}`,
-        badge: `${this.$Config.textile.browser}/ipfs/${image}`,
+        icon: `${this.$Config.ipfs.gateway}${image}`,
+        badge: `${this.$Config.ipfs.gateway}${image}`,
       })
     }
     // if (this.currentPlatform === PlatformTypeEnum.WEB) {
@@ -156,7 +156,7 @@ export const Notifications = class Notifications {
     //         attachments: [
     //           {
     //             id: 'face',
-    //             url: `${this.$Config.textile.browser}/ipfs/${image}`,
+    //             url: `${this.$Config.ipfs.gateway}${image}`,
     //           },
     //         ],
     //       },

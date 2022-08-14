@@ -5,7 +5,6 @@ import {
   PublicKey,
   ConfirmOptions,
 } from '@solana/web3.js'
-import { PrivateKey } from '@textile/hub'
 
 export interface RawUser {
   name: string

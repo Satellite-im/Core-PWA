@@ -57,7 +57,7 @@ export default Vue.extend({
     },
     callerAvatar(): string {
       const hash = this.caller?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
 })

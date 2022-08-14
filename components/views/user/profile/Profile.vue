@@ -68,7 +68,7 @@ export default Vue.extend({
     },
     profilePictureSrc(): string {
       const hash = this.ui.userProfile.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     // temp until we get real badges
     badgeColors(): string[] {

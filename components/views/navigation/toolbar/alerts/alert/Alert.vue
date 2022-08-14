@@ -33,7 +33,7 @@ export default Vue.extend({
     },
     alertImage(): string {
       const hash = this.alert?.content?.image
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
   methods: {
