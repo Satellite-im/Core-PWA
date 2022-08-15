@@ -30,6 +30,7 @@ export default Vue.extend({
       type: String,
       default: 'button',
     },
+    disabled: Boolean,
   },
   data() {
     return {
@@ -47,7 +48,7 @@ export default Vue.extend({
         backgroundPosition: `left ${this.cursorX - 150}px top ${
           this.cursorY - 150
         }px`,
-        opacity: this.showCursorGlow ? 1 : 0,
+        opacity: !this.disabled && this.showCursorGlow ? 1 : 0,
       }
     },
   },
