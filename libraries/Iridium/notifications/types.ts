@@ -15,7 +15,7 @@ export enum NotificationType {
   ACCOUNT_NOTIFICATION = 'accountNotification',
   APPLICATION_NOTIFICATION = 'applicationNotification',
   MISCELLANEOUS = 'miscellaneous',
-  EMPTY = 'EMPTY'
+  SEEN = 'Seen',
 }
 
 export type Notification = {

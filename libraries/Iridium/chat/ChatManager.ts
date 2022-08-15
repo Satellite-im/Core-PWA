@@ -226,6 +226,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `/conversations/${conversationId}/message/${message.id}`,
         message,
       )
+      const friendName = this.iridium.friends.getFriend(message?.from)
+      const buildNotification: Partial<Notification> = {
+        fromName: friendName?.name,
+        at: Date.now(),
+        fromAddress: conversationId,
+        title: `New message from ${friendName?.name}`,
+        description:
+          message.body?.length > 79
+            ? `${message.body?.substring(0, 80)}...`
+            : message.body,
+        image: message.from,
+        type: NotificationType.DIRECT_MESSAGE,
+        seen: false,
+      }
+
+      this.iridium.notifications?.sendNotification(buildNotification)
     }
   }
 
@@ -317,21 +333,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (!message) {
       throw new Error(ChatError.MESSAGE_NOT_FOUND)
     }
-    const buildNotification: Partial<Notification> = {
-      fromName: message.from,
-      at: Date.now(),
-      fromAddress: conversationId,
-      title: `New message from ${message.from}`,
-      description:
-        message.body.length > 79
-          ? `${message.body.substring(0, 80)}...`
-          : message.body,
-      image: message.from,
-      type: NotificationType.DIRECT_MESSAGE,
-      seen: false,
-    }
-    console.log(buildNotification)
-    this.iridium.notifications?.sendNotification(buildNotification)
     return message
   }
 

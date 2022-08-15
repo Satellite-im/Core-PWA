@@ -23,6 +23,10 @@
       >
         {{notifications.length}}
       </UiCircle>
+      <ToolbarAlerts
+        v-if="showAlerts && $device.isDesktop"
+        v-click-outside="toggleAlerts"
+      />
       <bell-icon
         v-tooltip.bottom="$t('pages.chat.alerts')"
         size="1x"
@@ -30,15 +34,7 @@
         color="primary"
         @click="toggleAlerts"
       />
-      <ToolbarAlerts
-        v-if="showAlerts && $device.isDesktop"
-        v-click-outside="toggleAlerts"
-      />
     </div>
-    <ToolbarAlerts
-      v-if="showAlerts && !$device.isDesktop"
-      v-click-outside="toggleAlerts"
-    />
     <div
       v-if="conversation"
       v-tooltip.bottom="callTooltipText"
