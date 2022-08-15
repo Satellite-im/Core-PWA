@@ -10,6 +10,7 @@
 
 .list-container {
   position: relative;
+  max-width: 100%;
   .width-buffer {
     height: 0;
     visibility: hidden;
@@ -33,6 +34,16 @@ select {
   justify-content: space-between;
   gap: 0.5rem;
   &:extend(.ellipsis);
+  max-width: 100%;
+
+  > * {
+    flex-shrink: 0;
+  }
+
+  .label {
+    flex-shrink: 1;
+    &:extend(.ellipsis);
+  }
 
   &:disabled {
     box-shadow: 0 5px 14px -5px @gray;
@@ -53,14 +64,13 @@ ul {
   overflow-y: auto;
   position: absolute;
   left: 0;
-  right: 0;
   box-shadow: @ui-shadow;
   margin-top: 0.25rem;
   transform-origin: 50% 0%;
+  z-index: 10000;
+  min-width: 100%;
   &:extend(.background-dark-gradient);
-  &:extend(.fifth-layer);
   &:extend(.round-corners);
-  &:extend(.sixth-layer);
 }
 
 li {
@@ -73,11 +83,15 @@ li {
   position: relative;
   user-select: none;
   color: @white;
+  cursor: pointer;
+  &:extend(.ellipsis);
 
-  &:focus,
-  &:hover {
-    filter: brightness(110%);
-    cursor: pointer;
+  &:not([aria-selected]) {
+    &:focus,
+    &:hover {
+      &:extend(.background-dark-gradient);
+      filter: brightness(110%);
+    }
   }
 
   &[aria-selected='true'] {
