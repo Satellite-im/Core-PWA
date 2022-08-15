@@ -185,6 +185,26 @@ describe('init', () => {
       [newMessage.address]: newObject,
     })
   })
+  it('should addMessageToConversation but conversations does not exist', async () => {
+    const localState = InitialTextileState()
+    localState.conversations = {}
+    const newMessage = {
+      address: '0x0',
+      sender: '0x1',
+      message: {
+        id: '0x1',
+        from: '0x1',
+        to: '0x0',
+        payload: 'hello, world',
+        type: 'text',
+        at: 123,
+        readAt: 123,
+      },
+    }
+    inst.addMessageToConversation(localState, newMessage)
+
+    expect(localState.conversations).toMatchObject({})
+  })
   it('should setConversationLoading', () => {
     const localState = InitialTextileState()
     const newLoadingState = {
