@@ -1,5 +1,4 @@
 import { IDL } from '~/libraries/Solana/GroupChatsProgram/GroupChatsProgram.types'
-idl
 
 test('check IDL export type', () => {
   expect(IDL).toEqual({
