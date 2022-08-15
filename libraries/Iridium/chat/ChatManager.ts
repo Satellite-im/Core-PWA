@@ -4,14 +4,12 @@ import {
   Emitter,
   didUtils,
   IridiumPubsubMessage,
-  encoding,
   IridiumSetOptions,
 } from '@satellite-im/iridium'
 import type { AddOptions, AddResult } from 'ipfs-core-types/root'
 import type { IPFS } from 'ipfs-core-types'
 import type { SyncSubscriptionResponse } from '@satellite-im/iridium/src/sync/agent'
 import type { EmitterCallback } from '@satellite-im/iridium'
-import { ItemErrors } from '../files/types'
 import {
   Conversation,
   ConversationMessage,
