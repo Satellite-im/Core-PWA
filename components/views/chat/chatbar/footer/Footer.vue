@@ -11,6 +11,10 @@ export default Vue.extend({
     CircleIcon,
   },
   props: {
+    peerActive: {
+      type: Boolean,
+      required: true,
+    },
     charlimit: {
       type: Boolean,
       required: true,
