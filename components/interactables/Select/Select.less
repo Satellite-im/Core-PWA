@@ -55,6 +55,8 @@ ul {
   left: 0;
   right: 0;
   box-shadow: @ui-shadow;
+  margin-top: 0.25rem;
+  transform-origin: 50% 0%;
   &:extend(.background-dark-gradient);
   &:extend(.fifth-layer);
   &:extend(.round-corners);
@@ -82,4 +84,18 @@ li {
   &[aria-selected='true'] {
     &:extend(.background-semitransparent-lighter);
   }
+}
+
+.listbox-enter-active {
+  transition: all @animation-speed-long ease, opacity 150ms 50ms ease;
+}
+.listbox-leave-active {
+  transition: all @animation-speed-long ease, opacity 150ms ease;
+}
+
+.listbox-enter,
+.listbox-leave-to {
+  opacity: 0;
+  transform: perspective(880px) rotateX(-45deg);
+  filter: @light-blur;
 }
