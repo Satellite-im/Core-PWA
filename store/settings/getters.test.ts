@@ -19,4 +19,9 @@ describe('settings.getters', () => {
     })
     expect(actual).toMatchSnapshot()
   })
+
+  test('getDate', () => {
+    const actual = getters.getDate(state)(1654486643615)
+    expect(actual).toMatchSnapshot()
+  })
 })
