@@ -178,6 +178,8 @@ export default {
         type: 'Type',
         encrypted: 'Encrypted',
         size: 'Size',
+        search_all: 'Search all folders',
+        search_current: 'Search current folder',
       },
       aside: {
         free_tier: 'Free Tier',

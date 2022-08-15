@@ -18,6 +18,9 @@ const mutations = {
   setRename(state: FilesState, item?: IridiumItem) {
     state.rename = item
   },
+  setSearchValue(state: FilesState, searchValue: string) {
+    state.search.value = searchValue
+  },
   setPath(state: FilesState, path: { id: string; name: string }[]) {
     state.path = path
   },
@@ -36,6 +39,9 @@ const mutations = {
   },
   toggleLayout(state: FilesState) {
     state.gridLayout = !state.gridLayout
+  },
+  toggleSearchAll(state: FilesState) {
+    state.search.searchAll = !state.search.searchAll
   },
 }
 

@@ -23,12 +23,15 @@ export default Vue.extend({
       path: (state) => (state as RootState).files.path,
       gridLayout: (state) => (state as RootState).files.gridLayout,
       modals: (state) => (state as RootState).ui.modals,
+      searchValue: (state) => (state as RootState).files.search.value,
     }),
     ...mapGetters({
+      filterSearch: 'files/filterSearch',
       sortedItems: 'files/sortedItems',
     }),
     directory(): IridiumItem[] {
-      return this.sortedItems(this.items, this.$route.query.route)
+      const filteredItems = this.filterSearch(this.items, this.searchValue)
+      return this.sortedItems(filteredItems, this.$route.query.route)
     },
   },
   watch: {
