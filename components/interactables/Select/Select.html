@@ -1,4 +1,4 @@
-<div class="listbox" :value="value" ref="listbox">
+<div class="listbox" :class="`font-size-${size}`" :value="value" ref="listbox">
   <TypographyText
     :id="`${label}-label`"
     :class="{ hidden : !showLabel }"
@@ -36,29 +36,38 @@
       @keydown="checkShow"
       ref="button"
     >
-      {{ value ? selectedOptionLabel : placeholder }}
+      <div class="label">
+        {{ value ? selectedOptionLabel : placeholder }}
+        <div class="width-buffer" aria-hidden="true">
+          <div v-for="(option, index) in options">{{ option.text }}</div>
+        </div>
+      </div>
+      <chevron-down-icon size="1.25x" />
     </button>
-    <ul
-      v-show="!listboxHidden"
-      :aria-labelledby="`${label}-label`"
-      :aria-activedescendant="value"
-      tabindex="-1"
-      role="listbox"
-      @keydown="checkKeyDown"
-      @click="checkClickItem"
-      ref="list"
-    >
-      <li
-        v-for="(option, index) in options"
-        :key="`${label}-option-${index}`"
-        :aria-selected="option.value === value"
-        :data-value="option.value"
-        :style="option.color ? 'background:' + option.color : ''"
-        role="option"
-        ref="options"
+    <transition name="listbox">
+      <ul
+        v-show="!listboxHidden"
+        :aria-labelledby="`${label}-label`"
+        :aria-activedescendant="value"
+        tabindex="-1"
+        role="listbox"
+        @keydown="checkKeyDown"
+        @click="checkClickItem"
+        ref="list"
       >
-        {{ option.text }}
-      </li>
-    </ul>
+        <li
+          v-for="(option, index) in options"
+          :key="`${label}-option-${index}`"
+          :aria-selected="option.value === value"
+          :data-value="option.value"
+          :style="option.color ? 'background:' + option.color : ''"
+          role="option"
+          ref="options"
+        >
+          {{ option.text }}
+          <check-icon v-if="option.value === value" size="1.25x" />
+        </li>
+      </ul>
+    </transition>
   </div>
 </div>

@@ -6,14 +6,10 @@ import { SideType } from './types'
 
 export default Vue.extend({
   name: 'DragBar',
-  state: {
-    isDragging: false,
-    startPoint: null as number | null,
-  },
   props: {
     side: {
       type: String as PropType<SideType>,
-      require: true,
+      required: true,
     },
     showHandle: {
       type: Boolean,
@@ -24,12 +20,16 @@ export default Vue.extend({
       default: () => false,
     },
   },
+  data: () => ({
+    isDragging: false,
+    startPoint: null as number | null,
+  }),
   computed: {
     isVertical(): boolean {
       return this.side === 'top' || this.side === 'bottom'
     },
   },
-  unmounted() {
+  beforeDestroy() {
     this.removeEventListeners()
   },
   methods: {
@@ -72,5 +72,4 @@ export default Vue.extend({
   },
 })
 </script>
-
-<stye scoped lang="less" src="./DragBar.less"></stye>
+<style scoped lang="less" src="./DragBar.less"></style>

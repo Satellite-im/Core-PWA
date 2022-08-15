@@ -2,7 +2,9 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { CheckIcon, ChevronDownIcon } from 'satellite-lucide-icons'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
+import { Size } from '~/types/typography'
 
 export interface SelectOption {
   value: string
@@ -11,6 +13,10 @@ export interface SelectOption {
 }
 
 export default Vue.extend({
+  components: {
+    CheckIcon,
+    ChevronDownIcon,
+  },
   props: {
     value: {
       type: String,
@@ -35,6 +41,10 @@ export default Vue.extend({
     disabled: {
       type: Boolean,
       default: false,
+    },
+    size: {
+      type: String as PropType<Size>,
+      default: 'sm',
     },
   },
   data: () => ({

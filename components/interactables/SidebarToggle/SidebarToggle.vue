@@ -1,13 +1,7 @@
 <template>
-  <div class="sidebar-toggle">
-    <button
-      data-cy="hamburger-button"
-      class="toggle-button"
-      @click="toggleMenu"
-    >
-      <menu-icon class="button-icon" size="1.2x" />
-    </button>
-  </div>
+  <button data-cy="hamburger-button" @click="toggleMenu">
+    <menu-icon class="button-icon" size="1.5x" />
+  </button>
 </template>
 
 <script lang="ts">
@@ -34,13 +28,10 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less">
-.sidebar-toggle {
+button {
+  color: @flair-color;
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  .toggle-button {
-    align-items: center;
-  }
+  align-self: center;
 }
 </style>
