@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`settings.getters getDate 1`] = `"06/06/2022"`;
+
 exports[`settings.getters getFullTimestamp 1`] = `"06/06/2022 5:37 AM"`;
 
 exports[`settings.getters getTimestamp 1`] = `"5:37 AM"`;
