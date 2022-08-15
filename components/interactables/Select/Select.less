@@ -1,8 +1,18 @@
 .listbox {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+
   .listbox-label {
     padding-bottom: @xlight-spacing;
+  }
+}
+
+.list-container {
+  position: relative;
+  .width-buffer {
+    height: 0;
+    visibility: hidden;
   }
 }
 
@@ -12,13 +22,16 @@ select {
   text-align: left;
   position: relative;
   border-radius: 4rem;
-  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  padding: 0.5rem 1rem;
   color: @white;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>')
-    no-repeat right 13px center @flair-color;
+  background: @flair-color;
   box-shadow: 0 5px 14px -5px @flair-color;
   border: none;
   max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   &:extend(.ellipsis);
 
   &:disabled {
@@ -33,23 +46,39 @@ select {
   -webkit-appearance: none;
   appearance: none;
 }
+
 ul {
   min-width: 150px;
   max-height: 350px;
   overflow-y: auto;
   position: absolute;
-  margin-top: 0.25rem;
+  left: 0;
+  right: 0;
+  box-shadow: @ui-shadow;
   &:extend(.background-dark-gradient);
   &:extend(.fifth-layer);
+  &:extend(.round-corners);
+  &:extend(.sixth-layer);
 }
+
 li {
-  display: block;
-  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
   position: relative;
   user-select: none;
   color: @white;
+  transition: filter @animation-speed ease;
+
   &:focus,
-  &:hover,
+  &:hover {
+    filter: brightness(110%);
+    cursor: pointer;
+  }
+
   &[aria-selected='true'] {
     &:extend(.background-semitransparent-lighter);
   }

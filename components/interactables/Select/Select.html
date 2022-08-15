@@ -36,7 +36,13 @@
       @keydown="checkShow"
       ref="button"
     >
-      {{ value ? selectedOptionLabel : placeholder }}
+      <div class="label">
+        {{ value ? selectedOptionLabel : placeholder }}
+        <div class="width-buffer" aria-hidden="true">
+          <div v-for="(option, index) in options">{{ option.text }}</div>
+        </div>
+      </div>
+      <chevron-down-icon size="1.25x" />
     </button>
     <ul
       v-show="!listboxHidden"
@@ -58,6 +64,7 @@
         ref="options"
       >
         {{ option.text }}
+        <check-icon v-if="option.value === value" size="1.25x" />
       </li>
     </ul>
   </div>
