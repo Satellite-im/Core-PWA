@@ -255,6 +255,17 @@ export default {
       recover: 'Recover Account',
       error_recover_phrase: 'Invalid passphrase',
     },
+    importWallet: {
+      title1: 'Detected Wallets',
+      subtitle1:
+        'Select which of these supported wallets in your browser you want to use',
+      no_wallet:
+        'No supported wallet were found installed on the current device',
+      confirm: 'Connect Wallet',
+      title2: 'Supported Wallets',
+      subtitle2:
+        'This is the list of supported wallets that are not yet installed on your browser, check them out!',
+    },
     phrase: {
       title: 'Recovery Seed',
       done: 'I Saved It',
