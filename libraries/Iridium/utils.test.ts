@@ -1,7 +1,7 @@
 import { setInObject } from './utils'
 
 describe('', () => {
-  test('Initialize Crypto', () => {
+  test('test params', () => {
     const params = {
       obj: {
         a: {
