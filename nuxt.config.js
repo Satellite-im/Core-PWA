@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   alias: {
     tslib: 'tslib/tslib.es6.js',
     'merge-options': 'merge-options/index.js',
-    '@satellite-im/iridium': '@satellite-im/iridium/dist/index.browser.js',
+    '@satellite-im/iridium': '@satellite-im/iridium/dist/browser/index.js',
   },
   bridge: {
     nitro: false,
