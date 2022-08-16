@@ -10,7 +10,6 @@ import {
   EmptyNotification,
   Notification,
   NotificationsError,
-  NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { Notifications } from '~/utilities/Notifications'
 
@@ -96,7 +95,6 @@ export default class NotificationManager extends Emitter<Notification> {
   /**
    * Send a new notification
    * @method sendNotification
-   * @returns returns the textile response
    */
   async sendNotification(payload: Partial<Notification>) {
     if (!this.iridium.connector) return

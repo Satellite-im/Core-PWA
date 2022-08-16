@@ -1,11 +1,10 @@
 <template src="./Alerts.html"></template>
 
 <script lang="ts">
-import Vue, {PropType} from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 import { FlaskConicalIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { Notification } from '~/libraries/Iridium/notifications/types'
 export default Vue.extend({
   components: {
     FlaskConicalIcon,
