@@ -137,7 +137,6 @@ const Chatbar = Vue.extend({
     this.$store.commit('chat/clearReplyChatbarMessage', {
       conversationId: this.conversationId,
     })
-    console.log(this.peerNotActive)
     this.$store.dispatch('ui/setChatbarContent', { content: message })
     if (this.$device.isDesktop) {
       this.$store.dispatch('ui/setChatbarFocus')
