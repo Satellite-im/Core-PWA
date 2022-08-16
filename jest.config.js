@@ -16,7 +16,6 @@ module.exports = {
     '!**/startup.js',
     '!**/*.eslintrc.js',
     '!**/iridium/**',
-
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
