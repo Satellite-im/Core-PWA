@@ -35,6 +35,7 @@ module.exports = {
     '<rootDir>/libraries/Files/errors',
     '<rootDir>/libraries/Files/types',
     '<rootDir>/types',
+    'iridium',
   ],
   testEnvironment: 'jsdom',
   transform: {
