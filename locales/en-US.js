@@ -628,7 +628,6 @@ export default {
       request_already_accepted: 'This user is already in your friends',
       request_not_found: 'User not found',
       friend_info_not_found: 'Seems that this user is not registered',
-      textile_not_initialized: 'Your account is not ready. Try later',
       friend_not_removed: 'Could not remove friend',
       network: 'We are experiencing network issues, please try again later',
     },
@@ -642,12 +641,6 @@ export default {
         'Enter a group name of at least {min} characters, up to {max}',
       conversation_exists:
         'A conversation with that name already exists, please choose a different name',
-    },
-    textile: {
-      friend_not_found: 'Friend not found',
-      mailbox_manager_not_found: 'Mailbox manager not found',
-      mailbox_manager_not_initialized: 'Mailbox manager not initialized',
-      bucket_not_initialized: 'Bucket not initialized',
     },
     storage: {
       database_not_cleared: 'Could not clear database',

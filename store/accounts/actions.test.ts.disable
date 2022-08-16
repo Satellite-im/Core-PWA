@@ -5,13 +5,11 @@ import { AccountsError, RegistrationStatus } from './types'
 import { Config } from '~/config'
 import Crypto from '~/libraries/Crypto/Crypto'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import TextileManager from '~/libraries/Textile/TextileManager'
 import * as accounts from '~/store/accounts/actions'
 import InitialAccountsState from '~/store/accounts/state'
 import { DataStateType } from '~/store/dataState/types'
 
 Vue.prototype.$Config = Config
-Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$Crypto = new Crypto()
 Vue.prototype.$SolanaManager = new SolanaManager()
 
@@ -333,20 +331,7 @@ describe('init', () => {
   })
 
   test('uploadPicture with an image', async () => {
-    /*
-     * The comments are here because I am still discussing on how to proceed in testing out the TextileManager on the Vue side. Right now it is about fetch.
-     */
-    // console.log(Vue.prototype.$TextileManager.bucketManager)
-    // const TMPrototype = Vue.prototype.$TextileManager
-    // TMPrototype.bucketManager.getBucket = jest.fn()
-    // TMPrototype.bucketManager.pushFile = jest.fn()
-
-    const result = await accounts.exportForTesting.uploadPicture(
-      'https://drepram.com/assets/favicon.png',
-    )
-    expect(fetchMock.mock.calls.length).toEqual(1)
-    // expect(TMPrototype.bucketManager.getBucket).toHaveBeenCalled()
-    // expect(TMPrototype.bucketManager.pushFile).toHaveBeenCalled()
+    // TODO: image will get pinned to local ipfs, encrypted for other user and sync node, and then sync node will share
   })
 
   test('uploadPicture with a non image', async () => {
