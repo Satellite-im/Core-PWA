@@ -153,38 +153,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return this.iridium.connector?.set(`/chat${path}`, payload, options)
   }
 
-  // async onConversationMessage(
-  //   conversationId: string,
-  //   message: ConversationPubsubEvent,
-  // ) {
-  //   if (!this.iridium.connector) return
-  //   const { from, did, payload } = message
-  //   const conversation = await this.getConversation(conversationId)
-  //   if (!conversation || !conversation.participants.includes(did)) {
-  //     throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-  //   }
-  //   const { type, message: messageCID } = payload
-  //   if (type === 'chat/message' && messageCID) {
-  //     // TODO: type check the message?
-  //     const msg = await this.iridium.connector.load(messageCID, {
-  //       decrypt: true,
-  //     })
-  //     if (msg) {
-  //       conversation.messages.push(messageCID)
-  //       conversation.message[messageCID] = msg
-  //       this.state.conversation[conversationId] = conversation
-  //       await this.set(
-  //         `/conversations/${conversationId}/messages`,
-  //         conversation.messages,
-  //       )
-  //       await this.set(
-  //         `/conversations/${conversationId}/message/${messageCID}`,
-  //         msg,
-  //       )
-  //       await this.saveConversation(conversation)
-  //     }
-  //   }
-
   async onConversationMessage(
     conversationId: string,
     { from, payload }: ConversationPubsubEvent,
@@ -233,7 +201,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         fromAddress: conversationId,
         title: `New message from ${friendName?.name}`,
         description:
-          message.body?.length > 79
+          message.body?.length! > 79
             ? `${message.body?.substring(0, 80)}...`
             : message.body,
         image: message.from,

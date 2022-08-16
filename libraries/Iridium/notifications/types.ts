@@ -33,7 +33,7 @@ export type Notification = {
 export const EmptyNotification: Notification = {
   at: 0,
   id: '',
-  type: NotificationType.EMPTY,
+  type: NotificationType.SEEN,
   fromName: '',
   fromAddress: '',
   title: '',

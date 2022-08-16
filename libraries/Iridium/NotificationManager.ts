@@ -37,13 +37,6 @@ export default class NotificationManager extends Emitter<Notification> {
     this.state = (await this.iridium.connector?.get('notifications')) || {
       notifications: [{}],
     }
-    // if (!this.state.notifications) {
-    //   return
-    // }
-    // this.state.notifications.map((a) => {
-    //   return a[1].type !== NotificationType.EMPTY
-    // })
-    // console.log(this.state.notifications, 'asdffffffffffffffffffffffffff')
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
@@ -72,10 +65,6 @@ export default class NotificationManager extends Emitter<Notification> {
     return this.state.notifications.sort((a: any, b: any) => {
       return b.at - a.at
     })
-    // .filter((noti: any) => {
-    //   console.log(noti)
-    //   return noti.type !== NotificationType.EMPTY
-    // })
   }
 
   async seenAll() {
@@ -84,18 +73,6 @@ export default class NotificationManager extends Emitter<Notification> {
       this.iridium.connector?.set(`/notifications/${a[0]}`, a[1])
     })
   }
-
-  // private async onNotificationActivity(notificationID: string) {
-  //   if (!this.iridium.connector) return
-  //   const noti = await this.iridium.connector.load(notificationID, {
-  //     decrypt: true,
-  //   })
-  //   if (noti) {
-  //     this.state.notifications.push(noti)
-  //     await this.iridium.connector?.set(`notifications/${noti}`, noti)
-  //   }
-  //   this.emit(`notifications/${noti}`, noti)
-  // }
 
   async subscribeToNotifications(
     id: string,
@@ -132,26 +109,6 @@ export default class NotificationManager extends Emitter<Notification> {
       payload,
     )
 
-    // const buildNotification: Partial<Notification> = {
-    //   fromName: friendUser?.name,
-    //   at: Date.now(),
-    //   fromAddress: conversationId,
-    //   title: `New message from ${friendUser?.name}`,
-    //   description:
-    //     msg.body.length > 79 ? `${msg.body.substring(0, 80)}...` : msg.body,
-    //   image: friendUser?.photoHash,
-    //   type: NotificationType.DIRECT_MESSAGE,
-    //   seen: false,
-    // }
-    // console.log(buildNotification)
-    // this.iridium.notifications?.sendNotification(buildNotification)
-    // await this.iridium.connector.broadcast(
-    //   `/notifications/${notificationCID}`,
-    //   {
-    //     action: 'notification',
-    //     notification: payload,
-    //   },
-    // )
     this.emit(`notifications/${notificationCID}`, {
       action: 'notification',
       message: payload,
