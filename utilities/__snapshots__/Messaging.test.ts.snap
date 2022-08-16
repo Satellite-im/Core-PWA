@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` messageRepliesToUIReplies 1`] = `
+exports[`messageRepliesToUIReplies 1`] = `
 Array [
   Object {
     "fileMessage": "",
@@ -25,7 +25,7 @@ Array [
 ]
 `;
 
-exports[` replyMessageToUIReply 1`] = `
+exports[`replyMessageToUIReply 1`] = `
 Object {
   "0": Object {
     "fileMessage": "",

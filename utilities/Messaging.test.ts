@@ -224,9 +224,9 @@ describe('', () => {
     jest.useFakeTimers()
     const action = jest.fn()
     const result1 = Messaging.refreshTimestampInterval(123, action, 3000)
-    expect(result1).toBe(1000000000000)
+    expect(result1).toBe(1)
     const result2 = Messaging.refreshTimestampInterval(135, action, 3000)
-    expect(result2).toBe(1000000000001)
+    expect(result2).toBe(2)
   })
 
   test('replyMessageToUIReply', () => {
