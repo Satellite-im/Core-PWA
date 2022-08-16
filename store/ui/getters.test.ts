@@ -1,6 +1,5 @@
 import { Flairs, GlyphMarketViewStatus, Themes } from './types'
 import * as getters from '~/store/ui/getters'
-import InitialUIState from '~/store/ui/state'
 
 describe('init', () => {
   let inst: any
