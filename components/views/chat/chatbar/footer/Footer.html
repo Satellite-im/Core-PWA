@@ -1,6 +1,6 @@
 <div id="bottom-bar-container">
   <UiChatTypingIndicator v-if="typingParticipants.length" />
-  <ChatbarFooterConnected v-else />
+  <ChatbarFooterConnected :peerActive="peerActive" v-else />
   <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
     {{ lengthCount }}
   </span>

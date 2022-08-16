@@ -56,7 +56,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   private _intervals: { [key: string]: any } = {}
-  private _subscriptions: {
+  public subscriptions: {
     [key: string]: { topic: string; connected: boolean }
   } = {}
 
@@ -80,9 +80,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       logger.info('iridium/chatmanager/init', 'p2p ready, initializing chat...')
 
       for (const conversation of conversations) {
-        if (this._subscriptions[conversation.id] !== undefined) continue
+        if (this.subscriptions[conversation.id] !== undefined) continue
         const topic = `/chat/conversations/${conversation.id}`
-        this._subscriptions[conversation.id] = { topic, connected: false }
+        this.subscriptions[conversation.id] = { topic, connected: false }
 
         logger.info(
           'iridium/chatmanager/init',
@@ -118,9 +118,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error('no topic in sync subscription response')
     }
     const [conversationId, subscription] =
-      Object.entries(this._subscriptions).find(
+      Object.entries(this.subscriptions).find(
         ([, { topic }]) => topic === message.payload.body.topic,
       ) || []
+
     if (!conversationId || !subscription) {
       throw new Error('subscription not requested')
     }
@@ -136,6 +137,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         handler: this.onConversationMessage.bind(this, conversationId),
       })
       subscription.connected = true
+      this.subscriptions = {
+        ...this.subscriptions,
+        [conversationId]: {
+          ...this.subscriptions[conversationId],
+          connected: true,
+        },
+      }
       return
     }
     logger.warn(
@@ -257,7 +265,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversations/${id}`, conversation)
 
     // ask the sync node to subscribe to this topic
-    this._subscriptions[conversation.id] = {
+    this.subscriptions[conversation.id] = {
       topic: `/chat/conversations/${id}`,
       connected: false,
     }
@@ -384,7 +392,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       })
     ).toString()
 
-    if (!this._subscriptions[conversationId]) {
+    if (!this.subscriptions[conversationId]) {
       // we're not subscribed yet
       throw new Error(`not yet subscribed to conversation ${conversationId}`)
     }
@@ -421,7 +429,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const { conversationId, messageId } = payload
     const message = this.getConversationMessage(conversationId, messageId)
 
-    if (!this._subscriptions[conversationId]) {
+    if (!this.subscriptions[conversationId]) {
       // we're not subscribed yet
       throw new Error(`not yet subscribed to conversation ${conversationId}`)
     }

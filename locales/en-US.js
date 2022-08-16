@@ -26,6 +26,7 @@ export default {
     clear_all: 'Clear All',
     search: 'Search',
     home: 'Home',
+    peer_not_active: 'Please wait while peer connects...',
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
     emoji: 'Emoji',
