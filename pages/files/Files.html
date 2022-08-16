@@ -18,8 +18,9 @@
   </div>
   <div class="files-view">
     <div v-if="!directory.length">
-      <UiResultsMessage v-if="!searchValue" :title="$t('pages.files.empty')" />
-      <UiResultsMessage v-else :title="$t('pages.files.search.empty')" />
+      <UiResultsMessage
+        :title="$t(`pages.files.${searchValue ? 'search.' : ''}empty`)"
+      />
     </div>
     <FilesMobileList
       v-else-if="$device.isMobile"
