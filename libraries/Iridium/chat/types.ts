@@ -48,6 +48,7 @@ export type Conversation = {
   message: {
     [key: string]: ConversationMessage
   }
+  connected?: boolean
 }
 
 export const ChatError = {

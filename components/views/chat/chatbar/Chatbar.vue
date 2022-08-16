@@ -11,10 +11,8 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { SettingsRoutes } from '~/store/ui/types'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
 import {
   Conversation,
@@ -24,9 +22,6 @@ import {
 const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
-  },
-  data() {
-    return { peerActive: false }
   },
   computed: {
     ...mapState({
@@ -98,6 +93,9 @@ const Chatbar = Vue.extend({
         this.chat.countError
       )
     },
+    peerActive(): boolean {
+      return !iridium.chat.subscriptions[this.$route.params.id]?.connected
+    },
     text: {
       /**
        * @method get
@@ -139,17 +137,11 @@ const Chatbar = Vue.extend({
     this.$store.commit('chat/clearReplyChatbarMessage', {
       conversationId: this.conversationId,
     })
+    console.log(this.peerNotActive)
     this.$store.dispatch('ui/setChatbarContent', { content: message })
     if (this.$device.isDesktop) {
       this.$store.dispatch('ui/setChatbarFocus')
     }
-    console.log(iridium.connector, 'state')
-    iridium.connector?.on('peer/connect', (peer) => {
-      console.log(peer)
-      if (peer) {
-        this.peerActive = true
-      }
-    })
   },
   methods: {
     /**
