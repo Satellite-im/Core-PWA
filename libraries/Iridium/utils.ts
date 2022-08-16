@@ -14,7 +14,6 @@ export function setInObject(obj: any, path: string, value: any): boolean {
       if (obj[parts[index]] === value) {
         return false
       }
-      console.log(obj, parts, index)
       obj[parts[index]] = value
     }
     obj = obj[part]
