@@ -1,0 +1,84 @@
+.container {
+  margin: 0 auto;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  .input-account-body {
+    min-width: 250px;
+    align-self: center;
+
+    .container-actions {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: @light-spacing 0;
+
+      .action {
+        width: calc(50% - @xlight-spacing);
+        padding: @xlight-spacing 0;
+
+        .is-button {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        .wallet-button {
+          width: 100%;
+
+          .wallet-content {
+            width: 100%;
+            min-width: 125px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .wallet-icon {
+              width: 20px;
+              height: 20px;
+            }
+          }
+        }
+      }
+    }
+
+    .container-confirm-action {
+      display: flex;
+      justify-content: center;
+      padding: @light-spacing @xlarge-spacing;
+
+      .confirm-btn {
+        min-width: 150px;
+        width: 40%;
+      }
+    }
+  }
+  .input-error {
+    margin-top: @normal-spacing;
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .container {
+    padding: 0 @normal-spacing;
+    &:extend(.full-width);
+  }
+
+  .input-account-body {
+    padding-top: @normal-spacing;
+    align-self: flex-start;
+    height: @full;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: @normal-spacing;
+
+    .title {
+      margin-top: 10vh;
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}

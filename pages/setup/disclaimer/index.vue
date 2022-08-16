@@ -19,8 +19,7 @@ export default Vue.extend({
       this.$router.push('importAccount')
     },
     async connectAccount() {
-      await this.$store.dispatch('accounts/connectWallet')
-      this.$router.push('/')
+      this.$router.push('importWallet')
     },
   },
 })

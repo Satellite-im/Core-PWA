@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="input-account-body">
+    <TypographyTitle :size="4" :text="$t('pages.importWallet.title1')" />
+    <TypographySubtitle :size="6" :text="$t('pages.importWallet.subtitle1')" />
+
+    <TypographyError v-if="error" :text="$t(error)" class="input-error" />
+
+    <UiLoadersLoadingBar v-if="loading" />
+    <div class="container-actions" v-else-if="detectedWallets.length">
+      <div class="action" v-for="wallet in detectedWallets">
+        <InteractablesButton
+          full-width
+          :color="wallet === selected ? 'primary' : 'dark'"
+          @click="() => selectWallet(wallet)"
+          class="wallet-button"
+          ><div class="wallet-content">
+            <img v-bind:src="getImgUrl(wallet.icon)" class="wallet-icon" />
+            <span>{{wallet.name}}</span>
+            <div />
+          </div>
+        </InteractablesButton>
+      </div>
+    </div>
+
+    <TypographyError
+      v-if="!detectedWallets.length"
+      :text="$t('pages.importWallet.no_wallet')"
+      class="input-error"
+    />
+
+    <UiSpacer :height="45" />
+    <div class="container-confirm-action" v-if="detectedWallets.length">
+      <InteractablesButton
+        full-width
+        class="confirm-btn"
+        :text="$t('pages.importWallet.confirm')"
+        :disabled="loading || error || !selected"
+        :color="loading || error || !selected ? 'dark' : 'primary'"
+        @click="importSelectedWallet"
+      />
+    </div>
+
+    <div class="input-account-body" v-if="availableWallets.length">
+      <UiSpacer :height="45" />
+      <TypographyTitle :size="4" :text="$t('pages.importWallet.title2')" />
+      <TypographySubtitle
+        :size="6"
+        :text="$t('pages.importWallet.subtitle2')"
+      />
+
+      <div class="container-actions">
+        <div class="action" v-for="wallet in availableWallets">
+          <InteractablesButton
+            full-width
+            color="dark"
+            @click="() => openWalletPage(wallet)"
+            class="wallet-button"
+            ><div class="wallet-content">
+              <img v-bind:src="getImgUrl(wallet.icon)" class="wallet-icon" />
+              <span>{{wallet.name}}</span>
+              <div />
+            </div>
+          </InteractablesButton>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
