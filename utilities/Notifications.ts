@@ -133,7 +133,7 @@ export const Notifications = class Notifications {
       this.currentPlatform === PlatformTypeEnum.ELECTRON
     ) {
       // browser notification api
-      await new Notification(`${type} ${titleText}`, {
+      await new Notification(`${titleText}`, {
         tag: String(new Date().getTime()),
         body: message,
         icon: `${this.$Config.ipfs.gateway}${image}`,

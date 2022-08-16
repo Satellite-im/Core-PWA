@@ -22,6 +22,10 @@ import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
+import {
+  Notification,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
 
 export default Vue.extend({
   components: {
@@ -50,13 +54,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
+      notifications: () => Object.entries(iridium.notifications?.state),
       ui: (state) => (state as RootState).ui,
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
       webrtc: (state) => (state as RootState).webrtc,
       modals: (state) => (state as RootState).ui.modals,
     }),
-    ...mapGetters('ui', ['allUnseenNotifications']),
     ModalWindows: () => ModalWindows,
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
