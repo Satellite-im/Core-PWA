@@ -1,4 +1,5 @@
 <template src="./Controls.html"></template>
+
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
@@ -8,6 +9,7 @@ import {
   FilePlusIcon,
   AlertTriangleIcon,
   XIcon,
+  FolderIcon,
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -19,10 +21,12 @@ const Controls = Vue.extend({
     FilePlusIcon,
     AlertTriangleIcon,
     XIcon,
+    FolderIcon,
   },
   data() {
     return {
-      text: '' as string,
+      searchValue: '' as string,
+      newFolderName: '' as string,
       errors: [] as Array<string | TranslateResult>,
     }
   },
@@ -32,9 +36,15 @@ const Controls = Vue.extend({
       path: (state) => (state as RootState).files.path,
       status: (state) => (state as RootState).files.status,
       showSidebar: (state) => (state as RootState).ui.showSidebar,
+      searchAll: (state) => (state as RootState).files.search.searchAll,
     }),
     consentToScan(): boolean {
       return iridium.settings.state.privacy.consentToScan
+    },
+  },
+  watch: {
+    searchValue(value: string) {
+      this.$store.commit('files/setSearchValue', value)
     },
   },
   methods: {
@@ -66,12 +76,15 @@ const Controls = Vue.extend({
     addFolder() {
       this.errors = []
       try {
-        iridium.files.addDirectory(this.text, this.path.at(-1)?.id ?? '')
+        iridium.files.addDirectory(
+          this.newFolderName,
+          this.path.at(-1)?.id ?? '',
+        )
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
         return
       }
-      this.text = ''
+      this.newFolderName = ''
     },
 
     handleInput(event: any) {
@@ -141,6 +154,14 @@ const Controls = Vue.extend({
           )}%`,
         ]),
       )
+    },
+
+    /**
+     @ method toggleSearchAll
+     * @description Toggle search all.
+     */
+    toggleSearchAll() {
+      this.$store.commit('files/toggleSearchAll')
     },
   },
 })

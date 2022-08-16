@@ -1,16 +1,32 @@
 <div>
   <div class="search-container">
     <InteractablesSidebarToggle v-if="!showSidebar && !$device.isMobile" />
-    <UiComingSoon
-      :tooltipText="this.$t('ui.coming_soon')"
-      :tooltipPosition="'top'"
+    <InteractablesInput
+      v-model="searchValue"
+      size="xs"
+      :placeholder="$t('pages.files.browse.search')"
+      class="search"
+      type="search"
     >
-      <InteractablesInput
-        size="xs"
-        :placeholder="$t('pages.files.browse.search')"
-        class="search"
-      />
-    </UiComingSoon>
+      <!-- TODO: enable when advanced search is implemented -->
+      <!-- <template #append> -->
+      <!-- <button @click="toggleSearchAll"> -->
+      <!-- <folder-icon -->
+      <!-- v-if="searchAll" -->
+      <!-- class="input-icon" -->
+      <!-- size="1x" -->
+      <!-- v-tooltip.top="$t('pages.files.browse.search_current')" -->
+      <!-- /> -->
+      <!-- <!~~ TODO: Switch to folders-icon when it's ready ~~> -->
+      <!-- <folder-plus-icon -->
+      <!-- v-else -->
+      <!-- class="input-icon" -->
+      <!-- size="1x" -->
+      <!-- v-tooltip.top="$t('pages.files.browse.search_all')" -->
+      <!-- /> -->
+      <!-- </button> -->
+      <!-- </template> -->
+    </InteractablesInput>
     <!-- <InteractablesSelect
       :placeholder="$t('pages.files.file_type')"
       :options="[
@@ -30,29 +46,29 @@
       <file-plus-icon size="1.3x" />
     </InteractablesButton>
     <InteractablesInput
-      v-model="text"
+      v-model="newFolderName"
       class="name"
       size="xs"
-      @submit="addFolder"
       :placeholder="$t('pages.files.controls.name_folder')"
+      @submit="addFolder"
     >
       <folder-plus-icon size="1.3x" />
     </InteractablesInput>
     <input
       ref="upload"
       type="file"
-      @click="resetFileUpload"
-      @change="handleInput"
       style="display: none"
       multiple
+      @click="resetFileUpload"
+      @change="handleInput"
     />
   </div>
   <TypographyText v-if="status" class="status"> {{ status }} </TypographyText>
-  <div class="error-container" v-if="errors.length">
+  <div v-if="errors.length" class="error-container">
     <alert-triangle-icon size="1.3x" />
     <div>
       <TypographyError v-for="error in errors" :key="error" :text="error" />
     </div>
-    <x-icon size="1.3x" class="close" @click="errors=[]" />
+    <x-icon size="1.3x" class="close" @click="errors = []" />
   </div>
 </div>
