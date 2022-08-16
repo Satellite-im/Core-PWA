@@ -15,6 +15,8 @@ module.exports = {
     '!**/config.ts',
     '!**/startup.js',
     '!**/*.eslintrc.js',
+    '!**/iridium/**',
+
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
@@ -35,7 +37,7 @@ module.exports = {
     '<rootDir>/libraries/Files/errors',
     '<rootDir>/libraries/Files/types',
     '<rootDir>/types',
-    'iridium',
+    '<rootDir>/iridium',
   ],
   testEnvironment: 'jsdom',
   transform: {
