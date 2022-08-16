@@ -7,13 +7,13 @@ import {
   RegistrationStatus,
   UserRegistrationPayload,
 } from './types'
+import MultiWalletAdapter from '~/libraries/BlockchainClient/adapters/MultiWalletAdapter/MultiWalletAdapter'
 import Crypto from '~/libraries/Crypto/Crypto'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ActionsArguments } from '~/types/store/store'
 import BlockchainClient from '~/libraries/BlockchainClient'
 import logger from '~/plugins/local/logger'
-import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 
@@ -162,7 +162,7 @@ export default {
       $BlockchainClient.setAdapter(new SolanaAdapter())
       logger.info('accounts/actions/loadAccount', 'using solana adapter')
     } else {
-      $BlockchainClient.setAdapter(new PhantomAdapter())
+      $BlockchainClient.setAdapter(new MultiWalletAdapter())
       logger.info('accounts/actions/loadAccount', 'using phantom wallet')
     }
     const mnemonic = state.phrase
@@ -333,7 +333,7 @@ export default {
     dispatch,
     state,
   }: ActionsArguments<AccountsState>) {
-    const { pin } = state
+    const { pin, phrase } = state
 
     if (!pin) {
       throw new Error(AccountsError.INVALID_PIN)
@@ -341,19 +341,16 @@ export default {
 
     commit('setAdapter', 'Phantom')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-    $BlockchainClient.setAdapter(new PhantomAdapter())
-    await $BlockchainClient.initFromMnemonic()
+    $BlockchainClient.setAdapter(new MultiWalletAdapter())
+    await $BlockchainClient.initFromMnemonic(phrase)
 
-    const { pinHash } = state
     const entropyMessage = IdentityManager.generateEntropyMessage(
       $BlockchainClient.account.publicKey.toBase58(),
-      pinHash,
+      '',
     )
     commit('setEntropy', entropyMessage)
 
-    const fakeMnemonic = 'fake mnemonic to bypass checks'
-    commit('setPhrase', 'fake mnemonic to bypass checks')
-    const encryptedPhrase = await Crypto.encryptWithPassword(fakeMnemonic, pin)
+    const encryptedPhrase = await Crypto.encryptWithPassword(phrase, pin)
 
     commit('setEncryptedPhrase', encryptedPhrase)
   },
