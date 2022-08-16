@@ -25,7 +25,10 @@ module.exports = {
     '^[@|~]/(.*)$': '<rootDir>/$1',
     skaler: '<rootDir>/store/__mocks__/skaler.js',
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules',
+    '<rootDir>/iridium',
+  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/.nuxt',
     '<rootDir>/cypress',
