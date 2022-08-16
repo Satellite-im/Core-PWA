@@ -24,14 +24,30 @@ export default Vue.extend({
       gridLayout: (state) => (state as RootState).files.gridLayout,
       modals: (state) => (state as RootState).ui.modals,
       searchValue: (state) => (state as RootState).files.search.value,
+      searchAll: (state) => (state as RootState).files.search.searchAll,
     }),
     ...mapGetters({
-      filterSearch: 'files/filterSearch',
+      searchedItems: 'files/searchedItems',
       sortedItems: 'files/sortedItems',
     }),
     directory(): IridiumItem[] {
-      const filteredItems = this.filterSearch(this.items, this.searchValue)
-      return this.sortedItems(filteredItems, this.$route.query.route)
+      const filteredItems = this.searchedItems(this.items, this.searchValue)
+      return this.sortedItems(
+        filteredItems,
+        this.items,
+        this.$route.query.route,
+      )
+    },
+    searchScope(): string {
+      const directoryPath = this.path.map((v) => v.name).join(' › ')
+      const currentDirectory =
+        this.path.length > 0 ? directoryPath : (this.$t('ui.home') as string)
+
+      const scope = this.searchAll
+        ? (this.$t('pages.files.search.all') as string)
+        : currentDirectory
+
+      return scope
     },
   },
   watch: {
@@ -47,16 +63,30 @@ export default Vue.extend({
   },
   methods: {
     /**
+     * @description Get the file path for the item.
+     * @param {IridiumItem} item
+     */
+    getPath(item: IridiumItem): { id: string; name: string }[] {
+      const path = [{ id: item.id, name: item.name }]
+      if (item.parentId) {
+        const parent = iridium.files.flat.find((i) => i.id === item.parentId)
+        if (parent) {
+          path.unshift(...this.getPath(parent))
+        }
+      }
+      return path
+    },
+    /**
      * @description if directory, set new path. if file, open fullscreen view
      * @param {IridiumItem} item
      */
     handle(item: IridiumItem) {
       // if directory
       if ('children' in item) {
-        this.$store.commit('files/setPath', [
-          ...this.path,
-          { id: item.id, name: item.name },
-        ])
+        if (this.searchValue) {
+          this.$store.commit('files/setSearchValue', '')
+        }
+        this.$store.commit('files/setPath', this.getPath(item))
         return
       }
       this.$store.commit('files/setPreview', item)

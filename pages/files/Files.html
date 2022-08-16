@@ -4,13 +4,23 @@
     <FilesAside />
   </div>
   <div class="files-path">
-    <FilesFilepath />
+    <div v-if="searchValue" class="search-info">
+      <TypographyText class="search-info-text">
+        {{ $t('pages.files.search.for_1') }} "{{ searchValue }}" {{
+        $t('pages.files.search.for_2') }}
+        <em>{{searchScope}}</em>
+      </TypographyText>
+    </div>
+
+    <FilesFilepath v-else />
+
     <FilesControlsSwitch />
   </div>
   <div class="files-view">
-    <TypographyText v-if="!directory.length">
-      {{ $t('pages.files.empty') }}
-    </TypographyText>
+    <div v-if="!directory.length">
+      <UiResultsMessage v-if="!searchValue" :title="$t('pages.files.empty')" />
+      <UiResultsMessage v-else :title="$t('pages.files.search.empty')" />
+    </div>
     <FilesMobileList
       v-else-if="$device.isMobile"
       :directory="directory"

@@ -36,10 +36,13 @@
 
         ::placeholder {
           color: @body;
+          
+        &[type='search']::-webkit-search-cancel-button {
+          display: none;
         }
       }
 
-      .clear-button {
+      .append {
         position: absolute;
         inset: 0 0 0 auto;
         font-size: @tiny-icon-size;
@@ -48,6 +51,15 @@
         justify-content: center;
         padding: 0.5rem;
         color: @text-muted;
+
+        .slot {
+          display: flex;
+          gap: 0.75rem;
+          padding: 0.125rem 0.25rem;
+          padding-left: 0.75rem;
+          margin-left: 0.5rem;
+          border-left: 1px solid @dark-gray;
+        }
       }
 
       &:not(:last-child) .input {

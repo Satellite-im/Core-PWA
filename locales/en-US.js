@@ -160,6 +160,15 @@ export default {
       remove_favorite: 'Removed from favorites',
       link_copied: 'Link copied to clipboard',
       item_count: '0 items | 1 item | {count} items',
+      search: {
+        for_1: 'Searching for',
+        for_2: 'in',
+        all: 'all directories',
+        empty: 'No results found',
+        placeholder: 'Search...',
+        enable_global: 'Enable Global Search',
+        disable_global: 'Disable Global Search',
+      },
       status: {
         prepare: 'Preparing files for upload',
         upload: 'Uploading {0}',
@@ -172,15 +181,12 @@ export default {
       },
       browse: {
         files: 'Files',
-        search: 'Search...',
         sort: 'Sort',
         name: 'Name',
         modified: 'Modified',
         type: 'Type',
         encrypted: 'Encrypted',
         size: 'Size',
-        search_all: 'Search all folders',
-        search_current: 'Search current folder',
       },
       aside: {
         free_tier: 'Free Tier',

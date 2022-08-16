@@ -1,7 +1,10 @@
 <template>
   <div>
     <template v-if="!incomingRequests.length && !outgoingRequests.length">
-      <FriendsRequestsEmptyMessage />
+      <UiResultsMessage
+        :title="$t('friends.no_requests')"
+        :subtitle="$t('friends.no_requests_subtitle')"
+      />
     </template>
 
     <!-- Incoming Requests -->

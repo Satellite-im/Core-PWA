@@ -52,6 +52,7 @@
     "filesize": "^8.0.7",
     "floating-vue": "^1.0.0-beta.17",
     "fp-ts": "^2.11.8",
+    "fuzzysort": "^2.0.1",
     "heic-convert": "^1.2.4",
     "howler": "^2.2.3",
     "ipfs-core-types": "^0.11.1",
