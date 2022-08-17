@@ -39,5 +39,5 @@
     "electron",
     "android"
   ],
-  "include": ["./**/*.test.ts"]
+  "include": ["**/*.ts", "**/*.js", "**/*.vue"]
 }
