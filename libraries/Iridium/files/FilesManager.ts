@@ -163,7 +163,12 @@ export default class FilesManager extends Emitter {
   private removeFromFileSystem(item: IridiumItem) {
     // if root item
     if (!item.parentId) {
-      const index = this.state.items.indexOf(item)
+      const index = this.state.items.findIndex((e) => e.id === item.id)
+
+      if (index === -1) {
+        throw new Error('item not found')
+      }
+
       this.state.items.splice(index, 1)
       this.set('/items', this.state.items)
       return
@@ -172,10 +177,13 @@ export default class FilesManager extends Emitter {
       | IridiumDirectory
       | undefined
     if (parent) {
-      const index = parent.children.indexOf(item)
-      if (index > -1) {
-        parent.children.splice(index, 1)
+      const index = parent.children.findIndex((e) => e.id === item.id)
+
+      if (index === -1) {
+        throw new Error('item not found')
       }
+
+      parent.children.splice(index, 1)
       this.set('/items', this.state.items)
     }
   }
@@ -226,15 +234,25 @@ export default class FilesManager extends Emitter {
     if (!item) {
       return
     }
-    if (name !== undefined) {
-      const parent = this.flat.find((e) => e.id === item.parentId) as
-        | IridiumDirectory
-        | undefined
-      this.validateName(name, parent)
-      item.name = name
-    } else if (liked !== undefined) {
-      item.liked = liked
+
+    // find item in state
+    const parent = this.flat.find((e) => e.id === item.parentId) as
+      | IridiumDirectory
+      | undefined
+    const target = parent?.children ?? this.state.items
+    const index = target.findIndex((e) => e.id === item.id)
+
+    if (index === -1) {
+      throw new Error('item not found')
     }
+
+    if (name !== undefined) {
+      this.validateName(name, parent)
+      target[index].name = name
+    } else if (liked !== undefined) {
+      target[index].liked = liked
+    }
+
     this.set('/items', this.state.items)
   }
 
