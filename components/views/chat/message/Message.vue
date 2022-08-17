@@ -54,7 +54,6 @@ export default Vue.extend({
     ...mapGetters({
       findFriendByAddress: 'friends/findFriendByAddress',
       getFiles: 'chat/getFiles',
-      isGroup: 'conversation/isGroup',
       getTimestamp: 'settings/getTimestamp',
     }),
     conversationId(): Conversation['id'] {

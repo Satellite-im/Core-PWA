@@ -11,7 +11,7 @@ export const wireIdentificationMessage = t.intersection([
   t.type({
     type: t.literal('IDENTIFICATION'),
     payload: t.type({
-      peerId: t.string,
+      did: t.string,
     }),
   }),
 ])
@@ -28,7 +28,7 @@ export const wireSignalMessage = t.intersection([
   t.type({
     type: t.literal('SIGNAL'),
     payload: t.type({
-      peerId: t.string,
+      did: t.string,
       data: t.type({
         type: t.string,
         transceiverRequest: t.type({
@@ -49,7 +49,7 @@ export const wireRefuseConnectionMessage = t.intersection([
   t.type({
     type: t.literal('REFUSE'),
     payload: t.type({
-      peerId: t.string,
+      did: t.string,
     }),
   }),
 ])

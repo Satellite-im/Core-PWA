@@ -500,4 +500,17 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       await this.send(payload)
     }
   }
+
+  /**
+   * @method updateFriend
+   * @description check if there's a friend with the current did and change it with new user object
+   * @param did string (required)
+   * @param user User (required)
+   */
+  updateFriend(user: User): void {
+    const friend = this.getFriend(user.did)
+    if (!friend) return
+
+    Vue.set(this.state.details, user.did, user)
+  }
 }

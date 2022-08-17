@@ -72,17 +72,6 @@
   align-items: center;
   padding: 10px 20px;
 }
-.button {
-  &:extend(.full-width);
-  margin: @normal-spacing;
-
-  &:nth-child(1) {
-    margin-left: 0;
-  }
-  &:nth-child(2) {
-    margin-right: 0;
-  }
-}
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .content {
@@ -99,9 +88,9 @@
     bottom: 150px;
   }
 
-  .button {
-    margin: @normal-spacing !important;
-  }
+  // .button {
+  //   margin: @normal-spacing !important;
+  // }
 
   .modal-card-foot {
     bottom: 20px;

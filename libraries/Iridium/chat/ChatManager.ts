@@ -123,7 +123,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       ) || []
 
     if (!conversationId || !subscription) {
-      throw new Error('subscription not requested')
+      return
     }
     if (subscription?.connected) {
       throw new Error('subscription already connected')
