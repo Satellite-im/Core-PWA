@@ -27,8 +27,10 @@
         </div>
         <div class="bottom">
           <template v-if="route === 'request'">
-            <FriendsRequestsEmptyMessage
+            <UiResultsMessage
               v-if="!incomingRequests.length && !outgoingRequests.length"
+              :title="$t('friends.no_requests')"
+              :subtitle="$t('friends.no_requests_subtitle')"
             />
             <div v-if="incomingRequests.length" class="list-wrapper">
               <TypographyText>{{ $t('friends.received') }}</TypographyText>

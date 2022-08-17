@@ -9,7 +9,7 @@ import {
   FilePlusIcon,
   AlertTriangleIcon,
   XIcon,
-  FolderIcon,
+  GlobeIcon,
 } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -21,7 +21,7 @@ const Controls = Vue.extend({
     FilePlusIcon,
     AlertTriangleIcon,
     XIcon,
-    FolderIcon,
+    GlobeIcon,
   },
   data() {
     return {

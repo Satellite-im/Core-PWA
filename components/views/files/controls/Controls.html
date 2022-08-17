@@ -4,28 +4,23 @@
     <InteractablesInput
       v-model="searchValue"
       size="xs"
-      :placeholder="$t('pages.files.browse.search')"
+      :placeholder="$t('pages.files.search.placeholder')"
       class="search"
       type="search"
     >
-      <!-- TODO: enable when advanced search is implemented -->
-      <!-- <template #append> -->
-      <!-- <button @click="toggleSearchAll"> -->
-      <!-- <folder-icon -->
-      <!-- v-if="searchAll" -->
-      <!-- class="input-icon" -->
-      <!-- size="1x" -->
-      <!-- v-tooltip.top="$t('pages.files.browse.search_current')" -->
-      <!-- /> -->
-      <!-- <!~~ TODO: Switch to folders-icon when it's ready ~~> -->
-      <!-- <folder-plus-icon -->
-      <!-- v-else -->
-      <!-- class="input-icon" -->
-      <!-- size="1x" -->
-      <!-- v-tooltip.top="$t('pages.files.browse.search_all')" -->
-      <!-- /> -->
-      <!-- </button> -->
-      <!-- </template> -->
+      <template #append>
+        <button
+          @click="toggleSearchAll"
+          class="input-button"
+          :class="{ 'active': searchAll }"
+        >
+          <globe-icon
+            class="input-icon"
+            size="1x"
+            v-tooltip.top="$t(`pages.files.search.${searchAll ? 'disable_global' : 'enable_global'}`)"
+          />
+        </button>
+      </template>
     </InteractablesInput>
     <!-- <InteractablesSelect
       :placeholder="$t('pages.files.file_type')"
