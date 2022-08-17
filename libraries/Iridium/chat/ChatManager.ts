@@ -339,7 +339,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async addFile(
-    upload: ChatFileUpload,
+    {
+      upload,
+      conversationId,
+    }: { upload: ChatFileUpload; conversationId: string },
     options?: AddOptions,
   ): Promise<MessageAttachment> {
     if (upload.file.size === 0) {
@@ -348,7 +351,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const thumbnailBlob = await createThumbnail(upload.file, 400)
 
     return {
-      id: (await this.upload(upload.file, options)).path,
+      id: await this.upload(upload.file, conversationId),
       name: upload.file.name,
       size: upload.file.size,
       nsfw: await isNSFW(upload.file),
@@ -356,16 +359,31 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
       thumbnail: thumbnailBlob
-        ? (await this.upload(thumbnailBlob, options)).path
+        ? await this.upload(thumbnailBlob, conversationId)
         : '',
     }
   }
 
-  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
-    return await (this.iridium.connector?.ipfs as IPFS).add(
-      blobToStream(file),
-      options,
-    )
+  async upload(file: Blob, conversationId: string) {
+    // change to irdium.store with sync-node: true so that we pin it.
+    const conversation = this.getConversation(conversationId)
+    if (!this.iridium.connector?.p2p.primaryNodeID) {
+      throw new Error('not connected to primary node')
+    }
+
+    return await this.iridium.connector?.store(blobToStream(file), {
+      syncPin: true,
+      encrypt: {
+        recipients: [
+          ...conversation.participants,
+          this.iridium.connector?.p2p.primaryNodeID,
+        ],
+      },
+    })
+    // return await (this.iridium.connector?.ipfs as IPFS).add(
+    //   blobToStream(file),
+    //   options,
+    // )
   }
 
   /**
@@ -378,6 +396,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
 
     const { conversationId } = payload
+    console.log(
+      'debug: | ChatManager | sendMessage | conversationId',
+      conversationId,
+    )
     const conversation = this.getConversation(conversationId)
     const message: Partial<ConversationMessage> = {
       ...payload,
@@ -385,6 +407,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions: {},
       attachments: payload.attachments,
     }
+    console.log('debug: | ChatManager | sendMessage | message', message)
+
     message.id = (
       await this.iridium.connector.store(message, {
         syncPin: true,

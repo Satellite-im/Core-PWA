@@ -202,15 +202,18 @@ const Chatbar = Vue.extend({
       const conversationId = this.$route.params.id
       return await Promise.all(
         this.files.map(async (file, index) => {
-          return await iridium.chat.addFile(file, {
-            progress: (bytes) => {
-              this.$store.commit('chat/setFileProgress', {
-                id: conversationId,
-                index,
-                progress: Math.floor((bytes / file.file.size) * 100),
-              })
+          return await iridium.chat.addFile(
+            { upload: file, conversationId },
+            {
+              progress: (bytes) => {
+                this.$store.commit('chat/setFileProgress', {
+                  id: conversationId,
+                  index,
+                  progress: Math.floor((bytes / file.file.size) * 100),
+                })
+              },
             },
-          })
+          )
         }),
       )
     },
