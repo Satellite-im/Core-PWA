@@ -39,7 +39,5 @@
     "electron",
     "android"
   ],
-  "include": [
-  "*.test.ts"
-  ], 
+  "include": ["./**/*.test.ts"]
 }
