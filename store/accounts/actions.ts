@@ -333,7 +333,7 @@ export default {
     dispatch,
     state,
   }: ActionsArguments<AccountsState>) {
-    const { pin, phrase } = state
+    const { pin, phrase, pinHash } = state
 
     if (!pin) {
       throw new Error(AccountsError.INVALID_PIN)
@@ -346,7 +346,7 @@ export default {
 
     const entropyMessage = IdentityManager.generateEntropyMessage(
       $BlockchainClient.account.publicKey.toBase58(),
-      '',
+      pinHash,
     )
     commit('setEntropy', entropyMessage)
 
