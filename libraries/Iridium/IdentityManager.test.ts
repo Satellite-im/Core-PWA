@@ -6,6 +6,7 @@ describe('Test generateEntropyMessage', () => {
       address: 'address',
       secret: 'secret',
     }
+
     const result = IdentityManager.generateEntropyMessage(
       localParam.address,
       localParam.secret,
