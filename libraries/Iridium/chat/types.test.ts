@@ -1,6 +1,6 @@
 import { ChatError } from './types'
 
-describe('', () => {
+describe('Iridium/chat types', () => {
   test('check ChatError export type', () => {
     expect(ChatError).toEqual({
       CONVERSATION_EXISTS: 'errors.chat.conversation_exists',
