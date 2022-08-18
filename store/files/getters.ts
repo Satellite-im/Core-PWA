@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { GetterTree } from 'vuex'
 import fuzzysort from 'fuzzysort'
-import { cloneDeep } from 'lodash'
 import { FileRouteEnum, FileSortEnum } from '~/libraries/Enums/enums'
 import { IridiumDirectory, IridiumItem } from '~/libraries/Iridium/files/types'
 import { FilesState } from '~/store/files/types'
@@ -25,7 +24,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
         return files
       }
 
-      let items: IridiumItem[] = cloneDeep(files)
+      let items: IridiumItem[] = files
       const itemsFlat = flatDeep(items)
 
       if (state.search.searchAll) {
@@ -59,7 +58,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
       const key = state.sort.category
       const searchAllActive = state.search.searchAll && state.search.value
 
-      let items: IridiumItem[] = cloneDeep(filteredFiles)
+      let items: IridiumItem[] = filteredFiles
       const allItems = flatDeep(allFiles)
 
       // If "SearchAll" is inactive, we only want to sort the items that are in the current directory
