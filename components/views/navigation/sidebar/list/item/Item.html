@@ -5,22 +5,21 @@
   @click="openConversation"
   data-cy="sidebar-user"
 >
-  <template v-if="details">
-    <UiUserState v-if="conversation.type === 'direct'" :user="details" />
-    <UiGroupIcon v-else :group="details" />
+  <template>
+    <UiUserState v-if="conversation.type === 'direct'" :user="user" />
+    <UiGroupIcon v-else :participants="participants" />
   </template>
   <div class="user-info">
     <TypographyText
-      v-if="details"
       class="ellipsis"
       color="light"
       font="heading"
       weight="bold"
       data-cy="sidebar-user-name"
     >
-      {{ details.name }}
+      {{ conversation.name }}
     </TypographyText>
-    <TypographyText v-if="details" size="sm" data-cy="sidebar-user-name">
+    <TypographyText size="sm" data-cy="sidebar-user-name">
       <div
         v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
         class="ellipsis"

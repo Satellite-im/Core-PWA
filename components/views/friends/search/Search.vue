@@ -78,16 +78,13 @@ export default Vue.extend({
         this.error = this.$t('friends.self_add') as string
         return
       }
+      await iridium.users.searchPeer(friendId)
       const hasFriend = iridium.friends.isFriend(friendId)
       if (hasFriend) {
         this.error = this.$t('friends.already_friend') as string
       }
 
-      this.user = {
-        did: friendId,
-        name: friendId,
-        status: 'offline',
-      }
+      this.user = iridium.users.getUser(friendId)
       this.searching = false
     },
     onFriendRequestSent() {
