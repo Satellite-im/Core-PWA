@@ -119,6 +119,7 @@
     "cypress-image-snapshot": "^4.0.1",
     "cypress-localstorage-commands": "^1.7.0",
     "cypress-real-events": "^1.7.0",
+    "danger-plugin-yarn": "^1.5.1",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-jest": "^26.8.3",
