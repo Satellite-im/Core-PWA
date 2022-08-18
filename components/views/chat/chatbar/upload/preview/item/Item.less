@@ -10,6 +10,13 @@
   padding: @large-spacing @normal-spacing @light-spacing @normal-spacing;
   &:extend(.background-semitransparent-lighter);
   &:extend(.bordered);
+
+  &:first-child {
+    margin-left: 16px;
+  }
+  &:last-child {
+    margin-right: 16px;
+  }
   .close {
     border: none;
     position: absolute;
