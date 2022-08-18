@@ -10,11 +10,11 @@ import {
   MicOffIcon,
 } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/friends/types'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
 import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -37,6 +37,11 @@ export default Vue.extend({
       default: false,
     },
   },
+  setup() {
+    const { call } = useWebRTC()
+
+    return { call }
+  },
   data() {
     return {
       videoSettings: iridium.settings.state.video,
@@ -50,13 +55,6 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    call() {
-      return (
-        this.user?.did &&
-        this.webrtc.activeCall?.callId &&
-        $WebRTC.getCall(this.webrtc.activeCall.callId)
-      )
-    },
     muted() {
       return (
         (this.user?.did && this.webrtc.streamMuted[this.user.did]) ?? {
@@ -67,11 +65,9 @@ export default Vue.extend({
       )
     },
     streams() {
-      return (
-        this.call &&
-        this.user?.did &&
-        (this.call as Call).streams[(this.user as User).did as string]
-      )
+      if (!(this.user as User).did || !this.call) return
+
+      return (this.call as Call).streams[(this.user as User).did]
     },
     videoStream() {
       return (

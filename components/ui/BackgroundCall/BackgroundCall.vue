@@ -3,25 +3,68 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
+import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
+import { useCallElapsedTime, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
+  setup() {
+    const { remoteParticipants, call } = useWebRTC()
+    const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
+
+    const remoteParticipant = computed(() => {
+      return remoteParticipants.value.length > 0
+        ? remoteParticipants.value[0]
+        : null
+    })
+
+    return { remoteParticipant, call, elapsedTime, startInterval, clearTimer }
+  },
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
   computed: {
     ...mapState({
       friends: (state) => (state as RootState).friends.all,
-      elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
-      activeCall: (state) => (state as RootState).webrtc.activeCall,
+      deafened: (state) => (state as RootState).audio.deafened,
     }),
-    caller(): Friend | undefined {
-      return this.friends.find(
-        (f: Friend) => f.peerId === this.activeCall?.peerId,
-      )
+    createdAt(): WebRTCState['createdAt'] {
+      return this.webrtc.createdAt
+    },
+    audioMuted(): boolean {
+      if (!this.remoteParticipant) return true
+
+      return this.webrtc.streamMuted[this.remoteParticipant.did].audio
+    },
+    streams(): CallPeerStreams | undefined {
+      if (!this.remoteParticipant || !this.call) return
+
+      return (this.call as Call).streams[this.remoteParticipant.did]
+    },
+    audioStream(): MediaStream | undefined {
+      if (this.audioMuted || !this.call) return
+
+      return (this.streams as CallPeerStreams)?.audio
     },
   },
+  watch: {
+    createdAt: {
+      handler() {
+        this.startInterval()
+      },
+      immediate: true,
+    },
+  },
+  beforeDestroy() {
+    this.clearTimer()
+  },
   methods: {
-    navigateToActiveConversation() {
-      if (!this.caller) {
+    async navigateToActiveConversation() {
+      if (!this.remoteParticipant) {
         return
       }
 
@@ -30,14 +73,15 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      this.$store.dispatch('conversation/setConversation', {
-        id: this.caller.peerId,
-        type: 'friend',
-        participants: [this.caller],
-        calling: false,
-      })
+      const id = iridium.chat?.directConversationIdFromDid(
+        this.remoteParticipant.did,
+      )
 
-      this.$router.push(`/chat/direct/${this.caller.address}`)
+      if (!id || !iridium.chat?.hasConversation(id)) {
+        return
+      }
+
+      this.$router.push(`/chat/${id}`)
     },
   },
 })

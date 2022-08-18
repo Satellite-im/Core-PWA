@@ -43,16 +43,13 @@ export default Vue.extend({
       return this.audio.muted
     },
     videoMuted(): boolean {
-      return this.inCall ? this.video.disabled : false
+      return this.webrtc.activeCall ? this.video.disabled : false
     },
     screenMuted(): boolean {
       return Boolean(
         iridium.connector?.id &&
           this.webrtc.streamMuted[iridium.connector?.id]?.screen,
       )
-    },
-    inCall(): boolean {
-      return this.webrtc.activeCall !== null
     },
   },
   methods: {
@@ -66,7 +63,7 @@ export default Vue.extend({
       try {
         if (kind === WebRTCEnum.AUDIO) {
           await this.$store.dispatch('audio/toggleMute')
-        } else if (kind === WebRTCEnum.VIDEO && this.inCall) {
+        } else if (kind === WebRTCEnum.VIDEO && this.webrtc.activeCall) {
           await this.$store.dispatch('video/toggleMute')
         }
       } catch (e: any) {

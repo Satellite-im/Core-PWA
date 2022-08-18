@@ -4,7 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/WebRTCManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   name: 'Chat',

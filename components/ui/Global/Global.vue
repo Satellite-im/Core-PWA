@@ -5,7 +5,7 @@ import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/WebRTCManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 declare module 'vue/types/vue' {
   interface Vue {

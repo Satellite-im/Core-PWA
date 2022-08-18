@@ -22,7 +22,7 @@ import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/WebRTCManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
