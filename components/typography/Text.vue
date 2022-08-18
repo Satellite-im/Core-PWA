@@ -4,7 +4,7 @@
     :class="[
       `font-${getFont} font-color-${getColor} font-size-${getSize}`,
       { uppercase: uppercase },
-      getWeight,
+      `font-weight-getWeight`,
     ]"
   >
     <slot />
@@ -65,8 +65,15 @@ export default Vue.extend({
       if (this.size) {
         return this.size
       }
-      const map = new Map()
-      map.set('h1', '2xl').set('h2', 'xl').set('h3', 'lg').set('label', 'sm')
+      const map = new Map([
+        ['h1', '2xl'],
+        ['h2', 'xl'],
+        ['h3', 'lg'],
+        ['h4', 'md'],
+        ['h5', 'sm'],
+        ['h6', 'xs'],
+        ['label', 'sm'],
+      ])
       return map.get(this.as) || 'md'
     },
     getWeight(): string {
@@ -81,15 +88,3 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less">
-.bold {
-  font-weight: 700;
-}
-
-h1 {
-  margin-bottom: 1rem;
-}
-.uppercase {
-  text-transform: uppercase;
-}
-</style>
