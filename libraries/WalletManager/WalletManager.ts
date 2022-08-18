@@ -7,6 +7,8 @@ import {
   Coin98WalletAdapter,
   ExodusWalletAdapter,
   GlowWalletAdapter,
+  TokenPocketWalletAdapter,
+  SpotWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import {
   BaseMessageSignerWalletAdapter,
@@ -149,6 +151,12 @@ export default class MultiWalletManager {
       case 'WalletConnect':
         window.console.log('WalletConnect wallet selected')
         return new WalletConnectAdapter()
+      case 'TokenPocket':
+        window.console.log('TokenPocket wallet selected')
+        return new TokenPocketWalletAdapter()
+      case 'Spot':
+        window.console.log('Spot wallet selected')
+        return new SpotWalletAdapter()
 
       default:
         throw new Error('Wallet not found')

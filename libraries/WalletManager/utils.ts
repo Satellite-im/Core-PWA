@@ -7,6 +7,8 @@ import {
   Coin98WalletAdapter,
   ExodusWalletAdapter,
   GlowWalletAdapter,
+  TokenPocketWalletAdapter,
+  SpotWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { WalletReadyState } from '@solana/wallet-adapter-base'
 
@@ -74,6 +76,20 @@ export const getUsableWallets = (): Array<walletList> => {
     icon: 'glow.svg',
     url: new GlowWalletAdapter().url,
     state: new GlowWalletAdapter().readyState.toString(),
+  })
+
+  result.push({
+    name: 'TokenPocket',
+    icon: 'tokenpocket.svg',
+    url: new TokenPocketWalletAdapter().url,
+    state: new TokenPocketWalletAdapter().readyState.toString(),
+  })
+
+  result.push({
+    name: 'Spot',
+    icon: 'spot.svg',
+    url: new SpotWalletAdapter().url,
+    state: new SpotWalletAdapter().readyState.toString(),
   })
 
   return result
