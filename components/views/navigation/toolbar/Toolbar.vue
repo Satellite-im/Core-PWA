@@ -108,13 +108,13 @@ export default Vue.extend({
       // todo- hook up to usermanager
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
-        return Object.values(this.friends).some(
+        return Object.values(this.users).some(
           (friend: Friend) =>
             memberIds.includes(friend.did) && friend.status === 'online',
         )
       }
       // Check current recipient is on the user's friends list
-      const friend = Object.values(this.friends).find(
+      const friend = Object.values(this.users).find(
         (f) => f.did === (this.details as User)?.did,
       )
       return friend?.status === 'online'

@@ -63,7 +63,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      return iridium.friends.getFriend(this.incomingCall.did)
+      return iridium.users.getUser(this.incomingCall.did)
     },
     callerAvatar(): string {
       if (!this.caller) {

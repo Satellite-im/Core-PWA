@@ -316,7 +316,7 @@ export default class WebRTCManager extends Emitter {
           })
       }
 
-      const friends = Object.values(this.iridium.friends.state.details)
+      const friends = Object.values(this.iridium.users.state)
 
       friends
         .filter((friend) => friend.did && friend.status !== 'online')
@@ -437,12 +437,12 @@ export default class WebRTCManager extends Emitter {
 
   private onPeerAnnounce = (payload: any) => {
     const did = payload.did as string
-    const requestFriend = this.iridium.friends.getFriend(did)
+    const requestFriend = this.iridium.users.getUser(did)
 
     if (!requestFriend || requestFriend.status === 'online') return
 
     // TO DO : move to usermanager
-    this.iridium.friends.updateFriend({
+    this.iridium.users.setUser(requestFriend.did, {
       ...requestFriend,
       status: 'online',
     })
@@ -516,8 +516,7 @@ export default class WebRTCManager extends Emitter {
 
       const peers = participants.map((did) => {
         const user =
-          this.iridium.friends.getFriend(did) ||
-          (this.iridium.profile.state ?? '')
+          this.iridium.users.getUser(did) || (this.iridium.profile.state ?? '')
 
         return {
           name: user.name,
