@@ -1,14 +1,7 @@
 import IdentityManager from './IdentityManager'
-const crypto = require('crypto')
 
-Object.defineProperty(global.self, 'crypto', {
-  value: {
-    getRandomValues: (arr) => crypto.randomBytes(arr.length),
-  },
-})
-
-describe('', () => {
-  test('generateEntropyMessage', () => {
+describe('Test generateEntropyMessage', () => {
+  it('should return an uin8array', () => {
     const localParam = {
       address: 'address',
       secret: 'secret',
@@ -19,7 +12,10 @@ describe('', () => {
     )
     expect(result).toMatchSnapshot()
   })
-  test('seedRandom', async () => {
+})
+
+describe('Test seedRandom', () => {
+  it('should exist', async () => {
     const result = await IdentityManager.seedRandom()
     expect(result).not.toBeFalsy() // The result exists
   })
