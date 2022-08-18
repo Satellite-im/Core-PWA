@@ -25,12 +25,9 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    createdAt(): WebRTCState['createdAt'] {
-      return this.webrtc.createdAt
-    },
   },
   watch: {
-    createdAt: {
+    'webrtc.createdAt': {
       handler() {
         this.startInterval()
       },

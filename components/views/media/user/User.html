@@ -47,7 +47,7 @@
   </div>
 
   <div class="indicators">
-    <div class="indicator" data-cy="muted-indicator" v-if="muted.audio">
+    <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
       <mic-off-icon />
     </div>
   </div>

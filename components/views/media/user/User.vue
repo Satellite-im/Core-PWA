@@ -10,11 +10,9 @@ import {
   MicOffIcon,
 } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/friends/types'
-import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
-import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import { useUserStreams, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -37,10 +35,17 @@ export default Vue.extend({
       default: false,
     },
   },
-  setup() {
+  setup(props) {
     const { call } = useWebRTC()
+    const { streams, getStream } = useUserStreams(props.user.did)
 
-    return { call }
+    return {
+      call,
+      streams,
+      audioStream: getStream('audio'),
+      videoStream: getStream('video'),
+      screenStream: getStream('screen'),
+    }
   },
   data() {
     return {
@@ -55,41 +60,6 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    muted() {
-      return (
-        (this.user?.did && this.webrtc.streamMuted[this.user.did]) ?? {
-          audio: true,
-          video: true,
-          screen: true,
-        }
-      )
-    },
-    streams() {
-      if (!(this.user as User).did || !this.call) return
-
-      return (this.call as Call).streams[(this.user as User).did]
-    },
-    videoStream() {
-      return (
-        this.call &&
-        !(this.muted as PeerMutedState).video &&
-        (this.streams as CallPeerStreams)?.video
-      )
-    },
-    audioStream() {
-      return (
-        this.call &&
-        !(this.muted as PeerMutedState).audio &&
-        (this.streams as CallPeerStreams)?.audio
-      )
-    },
-    screenStream() {
-      return (
-        this.call &&
-        !(this.muted as PeerMutedState).screen &&
-        (this.streams as CallPeerStreams)?.screen
-      )
-    },
     src(): string {
       const hash = this.user.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''

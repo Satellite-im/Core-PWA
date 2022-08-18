@@ -5,9 +5,11 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
-import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
-import { useCallElapsedTime, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import {
+  useCallElapsedTime,
+  useUserStreams,
+  useWebRTC,
+} from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   setup() {
@@ -20,7 +22,17 @@ export default Vue.extend({
         : null
     })
 
-    return { remoteParticipant, call, elapsedTime, startInterval, clearTimer }
+    const { streams, getStream } = useUserStreams(remoteParticipant.value?.did)
+
+    return {
+      remoteParticipant,
+      call,
+      elapsedTime,
+      startInterval,
+      clearTimer,
+      streams,
+      audioStream: getStream('audio'),
+    }
   },
   data() {
     return {
@@ -32,27 +44,9 @@ export default Vue.extend({
       friends: (state) => (state as RootState).friends.all,
       deafened: (state) => (state as RootState).audio.deafened,
     }),
-    createdAt(): WebRTCState['createdAt'] {
-      return this.webrtc.createdAt
-    },
-    audioMuted(): boolean {
-      if (!this.remoteParticipant) return true
-
-      return this.webrtc.streamMuted[this.remoteParticipant.did].audio
-    },
-    streams(): CallPeerStreams | undefined {
-      if (!this.remoteParticipant || !this.call) return
-
-      return (this.call as Call).streams[this.remoteParticipant.did]
-    },
-    audioStream(): MediaStream | undefined {
-      if (this.audioMuted || !this.call) return
-
-      return (this.streams as CallPeerStreams)?.audio
-    },
   },
   watch: {
-    createdAt: {
+    'webrtc.createdAt': {
       handler() {
         this.startInterval()
       },
@@ -63,7 +57,7 @@ export default Vue.extend({
     this.clearTimer()
   },
   methods: {
-    async navigateToActiveConversation() {
+    navigateToActiveConversation() {
       if (!this.remoteParticipant) {
         return
       }
