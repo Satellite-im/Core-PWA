@@ -1,6 +1,14 @@
-<!-- Fix this on separate PR -->
-<div v-if="false" class="background-call" @click="navigateToActiveConversation">
+<div class="background-call" @click="navigateToActiveConversation">
   {{$t('ui.background_call')}}&nbsp;
-  <span v-if="caller" class="background-call-name">{{caller.name}}</span>&nbsp;
+  <span v-if="remoteParticipant" class="background-call-name"
+    >{{remoteParticipant.name}}</span
+  >&nbsp;
   <span v-if="elapsedTime">- {{elapsedTime}}</span>
+  <div v-if="!deafened && audioStream" class="audio-stream-container">
+    <audio
+      :id="`audio-stream-${audioStream.id}`"
+      :src-object.prop="audioStream"
+      autoplay
+    />
+  </div>
 </div>

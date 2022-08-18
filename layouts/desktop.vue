@@ -32,7 +32,7 @@ import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
 import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/WebRTCManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({

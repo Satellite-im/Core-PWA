@@ -10,11 +10,9 @@ import {
   MicOffIcon,
 } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/friends/types'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
-import { PeerMutedState } from '~/libraries/Iridium/webrtc/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { useUserStreams, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -37,6 +35,18 @@ export default Vue.extend({
       default: false,
     },
   },
+  setup(props) {
+    const { call } = useWebRTC()
+    const { streams, getStream } = useUserStreams(props.user.did)
+
+    return {
+      call,
+      streams,
+      audioStream: getStream('audio'),
+      videoStream: getStream('video'),
+      screenStream: getStream('screen'),
+    }
+  },
   data() {
     return {
       videoSettings: iridium.settings.state.video,
@@ -50,50 +60,6 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    call() {
-      return (
-        this.user?.did &&
-        this.webrtc.activeCall?.callId &&
-        $WebRTC.getCall(this.webrtc.activeCall.callId)
-      )
-    },
-    muted() {
-      return (
-        (this.user?.did && this.webrtc.streamMuted[this.user.did]) ?? {
-          audio: true,
-          video: true,
-          screen: true,
-        }
-      )
-    },
-    streams() {
-      return (
-        this.call &&
-        this.user?.did &&
-        (this.call as Call).streams[(this.user as User).did as string]
-      )
-    },
-    videoStream() {
-      return (
-        this.call &&
-        !(this.muted as PeerMutedState).video &&
-        (this.streams as CallPeerStreams)?.video
-      )
-    },
-    audioStream() {
-      return (
-        this.call &&
-        !(this.muted as PeerMutedState).audio &&
-        (this.streams as CallPeerStreams)?.audio
-      )
-    },
-    screenStream() {
-      return (
-        this.call &&
-        !(this.muted as PeerMutedState).screen &&
-        (this.streams as CallPeerStreams)?.screen
-      )
-    },
     src(): string {
       const hash = this.user.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''

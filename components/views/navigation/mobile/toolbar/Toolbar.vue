@@ -16,7 +16,7 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import type { User } from '~/libraries/Iridium/friends/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/WebRTCManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {

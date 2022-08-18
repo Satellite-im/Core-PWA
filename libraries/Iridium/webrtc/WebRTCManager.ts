@@ -5,7 +5,6 @@ import Vue from 'vue'
 import iridium, { IridiumManager } from '../IridiumManager'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-
 import { Friend } from '~/libraries/Iridium/friends/types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
@@ -15,33 +14,6 @@ import logger from '~/plugins/local/logger'
 const $Sounds = new SoundManager()
 
 const announceFrequency = 5000
-
-export function useWebRTC() {
-  // THIS SHOULD BE IN ITS OWN useConversation Hook
-  const $nuxt = useNuxtApp()
-  const conversationId = computed(() => {
-    return $nuxt.$route.params.id
-  })
-
-  const isActiveCall = computed(() => {
-    if (!iridium.webRTC.state.activeCall?.callId || !conversationId.value) {
-      return false
-    }
-    return iridium.webRTC.state.activeCall.callId === conversationId.value
-  })
-
-  const isBackgroundCall = computed(() => {
-    if (!iridium.webRTC.state.activeCall?.callId) {
-      return false
-    }
-    return iridium.webRTC.state.activeCall.callId !== conversationId.value
-  })
-
-  return {
-    isActiveCall,
-    isBackgroundCall,
-  }
-}
 
 const initialState: WebRTCState = {
   incomingCall: null,

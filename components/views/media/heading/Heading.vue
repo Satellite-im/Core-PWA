@@ -4,42 +4,38 @@
 import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
-import dayjs from 'dayjs'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
+import { useCallElapsedTime } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
     MaximizeIcon,
     MinimizeIcon,
   },
+  setup() {
+    const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
+
+    return { elapsedTime, startInterval, clearTimer }
+  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
-      interval: null,
-      elapsedTime: '',
     }
   },
   computed: {
     ...mapState(['ui']),
-    activeCall() {
-      return this.webrtc.activeCall
-    },
-    createdAt() {
-      return this.webrtc.createdAt
-    },
   },
   watch: {
-    createdAt() {
-      this.startInterval()
+    'webrtc.createdAt': {
+      handler() {
+        this.startInterval()
+      },
+      immediate: true,
     },
   },
   beforeDestroy() {
-    if (this.interval) {
-      clearInterval(this.interval)
-    }
-  },
-  mounted() {
-    this.startInterval()
+    this.clearTimer()
   },
   methods: {
     /**
@@ -56,18 +52,6 @@ export default Vue.extend({
           element?.classList.remove('full-video')
         }
       }
-    },
-    startInterval() {
-      if (!this.interval && this.createdAt && this.activeCall) {
-        this.interval = setInterval(this.updateElapsedTime, 1000)
-      }
-    },
-    updateElapsedTime() {
-      const duration = dayjs.duration(Date.now() - this.createdAt)
-      const hours = duration.hours()
-      this.elapsedTime = `${hours > 0 ? hours + ':' : ''}${duration.format(
-        'mm:ss',
-      )}`
     },
   },
 })
