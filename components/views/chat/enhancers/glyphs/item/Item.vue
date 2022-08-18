@@ -71,6 +71,7 @@ export default Vue.extend({
           src: this.src,
         },
         at: Date.now(),
+        attachments: [],
       })
 
       this.$store.commit('ui/updateRecentGlyphs', {
