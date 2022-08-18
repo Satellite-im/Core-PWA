@@ -1,6 +1,6 @@
 import { setInObject } from './utils'
 
-describe('', () => {
+describe('Iridium utils', () => {
   test('test params', () => {
     const params = {
       obj: {
