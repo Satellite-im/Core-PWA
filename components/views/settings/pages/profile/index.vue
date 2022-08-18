@@ -47,7 +47,7 @@ export default Vue.extend({
         return this.croppedImage
       }
       const hash = this.accounts?.details?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     imageInputRef(): HTMLInputElement {
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement

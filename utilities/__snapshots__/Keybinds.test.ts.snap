@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Keybinds.getCorrectKeybind 0 1`] = `"ctrlcontrol"`;
+
+exports[`Keybinds.getCorrectKeybind 1 1`] = `"ctrlJean-Philippe"`;
+
+exports[`Keybinds.getCorrectKeybind 2 1`] = `"Jean-PhilippectrlcontrolGeorge"`;
+
+exports[`Keybinds.getCorrectKeybind 3 1`] = `"Georgectrl"`;
+
+exports[`Keybinds.getCorrectKeybind 4 1`] = `"ctrl"`;
+
+exports[`Keybinds.getCorrectKeybind 5 1`] = `""`;

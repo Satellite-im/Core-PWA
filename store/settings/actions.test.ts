@@ -1,5 +1,4 @@
 import { Dexie } from 'dexie'
-import Vue from 'vue'
 import * as actions from './actions'
 import { SettingsError } from './types'
 import { db } from '~/libraries/SatelliteDB/SatelliteDB'

@@ -11,6 +11,12 @@ export default Vue.extend({
   components: {
     CircleIcon,
   },
+  props: {
+    peerActive: {
+      type: Boolean,
+      required: true,
+    },
+  },
   computed: {
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
@@ -21,6 +27,9 @@ export default Vue.extend({
      * @description builds translated string for online/offline status
      */
     participantsText(): string {
+      if (!this.peerActive) {
+        return this.$tc('ui.peer_not_active')
+      }
       // if DM with single person
       if (this.otherParticipants.length === 1) {
         return this.$tc(

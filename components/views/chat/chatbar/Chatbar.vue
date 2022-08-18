@@ -11,10 +11,8 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { SettingsRoutes } from '~/store/ui/types'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
 import {
   Conversation,
@@ -95,6 +93,9 @@ const Chatbar = Vue.extend({
         this.commandPreview ||
         this.chat.countError
       )
+    },
+    peerActive(): boolean {
+      return !iridium.chat.subscriptions[this.$route.params.id]?.connected
     },
     text: {
       /**

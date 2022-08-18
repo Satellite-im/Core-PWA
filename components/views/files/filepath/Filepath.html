@@ -1,9 +1,9 @@
 <nav class="breadcrumb" aria-label="breadcrumbs">
   <ul>
     <li>
-      <a @click="$store.commit('files/setPath', [])">
+      <button @click="$store.commit('files/setPath', [])">
         <home-icon size="1.5x" />
-      </a>
+      </button>
     </li>
     <li
       v-for="el, i in path"
