@@ -1,5 +1,6 @@
 import { Emitter, createIridiumIPFS } from '@satellite-im/iridium'
 import type { IridiumIPFS } from '@satellite-im/iridium'
+import UsersManager from './users/UsersManager'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import GroupManager from '~/libraries/Iridium/groups/GroupManager'
@@ -24,6 +25,7 @@ export class IridiumManager extends Emitter {
   notifications: NotificationManager
   webRTC: WebRTCManager
   settings: SettingsManager
+  users: UsersManager
 
   constructor() {
     super()
@@ -35,6 +37,7 @@ export class IridiumManager extends Emitter {
     this.webRTC = new WebRTCManager(this)
     this.settings = new SettingsManager(this)
     this.notifications = new NotificationManager(this)
+    this.users = new UsersManager(this)
   }
 
   /**
@@ -77,7 +80,7 @@ export class IridiumManager extends Emitter {
       logger.log('iridium/manager', 'creating new root document', doc)
       doc = {
         id: this.connector.id,
-        profile: { name: 'guest' },
+        profile: {},
         groups: {},
         friends: {},
         conversations: {},
@@ -108,11 +111,24 @@ export class IridiumManager extends Emitter {
     await this.settings.init()
     logger.log('iridium/manager', 'notification settings')
     await this.notifications.init()
+    logger.log('iridium/manager', 'initializing users')
+    await this.users.init()
     logger.log('iridium/manager', 'ready')
+
+    if (this.connector.p2p.primaryNodeID) {
+      const payload = {
+        type: 'sync/init',
+        at: Date.now(),
+        name: this.profile.state.name,
+        avatar: this.profile.state.photoHash,
+      }
+      await this.connector.p2p.send(this.connector.p2p.primaryNodeID, payload)
+    }
 
     this.ready = true
   }
 }
 
 const instance = new IridiumManager()
+window.i = instance
 export default instance
