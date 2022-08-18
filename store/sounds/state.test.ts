@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import InitialSettingsState from '~/store/sounds/state'
 
 describe('init', () => {

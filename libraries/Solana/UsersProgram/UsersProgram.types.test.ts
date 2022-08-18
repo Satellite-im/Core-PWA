@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { IDL } from '~/libraries/Solana/UsersProgram/UsersProgram.types'
 
 describe('', () => {

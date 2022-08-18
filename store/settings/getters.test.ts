@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import InitialSettingsState from '~/store/settings/state'
 import getters from '~/store/settings/getters'
 

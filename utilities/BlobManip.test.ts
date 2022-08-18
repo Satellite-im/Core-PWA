@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { blobToBase64 } from '~/utilities/BlobManip'
 
 describe('convert blob to base 64 successfully', () => {

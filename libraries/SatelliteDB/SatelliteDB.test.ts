@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import 'fake-indexeddb/auto'
 import { SatelliteDB } from './SatelliteDB'
 import SearchIndex from './SearchIndex'

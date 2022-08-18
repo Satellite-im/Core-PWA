@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Glyphs } from '../glyphs'
 
 describe('init', () => {

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { CaptureMouseTypes, KeybindTypes } from './types'
 import InitialSettingsState from '~/store/settings/state'
 

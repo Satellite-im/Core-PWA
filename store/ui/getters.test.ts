@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Flairs, GlyphMarketViewStatus, Themes } from './types'
 import * as getters from '~/store/ui/getters'
 

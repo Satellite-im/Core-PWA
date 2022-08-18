@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import mutations from '~/store/dataState/mutations'
 import { DataStateType } from '~/store/dataState/types'
 

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as mutations from '~/store/audio/mutations'
 
 describe('mutations.default.mute', () => {

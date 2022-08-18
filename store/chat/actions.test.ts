@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'

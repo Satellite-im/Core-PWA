@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as index from '~/components/mixins/Touch/index'
 
 describe('index.Touch.created', () => {

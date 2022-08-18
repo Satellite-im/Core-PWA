@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { filesize } from './Filesize'
 
 describe('init', () => {

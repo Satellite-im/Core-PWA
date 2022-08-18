@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as state from '~/store/conversation/state'
 
 describe('state.default', () => {

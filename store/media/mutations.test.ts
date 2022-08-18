@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Media from '~/store/media/mutations'
 
 describe('Mutate Media by setting', () => {

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as mutations from '~/store/video/mutations'
 import { VideoState } from '~/store/video/types'
 

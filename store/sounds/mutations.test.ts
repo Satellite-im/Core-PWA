@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import mutations from '~/store/sounds/mutations'
 
 describe('init', () => {

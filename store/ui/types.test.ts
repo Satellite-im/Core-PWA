@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Flairs, Themes } from '~/store/ui/types'
 
 describe('check flair constants', () => {

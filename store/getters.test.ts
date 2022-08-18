@@ -1,6 +1,6 @@
+import { expect } from '@jest/globals'
 import getters from './getters'
 import { RootState } from '~/types/store/store'
-
 import InitialAccountsState from '~/store/accounts/state'
 import InitialAudioState from '~/store/audio/state'
 import InitialChatState from '~/store/chat/state'

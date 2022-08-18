@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Users from '../users'
 
 describe('init', () => {

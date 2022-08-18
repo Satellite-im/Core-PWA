@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import Security from './Security'
 import { stripEXIF } from '~/utilities/EXIF'
 import isNSFW from '~/utilities/NSFW'

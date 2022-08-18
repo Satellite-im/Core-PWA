@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock'
 import * as ReleaseNotes from '~/libraries/ui/ReleaseNotes'
 enableFetchMocks()

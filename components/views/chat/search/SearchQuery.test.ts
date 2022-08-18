@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as SearchQuery from '~/components/views/chat/search/SearchQuery'
 import * as search from '~/types/search/search'
 

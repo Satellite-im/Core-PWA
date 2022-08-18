@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Commands from '~/libraries/ui/Commands'
 
 describe('Commands.parseCommand', () => {

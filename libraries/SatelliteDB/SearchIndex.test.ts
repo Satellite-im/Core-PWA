@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import SearchIndex from './SearchIndex'
 
 describe('SatelliteDB/SearchIndex', () => {

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import PhantomAdapter from './PhantomAdapter'
 
 jest.mock('@solana/web3.js')

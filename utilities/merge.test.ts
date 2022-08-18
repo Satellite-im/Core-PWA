@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as merge from '~/utilities/merge'
 
 describe('merge.overwriteMerge', () => {

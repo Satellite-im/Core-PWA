@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { MessagingTypesEnum, PropCommonEnum } from '~/libraries/Enums/enums'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'

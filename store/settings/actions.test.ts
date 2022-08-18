@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Dexie } from 'dexie'
 import * as actions from './actions'
 import { SettingsError } from './types'

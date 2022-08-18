@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Emitter from '~/libraries/WebRTC/Emitter'
 
 const EmitterDefault = Emitter.default

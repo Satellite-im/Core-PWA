@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Keypair } from '@solana/web3.js'
 import Crypto from './Crypto'
 

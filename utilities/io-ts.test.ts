@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as IoTS from '~/utilities/io-ts'
 
 describe('IoTS.fromEnum', () => {

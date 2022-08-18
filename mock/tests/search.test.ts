@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Search from '../search'
 
 describe('init', () => {

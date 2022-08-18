@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { AccountsState, RegistrationStatus } from './types'
 import mutations from '~/store/accounts/mutations'
 

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import InitialAccountsState from '~/store/accounts/state'
 
 describe('init', () => {

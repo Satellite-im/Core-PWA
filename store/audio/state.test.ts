@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as state from '~/store/audio/state'
 
 describe('state.default', () => {

@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as utils from '~/libraries/BlockchainClient/adapters/SolanaAdapter/utils'
 
 describe.skip('utils.accountFromWallet', () => {

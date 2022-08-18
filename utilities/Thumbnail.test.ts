@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { expect } from '@jest/globals'
 import * as Thumbnail from './Thumbnail'
 
 const ThumbnailDefault = Thumbnail.default

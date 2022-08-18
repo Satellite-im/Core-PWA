@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Friends } from '../friends'
 
 describe('init', () => {

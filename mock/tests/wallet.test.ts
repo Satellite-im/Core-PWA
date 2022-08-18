@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Wallet from '../wallet'
 
 describe('init', () => {

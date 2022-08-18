@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import 'jest-canvas-mock'
 import 'jest-webgl-canvas-mock'
 import { EnvInfo } from './EnvInfo'

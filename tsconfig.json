@@ -35,9 +35,7 @@
     "dist",
     "cypress/**/*",
     ".husky",
-    ".github",
-    "electron",
-    "android"
+    ".github"
   ],
   "include": ["**/*.ts", "**/*.js", "**/*.vue"]
 }

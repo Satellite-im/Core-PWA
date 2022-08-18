@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { MetaState } from './types'
 import * as meta from '~/store/meta/mutations'
 

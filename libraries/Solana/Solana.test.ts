@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { web3 } from '@project-serum/anchor'
 import * as Solana from '~/libraries/Solana/Solana'
 

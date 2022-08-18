@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import InitialGroupsState from '~/store/groups/state'
 
 describe('init', () => {

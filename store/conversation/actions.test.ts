@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { createFromPubKey } from 'peer-id'
 import { ConversationActivity, ConversationConnection } from './types'
 import { RegistrationStatus } from '~/store/accounts/types'

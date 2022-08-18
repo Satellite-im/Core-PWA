@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { ChatState, ChatFileUpload } from './types'
 import * as module from '~/store/chat/mutations'
 

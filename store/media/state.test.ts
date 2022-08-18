@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import InitialMediaState from '~/store/media/state'
 
 describe('init', () => {

@@ -1,4 +1,6 @@
+import { expect } from '@jest/globals'
 import * as Cursor from '~/libraries/ui/Cursor'
+
 describe('Cursor.default.getCurrentCursorPosition', () => {
   test('0', () => {
     const result: any = Cursor.default.getCurrentCursorPosition(

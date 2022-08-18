@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Common from '~/libraries/ui/Common'
 
 describe('Common.validURL', () => {

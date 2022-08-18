@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'

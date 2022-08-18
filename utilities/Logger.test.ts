@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import Logger from './Logger'
 
 describe('Logger', () => {

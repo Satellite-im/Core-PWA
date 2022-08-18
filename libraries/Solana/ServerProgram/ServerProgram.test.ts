@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as web3 from '@solana/web3.js'
 import * as ServerProgram from '~/libraries/Solana/ServerProgram/ServerProgram'
 

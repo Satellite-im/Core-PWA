@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { macShortcuts, windowsShortcuts } from '~/utilities/Keyboard'
 
 describe('check windowsShortcuts constants', () => {

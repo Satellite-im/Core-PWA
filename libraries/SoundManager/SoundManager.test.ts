@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { Howler } from 'howler'
 import SoundManager, { Sounds } from './SoundManager'
 

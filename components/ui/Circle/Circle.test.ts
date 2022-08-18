@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import * as Circle from '~/utilities/Circle'
 
 describe('Circle.addressToNumber', () => {
