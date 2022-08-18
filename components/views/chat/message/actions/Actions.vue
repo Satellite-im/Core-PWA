@@ -13,6 +13,8 @@ import { mapState } from 'vuex'
 import { UIMessage } from '~/types/messaging'
 import { ModalWindows } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+import { Conversation } from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -61,8 +63,19 @@ export default Vue.extend({
     ...mapState({
       ui: (state) => (state as RootState).ui,
       accounts: (state) => (state as RootState).accounts,
-      isGroup: (state) => (state as RootState).conversation.type === 'group',
     }),
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return iridium.chat.state.conversations[this.conversationId]
+    },
+    isGroup(): boolean {
+      return this.conversation?.type === 'group'
+    },
     isEditable(): boolean {
       return (
         this.message.from === this.accounts.details?.textilePubkey &&

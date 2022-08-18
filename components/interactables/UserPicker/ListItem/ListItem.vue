@@ -22,7 +22,7 @@ export default Vue.extend({
         this.friend?.photoHash ||
         this.friend?.profilePicture ||
         this.friend?.request?.userInfo?.photoHash
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
 })

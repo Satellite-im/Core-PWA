@@ -5,7 +5,6 @@
  * utilities like we do in this section
  */
 
-import { MailboxEvent } from '@textile/hub'
 import { TypeOf } from 'io-ts'
 import {
   decryptedMessage,
@@ -13,7 +12,6 @@ import {
   glyphMessage,
   mediaMessage,
   messageEncoder,
-  messageFromThread,
   reactionMessage,
   replyMessage,
   textMessage,
@@ -78,17 +76,6 @@ export type MessagePayload = MessagePayloads[keyof MessagePayloads]
  * resulting type
  */
 export type Message = TypeOf<typeof messageEncoder>
-
-/**
- * It represent how a UserMessage from Textile Mailbox looks
- * like if you read it directly from a thread
- */
-export type MessageFromThread = TypeOf<typeof messageFromThread>
-
-export type MailboxCallback = (
-  reply?: MailboxEvent | undefined,
-  err?: Error | undefined,
-) => void
 
 export type MessageCallback = (message?: Message) => void
 

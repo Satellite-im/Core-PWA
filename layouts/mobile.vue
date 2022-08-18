@@ -20,6 +20,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import 'swiper/css'
 import { RootState } from '~/types/store/store'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   name: 'Mobile',
@@ -35,6 +36,9 @@ export default Vue.extend({
     flair(): Flair {
       return flairs[this.settings.flair]
     },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
   },
 })
 </script>
@@ -49,6 +53,11 @@ export default Vue.extend({
 
   &.hidden-nav {
     padding-bottom: 0;
+  }
+
+  &.has-background-call {
+    position: relative;
+    padding-top: @background-call-height;
   }
 }
 </style>

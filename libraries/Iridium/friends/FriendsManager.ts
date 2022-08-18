@@ -19,6 +19,10 @@ import {
   User,
 } from './types'
 import logger from '~/plugins/local/logger'
+import {
+  Notification,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
 
 export type IridiumFriendEvent = {
   to: IridiumPeerIdentifier
@@ -282,6 +286,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       did,
       request,
     })
+    logger.info('iridium/friends', 'saving friend request', {
+      did,
+      request,
+    })
 
     // Announce to the remote user
     if (did !== this.iridium.connector?.id) {
@@ -303,6 +311,16 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         did,
         payload,
       })
+      const buildNotification: Partial<Notification> = {
+        fromName: request.user.name,
+        at: Date.now(),
+        title: 'New Request',
+        description: `New ${NotificationType.FRIEND_REQUEST} From ${request.user.name}`,
+        image: request.user.photoHash,
+        type: NotificationType.FRIEND_REQUEST,
+        seen: false,
+      }
+      this.iridium.notifications?.sendNotification(buildNotification)
       await this.send(payload)
     }
   }
@@ -481,5 +499,18 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       })
       await this.send(payload)
     }
+  }
+
+  /**
+   * @method updateFriend
+   * @description check if there's a friend with the current did and change it with new user object
+   * @param did string (required)
+   * @param user User (required)
+   */
+  updateFriend(user: User): void {
+    const friend = this.getFriend(user.did)
+    if (!friend) return
+
+    Vue.set(this.state.details, user.did, user)
   }
 }

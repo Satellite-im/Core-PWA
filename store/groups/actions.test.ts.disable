@@ -3,10 +3,8 @@ import * as module from './actions'
 import { GroupsError } from './types'
 import { Config } from '~/config'
 import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import TextileManager from '~/libraries/Textile/TextileManager'
 
 Vue.prototype.$Config = Config
-Vue.prototype.$TextileManager = new TextileManager()
 Vue.prototype.$SolanaManager = new SolanaManager()
 
 // Commented out for later use in mocking the Solana program(s) functions.
@@ -369,19 +367,5 @@ describe('', () => {
 
     module.default.addGroup({ commit, state }, 'non-existent-id')
     expect(commit).toHaveBeenCalledWith('addGroup')
-  })
-})
-
-describe('module.exportForTesting', () => {
-  test('getGroupChatManager without initializing Textile', () => {
-    try {
-      const result = module.exportForTesting.getGroupChatManager()
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty(
-        'message',
-        GroupsError.TEXTILE_NOT_INITIALIZED,
-      )
-    }
   })
 })

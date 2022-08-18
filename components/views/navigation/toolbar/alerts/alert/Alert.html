@@ -1,15 +1,13 @@
-<div class="alert">
-  <UiCircle
-    :type="alertImage ? 'image' : 'random'"
-    :source="alertImage"
-    :data-cy="{'circle-without-picture' : !alertImage}"
-  />
-  <div class="info-container">
+<div class="alert" >
+<!--  <UiCircle-->
+<!--    :type="alertImage ? 'image' : 'random'"-->
+<!--    :source="alertImage"-->
+<!--    :data-cy="{'circle-without-picture' : !alertImage}"-->
+<!--  />-->
+  <div class="info-container"  @click="notificationLink(alert.type)">
     <div class="head">
-      <TypographySubtitle :size="6" :text="alert.content.title" />
-      <TypographyText color="dark" size="xs">
-        {{ $dayjs(alert.at).fromNow() }}
-      </TypographyText>
+      <TypographySubtitle :size="6" :text="setTranslateText" />
+      <TypographyText :text="$dayjs(alert.at).fromNow()" class="timestamp" />
     </div>
     <TypographyText class="ellipsis" :title="setTranslateText">
       {{ setTranslateText }}

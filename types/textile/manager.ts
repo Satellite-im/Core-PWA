@@ -1,4 +1,3 @@
-import { Client, Identity, Users } from '@textile/hub'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 
 export interface StorageConfig {
@@ -13,13 +12,6 @@ export interface TextileConfig extends StorageConfig {
 export interface Creds {
   id: string
   pass: string
-}
-
-export interface TextileInitializationData {
-  identity: Identity
-  client: Client
-  users: Users
-  wallet: Account
 }
 
 export type TextileImage = {

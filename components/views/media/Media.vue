@@ -3,11 +3,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
-import { User } from '~/types/ui/user'
+import { User } from '~/libraries/Iridium/friends/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { ConversationParticipant } from '~/store/conversation/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   props: {
@@ -34,38 +33,47 @@ export default Vue.extend({
   data() {
     return {
       componentKey: this.fullscreen,
+      webrtc: iridium.webRTC.state,
+      friends: iridium.friends.state.details,
     }
   },
   computed: {
-    ...mapState([
-      'ui',
-      'accounts',
-      'friends',
-      'groups',
-      'webrtc',
-      'conversation',
-    ]),
-    ...mapGetters('webrtc', ['isActiveCall']),
-    computedUsers() {
-      return this.fullscreen
-        ? this.users.slice(0, this.fullscreenMaxViewableUsers)
-        : this.users.slice(0, this.maxViewableUsers)
+    ...mapState(['ui', 'accounts', 'groups', 'audio']),
+    conversationId(): Conversation['id'] | undefined {
+      return this.$route.params.id
     },
-    localParticipant() {
-      return { ...this.accounts.details, peerId: iridium.connector?.peerId }
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return iridium.chat.state.conversations[this.conversationId]
     },
-    remoteParticipants() {
-      return this.conversation.participants.filter(
-        (participant: ConversationParticipant) =>
-          participant.peerId !== iridium.connector?.peerId,
+    localParticipant(): User | undefined {
+      const id = this.webrtc.activeCall?.did
+      if (!id) {
+        return undefined
+      }
+      return iridium.profile.state
+    },
+    remoteParticipants(): User[] {
+      if (!this.conversationId || !this.conversation) {
+        return []
+      }
+
+      const dids = this.conversation.participants.filter(
+        (f) => f !== iridium.connector?.id,
       )
+
+      return dids.map((did) => this.friends[did])
     },
     activeCall() {
       const { activeCall } = this.webrtc
+      if (!activeCall) {
+        return undefined
+      }
       const call = $WebRTC.getCall(activeCall.callId)
       return call
     },
-    ...mapState(['audio']),
   },
   watch: {
     fullscreen(value) {
@@ -207,12 +215,6 @@ export default Vue.extend({
         }
       },
     },
-  },
-  beforeMount() {
-    // TODO: Create mixin/library that will handle call rejoining and closing
-    window.onbeforeunload = (e) => {
-      this.$store.dispatch('webrtc/hangUp')
-    }
   },
   methods: {
     /**

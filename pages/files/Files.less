@@ -11,10 +11,25 @@
     'files-view files-aside-container';
   overflow-y: scroll;
   padding: @normal-spacing;
+  min-width: 0; // Enables .search-info-text ellipsis
+
+  .search-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.33em;
+    user-select: none;
+    min-width: 0; // Enables .search-info-text ellipsis
+
+    .search-info-text {
+      &:extend(.ellipsis);
+    }
+  }
 
   .files-path {
     grid-area: files-path;
     display: flex;
+    justify-content: space-between;
     gap: @light-spacing;
   }
 

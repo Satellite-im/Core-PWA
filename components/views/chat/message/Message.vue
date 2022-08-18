@@ -54,7 +54,6 @@ export default Vue.extend({
     ...mapGetters({
       findFriendByAddress: 'friends/findFriendByAddress',
       getFiles: 'chat/getFiles',
-      isGroup: 'conversation/isGroup',
       getTimestamp: 'settings/getTimestamp',
     }),
     conversationId(): Conversation['id'] {
@@ -225,11 +224,7 @@ export default Vue.extend({
       this.$toast.show(this.$t('ui.copied') as string)
     },
     saveImage() {
-      // this.$TextileManager.sharedBucket?.pullFile(
-      //   this.message.payload.id,
-      //   this.message.payload.name,
-      //   this.message.payload.size,
-      // )
+      // TODO: Send pin encrypted message to local IPFS and share with sync node
     },
     /**
      * @method toPng

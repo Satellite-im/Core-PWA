@@ -1,4 +1,3 @@
-import memoize from 'lodash/memoize'
 import * as authenticated from './authenticated'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { DataStateType } from '~/store/dataState/types'

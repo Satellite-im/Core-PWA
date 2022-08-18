@@ -2,20 +2,29 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { FlaskConicalIcon } from 'satellite-lucide-icons'
-import { AlertState } from '~/libraries/ui/Alerts'
-import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     FlaskConicalIcon,
   },
+  data() {
+    return {
+      messages: [],
+    }
+  },
   computed: {
     ...mapState({
-      notifications: (state) => (state as RootState).ui.notifications,
+      notifications: () =>
+        Object.entries(iridium.notifications?.state)
+          .sort((a: any, b: any) => {
+            return b.at - a.at
+          })
+          .filter((a) => {
+            return a
+          }),
     }),
-    ...mapGetters('ui', ['allUnseenNotifications']),
-    AlertState: () => AlertState,
   },
   methods: {
     clearNotifications() {

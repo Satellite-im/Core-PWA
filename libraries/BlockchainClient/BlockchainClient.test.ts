@@ -1,4 +1,4 @@
-import BlockchainClient from '~/libraries/BlockchainClient/BlockchainClient'
+import BlockchainClient from './BlockchainClient'
 
 describe('', () => {
   test('get account but it is uninitialized', () => {
@@ -32,6 +32,7 @@ describe('', () => {
     const result = $BlockchainClient.isPayerInitialized
     expect(result).toBeFalsy()
   })
+
   test.skip('setPhotoHash', () => {
     const mockedFunction = jest.fn()
     const constructorArguments = {
@@ -43,6 +44,7 @@ describe('', () => {
     expect(result).toBeFalsy()
     expect(mockedFunction).toHaveBeenCalled()
   })
+
   test.skip('get account but it has been initialized', async () => {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     $BlockchainClient.initRandom()
