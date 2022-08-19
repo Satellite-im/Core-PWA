@@ -280,7 +280,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     // Announce to the remote user
     if (did !== this.iridium.connector?.id) {
-      const profile = await this.iridium.profile?.get()
+      const profile = this.iridium.profile.state
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
         throw new Error(FriendsError.NETWORK_ERROR)
@@ -419,7 +419,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     // Announce to the remote user
     if (didUtils.didString(did) !== this.iridium.connector?.id) {
-      const profile = await this.iridium.profile?.get()
+      const profile = this.iridium.profile.state
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
         throw new Error(FriendsError.NETWORK_ERROR)
