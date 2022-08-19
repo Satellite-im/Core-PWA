@@ -116,7 +116,6 @@ export function useWebRTC() {
       (f) => f !== iridium.connector?.id,
     )
 
-    // TODO: change this when the user manager is ready, not all participants are friends
     return dids.map((did) => iridium.users.getUser(did))
   })
 
