@@ -1,88 +1,47 @@
-.create-server-container {
-  width: @normal-modal-size;
-}
-
-.address {
-  font-size: @text-size;
-  color: #ccc;
-}
-
-.is-rounded.circle {
-  background: @foreground !important;
-}
-
-.label {
-  font-size: @text-size;
-  color: @secondary-text !important;
-}
-.image {
-  max-width: 175px;
-}
-.column.align {
-  align-items: flex-start;
+.create-user-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  .set-photo-title {
-    margin-bottom: 20px;
+  align-items: center;
+  height: 100%;
+  max-width: @normal-modal-size;
+  padding: 16px;
+
+  .create-user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .header {
+      display: flex;
+      gap: 16px;
+
+      .image-container {
+        max-width: 175px;
+      }
+    }
+
+    .body {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+
+      .submit-button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+      }
+    }
   }
 }
 
-.submit-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 40px;
-  &:extend(.full-width);
-}
-
-.input-container {
-  margin-bottom: 20px;
-}
-
-.cropper-mask {
-  &:extend(.blur-less);
-  position: fixed;
-  &:extend(.first-layer);
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.red {
-  &:extend(.color-danger);
-}
-
-.modal-body {
-  display: flex;
-  flex-wrap: wrap;
-  height: @full;
-}
-
-.custom-modal-content {
-  &:extend(.full-width);
-}
-
-@media (max-width: @mobile-breakpoint) {
-  .create-server-container {
-    &:extend(.full-width);
-  }
-
-  .custom-modal-content {
-    height: calc(@full - 90px);
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-
-  .submit-container {
-    align-items: center;
-    justify-content: center;
-    align-self: flex-end;
-    margin-top: 0px;
-    .is-button {
-      width: @full;
-      height: 2rem;
-      margin-top: @light-spacing;
+@media (max-width: @mobile-small-breakpoint) {
+  .create-user-container {
+    .create-user-form {
+      .body {
+        .submit-button-container {
+          flex-direction: column;
+          margin-top: 24px;
+        }
+      }
     }
   }
 }
