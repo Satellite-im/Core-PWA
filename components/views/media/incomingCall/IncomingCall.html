@@ -1,10 +1,10 @@
 <div class="incoming" data-cy="incoming-call">
-  <div
-    v-if="callerAvatar"
-    class="user-profile-picture"
-    v-bind:style="`background:url(${callerAvatar})`"
+  <UiCircle
+    :type="callerAvatar ? 'image' : 'random'"
+    :seed="caller.did"
+    :source="callerAvatar"
+    :size="120"
   />
-  <UiCircle v-else type="random" :seed="caller.did" :size="120" />
   <div class="user-info">
     <TypographyText class="ellipsis" as="h2" :title="caller.name">
       {{caller.name}}
