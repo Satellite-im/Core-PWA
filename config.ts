@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/named
 import { Commitment } from '@solana/web3.js'
 
-const soundsCID = 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9'
 const syncNodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
   '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
 ]
@@ -28,15 +27,15 @@ export const Config = {
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
-    newMessage: `${soundsCID}/Notification.m4a`,
-    call: `${soundsCID}/Call.m4a`,
-    hangup: `${soundsCID}/Unused.m4a`,
-    mute: `${soundsCID}/Mute.m4a`,
-    unmute: `${soundsCID}/Unmute.m4a`,
-    deafen: `${soundsCID}/Deafen.m4a`,
-    undeafen: `${soundsCID}/Undeafen.m4a`,
-    upload: `${soundsCID}/Success.m4a`,
-    connected: `${soundsCID}/Success.m4a`,
+    newMessage: `static/Notification.m4a`,
+    call: `static/Call.m4a`,
+    hangup: `static/Unused.m4a`,
+    mute: `static/Mute.m4a`,
+    unmute: `static/Unmute.m4a`,
+    deafen: `static/Deafen.m4a`,
+    undeafen: `static/Undeafen.m4a`,
+    upload: `static/Success.m4a`,
+    connected: `static/Success.m4a`,
   },
   cacher: {
     user_lifespan: 90000,
