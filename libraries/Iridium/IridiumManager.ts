@@ -115,19 +115,28 @@ export class IridiumManager extends Emitter {
     await this.users.init()
     logger.log('iridium/manager', 'ready')
 
-    if (this.connector.p2p.primaryNodeID) {
-      const payload = {
-        type: 'sync/init',
-        at: Date.now(),
-        name: this.profile.state.name,
-        avatar: this.profile.state.photoHash,
-      }
-      await this.connector.p2p.send(this.connector.p2p.primaryNodeID, payload)
-    }
+    await this.sendSyncInit()
 
     this.ready = true
+  }
+
+  async sendSyncInit() {
+    const connector = this.connector
+    const profile = this.profile.state
+    if (!connector?.p2p.primaryNodeID || !profile) {
+      return
+    }
+
+    const payload = {
+      type: 'sync/init',
+      at: Date.now(),
+      name: profile.name,
+      avatar: profile.photoHash,
+    }
+    await connector.p2p.send(connector.p2p.primaryNodeID, payload)
   }
 }
 
 const instance = new IridiumManager()
+window.i = instance
 export default instance

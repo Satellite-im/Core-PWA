@@ -271,6 +271,7 @@ export default {
     }
     await iridium.connector?.waitForSyncNode()
     await iridium.profile?.set('', profile)
+    await iridium.sendSyncInit()
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)
     commit('setUserDetails', {
