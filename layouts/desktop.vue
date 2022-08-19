@@ -26,12 +26,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import useMeta from '~/components/compositions/useMeta'
 import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
 import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -39,17 +40,20 @@ export default Vue.extend({
   middleware: 'authenticated',
   setup() {
     useMeta()
+    const { isBackgroundCall } = useWebRTC()
+
+    return { isBackgroundCall }
   },
   data() {
     return {
       settings: iridium.settings.state,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
     ...mapState({
       showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
-    ...mapGetters('webrtc', ['isBackgroundCall']),
     flair(): Flair {
       return flairs[this.settings.flair]
     },
@@ -102,6 +106,11 @@ export default Vue.extend({
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);
+  }
+
+  &.has-background-call {
+    position: relative;
+    padding-top: @background-call-height;
   }
 }
 </style>

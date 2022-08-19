@@ -23,7 +23,9 @@ export default Vue.extend({
       showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
     friendsList(): Friend[] {
-      return Object.values(this.friends.details)
+      return this.friends.friends.map((did) => {
+        return iridium.users.getUser(did)
+      })
     },
     activeTab(): FriendsTabs {
       return this.$store.state.friends.activeTab

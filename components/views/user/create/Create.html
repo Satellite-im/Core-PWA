@@ -26,7 +26,6 @@
             <InteractablesImageInput ref="imageInput" @change="selectImage" />
             <InteractablesButton
               @click="() => imageInputRef.click()"
-              type="primary"
               size="small"
               :text="$t('servers.create.photo_button')"
               outlined
@@ -79,7 +78,7 @@
           :loading="isLoading"
           class="create-server-btn"
           data-cy="sign-in-button"
-          as="submit"
+          type="submit"
         />
       </div>
     </form>

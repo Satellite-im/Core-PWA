@@ -8,6 +8,10 @@ const InitialFilesState: FilesState = {
   path: [],
   preview: undefined,
   rename: undefined,
+  search: {
+    value: '',
+    searchAll: false,
+  },
   sort: {
     category: FileSortEnum.MODIFIED,
     asc: true,

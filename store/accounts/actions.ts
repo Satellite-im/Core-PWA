@@ -192,13 +192,13 @@ export default {
       await iridium.initFromEntropy(entropy)
     }
 
-    commit('setActiveAccount', iridium.connector?.id)
     logger.debug('accounts/actions/loadAccount', 'fetching iridium profile')
     const userInfo = await iridium.profile?.get()
     if (!userInfo?.did) {
       logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
+    commit('setActiveAccount', iridium.connector?.id)
 
     logger.debug(
       'accounts/actions/loadAccount',
@@ -271,6 +271,7 @@ export default {
     }
     await iridium.connector?.waitForSyncNode()
     await iridium.profile?.set('', profile)
+    await iridium.sendSyncInit()
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)
     commit('setUserDetails', {
@@ -325,20 +326,6 @@ export default {
     rootState,
     state,
   }: ActionsArguments<AccountsState>) {
-    dispatch(
-      'webrtc/initialize',
-      {
-        privateKeyInfo: {
-          type: 'ed25519',
-          privateKey: iridium.connector?.peerId,
-        },
-        originator: iridium.connector?.peerId,
-      },
-      {
-        root: true,
-      },
-    )
-
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
   },
   async connectWallet({

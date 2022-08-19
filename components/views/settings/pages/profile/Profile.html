@@ -77,14 +77,21 @@
                   <TypographyTitle :size="6" :text="accounts.details.name" />
                 </div>
                 <div class="status-input">
-                  <InteractablesInput
-                    v-model="status"
-                    size="xs"
-                    type="text"
-                    :placeholder="$t('pages.settings.profile.status_placeholder')"
+                  <UiComingSoon
+                    style="flex: 1"
+                    :tooltipText="$t('ui.coming_soon')"
+                    :tooltipPosition="'top'"
+                    disabled
                   >
-                    <edit-icon size="1x" />
-                  </InteractablesInput>
+                    <InteractablesInput
+                      v-model="status"
+                      size="xs"
+                      type="text"
+                      :placeholder="$t('pages.settings.profile.status_placeholder')"
+                    >
+                      <edit-icon size="1x" />
+                    </InteractablesInput>
+                  </UiComingSoon>
                 </div>
                 <div v-if="!!accounts.details.status" class="status">
                   <TypographyText as="h6">Current Status</TypographyText>
@@ -108,9 +115,22 @@
                   :text="$t('pages.settings.profile.about.title')"
                 />
               </div>
-              <button class="edit-button" @click="() => {}">
-                {{$t('global.edit')}}
-              </button>
+              <div>
+                <UiComingSoon
+                  style="flex: 1"
+                  :tooltipText="$t('ui.coming_soon')"
+                  :tooltipPosition="'top'"
+                  disabled
+                >
+                  <button
+                    v-tooltip.top="$t('ui.coming_soon')"
+                    class="edit-button"
+                    @click="() => {}"
+                  >
+                    {{$t('global.edit')}}
+                  </button>
+                </UiComingSoon>
+              </div>
             </div>
             <div class="about-main">
               <div class="about-subtitle">
@@ -119,7 +139,8 @@
                   :text="$t('pages.settings.profile.about.subtitle')"
                 />
               </div>
-              <TypographySubtitle :size="6" :text="sampleProfileInfo.about" />
+              <!-- TODO: Enable when about me is implemented -->
+              <!-- <TypographySubtitle :size="6" :text="sampleProfileInfo.about" /> -->
             </div>
           </div>
 
@@ -147,14 +168,22 @@
                     <info-icon size="1.5x" class="section-icon-tooltip" />
                   </div>
                 </div>
-                <InteractablesInput
-                  v-model="accountUrl"
-                  size="xs"
-                  type="text"
-                  :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
+
+                <UiComingSoon
+                  style="flex: 1"
+                  :tooltipText="$t('ui.coming_soon')"
+                  :tooltipPosition="'top'"
+                  disabled
                 >
-                  <edit-icon size="1x" />
-                </InteractablesInput>
+                  <InteractablesInput
+                    v-model="accountUrl"
+                    size="xs"
+                    type="text"
+                    :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
+                  >
+                    <edit-icon size="1x" />
+                  </InteractablesInput>
+                </UiComingSoon>
               </div>
 
               <div class="accounts-subtitle-wrapper">

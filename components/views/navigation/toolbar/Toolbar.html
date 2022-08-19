@@ -13,16 +13,20 @@
   <div class="controls">
     <div class="toggle-alerts" data-cy="toolbar-alerts">
       <UiCircle
-        v-if="allUnseenNotifications.length"
+        v-if="notifications.length"
         class="notification-alert"
         :size="15"
         color="red"
         type="icon"
-        :data="allUnseenNotifications.length"
+        :data="notifications.length"
         @click="toggleAlerts"
       >
-        {{ allUnseenNotifications.length }}
+        {{notifications.length}}
       </UiCircle>
+      <ToolbarAlerts
+        v-if="showAlerts && $device.isDesktop"
+        v-click-outside="toggleAlerts"
+      />
       <bell-icon
         v-tooltip.bottom="$t('pages.chat.alerts')"
         size="1x"
@@ -30,15 +34,7 @@
         color="primary"
         @click="toggleAlerts"
       />
-      <ToolbarAlerts
-        v-if="showAlerts && $device.isDesktop"
-        v-click-outside="toggleAlerts"
-      />
     </div>
-    <ToolbarAlerts
-      v-if="showAlerts && !$device.isDesktop"
-      v-click-outside="toggleAlerts"
-    />
     <div
       v-if="conversation"
       v-tooltip.bottom="callTooltipText"

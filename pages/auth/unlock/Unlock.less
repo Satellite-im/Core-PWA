@@ -5,6 +5,8 @@
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
+  gap: 48px;
+
   .realm-container {
     &:extend(.full-width);
     display: inline-flex;
@@ -19,6 +21,7 @@
       align-items: center;
       gap: 0.5rem;
     }
+
     &:extend(.background-semitransparent-dark);
     &:extend(.round-corners);
     &:extend(.bordered);
@@ -27,7 +30,7 @@
 
   .decryption-body {
     align-self: center;
-    margin-bottom: 25vh;
+
     .delete-link {
       display: flex;
       font-family: @secondary-font;

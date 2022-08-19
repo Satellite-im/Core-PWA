@@ -259,7 +259,6 @@ export default defineNuxtConfig({
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
-    textileKey: process.env.TEXTILE_API_KEY,
   },
   webpack: {
     watchOptions: {

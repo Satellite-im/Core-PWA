@@ -11,10 +11,8 @@ import {
   PropCommonEnum,
 } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { ChatState, ChatText } from '~/store/chat/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { SettingsRoutes } from '~/store/ui/types'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
 import {
   Conversation,
@@ -96,6 +94,9 @@ const Chatbar = Vue.extend({
         this.chat.countError
       )
     },
+    isSubscribed(): boolean {
+      return iridium.chat.subscriptions[this.$route.params.id]?.connected
+    },
     text: {
       /**
        * @method get
@@ -143,13 +144,6 @@ const Chatbar = Vue.extend({
     }
   },
   methods: {
-    /**
-     * @method blurChatbar
-     * @description blur chatbar
-     */
-    blurChatbar() {
-      document.activeElement?.blur()
-    },
     /**
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
@@ -223,7 +217,8 @@ const Chatbar = Vue.extend({
       if (
         !this.files.length &&
         (this.text.length > this.$Config.chat.maxChars ||
-          !this.text.trim().length)
+          !this.text.trim().length ||
+          !this.isSubscribed)
       ) {
         return
       }

@@ -10,7 +10,7 @@
         :class="[
           `is-${color}`,
           {
-            'show-clear-button': showClear,
+            'show-clear-button': showClearButton,
             'is-danger': error || invalid
           }
         ]"
@@ -25,13 +25,14 @@
         @input="handleInput"
         data-cy="input-group"
       />
-      <button
-        v-if="showClear && !isEmpty"
-        class="clear-button"
-        @click="clearInput"
-      >
-        <delete-icon size="1x" />
-      </button>
+      <div class="append input-options">
+        <button v-if="showClearButton && !isEmpty" @click="clearInput">
+          <delete-icon size="1x" />
+        </button>
+        <div v-if="$slots.append" class="slot">
+          <slot name="append" />
+        </div>
+      </div>
     </div>
     <InteractablesButton
       v-if="$slots.default"

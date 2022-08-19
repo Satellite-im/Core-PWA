@@ -9,14 +9,14 @@ import {
   VideoIcon,
 } from 'satellite-lucide-icons'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import Group from '~/libraries/Iridium/groups/Group'
 import { TrackKind } from '~/libraries/WebRTC/types'
-import type { Friend, User } from '~/libraries/Iridium/friends/types'
-import { RootState } from '~/types/store/store'
+import type { User } from '~/libraries/Iridium/friends/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -25,17 +25,20 @@ export default Vue.extend({
     MenuIcon,
     VideoIcon,
   },
+  setup() {
+    const { isActiveCall } = useWebRTC()
+
+    return { isActiveCall }
+  },
   data() {
     return {
-      friends: iridium.friends.state.details,
+      users: iridium.users.state,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
-    ...mapState({
-      webrtc: (state) => (state as RootState).webrtc,
-    }),
     ...mapGetters('ui', ['allUnseenNotifications']),
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
@@ -62,7 +65,7 @@ export default Vue.extend({
       if (!friendDid) {
         return
       }
-      return this.friends[friendDid]
+      return this.users[friendDid]
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -87,13 +90,11 @@ export default Vue.extend({
   },
   methods: {
     async call(kinds: TrackKind[]) {
-      if (!this.enableRTC) {
+      if (!this.enableRTC || !this.details) {
         return
       }
       try {
-        await this.$store.dispatch('webrtc/call', {
-          kinds,
-        })
+        await iridium.webRTC.call(this.details, kinds)
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
@@ -102,7 +103,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.webrtc.activeCall) {
+      if (!this.enableRTC || this.isActiveCall) {
         return
       }
       await this.call(['audio'])

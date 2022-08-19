@@ -19,7 +19,7 @@ Start by copying the `.env.example` to a `.env` file. This stores secure informa
 cp .env.example .env
 ```
 
-Currently, the only environment variable you need is a [Textile](https://www.textile.io) API key.
+Currently, the only environment variable you need is comma separated list of sync nodes, `NUXT_ENV_IRIDIUM_SYNC_NODES`.
 
 ## Running Locally
 

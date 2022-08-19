@@ -1,12 +1,11 @@
 <template src="./Global.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { Friend } from '~/types/ui/friends'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -16,9 +15,18 @@ declare module 'vue/types/vue' {
 
 export default Vue.extend({
   name: 'Global',
+  setup() {
+    const { isActiveCall, isBackgroundCall } = useWebRTC()
+
+    return { isActiveCall, isBackgroundCall }
+  },
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
   computed: {
-    ...mapState(['ui', 'media', 'webrtc', 'conversation', 'files']),
-    ...mapGetters('webrtc', ['isBackgroundCall', 'isActiveCall']),
+    ...mapState(['ui', 'media', 'conversation', 'files']),
     ModalWindows: () => ModalWindows,
     showBackgroundCall(): boolean {
       if (!this.$device.isMobile) {
@@ -76,37 +84,20 @@ export default Vue.extend({
      * @example
      */
     async acceptCall(kinds: TrackKind[]) {
-      this.$store.commit('webrtc/setStreamMuted', {
-        did: iridium.connector?.peerId,
-        audio: true,
-        video: true,
-        screen: true,
-      })
-      const { callId, peerId } = this.webrtc.incomingCall
-      const call = $WebRTC.getCall(callId)
-      if (!call) {
-        return
-      }
-
-      const redirectId =
-        this.webrtc.incomingCall.type === 'group'
-          ? `groups/${callId}`
-          : `direct/${
-              this.$store.state.friends.all.find(
-                (f: Friend) => f.peerId === peerId,
-              )?.address || 'error'
-            }`
-
       try {
-        await call.createLocalTracks(kinds)
-        await call.answer(peerId)
+        await iridium.webRTC.acceptCall(kinds)
       } catch (error) {
         if (error instanceof Error) {
           this.$toast.error(this.$t(error.message) as string)
         }
       }
 
-      const callingPath = `/chat/${redirectId}`
+      const callId = this.webrtc.activeCall?.callId
+      if (!callId) {
+        return
+      }
+
+      const callingPath = `/chat/${callId}`
       if (this.$route.path !== callingPath) {
         this.$router.push(callingPath)
       }
@@ -118,7 +109,7 @@ export default Vue.extend({
      */
     denyCall() {
       this.$store.commit('ui/fullscreen', false)
-      this.$store.dispatch('webrtc/denyCall')
+      iridium.webRTC.denyCall()
     },
     /**
      * @method hangUp
@@ -126,9 +117,8 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      this.$store.commit('webrtc/setIncomingCall', undefined, { root: true })
       this.$store.commit('ui/fullscreen', false)
-      this.$store.dispatch('webrtc/hangUp')
+      iridium.webRTC.hangUp()
     },
   },
 })

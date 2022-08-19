@@ -15,6 +15,7 @@ module.exports = {
     '!**/config.ts',
     '!**/startup.js',
     '!**/*.eslintrc.js',
+    '!**/iridium/**',
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
@@ -24,7 +25,10 @@ module.exports = {
     '^[@|~]/(.*)$': '<rootDir>/$1',
     skaler: '<rootDir>/store/__mocks__/skaler.js',
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules',
+    '<rootDir>/linked-iridium',
+  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/.nuxt',
     '<rootDir>/cypress',
@@ -35,6 +39,7 @@ module.exports = {
     '<rootDir>/libraries/Files/errors',
     '<rootDir>/libraries/Files/types',
     '<rootDir>/types',
+    '<rootDir>/iridium',
   ],
   testEnvironment: 'jsdom',
   transform: {

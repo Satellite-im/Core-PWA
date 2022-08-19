@@ -15,6 +15,19 @@
 @font-size-xl: 1.25rem;
 @font-size-2xl: 1.5rem;
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
 .font {
   // font families
   &-heading {
@@ -56,6 +69,21 @@
   }
   &-color-flair {
     color: @flair-color;
+  }
+  &-color-error {
+    color: @red;
+  }
+}
+
+.font-weight {
+  &-normal {
+    font-weight: 400;
+  }
+  &-medium {
+    font-weight: 500;
+  }
+  &-bold {
+    font-weight: 600;
   }
 }
 

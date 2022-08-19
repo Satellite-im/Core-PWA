@@ -106,6 +106,7 @@ export default Vue.extend({
 .menu {
   overflow-y: auto;
   &:extend(.no-select);
+  padding: 16px;
 
   .menu-label {
     &:extend(.font-muted);

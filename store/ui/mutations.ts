@@ -9,7 +9,6 @@ import {
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { FileMessage } from '~/types/textile/mailbox'
-import { Alert, AlertState, AlertType } from '~/libraries/ui/Alerts'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -314,22 +313,6 @@ export default {
       url: glyph.url,
       count: 1,
     })
-  },
-  sendNotification(state: UIState, notification: Alert) {
-    state.notifications.push(notification)
-  },
-  setNotifications(state: UIState, notifications: Array<Alert>) {
-    state.notifications = notifications
-  },
-  clearAllNotifications(state: UIState) {
-    state.notifications.forEach((notification) => {
-      notification.state = AlertState.READ
-    })
-  },
-  updateGroupNotifications(state: UIState) {
-    state.notifications = state.notifications.filter(
-      (item) => item.type !== AlertType.GROUP_MESSAGE,
-    )
   },
   removeNotification(state: UIState, id: string) {
     state.notifications = state.notifications.filter((item) => item.id !== id)

@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 
 import {
   PhoneIcon,
@@ -10,9 +9,10 @@ import {
   VideoIcon,
   VideoOffIcon,
 } from 'satellite-lucide-icons'
-import { Friend } from '~/types/ui/friends'
-import { Group } from '~/store/groups/types'
-import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/friends/types'
+import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -34,30 +34,43 @@ export default Vue.extend({
       required: false,
     },
   },
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
   computed: {
-    ...mapState({
-      callId: (state) => (state as RootState).webrtc.incomingCall?.callId,
-      friends: (state) => (state as RootState).friends.all,
-      groups: (state) => (state as RootState).groups.all,
-    }),
-    callType(): 'group' | 'friend' | undefined {
-      return this.callId &&
-        RegExp(this.$Config.regex.uuidv4).test(this.callId?.split('|')?.[1])
-        ? 'group'
-        : 'friend'
+    conversationId(): Conversation['id'] | undefined {
+      return this.$route.params.id
     },
-    caller(): Friend | Group | undefined {
-      if (!this.callType) {
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return iridium.chat.state.conversations[this.conversationId]
+    },
+    isGroup(): boolean {
+      return this.conversation?.type === 'group'
+    },
+    incomingCall(): WebRTCState['incomingCall'] {
+      return this.webrtc.incomingCall
+    },
+    caller(): User | undefined {
+      if (!this.incomingCall?.did) {
         return
       }
-      if (this.callType === 'friend') {
-        return this.friends.find((f: Friend) => f.peerId === this.callId)
+      // TODO : fix this later
+      if (this.isGroup) {
+        return
       }
-      return this.groups.find((g: Group) => g.id === this.callId)
+      return iridium.users.getUser(this.incomingCall.did)
     },
     callerAvatar(): string {
-      const hash = this.caller?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      if (!this.caller) {
+        return ''
+      }
+      const hash = this.caller.photoHash
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
 })

@@ -13,14 +13,14 @@
       data-cy="satellite-circle-profile"
     />
     <div
-      v-if="user.state !== 'mobile' && !isTyping"
+      v-if="user.status !== 'mobile' && !isTyping"
       class="status"
-      :class="{ [`is-${user.state}`]: user.state }"
+      :class="{ [`is-${user.status}`]: user.status }"
     />
     <smartphone-icon
-      v-else-if="user.state === 'mobile'"
+      v-else-if="user.status === 'mobile'"
       class="mobile-status"
-      :class="`is-${user.state}`"
+      :class="`is-${user.status}`"
       size="1x"
     />
     <UiChatTypingIndicator v-else />

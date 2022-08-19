@@ -17,7 +17,7 @@ export default Vue.extend({
     ...mapGetters('settings', ['getTimestamp']),
     src(): string {
       const hash = this.data.user?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     timestamp(): string {
       const msgTimestamp = this.$dayjs(this.data.at)
