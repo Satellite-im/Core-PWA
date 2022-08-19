@@ -1,9 +1,12 @@
 .container {
-  margin: 0 auto;
-  max-width: 400px;
   display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 420px;
   justify-content: center;
   text-align: center;
+  gap: 32px;
+  padding: 32px 16px;
 
   .input-account-body {
     min-width: 250px;
@@ -20,26 +23,19 @@
         .tag-container {
           &:extend(.full-width);
         }
+
         .tag {
           margin: @xlight-spacing 0;
         }
       }
     }
+  }
 
-    .container-actions {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0;
-
-      .action {
-        width: calc(50% - @xlight-spacing);
-
-        .is-button {
-          padding-left: 0;
-          padding-right: 0;
-        }
-      }
-    }
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 0;
+    gap: 24px;
   }
 
   .input-error {
@@ -49,24 +45,19 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    padding: 0 @normal-spacing;
-    &:extend(.full-width);
-  }
+    gap: 56px;
 
-  .input-account-body {
-    margin-top: @normal-spacing;
-    align-self: flex-start;
-    height: @full;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: @normal-spacing;
-
-    .title {
-      margin-top: 10vh;
+    .input-account-body {
+      display: flex;
+      justify-content: center;
+      align-self: flex-start;
+      flex-direction: column;
     }
-  }
 
-  .spacer {
-    flex: 1;
+    .buttons {
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
   }
 }

@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 32px;
-  padding: 0 @normal-spacing;
+  padding: 32px 16px;
 
   .disclaimer-body {
     display: flex;
@@ -23,24 +23,20 @@
 
   .buttons {
     display: flex;
-    gap: 16px;
-
-    button {
-      margin-top: @light-spacing;
-    }
+    gap: 24px;
   }
 }
 
 @media only screen and (max-width: @mobile-small-breakpoint) {
   .container {
+    gap: 56px;
+
     .disclaimer-body {
-      flex-grow: 1;
       margin-bottom: 0;
     }
 
     .buttons {
       flex-direction: column;
-      margin-bottom: 32px;
     }
   }
 }

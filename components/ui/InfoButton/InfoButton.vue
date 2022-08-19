@@ -1,6 +1,8 @@
 <template>
   <div>
-    <info-icon size="1.5x" class="info-icon" @click="toggleShowModal" />
+    <button @click="toggleShowModal">
+      <info-icon size="1.5x" class="info-icon" />
+    </button>
 
     <div v-if="showModal" class="modal-overlay" @click="toggleShowModal">
       <div class="modal">
@@ -35,16 +37,6 @@ export default Vue.extend({
   components: {
     InfoIcon,
   },
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    body: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       showModal: false,
@@ -68,21 +60,17 @@ export default Vue.extend({
 }
 
 .modal-overlay {
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  animation: zoom-in-zoom-out @animation-speed-long ease-out;
+  &:extend(.third-layer);
   &:extend(.background-semitransparent-light);
   &:extend(.blur);
   &:extend(.flex-justify-content-centered);
   &:extend(.absolute-coverage);
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  margin: auto;
-  width: 100%;
-  height: 100%;
-  animation: zoom-in-zoom-out @animation-speed ease-out;
-  &:extend(.third-layer);
 
   .modal {
-    margin-bottom: @normal-spacing;
     padding: 16px;
     &:extend(.background-semitransparent-dark);
     &:extend(.round-corners);
