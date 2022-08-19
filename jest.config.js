@@ -27,7 +27,7 @@ module.exports = {
   },
   testPathIgnorePatterns: [
     '<rootDir>/node_modules',
-    '<rootDir>/iridium',
+    '<rootDir>/linked-iridium',
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/.nuxt',
