@@ -8,7 +8,7 @@ describe('init', () => {
     inst = getters.default
   })
 
-  test.skip('sort most recent glyphs', () => {
+  test('sort most recent glyphs', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
@@ -211,7 +211,7 @@ describe('init', () => {
     ])
     expect(result).toMatchSnapshot()
   })
-  test.skip('sort most used emojis', () => {
+  test('sort most used emojis', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
