@@ -117,7 +117,7 @@ export function useWebRTC() {
     )
 
     // TODO: change this when the user manager is ready, not all participants are friends
-    return dids.map((did) => iridium.friends.state.details[did]).filter(Boolean)
+    return dids.map((did) => iridium.users.getUser(did))
   })
 
   return {
