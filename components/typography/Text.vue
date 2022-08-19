@@ -2,9 +2,8 @@
   <component
     :is="as"
     :class="[
-      `font-${getFont} font-color-${getColor} font-size-${getSize}`,
+      `font-${getFont} font-color-${getColor} font-size-${getSize} font-weight-${getWeight}`,
       { uppercase: uppercase },
-      `font-weight-getWeight`,
     ]"
   >
     <slot />
