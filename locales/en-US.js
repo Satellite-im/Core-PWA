@@ -128,6 +128,7 @@ export default {
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
+    back_to_call: 'Back to call',
   },
   popups: {
     error: {

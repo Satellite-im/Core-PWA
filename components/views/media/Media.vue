@@ -38,7 +38,6 @@ export default Vue.extend({
     return {
       componentKey: this.fullscreen,
       webrtc: iridium.webRTC.state,
-      friends: iridium.friends.state.details,
     }
   },
   computed: {

@@ -4,11 +4,4 @@
     >{{remoteParticipant.name}}</span
   >&nbsp;
   <span v-if="elapsedTime">- {{elapsedTime}}</span>
-  <div v-if="!deafened && audioStream" class="audio-stream-container">
-    <audio
-      :id="`audio-stream-${audioStream.id}`"
-      :src-object.prop="audioStream"
-      autoplay
-    />
-  </div>
 </div>

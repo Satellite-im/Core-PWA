@@ -204,4 +204,21 @@ export const Config = {
     errorNetworkActionThrottle: 1000,
   },
   seedPhraseCharsCount: 12,
+  pip: {
+    /* Grid config, image splitting the screen in `rows x columns` 
+     _____ _____
+    |_____|_____|
+    |_____|_____|
+    |_____|_____|
+    |_____|_____|
+    
+    Depending on the center of the Pip, it will land on a specific slot
+    */
+    rows: [0, 1, 2, 3] as const,
+    columns: [0, 1] as const,
+    throttleTime: 100, // ms
+    windowMargin: 80, // pixels
+    enlargeFactor: 1.25,
+    preventDragClass: '.drag-stop', // add this class to pip children that should not trigger drag/resize
+  },
 }
