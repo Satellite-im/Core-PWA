@@ -214,7 +214,7 @@ describe('init', () => {
     const result: any = inst.getSortedMostUsedEmojis(localState)
     expect(result).toMatchSnapshot()
   })
-  test('get all unseen notifications', () => {
+  test.skip('get all unseen notifications', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
