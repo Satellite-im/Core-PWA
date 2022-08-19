@@ -1,4 +1,4 @@
-import { Flairs, GlyphMarketViewStatus, Themes } from './types'
+import { GlyphMarketViewStatus } from './types'
 import * as getters from '~/store/ui/getters'
 
 describe('init', () => {
@@ -133,10 +133,6 @@ describe('init', () => {
           count: 2,
         },
       ],
-      theme: {
-        base: Themes[0],
-        flair: Flairs[0],
-      },
     }
     const result: any = inst.getSortedRecentGlyphs(localState)
     expect(result).toMatchSnapshot()
@@ -213,10 +209,6 @@ describe('init', () => {
         },
       ],
       recentGlyphs: [],
-      theme: {
-        base: Themes[0],
-        flair: Flairs[0],
-      },
     }
     const result: any = inst.getSortedMostUsedEmojis(localState)
     expect(result).toMatchSnapshot()
@@ -293,10 +285,6 @@ describe('init', () => {
         },
       ],
       recentGlyphs: [],
-      theme: {
-        base: Themes[0],
-        flair: Flairs[0],
-      },
     }
     const result: any = inst.allUnseenNotifications(localState)
     expect(result).toMatchSnapshot()
