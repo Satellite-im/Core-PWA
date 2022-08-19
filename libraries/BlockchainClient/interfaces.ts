@@ -125,58 +125,12 @@ export interface OutgoingFriendRequest extends FriendAccount {
 
 export interface Adapter {
   _getConnectionStatus(): boolean
-  initUserProgram(): Promise<void>
-  setPhotoHash(photoHash: string): Promise<string>
   createRandomAccount(): Promise<Account | undefined>
   signMessage(message: string): Promise<Uint8Array>
 
   getAccountFromMnemonic(mnemonic?: string): Promise<Account | null>
   getAccountBalance(account: Account): Promise<number | null>
   requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null>
-  createUser(params: CreateUserParams): Promise<boolean>
+
   getActiveAccount(): Promise<Account | undefined>
-
-  getCurrentUserInfo(): Promise<User | null>
-  getUserInfo(address: string): Promise<User | null>
-  getUsersInfo(addresses: string[]): Promise<User[]>
-
-  getFriendsByStatus(
-    status: FriendStatus,
-  ): Promise<{ incoming: FriendAccount[]; outgoing: FriendAccount[] }>
-  subscribeToEvents(): Promise<void>
-  addEventListener(
-    type: FriendsEvents,
-    callback: (data?: FriendAccount) => void,
-  ): void
-  computeAccountKeys(
-    from: PublicKey,
-    to: PublicKey,
-  ): Promise<{ request: PublicKey; first: PublicKey; second: PublicKey }>
-  getFriendsPayer(): Promise<Account>
-  getAccountStatus(accountKey: PublicKey): Promise<FriendStatus>
-  makeFriendRequest(
-    request: PublicKey,
-    first: PublicKey,
-    second: PublicKey,
-    k: String,
-  ): Promise<string>
-  getFriendAccount(accountKey: PublicKey): Promise<FriendAccount | null>
-  acceptFriendRequest(request: PublicKey, k: String): Promise<string>
-  denyFriendRequest(request: PublicKey): Promise<string>
-  removeFriendRequest(request: PublicKey): Promise<string>
-  removeFriend(request: PublicKey): Promise<string>
-  closeFriendRequest(request: PublicKey): Promise<string>
-
-  getPayerAccount(): Promise<Account | undefined>
-  createGroup(groupId: string, name: string): Promise<Group>
-  getUserGroups(address: string | PublicKey): Promise<Group[]>
-  getGroupsUsers(groupIds: string[]): Promise<{ id: string; users: string[] }[]>
-  inviteToGroup(groupId: string, recipient: string): Promise<void>
-  addGroupInviteListener(cb: (group: Group) => void): Promise<string>
-  unsubscribeGroupInviteListener(id: number): Promise<void>
-  addGroupListener(id: string, cb: (value: Group) => void): Promise<string>
-  removeGroupListeners(keys: string[]): Promise<void>
-  getGroupById(id: string): Promise<Group>
-  getGroupUsers(groupId: string): Promise<string[]>
-  addGroupsListener(cb: (value: Group) => void): Promise<string[]>
 }
