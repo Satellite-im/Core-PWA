@@ -183,52 +183,31 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   async onSyncFetchResponse(
     message: IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>,
   ) {
-    if (!message.payload.body.messages) {
-      return
-    }
-    if (!this.iridium.connector?.p2p.primaryNodeID) {
+    if (!message.payload.body.rows) {
       return
     }
     await Promise.all(
-      message.payload.body.messages.map(async (message) => {
-        const stored = await this.iridium.connector?.dag.get(
-          CID.parse(message.cid),
-        )
+      message.payload.body.rows.map(async (row) => {
+        const stored = await this.iridium.connector?.dag.get(CID.parse(row.cid))
         if (!stored.body) {
           return
         }
         const buffer = await this.iridium.connector?.did.decryptJWE(stored.body)
-        const payload: any = buffer && json.decode(buffer)
+        const message: any = buffer && json.decode(buffer)
         if (stored.topic) {
           logger.info(
             'iridium/chatmanager',
-            'sync/fetch/message - emitting synced message',
+            'sync/fetch/row - emitting synced message',
             message,
           )
           await this.iridium.connector?.pubsub.emit(stored.topic, {
             from: stored.from,
             topic: stored.topic,
-            payload: { type: 'jwe', body: payload },
+            payload: { type: 'jwe', body: message },
           })
         }
       }),
     )
-    logger.info(
-      'iridium/chatmanager',
-      'sync/fetch/messages - sending delivery receipt',
-      message.payload.body.messages,
-    )
-    // let the sync node know we've stored these messages
-    await this.iridium.connector?.p2p.send(
-      this.iridium.connector?.p2p.primaryNodeID,
-      {
-        type: 'sync/delivered',
-        messages: message.payload.body.messages?.map(
-          (message: { cid: string }) => message.cid,
-        ),
-      },
-    )
-    logger.info('iridium/chatmanager', 'sync/fetch/messages - done')
   }
 
   get(path: string = '', options: any = {}) {
