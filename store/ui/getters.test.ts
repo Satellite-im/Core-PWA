@@ -1,4 +1,5 @@
 import { GlyphMarketViewStatus } from './types'
+import { AlertState } from '~/libraries/ui/Alerts'
 import * as getters from '~/store/ui/getters'
 
 describe('init', () => {
@@ -213,7 +214,7 @@ describe('init', () => {
     const result: any = inst.getSortedMostUsedEmojis(localState)
     expect(result).toMatchSnapshot()
   })
-  test('get all unseen notificatins', () => {
+  test('get all unseen notifications', () => {
     const localState = {
       contextMenuStatus: false,
       showSidebarUsers: true,
@@ -285,80 +286,18 @@ describe('init', () => {
         },
       ],
       recentGlyphs: [],
+      notifications: [
+        {
+          at: 1660927020192,
+          state: AlertState.UNREAD
+        },
+        {
+          at: 1660927047329,
+          state: AlertState.UNREAD
+        }
+      ]
     }
-    const localState2 = {
-      contextMenuStatus: false,
-      showSidebarUsers: true,
-      showSidebar: true,
-      showSearchResult: false,
-      showSettings: false,
-      settingsSideBar: true,
-      quickProfile: false,
-      userProfile: {},
-      contextMenuValues: [],
-      contextMenuPosition: { x: 0, y: 0 },
-      quickProfilePosition: { x: 0, y: 0 },
-      modals: {
-        newfolder: false,
-        createServer: false,
-        marketplace: false,
-        wallet: false,
-        quickchat: false,
-        walletMini: false,
-        error: false,
-        changelog: false,
-        glyph: false,
-        userProfile: false,
-      },
-      glyphModalPackId: '',
-      chatbarContent: '',
-      replyChatbarMessage: { id: '', from: '', payload: '' },
-      chatbarFocus: false,
-      fullscreen: false,
-      showPinned: false,
-      enhancers: {
-        show: false,
-        floating: false,
-        position: [0, 0],
-        defaultWidth: '24rem',
-        defaultHeight: '30rem',
-        containerWidth: 0,
-        route: 'emoji',
-      },
-      messages: [],
-      unreadMessage: 0,
-      isScrollOver: false,
-      isTyping: false,
-      isReacted: false,
-      activeChannel: undefined,
-      settingReaction: { status: false, groupID: null, messageID: null },
-      hoveredGlyphInfo: undefined,
-      glyphMarketplaceView: {
-        view: GlyphMarketViewStatus.HOME,
-        shopId: null,
-      },
-      editMessage: { id: '', from: '', payload: '' },
-      recentReactions: ['👍', '😂', '♥️'],
-      mostEmojiUsed: [
-        {
-          code: 'thumbup',
-          content: '👍',
-          count: 1,
-        },
-        {
-          code: 'flag_id',
-          content: '🇮🇩',
-          count: 3,
-        },
-        {
-          code: 'pray',
-          content: '🙏 ',
-          count: 2,
-        },
-      ],
-      recentGlyphs: [],
-    }
-    const result: any = inst.allUnseenNotifications([localState, localState2])
+    const result: any = inst.allUnseenNotifications(localState)
     expect(result).toMatchSnapshot()
   })
 })
