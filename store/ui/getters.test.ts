@@ -286,7 +286,79 @@ describe('init', () => {
       ],
       recentGlyphs: [],
     }
-    const result: any = inst.allUnseenNotifications(localState)
+    const localState2 = {
+      contextMenuStatus: false,
+      showSidebarUsers: true,
+      showSidebar: true,
+      showSearchResult: false,
+      showSettings: false,
+      settingsSideBar: true,
+      quickProfile: false,
+      userProfile: {},
+      contextMenuValues: [],
+      contextMenuPosition: { x: 0, y: 0 },
+      quickProfilePosition: { x: 0, y: 0 },
+      modals: {
+        newfolder: false,
+        createServer: false,
+        marketplace: false,
+        wallet: false,
+        quickchat: false,
+        walletMini: false,
+        error: false,
+        changelog: false,
+        glyph: false,
+        userProfile: false,
+      },
+      glyphModalPackId: '',
+      chatbarContent: '',
+      replyChatbarMessage: { id: '', from: '', payload: '' },
+      chatbarFocus: false,
+      fullscreen: false,
+      showPinned: false,
+      enhancers: {
+        show: false,
+        floating: false,
+        position: [0, 0],
+        defaultWidth: '24rem',
+        defaultHeight: '30rem',
+        containerWidth: 0,
+        route: 'emoji',
+      },
+      messages: [],
+      unreadMessage: 0,
+      isScrollOver: false,
+      isTyping: false,
+      isReacted: false,
+      activeChannel: undefined,
+      settingReaction: { status: false, groupID: null, messageID: null },
+      hoveredGlyphInfo: undefined,
+      glyphMarketplaceView: {
+        view: GlyphMarketViewStatus.HOME,
+        shopId: null,
+      },
+      editMessage: { id: '', from: '', payload: '' },
+      recentReactions: ['👍', '😂', '♥️'],
+      mostEmojiUsed: [
+        {
+          code: 'thumbup',
+          content: '👍',
+          count: 1,
+        },
+        {
+          code: 'flag_id',
+          content: '🇮🇩',
+          count: 3,
+        },
+        {
+          code: 'pray',
+          content: '🙏 ',
+          count: 2,
+        },
+      ],
+      recentGlyphs: [],
+    }
+    const result: any = inst.allUnseenNotifications([localState, localState2])
     expect(result).toMatchSnapshot()
   })
 })
