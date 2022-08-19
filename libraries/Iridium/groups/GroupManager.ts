@@ -238,7 +238,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.CANNOT_ADD_MEMBER)
     }
 
-    const member = this.iridium.friends.getFriend(remotePeerDID)
+    const member = this.iridium.users.getUser(remotePeerDID)
     if (!member) {
       logger.error(this.loggerTag, 'friend not found')
       throw new Error(GroupsError.CANNOT_ADD_MEMBER)

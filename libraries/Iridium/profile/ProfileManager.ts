@@ -4,7 +4,7 @@ import { Profile } from './types'
 
 export default class IridiumProfile extends Emitter {
   public readonly iridium: IridiumManager
-  public state: Profile
+  public state?: Profile
 
   constructor(iridium: IridiumManager) {
     super()

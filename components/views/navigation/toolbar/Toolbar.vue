@@ -49,7 +49,7 @@ export default Vue.extend({
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
-      friends: iridium.friends.state.details,
+      users: iridium.users.state,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
@@ -89,7 +89,7 @@ export default Vue.extend({
       if (!friendDid) {
         return
       }
-      return this.friends[friendDid]
+      return this.users[friendDid]
     },
     groupMembers(): GroupMemberDetails[] {
       const members = (this.details as Group).members ?? []
@@ -108,13 +108,13 @@ export default Vue.extend({
       // todo- hook up to usermanager
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
-        return Object.values(this.friends).some(
+        return Object.values(this.users).some(
           (friend: Friend) =>
             memberIds.includes(friend.did) && friend.status === 'online',
         )
       }
       // Check current recipient is on the user's friends list
-      const friend = Object.values(this.friends).find(
+      const friend = Object.values(this.users).find(
         (f) => f.did === (this.details as User)?.did,
       )
       return friend?.status === 'online'

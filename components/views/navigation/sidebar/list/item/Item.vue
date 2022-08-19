@@ -41,6 +41,14 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
+    user(): User | null {
+      return iridium.users.getUser(this.conversation.participants[0])
+    },
+    participants(): (User | null)[] {
+      return this.conversation.participants.map((did) => {
+        return iridium.users.getUser(did)
+      })
+    },
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation.type === 'direct'
         ? [
@@ -94,19 +102,6 @@ export default Vue.extend({
       //   default:
       //     return this.$t(`messaging.user_sent_something.${sender}`) as string
       // }
-    },
-
-    details(): User | Group | undefined {
-      if (this.conversation.type === 'direct') {
-        const friendDid = this.conversation.participants.find(
-          (f) => f !== iridium.connector?.id,
-        )
-        if (!friendDid) {
-          return
-        }
-        return this.friends[friendDid]
-      }
-      return this.groups[this.conversation.id]
     },
 
     isSelected(): boolean {

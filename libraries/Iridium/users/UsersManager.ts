@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
   Emitter,
@@ -23,7 +24,7 @@ export type IridiumUserEvent = {
   at: number
 }
 
-export type UserState = { [key: string]: User }
+export type UserState = { [key: User['did']]: User }
 
 export type IridiumUserPubsub = IridiumMessage<IridiumUserEvent>
 
@@ -43,13 +44,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async init() {
-    if (!this.iridium.connector) {
+    const iridium = this.iridium.connector
+    if (!iridium) {
       throw new Error('cannot initialize users, no iridium connector')
     }
 
-    const iridium = this.iridium.connector
     logger.log(this.loggerTag, 'initializing')
-    const pubsub = await iridium.pubsub.subscriptions()
+    const pubsub = iridium.pubsub.subscriptions()
     logger.info(this.loggerTag, 'pubsub', pubsub)
     await this.fetch()
     logger.log(this.loggerTag, 'users state loaded', this.state)
@@ -161,7 +162,48 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    * @returns user data object if found in the local state
    */
   getUser(did: IridiumPeerIdentifier) {
-    return did ? this.state?.[didUtils.didString(did)] : null
+    return this.state[didUtils.didString(did)]
+  }
+
+  async searchPeer(did: IridiumPeerIdentifier) {
+    const iridium = this.iridium.connector
+    if (!iridium) {
+      return
+    }
+
+    await new Promise<void>((resolve) => {
+      const id = v4()
+      const peerId = iridium.p2p.primaryNodeID
+      if (!peerId) {
+        return
+      }
+
+      this.iridium.connector?.p2p.on(
+        'node/message/sync/searchPeer',
+        (message) => {
+          if (message.payload.body.request !== id) {
+            return
+          }
+          logger.log('onPeerMessage', 'node/message/sync/searchPeer', message)
+          const peers = message.payload.body.peers as User[]
+          peers.forEach((peer) => {
+            this.setUser(peer.did, peer)
+          })
+          resolve()
+        },
+      )
+
+      iridium.p2p.send(peerId, {
+        type: 'sync/searchPeer',
+        id,
+        did: didUtils.didString(did),
+      })
+    })
+  }
+
+  async setUser(did: IridiumPeerIdentifier, user: User) {
+    Vue.set(this.state, didUtils.didString(did), user)
+    await this.set(`/${didUtils.didString(did)}`, user)
   }
 
   async send(event: IridiumUserEvent) {

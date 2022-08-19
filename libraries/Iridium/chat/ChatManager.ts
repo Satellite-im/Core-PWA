@@ -202,7 +202,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `/conversations/${conversationId}/message/${message.id}`,
         message,
       )
-      const friendName = this.iridium.friends.getFriend(message?.from)
+      const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Partial<Notification> = {
         fromName: friendName?.name,
         at: Date.now(),
