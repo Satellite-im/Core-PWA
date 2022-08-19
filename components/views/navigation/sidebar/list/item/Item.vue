@@ -14,7 +14,6 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
-import Group from '~/libraries/Iridium/groups/Group'
 
 export default Vue.extend({
   components: {
@@ -31,7 +30,6 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
     }
   },
@@ -41,6 +39,14 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
+    user(): User | null {
+      return iridium.users.getUser(this.conversation.participants[0])
+    },
+    participants(): (User | null)[] {
+      return this.conversation.participants.map((did) => {
+        return iridium.users.getUser(did)
+      })
+    },
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation.type === 'direct'
         ? [
@@ -96,19 +102,6 @@ export default Vue.extend({
       // }
     },
 
-    details(): User | Group | undefined {
-      if (this.conversation.type === 'direct') {
-        const friendDid = this.conversation.participants.find(
-          (f) => f !== iridium.connector?.id,
-        )
-        if (!friendDid) {
-          return
-        }
-        return this.friends[friendDid]
-      }
-      return this.groups[this.conversation.id]
-    },
-
     isSelected(): boolean {
       return this.conversation.id === this.$route.params.id
     },
@@ -141,12 +134,12 @@ export default Vue.extend({
   },
   methods: {
     async removeFriend() {
-      if (!(this.details as User)?.did) {
+      if (!this.user?.did) {
         return
       }
       this.isLoading = true
       await iridium.friends
-        .friendRemove((this.details as User).did)
+        .friendRemove(this.user.did)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
       this.isLoading = false
     },

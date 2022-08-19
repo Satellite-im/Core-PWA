@@ -1,4 +1,3 @@
-// import { Context } from '@textile/context'
 import { Account } from '../BlockchainClient/interfaces'
 import Crypto from '~/libraries/Crypto/Crypto'
 import logger from '~/plugins/local/logger'

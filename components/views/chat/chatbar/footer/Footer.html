@@ -1,7 +1,11 @@
 <div id="bottom-bar-container">
   <UiChatTypingIndicator v-if="typingParticipants.length" />
   <ChatbarFooterConnected v-else />
-  <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
+  <TypographyText
+    class="no-select"
+    size="sm"
+    :color="charlimit ? 'error' : 'dark'"
+  >
     {{ lengthCount }}
-  </span>
+  </TypographyText>
 </div>

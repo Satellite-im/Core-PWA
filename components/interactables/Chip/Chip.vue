@@ -3,7 +3,7 @@
     <UiCircle
       v-if="friend"
       :type="src ? 'image' : 'random'"
-      :seed="friend.address"
+      :seed="friend.did"
       :size="16"
       :source="src"
     />
@@ -45,7 +45,7 @@ export default Vue.extend({
   computed: {
     src(): string {
       const hash = this.friend.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
 })

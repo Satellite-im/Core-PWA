@@ -13,7 +13,7 @@ export default Vue.extend({
     }),
     src(): string {
       const hash = this.accounts.details?.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
   methods: {

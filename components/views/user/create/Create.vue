@@ -5,7 +5,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
-import { blobToBase64 } from '~/utilities/BlobManip'
 const convert = require('heic-convert')
 
 export default Vue.extend({

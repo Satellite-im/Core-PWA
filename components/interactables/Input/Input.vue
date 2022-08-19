@@ -81,8 +81,11 @@ export default Vue.extend({
     },
   },
   computed: {
-    isEmpty() {
+    isEmpty(): boolean {
       return !this.text.length
+    },
+    showClearButton(): boolean {
+      return this.showClear || this.type === 'search'
     },
   },
   mounted() {

@@ -4,32 +4,20 @@
     :tooltipPosition="'top'"
   >
     <button
-      id="send-money-toggle"
       v-tooltip.top="$t('wallet.send_money')"
       @click="toggleMiniWallet"
-      class="control-tooltip-wrap"
       disabled
     >
       <banknote-icon size="1x" class="control-icon" color="grey" />
     </button>
   </UiComingSoon>
-  <button
-    id="glyph-toggle"
-    v-tooltip.top="$t('ui.glyphs')"
-    @click="toggleEnhancers('glyphs')"
-    class="control-tooltip-wrap"
-  >
+  <button v-tooltip.top="$t('ui.glyphs')" @click="toggleEnhancers('glyphs')">
     <box-select-icon
       size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'glyphs' ? 'primary' : ''}`"
     />
   </button>
-  <button
-    id="emoji-toggle"
-    v-tooltip.top="$t('ui.emoji')"
-    @click="toggleEnhancers('emoji')"
-    class="control-tooltip-wrap"
-  >
+  <button v-tooltip.top="$t('ui.emoji')" @click="toggleEnhancers('emoji')">
     <smile-icon
       size="1x"
       :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emoji'  ? 'primary' : ''}`"
@@ -38,7 +26,7 @@
   <button
     v-if="!$device.isMobile"
     v-tooltip.top="$t('ui.send')"
-    class="control-tooltip-wrap send-message-btn"
+    class="send"
     :disabled="disabled"
     @click="$emit('send')"
     data-cy="send-message"

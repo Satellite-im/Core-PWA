@@ -52,7 +52,6 @@ const webRTCActions = {
         },
         { root: true },
       )
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
     })
 
     iridium.connector.on(
@@ -91,7 +90,6 @@ const webRTCActions = {
           },
           { root: true },
         )
-        dispatch('textile/subscribeToMailbox', {}, { root: true })
       },
     )
 
@@ -240,8 +238,6 @@ const webRTCActions = {
           { root: true },
         )
       }, Config.chat.typingInputThrottle * 3)
-
-      dispatch('textile/subscribeToMailbox', {}, { root: true })
     })
 
     iridium.connector?.on(
@@ -276,7 +272,6 @@ const webRTCActions = {
           },
           { root: true },
         )
-        dispatch('textile/subscribeToMailbox', {}, { root: true })
       },
     )
 

@@ -4,23 +4,17 @@
   button {
     font-size: @larger-icon-size;
     padding: 12px @light-spacing;
-    display: inline-flex;
     align-items: center;
     height: @chatbar-input-height;
-    background-color: transparent;
     color: @white;
-    border: none;
-    cursor: pointer;
-    &:before {
-      &:extend(.first-layer);
-    }
-    &[disabled] {
-      cursor: not-allowed !important;
-      color: @gray;
+
+    &.send {
+      color: @flair-color;
     }
 
-    &.send-message-btn {
-      &:extend(.font-flair);
+    &[disabled] {
+      color: @gray;
+      cursor: not-allowed;
     }
   }
 }

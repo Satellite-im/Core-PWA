@@ -21,6 +21,7 @@ export default Vue.extend({
   props: {
     disabled: {
       type: Boolean,
+      required: true,
     },
   },
   computed: {
@@ -33,9 +34,6 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(route: string) {
-      if (this.disabled) {
-        return
-      }
       this.$store.commit('ui/toggleEnhancers', {
         show:
           (this.ui.enhancers.show && this.ui.enhancers.route !== route) ||
@@ -45,12 +43,13 @@ export default Vue.extend({
       })
     },
     toggleMiniWallet() {
-      if (!this.disabled) {
-        this.$store.commit('ui/toggleModal', {
-          name: 'walletMini',
-          state: !this.ui.modals.walletMini,
-        })
+      if (this.disabled) {
+        return
       }
+      this.$store.commit('ui/toggleModal', {
+        name: 'walletMini',
+        state: !this.ui.modals.walletMini,
+      })
     },
   },
 })

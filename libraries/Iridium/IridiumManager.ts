@@ -1,5 +1,6 @@
 import { Emitter, createIridiumIPFS } from '@satellite-im/iridium'
 import type { IridiumIPFS } from '@satellite-im/iridium'
+import UsersManager from './users/UsersManager'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import GroupManager from '~/libraries/Iridium/groups/GroupManager'
@@ -9,7 +10,9 @@ import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
 import logger from '~/plugins/local/logger'
 import { Config } from '~/config'
 import FilesManager from '~/libraries/Iridium/files/FilesManager'
+import WebRTCManager from '~/libraries/Iridium/webrtc/WebRTCManager'
 import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
+import NotificationManager from '~/libraries/Iridium/NotificationManager'
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
@@ -19,7 +22,10 @@ export class IridiumManager extends Emitter {
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
+  notifications: NotificationManager
+  webRTC: WebRTCManager
   settings: SettingsManager
+  users: UsersManager
 
   constructor() {
     super()
@@ -28,7 +34,10 @@ export class IridiumManager extends Emitter {
     this.friends = new FriendsManager(this)
     this.chat = new ChatManager(this)
     this.files = new FilesManager(this)
+    this.webRTC = new WebRTCManager(this)
     this.settings = new SettingsManager(this)
+    this.notifications = new NotificationManager(this)
+    this.users = new UsersManager(this)
   }
 
   /**
@@ -71,11 +80,12 @@ export class IridiumManager extends Emitter {
       logger.log('iridium/manager', 'creating new root document', doc)
       doc = {
         id: this.connector.id,
-        profile: { name: 'guest' },
+        profile: {},
         groups: {},
         friends: {},
         conversations: {},
         files: {},
+        notifications: {},
         settings: {},
         indexes: {},
       }
@@ -95,11 +105,35 @@ export class IridiumManager extends Emitter {
     await this.chat.init()
     logger.log('iridium/manager', 'initializing files')
     await this.files.init()
+    logger.log('iridium/manager', 'initializing webRTC')
+    await this.webRTC.init()
     logger.log('iridium/manager', 'initializing settings')
     await this.settings.init()
+    logger.log('iridium/manager', 'notification settings')
+    await this.notifications.init()
+    logger.log('iridium/manager', 'initializing users')
+    await this.users.init()
     logger.log('iridium/manager', 'ready')
 
+    await this.sendSyncInit()
+
     this.ready = true
+  }
+
+  async sendSyncInit() {
+    const connector = this.connector
+    const profile = this.profile.state
+    if (!connector?.p2p.primaryNodeID || !profile) {
+      return
+    }
+
+    const payload = {
+      type: 'sync/init',
+      at: Date.now(),
+      name: profile.name,
+      avatar: profile.photoHash,
+    }
+    await connector.p2p.send(connector.p2p.primaryNodeID, payload)
   }
 }
 

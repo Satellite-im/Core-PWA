@@ -33,6 +33,10 @@ import createThumbnail from '~/utilities/Thumbnail'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { blobToStream } from '~/utilities/BlobManip'
 import isNSFW from '~/utilities/NSFW'
+import {
+  Notification,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
 
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
@@ -61,7 +65,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   private _intervals: { [key: string]: any } = {}
-  private _subscriptions: {
+  public subscriptions: {
     [key: string]: { topic: string; connected: boolean }
   } = {}
 
@@ -100,9 +104,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       )
 
       for (const conversation of conversations) {
-        if (this._subscriptions[conversation.id] !== undefined) continue
+        if (this.subscriptions[conversation.id] !== undefined) continue
         const topic = `/chat/conversations/${conversation.id}`
-        this._subscriptions[conversation.id] = { topic, connected: false }
+        this.subscriptions[conversation.id] = { topic, connected: false }
 
         logger.info(
           'iridium/chatmanager/init',
@@ -141,11 +145,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error('no topic in sync subscription response')
     }
     const [conversationId, subscription] =
-      Object.entries(this._subscriptions).find(
+      Object.entries(this.subscriptions).find(
         ([, { topic }]) => topic === message.payload.body.topic,
       ) || []
+
     if (!conversationId || !subscription) {
-      throw new Error('subscription not requested')
+      return
     }
     if (subscription?.connected) {
       throw new Error('subscription already connected')
@@ -159,6 +164,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         handler: this.onConversationMessage.bind(this, conversationId),
       })
       subscription.connected = true
+      this.subscriptions = {
+        ...this.subscriptions,
+        [conversationId]: {
+          ...this.subscriptions[conversationId],
+          connected: true,
+        },
+      }
       return
     }
     logger.warn(
@@ -247,6 +259,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `/conversations/${conversationId}/message/${message.id}`,
         message,
       )
+      const friendName = this.iridium.users.getUser(message?.from)
+      const buildNotification: Partial<Notification> = {
+        fromName: friendName?.name,
+        at: Date.now(),
+        fromAddress: conversationId,
+        title: `New message from ${friendName?.name}`,
+        description:
+          message.body?.length! > 79
+            ? `${message.body?.substring(0, 80)}...`
+            : message.body,
+        image: message.from,
+        type: NotificationType.DIRECT_MESSAGE,
+        seen: false,
+      }
+
+      this.iridium.notifications?.sendNotification(buildNotification)
     }
   }
 
@@ -294,7 +322,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversations/${id}`, conversation)
 
     // ask the sync node to subscribe to this topic
-    this._subscriptions[conversation.id] = {
+    this.subscriptions[conversation.id] = {
       topic: `/chat/conversations/${id}`,
       connected: false,
     }
@@ -422,7 +450,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       })
     ).toString()
 
-    if (!this._subscriptions[conversationId]) {
+    if (!this.subscriptions[conversationId]) {
       // we're not subscribed yet
       throw new Error(`not yet subscribed to conversation ${conversationId}`)
     }
@@ -459,7 +487,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const { conversationId, messageId } = payload
     const message = this.getConversationMessage(conversationId, messageId)
 
-    if (!this._subscriptions[conversationId]) {
+    if (!this.subscriptions[conversationId]) {
       // we're not subscribed yet
       throw new Error(`not yet subscribed to conversation ${conversationId}`)
     }

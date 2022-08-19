@@ -2,6 +2,7 @@ import type { AudioState } from './types'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default {
   /**
@@ -9,13 +10,8 @@ export default {
    * @description Toggles mute for outgoing audio
    * @example @click="toggleMute"
    */
-  async toggleMute({
-    state,
-    commit,
-    dispatch,
-    rootState,
-  }: ActionsArguments<AudioState>) {
-    const { activeCall } = rootState.webrtc
+  async toggleMute({ state, commit, dispatch }: ActionsArguments<AudioState>) {
+    const { activeCall } = iridium.webRTC.state
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
 
     dispatch('sounds/playSound', state.muted ? Sounds.MUTE : Sounds.UNMUTE, {

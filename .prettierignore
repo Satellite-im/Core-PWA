@@ -3,3 +3,4 @@ coverage/
 dist/_nuxt/
 *.snap
 .prettierignore
+.eslintrc

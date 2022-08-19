@@ -1,7 +1,10 @@
 <UiModal @close="close">
   <div class="settings">
     <SettingsSidebar class="sidebar" />
-    <div class="page">
+    <div
+      class="page"
+      :class="{profile: ui.settingsRoute === SettingsRoutes.PROFILE}"
+    >
       <SettingsPagesPersonalize
         v-if="ui.settingsRoute === SettingsRoutes.PERSONALIZE"
       />

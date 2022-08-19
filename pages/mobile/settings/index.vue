@@ -7,7 +7,10 @@
       >
         <SettingsSidebar class="sidebar" />
       </div>
-      <div class="swiper-slide">
+      <div
+        class="swiper-slide"
+        :class="{ profile: settingsRoute === SettingsRoutes.PROFILE }"
+      >
         <SettingsPagesPersonalize
           v-if="settingsRoute === SettingsRoutes.PERSONALIZE"
         />
@@ -114,6 +117,10 @@ export default Vue.extend({
 
     .sidebar {
       flex: 1;
+    }
+
+    &.profile {
+      padding: 0;
     }
   }
 }

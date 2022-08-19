@@ -31,13 +31,13 @@ export default Vue.extend({
   data() {
     return {
       isLoading: false,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
     ...mapState({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
-      webrtc: (state) => (state as RootState).webrtc,
     }),
     audioMuted(): boolean {
       return this.audio.muted
@@ -46,9 +46,9 @@ export default Vue.extend({
       return this.video.disabled
     },
     screenMuted(): boolean {
-      return (
-        iridium.connector?.peerId &&
-        this.webrtc.streamMuted[iridium.connector?.peerId]?.screen
+      return Boolean(
+        iridium.connector?.id &&
+          this.webrtc.streamMuted[iridium.connector?.id]?.screen,
       )
     },
   },
@@ -59,6 +59,8 @@ export default Vue.extend({
      * @example
      */
     async toggleMute(kind: WebRTCEnum) {
+      if (!iridium.connector?.id) return
+
       // TODO: isLoading needs to be kind specific, currently all 3 kinds show loading icon if any of them is loading.
       this.isLoading = true
       try {
@@ -67,11 +69,10 @@ export default Vue.extend({
         } else if (kind === WebRTCEnum.VIDEO) {
           await this.$store.dispatch('video/toggleMute')
         } else {
-          await this.$store.dispatch(
-            'webrtc/toggleMute',
-            { kind, peerId: iridium.connector?.peerId },
-            { root: true },
-          )
+          await iridium.webRTC.toggleMute({
+            kind,
+            did: iridium.connector.id,
+          })
         }
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
@@ -84,7 +85,7 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      this.$store.dispatch('webrtc/hangUp', undefined, { root: true })
+      iridium.webRTC.hangUp()
     },
   },
 })

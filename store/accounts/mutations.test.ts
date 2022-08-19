@@ -201,17 +201,6 @@ describe('init', () => {
     })
   })
 
-  it('should updateTextilePubkey', () => {
-    const localStateForUnitTest = { ...state }
-    inst.updateTextilePubkey(localStateForUnitTest, 'textile pubkey')
-
-    expect(localStateForUnitTest).toMatchObject({
-      details: {
-        textilePubkey: 'textile pubkey',
-      },
-    })
-  })
-
   it('should setRegistrationStatus', () => {
     const localStateForUnitTest = { ...state }
     inst.setRegistrationStatus(
