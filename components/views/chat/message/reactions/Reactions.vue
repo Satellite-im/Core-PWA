@@ -41,9 +41,9 @@ export default Vue.extend({
           didsForEmoji[emoji].push(did)
         })
       })
-      const reactions = Object.entries(didsForEmoji).map(([emoji, names]) => ({
+      const reactions = Object.entries(didsForEmoji).map(([emoji, dids]) => ({
         emoji,
-        names,
+        names: dids.map((did) => iridium.users.getUser(did)?.name),
       }))
       return reactions
     },
