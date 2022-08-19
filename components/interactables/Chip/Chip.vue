@@ -3,7 +3,7 @@
     <UiCircle
       v-if="friend"
       :type="src ? 'image' : 'random'"
-      :seed="friend.address"
+      :seed="friend.did"
       :size="16"
       :source="src"
     />

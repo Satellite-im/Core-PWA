@@ -1,4 +1,4 @@
-<div class="message-attachments">
+<div class="message-attachments" v-if="attachments.length">
   <MessageAttachmentsItem
     v-for="(attachment, index) in attachments"
     :key="attachment.id + index"

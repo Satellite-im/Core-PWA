@@ -1,7 +1,7 @@
 <div class="list-item" @click="$emit('click', $event)">
   <UiCircle
     :type="src ? 'image' : 'random'"
-    :seed="friend.address"
+    :seed="friend.did"
     :size="32"
     :source="src"
   />
