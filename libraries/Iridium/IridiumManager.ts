@@ -130,5 +130,4 @@ export class IridiumManager extends Emitter {
 }
 
 const instance = new IridiumManager()
-window.i = instance
 export default instance
