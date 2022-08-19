@@ -102,4 +102,6 @@ scratchpad.js
 .vscode/chrome/
 
 solana-localnet
+
+./iridium
 linked-iridium
