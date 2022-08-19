@@ -144,6 +144,7 @@ describe('mutations', () => {
     },
   }
   const initialState = {
+    isMobileNavVisible: false,
     contextMenuStatus: false,
     showSidebar: true,
     showSearchResult: false,
@@ -894,44 +895,16 @@ describe('mutations', () => {
     ).toMatchSnapshot()
   })
 
-  test.skip('updateTheme', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      text: 'Moonless Night',
-      name: ThemeNames.MOONLESS,
-      value: ThemeNames.MOONLESS,
-      class: 'moonless_night',
-    }
-    mutations.default.updateTheme(localizedState, object)
-    expect(localizedState.theme.base).toBe(object)
-  })
-
-  test.skip('updateFlair', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      text: 'Lavender',
-      value: FlairColors.LAVENDER,
-    }
-    mutations.default.updateFlair(localizedState, object)
-    expect(localizedState.theme.flair).toBe(object)
-  })
-
   test('setChatbarFocus', () => {
     const localizedState = { ...initialState }
     mutations.default.setChatbarFocus(localizedState, true)
     expect(localizedState.chatbarFocus).toBeTruthy()
   })
 
-  test.skip('setRenameItem', () => {
+  test('setIsMobileNavVisible', () => {
     const localizedState = { ...initialState }
-    const mockDirectoryData = {
-      name: 'Test Directory',
-      liked: false,
-      shared: false,
-      type: DIRECTORY_TYPE.DEFAULT,
-    }
-    mutations.default.setRenameItem(localizedState, mockDirectoryData)
-    expect(localizedState.renameItem).toBe(mockDirectoryData)
+    mutations.default.setIsMobileNavVisible(localizedState, true)
+    expect(localizedState.isMobileNavVisible).toBeTruthy()
   })
 
   test('setSettingsRoute', () => {
@@ -1250,45 +1223,5 @@ describe('mutations', () => {
       to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
       type: 'group',
     })
-  })
-
-  test.skip('setFileSort', () => {
-    const localizedState = { ...initialState }
-    const argument = {
-      category: 'modified',
-      asc: true,
-    }
-    mutations.default.setFileSort(localizedState, argument)
-    expect(localizedState.fileSort).toBe(argument)
-  })
-
-  test.skip('setFilesUploadStatus', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setFilesUploadStatus(localizedState, 'process')
-    expect(localizedState.filesUploadStatus).toBe('process')
-  })
-
-  test.skip('addFileDownload', () => {
-    const localizedState = { ...initialState }
-    mutations.default.addFileDownload(localizedState, 'process')
-    expect(localizedState.fileDownloadList).toEqual(
-      expect.arrayContaining(['process']),
-    )
-  })
-
-  test.skip('removeFileDownload with query found', () => {
-    const localizedState = { ...initialState }
-    mutations.default.removeFileDownload(localizedState, 'process')
-    expect(localizedState.fileDownloadList).not.toEqual(
-      expect.arrayContaining(['process']),
-    )
-  })
-
-  test.skip('removeFileDownload with query not found', () => {
-    const localizedState = { ...initialState }
-    mutations.default.removeFileDownload(localizedState, 'not-in-array')
-    expect(localizedState.fileDownloadList).not.toEqual(
-      expect.arrayContaining(['not-in-array']),
-    )
   })
 })
