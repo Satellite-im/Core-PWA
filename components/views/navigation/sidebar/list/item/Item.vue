@@ -14,7 +14,6 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
-import Group from '~/libraries/Iridium/groups/Group'
 
 export default Vue.extend({
   components: {
@@ -31,7 +30,6 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      friends: iridium.friends.state.details,
       groups: iridium.groups.state,
     }
   },
@@ -136,12 +134,12 @@ export default Vue.extend({
   },
   methods: {
     async removeFriend() {
-      if (!(this.details as User)?.did) {
+      if (!this.user?.did) {
         return
       }
       this.isLoading = true
       await iridium.friends
-        .friendRemove((this.details as User).did)
+        .friendRemove(this.user.did)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
       this.isLoading = false
     },
