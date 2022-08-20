@@ -1,33 +1,22 @@
-<div>
-  <div class="content">
-    <div class="gradient-cover" data-cy="incoming-call"></div>
-    <div
-      v-if="Boolean(caller)"
-      class="caller"
-      :class="incomingCall.type === 'friend' ? 'caller--user' : 'caller--group'"
-    >
-      <div
-        v-if="callerAvatar"
-        class="user-profile-picture"
-        v-bind:style="`background:url(${callerAvatar})`"
-      />
-      <UiCircle
-        v-else
-        class="user-profile-placeholder"
-        type="random"
-        :seed="caller.did"
-        :size="120"
-      />
-      <div class="user-info">
-        <p class="user-name" :title="caller.name">{{caller.name}}</p>
-        <p class="user-status">{{caller.status}}</p>
-      </div>
-    </div>
+<div class="incoming" data-cy="incoming-call">
+  <UiCircle
+    :type="callerAvatar ? 'image' : 'random'"
+    :seed="caller.did"
+    :source="callerAvatar"
+    :size="120"
+  />
+  <div class="user-info">
+    <TypographyText class="ellipsis" as="h2" :title="caller.name">
+      {{caller.name}}
+    </TypographyText>
+    <TypographyText class="ellipsis" as="h4" :title="caller.status">
+      {{caller.status}}
+    </TypographyText>
   </div>
-  <footer class="modal-card-foot">
+  <div class="buttons">
     <InteractablesButton
       color="success"
-      @click="() => acceptCall(['audio'])"
+      @click="acceptCall(['audio'])"
       data-cy="incoming-call-accept"
     >
       <phone-icon size="1x" class="button-icon" />
@@ -39,5 +28,5 @@
     >
       <phone-off-icon size="1x" class="button-icon" />
     </InteractablesButton>
-  </footer>
+  </div>
 </div>
