@@ -148,9 +148,13 @@ const Chatbar = Vue.extend({
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
      */
-    throttleTyping: throttle(function (ctx) {
-      ctx.$store.dispatch('webrtc/sendTyping')
-    }, Config.chat.typingInputThrottle),
+    throttleTyping: throttle(
+      function () {
+        iridium.webRTC.sendTyping(this.conversationId)
+      },
+      Config.chat.typingInputThrottle,
+      { trailing: false },
+    ),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.

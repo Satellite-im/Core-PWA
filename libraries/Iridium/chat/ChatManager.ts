@@ -259,6 +259,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `/conversations/${conversationId}/message/${message.id}`,
         message,
       )
+
+      // Remove is_typing indicator upon user message receive
+      clearTimeout(this.iridium.webRTC.timeoutMap[message.from])
+      Vue.set(
+        this.state.conversations[conversationId].typing,
+        message.from,
+        false,
+      )
+
       const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Partial<Notification> = {
         fromName: friendName?.name,
