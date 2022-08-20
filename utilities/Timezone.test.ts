@@ -1,7 +1,7 @@
 import * as Timezone from './Timezone'
 
 describe('init', () => {
-  test('getTimezoneDropdowns', () => {
+  test.skip('getTimezoneDropdowns', () => {
     const result = Timezone.getTimezoneDropdowns()
     const nonDaylightTimezone = result.find((obj) => {
       return obj.alternativeName === 'Singapore Time'
