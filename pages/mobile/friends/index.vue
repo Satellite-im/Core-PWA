@@ -109,9 +109,11 @@ export default Vue.extend({
       }
     },
     friendsList(): Friend[] {
-      return Object.values(this.friends.details).sort((a, b) =>
-        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
-      )
+      return this.friends.friends
+        .map((did) => iridium.users.getUser(did))
+        .sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+        )
     },
     incomingRequests(): FriendRequest[] {
       return Object.values(this.friends.requests)
