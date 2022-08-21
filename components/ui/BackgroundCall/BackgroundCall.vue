@@ -2,18 +2,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import {
-  useCallElapsedTime,
-  useUserStreams,
-  useWebRTC,
-} from '~/libraries/Iridium/webrtc/hooks'
+import { useCallElapsedTime, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   setup() {
-    const { remoteParticipants, call } = useWebRTC()
+    const { remoteParticipants } = useWebRTC()
     const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
 
     const remoteParticipant = computed(() => {
@@ -22,28 +16,17 @@ export default Vue.extend({
         : null
     })
 
-    const { streams, getStream } = useUserStreams(remoteParticipant.value?.did)
-
     return {
       remoteParticipant,
-      call,
       elapsedTime,
       startInterval,
       clearTimer,
-      streams,
-      audioStream: getStream('audio'),
     }
   },
   data() {
     return {
       webrtc: iridium.webRTC.state,
     }
-  },
-  computed: {
-    ...mapState({
-      friends: (state) => (state as RootState).friends.all,
-      deafened: (state) => (state as RootState).audio.deafened,
-    }),
   },
   watch: {
     'webrtc.createdAt': {

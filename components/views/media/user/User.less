@@ -1,5 +1,3 @@
-@indicator-size: 32px;
-
 .user {
   position: relative;
 }
@@ -67,6 +65,9 @@
   }
   .tag {
     &:extend(.ellipsis);
+    &:extend(.background-semitransparent-dark);
+    &:extend(.font-primary);
+    font-family: @primary-font;
 
     display: inline-block;
     line-height: 2em;
