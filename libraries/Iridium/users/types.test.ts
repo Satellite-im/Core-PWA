@@ -1,6 +1,6 @@
 import { UsersError } from './types'
 
-describe('UsersError', () => {
+describe('Iridium/users types', () => {
   test('check UsersError export type', () => {
     expect(UsersError).toEqual({
       NETWORK_ERROR: 'errors.users.network',

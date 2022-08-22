@@ -1,40 +1,42 @@
 .container {
-  .disclaimer-body {
-    min-width: 250px;
-    max-width: 416px;
-    align-self: center;
-    margin-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  padding: 32px 16px;
 
-    .centered-subtitle {
-      margin: @normal-spacing;
-    }
-    padding: 0 @normal-spacing;
+  .disclaimer-body {
     display: flex;
     justify-content: center;
     align-content: center;
     text-align: center;
     flex-direction: column;
-  }
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  .buttons {
-    button {
-      margin-top: @light-spacing;
+    min-width: 250px;
+    max-width: 416px;
+    align-self: center;
+    padding: 0 @normal-spacing;
+
+    .centered-subtitle {
+      margin: @normal-spacing;
     }
   }
-  padding: 0 @normal-spacing;
+
+  .buttons {
+    display: flex;
+    gap: 24px;
+  }
 }
-@media only screen and (max-width: @mobile-breakpoint) {
+
+@media only screen and (max-width: @mobile-small-breakpoint) {
   .container {
+    gap: 56px;
+
     .disclaimer-body {
-      margin-top: 10vh;
       margin-bottom: 0;
     }
+
     .buttons {
-      display: inline-block;
-      margin-top: auto;
-      margin-bottom: @normal-spacing;
+      flex-direction: column;
     }
   }
 }
