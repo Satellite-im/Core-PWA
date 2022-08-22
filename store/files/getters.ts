@@ -96,14 +96,4 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
     },
 }
 
-const flatDeep = (list: IridiumItem[]): IridiumItem[] => {
-  return list.reduce((prev: IridiumItem[], curr) => {
-    prev.push(curr)
-    if ('children' in curr) {
-      prev.push(...flatDeep(curr.children))
-    }
-    return prev
-  }, [])
-}
-
 export default getters
