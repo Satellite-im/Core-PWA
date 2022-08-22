@@ -4,7 +4,7 @@
 <!--    :source="alertImage"-->
 <!--    :data-cy="{'circle-without-picture' : !alertImage}"-->
 <!--  />-->
-<div class="info-container" @click="notificationLink(alert.type)">
+  <div class="info-container"  @click="notificationLink(alert.type)">
     <div class="head">
       <TypographySubtitle :size="6" :text="setTranslateText" />
       <TypographyText :text="$dayjs(alert.at).fromNow()" class="timestamp" />
