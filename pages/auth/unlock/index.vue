@@ -46,6 +46,10 @@ export default Vue.extend({
         location.host.endsWith('.on.fleek.co')
       )
     },
+    pinDescription(): string {
+      return `${this.$t('pages.unlock.choose_pin_description_1')}
+${this.$t('pages.unlock.choose_pin_description_2')}`
+    },
   },
   watch: {
     error(newValue) {
@@ -155,6 +159,12 @@ export default Vue.extend({
         return
       }
       this.create()
+    },
+    togglePinInfoModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'pinInfo',
+        state: !this.ui.modals.pinInfo,
+      })
     },
     // FOR DEVELOPMENT PURPOSES ONLY
     async createRandom() {

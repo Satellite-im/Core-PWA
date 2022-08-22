@@ -44,24 +44,17 @@
         </div>
       </div>
     </div>
-    <UiSpacer :height="45" />
-    <div class="container-actions">
-      <div class="action">
-        <InteractablesButton
-          :text="$t('pages.inputAccount.reset')"
-          :disabled="phrases.length === 0"
-          @click="resetPassphrase"
-        >
-          <trash-icon size="1x" />
-        </InteractablesButton>
-      </div>
-      <div class="action">
-        <InteractablesButton
-          :text="$t('pages.inputAccount.recover')"
-          :disabled="phrases.length<12"
-          @click="recoverAccount"
-        />
-      </div>
-    </div>
+  </div>
+  <div class="buttons">
+    <InteractablesButton
+      :text="$t('pages.inputAccount.reset')"
+      :disabled="phrases.length === 0"
+      @click="resetPassphrase"
+    />
+    <InteractablesButton
+      :text="$t('pages.inputAccount.recover')"
+      :disabled="phrases.length<12"
+      @click="recoverAccount"
+    />
   </div>
 </div>
