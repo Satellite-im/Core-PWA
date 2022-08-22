@@ -56,15 +56,3 @@ describe('', () => {
     expect(result).not.toBeNull()
   })
 })
-
-describe('Crypto', () => {
-  let instance: Crypto
-
-  beforeEach(() => {
-    instance = new Crypto()
-  })
-
-  it('instance should be an instanceof Crypto', () => {
-    expect(instance instanceof Crypto).toBeTruthy()
-  })
-})
