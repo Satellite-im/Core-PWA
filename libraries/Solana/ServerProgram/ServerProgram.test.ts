@@ -32,8 +32,6 @@ describe('ServerProgram.default.getUserPublicKey', () => {
 describe('ServerProgram.default.parseUserInfo', () => {
   let inst10: any
   let inst9: any
-  let inst8: any
-  let inst7: any
   let inst6: any
   let inst5: any
   let inst4: any
@@ -44,8 +42,6 @@ describe('ServerProgram.default.parseUserInfo', () => {
   beforeEach(() => {
     inst10 = new ServerProgramDefault(undefined)
     inst9 = new ServerProgramDefault(undefined)
-    inst8 = new ServerProgramDefault(undefined)
-    inst7 = new ServerProgramDefault(undefined)
     inst6 = new ServerProgramDefault(undefined)
     inst5 = new ServerProgramDefault(undefined)
     inst4 = new ServerProgramDefault(undefined)

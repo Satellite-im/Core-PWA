@@ -4,3 +4,4 @@ dist/_nuxt/
 *.snap
 .prettierignore
 .eslintrc
+iridium/

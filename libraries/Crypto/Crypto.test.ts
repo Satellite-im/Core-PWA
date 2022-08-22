@@ -25,7 +25,7 @@ describe('', () => {
     }
   })
   test('getPublicKey', () => {
-    function toHexString(byteArray) {
+    function toHexString(byteArray: Iterable<unknown> | ArrayLike<unknown>) {
       // From https://stackoverflow.com/a/34310051
       return Array.from(byteArray, function (byte) {
         return ('0' + (byte & 0xff).toString(16)).slice(-2)
@@ -54,5 +54,17 @@ describe('', () => {
     konstruktor.init(exampleKeypair)
     const result = konstruktor.computeSharedSecret(localRecipientPublicKey)
     expect(result).not.toBeNull()
+  })
+})
+
+describe('Crypto', () => {
+  let instance: Crypto
+
+  beforeEach(() => {
+    instance = new Crypto()
+  })
+
+  it('instance should be an instanceof Crypto', () => {
+    expect(instance instanceof Crypto).toBeTruthy()
   })
 })

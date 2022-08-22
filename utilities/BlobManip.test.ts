@@ -1,4 +1,4 @@
-import { blobToBase64 } from '~/utilities/BlobManip'
+import { blobToStream, blobToBase64 } from './BlobManip'
 
 describe('convert blob to base 64 successfully', () => {
   test('file is jpeg', async () => {
@@ -47,5 +47,17 @@ describe('convert blob to base 64 failing', () => {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', 'mock error')
     }
+  })
+
+  describe('blobToStream', () => {
+    it('should expose a function', () => {
+      expect(blobToStream).toBeDefined()
+    })
+  })
+
+  describe('blobToBase64', () => {
+    it('should expose a function', () => {
+      expect(blobToBase64).toBeDefined()
+    })
   })
 })

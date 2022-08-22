@@ -16,6 +16,7 @@ module.exports = {
     '!**/startup.js',
     '!**/*.eslintrc.js',
     '!**/iridium/**',
+    '!**/*.disabled.ts',
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
@@ -28,6 +29,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules',
     '<rootDir>/linked-iridium',
+    '<rootDir>/iridium',
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/.nuxt',

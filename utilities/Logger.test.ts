@@ -1,7 +1,7 @@
 import Logger from './Logger'
 
 describe('Logger', () => {
-  let instance
+  let instance: Logger
 
   beforeEach(() => {
     instance = new Logger()
