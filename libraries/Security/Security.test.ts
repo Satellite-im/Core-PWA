@@ -7,7 +7,6 @@ describe('check properties', () => {
     const inst: any = new Security()
     expect(inst.stripEXIF).toEqual(stripEXIF)
   })
-
   it('check isNSFW', () => {
     const inst: any = new Security()
     expect(inst.isNSFW).toEqual(isNSFW)
