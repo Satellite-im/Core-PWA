@@ -111,15 +111,6 @@ export default Vue.extend({
       this.$store.commit('ui/fullscreen', false)
       iridium.webRTC.denyCall()
     },
-    /**
-     * @method hangUp
-     * @description Hangs up active call
-     * @example
-     */
-    hangUp() {
-      this.$store.commit('ui/fullscreen', false)
-      iridium.webRTC.hangUp()
-    },
   },
 })
 </script>

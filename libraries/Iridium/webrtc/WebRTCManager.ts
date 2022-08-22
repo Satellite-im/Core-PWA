@@ -10,6 +10,7 @@ import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
+import { Config } from '~/config'
 
 const $Sounds = new SoundManager()
 
@@ -26,7 +27,7 @@ export default class WebRTCManager extends Emitter {
   public readonly iridium: IridiumManager
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
-  private timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
+  public timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
 
   private _subscriptions: {
     [key: string]: { topic: string; connected: boolean; handler?: Function }
@@ -389,50 +390,31 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  // FIX ON ANOTHER TICKET
-  private onPeerTyping = ({ did }: { did: string }) => {
-    if (!did) return
+  private onPeerTyping = ({
+    did,
+    conversationId,
+  }: {
+    did: string
+    conversationId: string
+  }) => {
+    const conversation = this.iridium.chat.getConversation(conversationId)
+    if (!did || !conversation) return
 
-    const id = this.iridium.chat?.directConversationIdFromDid(did)
-
-    if (id && this.iridium.chat?.hasConversation(id)) {
-      const conversation = this.iridium.chat?.getConversation(id)
-      const typingParticipant = conversation.participants.find(
-        (participant) => participant === did,
-      )
-      if (typingParticipant) {
-        // this.iridium.chat.updateConversation({
-        //   ...conversation,
-        //   participants: conversation.participants.map((participant) => {
-        //     if (participant.did === typingParticipant.did) {
-        //       return {
-        //         ...participant,
-        //         activity: ConversationActivity.TYPING,
-        //       }
-        //     }
-        //     return participant
-        //   }),
-        // })
-      }
-
-      clearTimeout(this.timeoutMap[did])
-      delete this.timeoutMap[did]
-
-      // this.timeoutMap[did] = setTimeout(() => {
-      //   this.iridium.chat.updateConversation({
-      //     ...conversation,
-      //     participants: conversation.participants.map((participant) => {
-      //       if (participant.did === did) {
-      //         return {
-      //           ...participant,
-      //           activity: ConversationActivity.NOT_TYPING,
-      //         }
-      //       }
-      //       return participant
-      //     }),
-      //   })
-      // }, Config.chat.typingInputThrottle * 3)
+    if (!conversation.typing?.[did]) {
+      Vue.set(this.iridium.chat.state.conversations[conversationId], 'typing', {
+        ...conversation.typing,
+        [did]: true,
+      })
     }
+
+    clearTimeout(this.timeoutMap[did])
+
+    this.timeoutMap[did] = setTimeout(() => {
+      Vue.set(this.iridium.chat.state.conversations[conversationId], 'typing', {
+        ...conversation.typing,
+        [did]: false,
+      })
+    }, Config.chat.typingInputThrottle * 3)
   }
 
   private onPeerAnnounce = (payload: any) => {
@@ -930,22 +912,25 @@ export default class WebRTCManager extends Emitter {
    * @method sendTyping
    * @description - send the TYPING event to the other conversation participants
    */
-  public sendTyping = async ({ did }: { did: string }) => {
-    const id = this.iridium.chat?.directConversationIdFromDid(did)
+  public sendTyping = async (conversationId: string) => {
+    const conversation = this.iridium.chat.getConversation(conversationId)
 
-    if (id && this.iridium.chat?.hasConversation(id)) {
-      const conversation = this.iridium.chat?.getConversation(id)
-      conversation.participants
-        .filter((p) => p !== this.iridium.connector?.id)
-        .forEach((p) => {
-          this.sendWebrtc(p, {
-            module: 'webrtc',
-            type: 'peer:typing',
-            did: this.iridium.connector.id,
-            at: Date.now().valueOf(),
-          })
-        })
-    }
+    if (!conversation) return
+
+    // broadcast the message to connected peers
+    await this.iridium.connector?.publish(
+      'webrtc',
+      {
+        module: 'webrtc',
+        type: 'peer:typing',
+        did: this.iridium.connector.id,
+        conversationId,
+        at: Date.now().valueOf(),
+      },
+      {
+        encrypt: { recipients: conversation.participants },
+      },
+    )
   }
 
   // WILL BE REPLACED ONCE DIRECT SEND WITH IRIDIUM WORKS
