@@ -14,7 +14,7 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
-    "test": "jest --silent --coverage --coverageReporters='text-summary'",
+    "test": "jest --silent --coverage",
     "cy:run": "cypress run --browser chrome headless",
     "cy:first": "xvfb-run -a cypress run --config-file cypress-first.config.js --browser chrome",
     "cy:second": "xvfb-run -a cypress run --config-file cypress-second.config.js --browser chrome",
