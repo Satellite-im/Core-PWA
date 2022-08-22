@@ -1,7 +1,4 @@
-import { RpcResponseAndContext, SignatureResult } from '@solana/web3.js'
-
 import { Account, Adapter } from '../../interfaces'
-
 import MultiWalletManager from '~/libraries/WalletManager/WalletManager'
 
 export default class MultiWalletAdapter implements Adapter {
@@ -46,10 +43,6 @@ export default class MultiWalletAdapter implements Adapter {
 
   async getAccountBalance(_account: Account): Promise<number | null> {
     return await this.$WalletManager.getCurrentAccountBalance()
-  }
-
-  requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null> {
-    throw new Error('This method dose not exist in Phantom')
   }
 
   async getActiveAccount(): Promise<Account | undefined> {

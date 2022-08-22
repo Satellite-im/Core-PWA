@@ -1,20 +1,19 @@
 import WalletConnect from '@walletconnect/client'
 import QRCodeModal from '@walletconnect/qrcode-modal'
-
 import { WalletReadyState } from '@solana/wallet-adapter-base'
-import { PublicKey } from '@solana/web3.js'
 
+// @TODO: Needs to be refactored
 export default class WalletConnectAdapter {
   connector: WalletConnect
   private accounts: any
   url: string
   private name: string
-  private _publicKey: PublicKey | null
+  private _publicKey: string | null
   private _readyState: WalletReadyState | null
 
   constructor() {
     this.connector = new WalletConnect({
-      bridge: 'https://bridge.walletconnect.org', // Required
+      bridge: 'https://bridge.walletconnect.org',
       qrcodeModal: QRCodeModal,
     })
     this.url = 'https://walletconnect.org'
@@ -34,7 +33,7 @@ export default class WalletConnectAdapter {
     return this.getConnector().connected
   }
 
-  get publicKey(): PublicKey {
+  get publicKey(): string {
     if (!this._publicKey) {
       throw new Error('Public key not initialized')
     }
@@ -60,17 +59,15 @@ export default class WalletConnectAdapter {
       }
 
       // Get provided accounts and chainId
-      const { accounts, chainId } = payload.params[0]
-      this.accounts = accounts[0]
-      console.log(this.accounts)
-      this._publicKey = new PublicKey(Buffer.from(this.accounts, 'hex'))
+      const { accounts } = payload.params[0]
+      this.accounts = accounts
+      this._publicKey = this.accounts[0]
     })
 
     this.getConnector().on('session_update', (error, payload) => {
       if (error) {
         throw error
       }
-
       // Get updated accounts and chainId
       const { accounts, chainId } = payload.params[0]
       this.accounts = accounts[0]
@@ -80,19 +77,18 @@ export default class WalletConnectAdapter {
       if (error) {
         throw error
       }
-
       // Delete connector
     })
   }
 
   async signMessage(message: Uint8Array): Promise<Uint8Array> {
     if (!this.connected) {
-      throw new Error('Connectio  has not been established')
+      throw new Error('Connection has not been established')
     }
     const TxtMessage = Buffer.from(message).toString('hex')
     const msgParams = [
-      Buffer.from(TxtMessage, 'utf8').toString('hex'), // Required
-      this.accounts, // Required
+      Buffer.from(TxtMessage, 'utf8').toString('hex'),
+      this.accounts,
     ]
 
     const result = await this.getConnector()

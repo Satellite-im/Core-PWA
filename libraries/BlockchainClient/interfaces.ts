@@ -130,7 +130,6 @@ export interface Adapter {
 
   getAccountFromMnemonic(mnemonic?: string): Promise<Account | null>
   getAccountBalance(account: Account): Promise<number | null>
-  requestAirdrop(): Promise<RpcResponseAndContext<SignatureResult> | null>
 
   getActiveAccount(): Promise<Account | undefined>
 }

@@ -165,7 +165,7 @@ export default class MultiWalletManager {
 
   /**
    * @method _getConnection
-   * @returns return the connectiomn
+   * @returns return the connection
    */
   _getConnection(): Connection {
     if (!this.connection) {

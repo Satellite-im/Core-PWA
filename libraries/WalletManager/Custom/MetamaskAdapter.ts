@@ -1,6 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider'
 import { WalletReadyState } from '@solana/wallet-adapter-base'
-import { PublicKey } from '@solana/web3.js'
 
 export default class MetamaskAdapter {
   name: string
@@ -13,7 +12,7 @@ export default class MetamaskAdapter {
   private provider: any
 
   constructor() {
-    this.name = 'Metmask'
+    this.name = 'Metamask'
     this.url = 'https://metamask.io'
     this.icon = 'metamask.svg'
     this._connecting = false
@@ -48,8 +47,8 @@ export default class MetamaskAdapter {
     }
   }
 
-  get publicKey(): PublicKey {
-    const out = new PublicKey(Buffer.from(this._publicKey))
+  get publicKey(): string {
+    const out = this._publicKey
     return out
   }
 
