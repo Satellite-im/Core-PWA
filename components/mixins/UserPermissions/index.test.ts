@@ -6,7 +6,6 @@ describe('index.UserPermissions.created', () => {
     expect(result).toMatchSnapshot()
   })
 })
-
 describe('index.UserPermissions.methods.getUserPermissions', () => {
   test('0', async () => {
     await index.UserPermissions.methods.getUserPermissions()
@@ -31,7 +30,6 @@ describe('index.UserPermissions.methods.requestUserPermissions', () => {
     expect(result).toMatchObject(mockObj)
   })
 })
-
 describe('index.exportForTesting.formatDevices', () => {
   test('0', async () => {
     const devices = [
@@ -61,6 +59,7 @@ describe('index.UserPermissions.created', () => {
     expect(result).toMatchSnapshot()
   })
 })
+
 describe('index.UserPermissions.methods.requestUserPermissions', () => {
   test('0', async () => {
     await index.UserPermissions.methods.requestUserPermissions('user_name')
@@ -86,6 +85,7 @@ describe('index.UserPermissions.methods.requestUserPermissions', () => {
     await index.UserPermissions.methods.requestUserPermissions('')
   })
 })
+
 describe('index.UserPermissions.methods.getUserPermissions', () => {
   test('0', async () => {
     await index.UserPermissions.methods.getUserPermissions()
