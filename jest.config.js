@@ -28,6 +28,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules',
     '<rootDir>/linked-iridium',
+    '<rootDir>/iridium',
     '<rootDir>/cypress',
   ],
   coveragePathIgnorePatterns: [
