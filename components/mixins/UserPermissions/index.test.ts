@@ -12,7 +12,6 @@ describe('index.UserPermissions.methods.getUserPermissions', () => {
     await index.UserPermissions.methods.getUserPermissions()
   })
 })
-
 describe('index.UserPermissions.methods.requestUserPermissions', () => {
   test('0', async () => {
     const mockObj = { a: 'b' }
@@ -62,7 +61,6 @@ describe('index.UserPermissions.created', () => {
     expect(result).toMatchSnapshot()
   })
 })
-
 describe('index.UserPermissions.methods.requestUserPermissions', () => {
   test('0', async () => {
     await index.UserPermissions.methods.requestUserPermissions('user_name')
@@ -88,7 +86,6 @@ describe('index.UserPermissions.methods.requestUserPermissions', () => {
     await index.UserPermissions.methods.requestUserPermissions('')
   })
 })
-
 describe('index.UserPermissions.methods.getUserPermissions', () => {
   test('0', async () => {
     await index.UserPermissions.methods.getUserPermissions()
