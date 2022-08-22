@@ -1,7 +1,7 @@
+import Vue from 'vue'
 import { Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
 import type { SyncSubscriptionResponse } from '@satellite-im/iridium/src/sync/agent'
 import { SignalData } from 'simple-peer'
-import Vue from 'vue'
 import iridium, { IridiumManager } from '../IridiumManager'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
@@ -117,7 +117,7 @@ export default class WebRTCManager extends Emitter {
       await this.iridium.connector?.subscribe(
         message.payload.body.topic,
         subscription.handler
-          ? { handler: subscription.handler.bind(this, channel) }
+          ? { handler: subscription.handler.bind(this) }
           : null,
       )
       subscription.connected = true
@@ -334,7 +334,7 @@ export default class WebRTCManager extends Emitter {
     }, announceFrequency)
   }
 
-  private onMessage = (message: any, { payload }: { payload: any }) => {
+  private onMessage = ({ payload }: { payload: any }) => {
     if (!payload.body.module || payload.body.module !== 'webrtc') {
       return
     }
@@ -355,7 +355,7 @@ export default class WebRTCManager extends Emitter {
   }
 
   private onPeerCall = async (payload: any) => {
-    const { did, callId, peers, signal } = payload
+    const { did, callId, peers } = payload
 
     const loggerPrefix = 'webrtc/peer:call - '
     logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
@@ -373,7 +373,6 @@ export default class WebRTCManager extends Emitter {
         did,
         callId,
         peers,
-        signal,
       })
       return
     }
@@ -558,12 +557,10 @@ export default class WebRTCManager extends Emitter {
   private createCall = async ({
     callId,
     peers,
-    signal,
     did,
   }: {
     callId: string
     peers: CallPeerDescriptor[]
-    signal?: SignalData
     did?: string
   }) => {
     logger.log('webrtc: creating call', callId + peers)
@@ -583,18 +580,20 @@ export default class WebRTCManager extends Emitter {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
 
-    const call = $WebRTC.connect(
-      usedCallId,
-      peers,
-      signal && did ? { [did]: signal } : {},
-    )
+    const call = $WebRTC.connect(usedCallId, peers)
 
     if (!call) {
       logger.log('webrtc/createCall', 'call invalid')
       return
     }
 
-    const onCallIncoming = async ({ did }: { did: string }) => {
+    const onCallIncoming = async ({
+      did,
+      data,
+    }: {
+      did: string
+      data: SignalData
+    }) => {
       call.peerDialingDisabled[did] = true
       if (this.state.activeCall?.callId === call.callId) {
         call.answer(did)
@@ -616,6 +615,7 @@ export default class WebRTCManager extends Emitter {
           callId: call.callId,
           did,
           type,
+          data,
         }
       }
       $Sounds.playSound(Sounds.CALL)
@@ -855,6 +855,7 @@ export default class WebRTCManager extends Emitter {
       $Sounds.playSound(Sounds.HANGUP)
     }
     call.on('DESTROY', onCallDestroy)
+    call.on('ERROR', onCallDestroy)
   }
 
   public acceptCall = async (kinds: TrackKind[]) => {
@@ -874,7 +875,7 @@ export default class WebRTCManager extends Emitter {
       screen: true,
     })
 
-    const { callId, did } = this.state.incomingCall
+    const { callId, did, data } = this.state.incomingCall
 
     const call = $WebRTC.getCall(callId)
 
@@ -883,7 +884,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     await call.createLocalTracks(kinds)
-    await call.answer(did)
+    await call.answer(did, data)
   }
 
   public denyCall = () => {
@@ -950,7 +951,7 @@ export default class WebRTCManager extends Emitter {
 
   // WILL BE REPLACED ONCE DIRECT SEND WITH IRIDIUM WORKS
   public sendWebrtc(did: string, payload: any) {
-    this.iridium.connector?.publish('webrtc', payload, {
+    return this.iridium.connector?.publish('webrtc', payload, {
       encrypt: { recipients: [did] },
     })
   }
