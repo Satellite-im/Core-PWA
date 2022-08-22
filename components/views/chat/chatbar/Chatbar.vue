@@ -94,8 +94,8 @@ const Chatbar = Vue.extend({
         this.chat.countError
       )
     },
-    peerActive(): boolean {
-      return !iridium.chat.subscriptions[this.$route.params.id]?.connected
+    isSubscribed(): boolean {
+      return iridium.chat.subscriptions[this.$route.params.id]?.connected
     },
     text: {
       /**
@@ -144,13 +144,6 @@ const Chatbar = Vue.extend({
     }
   },
   methods: {
-    /**
-     * @method blurChatbar
-     * @description blur chatbar
-     */
-    blurChatbar() {
-      document.activeElement?.blur()
-    },
     /**
      * @method throttleTyping
      * @description Throttles the typing event so that we only send the typing once every two seconds
@@ -224,7 +217,8 @@ const Chatbar = Vue.extend({
       if (
         !this.files.length &&
         (this.text.length > this.$Config.chat.maxChars ||
-          !this.text.trim().length)
+          !this.text.trim().length ||
+          !this.isSubscribed)
       ) {
         return
       }

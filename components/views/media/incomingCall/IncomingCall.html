@@ -1,49 +1,32 @@
-<div>
-  <div class="content">
-    <div class="gradient-cover" data-cy="incoming-call"></div>
-    <div
-      v-if="Boolean(caller)"
-      class="caller"
-      :class="callType === 'friend' ? 'caller--user' : 'caller--group'"
-    >
-      <div
-        v-if="callerAvatar"
-        class="user-profile-picture"
-        v-bind:style="`background:url(${callerAvatar})`"
-      />
-      <UiCircle
-        v-else
-        class="user-profile-placeholder"
-        type="random"
-        :seed="caller.address"
-        :size="120"
-      />
-      <div class="user-info">
-        <p class="user-name" :title="caller.name">{{caller.name}}</p>
-        <p class="user-status">{{caller.status}}</p>
-      </div>
-    </div>
+<div class="incoming" data-cy="incoming-call">
+  <UiCircle
+    :type="callerAvatar ? 'image' : 'random'"
+    :seed="caller.did"
+    :source="callerAvatar"
+    :size="120"
+  />
+  <div class="user-info">
+    <TypographyText class="ellipsis" as="h2" :title="caller.name">
+      {{caller.name}}
+    </TypographyText>
+    <TypographyText class="ellipsis" as="h4" :title="caller.status">
+      {{caller.status}}
+    </TypographyText>
   </div>
-  <footer class="modal-card-foot">
-    <button
-      class="button is-success"
+  <div class="buttons">
+    <InteractablesButton
+      color="success"
+      @click="acceptCall(['audio'])"
       data-cy="incoming-call-accept"
-      v-on:click="() => acceptCall(['audio'])"
     >
       <phone-icon size="1x" class="button-icon" />
-    </button>
-    <!-- <button
-      class="button is-success"
-      v-on:click="() => acceptCall(['audio', 'video'])"
-    >
-      <video-icon size="1x" class="button-icon" />
-    </button> -->
-    <button
-      class="button is-danger"
+    </InteractablesButton>
+    <InteractablesButton
+      color="danger"
+      @click="denyCall"
       data-cy="incoming-call-deny"
-      v-on:click="denyCall"
     >
       <phone-off-icon size="1x" class="button-icon" />
-    </button>
-  </footer>
+    </InteractablesButton>
+  </div>
 </div>

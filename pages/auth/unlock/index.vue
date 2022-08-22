@@ -161,7 +161,10 @@ export default Vue.extend({
       try {
         this.status = 'loading'
         await this.deleteAccount()
-        await this.$store.dispatch('accounts/setPin', DEV_PIN)
+        await this.$store.dispatch(
+          'accounts/setPin',
+          this.pin || (this.isDev ? DEV_PIN : ''),
+        )
         await this.decrypt(false)
         await this.$store.dispatch('accounts/generateWallet')
         try {

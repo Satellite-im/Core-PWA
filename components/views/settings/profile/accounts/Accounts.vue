@@ -34,15 +34,15 @@ export default Vue.extend({
         twitch: {
           name: 'Twitch',
           icon: TwitchIcon,
-          username: 'Sophia_Kalindi',
-          isVerified: true,
+          username: '',
+          isVerified: false,
           displayOnProfile: true,
           verifyUrl: 'https://www.twitch.com/',
         },
         youtube: {
           name: 'Youtube',
           icon: YoutubeIcon,
-          username: 'Sophia_Kalindi94',
+          username: '',
           isVerified: false,
           displayMusic: false,
           displayOnProfile: true,
@@ -51,8 +51,8 @@ export default Vue.extend({
         twitter: {
           name: 'Twitter',
           icon: TwitterIcon,
-          username: 'Sophia_Kalindi94',
-          isVerified: true,
+          username: '',
+          isVerified: false,
           displayOnProfile: true,
           verifyUrl: 'https://www.twitter.com/',
         },
@@ -81,7 +81,6 @@ export default Vue.extend({
 .list {
   display: flex;
   flex-direction: column;
-  gap: @large-spacing;
-  padding-bottom: 18px;
+  gap: 16px;
 }
 </style>

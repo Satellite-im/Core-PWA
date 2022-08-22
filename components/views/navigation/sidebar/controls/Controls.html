@@ -25,7 +25,7 @@
     <headphones-icon data-cy="sidebar-audio-not-deafened" v-else size="1x" />
   </InteractablesButton>
   <InteractablesButton
-    v-if="inCall"
+    v-if="webrtc.activeCall"
     :color="videoMuted ? 'danger' : 'dark'"
     v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
     :text="$t('controls.video')"

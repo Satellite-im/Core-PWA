@@ -10,16 +10,9 @@
   @mouseenter="handleMouseEnter"
   @mouseleave="handleMouseLeave"
 >
-  <div class="spinner" v-if="loading">
-    <UiLoadersSpinner spinning />
-  </div>
+  <UiLoadersSpinner class="spinner" v-if="loading" spinning />
   <div v-else class="content">
-    <div
-      :class="`feather ${text.length ? '' : 'no-text-feather'}`"
-      v-if="$slots.default"
-    >
-      <slot></slot>
-    </div>
+    <slot></slot>
     <span v-if="text.length">{{ text }}</span>
   </div>
   <div class="cursor-glow" :style="cursorGlowStyle"></div>

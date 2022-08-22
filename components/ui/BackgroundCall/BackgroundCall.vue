@@ -2,26 +2,46 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
-import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { useCallElapsedTime, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
-  computed: {
-    ...mapState({
-      friends: (state) => (state as RootState).friends.all,
-      elapsedTime: (state) => (state as RootState).webrtc.elapsedTime,
-      activeCall: (state) => (state as RootState).webrtc.activeCall,
-    }),
-    caller(): Friend | undefined {
-      return this.friends.find(
-        (f: Friend) => f.peerId === this.activeCall?.peerId,
-      )
+  setup() {
+    const { remoteParticipants } = useWebRTC()
+    const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
+
+    const remoteParticipant = computed(() => {
+      return remoteParticipants.value.length > 0
+        ? remoteParticipants.value[0]
+        : null
+    })
+
+    return {
+      remoteParticipant,
+      elapsedTime,
+      startInterval,
+      clearTimer,
+    }
+  },
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
+  watch: {
+    'webrtc.createdAt': {
+      handler() {
+        this.startInterval()
+      },
+      immediate: true,
     },
+  },
+  beforeDestroy() {
+    this.clearTimer()
   },
   methods: {
     navigateToActiveConversation() {
-      if (!this.caller) {
+      if (!this.remoteParticipant) {
         return
       }
 
@@ -30,14 +50,15 @@ export default Vue.extend({
         this.$store.commit('ui/showSidebar', false)
       }
 
-      this.$store.dispatch('conversation/setConversation', {
-        id: this.caller.peerId,
-        type: 'friend',
-        participants: [this.caller],
-        calling: false,
-      })
+      const id = iridium.chat?.directConversationIdFromDid(
+        this.remoteParticipant.did,
+      )
 
-      this.$router.push(`/chat/direct/${this.caller.address}`)
+      if (!id || !iridium.chat?.hasConversation(id)) {
+        return
+      }
+
+      this.$router.push(`/chat/${id}`)
     },
   },
 })

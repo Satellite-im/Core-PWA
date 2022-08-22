@@ -1,6 +1,8 @@
 <template>
   <div class="file-error">
-    <TypographyError :text="$t('errors.chat.drop_file_count')" />
+    <TypographyText color="error">
+      {{ $t('errors.chat.drop_file_count') }}
+    </TypographyText>
     <x-icon
       size="1x"
       class="has-text-danger"
@@ -20,8 +22,6 @@ import { XIcon } from 'satellite-lucide-icons'
   justify-content: space-between;
   align-items: center;
   padding: @normal-spacing;
-  width: calc(@full - 2rem);
-  margin: 0 @normal-spacing;
   &:extend(.background-semitransparent-light);
   border-radius: @corner-rounding @corner-rounding 0 0;
 

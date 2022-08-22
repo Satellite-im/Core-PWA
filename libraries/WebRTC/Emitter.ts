@@ -19,7 +19,6 @@ export default class Emitter<
     if (!this._events[event]) {
       this._events[event] = []
     }
-
     this._events[event]!.push(listener)
   }
 
@@ -58,7 +57,6 @@ export default class Emitter<
     if (!this._events[event]) {
       return
     }
-
     this._events[event]!.forEach((cb) => cb(data))
   }
 }

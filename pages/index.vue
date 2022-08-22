@@ -16,9 +16,6 @@ import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'Main',
-  data() {
-    return {}
-  },
   computed: {
     ...mapGetters(['allPrerequisitesReady']),
     ...mapState({
@@ -38,17 +35,16 @@ export default Vue.extend({
         if (!nextValue) return
         this.eventuallyRedirect()
       },
-      immediate: true,
     },
   },
-  mounted() {
+  async mounted() {
     // Handle the case that the wallet is not found
     if (this.accounts.encryptedPhrase === '') {
       this.$router.replace('/setup/disclaimer')
       return
     }
 
-    this.loadAccount()
+    await this.loadAccount()
 
     this.$store.dispatch('ui/activateKeybinds')
   },
@@ -80,11 +76,11 @@ export default Vue.extend({
         await this.$store.dispatch('accounts/loadAccount')
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          this.$router.replace('/auth/register')
+          await this.$router.replace('/auth/register')
           return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
-          this.$router.replace('/setup/disclaimer')
+          await this.$router.replace('/setup/disclaimer')
           return
         }
 
@@ -93,6 +89,8 @@ export default Vue.extend({
           action: this.loadAccount,
         })
       }
+
+      this.eventuallyRedirect()
     },
   },
 })

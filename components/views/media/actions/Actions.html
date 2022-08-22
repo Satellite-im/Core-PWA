@@ -28,7 +28,7 @@
     v-tooltip.top="screenMuted ? $t('controls.screen') : $t('controls.stop_streaming')"
   >
     <InteractablesButton
-      :type="screenMuted ? 'danger' : 'dark'"
+      :color="screenMuted ? 'danger' : 'dark'"
       data-cy="call-screen-share"
       @click="() => toggleMute('screen')"
       :loading="isLoading"

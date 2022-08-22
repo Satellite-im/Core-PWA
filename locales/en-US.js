@@ -128,6 +128,7 @@ export default {
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
+    back_to_call: 'Back to call',
   },
   popups: {
     error: {
@@ -526,6 +527,7 @@ export default {
           location: 'Location',
           selectLocation: 'Select Location',
           timezone: 'Timezone',
+          selectTimezone: 'Select Timezone',
           language: 'Language',
           selectLanguage: 'Select Language',
           noResult: 'No elements found',
@@ -548,7 +550,7 @@ export default {
             'Link your accounts to display on your profile and have easier access to them while using Satellite.im.',
           displayMusic: 'Display Your Music',
           displayOnProfile: 'Display On Profile',
-          verify: 'Verify',
+          link: 'Link',
         },
       },
     },

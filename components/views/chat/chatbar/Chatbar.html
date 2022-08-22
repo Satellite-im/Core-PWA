@@ -25,7 +25,10 @@
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-    <ChatbarControls :disabled="peerActive" @send="sendMessage" />
+    <ChatbarControls
+      :disabled="!isSubscribed || charlimit"
+      @send="sendMessage"
+    />
   </div>
-  <ChatbarFooter :peerActive="!peerActive" :text="text" :charlimit="charlimit" />
+  <ChatbarFooter :text="text" :charlimit="charlimit" />
 </div>

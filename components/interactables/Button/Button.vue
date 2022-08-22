@@ -63,7 +63,11 @@ export default Vue.extend({
       this.showCursorGlow = false
     },
     handleMouseMove(e: MouseEvent) {
-      const bounds = (this.$refs.button as HTMLElement).getBoundingClientRect()
+      const button = this.$refs.button as HTMLElement
+      if (!button) {
+        return
+      }
+      const bounds = button.getBoundingClientRect()
       this.cursorX = e.clientX - bounds.left
       this.cursorY = e.clientY - bounds.top
     },

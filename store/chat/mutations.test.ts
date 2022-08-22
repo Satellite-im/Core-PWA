@@ -1047,7 +1047,7 @@ describe('misc', () => {
     })
   })
 
-  test.skip('module.removeFile', () => {
+  test('module.removeFile', () => {
     const localState = {
       ...InitialChatState,
       files: {
@@ -1064,14 +1064,14 @@ describe('misc', () => {
         ],
       },
     }
-    const argument = { address: 'file1', index: 0 }
+    const argument = { id: 'file1', index: 0 }
 
     module.default.removeFile(localState, argument)
 
     expect(localState.files).toEqual({ file1: [] })
   })
 
-  test.skip('module.setFileProgress', () => {
+  test('module.setFileProgress', () => {
     const localState = {
       ...InitialChatState,
       files: {
@@ -1088,7 +1088,7 @@ describe('misc', () => {
         ],
       },
     }
-    const argument = { address: 'file1', index: 0, progress: 10 }
+    const argument = { id: 'file1', index: 0, progress: 10 }
 
     module.default.setFileProgress(localState, argument)
 

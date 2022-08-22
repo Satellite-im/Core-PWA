@@ -1,109 +1,29 @@
-.modal-card-body {
-  padding: 0 !important;
-}
+@width: 300px;
 
-.content {
-  width: 300px;
-  height: 400px;
-}
-
-.caller {
-  height: @full;
-  text-align: center;
-}
-
-.user-profile-picture {
-  background-size: cover !important;
-  background-position: center !important;
-  height: 80%;
-  &:extend(.full-width);
-}
-
-.user-profile-placeholder {
-  position: absolute;
-  bottom: 200px;
-  left: 50%;
-  margin-left: -60px;
-}
-
-.gradient-cover {
-  background: linear-gradient(transparent, #000 80%);
-  height: @full;
-  &:extend(.full-width);
-  position: absolute;
-}
-
-.modal-card-foot {
-  background: transparent;
-  position: absolute;
-  bottom: 5px;
-  border-top: 0;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  &:extend(.full-width);
-}
-
-.user-info {
-  .user-name {
-    &:extend(.ellipsis);
-    color: #fff;
-    font-size: 25px;
-    font-family: @primary-font;
-    margin-bottom: 0;
-    width: 100%;
-    text-align: center;
-  }
-  .user-status {
-    opacity: 0.5;
-    color: #fff;
-    font-family: @primary-font;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: @full;
-    margin-bottom: @normal-spacing;
-  }
-  position: absolute;
-  &:extend(.full-width);
-  bottom: 80px;
+.incoming {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 20px;
-}
-.button {
-  &:extend(.full-width);
-  margin: @normal-spacing;
-
-  &:nth-child(1) {
-    margin-left: 0;
-  }
-  &:nth-child(2) {
-    margin-right: 0;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .content {
-    &:extend(.full-width);
-    height: @full;
-    width: @full;
-  }
-
-  .user-profile-placeholder {
-    bottom: 300px;
-  }
+  gap: 1rem;
+  width: @width;
+  height: 380px;
+  padding: 32px;
+  background: @foreground-gradient;
+  border-radius: @corner-rounding;
 
   .user-info {
-    bottom: 150px;
+    max-width: @width;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .button {
-    margin: @normal-spacing !important;
-  }
-
-  .modal-card-foot {
-    bottom: 20px;
+  .buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin-top: auto;
   }
 }

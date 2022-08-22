@@ -4,7 +4,7 @@ import { Profile } from './types'
 
 export default class IridiumProfile extends Emitter {
   public readonly iridium: IridiumManager
-  public state: Profile
+  public state?: Profile
 
   constructor(iridium: IridiumManager) {
     super()
@@ -17,7 +17,7 @@ export default class IridiumProfile extends Emitter {
       throw new Error('cannot initialize profile, no iridium connector')
     }
 
-    iridium.on('state:changed', this.onStateChanged.bind(this))
+    iridium.on('changed', this.onStateChanged.bind(this))
     await this.fetch()
   }
 
@@ -28,6 +28,7 @@ export default class IridiumProfile extends Emitter {
 
   onStateChanged(state: { path: string; value: any }) {
     if (state.path.startsWith('/profile')) {
+      this.state = state.value?.profile || {}
       this.emit('changed', state)
     }
   }

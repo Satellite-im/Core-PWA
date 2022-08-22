@@ -58,6 +58,10 @@ import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 
+function notNull<TValue>(value: TValue | null): value is TValue {
+  return value !== null
+}
+
 export default Vue.extend({
   name: 'FriendRequests',
   data() {
@@ -66,15 +70,22 @@ export default Vue.extend({
     }
   },
   computed: {
+    requests(): FriendRequest[] {
+      return Object.values(this.friends.requests)
+        .map((request) => {
+          const user = iridium.users.getUser(request.user.did)
+          if (!user) {
+            return null
+          }
+          return { ...request, user }
+        })
+        .filter(notNull)
+    },
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-      )
+      return this.requests.filter((r) => r.incoming && r.status !== 'accepted')
     },
     outgoingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => !r.incoming && r.status === 'pending',
-      )
+      return this.requests.filter((r) => !r.incoming && r.status === 'pending')
     },
   },
 })

@@ -140,7 +140,7 @@ IntersectionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"IDENTIFICATION\\", payload: { peerId: string } })",
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"IDENTIFICATION\\", payload: { did: string } })",
   "types": Array [
     InterfaceType {
       "_tag": "InterfaceType",
@@ -181,16 +181,16 @@ IntersectionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "{ type: \\"IDENTIFICATION\\", payload: { peerId: string } }",
+      "name": "{ type: \\"IDENTIFICATION\\", payload: { did: string } }",
       "props": Object {
         "payload": InterfaceType {
           "_tag": "InterfaceType",
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ peerId: string }",
+          "name": "{ did: string }",
           "props": Object {
-            "peerId": StringType {
+            "did": StringType {
               "_tag": "StringType",
               "decode": [Function],
               "encode": [Function],
@@ -328,7 +328,7 @@ IntersectionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"REFUSE\\", payload: { peerId: string } })",
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"REFUSE\\", payload: { did: string } })",
   "types": Array [
     InterfaceType {
       "_tag": "InterfaceType",
@@ -369,16 +369,16 @@ IntersectionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "{ type: \\"REFUSE\\", payload: { peerId: string } }",
+      "name": "{ type: \\"REFUSE\\", payload: { did: string } }",
       "props": Object {
         "payload": InterfaceType {
           "_tag": "InterfaceType",
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ peerId: string }",
+          "name": "{ did: string }",
           "props": Object {
-            "peerId": StringType {
+            "did": StringType {
               "_tag": "StringType",
               "decode": [Function],
               "encode": [Function],
@@ -412,7 +412,7 @@ IntersectionType {
   "decode": [Function],
   "encode": [Function],
   "is": [Function],
-  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"SIGNAL\\", payload: { peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } })",
+  "name": "({ type: string, payload: unknown, sentAt: number } & { type: \\"SIGNAL\\", payload: { did: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } })",
   "types": Array [
     InterfaceType {
       "_tag": "InterfaceType",
@@ -453,14 +453,14 @@ IntersectionType {
       "decode": [Function],
       "encode": [Function],
       "is": [Function],
-      "name": "{ type: \\"SIGNAL\\", payload: { peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } }",
+      "name": "{ type: \\"SIGNAL\\", payload: { did: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } } }",
       "props": Object {
         "payload": InterfaceType {
           "_tag": "InterfaceType",
           "decode": [Function],
           "encode": [Function],
           "is": [Function],
-          "name": "{ peerId: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } }",
+          "name": "{ did: string, data: { type: string, transceiverRequest: { kind: string, init: { sdp: string } }, renegotiate: boolean, candidate: unknown } }",
           "props": Object {
             "data": InterfaceType {
               "_tag": "InterfaceType",
@@ -532,7 +532,7 @@ IntersectionType {
               },
               "validate": [Function],
             },
-            "peerId": StringType {
+            "did": StringType {
               "_tag": "StringType",
               "decode": [Function],
               "encode": [Function],

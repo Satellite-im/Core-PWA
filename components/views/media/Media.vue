@@ -2,12 +2,10 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapGetters, mapState } from 'vuex'
-import { Friend } from '~/types/ui/friends'
-import { User } from '~/types/ui/user'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
-import { ConversationParticipant } from '~/store/conversation/types'
+import { mapState } from 'vuex'
+import { User } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   props: {
@@ -31,41 +29,19 @@ export default Vue.extend({
       required: true,
     },
   },
+  setup() {
+    const { localParticipant, remoteParticipants } = useWebRTC()
+
+    return { localParticipant, remoteParticipants }
+  },
   data() {
     return {
       componentKey: this.fullscreen,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
-    ...mapState([
-      'ui',
-      'accounts',
-      'friends',
-      'groups',
-      'webrtc',
-      'conversation',
-    ]),
-    ...mapGetters('webrtc', ['isActiveCall']),
-    computedUsers() {
-      return this.fullscreen
-        ? this.users.slice(0, this.fullscreenMaxViewableUsers)
-        : this.users.slice(0, this.maxViewableUsers)
-    },
-    localParticipant() {
-      return { ...this.accounts.details, peerId: iridium.connector?.peerId }
-    },
-    remoteParticipants() {
-      return this.conversation.participants.filter(
-        (participant: ConversationParticipant) =>
-          participant.peerId !== iridium.connector?.peerId,
-      )
-    },
-    activeCall() {
-      const { activeCall } = this.webrtc
-      const call = $WebRTC.getCall(activeCall.callId)
-      return call
-    },
-    ...mapState(['audio']),
+    ...mapState(['ui', 'accounts', 'groups', 'audio']),
   },
   watch: {
     fullscreen(value) {
@@ -207,12 +183,6 @@ export default Vue.extend({
         }
       },
     },
-  },
-  beforeMount() {
-    // TODO: Create mixin/library that will handle call rejoining and closing
-    window.onbeforeunload = (e) => {
-      this.$store.dispatch('webrtc/hangUp')
-    }
   },
   methods: {
     /**

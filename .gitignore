@@ -103,4 +103,5 @@ scratchpad.js
 
 solana-localnet
 
-iridium
+./iridium
+linked-iridium

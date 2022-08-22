@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { PublicKey } from '@solana/web3.js'
 
 import {
   UserPlusIcon,
