@@ -1,31 +1,45 @@
 <template>
   <div>
-    <button @click="toggleShowModal">
-      <info-icon size="1.5x" class="info-icon" />
+    <button class="info-icon-button" @click="toggleShowModal">
+      <info-icon size="1.5x" />
     </button>
 
-    <div v-if="showModal" class="modal-overlay" @click="toggleShowModal">
-      <div class="modal">
+    <transition name="modal">
+      <UiModal v-if="showModal" @close="() => toggleShowModal()">
         <div class="modal-content">
-          <div class="icon-container">
-            <info-icon size="1.5x" />
-          </div>
-          <div class="body">
-            <div class="heading">
-              <info-icon size="1.5x" class="info-icon-mobile" />
+          <div class="modal-main">
+            <TypographyText color="flair" class="icon-container">
+              <info-icon size="1.5x" />
+            </TypographyText>
+            <div class="body">
+              <div class="heading">
+                <TypographyText class="info-icon-mobile" color="flair">
+                  <info-icon size="1.5x" />
+                </TypographyText>
 
-              <TypographyText as="h2" color="light" font="heading">
-                <slot name="title" />
+                <TypographyText as="h2" color="light" font="heading">
+                  <slot name="title" />
+                </TypographyText>
+              </div>
+
+              <TypographyText color="light" class="subtitle">
+                <slot name="subtitle" />
               </TypographyText>
             </div>
-
-            <TypographyText color="light" class="subtitle">
-              <slot name="subtitle" />
-            </TypographyText>
           </div>
+
+          <InteractablesButton
+            color="light"
+            class="close-button"
+            @click="() => toggleShowModal()"
+          >
+            <TypographyText color="light" font="heading">
+              {{ $t('ui.close') }}
+            </TypographyText>
+          </InteractablesButton>
         </div>
-      </div>
-    </div>
+      </UiModal>
+    </transition>
   </div>
 </template>
 
@@ -51,83 +65,77 @@ export default Vue.extend({
 </script>
 
 <style lang="less" scoped>
-.info-icon {
+.info-icon-button {
   cursor: pointer;
+  transition: @animation-speed-long ease-in-out;
 
   &:hover {
     color: @satellite-color;
   }
 }
 
-.modal-overlay {
+.modal-content {
+  display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100%;
+  max-width: 500px;
   padding: 16px;
-  animation: zoom-in-zoom-out @animation-speed-long ease-out;
-  &:extend(.third-layer);
-  &:extend(.background-semitransparent-light);
-  &:extend(.blur);
-  &:extend(.flex-justify-content-centered);
-  &:extend(.absolute-coverage);
+  user-select: none;
 
-  .modal {
-    padding: 16px;
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
+  .modal-main {
+    display: flex;
+    gap: 16px;
 
-    .modal-content {
+    .icon-container {
+      color: 'blue';
+      padding: 3px 0;
+    }
+
+    .body {
       display: flex;
-      gap: 16px;
+      flex-direction: column;
+      gap: 8px;
 
-      .icon-container {
-        padding: 3px 0;
-      }
-
-      .body {
+      .heading {
         display: flex;
-        flex-direction: column;
+        align-items: center;
         gap: 8px;
 
-        .heading {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-
-          .info-icon-mobile {
-            display: none;
-          }
+        .info-icon-mobile {
+          display: none;
         }
+      }
 
-        .subtitle {
-          white-space: pre-line;
-        }
+      .subtitle {
+        white-space: pre-line;
       }
     }
   }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  .modal-overlay {
-    .modal {
-      .modal-content {
-        .icon-container {
-          display: none;
+  .modal-content {
+    max-width: @full;
+
+    .icon-container {
+      display: none;
+    }
+
+    .modal-main {
+      .body {
+        align-items: center;
+
+        .heading {
+          .info-icon-mobile {
+            display: inherit;
+          }
         }
 
-        .body {
-          align-items: center;
-          gap: 16px;
-
-          .heading {
-            .info-icon-mobile {
-              display: inherit;
-            }
-          }
-
-          .subtitle {
-            text-align: center;
-          }
+        .subtitle {
+          text-align: center;
         }
       }
     }
