@@ -241,7 +241,7 @@ export default defineNuxtConfig({
       }
     },
     babel: {
-      plugins: ['lodash'],
+      plugins: ['lodash', '@babel/plugin-proposal-optional-chaining'],
       compact: true,
       presets({ isServer }, [preset, options]) {
         options.targets = isServer
