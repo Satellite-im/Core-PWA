@@ -39,11 +39,6 @@ export default Vue.extend({
       default: false,
     },
   },
-  setup() {
-    const { isActiveCall } = useWebRTC()
-
-    return { isActiveCall }
-  },
   data() {
     return {
       searchRecommend,
@@ -53,6 +48,7 @@ export default Vue.extend({
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
+      isActiveCall: undefined as any,
     }
   },
   computed: {
@@ -64,50 +60,42 @@ export default Vue.extend({
       modals: (state) => (state as RootState).ui.modals,
     }),
     ModalWindows: () => ModalWindows,
-    conversationId(): Conversation['id'] | undefined {
+    conversationId(): string {
       return this.$route.params.id
     },
-    conversation(): Conversation | undefined {
-      if (!this.conversationId) {
-        return undefined
-      }
+    conversation(): Conversation {
       return iridium.chat.state.conversations[this.conversationId]
     },
     isGroup(): boolean {
-      return this.conversation?.type === 'group'
+      return this.conversation.participants.length > 2
     },
-    details(): User | Group | undefined {
-      if (!this.conversation) {
-        return undefined
-      }
+    details(): User | Conversation {
       if (this.isGroup) {
-        return this.groups[this.conversation.id]
+        return iridium.chat.state.conversations[this.conversationId]
       }
       const friendDid = this.conversation.participants.find(
         (f) => f !== iridium.connector?.id,
-      )
-      if (!friendDid) {
-        return
-      }
+      ) as string
       return this.users[friendDid]
     },
-    groupMembers(): GroupMemberDetails[] {
-      const members = (this.details as Group).members ?? []
-      return Object.values(members)
+    members(): User[] {
+      return this.conversation.participants.map((did) => {
+        return iridium.users.getUser(did)
+      })
     },
     subtitleText(): string {
       if (!this.details) {
         return ''
       }
       if (this.isGroup) {
-        return this.groupMembers.map((m) => m.name).join(', ')
+        return this.members.map((m) => m.name).join(', ')
       }
       return (this.details as User).status || 'offline'
     },
     enableRTC(): boolean {
       // todo- hook up to usermanager
       if (this.isGroup) {
-        const memberIds = this.groupMembers.map((m) => m.id)
+        const memberIds = this.members.map((m) => m.did)
         return Object.values(this.users).some(
           (friend: Friend) =>
             memberIds.includes(friend.did) && friend.status === 'online',
@@ -128,11 +116,14 @@ export default Vue.extend({
         : (this.$t('controls.not_connected') as string)
     },
   },
+  mounted() {
+    this.isActiveCall = useWebRTC()
+  },
   methods: {
     groupInvite() {
       this.$store.commit('ui/toggleModal', {
         name: 'groupInvite',
-        state: { isOpen: true, group: this.details as Group },
+        state: { isOpen: true, group: this.details as Conversation },
       })
     },
     toggleAlerts() {

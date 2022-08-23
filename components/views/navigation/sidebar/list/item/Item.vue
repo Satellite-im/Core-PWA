@@ -42,7 +42,7 @@ export default Vue.extend({
     user(): User | null {
       return iridium.users.getUser(this.conversation.participants[0])
     },
-    participants(): (User | null)[] {
+    participants(): User[] {
       return this.conversation.participants.map((did) => {
         return iridium.users.getUser(did)
       })

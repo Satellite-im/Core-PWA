@@ -198,6 +198,7 @@ export default {
       logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
+    iridium.profile.setUser()
     commit('setActiveAccount', iridium.connector?.id)
 
     logger.debug(

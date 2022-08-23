@@ -7,6 +7,7 @@ import { TranslateResult } from 'vue-i18n'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   data() {
@@ -53,25 +54,16 @@ export default Vue.extend({
       }
       this.isLoading = true
       try {
-        if (!this.accounts.details) {
-          throw new Error('no account')
+        if (!iridium.connector) {
+          return
         }
-        const id = await iridium.groups.createGroup({
+        const participants = [
+          iridium.connector.id,
+          ...this.friends.map((friend) => friend.did),
+        ]
+        const id = await iridium.chat.createGroupConversation({
           name: this.name,
-          members: {
-            [this.accounts.active]: {
-              id: this.accounts.active,
-              name: this.accounts.details.name,
-              photoHash: this.accounts.details.profilePicture,
-            },
-            ...this.friends.reduce(
-              (prev, f) => ({
-                ...prev,
-                [f.did]: { id: f.did, name: f.name, photoHash: f.photoHash },
-              }),
-              {},
-            ),
-          },
+          participants,
         })
         this.$emit('toggle')
         this.$router.push(`/chat/${id}`)
