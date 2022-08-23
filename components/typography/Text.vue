@@ -82,7 +82,7 @@ export default Vue.extend({
       if (this.as.match('h[1-3]')) {
         return 'bold'
       }
-      return ''
+      return 'normal'
     },
   },
 })
