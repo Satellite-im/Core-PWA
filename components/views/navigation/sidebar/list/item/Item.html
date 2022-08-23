@@ -7,7 +7,7 @@
 >
   <template>
     <UiUserState v-if="conversation.type === 'direct'" :user="user" />
-    <UiGroupIcon v-else :participants="participants" />
+    <UiGroupIcon v-else :members="participants" />
   </template>
   <div class="user-info">
     <TypographyText

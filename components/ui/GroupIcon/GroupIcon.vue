@@ -2,15 +2,12 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import {
-  GroupConfig,
-  GroupMemberDetails,
-} from '~/libraries/Iridium/groups/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   props: {
-    group: {
-      type: Object as PropType<GroupConfig>,
+    members: {
+      type: Array as PropType<User[]>,
       required: true,
     },
     size: {
@@ -19,9 +16,6 @@ export default Vue.extend({
     },
   },
   computed: {
-    members(): GroupMemberDetails[] {
-      return Object.values(this.group.members)
-    },
     /**
      * @method groupClass
      * @description Returns classname as string based on group members
@@ -46,13 +40,11 @@ export default Vue.extend({
     /**
      * @method getSource
      * @description Returns user profile image source hash, stored in IPFS, if they have one
-     * @param member <GroupMember> the User object/info for a member
-     * @example :source="getSource(member)"
+     * @param did
+     * @example :source="getSource(did)"
      */
-    getSource(member: GroupMemberDetails) {
-      return member.photoHash
-        ? this.$Config.ipfs.gateway + member.photoHash
-        : ''
+    getSource(user: User) {
+      return user?.photoHash && this.$Config.ipfs.gateway + user.photoHash
     },
   },
 })

@@ -1,10 +1,10 @@
 import { Emitter } from '@satellite-im/iridium'
 import { IridiumManager } from '../IridiumManager'
-import { Profile } from './types'
+import { User } from '../Users/types'
 
 export default class IridiumProfile extends Emitter {
   public readonly iridium: IridiumManager
-  public state?: Profile
+  public state?: User
 
   constructor(iridium: IridiumManager) {
     super()
@@ -23,12 +23,17 @@ export default class IridiumProfile extends Emitter {
 
   private async fetch() {
     this.state = await this.iridium.connector?.get('/profile')
+    this.setUser()
     // TODO: verify schema of profile data, recover from invalid data
   }
 
   onStateChanged(state: { path: string; value: any }) {
     if (state.path.startsWith('/profile')) {
-      this.state = state.value?.profile || {}
+      if (!state.value?.profile) {
+        return
+      }
+      this.state = state.value?.profile
+      this.setUser()
       this.emit('changed', state)
     }
   }
@@ -39,5 +44,12 @@ export default class IridiumProfile extends Emitter {
 
   set(path: string = '', payload: any, options: any = {}) {
     return this.iridium.connector?.set(`/profile${path}`, payload, options)
+  }
+
+  setUser() {
+    const id = this.iridium.connector?.id
+    if (this.state && id) {
+      this.iridium.users.setUser(id, this.state)
+    }
   }
 }

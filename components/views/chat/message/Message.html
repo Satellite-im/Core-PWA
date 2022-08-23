@@ -6,9 +6,9 @@
     <template v-if="showHeader">
       <div class="avatar">
         <UiCircle
-          :type="author.src ? 'image' :'random'"
-          :seed="author.id"
-          :source="author.src"
+          :type="avatarSrc ? 'image' : 'random'"
+          :seed="author.did"
+          :source="avatarSrc"
         />
       </div>
       <div class="header">

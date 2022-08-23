@@ -280,7 +280,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     // Announce to the remote user
     if (did !== this.iridium.connector?.id) {
-      const profile = await this.iridium.profile?.get()
+      const profile = this.iridium.profile.state
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
         throw new Error(FriendsError.NETWORK_ERROR)
@@ -394,18 +394,15 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     const user = this.iridium.users.getUser(did.toString())
-    const id = await encoding.hash(
-      [did.toString(), this.iridium.connector?.id].sort(),
-    )
     if (!user) {
       throw new Error(`can't find user: ${did}`)
     }
-    if (id && !this.iridium.chat.hasConversation(id)) {
+    const participants = [did.toString(), this.iridium.connector.id]
+    if (!(await this.iridium.chat.hasDirectConversation(did.toString()))) {
       await this.iridium.chat.createConversation({
-        id,
         name: user.name,
         type: 'direct',
-        participants: [did.toString(), this.iridium.connector.id],
+        participants,
       })
     }
 
@@ -419,7 +416,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     // Announce to the remote user
     if (didUtils.didString(did) !== this.iridium.connector?.id) {
-      const profile = await this.iridium.profile?.get()
+      const profile = this.iridium.profile.state
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
         throw new Error(FriendsError.NETWORK_ERROR)
