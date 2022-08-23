@@ -60,6 +60,16 @@ export default Vue.extend({
       return this.$route.params.id
     },
     author(): User {
+      // iridium.users.getUser can not return self, check if it's you first. On reload this would be missing,
+      //   and show as 'internal.missing_text' for you, for your own username
+      if (this.message.from === this.accounts.active) {
+        const neededAccountItems: User = {
+          name: this.accounts.details?.name || 'Unknown',
+          did: this.accounts.active,
+        }
+        return neededAccountItems
+      }
+      // TODO: be able to return self from getUser
       return iridium.users.getUser(this.message.from)
     },
     avatarSrc(): string | undefined {
