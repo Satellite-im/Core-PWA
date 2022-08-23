@@ -13,11 +13,6 @@ export default Vue.extend({
       type: Array as PropType<Array<User>>,
       default: () => [],
     },
-    fullscreen: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
     maxViewableUsers: {
       type: Number,
       default: 0,
@@ -36,7 +31,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      componentKey: this.fullscreen,
       webrtc: iridium.webRTC.state,
     }
   },
@@ -44,7 +38,7 @@ export default Vue.extend({
     ...mapState(['ui', 'accounts', 'groups', 'audio']),
   },
   watch: {
-    fullscreen(value) {
+    'ui.fullscreen'(value) {
       const media: HTMLElement = this.$refs.media as HTMLElement
       if (!value) {
         const blocks = media.querySelectorAll('.user, .more-user')

@@ -1,13 +1,12 @@
 .user {
   position: relative;
-}
+  background: linear-gradient(
+      180deg,
+      rgba(48, 52, 71, 0.7) 0%,
+      rgba(42, 54, 75, 0) 100%
+    ),
+    @foreground-alt;
 
-.video-stream-container {
-  height: 100%;
-  width: 100%;
-  background: @semitransparent-light-gradient;
-  border: 1px solid @foreground;
-  border-radius: @corner-rounding;
   .video-stream {
     width: 100%;
     height: 100%;
@@ -16,6 +15,39 @@
     box-shadow: none;
     &.flip {
       transform: scaleX(-1);
+    }
+  }
+
+  .voice-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    overflow: hidden;
+    height: 100%;
+
+    &.loading {
+      background: @foreground-gradient;
+    }
+    &.calling {
+      .circle {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+        transform: scale(1);
+        animation: pulse 2s infinite;
+      }
+    }
+    .loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      inset: 0;
+    }
+
+    .tag {
+      align-self: flex-start;
+      max-width: 100%;
     }
   }
 }
@@ -47,49 +79,6 @@
       color: @white;
       width: 16px;
       height: 16px;
-    }
-  }
-}
-
-.media-user {
-  .circle {
-    position: absolute;
-    top: calc(@half - 38.5px);
-    left: calc(@half - 32.5px);
-  }
-
-  .calling {
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-    transform: scale(1);
-    animation: pulse 2s infinite;
-  }
-  .tag {
-    &:extend(.ellipsis);
-    &:extend(.background-semitransparent-dark);
-    &:extend(.font-primary);
-    font-family: @primary-font;
-
-    display: inline-block;
-    line-height: 2em;
-    max-width: calc(100% - @indicator-size - @light-spacing);
-  }
-  width: 100%;
-  height: 100%;
-  &:extend(.round-corners);
-  display: inline-block;
-  padding: @light-spacing;
-  position: relative;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .user {
-    min-width: 160px;
-    min-height: 90px;
-    .circle,
-    .tag,
-    .talking {
-      top: calc(@half - 5px);
-      left: calc(@half - 17.5px);
     }
   }
 }

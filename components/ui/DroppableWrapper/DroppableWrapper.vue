@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MessagingTypesEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'DroppableWrapper',
@@ -22,14 +21,6 @@ export default Vue.extend({
      * @description Event handler that define target that was entered
      */
     handleDragenter(e: DragEvent) {
-      // do not show hovered effect if draggable item type include text
-      if (
-        Array.prototype.some.call(e.dataTransfer?.items, (item) =>
-          item.type.includes(MessagingTypesEnum.TEXT),
-        )
-      ) {
-        return null
-      }
       this.target = e.target
       this.dragging = true
     },

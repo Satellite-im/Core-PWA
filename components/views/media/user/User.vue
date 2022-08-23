@@ -64,6 +64,13 @@ export default Vue.extend({
       const hash = this.user.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
+    isPending(): boolean {
+      return Boolean(
+        this.user.did !== iridium.connector?.id &&
+          this.call &&
+          !this.webrtc.createdAt,
+      )
+    },
   },
   updated() {
     // When audio is streamed, initialize stream volume to current volume.

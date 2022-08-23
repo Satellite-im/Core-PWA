@@ -1,54 +1,55 @@
 <div v-if="call" class="user">
-  <div v-if="screenStream" class="video-stream-container">
-    <video
-      :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
-      class="video-stream screen-stream"
-      data-cy="screen-stream"
-      :src-object.prop="screenStream"
-      playsinline
-      autoplay
-    ></video>
-  </div>
+  <video
+    v-if="videoStream"
+    :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
+    class="video-stream"
+    data-cy="video-stream"
+    :src-object.prop="videoStream"
+    playsinline
+    autoplay
+  />
 
-  <div v-else-if="videoStream" class="video-stream-container">
-    <video
-      :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
-      class="video-stream"
-      data-cy="video-stream"
-      :src-object.prop="videoStream"
-      playsinline
-      autoplay
-    ></video>
-  </div>
-
-  <div class="media-user" v-else-if="user">
+  <div
+    v-else
+    class="voice-user"
+    :class="{calling: audioStream, loading: isPending && !isLocal}"
+  >
+    <TypographyTag :title="user.name" class="ellipsis tag" inverted>
+      {{user.name}}
+    </TypographyTag>
+    <UiLoadersScaleLoader v-if="isPending && !isLocal" class="loader" />
     <UiCircle
+      v-else
       :type="src ? 'image' : 'random'"
       :seed="user.did"
       :size="$device.isMobile ? 36 : 65"
       data-cy="media-user-circle"
-      :class="{calling: audioStream}"
       :source="src"
       color="transparent"
     />
-    <TypographyTag :text="user.name" :title="user.name" inverted />
   </div>
 
-  <div
-    v-if="!isLocal && !audio.deafened && audioStream"
-    class="audio-stream-container"
-  >
-    <audio
-      :id="`audio-stream-${audioStream.id}`"
-      :class="`${isLocal ? 'local' : 'remote'}-audio-stream`"
-      :src-object.prop="audioStream"
-      autoplay
-    />
-  </div>
+  <video
+    v-if="screenStream"
+    :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
+    class="video-stream"
+    data-cy="screen-stream"
+    :src-object.prop="screenStream"
+    playsinline
+    autoplay
+  />
 
-  <div class="indicators">
+  <div class="indicators" v-if="!isPending || isLocal">
     <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
       <mic-off-icon />
     </div>
   </div>
+
+  <audio
+    v-if="!isLocal && !audio.deafened && audioStream"
+    :id="`audio-stream-${audioStream.id}`"
+    :class="`${isLocal ? 'local' : 'remote'}-audio-stream`"
+    :src-object.prop="audioStream"
+    autoplay
+  />
 </div>

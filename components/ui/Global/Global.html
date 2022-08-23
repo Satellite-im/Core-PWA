@@ -81,7 +81,6 @@
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
-  <UiBackgroundCall v-if="showBackgroundCall" />
   <UiPip v-if="showBackgroundCall" v-slot="{ dragging }">
     <MediaPreviewCall :dragging="dragging" />
   </UiPip>

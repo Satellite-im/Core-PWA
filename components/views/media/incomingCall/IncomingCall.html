@@ -13,20 +13,21 @@
       {{caller.status}}
     </TypographyText>
   </div>
+  <UiLoadersScaleLoader />
   <div class="buttons">
-    <InteractablesButton
-      color="success"
-      @click="acceptCall(['audio'])"
-      data-cy="incoming-call-accept"
-    >
-      <phone-icon size="1x" class="button-icon" />
-    </InteractablesButton>
     <InteractablesButton
       color="danger"
       @click="denyCall"
       data-cy="incoming-call-deny"
     >
       <phone-off-icon size="1x" class="button-icon" />
+    </InteractablesButton>
+    <InteractablesButton
+      color="success"
+      @click="acceptCall(['audio'])"
+      data-cy="incoming-call-accept"
+    >
+      <phone-icon size="1x" class="button-icon" />
     </InteractablesButton>
   </div>
 </div>

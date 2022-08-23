@@ -4,7 +4,6 @@
     :class="[
       `theme-${settings.theme}`,
       {
-        'has-background-call': isBackgroundCall,
         'hide-sidebars': !showSidebar,
       },
     ]"
@@ -32,17 +31,14 @@ import { ChatbarRef } from '~/components/views/chat/chatbar/Chatbar.vue'
 import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 import { RootState } from '~/types/store/store'
+import notNull from '~/utilities/notNull'
 
 export default Vue.extend({
   name: 'Desktop',
   middleware: 'authenticated',
   setup() {
     useMeta()
-    const { isBackgroundCall } = useWebRTC()
-
-    return { isBackgroundCall }
   },
   data() {
     return {
@@ -88,7 +84,9 @@ export default Vue.extend({
           ...e.dataTransfer.items,
         ])
       } else if (childRefs.controls) {
-        const files = [...e.dataTransfer.items].map((f) => f.getAsFile())
+        const files = [...e.dataTransfer.items]
+          .map((f) => f.getAsFile())
+          .filter(notNull)
         ;(childRefs.controls as FilesControlsRef).handleFile(files)
       }
     },
@@ -106,11 +104,6 @@ export default Vue.extend({
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);
-  }
-
-  &.has-background-call {
-    position: relative;
-    padding-top: @background-call-height;
   }
 }
 </style>
