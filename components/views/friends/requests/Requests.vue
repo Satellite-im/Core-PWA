@@ -57,10 +57,7 @@
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
-
-function notNull<TValue>(value: TValue | null): value is TValue {
-  return value !== null
-}
+import notNull from '~/utilities/notNull'
 
 export default Vue.extend({
   name: 'FriendRequests',
