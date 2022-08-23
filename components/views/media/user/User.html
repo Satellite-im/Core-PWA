@@ -9,18 +9,8 @@
     autoplay
   />
 
-  <video
-    v-if="screenStream"
-    :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
-    class="video-stream"
-    data-cy="screen-stream"
-    :src-object.prop="screenStream"
-    playsinline
-    autoplay
-  />
-
   <div
-    v-else-if="!screenStream || !videoStream"
+    v-else
     class="voice-user"
     :class="{calling: audioStream, loading: isPending && !isLocal}"
   >
@@ -38,6 +28,16 @@
       color="transparent"
     />
   </div>
+
+  <video
+    v-if="screenStream"
+    :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
+    class="video-stream"
+    data-cy="screen-stream"
+    :src-object.prop="screenStream"
+    playsinline
+    autoplay
+  />
 
   <div class="indicators" v-if="!isPending || isLocal">
     <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
