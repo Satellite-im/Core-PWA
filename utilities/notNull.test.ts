@@ -1,13 +1,13 @@
-import * as notNull from '~/utilities/notNull'
+import notNull from '~/utilities/notNull'
 
-describe('notNull.default', () => {
-  test('0', () => {
-    const result: any = notNull.default(undefined)
-    expect(result).toMatchSnapshot()
+describe('notNull utility', () => {
+  test('Expect undefined to be true', () => {
+    const result: boolean = notNull(undefined)
+    expect(result).toBe(true)
   })
 
-  test('1', () => {
-    const result: any = notNull.default(null)
-    expect(result).toMatchSnapshot()
+  test('Expect null to be false', () => {
+    const result: boolean = notNull(null)
+    expect(result).toBe(false)
   })
 })
