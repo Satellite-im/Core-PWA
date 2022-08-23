@@ -34,7 +34,6 @@
     "@nuxtjs/toast": "^3.3.1",
     "@project-serum/anchor": "0.18.2",
     "@solana/wallet-adapter-wallets": "^0.16.8",
-    "@satellite-im/iridium": "git+https://git@github.com/Satellite-im/iridium.git#main",
     "@solana/web3.js": "1.43.1",
     "@tensorflow/tfjs": "^3.13.0",
     "@vueuse/head": "^0.7.5",
