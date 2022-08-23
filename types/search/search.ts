@@ -134,6 +134,7 @@ export type SearchParam = {
 }
 
 export interface UISearchResultData {
+  address: any
   at: number
   conversation: string
   from: string

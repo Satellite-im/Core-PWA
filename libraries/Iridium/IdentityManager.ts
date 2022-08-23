@@ -7,7 +7,7 @@ export default class IdentityManager {
   /**
    * @method
    * Generates a string to be signed
-   * @param address String rapresentation of the public key
+   * @param address String representation of the public key
    * @param secret secret string
    * @returns a message to be signed
    */

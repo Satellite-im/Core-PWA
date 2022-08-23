@@ -1,6 +1,6 @@
 /**
  * @method ReleaseNotes
- * @description Get the most recent release notes from github
+ * @description Get the most recent release notes from Github
  * @param none
  * @returns Promise with an object for the release info that includes a body
  * @example

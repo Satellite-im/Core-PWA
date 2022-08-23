@@ -10,7 +10,6 @@ export interface EncryptedFriend extends User {
 
 export interface FriendRequest {
   requestId: string
-  // account: FriendAccount
   pending: boolean
   userInfo: UserInfo | null
 }

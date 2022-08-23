@@ -2,7 +2,6 @@ import { Store, Commit, Dispatch } from 'vuex'
 import { AccountsState } from '~/store/accounts/types'
 import { DataState } from '~/store/dataState/types'
 import { FriendsState } from '~/store/friends/types'
-import { TextileState } from '~/store/textile/types'
 import { UIState } from '~/store/ui/types'
 import { GroupsState } from '~/store/groups/types'
 import { SettingsState } from '~/store/settings/types'
@@ -29,7 +28,6 @@ export interface RootState {
   settings: SettingsState
   sounds: SoundsState
   ui: UIState
-  textile: TextileState
   video: VideoState
 }
 

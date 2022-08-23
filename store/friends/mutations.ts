@@ -1,6 +1,6 @@
-import { Conversation } from '../textile/types'
 import { FriendsState, FriendsTabs } from './types'
 import { Friend, IncomingRequest, OutgoingRequest } from '~/types/ui/friends'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const mutations = {
   setIncomingRequests(
@@ -51,9 +51,7 @@ const mutations = {
   setActive(state: FriendsState, friend: Friend) {
     state.activeConversation = { type: 'friend', target: friend }
   },
-  // setActiveGroup(state: FriendsState, groupId: string) {
-  //   state.activeGroup = groupId
-  // },
+
   setStored(state: FriendsState, friend: Friend, isStored: boolean = true) {
     state.all = state.all.map((f) => ({
       ...f,

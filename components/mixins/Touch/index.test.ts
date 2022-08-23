@@ -81,7 +81,6 @@ describe('index.Touch.methods.sidebarSwipeHandler human created', () => {
     }
     const givenFunction: any = index.Touch.methods.sidebarSwipeHandler(local)
     givenFunction('right')
-    // expect(local.sidebar).toBeTruthy()
     expect(local.sidebar).toBeFalsy() // Will be false because no mutation is done to the local, because showSettings is not false.
   })
 })

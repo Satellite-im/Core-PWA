@@ -42,7 +42,6 @@ export default class SolanaManager {
    * @returns the ethereum like path for generating a new deterministic account
    */
   deriveSeed(seed: Buffer, path: string): Buffer {
-    // const path = this.getPath(walletIndex)
     return ed25519.derivePath(path, seed.toString('hex')).key
   }
 
@@ -327,7 +326,7 @@ export default class SolanaManager {
     await this.connection
       .confirmTransaction(signature, Config.solana.defaultCommitment)
       .catch((e) => {
-        // console.log('error confirming transaction', e) //TODO: error handler
+        // TODO: error handler
       })
   }
 }

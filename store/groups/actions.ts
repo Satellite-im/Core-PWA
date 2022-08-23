@@ -1,8 +1,5 @@
-import { map, uniq } from 'lodash'
-import { DataStateType } from '../dataState/types'
 import { GroupsState } from './types'
 import { ActionsArguments } from '~/types/store/store'
-import BlockchainClient from '~/libraries/BlockchainClient'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default {
