@@ -26,10 +26,9 @@
         />
       </div>
       <div class="profile-preferences-language" v-if="featureReadyToShow">
-        <TypographySubtitle
-          :size="6"
-          :text="$t('pages.settings.profile.info.language')"
-        />
+        <TypographyText>
+          {{ $t('pages.settings.profile.info.language')}}
+        </TypographyText>
         <multiselect
           :options="[]"
           :multiple="true"

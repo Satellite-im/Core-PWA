@@ -8,19 +8,15 @@
     />
   </div>
   <div class="details">
-    <TypographySubtitle :text="realm.nickname" :size="6" />
-    <TypographySubtitle
-      :text="`Running on ${networkName}`"
-      class="detail"
-      :size="6"
-    />
-    <div>
-      <TypographySubtitle text="Available" class="detail" :size="6" />
-      <TypographySubtitle
-        :text="(!realm.disabled).toString()"
-        :class="`detail ${realm.disabled ? 'color-danger' : 'green'}`"
-        :size="6"
-      />
+    <TypographyText> {{ realm.nickname }} </TypographyText>
+    <TypographyText class="detail" as="h5">
+      {{ `Running on ${networkName}` }}
+    </TypographyText>
+    <div class="available">
+      <TypographyText> Available </TypographyText>
+      <TypographyText :color="realm.disabled ? 'error' : 'success'">
+        {{ (!realm.disabled).toString() }}
+      </TypographyText>
     </div>
   </div>
 </div>

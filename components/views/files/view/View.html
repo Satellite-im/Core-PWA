@@ -52,8 +52,8 @@
       <download-icon size="1x" class="file-icon" />
     </button>
     <TypographyText as="h1"> {{ file.name }} </TypographyText>
-    <TypographySubtitle :size="6" :text="file.type" />
-    <TypographySubtitle :text="$filesize(file.size)" :size="6" />
-    <TypographySubtitle :text="$dayjs(file.modified).fromNow()" :size="6" />
+    <TypographyText>{{ file.type }}</TypographyText>
+    <TypographyText>{{ $filesize(file.size) }}</TypographyText>
+    <TypographyText>{{ $dayjs(file.modified).fromNow() }}</TypographyText>
   </div>
 </div>
