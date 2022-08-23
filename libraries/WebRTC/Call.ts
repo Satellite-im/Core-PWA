@@ -139,7 +139,7 @@ export class Call extends Emitter<CallEventListeners> {
    * to call this method
    * @param stream MediaStream object containing the audio/video stream
    */
-  async answer(did: string, data?: Peer.SignalData) {
+  async answer(did: string, data: Peer.SignalData) {
     this.isCallee[did] = true
 
     await this.initiateCall(did, false, data)
@@ -754,7 +754,6 @@ export class Call extends Emitter<CallEventListeners> {
           }),
         ),
       )
-
       this.emit('LOCAL_TRACK_REMOVED', {
         track,
         kind,
@@ -1010,17 +1009,6 @@ export class Call extends Emitter<CallEventListeners> {
     track: MediaStreamTrack,
     stream: MediaStream,
   ) {
-    const trackMuteListener = () => {
-      this.emit('REMOTE_TRACK_REMOVED', {
-        did: peer.id,
-        track,
-        stream,
-        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
-      })
-      track.removeEventListener('mute', trackMuteListener)
-    }
-
-    track.addEventListener('mute', trackMuteListener)
     if (!this.tracks[peer.id]) {
       this.tracks[peer.id] = new Set()
     }
@@ -1181,20 +1169,18 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on mute event
    */
   protected _onBusMute({ payload }: { payload: any }) {
-    const { did, callId, trackId, kind } = payload.body
+    const { did, trackId, kind } = payload.body
 
-    this.emit('REMOTE_TRACK_MUTED', {
-      did,
-      kind,
-      trackId,
-    })
     Object.values(this.streams[did] || {}).forEach((stream) => {
       const track = stream.getTrackById(trackId)
       if (!track) return
       track.enabled = false
     })
-
-    iridium.webRTC.onPeerMute({ did, kind })
+    this.emit('REMOTE_TRACK_MUTED', {
+      did,
+      kind,
+      trackId,
+    })
   }
 
   /**
@@ -1202,19 +1188,18 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on unmute event
    */
   protected _onBusUnmute({ payload }: { payload: any }) {
-    const { did, callId, trackId, kind } = payload.body
+    const { did, trackId, kind } = payload.body
 
-    this.emit('REMOTE_TRACK_UNMUTED', {
-      did,
-      kind,
-      trackId,
-    })
     Object.values(this.streams[did] || {}).forEach((stream) => {
       const track = stream.getTrackById(trackId)
       if (!track) return
       track.enabled = true
     })
 
-    iridium.webRTC.onPeerUnmute({ did, kind })
+    this.emit('REMOTE_TRACK_UNMUTED', {
+      did,
+      kind,
+      trackId,
+    })
   }
 }

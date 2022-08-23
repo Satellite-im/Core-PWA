@@ -169,9 +169,6 @@ export default Vue.extend({
     toggleSearchResult() {
       this.searchQuery = ''
     },
-    // openProfile() {
-    //   this.$store.dispatch('ui/showProfile', this.recipient)
-    // },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC || !this.details) {
         return

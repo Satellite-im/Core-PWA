@@ -429,32 +429,6 @@ export default class WebRTCManager extends Emitter {
     })
   }
 
-  public onPeerMute = async ({
-    did,
-    kind,
-  }: {
-    did: string
-    kind: 'audio' | 'video' | 'screen'
-  }) => {
-    Vue.set(this.state.streamMuted, did, {
-      ...this.state.streamMuted[did],
-      [kind]: true,
-    })
-  }
-
-  public onPeerUnmute = async ({
-    did,
-    kind,
-  }: {
-    did: string
-    kind: 'audio' | 'video' | 'screen'
-  }) => {
-    Vue.set(this.state.streamMuted, did, {
-      ...this.state.streamMuted[did],
-      [kind]: false,
-    })
-  }
-
   public async call(recipient: Friend, kinds: TrackKind[]) {
     if (!this.iridium.connector?.id) {
       logger.error('webrtc', 'call - connector.id not found')
@@ -525,6 +499,11 @@ export default class WebRTCManager extends Emitter {
       screen: !kinds.includes('screen'),
     })
 
+    const $nuxt = useNuxtApp()
+    $nuxt.$store.commit('video/setDisabled', !kinds.includes('video'), {
+      root: true,
+    })
+
     await call.createLocalTracks(kinds)
 
     this.state.incomingCall = null
@@ -578,7 +557,7 @@ export default class WebRTCManager extends Emitter {
     }) => {
       call.peerDialingDisabled[did] = true
       if (this.state.activeCall?.callId === call.callId) {
-        call.answer(did)
+        call.answer(did, data)
       }
       if (this.state.activeCall?.callId) {
         return
@@ -587,7 +566,7 @@ export default class WebRTCManager extends Emitter {
         this.state.incomingCall === null &&
         (!call.active || this.state.activeCall?.callId !== call.callId)
       ) {
-        const type = call.callId?.indexOf('|') > -1 ? 'group' : 'friend'
+        const type = 'friend'
         logger.log(
           'webrtc/incomingCall',
           `incoming call #${call.callId} (${type})`,
@@ -615,16 +594,16 @@ export default class WebRTCManager extends Emitter {
     call.on('OUTGOING_CALL', onCallOutgoing)
 
     const onCallConnected = async ({ did }: { did: string }) => {
+      const $nuxt = useNuxtApp()
+
       this.state.incomingCall = null
       this.state.activeCall = { callId, did }
       this.state.createdAt = Date.now()
 
-      if (Vue.prototype.$nuxt.$store.state.audio.muted) {
+      if ($nuxt.$store.state.audio.muted) {
         call.mute({ did: this.iridium.connector?.id, kind: 'audio' })
       }
-      Vue.prototype.$nuxt.$store.commit('video/setDisabled', true, {
-        root: true,
-      })
+
       $Sounds.stopSound(Sounds.CALL)
       $Sounds.playSound(Sounds.CONNECTED)
     }
@@ -653,12 +632,13 @@ export default class WebRTCManager extends Emitter {
         logger.error('webrtc', 'onCallTrack - connector.id not found')
         return
       }
+      const $nuxt = useNuxtApp()
 
       let muted: Boolean = true
       if (kind === 'audio') {
-        muted = Vue.prototype.$nuxt.$store.state.audio.muted
+        muted = $nuxt.$store.state.audio.muted
       } else if (kind === 'video') {
-        muted = Vue.prototype.$nuxt.$store.state.video.disabled
+        muted = $nuxt.$store.state.video.disabled
       }
 
       Vue.set(this.state.streamMuted, this.iridium.connector.id, {
@@ -702,7 +682,7 @@ export default class WebRTCManager extends Emitter {
     }) => {
       logger.log(
         'webrtc',
-        `remote track received: ${track.kind}#${track.id} from ${did}`,
+        `remote track received: ${track.kind}#${track.id} from ${did} ${track.enabled}`,
       )
 
       if (!kind) return
@@ -711,22 +691,22 @@ export default class WebRTCManager extends Emitter {
         ...this.state.streamMuted[did],
         [kind]: false,
       })
-
-      if (Vue.prototype.$nuxt.$store.state.audio.muted) {
-        call.mute({ did: this.iridium.connector?.id, kind: 'audio' })
-      }
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
     const onPeerTrackUnmuted = async ({
       did,
+      trackId,
       kind,
     }: {
       did: string
       trackId: string
       kind?: string
     }) => {
-      logger.log('webrtc', `remote track unmuted: ${did} from ${did}`)
+      logger.log(
+        'webrtc',
+        `remote track unmuted: ${trackId} from ${did} ${kind}`,
+      )
       if (!kind) return
 
       Vue.set(this.state.streamMuted, did, {
@@ -736,30 +716,9 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
 
-    const onRemoteTrackRemoved = async ({
-      track,
-      did,
-      kind,
-    }: {
-      track: MediaStreamTrack
-      did: string
-      kind?: string
-    }) => {
-      logger.log(
-        'webrtc',
-        `remote track removed: ${track.kind}#${track.id} from ${did}`,
-      )
-      if (!kind) return
-
-      Vue.set(this.state.streamMuted, did, {
-        ...this.state.streamMuted[did],
-        [kind]: true,
-      })
-    }
-    call.on('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
-
     const onRemoteTrackMuted = async ({
       did,
+      trackId,
       kind,
     }: {
       did: string
@@ -767,6 +726,8 @@ export default class WebRTCManager extends Emitter {
       kind?: string
     }) => {
       if (!kind) return
+
+      logger.log('webrtc', `remote track muted: #${trackId} from ${did}`)
 
       Vue.set(this.state.streamMuted, did, {
         ...this.state.streamMuted[did],
@@ -803,7 +764,7 @@ export default class WebRTCManager extends Emitter {
 
       Vue.set(this.state.streamMuted, did, {
         ...this.state.streamMuted[did],
-        [kind]: false,
+        [kind]: !!this.state.streamMuted[did]?.[kind],
       })
     }
     call.on('STREAM', onStream)
@@ -826,12 +787,13 @@ export default class WebRTCManager extends Emitter {
       call.off('LOCAL_TRACK_CREATED', onCallTrack)
       call.off('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
       call.off('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
-      call.off('REMOTE_TRACK_REMOVED', onRemoteTrackRemoved)
       call.off('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
+      call.off('LOCAL_TRACK_UNMUTED', onLocalTrackUnmuted)
       call.off('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
       call.off('STREAM', onStream)
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
+      call.off('ERROR', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
       $Sounds.stopSound(Sounds.CALL)
       $Sounds.playSound(Sounds.HANGUP)
@@ -851,10 +813,15 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    Vue.set(this.state.streamMuted, this.iridium.connector?.id, {
-      audio: true,
-      video: true,
-      screen: true,
+    Vue.set(this.state.streamMuted, this.iridium.connector.id, {
+      audio: !kinds.includes('audio'),
+      video: !kinds.includes('video'),
+      screen: !kinds.includes('screen'),
+    })
+
+    const $nuxt = useNuxtApp()
+    $nuxt.$store.commit('video/setDisabled', !kinds.includes('video'), {
+      root: true,
     })
 
     const { callId, did, data } = this.state.incomingCall
