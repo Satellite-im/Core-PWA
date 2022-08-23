@@ -14,8 +14,6 @@ import { Config } from '~/config'
 
 const $Sounds = new SoundManager()
 
-const announceFrequency = 5000
-
 const initialState: WebRTCState = {
   incomingCall: null,
   activeCall: null,
@@ -28,6 +26,7 @@ export default class WebRTCManager extends Emitter {
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
   public timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
+  private userStatusMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
 
   private _subscriptions: {
     [key: string]: { topic: string; connected: boolean; handler?: Function }
@@ -295,44 +294,31 @@ export default class WebRTCManager extends Emitter {
 
   // LATER WILL BE REMOVED
   private subscribeToAnnounce = async () => {
-    const profile = this.iridium.profile.state
+    window.addEventListener('beforeunload', () => {
+      this.sendAnnounce('offline')
+    })
 
     setInterval(() => {
-      const id = this.iridium.chat?.directConversationIdFromDid(profile.did)
+      if (!this.iridium.ready) return
 
-      if (id && this.iridium.chat?.hasConversation(id)) {
-        const conversation = this.iridium.chat?.getConversation(id)
-        conversation.participants
-          .filter((p) => p !== this.iridium.connector?.id)
-          .forEach((p) => {
-            this.sendWebrtc(p, {
-              module: 'webrtc',
-              type: 'peer:announce',
-              did: this.iridium.connector.id,
-              name: profile.name,
-              address: profile.address,
-              profilePicture: profile.profilePicture,
-              at: Date.now().valueOf(),
-            })
-          })
-      }
+      this.sendAnnounce('online')
+    }, Config.webrtc.announceFrequency)
+  }
 
-      const friends = Object.values(this.iridium.users.state)
+  private sendAnnounce = (status: 'online' | 'offline') => {
+    const users = Object.values(this.iridium.users.state)
 
-      friends
-        .filter((friend) => friend.did && friend.status !== 'online')
-        .forEach((friend) => {
-          this.sendWebrtc(friend.did, {
-            module: 'webrtc',
-            type: 'peer:announce',
-            did: this.iridium.connector.id,
-            name: profile.name,
-            address: profile.address,
-            profilePicture: profile.profilePicture,
-            at: Date.now().valueOf(),
-          })
+    users
+      .filter((user) => user.did)
+      .forEach((user) => {
+        this.sendWebrtc(user.did, {
+          module: 'webrtc',
+          type: 'peer:announce',
+          status,
+          did: this.iridium.connector?.id,
+          at: Date.now().valueOf(),
         })
-    }, announceFrequency)
+      })
   }
 
   private onMessage = ({ payload }: { payload: any }) => {
@@ -413,13 +399,17 @@ export default class WebRTCManager extends Emitter {
     const did = payload.did as string
     const requestFriend = this.iridium.users.getUser(did)
 
-    if (!requestFriend || requestFriend.status === 'online') return
+    if (!requestFriend) return
 
-    // TO DO : move to usermanager
-    this.iridium.users.setUser(requestFriend.did, {
-      ...requestFriend,
-      status: 'online',
-    })
+    this.iridium.users.setUserStatus(requestFriend.did, payload.status)
+
+    if (payload.status === 'offline') return
+
+    clearTimeout(this.userStatusMap[did])
+
+    this.userStatusMap[did] = setTimeout(() => {
+      this.iridium.users.setUserStatus(requestFriend.did, 'offline')
+    }, Config.webrtc.announceFrequency * 3)
   }
 
   public async call(recipient: Friend, kinds: TrackKind[]) {

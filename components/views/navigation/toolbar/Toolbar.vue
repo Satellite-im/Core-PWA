@@ -43,6 +43,7 @@ export default Vue.extend({
       showAlerts: false,
       searchQuery: '' as string,
       users: iridium.users.state,
+      userStatus: iridium.users.userStatus,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
@@ -88,7 +89,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return this.members.map((m) => m.name).join(', ')
       }
-      return (this.details as User).status || 'offline'
+      return this.userStatus[(this.details as User).did] || 'offline'
     },
     enableRTC(): boolean {
       // todo- hook up to usermanager
@@ -96,14 +97,17 @@ export default Vue.extend({
         const memberIds = this.members.map((m) => m.did)
         return Object.values(this.users).some(
           (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
+            memberIds.includes(friend.did) &&
+            this.userStatus[friend.did] === 'online',
         )
       }
       // Check current recipient is on the user's friends list
       const friend = Object.values(this.users).find(
         (f) => f.did === (this.details as User)?.did,
       )
-      return friend?.status === 'online'
+      if (!friend) return false
+
+      return this.userStatus[friend.did] === 'online'
     },
     callTooltipText(): string {
       if (this.isGroup) {

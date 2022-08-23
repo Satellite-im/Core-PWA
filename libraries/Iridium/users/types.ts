@@ -3,10 +3,11 @@ export type User = {
   did: string
   name: string
   peerId?: string
-  status?: 'online' | 'offline' | 'busy' | 'away'
   seen?: number
   photoHash?: string
 }
+
+export type UserStatus = 'online' | 'offline' | 'busy' | 'away'
 
 export const UsersError = {
   NETWORK_ERROR: 'errors.users.network',
