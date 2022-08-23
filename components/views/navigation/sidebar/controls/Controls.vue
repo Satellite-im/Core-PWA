@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      isLoading: false,
+      buttonsLoading: [],
       webrtc: iridium.webRTC.state,
     }
   },
@@ -59,22 +59,21 @@ export default Vue.extend({
      * @example
      */
     async toggleMute(kind: keyof PeerMutedState) {
-      this.isLoading = true
+      this.buttonsLoading.push(kind)
       try {
         if (kind === WebRTCEnum.AUDIO) {
           await this.$store.dispatch('audio/toggleMute')
-        } else if (kind === WebRTCEnum.VIDEO && this.webrtc.activeCall) {
+        }
+        if (kind === WebRTCEnum.VIDEO && this.webrtc.activeCall) {
           await this.$store.dispatch('video/toggleMute')
+        }
+        if (kind === WebRTCEnum.HEADPHONES) {
+          await this.$store.dispatch('audio/toggleDeafen', {}, { root: true })
         }
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
-      this.isLoading = false
-    },
-    async toggleDeafen() {
-      this.isLoading = true
-      this.$store.dispatch('audio/toggleDeafen', {}, { root: true })
-      this.isLoading = false
+      this.buttonsLoading.splice(this.buttonsLoading.indexOf(kind), 1)
     },
   },
 })

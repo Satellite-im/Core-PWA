@@ -30,7 +30,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      isLoading: false,
+      buttonsLoading: [],
       webrtc: iridium.webRTC.state,
     }
   },
@@ -61,8 +61,7 @@ export default Vue.extend({
     async toggleMute(kind: WebRTCEnum) {
       if (!iridium.connector?.id) return
 
-      // TODO: isLoading needs to be kind specific, currently all 3 kinds show loading icon if any of them is loading.
-      this.isLoading = true
+      this.buttonsLoading.push(kind)
       try {
         if (kind === WebRTCEnum.AUDIO) {
           await this.$store.dispatch('audio/toggleMute')
@@ -77,7 +76,7 @@ export default Vue.extend({
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
-      this.isLoading = false
+      this.buttonsLoading.splice(this.buttonsLoading.indexOf(kind), 1)
     },
     /**
      * @method hangUp
