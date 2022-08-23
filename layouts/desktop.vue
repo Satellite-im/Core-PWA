@@ -4,7 +4,6 @@
     :class="[
       `theme-${settings.theme}`,
       {
-        'has-background-call': isBackgroundCall,
         'hide-sidebars': !showSidebar,
       },
     ]"
@@ -106,11 +105,6 @@ export default Vue.extend({
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);
-  }
-
-  &.has-background-call {
-    position: relative;
-    padding-top: @background-call-height;
   }
 }
 </style>
