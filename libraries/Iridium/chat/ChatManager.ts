@@ -622,7 +622,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async addFile(
-    upload: ChatFileUpload,
+    {
+      upload,
+      conversationId,
+    }: { upload: ChatFileUpload; conversationId: string },
     options?: AddOptions,
   ): Promise<MessageAttachment> {
     if (upload.file.size === 0) {
@@ -631,7 +634,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const thumbnailBlob = await createThumbnail(upload.file, 400)
 
     return {
-      id: (await this.upload(upload.file, options)).path,
+      id: await this.upload(upload.file, conversationId),
       name: upload.file.name,
       size: upload.file.size,
       nsfw: await isNSFW(upload.file),
@@ -639,7 +642,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
       thumbnail: thumbnailBlob
-        ? (await this.upload(thumbnailBlob, options)).path
+        ? await this.upload(thumbnailBlob, conversationId)
         : '',
     }
   }
