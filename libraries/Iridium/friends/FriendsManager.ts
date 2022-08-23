@@ -394,18 +394,15 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     const user = this.iridium.users.getUser(did.toString())
-    const id = await encoding.hash(
-      [did.toString(), this.iridium.connector?.id].sort(),
-    )
     if (!user) {
       throw new Error(`can't find user: ${did}`)
     }
-    if (id && !this.iridium.chat.hasConversation(id)) {
+    const participants = [did.toString(), this.iridium.connector.id]
+    if (!(await this.iridium.chat.hasDirectConversation(did.toString()))) {
       await this.iridium.chat.createConversation({
-        id,
         name: user.name,
         type: 'direct',
-        participants: [did.toString(), this.iridium.connector.id],
+        participants,
       })
     }
 
