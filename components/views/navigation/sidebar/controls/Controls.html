@@ -1,4 +1,4 @@
-<div class="call-controls">
+<div class="call-controls" :class="{live: webrtc.activeCall}">
   <InteractablesButton
     :color="audioMuted ? 'danger' : 'dark'"
     v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')"

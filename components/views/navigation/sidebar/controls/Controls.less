@@ -2,6 +2,13 @@
   display: flex;
   gap: @light-spacing;
   .button {
-    width: 33%;
+    width: @full;
+  }
+
+  .live {
+    .button {
+      flex-grow: 0;
+      width: 33%;
+    }
   }
 }
