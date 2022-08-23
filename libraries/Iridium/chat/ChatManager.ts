@@ -647,22 +647,25 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
   }
 
-  async upload(file: Blob, conversationId: string) {
+  async upload(file: File, conversationId: string) {
     const conversation = this.getConversation(conversationId)
     if (!this.iridium.connector?.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
     }
 
-    const data = await file.arrayBuffer()
-    return await this.iridium.connector?.store(data, {
-      syncPin: true,
-      encrypt: {
-        recipients: [
-          ...conversation.participants,
-          this.iridium.connector?.p2p.primaryNodeID,
-        ],
+    const fileBuffer = await file.arrayBuffer()
+    return await this.iridium.connector?.store(
+      { fileBuffer, name: file.name, size: file.size, type: file.type },
+      {
+        syncPin: true,
+        encrypt: {
+          recipients: [
+            ...conversation.participants,
+            this.iridium.connector?.p2p.primaryNodeID,
+          ],
+        },
       },
-    })
+    )
   }
 
   /**
