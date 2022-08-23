@@ -40,7 +40,6 @@ import {
   Notification,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
-
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
@@ -645,11 +644,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
   }
 
-  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
-    return await (this.iridium.connector?.ipfs as IPFS).add(
-      blobToStream(file),
-      options,
-    )
+  async upload(file: Blob, conversationId: string) {
+    const conversation = this.getConversation(conversationId)
+    if (!this.iridium.connector?.p2p.primaryNodeID) {
+      throw new Error('not connected to primary node')
+    }
+
+    const data = await file.arrayBuffer()
+    return await this.iridium.connector?.store(data, {
+      syncPin: true,
+      encrypt: {
+        recipients: [
+          ...conversation.participants,
+          this.iridium.connector?.p2p.primaryNodeID,
+        ],
+      },
+    })
   }
 
   /**
