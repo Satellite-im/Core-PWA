@@ -63,7 +63,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
         const recentItems = iridium.files.flat
           .filter((e) => !('children' in e))
           .sort((a, b) => b.modified - a.modified)
-          .slice(1, 14)
+          .slice(0, 14)
 
         if (recentItems) {
           items = recentItems
