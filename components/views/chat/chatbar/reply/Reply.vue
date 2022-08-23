@@ -3,10 +3,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { XIcon } from 'satellite-lucide-icons'
-import {
-  Conversation,
-  ConversationMessage,
-} from '~/libraries/Iridium/chat/types'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -15,14 +12,15 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['chat']),
-    conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
-    },
-    replyChatbarName(): string | undefined {
-      if (!this.conversationId) {
+    replyUserName(): string | undefined {
+      const conversationId = this.$route.params.id
+      if (!conversationId) {
         return undefined
       }
-      return iridium.chat.state.conversations[this.conversationId].name
+      return iridium.chat.state.conversations[conversationId].name
+    },
+    replyChatbarMessage(): ConversationMessage {
+      return this.chat.replyChatbarMessages[this.$route.params.id]
     },
   },
   methods: {
