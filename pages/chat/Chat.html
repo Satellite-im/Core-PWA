@@ -2,12 +2,10 @@
   <Toolbar />
   <Media
     v-if="isActiveCall"
-    :fullscreen="ui.fullscreen"
-    :users="$mock.callUsers"
     :max-viewable-users="10"
     :fullscreen-max-viewable-users="20"
   />
   <Conversation />
   <Chatbar ref="chatbar" />
-  <WalletMini v-if="ui.modals.walletMini" />
+  <!-- <WalletMini v-if="ui.modals.walletMini" /> -->
 </div>

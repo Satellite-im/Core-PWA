@@ -1,27 +1,26 @@
-<div id="mediastream" data-cy="mediastream" ref="mediastream">
+<div class="mediastream" data-cy="mediastream" ref="mediastream">
   <MediaHeading />
-  <div id="media" ref="media">
+  <div class="media" ref="media">
     <MediaUser
       id="local_video"
+      :user="localParticipant"
+      isLocal
       data-cy="local-video"
       @dblclick="handleDoubleClick('local_video')"
-      :user="localParticipant"
-      :isLocal="true"
     />
 
     <MediaUser
       v-for="participant in remoteParticipants"
       :id="`remote_video_${ participant.did }`"
+      :user="participant"
       data-cy="remote-video"
       @dblclick="handleDoubleClick('remote_video')"
-      :user="participant"
-      :isLocal="false"
     />
 
     <div
-      v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
+      v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
       class="more-user"
-      v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
+      :class="{full: ui.fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
     >
       ...
     </div>

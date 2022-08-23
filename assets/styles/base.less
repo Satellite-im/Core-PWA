@@ -1,5 +1,4 @@
 :root {
-  --app-height: 100vh;
   --flair-color: @satellite-color;
   --flair-color-secondary: @satellite-color-secondary;
   --flair-color-rgb: @satellite-color-rgb;
@@ -291,29 +290,6 @@ button {
   }
 }
 
-//Media
-#media-heading {
-  .tag {
-    &:extend(.background-flair);
-    &:extend(.glow-flair);
-    &:extend(.font-primary);
-  }
-}
-
-.user {
-  .tag {
-    &:extend(.background-flair);
-  }
-}
-
-.media-user {
-  &:extend(.background-flair);
-}
-
-.more-user {
-  &:extend(.background-flair);
-}
-
 //Video
 .plyr__control--overlaid {
   &:extend(.glow-flair);
@@ -322,32 +298,6 @@ button {
 
 .plyr--full-ui input[type='range'] {
   &:extend(.font-flair);
-}
-
-//Tag
-.tag {
-  font-family: @secondary-font;
-  &:extend(.background-flair-gradient);
-  &:extend(.glow-flair);
-  &:extend(.font-secondary);
-  .tag-number {
-    &:extend(.background-flair);
-  }
-
-  &:not(body).is-dark {
-    .tag-number {
-      &:extend(.background-flair);
-    }
-    background: @background;
-  }
-  &:not(body).is-primary {
-    &:extend(.background-flair);
-  }
-}
-
-.tag-inverted {
-  &:extend(.font-secondary);
-  background: @foreground;
 }
 
 .is-chatbar-reply {
