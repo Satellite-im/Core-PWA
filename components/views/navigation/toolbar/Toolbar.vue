@@ -11,9 +11,8 @@ import {
   UserPlusIcon,
 } from 'satellite-lucide-icons'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import Group from '~/libraries/Iridium/groups/Group'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
@@ -21,7 +20,6 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
-import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
@@ -48,7 +46,7 @@ export default Vue.extend({
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
-      isActiveCall: undefined as any,
+      webRTC: useWebRTC(),
     }
   },
   computed: {
@@ -116,9 +114,6 @@ export default Vue.extend({
         : (this.$t('controls.not_connected') as string)
     },
   },
-  mounted() {
-    this.isActiveCall = useWebRTC()
-  },
   methods: {
     groupInvite() {
       this.$store.commit('ui/toggleModal', {
@@ -168,7 +163,7 @@ export default Vue.extend({
         return
       }
       try {
-        await iridium.webRTC.call(this.details, kinds)
+        await iridium.webRTC.call(this.details as User, kinds)
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
@@ -177,7 +172,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.isActiveCall) {
+      if (!this.enableRTC || this.webRTC.isActiveCall) {
         return
       }
       await this.call(['audio'])
