@@ -13,7 +13,7 @@ import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
-import { User } from '~/libraries/Iridium/types'
+import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -60,19 +60,13 @@ export default Vue.extend({
       return this.$route.params.id
     },
     author(): User {
-      // TODO: access User from iridium via did
-      return {
-        id: this.message.from,
-        name: 'test',
-      } as User
-      // if (this.message.did === iridium.profile.state.
-      // if (this.conversation.type === 'direct') {
-      //   const friendDid = this.conversation.participants.find(
-      //     (f) => f !== iridium.connector?.id,
-      //   )
-      //   return this.friends.find((f) => f.did === friendDid)
-      // }
-      // return this.groups[this.conversation.id]
+      return iridium.users.getUser(this.message.from)
+    },
+    avatarSrc(): string | undefined {
+      return (
+        this.author.photoHash &&
+        this.$Config.ipfs.gateway + this.author.photoHash
+      )
     },
     isReplyingTo(): boolean {
       return (

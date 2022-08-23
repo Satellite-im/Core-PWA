@@ -5,7 +5,7 @@
         :type="getSource(member) ? 'image' : 'random'"
         :source="getSource(member)"
         :size="groupClass == 'multi' ? (i === 2 ? 10 : i == 1 ? 20 : 30) : groupIconSize"
-        :seed="member.id"
+        :seed="member.did"
       />
     </div>
   </div>
