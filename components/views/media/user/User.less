@@ -57,12 +57,30 @@
     top: calc(@half - 38.5px);
     left: calc(@half - 32.5px);
   }
-
-  .calling {
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
-    transform: scale(1);
-    animation: pulse 2s infinite;
+  &.loading {
+    background: @foreground-gradient;
+    .circle {
+      filter: @xlight-blur;
+      -webkit-filter: @xlight-blur;
+    }
   }
+
+  .loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.calling {
+    .circle {
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+      transform: scale(1);
+      animation: pulse 2s infinite;
+    }
+  }
+
   .tag {
     &:extend(.ellipsis);
     &:extend(.background-semitransparent-dark);

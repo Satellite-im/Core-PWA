@@ -21,17 +21,23 @@
     ></video>
   </div>
 
-  <div class="media-user" v-else-if="user">
+  <div
+    class="media-user"
+    :class="{calling: audioStream, loading: isPending && !isLocal}"
+    v-else-if="user"
+  >
     <UiCircle
       :type="src ? 'image' : 'random'"
       :seed="user.did"
       :size="$device.isMobile ? 36 : 65"
       data-cy="media-user-circle"
-      :class="{calling: audioStream}"
       :source="src"
       color="transparent"
     />
     <TypographyTag :text="user.name" :title="user.name" inverted />
+    <div class="loader" v-if="isPending && !isLocal">
+      <UiLoadersScaleLoader />
+    </div>
   </div>
 
   <div
@@ -46,7 +52,7 @@
     />
   </div>
 
-  <div class="indicators">
+  <div class="indicators" v-if="!isPending || isLocal">
     <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
       <mic-off-icon />
     </div>
