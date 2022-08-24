@@ -146,7 +146,7 @@ export default Vue.extend({
       this.isLoading = false
     },
     async leaveGroup() {
-      iridium.groups.leaveGroup(this.conversation.id)
+      iridium.chat.leaveGroup(this.conversation.id)
     },
     /**
      * @method openConversation
