@@ -19,7 +19,7 @@ export default Vue.extend({
     groupMembers(): string[] {
       return this.conversation?.participants ?? []
     },
-    conversationId(): Conversation['id'] {
+    conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
     },
     conversation(): Conversation | undefined {
@@ -31,7 +31,7 @@ export default Vue.extend({
   },
   methods: {
     async confirm() {
-      if (!this.recipients.length) {
+      if (!this.recipients.length || !this.conversationId) {
         return
       }
       this.error = ''
