@@ -15,6 +15,28 @@ export default Vue.extend({
       default: false,
     },
   },
+  created() {
+    this.listenToKeyboard()
+  },
+  beforeDestroy() {
+    this.unlistenToKeyboard()
+  },
+  methods: {
+    close() {
+      this.$emit('close')
+    },
+    handleKeyboard(evt) {
+      if (evt.key === 'Escape') {
+        this.close()
+      }
+    },
+    listenToKeyboard() {
+      document.addEventListener('keyup', this.handleKeyboard)
+    },
+    unlistenToKeyboard() {
+      document.removeEventListener('keyup', this.handleKeyboard)
+    },
+  },
 })
 </script>
 
