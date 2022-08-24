@@ -181,7 +181,7 @@ export const Config = {
         height: { min: 576, ideal: 720, max: 1080 },
       },
     },
-    announceFrequency: 5000,
+    announceFrequency: 30000,
   },
   cropperOptions: {
     type: 'blob',

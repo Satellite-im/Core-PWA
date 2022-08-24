@@ -9,6 +9,8 @@ export type User = {
 
 export type UserStatus = 'online' | 'offline' | 'busy' | 'away'
 
+export type UserType = User & { status: UserStatus }
+
 export const UsersError = {
   NETWORK_ERROR: 'errors.users.network',
   USER_NOT_FOUND: 'errors.users.not_found',
