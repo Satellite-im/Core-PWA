@@ -1,7 +1,7 @@
 import { MetaState } from './types'
 import * as meta from '~/store/meta/mutations'
 
-describe('', () => {
+describe('Test meta mutations', () => {
   let inst: any
   const state: MetaState = {
     title: 'empty title',
