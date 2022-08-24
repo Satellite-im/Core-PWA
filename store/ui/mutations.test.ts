@@ -432,12 +432,6 @@ describe('mutations', () => {
     expect(localizedState.chatbarContent).toBe('string')
   })
 
-  test('fullscreen', () => {
-    const localizedState = { ...initialState }
-    mutations.default.fullscreen(localizedState, true)
-    expect(localizedState.fullscreen).toBeTruthy()
-  })
-
   test('setChatImageOverlay', () => {
     const passedInImageOverlay = undefined
     const localizedState = { ...initialState }

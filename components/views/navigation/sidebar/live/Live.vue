@@ -85,11 +85,7 @@ export default Vue.extend({
   },
   methods: {
     hangUp() {
-      this.$store.commit('ui/fullscreen', false)
       this.webrtc.hangUp()
-    },
-    activeChat() {
-      this.$store.commit('ui/fullscreen', false)
     },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC || !this.details) {

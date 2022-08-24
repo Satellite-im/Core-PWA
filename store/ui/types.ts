@@ -88,7 +88,6 @@ export interface UIState {
   chatbarContent: string
   chatbarFocus: boolean
   showPinned: boolean
-  fullscreen: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number

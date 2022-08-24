@@ -660,7 +660,6 @@ const webRTCActions = {
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
       commit('conversation/setCalling', false, { root: true })
-      commit('ui/fullscreen', false, { root: true })
       call.off('INCOMING_CALL', onCallIncoming)
       call.off('OUTGOING_CALL', onCallOutgoing)
       call.off('CONNECTED', onCallConnected)

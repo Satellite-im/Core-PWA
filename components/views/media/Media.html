@@ -1,5 +1,10 @@
-<div class="mediastream" data-cy="mediastream" :style="`height:${height}`">
-  <MediaHeading />
+<div
+  class="mediastream"
+  ref="mediastream"
+  data-cy="mediastream"
+  :style="`height:${height}`"
+>
+  <MediaHeading :isFullscreen="isFullscreen" @toggle="toggleFullscreen" />
   <div class="media">
     <MediaUser
       id="local"
@@ -27,5 +32,10 @@
   />
   <MediaActionsSettings />
   <MediaActions />
-  <InteractablesDragBar side="bottom" showHandle @resize="(val)=> height=val" />
+  <InteractablesDragBar
+    v-if="!isFullscreen"
+    side="bottom"
+    showHandle
+    @resize="(val)=> height=val"
+  />
 </div>

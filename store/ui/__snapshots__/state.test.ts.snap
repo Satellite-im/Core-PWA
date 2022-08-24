@@ -30,7 +30,6 @@ Object {
     "route": "emoji",
     "show": false,
   },
-  "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
     "view": "home",
