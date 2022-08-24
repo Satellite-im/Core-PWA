@@ -1,4 +1,4 @@
-@dragbar-thickness: 6px;
+@dragbar-thickness: 12px;
 
 .drag-bar {
   display: flex;
@@ -36,10 +36,7 @@
 
   &:active::after {
     position: fixed;
-    top: -100vh;
-    left: -100vw;
-    right: -100vw;
-    bottom: -100vh;
+    inset: -100vh -100vw;
     content: '';
   }
 
