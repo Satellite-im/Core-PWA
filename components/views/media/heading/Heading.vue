@@ -5,7 +5,6 @@ import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { useCallElapsedTime } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
@@ -45,13 +44,6 @@ export default Vue.extend({
      */
     toggleFullscreen() {
       this.$store.commit('ui/fullscreen', !this.ui.fullscreen)
-      const elements = document.querySelectorAll('.full-video')
-      if (elements && elements.length > 0 && !this.ui.fullscreen) {
-        for (let i = 0; i < elements.length; i++) {
-          const element = elements[i]
-          element?.classList.remove('full-video')
-        }
-      }
     },
   },
 })

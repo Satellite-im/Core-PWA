@@ -58,6 +58,7 @@ const InitialUIState = (): UIState => ({
   recentGlyphs: [],
   chatImageOverlay: undefined,
   isMobileNavVisible: true,
+  callHeight: 'auto',
 })
 
 export default InitialUIState
