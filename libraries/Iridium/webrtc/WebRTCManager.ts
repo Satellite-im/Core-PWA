@@ -604,7 +604,7 @@ export default class WebRTCManager extends Emitter {
         call.mute({ did: this.iridium.connector?.id, kind: 'audio' })
       }
 
-      $Sounds.stopSound(Sounds.CALL)
+      $Sounds.stopSounds([Sounds.CALL])
       $Sounds.playSound(Sounds.CONNECTED)
     }
     call.on('CONNECTED', onCallConnected)
@@ -795,7 +795,7 @@ export default class WebRTCManager extends Emitter {
       call.off('DESTROY', onCallDestroy)
       call.off('ERROR', onCallDestroy)
       $WebRTC.destroyCall(call.callId)
-      $Sounds.stopSound(Sounds.CALL)
+      $Sounds.stopSounds([Sounds.CALL])
       $Sounds.playSound(Sounds.HANGUP)
     }
     call.on('DESTROY', onCallDestroy)
