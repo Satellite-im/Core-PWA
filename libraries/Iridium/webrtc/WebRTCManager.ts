@@ -399,21 +399,14 @@ export default class WebRTCManager extends Emitter {
     const conversation = this.iridium.chat.getConversation(conversationId)
     if (!did || !conversation) return
 
-    if (!conversation.typing?.[did]) {
-      Vue.set(this.iridium.chat.state.conversations[conversationId], 'typing', {
-        ...conversation.typing,
-        [did]: true,
-      })
+    if (!this.iridium.chat.typingStatus[conversationId]?.[did]) {
+      this.iridium.chat.toggleTypingStatus(conversationId, did)
     }
-
     clearTimeout(this.timeoutMap[did])
 
     this.timeoutMap[did] = setTimeout(() => {
-      Vue.set(this.iridium.chat.state.conversations[conversationId], 'typing', {
-        ...conversation.typing,
-        [did]: false,
-      })
-    }, Config.chat.typingInputThrottle * 3)
+      this.iridium.chat.toggleTypingStatus(conversationId, did)
+    }, Config.chat.typingInputThrottle * 2)
   }
 
   private onPeerAnnounce = (payload: any) => {

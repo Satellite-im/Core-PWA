@@ -53,9 +53,6 @@ export type Conversation = {
   type: 'direct' | 'group'
   name?: string
   participants: string[]
-  typing?: {
-    [key: string]: boolean
-  }
   createdAt: number
   updatedAt: number
   message: {
