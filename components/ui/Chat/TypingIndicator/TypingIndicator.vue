@@ -14,6 +14,9 @@ export default Vue.extend({
   computed: {
     typingParticipants(): User[] {
       const conversationId = this.$route.params.id
+      if (!conversationId) {
+        return []
+      }
       const conversation = this.chat.getConversation(conversationId)
       if (!conversation || !conversation.typing) {
         return []

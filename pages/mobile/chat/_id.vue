@@ -12,7 +12,7 @@
             show-clear
           />
           <button v-if="$route.params.id" @click="swiper.slideNext()">
-            <menu-icon class="toggle-sidebar" size="1.5x" />
+            <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
         <SidebarList class="mobile-list" />
