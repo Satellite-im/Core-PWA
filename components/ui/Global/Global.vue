@@ -108,7 +108,6 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.commit('ui/fullscreen', false)
       iridium.webRTC.denyCall()
     },
   },

@@ -33,6 +33,7 @@ export default Vue.extend({
   data() {
     return {
       webrtc: iridium.webRTC.state,
+      isFullscreen: false,
     }
   },
   computed: {
@@ -59,6 +60,16 @@ export default Vue.extend({
     volumeControlValueChange(volume: number) {
       this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('audio/setVolume', volume)
+    },
+    toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        const media = this.$refs.mediastream as HTMLElement
+        media.requestFullscreen()
+        this.isFullscreen = true
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen()
+        this.isFullscreen = false
+      }
     },
   },
 })

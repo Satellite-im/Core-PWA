@@ -29,7 +29,6 @@ const InitialUIState = (): UIState => ({
   glyphModalPackId: undefined,
   chatbarContent: '',
   chatbarFocus: false,
-  fullscreen: false,
   showPinned: false,
   enhancers: {
     show: false,
