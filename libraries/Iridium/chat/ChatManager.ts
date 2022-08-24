@@ -158,6 +158,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         name: payload.name,
         participants,
       })
+    } else if (payload.type === 'add_member') {
+      await this.appendParticipantsToConversation(payload.id, participants)
     }
   }
 
@@ -453,6 +455,63 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     })
 
     return id
+  }
+
+  async addMembersToGroup(id: string, newMembers: string[]) {
+    if (!this.iridium.connector) {
+      throw new Error('no iridium connector')
+    }
+
+    const conversation = this.getConversation(id)
+    if (!conversation) {
+      throw new Error('conversation not found')
+    }
+
+    for (const participant of conversation.participants) {
+      if (newMembers.includes(participant)) {
+        throw new Error(`already a member: ${participant}`)
+      }
+    }
+
+    let event: IridiumConversationEvent = {
+      id,
+      type: 'add_member',
+      participants: newMembers,
+    }
+
+    await this.iridium.connector.publish('/chat/announce', event, {
+      encrypt: {
+        recipients: conversation.participants,
+      },
+    })
+
+    this.appendParticipantsToConversation(id, newMembers)
+
+    event = {
+      id,
+      type: 'create',
+      name: conversation.name,
+      participants: conversation.participants,
+    }
+
+    await this.iridium.connector.publish('/chat/announce', event, {
+      encrypt: {
+        recipients: newMembers,
+      },
+    })
+  }
+
+  async appendParticipantsToConversation(id: string, participants: string[]) {
+    const conversation = this.getConversation(id)
+    if (!conversation) {
+      throw new Error('conversation not found')
+    }
+    conversation.participants.push(...participants)
+
+    await this.set(
+      `/conversations/${id}/participants`,
+      conversation.participants,
+    )
   }
 
   async deleteConversation(id: Conversation['id']) {
