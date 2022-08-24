@@ -1,7 +1,7 @@
 import * as exif from './EXIF'
 
-describe('', () => {
-  test('file is jpeg', async () => {
+describe('Tests exif', () => {
+  test('given file is jpeg', async () => {
     const jpegBlob = new Blob(['testing'], { type: 'image/jpeg' })
 
     // const file2 = new Fil({ ...mockFileData, name: 'testPng2.png' })

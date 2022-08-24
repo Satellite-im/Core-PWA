@@ -1,6 +1,6 @@
 import { IDL } from '~/libraries/Solana/UsersProgram/UsersProgram.types'
 
-describe('', () => {
+describe('Test UsersProgram types', () => {
   test('check IDL export type', () => {
     expect(IDL).toEqual({
       version: '0.1.0',
