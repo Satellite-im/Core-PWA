@@ -72,7 +72,7 @@ describe('Manage sounds', () => {
   })
 
   test('sound stops', () => {
-    const result: any = inst.stopSound(
+    const result: any = inst.stopSounds(
       {
         state: {
           newMessage: true,
@@ -86,14 +86,14 @@ describe('Manage sounds', () => {
           connected: true,
         },
       },
-      Sounds.CALL,
+      [Sounds.CALL],
     )
 
     expect(result).toMatchSnapshot()
   })
 
   test('sound does not stop', () => {
-    const result: any = inst.stopSound(
+    const result: any = inst.stopSounds(
       {
         state: {
           newMessage: true,
@@ -107,7 +107,7 @@ describe('Manage sounds', () => {
           connected: true,
         },
       },
-      Sounds.CALL,
+      [Sounds.CALL],
     )
 
     expect(result).toMatchSnapshot()
