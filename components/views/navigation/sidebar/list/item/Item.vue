@@ -39,8 +39,10 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
-    user(): User | null {
-      return iridium.users.getUser(this.conversation.participants[0])
+    user(): User | undefined {
+      return this.participants.find(
+        (user) => user.did !== iridium.connector?.id,
+      )
     },
     participants(): User[] {
       return this.conversation.participants.map((did) => {
