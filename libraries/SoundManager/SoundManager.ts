@@ -70,7 +70,6 @@ export default class SoundManager {
   stopSounds(soundList: Array<Sounds>) {
     soundList.forEach((sound: Sounds) => {
       if (this.playingSounds().includes(sound)) {
-        this.existsSound(sound)
         this.sounds[sound].stop()
       }
     })
