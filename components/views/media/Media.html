@@ -1,35 +1,31 @@
-<div class="mediastream" data-cy="mediastream" ref="mediastream">
+<div class="mediastream" data-cy="mediastream" :style="`height:${height}`">
   <MediaHeading />
-  <div class="media" ref="media">
+  <div class="media">
     <MediaUser
-      id="local_video"
+      id="local"
       :user="localParticipant"
       isLocal
       data-cy="local-video"
-      @dblclick="handleDoubleClick('local_video')"
     />
-
     <MediaUser
       v-for="participant in remoteParticipants"
-      :id="`remote_video_${ participant.did }`"
       :user="participant"
       data-cy="remote-video"
-      @dblclick="handleDoubleClick('remote_video')"
     />
-
-    <div
+    <!-- <div
       v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
       class="more-user"
       :class="{full: ui.fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
     >
       ...
-    </div>
+    </div> -->
   </div>
   <MediaActionsVolume
-    :volume="audio.volume"
+    :volume="volume"
     isPopup
     @volumeControlValueChange="volumeControlValueChange"
   />
   <MediaActionsSettings />
   <MediaActions />
+  <InteractablesDragBar side="bottom" showHandle @resize="(val)=> height=val" />
 </div>

@@ -109,6 +109,7 @@ export interface UIState {
   recentGlyphs: RecentGlyph[]
   chatImageOverlay?: FileMessage
   isMobileNavVisible: boolean
+  callHeight: string
 }
 
 export type Position = {

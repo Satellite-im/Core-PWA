@@ -3,6 +3,7 @@
 exports[`state.default 0 1`] = `
 Object {
   "activeChannel": undefined,
+  "callHeight": "auto",
   "chatImageOverlay": undefined,
   "chatbarContent": "",
   "chatbarFocus": false,

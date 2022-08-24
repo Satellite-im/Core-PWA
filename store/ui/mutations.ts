@@ -323,4 +323,7 @@ export default {
   setIsMobileNavVisible(state: UIState, value: boolean) {
     state.isMobileNavVisible = value
   },
+  setCallHeight(state: UIState, value: string) {
+    state.callHeight = value
+  },
 }
