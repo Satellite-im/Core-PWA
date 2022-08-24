@@ -60,7 +60,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.fetch()
     logger.log(this.loggerTag, 'friends state loaded', this.state)
     logger.info(this.loggerTag, 'subscribing to announce topic')
-    await iridium.subscribe<IridiumFriendEvent>('/friends/announce', {
+    iridium.subscribe<IridiumFriendEvent>('/friends/announce', {
       handler: this.onFriendsAnnounce.bind(this),
     })
     logger.log(this.loggerTag, 'listening for friend activity', this.state)
@@ -71,7 +71,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       }
       await iridium.p2p.send(iridium.p2p.primaryNodeID, {
         type: 'sync/subscribe',
-        topic: this.loggerTag,
+        topic: '/friends/announce',
         offlineSync: true,
       })
       // connect to all friends
