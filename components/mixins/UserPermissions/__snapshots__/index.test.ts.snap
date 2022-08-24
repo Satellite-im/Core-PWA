@@ -1,9 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`index.UserPermissions.created 0 1`] = `undefined`;
-
-exports[`index.UserPermissions.created 0 2`] = `undefined`;
-
 exports[`index.exportForTesting.formatDevices 0 1`] = `
 Array [
   Object {
