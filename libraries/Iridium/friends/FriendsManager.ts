@@ -66,6 +66,14 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     logger.log(this.loggerTag, 'listening for friend activity', this.state)
 
     this.iridium.connector?.p2p.on('ready', async () => {
+      if (!iridium.p2p.primaryNodeID) {
+        throw new Error('not connected to primary node')
+      }
+      await iridium.p2p.send(iridium.p2p.primaryNodeID, {
+        type: 'sync/subscribe',
+        topic: this.loggerTag,
+        offlineSync: true,
+      })
       // connect to all friends
       logger.info(this.loggerTag, 'connecting to friends', this.state.friends)
       await Promise.all(
