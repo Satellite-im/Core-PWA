@@ -26,35 +26,23 @@ export default Vue.extend({
 <style lang="less">
 .inline-realm {
   cursor: pointer;
-  display: inline-flex;
-  flex-direction: row;
-  &:extend(.full-width);
-  &:extend(.more-pad-sides);
-  &:extend(.round-corners);
-  &:extend(.background-semitransparent-light);
+  display: flex;
+  align-items: center;
   border: 1px solid @green;
   margin-top: @normal-spacing;
-  align-content: center;
-
-  .status {
-    display: inline-flex;
-    align-items: center;
-  }
+  gap: 16px;
+  background: @foreground-gradient;
+  padding: 8px 16px;
+  &:extend(.round-corners);
 
   .details {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
+    flex-grow: 1;
 
-    .subtitle {
-      font-size: @text-size;
-      margin: 0;
-      margin-left: @normal-spacing;
-      font-weight: bold;
-    }
-    .detail {
-      font-weight: normal;
-      font-size: @mini-text-size;
-      font-family: @primary-font;
+    .available {
+      display: flex;
+      gap: 0.5rem;
     }
   }
 }

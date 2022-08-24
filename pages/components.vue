@@ -1,11 +1,8 @@
 <template>
   <div v-scroll-lock="true" class="container">
     <div>
-      <TypographyTitle :size="1" text="Satellite-Absolute" />
-      <TypographySubtitle
-        :size="6"
-        text="Generic compoment list for use building Satellite."
-      />
+      <TypographyText as="h1"> Satellite-Absolute </TypographyText>
+
       <br />
 
       <TypographyLabel text="Loading" />
@@ -204,22 +201,16 @@
             <TypographyTitle :size="4" text="Typography" />
 
             <TypographyTitle :size="1" text="Title 1" />
-            <TypographySubtitle :size="1" text="Subtitle 1" />
 
             <TypographyTitle :size="2" text="Title 2" />
-            <TypographySubtitle :size="2" text="Subtitle 2" />
 
             <TypographyTitle :size="3" text="Title 3" />
-            <TypographySubtitle :size="3" text="Subtitle 3" />
 
             <TypographyTitle :size="4" text="Title 4" />
-            <TypographySubtitle :size="4" text="Subtitle 4" />
 
             <TypographyTitle :size="5" text="Title 5" />
-            <TypographySubtitle :size="5" text="Subtitle 5" />
 
             <TypographyTitle :size="6" text="Title 6" />
-            <TypographySubtitle :size="6" text="Subtitle 6" />
             <br />
             <TypographyLabel text="Label Component" />
           </div>

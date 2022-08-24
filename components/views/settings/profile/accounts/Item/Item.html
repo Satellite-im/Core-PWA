@@ -26,12 +26,9 @@
     <component :is="account.icon" v-else class="icon" size="1.3x" />
     <div class="titles">
       <TypographyTitle :size="6" :text="account.name" />
-      <TypographySubtitle
-        v-if="account.username"
-        :size="6"
-        :text="account.username"
-        class="username"
-      />
+      <TypographyText v-if="account.username" class="username">
+        {{ account.username }}
+      </TypographyText>
     </div>
     <InteractablesButton
       v-if="!account.isVerified"
