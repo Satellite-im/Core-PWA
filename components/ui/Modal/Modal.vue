@@ -1,6 +1,6 @@
 <template src="./Modal.html"></template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -25,8 +25,8 @@ export default Vue.extend({
     close() {
       this.$emit('close')
     },
-    handleKeyboard(evt) {
-      if (evt.key === 'Escape') {
+    handleKeyboard(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
         this.close()
       }
     },
