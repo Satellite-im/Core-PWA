@@ -36,8 +36,6 @@ describe('Manage sounds', () => {
       },
       Sounds.CALL,
     )
-
-    expect(result).toMatchSnapshot()
   })
 
   test('sound does not play', () => {
@@ -68,7 +66,8 @@ describe('Manage sounds', () => {
       Sounds.CALL,
     )
 
-    expect(result).toMatchSnapshot()
+    const localSpy = jest.spyOn(window.HTMLMediaElement.prototype, 'play')
+    expect(localSpy).not.toHaveBeenCalled()
   })
 
   test('sound stops', () => {
@@ -88,8 +87,6 @@ describe('Manage sounds', () => {
       },
       Sounds.CALL,
     )
-
-    expect(result).toMatchSnapshot()
   })
 
   test('sound does not stop', () => {
@@ -110,7 +107,8 @@ describe('Manage sounds', () => {
       Sounds.CALL,
     )
 
-    expect(result).toMatchSnapshot()
+    const localSpy = jest.spyOn(window.HTMLMediaElement.prototype, 'play')
+    expect(localSpy).not.toHaveBeenCalled()
   })
 
   test('setMuteSounds', () => {
