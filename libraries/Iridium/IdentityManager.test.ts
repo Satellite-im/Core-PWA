@@ -51,7 +51,7 @@ describe('Test seedFromWallet', () => {
 })
 
 describe('Test seedFromPrivateKey', () => {
-  it('should return an error: Incorrect signature hash size', async () => {
+  it('throws on invalid private key length', async () => {
     const localParam = {
       passphrase: 'string',
       privateKey: new Uint8Array(
