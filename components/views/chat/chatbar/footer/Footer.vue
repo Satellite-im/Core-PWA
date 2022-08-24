@@ -23,6 +23,9 @@ export default Vue.extend({
     }),
     typingParticipants(): string[] {
       const conversationId = this.$route.params.id
+      if (!conversationId) {
+        return []
+      }
       const conversation = iridium.chat.getConversation(conversationId)
       if (!conversation || !conversation.typing) {
         return []
