@@ -475,6 +475,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       }
     }
 
+    // notify existing members of conversation about the new members
     let event: IridiumConversationEvent = {
       id,
       type: 'add_member',
@@ -487,8 +488,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       },
     })
 
+    // locally append the new members to our state
     this.appendParticipantsToConversation(id, newMembers)
 
+    // notify the new membes of the conversation
     event = {
       id,
       type: 'create',
