@@ -737,6 +737,7 @@ export class Call extends Emitter<CallEventListeners> {
       track.enabled = false
       track.stop()
       stream.removeTrack(track)
+      delete this.streams[did]?.[kind]
     }
 
     // tell all of the peers that we muted the track
@@ -1176,6 +1177,11 @@ export class Call extends Emitter<CallEventListeners> {
       if (!track) return
       track.enabled = false
     })
+
+    if (kind === 'video' || kind === 'screen') {
+      delete this.streams[did]?.[kind]
+    }
+
     this.emit('REMOTE_TRACK_MUTED', {
       did,
       kind,
