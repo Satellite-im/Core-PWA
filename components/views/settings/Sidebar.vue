@@ -74,7 +74,7 @@ export default Vue.extend({
               text: 'Network',
             },
           ],
-        }, */ // hided due to AP-2243
+        }, */ // hidden due to AP-2243
         {
           title: 'Developer',
           links: [
