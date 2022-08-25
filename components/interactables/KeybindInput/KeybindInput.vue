@@ -155,6 +155,7 @@ export default Vue.extend({
         return
       }
 
+      // To keep keys uniform across platforms, we need to convert the keycode to a key
       this.key = keyCodeToKey[event.keyCode]
       this.newKeybind = this.keybindKeys
     },

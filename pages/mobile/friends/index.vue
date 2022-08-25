@@ -139,6 +139,10 @@ export default Vue.extend({
       this.$refs.swiper as HTMLElement,
       this.swiperConfig,
     )
+
+    if (!this.friendsList.length) {
+      this.next('add')
+    }
   },
   methods: {
     next(route: 'request' | 'add') {
