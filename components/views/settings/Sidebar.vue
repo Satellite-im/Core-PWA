@@ -30,7 +30,7 @@ export default Vue.extend({
     menuOptions(): SidebarGrouping[] {
       return [
         {
-          title: 'General',
+          title: 'User Settings',
           links: [
             {
               to: SettingsRoutes.PERSONALIZE,
@@ -43,35 +43,6 @@ export default Vue.extend({
             {
               to: SettingsRoutes.AUDIO_AND_VIDEO,
               text: 'Audio & Video',
-            },
-            {
-              to: SettingsRoutes.KEY_BINDS,
-              text: 'Keybinds',
-            },
-            {
-              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
-              text: 'Accounts & Devices',
-            },
-            {
-              to: SettingsRoutes.PRIVACY,
-              text: 'Privacy',
-            },
-          ],
-        },
-        {
-          title: 'Realms & Security',
-          links: [
-            {
-              to: SettingsRoutes.REALMS,
-              text: 'Realms',
-            },
-            {
-              to: SettingsRoutes.STORAGE,
-              text: 'Storage',
-            },
-            {
-              to: SettingsRoutes.NETWORK,
-              text: 'Network',
             },
           ],
         },
@@ -89,6 +60,35 @@ export default Vue.extend({
             {
               to: SettingsRoutes.INFO,
               text: 'App Info',
+            },
+          ],
+        },
+        {
+          title: 'App Settings',
+          links: [
+            /* {
+              to: SettingsRoutes.REALMS,
+              text: 'Realms',
+            }, */ // hidden due to AP-2243
+            {
+              to: SettingsRoutes.STORAGE,
+              text: 'Storage',
+            },
+            {
+              to: SettingsRoutes.NETWORK,
+              text: 'Network',
+            },
+            {
+              to: SettingsRoutes.KEY_BINDS,
+              text: 'Keybinds',
+            },
+            {
+              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
+              text: 'Accounts & Devices',
+            },
+            {
+              to: SettingsRoutes.PRIVACY,
+              text: 'Privacy',
             },
           ],
         },
