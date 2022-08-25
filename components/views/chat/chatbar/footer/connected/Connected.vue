@@ -54,6 +54,10 @@ export default Vue.extend({
      * @description builds translated string for online/offline status
      */
     participantsText(): string {
+      if (!this.onlineParticipants.length) {
+        return ''
+      }
+
       if (!this.isGroup) {
         return this.$tc(
           this.onlineParticipants.length ? 'ui.online' : 'ui.offline',
