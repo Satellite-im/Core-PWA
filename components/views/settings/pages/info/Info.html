@@ -1,7 +1,11 @@
 <SettingsPage>
   <SettingsUnit>
-    <TypographyTitle :size="6" :text="$t('pages.settings.info.title')" />
-    <TypographySubtitle :size="6" :text="$t('pages.settings.info.subtitle')" />
+    <TypographyText as="h2">
+      {{ $t('pages.settings.info.title') }}
+    </TypographyText>
+    <TypographyText color="dark">
+      {{ $t('pages.settings.info.subtitle') }}
+    </TypographyText>
   </SettingsUnit>
 
   <SettingsUnit>

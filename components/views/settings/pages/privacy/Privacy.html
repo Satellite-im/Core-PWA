@@ -1,8 +1,10 @@
 <SettingsPage>
   <SettingsSection>
     <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.privacy.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
+      <TypographyText as="h2"> {{ $t('pages.privacy.title') }} </TypographyText>
+      <TypographyText color="dark">
+        {{ $t('pages.privacy.subtitle') }}
+      </TypographyText>
     </SettingsUnit>
   </SettingsSection>
   <SettingsSection>
