@@ -239,7 +239,7 @@ export default {
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
       browser_warning:
-        'Hey there, welcome to our early access! While one of our goals is to make Satellite work across all browsers, we have focused the early access on Chromium based browsers. You are welcome to try Satellite on any browser you like, and we will focus on more broad support soon, but you may run in to more UI and functionality issues.',
+        'Hey there, welcome to our early access! While one of our goals is to make Satellite work across all browsers, we have focused the early access on Chromium-based browsers. You are welcome to try Satellite on any browser you like, and we will focus on more broad support soon, but you may run into more UI and functionality issues.',
     },
     loading: {
       loading: 'Linking Satellites...',
