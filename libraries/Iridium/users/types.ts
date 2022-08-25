@@ -7,7 +7,7 @@ export type User = {
   photoHash?: string
 }
 
-export type UserStatus = 'online' | 'offline' | 'busy' | 'away'
+export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'
 
 export type UserType = User & { status: UserStatus }
 

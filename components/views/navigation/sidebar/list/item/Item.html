@@ -6,7 +6,11 @@
   data-cy="sidebar-user"
 >
   <template>
-    <UiUserState v-if="conversation.type === 'direct'" :user="user" />
+    <UiUserState
+      v-if="conversation.type === 'direct'"
+      :user="user"
+      :isTyping="isTyping"
+    />
     <UiGroupIcon v-else :members="participants" />
   </template>
   <div class="user-info">

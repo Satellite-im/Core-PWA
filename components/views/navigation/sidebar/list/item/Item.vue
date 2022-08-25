@@ -30,6 +30,7 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
+      typingStatus: iridium.chat.typingStatus,
       groups: iridium.groups.state,
     }
   },
@@ -48,6 +49,11 @@ export default Vue.extend({
       return this.conversation.participants.map((did) => {
         return iridium.users.getUser(did)
       })
+    },
+    isTyping(): boolean {
+      if (!this.user) return false
+
+      return this.typingStatus[this.conversation.id]?.[this.user.did]
     },
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation.type === 'direct'

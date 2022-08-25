@@ -4,8 +4,6 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: @font-size-xs;
   line-height: 15px;
   overflow: hidden;
   border-radius: @corner-rounding;
@@ -33,6 +31,17 @@
   .spinner {
     height: 15px;
     width: 15px;
+  }
+
+  &.size- {
+    &md {
+      padding: 0.5rem 1rem;
+      font-size: @font-size-sm;
+    }
+    &lg {
+      padding: 0.75rem 1.25rem;
+      font-size: @font-size-xl;
+    }
   }
 
   &.color-primary {
