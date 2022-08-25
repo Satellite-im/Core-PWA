@@ -68,11 +68,13 @@ export default Vue.extend({
               return
             }
             if (activeIndex === 0) {
+              this.$store.commit('ui/showSidebar', true)
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
               this.isMobileNavVisible = true
             }
             if (activeIndex === 1) {
+              this.$store.commit('ui/showSidebar', false)
               this.swiper.allowSlidePrev = true
               this.swiper.allowSlideNext = false
               this.isMobileNavVisible = false

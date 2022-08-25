@@ -33,13 +33,16 @@ export default Vue.extend({
         return
       }
       if (this.$device.isMobile) {
-        this.$store.commit('ui/showSidebar', false)
+        this.$router.push(`/mobile/chat/`)
+        setTimeout(() => {
+          this.$router.push(
+            `/mobile/chat/${iridium.webRTC.state.activeCall.callId}`,
+          )
+        }, 50)
       }
-      this.$router.push(
-        `${this.$device.isMobile ? '/mobile/chat/' : '/chat/'}${
-          iridium.webRTC.state.activeCall.callId
-        }`,
-      )
+      if (this.$device.isDesktop) {
+        this.$router.push(`/chat/${iridium.webRTC.state.activeCall.callId}`)
+      }
     },
   },
 })
