@@ -600,7 +600,9 @@ export default class WebRTCManager extends Emitter {
       this.state.activeCall = { callId, did }
       this.state.createdAt = Date.now()
 
-      if ($nuxt.$store.state.audio.muted) {
+      if (!$nuxt.$store.state.audio.muted) {
+        call.unmute({ did: this.iridium.connector?.id, kind: 'audio' })
+      } else {
         call.mute({ did: this.iridium.connector?.id, kind: 'audio' })
       }
 
@@ -684,13 +686,6 @@ export default class WebRTCManager extends Emitter {
         'webrtc',
         `remote track received: ${track.kind}#${track.id} from ${did} ${track.enabled}`,
       )
-
-      if (!kind) return
-
-      Vue.set(this.state.streamMuted, did, {
-        ...this.state.streamMuted[did],
-        [kind]: false,
-      })
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
