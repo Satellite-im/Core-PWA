@@ -32,7 +32,7 @@ export const Config = {
     hangup: `sounds/Unused.m4a`,
     mute: `sounds/Mute.m4a`,
     unmute: `sounds/Unmute.m4a`,
-    deafen: `.sounds/Deafen.m4a`,
+    deafen: `sounds/Deafen.m4a`,
     undeafen: `sounds/Undeafen.m4a`,
     upload: `sounds/Success.m4a`,
     connected: `sounds/Success.m4a`,
