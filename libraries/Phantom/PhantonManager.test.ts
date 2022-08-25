@@ -15,9 +15,8 @@ describe('Test PhantomManager after Solana mock', () => {
     }
   })
 })
-describe('Test PhantomManager after Solana mock', () => {
-  const original = window.solana
 
+describe('Test PhantomManager after Solana mock', () => {
   beforeAll(() => {
     Object.defineProperty(window, 'solana', {
       configurable: true,
@@ -28,7 +27,7 @@ describe('Test PhantomManager after Solana mock', () => {
   afterAll(() => {
     Object.defineProperty(window, 'solana', {
       configurable: true,
-      value: original,
+      value: {},
     })
   })
 
@@ -50,8 +49,9 @@ describe('Test PhantomManager after Solana mock', () => {
   it('should fail to initialize wallet', async () => {
     // Reason for failing: related to non-existence of isPhantom on window.solana
     try {
-      const result = new PhantomManager()
-      result.getAccountBalance(web3.Keypair.generate())
+      const constructor = new PhantomManager()
+      const keypair = web3.Keypair.generate()
+      const result = constructor.getAccountBalance(keypair.publicKey)
       expect(result).toBe(123)
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
