@@ -17,11 +17,11 @@
 import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 
-const props = defineProps<{
+defineProps<{
   isFullscreen: boolean
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'toggle'): void
 }>()
 </script>
