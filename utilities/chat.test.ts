@@ -2,7 +2,7 @@ import * as chat from '~/utilities/chat'
 import * as file from '~/libraries/Files/types/file'
 
 describe('chat.conversationMessageIsNotice', () => {
-  test('0', () => {
+  test('test case 1', () => {
     const object: any = [
       {
         id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
@@ -29,7 +29,7 @@ describe('chat.conversationMessageIsNotice', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('1', () => {
+  test('test case 2', () => {
     const object: any = [
       {
         id: '03ea49f8-1d96-4cd0-b279-0684e3eec3a9',
@@ -84,7 +84,7 @@ describe('chat.conversationMessageIsNotice', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('2', () => {
+  test('test case 3', () => {
     const object: any = [
       {
         id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
@@ -121,7 +121,7 @@ describe('chat.conversationMessageIsNotice', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('3', () => {
+  test('test case 4', () => {
     const object: any = [
       {
         id: 'a85a8e6b-348b-4011-a1ec-1e78e9620782',
@@ -157,7 +157,7 @@ describe('chat.conversationMessageIsNotice', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('4', () => {
+  test('test case 5', () => {
     const object: any = [
       {
         id: '7289708e-b17a-477c-8a77-9ab575c4b4d8',
@@ -195,7 +195,7 @@ describe('chat.conversationMessageIsNotice', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('5', () => {
+  test('test case 6', () => {
     const result: any = chat.conversationMessageIsNotice({
       id: '',
       conversationId: '',
