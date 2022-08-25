@@ -21,6 +21,7 @@ export interface WebRTCState {
     data: SignalData
   } | null
   createdAt: number
+  streamConstraints: MediaStreamConstraints
 }
 
 export enum WebRTCError {
