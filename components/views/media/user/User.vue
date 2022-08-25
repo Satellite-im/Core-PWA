@@ -72,6 +72,9 @@ export default Vue.extend({
           !this.webrtc.createdAt,
       )
     },
+    isLocalVideoFlipped(): boolean {
+      return iridium.settings.state.video.flipLocalStream
+    },
   },
   watch: {
     audioStream(stream) {
