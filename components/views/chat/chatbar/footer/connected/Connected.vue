@@ -54,7 +54,7 @@ export default Vue.extend({
      * @description builds translated string for online/offline status
      */
     participantsText(): string {
-      if (!this.onlineParticipants.length) {
+      if (!this.conversation) {
         return ''
       }
 
