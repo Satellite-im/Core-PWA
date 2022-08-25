@@ -64,7 +64,7 @@ export default Vue.extend({
             /* {
               to: SettingsRoutes.REALMS,
               text: 'Realms',
-            }, */ // hided due to AP-2243
+            }, */ // hidden due to AP-2243
             {
               to: SettingsRoutes.STORAGE,
               text: 'Storage',
