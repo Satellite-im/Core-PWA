@@ -1,5 +1,5 @@
 import * as AudioStreamUtils from '~/utilities/AudioStreamUtils'
-// @ponicode
+
 describe('AudioStreamUtils.AudioStreamUtils.listenToMicLevel', () => {
   let inst: any
 
@@ -13,54 +13,6 @@ describe('AudioStreamUtils.AudioStreamUtils.listenToMicLevel', () => {
   })
 })
 
-// @ponicode
-describe('AudioStreamUtils.AudioStreamUtils.start', () => {
-  let inst2: any
-
-  beforeEach(() => {
-    inst2 = new AudioStreamUtils.AudioStreamUtils(
-      {
-        active: true,
-        id: '',
-        onaddtrack: undefined,
-        onremovetrack: () => '',
-        addTrack: () => undefined,
-        clone: () => ({
-          active: false,
-          id: '',
-          onaddtrack: null,
-          onremovetrack: () => '',
-          addTrack: () => undefined,
-          clone: () => undefined,
-          getAudioTracks: () => [],
-          getTrackById: () => null,
-          getTracks: () => [],
-          getVideoTracks: () => [],
-          removeTrack: () => undefined,
-          addEventListener: () => undefined,
-          removeEventListener: () => undefined,
-          dispatchEvent: () => false,
-        }),
-        getAudioTracks: () => [],
-        getTrackById: () => undefined,
-        getTracks: () => [],
-        getVideoTracks: () => [],
-        removeTrack: () => undefined,
-        addEventListener: () => undefined,
-        removeEventListener: () => undefined,
-        dispatchEvent: () => false,
-      },
-      undefined,
-    )
-  })
-
-  test('0', () => {
-    const result: any = inst2.start()
-    expect(result).toMatchSnapshot()
-  })
-})
-
-// @ponicode
 describe('AudioStreamUtils.AudioStreamUtils.stopListeningToMicLevel', () => {
   let inst2: any
 
@@ -92,7 +44,6 @@ describe('AudioStreamUtils.AudioStreamUtils.stopListeningToMicLevel', () => {
   })
 })
 
-// @ponicode
 describe('AudioStreamUtils.AudioStreamUtils.destroy', () => {
   let inst2: any
 
@@ -124,7 +75,6 @@ describe('AudioStreamUtils.AudioStreamUtils.destroy', () => {
   })
 })
 
-// @ponicode
 describe('AudioStreamUtils.AudioStreamUtils.updateIsTalking', () => {
   let inst8: any
   let object7: any

@@ -1,6 +1,6 @@
 import * as chat from '~/utilities/chat'
 import * as file from '~/libraries/Files/types/file'
-// @ponicode
+
 describe('chat.conversationMessageIsNotice', () => {
   test('0', () => {
     const object: any = [
