@@ -43,6 +43,7 @@ export default Vue.extend({
       showAlerts: false,
       searchQuery: '' as string,
       users: iridium.users.state,
+      userStatus: iridium.users.userStatus,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
@@ -61,22 +62,28 @@ export default Vue.extend({
     conversationId(): string {
       return this.$route.params.id
     },
-    conversation(): Conversation {
+    conversation(): Conversation | undefined {
       return iridium.chat.state.conversations[this.conversationId]
     },
     isGroup(): boolean {
+      if (!this.conversation) {
+        return false
+      }
       return this.conversation.participants.length > 2
     },
     details(): User | Conversation {
       if (this.isGroup) {
         return iridium.chat.state.conversations[this.conversationId]
       }
-      const friendDid = this.conversation.participants.find(
+      const friendDid = this.conversation?.participants.find(
         (f) => f !== iridium.connector?.id,
       ) as string
       return this.users[friendDid]
     },
     members(): User[] {
+      if (!this.conversation) {
+        return []
+      }
       return this.conversation.participants.map((did) => {
         return iridium.users.getUser(did)
       })
@@ -88,7 +95,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return this.members.map((m) => m.name).join(', ')
       }
-      return (this.details as User).status || 'offline'
+      return this.userStatus[(this.details as User).did] || 'offline'
     },
     enableRTC(): boolean {
       // todo- hook up to usermanager
@@ -96,14 +103,17 @@ export default Vue.extend({
         const memberIds = this.members.map((m) => m.did)
         return Object.values(this.users).some(
           (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
+            memberIds.includes(friend.did) &&
+            this.userStatus[friend.did] === 'online',
         )
       }
       // Check current recipient is on the user's friends list
       const friend = Object.values(this.users).find(
         (f) => f.did === (this.details as User)?.did,
       )
-      return friend?.status === 'online'
+      if (!friend) return false
+
+      return this.userStatus[friend.did] === 'online'
     },
     callTooltipText(): string {
       if (this.isGroup) {
@@ -155,9 +165,6 @@ export default Vue.extend({
     toggleSearchResult() {
       this.searchQuery = ''
     },
-    // openProfile() {
-    //   this.$store.dispatch('ui/showProfile', this.recipient)
-    // },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC || !this.details) {
         return

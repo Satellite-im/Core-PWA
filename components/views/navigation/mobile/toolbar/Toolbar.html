@@ -1,18 +1,18 @@
 <div class="toolbar">
   <button v-if="$route.params.id" @click="$emit('slidePrev')">
-    <menu-icon class="toggle-sidebar" size="1.5x" />
+    <menu-icon class="font-color-flair" size="1.5x" />
   </button>
   <TypographyTitle :size="6" v-if="conversation" :text="conversation.name" />
   <button
     class="phone"
-    :class="{'disabled' : !enableRTC || isActiveCall}"
+    :disabled="!enableRTC || isActiveCall"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >
     <phone-call-icon size="1.4x" :color="isGroup ? 'grey' : ''" />
   </button>
   <button
-    :class="{'disabled' : !enableRTC || isActiveCall}"
+    :disabled="!enableRTC || isActiveCall"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >

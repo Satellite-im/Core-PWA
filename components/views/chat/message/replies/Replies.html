@@ -1,4 +1,4 @@
-<div v-if="replies.length" class="replies-container">
+<div class="replies-container">
   <div
     v-if="!showReplies"
     class="toggle-button"
@@ -6,7 +6,7 @@
     @click="toggleReplies"
   >
     <plus-square-icon size="1.1x" />
-    {{ makeReplyText }}
+    {{ accordionText }}
   </div>
   <template v-else>
     <div class="message-replies">

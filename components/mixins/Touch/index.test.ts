@@ -2,8 +2,11 @@ import * as index from '~/components/mixins/Touch/index'
 
 describe('index.Touch.created', () => {
   test('0', () => {
+    const localSpy = jest.spyOn(index.Touch, 'created')
     const result: any = index.Touch.created()
-    expect(result).toMatchSnapshot()
+
+    expect(localSpy).toHaveBeenCalled()
+    expect(result).toBe(undefined)
   })
 })
 

@@ -110,7 +110,7 @@ export const Config = {
     messageMaxChars: 2048,
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
-    typingInputThrottle: 2000,
+    typingInputThrottle: 5000,
     maxUndoStack: 100,
     batchUndoSeconds: 5,
     searchCharLimit: 256,
@@ -181,6 +181,7 @@ export const Config = {
         height: { min: 576, ideal: 720, max: 1080 },
       },
     },
+    announceFrequency: 30000,
   },
   cropperOptions: {
     type: 'blob',

@@ -12,11 +12,11 @@ const videoActions = {
     }
 
     if (!state.disabled) {
-      await call.mute({ kind: 'video' })
+      await iridium.webRTC.mute({ kind: 'video' })
       commit('setDisabled', true)
       return
     }
-    await call.unmute({ kind: 'video' })
+    await iridium.webRTC.unmute({ kind: 'video' })
     commit('setDisabled', false)
   },
 }

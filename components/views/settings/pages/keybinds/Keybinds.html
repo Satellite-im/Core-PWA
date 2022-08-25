@@ -1,11 +1,12 @@
 <SettingsPage>
   <SettingsSection>
     <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.settings.keybinds.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.keybinds.subtitle')"
-      />
+      <TypographyText as="h2">
+        {{ $t('pages.settings.keybinds.title') }}
+      </TypographyText>
+      <TypographyText color="dark">
+        {{ $t('pages.settings.keybinds.subtitle') }}
+      </TypographyText>
     </SettingsUnit>
   </SettingsSection>
 

@@ -6,6 +6,7 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -26,13 +27,21 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'media', 'conversation', 'files']),
+    ...mapState(['ui', 'media', 'conversation', 'files', 'settings']),
     ModalWindows: () => ModalWindows,
     showBackgroundCall(): boolean {
       if (!this.$device.isMobile) {
         return this.isBackgroundCall
       }
       return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
+    },
+  },
+  watch: {
+    'settings.audioInput'(audioInput: string) {
+      this.updateWebRTCState({ audioInput })
+    },
+    'settings.videoInput'(videoInput: string) {
+      this.updateWebRTCState({ videoInput })
     },
   },
   mounted() {
@@ -65,6 +74,9 @@ export default Vue.extend({
       this.toggleModal('changelog')
       localStorage.setItem('local-version', this.$config.clientVersion)
     }
+
+    const { audioInput, videoInput } = this.settings
+    this.updateWebRTCState({ audioInput, videoInput })
   },
   methods: {
     /**
@@ -108,8 +120,30 @@ export default Vue.extend({
      * @example
      */
     denyCall() {
-      this.$store.commit('ui/fullscreen', false)
       iridium.webRTC.denyCall()
+    },
+    /**
+     * @method updateWebRTCState
+     * @description Updates the WebRTC state with the given settings.
+     * @example this.updateWebRTCState({ audioInput: 'default', videoInput: 'default' })
+     */
+    updateWebRTCState({
+      audioInput,
+      videoInput,
+    }: {
+      audioInput?: string
+      videoInput?: string
+    }) {
+      const streamConstraints = {} as MediaStreamConstraints
+
+      if (audioInput && audioInput !== PropCommonEnum.DEFAULT) {
+        streamConstraints.audio = { deviceId: audioInput }
+      }
+      if (videoInput && videoInput !== PropCommonEnum.DEFAULT) {
+        streamConstraints.video = { deviceId: videoInput }
+      }
+
+      iridium.webRTC.streamConstraints = streamConstraints
     },
   },
 })

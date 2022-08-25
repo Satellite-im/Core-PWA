@@ -104,6 +104,11 @@ export default {
       enter_to: 'enter to',
       save: 'save',
     },
+    group_join_notice: {
+      added: 'added',
+      to_group: 'to the group.',
+    },
+    group_leave_notice: 'left the group.',
   },
   controls: {
     copy_id: 'Copy ID',
@@ -614,10 +619,7 @@ export default {
     reply_to: 'Reply to',
     multimedia: 'Multimedia content',
     collapse: 'Collapse',
-    replies_separator: ' and ',
-    reply_single: 'Reply from {name}',
-    repliers_less_than_limit: 'Replies from {names}',
-    repliers_more_than_limit: 'Replies from {names} and {leftCount} more ...',
+    repliers: 'Reply from {names} | Replies from {names}',
   },
   errors: {
     accounts: {

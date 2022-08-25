@@ -139,7 +139,7 @@ export class Call extends Emitter<CallEventListeners> {
    * to call this method
    * @param stream MediaStream object containing the audio/video stream
    */
-  async answer(did: string, data?: Peer.SignalData) {
+  async answer(did: string, data: Peer.SignalData) {
     this.isCallee[did] = true
 
     await this.initiateCall(did, false, data)
@@ -281,11 +281,11 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     if (kinds.includes('audio')) {
-      await this.createAudioStream(constraints?.audio || true)
+      await this.createAudioStream(constraints?.audio)
     }
 
     if (kinds.includes('video')) {
-      await this.createVideoStream(constraints?.video || true)
+      await this.createVideoStream(constraints?.video)
     }
 
     return this.streams
@@ -299,9 +299,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    * await call.createAudioStream()
    */
-  async createAudioStream(
-    constraints: MediaTrackConstraints | boolean | undefined,
-  ) {
+  async createAudioStream(constraints?: MediaStreamConstraints['audio']) {
     if (!iridium.connector?.id) return
 
     const audioStream = await navigator.mediaDevices.getUserMedia({
@@ -342,9 +340,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    * await call.createVideoStream()
    */
-  async createVideoStream(
-    constraints: MediaTrackConstraints | boolean | undefined,
-  ) {
+  async createVideoStream(constraints?: MediaStreamConstraints['video']) {
     if (!iridium.connector?.id) return
     const videoStream = await navigator.mediaDevices.getUserMedia({
       video: constraints || true,
@@ -737,6 +733,7 @@ export class Call extends Emitter<CallEventListeners> {
       track.enabled = false
       track.stop()
       stream.removeTrack(track)
+      delete this.streams[did]?.[kind]
     }
 
     // tell all of the peers that we muted the track
@@ -754,7 +751,6 @@ export class Call extends Emitter<CallEventListeners> {
           }),
         ),
       )
-
       this.emit('LOCAL_TRACK_REMOVED', {
         track,
         kind,
@@ -771,20 +767,22 @@ export class Call extends Emitter<CallEventListeners> {
   async unmute({
     kind,
     did = iridium.connector?.id,
+    constraints,
   }: {
     kind: string
     did?: string
+    constraints: MediaStreamConstraints
   }) {
     if (!did) return
 
     if (did === iridium.connector?.id) {
       if (kind === 'audio' && !this.streams[did]?.audio) {
-        await this.createAudioStream(true)
+        await this.createAudioStream(constraints?.audio)
       } else if (
         kind === 'video' &&
         !this.streams[did]?.video?.getVideoTracks()?.length
       ) {
-        await this.createVideoStream(true)
+        await this.createVideoStream(constraints?.video)
       } else if (kind === 'screen' && !this.streams[did]?.screen) {
         await this.createDisplayStream()
       }
@@ -1010,17 +1008,6 @@ export class Call extends Emitter<CallEventListeners> {
     track: MediaStreamTrack,
     stream: MediaStream,
   ) {
-    const trackMuteListener = () => {
-      this.emit('REMOTE_TRACK_REMOVED', {
-        did: peer.id,
-        track,
-        stream,
-        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
-      })
-      track.removeEventListener('mute', trackMuteListener)
-    }
-
-    track.addEventListener('mute', trackMuteListener)
     if (!this.tracks[peer.id]) {
       this.tracks[peer.id] = new Set()
     }
@@ -1181,20 +1168,23 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on mute event
    */
   protected _onBusMute({ payload }: { payload: any }) {
-    const { did, callId, trackId, kind } = payload.body
+    const { did, trackId, kind } = payload.body
 
-    this.emit('REMOTE_TRACK_MUTED', {
-      did,
-      kind,
-      trackId,
-    })
     Object.values(this.streams[did] || {}).forEach((stream) => {
       const track = stream.getTrackById(trackId)
       if (!track) return
       track.enabled = false
     })
 
-    iridium.webRTC.onPeerMute({ did, kind })
+    if (kind === 'video' || kind === 'screen') {
+      delete this.streams[did]?.[kind]
+    }
+
+    this.emit('REMOTE_TRACK_MUTED', {
+      did,
+      kind,
+      trackId,
+    })
   }
 
   /**
@@ -1202,19 +1192,18 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on unmute event
    */
   protected _onBusUnmute({ payload }: { payload: any }) {
-    const { did, callId, trackId, kind } = payload.body
+    const { did, trackId, kind } = payload.body
 
-    this.emit('REMOTE_TRACK_UNMUTED', {
-      did,
-      kind,
-      trackId,
-    })
     Object.values(this.streams[did] || {}).forEach((stream) => {
       const track = stream.getTrackById(trackId)
       if (!track) return
       track.enabled = true
     })
 
-    iridium.webRTC.onPeerUnmute({ did, kind })
+    this.emit('REMOTE_TRACK_UNMUTED', {
+      did,
+      kind,
+      trackId,
+    })
   }
 }

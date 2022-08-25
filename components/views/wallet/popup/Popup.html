@@ -1,7 +1,7 @@
 <div class="wallet">
   <div class="heading">
     <wallet-icon size="1.2x" />
-    <TypographySubtitle :size="6" :text="$t('wallet.wallet')" />
+    <TypographyText>{{ $t('wallet.wallet') }}</TypographyText>
     <InteractablesClose class="close" @click="toggleWallet" />
   </div>
   <WalletBalance />

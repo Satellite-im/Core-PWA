@@ -4,10 +4,11 @@ import Vue from 'vue'
 import { ChevronDownIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import { conversationMessageIsNotice } from '~/utilities/chat'
 
 interface ChatItem {
   message: ConversationMessage
-  isSameAuthor: boolean
+  showHeader: boolean
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
@@ -60,10 +61,14 @@ export default Vue.extend({
           const replies = this.messages.filter(
             (replyMessage) => replyMessage.replyToId === message.id,
           )
+          const showHeader =
+            !isSameAuthor ||
+            (prevMessage && conversationMessageIsNotice(prevMessage)) ||
+            false
 
           return {
             message,
-            isSameAuthor,
+            showHeader,
             timeDiff,
             isNextDay,
             isFirstUnreadMessage,

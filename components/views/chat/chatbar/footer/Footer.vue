@@ -21,16 +21,17 @@ export default Vue.extend({
     ...mapState({
       ui: (state) => (state as RootState).ui,
     }),
-    typingParticipants(): string[] {
+    areTyping(): boolean {
       const conversationId = this.$route.params.id
-      const conversation = iridium.chat.getConversation(conversationId)
-      if (!conversation || !conversation.typing) {
-        return []
+      if (!conversationId) {
+        return false
       }
 
-      return Object.keys(conversation.typing).filter(
-        (k) => conversation.typing?.[k],
-      )
+      const convTypingStatus = iridium.chat.typingStatus[conversationId] || {}
+
+      return !!Object.keys(convTypingStatus).filter(
+        (k) => convTypingStatus?.[k],
+      ).length
     },
     lengthCount() {
       return `${this.ui.chatbarContent.length}/${this.$Config.chat.maxChars}`

@@ -1,5 +1,5 @@
 <div id="bottom-bar-container">
-  <UiChatTypingIndicator v-if="typingParticipants.length" />
+  <UiChatTypingIndicator v-if="areTyping" />
   <ChatbarFooterConnected v-else />
   <TypographyText
     class="no-select"

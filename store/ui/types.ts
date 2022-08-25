@@ -88,7 +88,6 @@ export interface UIState {
   chatbarContent: string
   chatbarFocus: boolean
   showPinned: boolean
-  fullscreen: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
@@ -109,6 +108,7 @@ export interface UIState {
   recentGlyphs: RecentGlyph[]
   chatImageOverlay?: FileMessage
   isMobileNavVisible: boolean
+  callHeight: string
 }
 
 export type Position = {

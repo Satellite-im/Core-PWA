@@ -67,6 +67,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     conversations: {},
   }
 
+  public typingStatus: {
+    [key: Conversation['id']]: { [key: string]: boolean }
+  } = {}
+
   private _intervals: { [key: string]: any } = {}
   public subscriptions: {
     [key: string]: { topic: string; connected: boolean }
@@ -158,6 +162,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         name: payload.name,
         participants,
       })
+    } else if (payload.type === 'add_member') {
+      await this.appendParticipantsToConversation(payload.id, participants)
+    } else if (payload.type === 'remove_member') {
+      await this.removeParticipantsFromConversation(payload.id, participants)
     }
   }
 
@@ -317,11 +325,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
       // Remove is_typing indicator upon user message receive
       clearTimeout(this.iridium.webRTC.timeoutMap[message.from])
-      Vue.set(
-        this.state.conversations[conversationId].typing,
-        message.from,
-        false,
-      )
+      this.toggleTypingStatus(conversationId, message.from)
 
       const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Partial<Notification> = {
@@ -455,6 +459,123 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return id
   }
 
+  async addMembersToGroup(id: string, newMembers: string[]) {
+    if (!this.iridium.connector) {
+      throw new Error('no iridium connector')
+    }
+
+    const conversation = this.getConversation(id)
+    if (!conversation) {
+      throw new Error('conversation not found')
+    }
+
+    for (const participant of conversation.participants) {
+      if (newMembers.includes(participant)) {
+        throw new Error(`already a member: ${participant}`)
+      }
+    }
+
+    // notify existing members of conversation about the new members
+    let event: IridiumConversationEvent = {
+      id,
+      type: 'add_member',
+      participants: newMembers,
+    }
+
+    await this.iridium.connector.publish('/chat/announce', event, {
+      encrypt: {
+        recipients: conversation.participants,
+      },
+    })
+
+    // locally append the new members to our state
+    this.appendParticipantsToConversation(id, newMembers)
+
+    // notify the new membes of the conversation
+    event = {
+      id,
+      type: 'create',
+      name: conversation.name,
+      participants: conversation.participants,
+    }
+
+    await this.iridium.connector.publish('/chat/announce', event, {
+      encrypt: {
+        recipients: newMembers,
+      },
+    })
+
+    // send a message in the conversation
+    await this.sendMessage({
+      conversationId: id,
+      type: 'member_join',
+      members: newMembers,
+      at: Date.now(),
+      attachments: [],
+    })
+  }
+
+  async appendParticipantsToConversation(id: string, participants: string[]) {
+    const conversation = this.getConversation(id)
+    if (!conversation) {
+      throw new Error('conversation not found')
+    }
+    conversation.participants.push(...participants)
+
+    await this.set(
+      `/conversations/${id}/participants`,
+      conversation.participants,
+    )
+  }
+
+  async leaveGroup(id: string) {
+    if (!this.iridium.connector) {
+      throw new Error('no iridium connector')
+    }
+
+    const conversation = this.getConversation(id)
+    if (!conversation) {
+      throw new Error('conversation not found')
+    }
+
+    // send a message in the conversation
+    await this.sendMessage({
+      conversationId: id,
+      type: 'member_leave',
+      at: Date.now(),
+      attachments: [],
+    })
+
+    const event: IridiumConversationEvent = {
+      id,
+      type: 'remove_member',
+      participants: [this.iridium.connector.id],
+    }
+
+    await this.iridium.connector.publish('/chat/announce', event, {
+      encrypt: {
+        recipients: conversation.participants,
+      },
+    })
+
+    await this.deleteConversation(id)
+  }
+
+  async removeParticipantsFromConversation(id: string, participants: string[]) {
+    const conversation = this.getConversation(id)
+    if (!conversation) {
+      throw new Error('conversation not found')
+    }
+    conversation.participants = conversation.participants.filter(
+      (did) => !participants.includes(did),
+    )
+
+    await this.set(
+      `/conversations/${id}/participants`,
+      conversation.participants,
+    )
+  }
+
   async deleteConversation(id: Conversation['id']) {
     if (!this.hasConversation(id)) {
       return
@@ -464,12 +585,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // todo - do we need to unsubscribe too?
   }
 
-  getConversation(id: Conversation['id']): Conversation {
-    const conversation = this.state.conversations[id]
-    if (!conversation) {
-      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-    }
-    return conversation
+  getConversation(id: Conversation['id']): Conversation | undefined {
+    return this.state.conversations[id]
   }
 
   getConversationMessage(
@@ -633,5 +750,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         reactions,
       },
     )
+  }
+
+  toggleTypingStatus(conversationId: string, did: string) {
+    Vue.set(this.typingStatus, conversationId, {
+      ...this.typingStatus[conversationId],
+      [did]: !this.typingStatus[conversationId]?.[did],
+    })
   }
 }

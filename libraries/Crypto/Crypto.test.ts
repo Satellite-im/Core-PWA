@@ -1,7 +1,7 @@
 import { Keypair } from '@solana/web3.js'
 import Crypto from './Crypto'
 
-describe('', () => {
+describe('Test crypto', () => {
   test('Initialize Crypto', () => {
     const exampleKeypair = Keypair.generate()
     const konstruktor = new Crypto()

@@ -1,11 +1,9 @@
 .volume-control {
-  &.absolute {
-    cursor: pointer;
-    position: absolute;
-    bottom: @light-spacing;
-    right: @normal-spacing;
-  }
   &.ltr {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    align-items: center;
     .volume-slider {
       display: block;
       max-width: 10rem;
@@ -14,9 +12,5 @@
     .volume-icon {
       padding: 0 1rem 0 0;
     }
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row-reverse;
-    align-items: center;
   }
 }

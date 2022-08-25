@@ -9,6 +9,7 @@ import {
   MicIcon,
   MicOffIcon,
 } from 'satellite-lucide-icons'
+import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 import { User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -52,7 +53,7 @@ export default Vue.extend({
       videoSettings: iridium.settings.state.video,
       webrtc: iridium.webRTC.state,
       isTalking: false,
-      requestId: null,
+      audioStreamUtils: null as AudioStreamUtils | null,
     }
   },
   computed: {
@@ -71,6 +72,25 @@ export default Vue.extend({
           !this.webrtc.createdAt,
       )
     },
+    isLocalVideoFlipped(): boolean {
+      return iridium.settings.state.video.flipLocalStream
+    },
+  },
+  watch: {
+    audioStream(stream) {
+      this.audioStreamUtils?.destroy()
+
+      if (!stream) {
+        this.isTalking = false
+        return
+      }
+
+      this.audioStreamUtils = new AudioStreamUtils(stream, this.audio)
+      this.audioStreamUtils.start()
+    },
+    'audioStreamUtils.isTalking'(isTalking) {
+      this.isTalking = isTalking
+    },
   },
   updated() {
     // When audio is streamed, initialize stream volume to current volume.
@@ -83,6 +103,9 @@ export default Vue.extend({
         audioStreamElement.volume = this.audio.volume / 100
       }
     }
+  },
+  beforeDestroy() {
+    this.audioStreamUtils?.destroy()
   },
 })
 </script>

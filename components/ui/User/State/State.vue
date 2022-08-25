@@ -13,14 +13,14 @@
       data-cy="satellite-circle-profile"
     />
     <div
-      v-if="user.status !== 'mobile' && !isTyping"
+      v-if="status !== 'mobile' && !isTyping"
       class="status"
-      :class="{ [`is-${user.status}`]: user.status }"
+      :class="{ [`is-${status}`]: status }"
     />
     <smartphone-icon
-      v-else-if="user.status === 'mobile'"
+      v-else-if="status === 'mobile'"
       class="mobile-status"
-      :class="`is-${user.status}`"
+      :class="`is-${status}`"
       size="1x"
     />
     <UiChatTypingIndicator v-else />
@@ -32,6 +32,8 @@ import Vue, { PropType } from 'vue'
 
 import { SmartphoneIcon } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { UserStatus } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -51,7 +53,17 @@ export default Vue.extend({
       default: 36,
     },
   },
+  data() {
+    return {
+      usersStatus: iridium.users.userStatus,
+    }
+  },
   computed: {
+    status(): UserStatus {
+      if (this.user.did === iridium.connector?.id) return 'online'
+
+      return this.usersStatus[this.user.did] || 'offline'
+    },
     imageSource(): string {
       return this.user.photoHash
         ? this.$Config.ipfs.gateway + this.user.photoHash

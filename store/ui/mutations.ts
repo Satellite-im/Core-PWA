@@ -39,9 +39,6 @@ export default {
   chatbarContent(state: UIState, content: string) {
     state.chatbarContent = content
   },
-  fullscreen(state: UIState, fullscreen: boolean) {
-    state.fullscreen = fullscreen
-  },
   setChatImageOverlay(state: UIState, image: FileMessage | undefined) {
     state.chatImageOverlay = image
   },
@@ -322,5 +319,8 @@ export default {
   },
   setIsMobileNavVisible(state: UIState, value: boolean) {
     state.isMobileNavVisible = value
+  },
+  setCallHeight(state: UIState, value: string) {
+    state.callHeight = value
   },
 }

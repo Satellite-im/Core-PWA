@@ -1,6 +1,6 @@
 import BlockchainClient from './BlockchainClient'
 
-describe('', () => {
+describe('Test BlockchainClient', () => {
   test('get account but it is uninitialized', () => {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     try {

@@ -1,0 +1,23 @@
+<div class="message-notice">
+  <template v-if="message.type === 'member_join'">
+    <div class="icon color-green">
+      <ArrowRightIcon />
+    </div>
+    <div class="text">
+      <span class="name">{{ from }}</span>
+      <span>{{ $t('messaging.group_join_notice.added') }}</span>
+      <span class="name">{{ members }}</span>
+      <span>{{ $t('messaging.group_join_notice.to_group') }}</span>
+    </div>
+  </template>
+
+  <template v-else-if="message.type === 'member_leave'">
+    <div class="icon color-red">
+      <ArrowLeftIcon />
+    </div>
+    <div class="text">
+      <span class="name">{{ from }}</span>
+      <span>{{ $t('messaging.group_leave_notice') }}</span>
+    </div>
+  </template>
+</div>

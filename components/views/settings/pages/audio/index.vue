@@ -12,6 +12,7 @@ import { UserPermissions } from '~/components/mixins/UserPermissions'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -55,6 +56,7 @@ export default Vue.extend({
         },
       ],
       iridiumSettings: iridium.settings.state,
+      audioStreamUtils: null as AudioStreamUtils | null,
     }
   },
   computed: {
@@ -163,8 +165,22 @@ export default Vue.extend({
         const stream = await this.requestUserPermissions({
           audio: { deviceId: newValue },
         })
-        this.setupMicMeter(stream)
+        this.updateStream(stream)
       }
+    },
+    '$data.stream'(stream) {
+      this.audioStreamUtils?.destroy()
+
+      if (!stream) {
+        this.$data.micLevel = 0
+        return
+      }
+
+      this.audioStreamUtils = new AudioStreamUtils(stream, this.audio)
+      this.audioStreamUtils.start()
+    },
+    'audioStreamUtils.level'(level) {
+      this.$data.micLevel = Math.round(level)
     },
   },
   mounted() {
@@ -181,64 +197,19 @@ export default Vue.extend({
         })
     }
     clearInterval(this.$data.updateInterval)
+
+    this.audioStreamUtils?.destroy()
   },
   methods: {
     ...UserPermissions.methods,
-    /**
-     * @method getMicLevel DocsTODO
-     * @description
-     * @param stream
-     * @example
-     */
-    getMicLevel(stream: MediaStream) {
-      const audioContext = new AudioContext()
-      const gainNode = audioContext.createGain()
-      const analyser = audioContext.createAnalyser()
-      const microphone = audioContext.createMediaStreamSource(stream)
-      const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1)
-
-      analyser.smoothingTimeConstant = 0
-
-      microphone.connect(gainNode)
-      gainNode.connect(analyser)
-      analyser.connect(javascriptNode)
-      javascriptNode.connect(audioContext.destination)
-
-      const array = new Uint8Array(analyser.frequencyBinCount)
-
-      const draw = () => {
-        // Update gain based on inputVolume
-        gainNode.gain.setValueAtTime(
-          this.audio.inputVolume / 100,
-          audioContext.currentTime,
-        )
-        requestAnimationFrame(draw)
-
-        analyser.getByteFrequencyData(array)
-        let values = 0
-
-        const length = array.length
-        for (let i = 0; i < length; i++) {
-          values += array[i]
-        }
-
-        const average = values / length
-
-        // The micLevel can range between 0 and 100 approximately
-        this.$data.micLevel = Math.round(average)
-      }
-
-      draw()
-    },
     /**
      * @method setupMicMeter DocsTODO
      * @description
      * @param stream
      * @example
      */
-    setupMicMeter(stream: MediaStream) {
+    updateStream(stream: MediaStream) {
       this.$data.stream = stream
-      this.getMicLevel(stream)
     },
     /**
      * @method setupDefaults DocsTODO
@@ -279,7 +250,7 @@ export default Vue.extend({
           const stream = await this.requestUserPermissions({
             audio: { deviceId: this.settings.audioInput },
           })
-          this.setupMicMeter(stream)
+          this.updateStream(stream)
         }
       }
 
@@ -308,7 +279,7 @@ export default Vue.extend({
       // Check to see if the user has permission
       try {
         const stream = await this.requestUserPermissions({ audio: true })
-        this.setupMicMeter(stream)
+        this.updateStream(stream)
         this.$data.userHasGivenAudioAccess = true
         this.setupDefaults()
       } catch (_: any) {

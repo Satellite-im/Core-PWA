@@ -142,8 +142,8 @@ const initialRootState: any = {
   },
 }
 
-describe('', () => {
-  test('getFullUserInfoFromState with identical textile public key', () => {
+describe('Test Messaging', () => {
+  it('calls getFullUserInfoFromState with identical textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest = 'publickey1'
     rootStateForTest.accounts.details.textilePubkey = publicKeyForTest
@@ -156,7 +156,7 @@ describe('', () => {
     expect(result).toBe(rootStateForTest.accounts.details)
   })
 
-  test('getFullUserInfoFromState with non-identical textile public key', () => {
+  it('calls getFullUserInfoFromState with non-identical textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest =
       'https://accounts.google.com/o/oauth2/revoke?token=%s'
@@ -194,7 +194,7 @@ describe('', () => {
     })
   })
 
-  test('getUsernameFromState with unknown textile public key', () => {
+  it('calls getUsernameFromState with unknown textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest = 'publickey1'
     rootStateForTest.accounts.details.textilePubkey = publicKeyForTest
@@ -207,7 +207,7 @@ describe('', () => {
     expect(result).toBe(PropCommonEnum.UNKNOWN)
   })
 
-  test('getAddressFromState with unknown textile public key', () => {
+  it('calls getAddressFromState with unknown textile public key', () => {
     const rootStateForTest = { ...initialRootState }
     const publicKeyForTest = 'publickey1'
     rootStateForTest.accounts.details.textilePubkey = publicKeyForTest
@@ -220,7 +220,7 @@ describe('', () => {
     expect(result).toBe(PropCommonEnum.UNKNOWN)
   })
 
-  test('refreshTimeStampInterval', () => {
+  it('calls refreshTimeStampInterval', () => {
     jest.useFakeTimers()
     const action = jest.fn()
     const result1 = Messaging.refreshTimestampInterval(123, action, 3000)
@@ -229,7 +229,7 @@ describe('', () => {
     expect(result2).toBe(1000000000001)
   })
 
-  test('replyMessageToUIReply', () => {
+  it('calls replyMessageToUIReply', () => {
     const result: UIReply = Messaging.exportedForTesting.replyMessageToUIReply(
       [
         {
@@ -256,7 +256,7 @@ describe('', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('messageRepliesToUIReplies', () => {
+  it('calls messageRepliesToUIReplies', () => {
     const result = Messaging.exportedForTesting.messageRepliesToUIReplies(
       [
         {
@@ -292,7 +292,7 @@ describe('', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('groupMessages', () => {
+  it('calls groupMessages', () => {
     const message1 = `message1`
     const message2 = `message2`
     const reaction1 = `reaction1`
@@ -336,7 +336,7 @@ describe('', () => {
 })
 
 describe('update message tracker', () => {
-  test('updateMessageTracker glyph', () => {
+  it('calls updateMessageTracker glyph', () => {
     const newMessages = [
       {
         replyMessage: 'text0',
@@ -360,7 +360,7 @@ describe('update message tracker', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('updateMessageTracker text', () => {
+  it('calls updateMessageTracker text', () => {
     const newMessages = [
       {
         replyMessage: 'text0',
@@ -384,7 +384,7 @@ describe('update message tracker', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('updateMessageTracker file', () => {
+  it('calls updateMessageTracker file', () => {
     const newMessages = [
       {
         replyMessage: 'text0',
@@ -408,7 +408,7 @@ describe('update message tracker', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('updateMessageTracker reaction', () => {
+  it('calls updateMessageTracker reaction', () => {
     const newMessages = [
       {
         replyMessage: 'text0',
@@ -432,7 +432,7 @@ describe('update message tracker', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('updateMessageTracker reply', () => {
+  it('calls updateMessageTracker reply', () => {
     const newMessages = [
       {
         replyMessage: 'text0',
@@ -456,7 +456,7 @@ describe('update message tracker', () => {
     expect(result).toMatchSnapshot()
   })
 
-  test('convertTimestampToDate', () => {
+  it('calls convertTimestampToDate', () => {
     const localTimestamp = dateNow
     const result = Messaging.convertTimestampToDate(
       {
