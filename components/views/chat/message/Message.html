@@ -51,7 +51,7 @@
     </div>
     <div class="footer">
       <MessageReactions :message="message" :emojiReaction="emojiReaction" />
-      <MessageReplies :replies="replies" />
+      <MessageReplies :replies="replies" v-if="replies.length" />
     </div>
   </div>
 </UiContextMenu>
