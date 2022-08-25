@@ -174,7 +174,7 @@ export default Vue.extend({
     },
     removeRoutes() {
       this.$router.push({
-        path: '/mobile/friends',
+        query: {},
       })
     },
     setSwiperAsTab() {
