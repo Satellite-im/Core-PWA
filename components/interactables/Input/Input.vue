@@ -6,6 +6,8 @@ import { DeleteIcon } from 'satellite-lucide-icons'
 import { InputType, InputColor } from './types'
 import { Size } from '~/types/typography'
 
+const MOBILE_FOCUS_DELAY = 300 // ms
+
 export default Vue.extend({
   components: {
     DeleteIcon,
@@ -90,7 +92,15 @@ export default Vue.extend({
   },
   mounted() {
     if (this.autofocus) {
-      this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
+      const inputRef = this.$refs.input as HTMLInputElement
+      if (this.$device.isMobile) {
+        // delay focus to avoid clash with swiper animation
+        setTimeout(() => {
+          inputRef.focus()
+        }, MOBILE_FOCUS_DELAY)
+      } else {
+        this.$nextTick(() => inputRef.focus())
+      }
     }
   },
   methods: {
