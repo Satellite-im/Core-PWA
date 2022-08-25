@@ -36,6 +36,7 @@ export default Vue.extend({
       isFullscreen: false,
     }
   },
+
   computed: {
     ...mapState({
       callHeight: (state) => (state as RootState).ui.callHeight,
@@ -49,6 +50,12 @@ export default Vue.extend({
         this.$store.commit('ui/setCallHeight', value)
       },
     },
+  },
+  mounted() {
+    document.addEventListener('fullscreenchange', this.setFullscreenValue)
+  },
+  beforeDestroy() {
+    document.removeEventListener('fullscreenchange', this.setFullscreenValue)
   },
   methods: {
     /**
@@ -65,11 +72,12 @@ export default Vue.extend({
       if (!document.fullscreenElement) {
         const media = this.$refs.mediastream as HTMLElement
         media.requestFullscreen()
-        this.isFullscreen = true
       } else if (document.exitFullscreen) {
         document.exitFullscreen()
-        this.isFullscreen = false
       }
+    },
+    setFullscreenValue() {
+      this.isFullscreen = Boolean(document.fullscreenElement)
     },
   },
 })

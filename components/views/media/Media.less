@@ -8,28 +8,16 @@
 
   .media {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(144px, 1fr));
     flex: 1;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
     overflow-y: auto;
     gap: 8px;
     padding: 8px;
 
     #local {
       order: -1;
-    }
-
-    .user {
-      width: 16rem;
-      height: 9rem;
-      &.full-video {
-        position: absolute;
-        width: 100% !important;
-        height: 100% !important;
-        &:extend(.third-layer);
-      }
     }
   }
 

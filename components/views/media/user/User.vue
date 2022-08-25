@@ -15,6 +15,8 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { useUserStreams, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
+type MediaType = 'audio' | 'video' | 'stream'
+
 export default Vue.extend({
   components: {
     VideoIcon,

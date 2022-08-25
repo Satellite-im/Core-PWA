@@ -1,9 +1,9 @@
-<div v-if="call" class="user" :class="{'talking': isTalking}">
+<div v-if="call" class="user">
   <video
     v-if="videoStream"
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
-    :class="{flip: isLocal && isLocalVideoFlipped}"
+    :class="{flip: isLocal && isLocalVideoFlipped, talking: isTalking}"
     data-cy="video-stream"
     :src-object.prop="videoStream"
     playsinline
@@ -13,7 +13,7 @@
   <div
     v-else
     class="voice-user"
-    :class="{calling: audioStream, loading: isPending && !isLocal}"
+    :class="{calling: audioStream, loading: isPending && !isLocal, talking: isTalking}"
   >
     <TypographyTag :title="user.name" class="ellipsis tag" inverted>
       {{user.name}}
