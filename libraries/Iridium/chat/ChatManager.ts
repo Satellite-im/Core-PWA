@@ -585,12 +585,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // todo - do we need to unsubscribe too?
   }
 
-  getConversation(id: Conversation['id']): Conversation {
-    const conversation = this.state.conversations[id]
-    if (!conversation) {
-      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-    }
-    return conversation
+  getConversation(id: Conversation['id']): Conversation | undefined {
+    return this.state.conversations[id]
   }
 
   getConversationMessage(
