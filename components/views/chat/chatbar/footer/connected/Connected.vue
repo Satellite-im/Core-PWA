@@ -2,27 +2,59 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
-import { ConversationParticipant } from '~/store/conversation/types'
+import { Conversation } from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { UserType } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
     CircleIcon,
   },
+  data() {
+    return {
+      userStatus: iridium.users.userStatus,
+    }
+  },
   computed: {
     ...mapState({
       allFriends: (state) => (state as RootState).friends.all,
     }),
-    ...mapGetters('conversation', ['otherParticipants', 'onlineParticipants']),
+    conversationId(): Conversation['id'] | undefined {
+      return this.$route.params.id
+    },
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return iridium.chat.state.conversations[this.conversationId]
+    },
+    isGroup(): boolean {
+      return this.conversation?.type === 'group'
+    },
+    participants(): UserType[] {
+      if (!this.conversation) return []
+
+      return this.conversation.participants.map((did) => ({
+        ...iridium.users.getUser(did),
+        did,
+        status: this.userStatus[did] || 'offline',
+      }))
+    },
+    otherParticipants(): UserType[] {
+      return this.participants.filter((p) => p.did !== iridium.connector?.id)
+    },
+    onlineParticipants(): UserType[] {
+      return this.otherParticipants.filter((p) => p.status === 'online')
+    },
     /**
      * @method participantsText
      * @description builds translated string for online/offline status
      */
     participantsText(): string {
-      // if DM with single person
-      if (this.otherParticipants.length === 1) {
+      if (!this.isGroup) {
         return this.$tc(
           this.onlineParticipants.length ? 'ui.online' : 'ui.offline',
           1,
@@ -31,11 +63,9 @@ export default Vue.extend({
           },
         )
       }
-      // if group
+
       return this.$tc('ui.online', this.onlineParticipants.length, {
-        name: this.onlineParticipants
-          .map((p: ConversationParticipant) => p.name)
-          .join(', '),
+        name: this.onlineParticipants.map((p) => p.name).join(', '),
       })
     },
     /**

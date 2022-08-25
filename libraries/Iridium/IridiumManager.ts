@@ -97,6 +97,8 @@ export class IridiumManager extends Emitter {
 
     logger.log('iridium/manager', 'initializing profile')
     await this.profile.init()
+    logger.log('iridium/manager', 'initializing users')
+    await this.users.init()
     logger.log('iridium/manager', 'initializing groups')
     await this.groups.init()
     logger.log('iridium/friends', 'initializing friends')
@@ -111,8 +113,6 @@ export class IridiumManager extends Emitter {
     await this.settings.init()
     logger.log('iridium/manager', 'notification settings')
     await this.notifications.init()
-    logger.log('iridium/manager', 'initializing users')
-    await this.users.init()
     logger.log('iridium/manager', 'ready')
 
     await this.sendSyncInit()
