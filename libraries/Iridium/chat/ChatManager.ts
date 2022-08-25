@@ -1,12 +1,12 @@
 import Vue from 'vue'
+import type { EmitterCallback } from '@satellite-im/iridium'
 import {
-  IridiumMessage,
-  Emitter,
   didUtils,
+  Emitter,
+  encoding,
+  IridiumMessage,
   IridiumPubsubMessage,
   IridiumSetOptions,
-  encoding,
-  IridiumPeerIdentifier,
 } from '@satellite-im/iridium'
 import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import type { AddOptions, AddResult } from 'ipfs-core-types/root'
@@ -17,16 +17,15 @@ import type {
   SyncFetchResponse,
   SyncSubscriptionResponse,
 } from '@satellite-im/iridium/src/sync/agent'
-import type { EmitterCallback } from '@satellite-im/iridium'
 import { v4 } from 'uuid'
 import {
+  ChatError,
   Conversation,
   ConversationMessage,
-  ChatError,
-  MessageReactionPayload,
   ConversationMessagePayload,
-  MessageAttachment,
   IridiumConversationEvent,
+  MessageAttachment,
+  MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
@@ -332,13 +331,20 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         fromName: friendName?.name,
         at: Date.now(),
         fromAddress: conversationId,
-        title: `New message from ${friendName?.name}`,
+        chatName: conversation.participants.length > 2 ? conversation.name : '',
+        title:
+          conversation.participants.length > 2
+            ? `${friendName?.name} posted in ${conversation.name}`
+            : `New message from ${friendName?.name}`,
         description:
           message.body?.length! > 79
             ? `${message.body?.substring(0, 80)}...`
             : message.body,
         image: message.from,
-        type: NotificationType.DIRECT_MESSAGE,
+        type:
+          conversation.participants.length > 2
+            ? NotificationType.GROUP_MESSAGE
+            : NotificationType.DIRECT_MESSAGE,
         seen: false,
       }
 
