@@ -58,13 +58,13 @@ export default Vue.extend({
             },
           ],
         },
-        /* {
-          title: 'Realms & Security',
+        {
+          title: 'Security',
           links: [
-            {
+            /* {
               to: SettingsRoutes.REALMS,
               text: 'Realms',
-            },
+            }, */ // hided due to AP-2243
             {
               to: SettingsRoutes.STORAGE,
               text: 'Storage',
@@ -74,7 +74,7 @@ export default Vue.extend({
               text: 'Network',
             },
           ],
-        }, */ // hided due to AP-2243
+        },
         {
           title: 'Developer',
           links: [
