@@ -1,34 +1,7 @@
 .is-chatbar-reply {
   display: flex;
   justify-content: space-between;
-  padding: 0.25rem 0.5rem;
-  font-size: @text-size;
-  font-family: @secondary-font;
-  border-radius: @corner-rounding @corner-rounding 0 0;
   align-items: center;
-  &:extend(.blur);
-
-  strong {
-    &:extend(.font-primary);
-  }
-
-  .markdown {
-    p {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: @text-size;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-  }
-
-  .reply-close {
-    cursor: pointer;
-    display: flex;
-    font-size: @small-icon-size;
-    font-family: @secondary-font;
-    &:extend(.font-primary);
-  }
+  padding: 4px 8px;
+  border-radius: @corner-rounding @corner-rounding 0 0;
 }
