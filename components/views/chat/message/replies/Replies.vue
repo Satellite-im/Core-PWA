@@ -3,9 +3,10 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
-import { getUsernameFromState } from '~/utilities/Messaging'
-import { toHTML } from '~/libraries/ui/Markdown'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import { RootState } from '~/types/store/store'
+import { ChatReply } from '~/store/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 interface ReplyItem {
   message: ConversationMessage
@@ -29,7 +30,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'chat']),
+    ...mapState({
+      chat: (state) => (state as RootState).chat,
+    }),
     replyItems(): ReplyItem[] {
       return this.replies.map((message, index) => {
         const prevMessage = index >= 0 ? this.replies[index - 1] : undefined
@@ -46,104 +49,27 @@ export default Vue.extend({
       set(state) {
         this.$store.commit('chat/setChatReply', state)
       },
-      get() {
+      get(): ChatReply[] {
         return this.chat.replies
       },
     },
-    /**
-     * makeReplyText: generates the "Replies from _____" text in a chat
-     * depending on the number of users in the reply thread, it will generate a different replyText
-     */
-    makeReplyText() {
-      const LIMIT = 2
-      const SEPARATOR = this.$t('conversation.replies_separator')
-
-      const replies = this.replies
-
+    accordionText(): string {
       const uniqueRepliers = [
-        ...new Set(replies.map((reply: any) => reply.from)),
-      ]
-
-      const names = uniqueRepliers
-        .slice(0, LIMIT)
-        .map((replier) =>
-          getUsernameFromState(replier as string, this.$store.state),
-        )
-        .join(SEPARATOR as string)
-
-      if (replies.length === 1) {
-        return this.$t('conversation.reply_single', {
-          name: names,
-        })
-      }
-
-      if (uniqueRepliers.length <= LIMIT) {
-        return this.$t('conversation.repliers_less_than_limit', {
-          names,
-        })
-      }
-
-      return this.$t('conversation.repliers_more_than_limit', {
-        names,
-        leftCount: uniqueRepliers.length - LIMIT,
+        ...new Set(this.replies.map((reply) => reply.from)),
+      ].map((r) => iridium.users.getUser(r).name)
+      return this.$tc('conversation.repliers', uniqueRepliers.length, {
+        names: uniqueRepliers.join(', '),
       })
     },
   },
   methods: {
-    /**
-     * @method markdownToHtml
-     * @description convert text markdown to html
-     * @param str String to convert
-     */
-    markdownToHtml(text: string) {
-      return toHTML(text, { liveTyping: false })
-    },
-    /**
-     * @method emojiReaction DocsTODO
-     * @description
-     * @param replyId
-     * @example
-     */
-    emojiReaction(e: MouseEvent, replyID: string) {
-      this.$store.commit('ui/settingReaction', {
-        status: true,
-        groupID: this.$props.group.id,
-        messageID: replyID,
-        to:
-          this.$props.message.to === myTextilePublicKey
-            ? this.$props.message.from
-            : this.$props.message.to,
-      })
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-        floating: true,
-      })
-    },
-    /**
-     * @method showQuickProfile DocsTODO
-     * @description
-     * @param {MouseEvent} e - Click event
-     * @param {string} textilePublicKey - The author of reply
-     * @example
-     */
-    showQuickProfile(e: MouseEvent, textilePublicKey: string) {
-      this.$store.dispatch('ui/showQuickProfile', {
-        textilePublicKey,
-        position: { x: e.x, y: e.y },
-      })
-    },
     /**
      * @method toggleReplies DocsTODO
      * @description
      * @example
      */
     toggleReplies() {
-      this.$data.showReplies = !this.$data.showReplies
-
-      //       this.setChatReply = {
-      //         replyId: this.$props.message.id,
-      //         value: this.$data.showReplies,
-      //       }
+      this.showReplies = !this.showReplies
     },
   },
 })
