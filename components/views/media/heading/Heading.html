@@ -1,18 +1,4 @@
 <div class="heading">
-  <transition name="media-fullscreen" mode="out-in">
-    <button
-      :key="isFullscreen"
-      v-tooltip.left="isFullscreen ? $t('ui.exit_fullscreen') : $t('ui.fullscreen')"
-      @click="$emit('toggle')"
-    >
-      <minimize-icon
-        v-if="isFullscreen"
-        data-cy="exit-fullscreen"
-        size="1.2x"
-      />
-      <maximize-icon v-else data-cy="go-fullscreen" size="1.2x" />
-    </button>
-  </transition>
   <TypographyTag v-if="elapsedTime" data-cy="elapsed-time">
     {{$t('ui.live', { time: elapsedTime })}}
   </TypographyTag>

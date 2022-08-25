@@ -10,11 +10,6 @@ import {
   VolumeXIcon,
 } from 'satellite-lucide-icons'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    hideSlider: () => void
-  }
-}
 export default Vue.extend({
   components: {
     VolumeIcon,
@@ -58,7 +53,7 @@ export default Vue.extend({
      * @example
      */
     toggleSlider() {
-      this.$data.showSlider = !this.$data.showSlider
+      this.showSlider = !this.showSlider
     },
     /**
      * @method hideSlider DocsTODO
@@ -69,7 +64,7 @@ export default Vue.extend({
     hideSlider(event: Event) {
       const vgroup = this.$refs.volumegroup as Element
       if (vgroup && vgroup.contains(event.target as Node) === false) {
-        this.$data.showSlider = false
+        this.showSlider = false
       }
     },
     /**
