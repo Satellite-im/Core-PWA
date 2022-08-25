@@ -2,75 +2,42 @@
   position: relative;
   display: flex;
   align-items: center;
+  margin-right: @light-spacing;
 
-  --circle-radius: 6px;
-  --border-width: 2px;
-
-  &.is-large {
-    --circle-radius: 10px;
+  .mask {
+    height: 100%;
+    width: auto;
   }
 
-  .circle {
-    mask: radial-gradient(
-        circle calc(var(--circle-radius) + var(--border-width)) at 86% 86%,
-        #0000 98%,
-        #000
-      )
-      100% 100%/100% 100% no-repeat;
-    overflow: hidden;
+  .is-rounded {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .status {
-    position: absolute;
-    left: 86%;
-    top: 86%;
-    border-radius: 50%;
-    width: calc(var(--circle-radius) * 2);
-    height: calc(var(--circle-radius) * 2);
-    margin-top: calc(-1 * var(--circle-radius));
-    margin-left: calc(-1 * var(--circle-radius));
-    background-color: @gray;
-
-    &.is-online {
-      background-color: @green;
-    }
-
-    &.is-idle {
-      background-color: @yellow;
-    }
-  }
-
-  .mobile-status {
-    position: absolute;
-    bottom: -1.5px;
-    right: -2.5px;
-    font-size: @small-icon-size;
-    text-shadow: 0 0 3px #000;
-
-    rect {
-      stroke: @midground;
-      stroke-width: 4;
-      paint-order: stroke;
+    &.is-online,
+    &.is-mobile {
       fill: @green;
     }
-    line {
-      fill: #000;
-      stroke: @midground;
-      stroke-width: 4;
+    &.is-offline {
+      fill: @gray;
     }
-    &.is-mobile {
-      &:extend(.color-success);
+    &.is-away {
+      fill: @yellow;
+    }
+    &.is-busy {
+      fill: @red;
+    }
+    &.is-typing {
+      fill: @flair-color;
     }
   }
 
-  #typing-badge-container {
-    width: 40px;
-    height: 18px;
-    position: absolute;
-    bottom: -1.5px;
-    left: 18px;
-    padding: 5px;
-    border-radius: 10px;
-    border: 3px solid @midground;
+  #typing-loader {
+    width: 6px;
+    height: 6px;
+    border-radius: @half;
+    position: relative;
+    &:extend(.typing-state-animation);
   }
 }
