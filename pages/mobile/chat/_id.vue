@@ -37,8 +37,8 @@ import { mapState } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 import 'swiper/css'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   name: 'MobileChat',
