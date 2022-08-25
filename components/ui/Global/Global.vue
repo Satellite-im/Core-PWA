@@ -33,7 +33,7 @@ export default Vue.extend({
       if (!this.$device.isMobile) {
         return this.isBackgroundCall
       }
-      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
+      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar) // this.ui.isMobileNavVisible
     },
   },
   watch: {
@@ -107,9 +107,6 @@ export default Vue.extend({
       const callId = this.webrtc.activeCall?.callId
       if (!callId) {
         return
-      }
-      if (this.$device.isMobile) {
-        this.$store.commit('ui/showSidebar', false)
       }
       const callingPath = `${
         this.$device.isMobile ? '/mobile/chat/' : '/chat/'

@@ -35,7 +35,11 @@ export default Vue.extend({
       if (this.$device.isMobile) {
         this.$store.commit('ui/showSidebar', false)
       }
-      this.$router.push(`/chat/${iridium.webRTC.state.activeCall.callId}`)
+      this.$router.push(
+        `${this.$device.isMobile ? '/mobile/chat/' : '/chat/'}${
+          iridium.webRTC.state.activeCall.callId
+        }`,
+      )
     },
   },
 })
