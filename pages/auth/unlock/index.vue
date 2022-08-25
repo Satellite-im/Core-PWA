@@ -23,6 +23,7 @@ export default Vue.extend({
       status: 'idle' as 'idle' | 'loading',
       error: '',
       step: 'signup' as 'signup' | 'login',
+      isChrome: false,
     }
   },
   computed: {
@@ -69,7 +70,8 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
   mounted() {
     // This information can be useful for users to help us find and report bugs.
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
-
+    // @ts-ignore
+    this.isChrome = !!window.chrome
     this.$store.commit('accounts/lock')
   },
   methods: {

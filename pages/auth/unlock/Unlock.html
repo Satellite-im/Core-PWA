@@ -33,8 +33,12 @@
     <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
       {{$t('pages.unlock.delete_account_label')}}
     </a>
-    <div class="realm-container">
-      <InteractablesRealm />
+    <div class="realm-container" v-if="!$device.isMobile">
+      <!-- <InteractablesRealm /> -->
+      <UiInlineNotification
+        v-if="!isChrome"
+        :text="$t('pages.unlock.browser_warning')"
+      />
     </div>
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton

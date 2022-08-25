@@ -238,6 +238,8 @@ export default {
       store_pin: 'Store Pin? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
+      browser_warning:
+        'Satellite is optimized for Chromium browsers. You may experience UI and functional issues. We will optimize for more browsers in the future.',
     },
     loading: {
       loading: 'Linking Satellites...',
