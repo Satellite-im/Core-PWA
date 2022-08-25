@@ -21,6 +21,10 @@ const initialState: WebRTCState = {
   activeCall: null,
   streamMuted: {},
   createdAt: 0,
+  streamConstraints: {
+    audio: true,
+    video: true,
+  },
 }
 
 export default class WebRTCManager extends Emitter {
@@ -37,6 +41,17 @@ export default class WebRTCManager extends Emitter {
     super()
     this.iridium = iridium
     this.state = initialState
+  }
+
+  set streamConstraints(constraints: MediaStreamConstraints) {
+    this.state.streamConstraints = {
+      ...this.state.streamConstraints,
+      ...constraints,
+    }
+  }
+
+  get streamConstraints() {
+    return this.state.streamConstraints
   }
 
   async init() {
@@ -497,7 +512,8 @@ export default class WebRTCManager extends Emitter {
       root: true,
     })
 
-    await call.createLocalTracks(kinds)
+    const constraints = this.streamConstraints
+    await call.createLocalTracks(kinds, constraints)
 
     this.state.incomingCall = null
     this.state.activeCall = {
@@ -820,7 +836,8 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    await call.createLocalTracks(kinds)
+    const constraints = this.streamConstraints
+    await call.createLocalTracks(kinds, constraints)
     await call.answer(did, data)
   }
 
@@ -856,7 +873,8 @@ export default class WebRTCManager extends Emitter {
     }
     const isMuted = this.state.streamMuted[did]?.[kind]
     if (isMuted) {
-      await call.unmute({ did, kind })
+      const constraints = this.streamConstraints
+      await call.unmute({ did, kind, constraints })
       $Sounds.playSound(Sounds.UNMUTE)
       return
     }
@@ -894,5 +912,31 @@ export default class WebRTCManager extends Emitter {
     return this.iridium.connector?.publish('webrtc', payload, {
       encrypt: { recipients: [did] },
     })
+  }
+
+  public async mute({
+    kind = 'audio',
+    did = iridium.connector?.id,
+  }: {
+    kind: string
+    did?: string
+  }) {
+    if (!this.state.activeCall) return
+    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    if (!call) return
+    await call.mute({ kind, did })
+  }
+
+  public async unmute({
+    kind,
+    did = iridium.connector?.id,
+  }: {
+    kind: string
+    did?: string
+  }) {
+    if (!this.state.activeCall) return
+    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    if (!call) return
+    await call.unmute({ did, kind, constraints: this.streamConstraints })
   }
 }

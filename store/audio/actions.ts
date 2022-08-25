@@ -29,11 +29,11 @@ export default {
     }
 
     if (!state.muted) {
-      await call.mute({ kind: 'audio' })
+      await iridium.webRTC.mute({ kind: 'audio' })
       commit('setMute', true)
       return
     }
-    await call.unmute({ kind: 'audio' })
+    await iridium.webRTC.unmute({ kind: 'audio' })
     commit('setMute', false)
   },
   /**

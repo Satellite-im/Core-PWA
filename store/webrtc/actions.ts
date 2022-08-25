@@ -374,11 +374,11 @@ const webRTCActions = {
     }
     const isMuted = state.streamMuted[peerId]?.[kind]
     if (isMuted) {
-      await call.unmute({ peerId, kind })
+      await iridium.webRTC.unmute({ kind })
       dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
       return
     }
-    await call.mute({ peerId, kind })
+    await iridium.webRTC.mute({ kind })
     dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
 
