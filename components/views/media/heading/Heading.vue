@@ -2,21 +2,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { useCallElapsedTime } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
-  components: {
-    MaximizeIcon,
-    MinimizeIcon,
-  },
-  props: {
-    isFullscreen: {
-      type: Boolean,
-      required: true,
-    },
-  },
   setup() {
     const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
     return { elapsedTime, startInterval, clearTimer }

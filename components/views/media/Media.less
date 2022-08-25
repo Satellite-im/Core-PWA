@@ -32,49 +32,13 @@
       }
     }
   }
-}
 
-.fullscreen-media {
-  .mediastream {
-    max-height: unset;
-    height: calc(@full - @toolbar-height - @light-spacing);
-    margin-bottom: 1rem;
-
-    .media {
-      justify-content: center;
-      flex-direction: row;
-    }
-  }
-}
-
-// .more-user {
-//   min-width: 16rem;
-//   height: 9rem;
-//   &:extend(.round-corners);
-//   display: flex;
-//   align-self: flex-end;
-//   justify-content: center;
-//   align-items: center;
-//   order: 11;
-//   font-size: 30px;
-//   line-height: 28px;
-//   margin: @xlight-spacing;
-//   padding: @light-spacing;
-//   position: relative;
-//   &.full {
-//     line-height: 13px;
-//     text-align: center;
-//   }
-//   &.full-mobile {
-//     min-width: 12rem !important;
-//   }
-// }
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .mediastream {
-    min-width: @viewport-width;
-    top: @toolbar-height - @normal-spacing;
-    margin: 0;
-    border-radius: 0;
+  .controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
   }
 }
