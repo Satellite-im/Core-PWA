@@ -24,7 +24,20 @@
     display: flex;
     width: 100%;
     justify-content: space-evenly;
-    margin-top: auto;
+    margin-top: @light-spacing;
+
+    .button {
+      width: 3rem;
+      height: 2rem;
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  .incoming {
+    height: @full;
+    width: @full;
+    justify-content: center;
   }
 
   @media only screen and (max-width: @mobile-breakpoint) {

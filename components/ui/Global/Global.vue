@@ -108,8 +108,12 @@ export default Vue.extend({
       if (!callId) {
         return
       }
-
-      const callingPath = `/chat/${callId}`
+      if (this.$device.isMobile) {
+        this.$store.commit('ui/showSidebar', false)
+      }
+      const callingPath = `${
+        this.$device.isMobile ? '/mobile/chat/' : '/chat/'
+      }${callId}`
       if (this.$route.path !== callingPath) {
         this.$router.push(callingPath)
       }

@@ -33,8 +33,6 @@ export default Vue.extend({
         return
       }
       if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
       }
       this.$router.push(`/chat/${iridium.webRTC.state.activeCall.callId}`)

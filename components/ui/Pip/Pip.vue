@@ -190,6 +190,7 @@ export default Vue.extend({
   cursor: -webkit-grab;
   overflow: hidden;
   &:extend(.no-select);
+  &:extend(.first-layer);
 }
 
 .dragging {

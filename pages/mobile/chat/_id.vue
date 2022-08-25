@@ -37,8 +37,8 @@ import { mapState } from 'vuex'
 import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
-import 'swiper/css'
 import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import 'swiper/css'
 
 export default Vue.extend({
   name: 'MobileChat',
@@ -68,11 +68,13 @@ export default Vue.extend({
               return
             }
             if (activeIndex === 0) {
+              this.$store.commit('ui/showSidebar', true)
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
               this.isMobileNavVisible = true
             }
             if (activeIndex === 1) {
+              this.$store.commit('ui/showSidebar', false)
               this.swiper.allowSlidePrev = true
               this.swiper.allowSlideNext = false
               this.isMobileNavVisible = false
