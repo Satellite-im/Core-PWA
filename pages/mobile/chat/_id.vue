@@ -19,12 +19,11 @@
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
-        <!-- <Media
-          v-if="$device.isMobile"
-          :users="$mock.callUsers"
+        <Media
+          v-if="isActiveCall"
           :max-viewable-users="10"
           :fullscreen-max-viewable-users="6"
-        /> -->
+        />
         <Conversation />
         <Chatbar ref="chatbar" />
       </div>
@@ -39,6 +38,7 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
 import 'swiper/css'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   name: 'MobileChat',
@@ -46,6 +46,11 @@ export default Vue.extend({
     MenuIcon,
   },
   layout: 'mobile',
+  setup() {
+    const { isActiveCall } = useWebRTC()
+
+    return { isActiveCall }
+  },
   data: () => ({
     swiper: undefined as Swiper | undefined,
   }),
