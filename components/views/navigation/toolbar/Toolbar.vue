@@ -62,22 +62,28 @@ export default Vue.extend({
     conversationId(): string {
       return this.$route.params.id
     },
-    conversation(): Conversation {
+    conversation(): Conversation | undefined {
       return iridium.chat.state.conversations[this.conversationId]
     },
     isGroup(): boolean {
+      if (!this.conversation) {
+        return false
+      }
       return this.conversation.participants.length > 2
     },
     details(): User | Conversation {
       if (this.isGroup) {
         return iridium.chat.state.conversations[this.conversationId]
       }
-      const friendDid = this.conversation.participants.find(
+      const friendDid = this.conversation?.participants.find(
         (f) => f !== iridium.connector?.id,
       ) as string
       return this.users[friendDid]
     },
     members(): User[] {
+      if (!this.conversation) {
+        return []
+      }
       return this.conversation.participants.map((did) => {
         return iridium.users.getUser(did)
       })

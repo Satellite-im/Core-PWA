@@ -12,9 +12,11 @@ import { RootState } from '~/types/store/store'
 import {
   Conversation,
   ConversationMessage,
+  ConversationMessageType,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { conversationMessageIsNotice } from '~/utilities/chat'
 
 export default Vue.extend({
   components: {
@@ -79,6 +81,9 @@ export default Vue.extend({
     },
     hasReactions(): boolean {
       return false // this.message.reactions && this.message.reactions.length
+    },
+    isNotice(): boolean {
+      return conversationMessageIsNotice(this.message)
     },
     isEditing(): boolean {
       return this.ui.editMessage.id === this.message.id

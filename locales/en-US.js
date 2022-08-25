@@ -104,6 +104,11 @@ export default {
       enter_to: 'enter to',
       save: 'save',
     },
+    group_join_notice: {
+      added: 'added',
+      to_group: 'to the group.',
+    },
+    group_leave_notice: 'left the group.',
   },
   controls: {
     copy_id: 'Copy ID',

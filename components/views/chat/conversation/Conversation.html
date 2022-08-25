@@ -9,7 +9,7 @@
       <Message
         :key="item.message.id"
         :message="item.message"
-        :showHeader="!item.isSameAuthor"
+        :showHeader="item.showHeader"
         :replies="item.replies"
       />
     </template>
