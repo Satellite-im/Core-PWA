@@ -1,8 +1,7 @@
 <div class="sounds">
-  <TypographyTitle
-    :size="6"
-    :text="$t('pages.settings.notifications.sounds.title')"
-  />
+  <TypographyText as="h3">
+    {{ $t('pages.settings.notifications.sounds.title') }}
+  </TypographyText>
   <SettingsPagesAudioSoundsItem
     :value="sounds[Sounds.NEW_MESSAGE]"
     @toggle="toggleSound(Sounds.NEW_MESSAGE, $event)"
