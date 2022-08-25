@@ -161,7 +161,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    * @param id string (required)
    * @returns user data object if found in the local state
    */
-  getUser(did: IridiumPeerIdentifier) {
+  getUser(did: IridiumPeerIdentifier): User | undefined {
     return this.state[didUtils.didString(did)]
   }
 
