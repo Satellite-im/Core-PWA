@@ -39,7 +39,7 @@ export default {
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
-    background_call: 'You are currently in a call with',
+    background_call: 'Current call',
   },
   time: {
     now: 'now',
