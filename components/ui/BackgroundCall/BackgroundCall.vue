@@ -41,24 +41,18 @@ export default Vue.extend({
   },
   methods: {
     navigateToActiveConversation() {
-      if (!this.remoteParticipant) {
-        return
-      }
-
-      if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/showSidebar', false)
-      }
-
       const id = iridium.chat?.directConversationIdFromDid(
         this.remoteParticipant.did,
       )
-
-      if (!id || !iridium.chat?.hasConversation(id)) {
+      if (
+        !id ||
+        !iridium.chat?.hasConversation(id) ||
+        !this.remoteParticipant
+      ) {
         return
       }
 
-      this.$router.push(`/chat/${id}`)
+      this.$router.push(`/mobile/chat/${id}`)
     },
   },
 })

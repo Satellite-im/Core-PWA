@@ -1,17 +1,8 @@
 .background-call {
-  &:extend(.background-flair);
-  &:extend(.font-secondary);
-  &:extend(.absolute-coverage);
-  border-radius: 0 0 @corner-rounding @corner-rounding;
-  height: @background-call-height;
-  z-index: @fifth-layer-zindex;
-  font-size: @micro-text-size;
-  bottom: auto;
+  background-color: @flair-color;
+  height: 30px;
   text-align: center;
-  box-shadow: 0px 0px 30px rgba(var(--flair-color-rgb), 0.35),
-    0px 0px 20px rgba(var(--flair-color-rgb), 0.4);
   padding: 10px 10%;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -22,12 +22,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'media', 'conversation', 'files', 'settings']),
     ModalWindows: () => ModalWindows,
-    showBackgroundCall(): boolean {
-      if (!this.$device.isMobile) {
-        return this.isBackgroundCall
-      }
-      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
-    },
   },
   watch: {
     'settings.audioInput'(audioInput: string) {

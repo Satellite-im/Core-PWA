@@ -16,7 +16,7 @@
             </button>
           </div>
         </div>
-        <FriendsMobileList v-if="friends.length" :list="friendsList" />
+        <FriendsMobileList v-if="friendsList.length" :list="friendsList" />
         <div v-else class="empty-friends-container">
           <FriendsEmptyMessage class="empty-friends" @click="setSwiperAsTab" />
         </div>
