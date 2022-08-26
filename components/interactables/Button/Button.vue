@@ -12,7 +12,7 @@ export default Vue.extend({
     },
     color: {
       type: String as PropType<ButtonType>,
-      default: '',
+      default: 'primary',
     },
     text: {
       type: String,

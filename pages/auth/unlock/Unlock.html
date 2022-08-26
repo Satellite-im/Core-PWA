@@ -39,7 +39,6 @@
     </TypographyText>
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
-        color="primary"
         class="random-user-btn"
         :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
         @click="createRandom"
