@@ -30,6 +30,12 @@ export default Vue.extend({
             msgType: this.alert.type,
           })
         }
+        case NotificationType.GROUP_MESSAGE: {
+          return this.$t('messaging.user_sent_group_message.message', {
+            user: this.alert.fromName,
+            group: this.alert.chatName,
+          })
+        }
         case NotificationType.FRIEND_REQUEST: {
           return this.$t('friends.new_friend_request', {
             user: this.alert.fromName,
