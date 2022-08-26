@@ -15,7 +15,7 @@
             <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
-        <SidebarList class="mobile-list" />
+        <SidebarList class="mobile-list" @slideNext="swiper.slideNext()" />
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
@@ -91,6 +91,13 @@ export default Vue.extend({
     },
   },
 
+  watch: {
+    isActiveCall(val) {
+      if (val) {
+        this.swiper?.slideNext()
+      }
+    },
+  },
   // component is remounted anytime the route param changes
   mounted() {
     this.swiper = new Swiper(

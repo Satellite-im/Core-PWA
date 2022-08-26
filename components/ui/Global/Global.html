@@ -1,5 +1,5 @@
 <div>
-  <UiSvgDefs />
+  <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
