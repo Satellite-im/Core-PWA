@@ -325,7 +325,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
       // Remove is_typing indicator upon user message receive
       clearTimeout(this.iridium.webRTC.timeoutMap[message.from])
-      this.toggleTypingStatus(conversationId, message.from)
+      this.setTypingStatus(conversationId, message.from, false)
 
       const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Partial<Notification> = {
@@ -752,10 +752,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
   }
 
-  toggleTypingStatus(conversationId: string, did: string) {
+  setTypingStatus(conversationId: string, did: string, value: boolean) {
     Vue.set(this.typingStatus, conversationId, {
       ...this.typingStatus[conversationId],
-      [did]: !this.typingStatus[conversationId]?.[did],
+      [did]: value,
     })
   }
 }

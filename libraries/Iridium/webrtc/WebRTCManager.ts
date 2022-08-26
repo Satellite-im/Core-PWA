@@ -400,12 +400,12 @@ export default class WebRTCManager extends Emitter {
     if (!did || !conversation) return
 
     if (!this.iridium.chat.typingStatus[conversationId]?.[did]) {
-      this.iridium.chat.toggleTypingStatus(conversationId, did)
+      this.iridium.chat.setTypingStatus(conversationId, did, true)
     }
     clearTimeout(this.timeoutMap[did])
 
     this.timeoutMap[did] = setTimeout(() => {
-      this.iridium.chat.toggleTypingStatus(conversationId, did)
+      this.iridium.chat.setTypingStatus(conversationId, did, false)
     }, Config.chat.typingInputThrottle * 2)
   }
 
