@@ -113,13 +113,11 @@
           <div class="content">
             <InteractablesButton
               text="Test Button"
-              color="primary"
               outlined
               @click="testAction"
             />
             <InteractablesButton
               text="Test Button"
-              color="primary"
               :icon="{ style: 'far', name: 'arrow-circle-right' }"
               :outlined="false"
               @click="testAction"

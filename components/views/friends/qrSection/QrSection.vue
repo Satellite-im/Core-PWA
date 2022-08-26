@@ -11,10 +11,7 @@
           <TypographyText>
             {{ $t('friends.scan_code') }}
           </TypographyText>
-          <InteractablesButton
-            color="primary"
-            :text="$t('friends.camera_scan')"
-          />
+          <InteractablesButton :text="$t('friends.camera_scan')" />
         </div>
         <div class="qr-section">
           <TypographyText>

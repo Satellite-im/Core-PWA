@@ -29,14 +29,13 @@
       </div>
       <div class="buttons mobile">
         <InteractablesButton
-          color="primary"
           v-if="!isFriend"
           @click="createFriendRequest"
           :loading="Boolean(loading)"
         >
           <user-plus-icon size="1.25x" />
         </InteractablesButton>
-        <InteractablesButton color="primary">
+        <InteractablesButton>
           <more-vertical-icon size="1.25x" />
         </InteractablesButton>
       </div>
@@ -48,13 +47,12 @@
       >
         <div class="buttons desktop">
           <InteractablesButton
-            color="primary"
             v-if="!isFriend"
             @click="createFriendRequest"
             :loading="Boolean(loading)"
           >
           </InteractablesButton>
-          <InteractablesButton color="primary">
+          <InteractablesButton>
             <more-vertical-icon size="1.25x" />
           </InteractablesButton>
         </div>
