@@ -36,7 +36,7 @@ export default Vue.extend({
 
       this.$router.push(
         this.$device.isMobile
-          ? `mobile/chat/${conversationId}`
+          ? `/mobile/chat/${conversationId}`
           : `/chat/${conversationId}`,
       )
     },
