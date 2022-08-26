@@ -1,7 +1,10 @@
 <div class="background-call" @click="navigateToActiveConversation">
-  {{$t('ui.background_call')}}&nbsp;
-  <span v-if="remoteParticipant" class="background-call-name"
-    >{{remoteParticipant.name}}</span
-  >&nbsp;
-  <span v-if="elapsedTime">- {{elapsedTime}}</span>
+  <TypographyText size="xs" class="text">
+    <span>{{ $t('ui.background_call') }} -&nbsp;</span>
+    <b v-if="remoteParticipant" class="ellipsis">
+      {{ remoteParticipant.name }}
+    </b>
+    &nbsp;-&nbsp;
+    <span v-if="elapsedTime">{{ elapsedTime }}</span>
+  </TypographyText>
 </div>

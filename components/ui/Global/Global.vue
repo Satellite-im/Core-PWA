@@ -2,17 +2,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    toggleModal: (modalName: string) => void
-  }
-}
 
 export default Vue.extend({
   name: 'Global',
@@ -29,12 +22,6 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'media', 'conversation', 'files', 'settings']),
     ModalWindows: () => ModalWindows,
-    showBackgroundCall(): boolean {
-      if (!this.$device.isMobile) {
-        return this.isBackgroundCall
-      }
-      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
-    },
   },
   watch: {
     'settings.audioInput'(audioInput: string) {
@@ -89,38 +76,6 @@ export default Vue.extend({
         name: modalName,
         state: !this.ui.modals[modalName],
       })
-    },
-    /**
-     * @method acceptCall DocsTODO
-     * @description
-     * @example
-     */
-    async acceptCall(kinds: TrackKind[]) {
-      try {
-        await iridium.webRTC.acceptCall(kinds)
-      } catch (error) {
-        if (error instanceof Error) {
-          this.$toast.error(this.$t(error.message) as string)
-        }
-      }
-
-      const callId = this.webrtc.activeCall?.callId
-      if (!callId) {
-        return
-      }
-
-      const callingPath = `/chat/${callId}`
-      if (this.$route.path !== callingPath) {
-        this.$router.push(callingPath)
-      }
-    },
-    /**
-     * @method denyCall DocsTODO
-     * @description
-     * @example
-     */
-    denyCall() {
-      iridium.webRTC.denyCall()
     },
     /**
      * @method updateWebRTCState

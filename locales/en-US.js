@@ -39,7 +39,7 @@ export default {
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
-    background_call: 'You are currently in a call with',
+    background_call: 'Current call',
   },
   time: {
     now: 'now',
@@ -104,6 +104,12 @@ export default {
       enter_to: 'enter to',
       save: 'save',
     },
+    group_join: '{name} added {members} to the group.',
+    group_leave: '{name} left the group.',
+    sent_attachment: '{name} sent an attachment.',
+    you_sent_attachment: 'You sent an attachment.',
+    sent_glyph: '{name} sent a glyph.',
+    you_sent_glyph: 'You sent a glyph.',
     group_join_notice: {
       added: 'added',
       to_group: 'to the group.',

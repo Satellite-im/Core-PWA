@@ -41,12 +41,10 @@
     <div class="button-container">
       <InteractablesButton
         :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
-        color="primary"
         @click="togglePhrase"
       />
       <InteractablesButton
         :text="$t('pages.settings.accounts.copy_phrase')"
-        color="primary"
         @click="copyPhrase"
       />
     </div>

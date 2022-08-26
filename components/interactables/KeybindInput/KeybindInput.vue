@@ -90,6 +90,9 @@ export default Vue.extend({
     newKeybindString(): string {
       return this.newKeybind.join(separator).toLowerCase()
     },
+    container(): HTMLElement {
+      return this.$refs.container as HTMLElement
+    },
   },
   beforeDestroy() {
     this.removeKeybindListener()
@@ -121,13 +124,14 @@ export default Vue.extend({
       this.removeKeybindListener()
     },
     addKeybindListener() {
-      window.addEventListener('keydown', this.handleKeyEvent)
-      window.addEventListener('keyup', this.handleKeyEvent)
+      this.container.addEventListener('keydown', this.handleKeyEvent)
+      this.container.addEventListener('keyup', this.handleKeyEvent)
+      this.container.focus()
       this.isListening = true
     },
     removeKeybindListener() {
-      window.removeEventListener('keydown', this.handleKeyEvent)
-      window.removeEventListener('keyup', this.handleKeyEvent)
+      this.container.removeEventListener('keydown', this.handleKeyEvent)
+      this.container.removeEventListener('keyup', this.handleKeyEvent)
       this.isListening = false
       Object.assign(this.modifiers, initialModifiersState)
     },
@@ -144,7 +148,8 @@ export default Vue.extend({
       }
 
       if (this.activeModifiers.length === 0) {
-        const editButton = this.$refs.editButton as HTMLButtonElement
+        const editButton = (this.$refs.editButton as Vue)
+          ?.$el as HTMLButtonElement
         if (event.keyCode === 13) {
           this.save()
           editButton.focus()

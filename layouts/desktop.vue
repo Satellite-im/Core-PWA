@@ -101,6 +101,8 @@ export default Vue.extend({
   inset: 0;
   position: absolute;
   transition: left @animation-speed-long ease;
+  /* background required for modal backdrop-filter to work properly */
+  background: @background;
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);

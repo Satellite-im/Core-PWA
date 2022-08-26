@@ -3,6 +3,7 @@
     v-for="c in sortedConversations"
     :key="c.id"
     :conversation="c"
+    @slideNext="$emit('slideNext')"
   />
   <FriendsEmptyMessage v-if="!sortedConversations.length" displayImage />
 </div>

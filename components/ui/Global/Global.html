@@ -1,5 +1,5 @@
 <div>
-  <UiSvgDefs />
+  <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
@@ -28,7 +28,7 @@
       />
     </UiModal> -->
     <UiModal v-if="webrtc.incomingCall">
-      <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
+      <MediaIncomingCall />
     </UiModal>
     <UiModal
       v-if="ui.modals.marketplace"
@@ -82,7 +82,7 @@
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
   </transition>
-  <UiPip v-if="showBackgroundCall && $device.isDesktop" v-slot="{ dragging }">
+  <UiPip v-if="$device.isDesktop && isBackgroundCall" v-slot="{ dragging }">
     <MediaPreviewCall :dragging="dragging" />
   </UiPip>
 </div>
