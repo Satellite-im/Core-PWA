@@ -90,7 +90,7 @@ export default {
       user: 'user sent you something',
     },
     user_sent_group_message: {
-      user: '{user} posted in {group}',
+      message: '{user} posted in {group}',
     },
     pinned: {
       archived_messages: 'Archived Messages',
