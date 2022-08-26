@@ -160,6 +160,10 @@ export default Vue.extend({
      */
     async openConversation() {
       if (this.$device.isMobile) {
+        if (this.conversation.id === this.$route.params.id) {
+          this.$emit('slideNext')
+          return
+        }
         this.$router.push({ params: { id: this.conversation.id } })
         return
       }
