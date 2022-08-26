@@ -16,25 +16,25 @@ export default Vue.extend({
     },
   },
   created() {
-    this.listenToKeyboard()
+    this.addEventListener()
   },
   beforeDestroy() {
-    this.unlistenToKeyboard()
+    this.removeEventListener()
   },
   methods: {
     close() {
       this.$emit('close')
     },
-    handleKeyboard(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
+    handleKeydown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
         this.close()
       }
     },
-    listenToKeyboard() {
-      document.addEventListener('keyup', this.handleKeyboard)
+    addEventListener() {
+      document.addEventListener('keydown', this.handleKeydown)
     },
-    unlistenToKeyboard() {
-      document.removeEventListener('keyup', this.handleKeyboard)
+    removeEventListener() {
+      document.removeEventListener('keydown', this.handleKeydown)
     },
   },
 })
