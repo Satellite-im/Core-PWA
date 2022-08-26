@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   computed: {
     conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
+      return this.incomingCall?.did
     },
     conversation(): Conversation | undefined {
       if (!this.conversationId) {
@@ -56,14 +56,14 @@ export default Vue.extend({
       return this.webrtc.incomingCall
     },
     caller(): User | undefined {
-      if (!this.incomingCall?.did) {
+      if (!this.conversationId) {
         return
       }
       // TODO : fix this later
       if (this.isGroup) {
         return
       }
-      return iridium.users.getUser(this.incomingCall.did)
+      return iridium.users.getUser(this.conversationId)
     },
     callerAvatar(): string {
       if (!this.caller) {
