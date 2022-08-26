@@ -1,4 +1,9 @@
-<div class="keybind-input" v-click-outside="cancel">
+<div
+  class="keybind-input"
+  v-click-outside="cancel"
+  ref="container"
+  tabindex="-1"
+>
   <TypographyLabel :text="name" />
   <div class="control">
     <TypographyText v-if="!isListening && value === ''" class="info-label">
