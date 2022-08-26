@@ -327,6 +327,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       this.toggleTypingStatus(conversationId, message.from)
 
       const friendName = this.iridium.users.getUser(message?.from)
+      if (!friendName) {
+        return
+      }
       const buildNotification: Partial<Notification> = {
         fromName: friendName?.name,
         at: Date.now(),
