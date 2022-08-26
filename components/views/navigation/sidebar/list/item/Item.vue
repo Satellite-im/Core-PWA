@@ -14,6 +14,7 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
+import { conversationMessageIsNotice } from '~/utilities/chat'
 
 export default Vue.extend({
   components: {
@@ -89,25 +90,40 @@ export default Vue.extend({
     },
 
     lastMessageDisplay(): string {
-      const lastMessage = this.messages.at(-1)
-      if (!lastMessage) {
+      const message = this.messages.at(-1)
+      if (!message) {
         return this.$t('messaging.say_hi') as string
       }
-      return lastMessage.body || ''
 
-      // const sender = message.from === iridium.connector?.id ? 'me' : 'user'
+      const name = iridium.users.getUser(message.from)?.name
+      const members = message.members
+        ?.map((did) => iridium.users.getUser(did)?.name)
+        .filter((name) => name)
+        .join(', ')
 
-      // switch (message.type) {
-      //   case MessagingTypesEnum.TEXT:
-      //     return message.payload
-      //   case MessagingTypesEnum.FILE:
-      //   case MessagingTypesEnum.GLYPH:
-      //     return this.$t(`messaging.user_sent.${sender}`, {
-      //       msgType: message.type,
-      //     }) as string
-      //   default:
-      //     return this.$t(`messaging.user_sent_something.${sender}`) as string
-      // }
+      const fromSelf = message.from === iridium.connector?.id
+
+      if (message.attachments.length) {
+        return fromSelf
+          ? (this.$t('messaging.you_sent_attachment') as string)
+          : (this.$t('messaging.sent_attachment', { name }) as string)
+      }
+
+      switch (message.type) {
+        case 'glyph':
+          return fromSelf
+            ? (this.$t('messaging.you_sent_glyph') as string)
+            : (this.$t('messaging.sent_glyph', { name }) as string)
+        case 'member_join':
+          return this.$t('messaging.group_join', {
+            name,
+            members,
+          }) as string
+        case 'member_leave':
+          return this.$t('messaging.group_leave', { name }) as string
+      }
+
+      return message.body || ''
     },
 
     isSelected(): boolean {
