@@ -2,7 +2,9 @@
 
 exports[`AudioStreamUtils.AudioStreamUtils.destroy test case 1 1`] = `undefined`;
 
-exports[`AudioStreamUtils.AudioStreamUtils.listenToMicLevel test case 1 1`] = `undefined`;
+exports[`AudioStreamUtils.AudioStreamUtils.listenToMicLevel test case 1 - empty constructor 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.start test case 1 1`] = `undefined`;
 
 exports[`AudioStreamUtils.AudioStreamUtils.stopListeningToMicLevel test case 1 1`] = `undefined`;
 

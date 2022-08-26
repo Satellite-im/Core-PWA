@@ -139,6 +139,7 @@
     "lint-staged": ">=10",
     "prettier": "^2.5.1",
     "simple-peer": "^9.11.1",
+    "standardized-audio-context-mock": "^9.6.0",
     "ts-jest": "^27.1.3",
     "typescript": "^4.5.5",
     "url-polyfill": "^1.1.12"
