@@ -627,28 +627,32 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       conversationId,
     }: { upload: ChatFileUpload; conversationId: string },
     options?: AddOptions,
-  ): Promise<MessageAttachment> {
+  ): Promise<MessageAttachment | false> {
     if (upload.file.size === 0) {
       throw new Error('TODO')
     }
+    const safer = await this.upload(upload.file, conversationId)
+    if (!safer) {
+      return false
+    }
     const thumbnailBlob = await createThumbnail(upload.file, 400)
-    const id = await this.upload(upload.file, conversationId)
-    const thumbnail = thumbnailBlob
-      ? await this.upload(thumbnailBlob, conversationId)
-      : ''
     return {
-      id,
+      cid: safer.cid,
       name: upload.file.name,
       size: upload.file.size,
       nsfw: await isNSFW(upload.file),
+      safe: safer.valid,
       type: Object.values(FILE_TYPE).includes(upload.file.type as FILE_TYPE)
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail,
+      thumbnail: thumbnailBlob,
     }
   }
 
-  async upload(file: File, conversationId: string): Promise<string> {
+  async upload(
+    file: File,
+    conversationId: string,
+  ): Promise<{ cid: string; valid: boolean } | undefined> {
     const conversation = this.getConversation(conversationId)
     if (!this.iridium.connector?.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
@@ -673,9 +677,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         const { payload } = msg
         const { body } = payload
         if (body.originalCID === cid.toString()) {
-          resolve(body.cid)
+          resolve({ cid: body.cid, valid: body.valid })
         }
-        setTimeout(() => resolve(''), 30000)
+        setTimeout(() => resolve(undefined), 30000)
       })
     })
   }

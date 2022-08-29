@@ -7,12 +7,13 @@ export type MessageGlyph = {
 }
 
 export type MessageAttachment = {
-  id: string
+  cid: string
   name: string
   type: FILE_TYPE
   size: number
-  thumbnail: string
   nsfw: boolean
+  safe: boolean
+  thumbnail?: File
 }
 
 export type ConversationMessageType =

@@ -207,22 +207,26 @@ const Chatbar = Vue.extend({
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
       const conversationId = this.$route.params.id
-      return await Promise.all(
-        this.files.map(async (file, index) => {
-          return await iridium.chat.addFile(
-            { upload: file, conversationId },
-            {
-              progress: (bytes) => {
-                this.$store.commit('chat/setFileProgress', {
-                  id: conversationId,
-                  index,
-                  progress: Math.floor((bytes / file.file.size) * 100),
-                })
+
+      const attachments: (MessageAttachment | false)[] = await Promise.all(
+        this.files.map(
+          async (upload, index): Promise<MessageAttachment | false> => {
+            return await iridium.chat.addFile(
+              { upload, conversationId },
+              {
+                progress: (bytes) => {
+                  this.$store.commit('chat/setFileProgress', {
+                    id: conversationId,
+                    index,
+                    progress: Math.floor((bytes / upload.file.size) * 100),
+                  })
+                },
               },
-            },
-          )
-        }),
+            )
+          },
+        ),
       )
+      return attachments.filter((a) => a) as MessageAttachment[]
     },
     /**
      * @method sendMessage
