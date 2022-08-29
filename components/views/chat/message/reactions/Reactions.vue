@@ -10,6 +10,7 @@ import { RootState } from '~/types/store/store'
 type Reaction = {
   emoji: string
   names: string[]
+  dids: string[]
 }
 
 export default Vue.extend({
@@ -44,6 +45,7 @@ export default Vue.extend({
       const reactions = Object.entries(didsForEmoji).map(([emoji, dids]) => ({
         emoji,
         names: dids.map((did) => iridium.users.getUser(did)?.name),
+        dids,
       }))
       return reactions
     },
@@ -60,7 +62,6 @@ export default Vue.extend({
         conversationId: this.message.conversationId,
         messageId: this.message.id,
         reaction: emoji,
-        remove: true,
       })
     },
     /**
@@ -74,7 +75,7 @@ export default Vue.extend({
       if (!iridium.connector) {
         return false
       }
-      return reaction.names.includes(iridium.connector.id)
+      return reaction.dids.includes(iridium.connector.id)
     },
     emojiReaction() {
       this.$store.commit('ui/settingReaction', {
