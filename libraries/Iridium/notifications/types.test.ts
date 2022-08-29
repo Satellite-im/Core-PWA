@@ -1,9 +1,7 @@
-import { NotificationsError } from './types'
+import { EmptyNotification } from '~/libraries/Iridium/notifications/types'
 
-describe('NotificationsError', () => {
-  test('check NotificationsError export type', () => {
-    expect(NotificationsError).toEqual({
-      NOTIFICATION_NOT_SENT: 'error.notifications.notifications_not_sent',
-    })
+describe('test constants of Iridium/notifications/types', () => {
+  it('should return correct value for EmptyNotification', () => {
+    expect(EmptyNotification).toMatchSnapshot()
   })
 })
