@@ -24,7 +24,7 @@
             </div>
 
             <div class="profile-main">
-              <div class="profile-image-cropper" v-if="showCropper">
+              <div v-if="showCropper" class="profile-image-cropper">
                 <div class="content">
                   <InteractablesImageCropper
                     v-click-outside="toggleCropper"
@@ -51,24 +51,24 @@
                     />
                     <UiComingSoon
                       style="flex: 1"
-                      :tooltipText="$t('ui.coming_soon')"
-                      :tooltipPosition="'top'"
+                      :tooltip-text="$t('ui.coming_soon')"
+                      :tooltip-position="'top'"
                       disabled
                     >
                       <UiCircle
-                        :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
-                        @click="openFileDialog"
+                        :type="croppedImage ? 'image' : 'random'"
                         :source="src"
                         :seed="accounts.active"
                         :size="isSmallScreen ? 55 : 80"
+                        @click="openFileDialog"
                       />
                       <UiCircle
                         type="icon"
-                        @click="openFileDialog"
                         icon="plus"
                         color="var(--flair-color)"
                         :size="20"
                         class="plus-button"
+                        @click="openFileDialog"
                       />
                     </UiComingSoon>
                   </div>
@@ -76,22 +76,27 @@
                 <button
                   v-if="src"
                   class="remove-button"
-                  @click="removeProfileImage"
+                  @click="updateUserDetail('photoHash', '')"
                 >
                   <span>{{ $t('pages.settings.profile.remove_image') }}</span>
                 </button>
                 <div class="username">
-                  <TypographyTitle :size="6" :text="accounts.details.name" />
+                  <TypographyTitle
+                    :size="6"
+                    :text="iridiumProfile ? iridiumProfile.name : ''"
+                  />
                 </div>
                 <div class="status-input">
                   <form
-                    @submit="updateUserDetail('status', userDetails.status)"
+                    @submit="updateUserDetail('status', inputs.status ?? '')"
                   >
                     <InteractablesInput
-                      v-model="userDetails.status"
+                      v-model="inputs.status"
                       size="xs"
                       type="text"
-                      :placeholder="$t('pages.settings.profile.status_placeholder')"
+                      :placeholder="
+                          $t('pages.settings.profile.status_placeholder')
+                        "
                       :loading="loading.has('status')"
                       button-type="submit"
                     >
@@ -99,12 +104,15 @@
                     </InteractablesInput>
                   </form>
                 </div>
-                <div v-if="!!accounts.details.status" class="status">
+                <div
+                  v-if="iridiumProfile && !!iridiumProfile.status"
+                  class="status"
+                >
                   <TypographyText as="h6">
-                    {{$t('pages.settings.profile.current_status')}}
+                    {{ $t('pages.settings.profile.current_status') }}
                   </TypographyText>
                   <TypographyText>
-                    {{ accounts.details.status }}
+                    {{ iridiumProfile ? iridiumProfile.status : '' }}
                   </TypographyText>
                 </div>
               </div>
@@ -126,8 +134,8 @@
               <div>
                 <UiComingSoon
                   style="flex: 1"
-                  :tooltipText="$t('ui.coming_soon')"
-                  :tooltipPosition="'top'"
+                  :tooltip-text="$t('ui.coming_soon')"
+                  :tooltip-position="'top'"
                   disabled
                 >
                   <button
@@ -135,7 +143,7 @@
                     class="edit-button"
                     @click="() => {}"
                   >
-                    {{$t('global.edit')}}
+                    {{ $t('global.edit') }}
                   </button>
                 </UiComingSoon>
               </div>
@@ -179,15 +187,17 @@
 
                 <UiComingSoon
                   style="flex: 1"
-                  :tooltipText="$t('ui.coming_soon')"
-                  :tooltipPosition="'top'"
+                  :tooltip-text="$t('ui.coming_soon')"
+                  :tooltip-position="'top'"
                   disabled
                 >
                   <InteractablesInput
-                    v-model="userDetails.accountUrl"
+                    v-model="inputs.accountUrl"
                     size="xs"
                     type="text"
-                    :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
+                    :placeholder="
+                        $t('pages.settings.profile.accounts.url_placeholder')
+                      "
                   >
                     <edit-icon size="1x" />
                   </InteractablesInput>
@@ -198,7 +208,9 @@
                 <div class="accounts-subtitle">
                   <TypographySubtitle
                     :size="6"
-                    :text="$t('pages.settings.profile.accounts.subtitle_accounts')"
+                    :text="
+                        $t('pages.settings.profile.accounts.subtitle_accounts')
+                      "
                   />
                 </div>
 

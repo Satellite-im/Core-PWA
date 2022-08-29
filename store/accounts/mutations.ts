@@ -47,9 +47,6 @@ const mutations = {
       lastUpdate: Date.now(),
     }
   },
-  async updateUserDetails(state: { details: User }, details: User) {
-    state.details = { ...state.details, ...details }
-  },
   setUserPeerId(state: AccountsState, peerId: string) {
     if (state.details) {
       state.details = {

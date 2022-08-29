@@ -13,7 +13,8 @@ import {
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { RootState } from '~/types/store/store'
-import { User } from '~/libraries/BlockchainClient/interfaces'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -30,7 +31,7 @@ export default Vue.extend({
       croppedImage: '',
       showCropper: false,
       loading: new Set() as Set<keyof User>,
-      userDetails: {
+      inputs: {
         status: '',
         accountUrl: '',
       } as Partial<User>,
@@ -41,6 +42,9 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
+    iridiumProfile(): User | undefined {
+      return iridium.profile.state
+    },
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore
@@ -50,7 +54,7 @@ export default Vue.extend({
       if (this.croppedImage) {
         return this.croppedImage
       }
-      const hash = this.accounts?.details?.profilePicture
+      const hash = iridium.profile.state?.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     imageInputRef(): HTMLInputElement {
@@ -117,13 +121,12 @@ export default Vue.extend({
     async updateUserDetail(key: keyof User, value: string) {
       try {
         this.loading.add(key)
-        await this.$store.dispatch('accounts/updateUser', {
+        await iridium.profile.updateUser({
           [key]: value,
         })
         this.$toast.show(
           this.$t('pages.settings.profile.detail_updated') as string,
         )
-        this.userDetails[key] = value
       } catch (e: any) {
         this.$toast.show(this.$t(e.message) as string)
       } finally {

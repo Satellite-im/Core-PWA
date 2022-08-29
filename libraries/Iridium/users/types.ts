@@ -1,10 +1,11 @@
-// TODO: Replace User (friends/types.ts) and GroupMemberDetails (groups/types.ts) with User (users/types.ts)
 export type User = {
   did: string
   name: string
   peerId?: string
   seen?: number
   photoHash?: string
+  status?: string
+  accountUrl?: string
 }
 
 export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'
