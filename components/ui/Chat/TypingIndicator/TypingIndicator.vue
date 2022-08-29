@@ -2,16 +2,27 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
-import { ConversationParticipant } from '~/store/conversation/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
+
 export default Vue.extend({
   computed: {
-    ...mapGetters('conversation', ['typingParticipants']),
+    typingParticipants(): User[] {
+      const conversationId = this.$route.params.id
+      if (!conversationId) {
+        return []
+      }
+
+      const convTypingStatus = iridium.chat.typingStatus[conversationId] || {}
+
+      return Object.keys(convTypingStatus)
+        .filter((k) => convTypingStatus?.[k])
+        .map((did) => iridium.users.getUser(did))
+        .filter(Boolean)
+    },
     text(): string {
       return this.$tc('messaging.typing', this.typingParticipants.length, {
-        user: this.typingParticipants
-          .map((p: ConversationParticipant) => p.name)
-          .join(', '),
+        user: this.typingParticipants.map((u) => u.name).join(', '),
       })
     },
   },

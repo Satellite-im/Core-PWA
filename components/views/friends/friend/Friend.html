@@ -88,7 +88,6 @@
     </div>
     <InteractablesButton
       v-if="!loading"
-      color="primary"
       data-cy="friend-send-message"
       v-tooltip.bottom="$t('friends.message')"
       @click="sendMessageRequest"
@@ -97,7 +96,6 @@
     </InteractablesButton>
     <InteractablesButton
       v-if="!loading"
-      color="primary"
       v-tooltip.bottom="$t('friends.options')"
     >
       <more-vertical-icon size="1x" />

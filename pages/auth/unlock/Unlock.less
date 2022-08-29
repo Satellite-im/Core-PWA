@@ -5,31 +5,26 @@
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
-  gap: 48px;
+  gap: 40px;
+
+  .info-button {
+    display: flex;
+    justify-content: flex-end;
+  }
 
   .realm-container {
     &:extend(.full-width);
     display: inline-flex;
     justify-content: center;
-    margin-top: @normal-spacing;
-  }
-
-  .create_pin_section {
-    margin-bottom: @normal-spacing;
-    .heading {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
-    &:extend(.more-pad-sides);
+    margin: 24px 0 70px 0;
   }
 
   .decryption-body {
     align-self: center;
+
+    .input-container {
+      margin-bottom: 8px;
+    }
 
     .delete-link {
       display: flex;

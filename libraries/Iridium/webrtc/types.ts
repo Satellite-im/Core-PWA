@@ -1,3 +1,4 @@
+import { SignalData } from 'simple-peer'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 
 export type PeerMutedState = {
@@ -17,8 +18,10 @@ export interface WebRTCState {
     callId: string
     did: string
     type: 'group' | 'friend'
+    data: SignalData
   } | null
   createdAt: number
+  streamConstraints: MediaStreamConstraints
 }
 
 export enum WebRTCError {

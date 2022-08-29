@@ -32,11 +32,7 @@
         </div>
         <TypographyText> {{ popularGlyph.glyph.description }} </TypographyText>
         <div class="btns">
-          <InteractablesButton
-            color="primary"
-            :text="$t('glyphs.shop_now')"
-            @click="shopGlyph"
-          >
+          <InteractablesButton :text="$t('glyphs.shop_now')" @click="shopGlyph">
           </InteractablesButton>
           <div class="navigator">
             <InteractablesButton @click="() => { navigateGlyph('prev') }">

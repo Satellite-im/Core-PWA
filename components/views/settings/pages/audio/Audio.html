@@ -14,7 +14,6 @@
       <!-- Ask for permissions block -->
       <InteractablesButton
         :text="$t('pages.settings.audio.sources.permissionButtonText')"
-        color="primary"
         @click="enableAudio"
       />
     </SettingsUnit>
@@ -147,7 +146,6 @@
       <InteractablesButton
         v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess"
         :text="$t('pages.settings.audio.sources.permissionButtonText')"
-        color="primary"
         :disabled="!hasWebcam"
         @click="enableVideo"
       />

@@ -2,8 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { RootState } from '~/types/store/store'
 import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
@@ -13,11 +11,6 @@ export default Vue.extend({
     const { isActiveCall } = useWebRTC()
 
     return { isActiveCall }
-  },
-  computed: {
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-    }),
   },
 })
 </script>

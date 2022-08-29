@@ -3,10 +3,10 @@
     <div class="custom-modal-content">
       <img src="~/assets/svg/mascot/sad_curious.svg" class="mascot" />
       <TypographyTitle :text="$t('popups.error_network.title')" class="title" />
-      <TypographyText color="light" style="margin-top: 8px">
+      <TypographyText color="light" class="subtitle">
         {{ $t('popups.error_network.subtitle') }}
       </TypographyText>
-      <InteractablesButton color="primary" class="action" @click="tryAgain">
+      <InteractablesButton class="action" @click="tryAgain">
         <refresh-cw-icon size="1.5x" />
         <TypographyText class="text">
           {{ $t('popups.error_network.action') }}

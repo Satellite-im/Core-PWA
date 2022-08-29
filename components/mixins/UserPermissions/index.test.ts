@@ -2,8 +2,11 @@ import * as index from '~/components/mixins/UserPermissions/index'
 
 describe('index.UserPermissions.created', () => {
   test('0', () => {
+    const localSpy = jest.spyOn(index.UserPermissions, 'created')
     const result: any = index.UserPermissions.created()
-    expect(result).toMatchSnapshot()
+
+    expect(localSpy).toHaveBeenCalled()
+    expect(result).toBe(undefined)
   })
 })
 describe('index.UserPermissions.methods.getUserPermissions', () => {
@@ -55,8 +58,11 @@ describe('index.exportForTesting.formatDevices', () => {
 
 describe('index.UserPermissions.created', () => {
   test('0', () => {
+    const localSpy = jest.spyOn(index.UserPermissions, 'created')
     const result: any = index.UserPermissions.created()
-    expect(result).toMatchSnapshot()
+
+    expect(localSpy).toHaveBeenCalled()
+    expect(result).toBe(undefined)
   })
 })
 

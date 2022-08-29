@@ -3,6 +3,7 @@
     id="app"
     :class="[`theme-${settings.theme}`, { 'hidden-nav': !isMobileNavVisible }]"
   >
+    <UiBackgroundCall v-if="isBackgroundCall" />
     <Nuxt />
     <MobileNav />
     <UiGlobal />
@@ -21,12 +22,19 @@ import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import 'swiper/css'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   name: 'Mobile',
+  setup() {
+    const { isBackgroundCall } = useWebRTC()
+
+    return { isBackgroundCall }
+  },
   data() {
     return {
       settings: iridium.settings.state,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
@@ -53,11 +61,6 @@ export default Vue.extend({
 
   &.hidden-nav {
     padding-bottom: 0;
-  }
-
-  &.has-background-call {
-    position: relative;
-    padding-top: @background-call-height;
   }
 }
 </style>

@@ -4,12 +4,12 @@
 import Vue from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { Friend } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   data() {
     return {
-      recipients: [] as Friend[],
+      recipients: [] as User[],
       isLoading: false,
       recipient: '',
       error: '',
@@ -31,20 +31,20 @@ export default Vue.extend({
   },
   methods: {
     async confirm() {
-      if (!this.recipients.length) {
+      if (!this.recipients.length || !this.conversationId) {
         return
       }
       this.error = ''
       this.isLoading = true
 
-      await Promise.all(
-        this.recipients.map(async (recipient) => {
-          await iridium.groups.addMemberToGroup(
-            this.$route.params.id,
-            recipient.did,
-          )
-        }),
-      ).catch((e) => (this.error = e.message))
+      try {
+        await iridium.chat.addMembersToGroup(
+          this.conversationId,
+          this.recipients.map((user) => user.did),
+        )
+      } catch (e) {
+        this.error = (e as Error).message
+      }
       if (this.error) {
         return
       }

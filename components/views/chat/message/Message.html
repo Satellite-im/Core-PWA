@@ -1,14 +1,16 @@
 <UiContextMenu class="chat-message-container" :items="contextMenuValues">
+  <MessageNotice v-if="isNotice" :message="message" />
   <div
+    v-else
     class="chat-message"
     :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo }"
   >
     <template v-if="showHeader">
       <div class="avatar">
         <UiCircle
-          :type="author.src ? 'image' :'random'"
-          :seed="author.id"
-          :source="author.src"
+          :type="avatarSrc ? 'image' : 'random'"
+          :seed="author.did"
+          :source="avatarSrc"
         />
       </div>
       <div class="header">
@@ -51,7 +53,7 @@
     </div>
     <div class="footer">
       <MessageReactions :message="message" :emojiReaction="emojiReaction" />
-      <MessageReplies :replies="replies" />
+      <MessageReplies :replies="replies" v-if="replies.length" />
     </div>
   </div>
 </UiContextMenu>

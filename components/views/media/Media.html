@@ -1,36 +1,48 @@
-<div id="mediastream" data-cy="mediastream" ref="mediastream">
+<div
+  class="mediastream"
+  ref="mediastream"
+  data-cy="mediastream"
+  :style="`height:${height}`"
+>
   <MediaHeading />
-  <div id="media" ref="media">
+  <div class="media">
     <MediaUser
-      id="local_video"
-      data-cy="local-video"
-      @dblclick="handleDoubleClick('local_video')"
+      id="local"
       :user="localParticipant"
-      :isLocal="true"
+      isLocal
+      data-cy="local-video"
     />
-
     <MediaUser
       v-for="participant in remoteParticipants"
-      :id="`remote_video_${ participant.did }`"
-      data-cy="remote-video"
-      @dblclick="handleDoubleClick('remote_video')"
       :user="participant"
-      :isLocal="false"
+      data-cy="remote-video"
     />
-
-    <div
-      v-if="fullscreen && users.length > fullscreenMaxViewableUsers || !fullscreen && users.length > maxViewableUsers"
+    <!-- <div
+      v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
       class="more-user"
-      v-bind:class="{full: fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
+      :class="{full: ui.fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
     >
       ...
-    </div>
+    </div> -->
   </div>
-  <MediaActionsVolume
-    :volume="audio.volume"
-    isPopup
-    @volumeControlValueChange="volumeControlValueChange"
-  />
-  <MediaActionsSettings />
+
+  <!-- <MediaActionsSettings /> -->
   <MediaActions />
+  <div class="controls">
+    <MediaActionsVolume
+      :volume="volume"
+      isPopup
+      @volumeControlValueChange="volumeControlValueChange"
+    />
+    <MediaActionsFullscreen
+      :isFullscreen="isFullscreen"
+      @toggle="toggleFullscreen"
+    />
+  </div>
+  <InteractablesDragBar
+    v-if="!isFullscreen"
+    side="bottom"
+    showHandle
+    @resize="(val)=> height=val"
+  />
 </div>

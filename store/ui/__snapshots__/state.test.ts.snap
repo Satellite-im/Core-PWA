@@ -3,6 +3,7 @@
 exports[`state.default 0 1`] = `
 Object {
   "activeChannel": undefined,
+  "callHeight": "auto",
   "chatImageOverlay": undefined,
   "chatbarContent": "",
   "chatbarFocus": false,
@@ -29,7 +30,6 @@ Object {
     "route": "emoji",
     "show": false,
   },
-  "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
     "view": "home",

@@ -17,7 +17,7 @@
     line-height: 1.6rem;
     font-size: 0.7em;
   }
-  margin-left: 1.4rem;
+  margin-left: 26px;
   display: flex;
 }
 
@@ -25,8 +25,6 @@
   width: 4px;
   height: 4px;
   border-radius: @half;
-  -webkit-animation: typing 1s linear infinite alternate;
-  -moz-animation: Typing 1s linear infinite alternate;
-  animation: typing 1s linear infinite alternate;
   position: relative;
+  &:extend(.typing-animation);
 }

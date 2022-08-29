@@ -31,7 +31,7 @@ export default class SoundManager {
       string,
     ][]) {
       this.sounds[key] = new Howl({
-        src: [`${Config.ipfs.gateway}${value}`],
+        src: [value],
         loop: Config.sounds.doesLoop.includes(key),
         volume,
         html5: true,
@@ -58,20 +58,30 @@ export default class SoundManager {
    */
   playSound(sound: Sounds) {
     this.existsSound(sound)
-
     this.sounds[sound].play()
   }
 
   /** @function
-   * Stops a specified sound
-   * @name stop
-   * @argument sound Name of the sound file to play.
+   * Stops specified sounds
+   * @name stopSounds
+   * @argument soundList Array of the sound file to stop.
    * @returns null
    */
-  stopSound(sound: Sounds) {
-    this.existsSound(sound)
+  stopSounds(soundList: Array<Sounds>) {
+    soundList.forEach((sound: Sounds) => {
+      if (this.playingSounds().includes(sound)) {
+        this.sounds[sound].stop()
+      }
+    })
+  }
 
-    this.sounds[sound].stop()
+  /** @function
+   * Pauses specified sounds
+   * @name playingSounds
+   * @returns array of sounds that are currently playing
+   */
+  playingSounds() {
+    return Object.keys(this.sounds).filter((s: string) => this.isPlaying(s))
   }
 
   setMuteSounds(flag: boolean) {

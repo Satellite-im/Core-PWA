@@ -29,7 +29,6 @@ const InitialUIState = (): UIState => ({
   glyphModalPackId: undefined,
   chatbarContent: '',
   chatbarFocus: false,
-  fullscreen: false,
   showPinned: false,
   enhancers: {
     show: false,
@@ -58,6 +57,7 @@ const InitialUIState = (): UIState => ({
   recentGlyphs: [],
   chatImageOverlay: undefined,
   isMobileNavVisible: true,
+  callHeight: 'auto',
 })
 
 export default InitialUIState

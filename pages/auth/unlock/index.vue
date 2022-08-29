@@ -23,6 +23,7 @@ export default Vue.extend({
       status: 'idle' as 'idle' | 'loading',
       error: '',
       step: 'signup' as 'signup' | 'login',
+      isChrome: false,
     }
   },
   computed: {
@@ -46,6 +47,10 @@ export default Vue.extend({
         location.host.endsWith('.on.fleek.co')
       )
     },
+    pinDescription(): string {
+      return `${this.$t('pages.unlock.choose_pin_description_1')}
+${this.$t('pages.unlock.choose_pin_description_2')}`
+    },
   },
   watch: {
     error(newValue) {
@@ -65,7 +70,8 @@ export default Vue.extend({
   mounted() {
     // This information can be useful for users to help us find and report bugs.
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
-
+    // @ts-ignore
+    this.isChrome = !!window.chrome
     this.$store.commit('accounts/lock')
   },
   methods: {
@@ -155,6 +161,12 @@ export default Vue.extend({
         return
       }
       this.create()
+    },
+    togglePinInfoModal() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'pinInfo',
+        state: !this.ui.modals.pinInfo,
+      })
     },
     // FOR DEVELOPMENT PURPOSES ONLY
     async createRandom() {

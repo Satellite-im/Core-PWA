@@ -4,7 +4,6 @@
       <UiSpacer :height="25" />
       <img src="~/static/icon.png" alt="" />
       <TypographyTitle :size="5" text="Satellite Absolute" />
-      <TypographySubtitle :size="5" text="UI Preview" />
       <UiSpacer :height="25" />
 
       <aside class="menu">

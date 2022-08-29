@@ -7,7 +7,7 @@
       class="left"
       :color="videoMuted ? 'danger' : 'dark'"
       @click="() => toggleMute('video')"
-      :loading="isLoading"
+      :loading="buttonsLoading.includes('video')"
     >
       <video-icon data-cy="video-unmuted" v-if="!videoMuted" size="1.2x" />
       <video-off-icon data-cy="video-muted" v-else size="1.2x" />
@@ -18,7 +18,7 @@
       :color="audioMuted ? 'danger' : 'dark'"
       data-cy="call-audio"
       @click="() => toggleMute('audio')"
-      :loading="isLoading"
+      :loading="buttonsLoading.includes('audio')"
     >
       <mic-icon data-cy="audio-unmuted" v-if="!audioMuted" size="1.2x" />
       <mic-off-icon data-cy="audio-muted" v-else size="1.2x" />
@@ -31,7 +31,7 @@
       :color="screenMuted ? 'danger' : 'dark'"
       data-cy="call-screen-share"
       @click="() => toggleMute('screen')"
-      :loading="isLoading"
+      :loading="buttonsLoading.includes('screen')"
     >
       <screen-share-icon
         data-cy="screen-unmuted"

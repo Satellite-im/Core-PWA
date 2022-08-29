@@ -11,9 +11,8 @@ import {
   UserPlusIcon,
 } from 'satellite-lucide-icons'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import Group from '~/libraries/Iridium/groups/Group'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
@@ -21,7 +20,6 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
-import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
@@ -39,20 +37,17 @@ export default Vue.extend({
       default: false,
     },
   },
-  setup() {
-    const { isActiveCall } = useWebRTC()
-
-    return { isActiveCall }
-  },
   data() {
     return {
       searchRecommend,
       showAlerts: false,
       searchQuery: '' as string,
       users: iridium.users.state,
+      userStatus: iridium.users.userStatus,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
+      webRTC: useWebRTC(),
     }
   },
   computed: {
@@ -64,60 +59,61 @@ export default Vue.extend({
       modals: (state) => (state as RootState).ui.modals,
     }),
     ModalWindows: () => ModalWindows,
-    conversationId(): Conversation['id'] | undefined {
+    conversationId(): string {
       return this.$route.params.id
     },
     conversation(): Conversation | undefined {
-      if (!this.conversationId) {
-        return undefined
-      }
       return iridium.chat.state.conversations[this.conversationId]
     },
     isGroup(): boolean {
-      return this.conversation?.type === 'group'
-    },
-    details(): User | Group | undefined {
       if (!this.conversation) {
-        return undefined
+        return false
       }
+      return this.conversation.participants.length > 2
+    },
+    details(): User | Conversation {
       if (this.isGroup) {
-        return this.groups[this.conversation.id]
+        return iridium.chat.state.conversations[this.conversationId]
       }
-      const friendDid = this.conversation.participants.find(
+      const friendDid = this.conversation?.participants.find(
         (f) => f !== iridium.connector?.id,
-      )
-      if (!friendDid) {
-        return
-      }
+      ) as string
       return this.users[friendDid]
     },
-    groupMembers(): GroupMemberDetails[] {
-      const members = (this.details as Group).members ?? []
-      return Object.values(members)
+    members(): User[] {
+      if (!this.conversation) {
+        return []
+      }
+      return this.conversation.participants.map((did) => {
+        return iridium.users.getUser(did)
+      })
     },
     subtitleText(): string {
       if (!this.details) {
         return ''
       }
       if (this.isGroup) {
-        return this.groupMembers.map((m) => m.name).join(', ')
+        return this.members.map((m) => m.name).join(', ')
       }
-      return (this.details as User).status || 'offline'
+      return this.userStatus[(this.details as User).did] || 'offline'
     },
     enableRTC(): boolean {
       // todo- hook up to usermanager
       if (this.isGroup) {
-        const memberIds = this.groupMembers.map((m) => m.id)
+        const memberIds = this.members.map((m) => m.did)
         return Object.values(this.users).some(
           (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
+            memberIds.includes(friend.did) &&
+            this.userStatus[friend.did] === 'online',
         )
       }
       // Check current recipient is on the user's friends list
       const friend = Object.values(this.users).find(
         (f) => f.did === (this.details as User)?.did,
       )
-      return friend?.status === 'online'
+      if (!friend) return false
+
+      return this.userStatus[friend.did] === 'online'
     },
     callTooltipText(): string {
       if (this.isGroup) {
@@ -132,7 +128,7 @@ export default Vue.extend({
     groupInvite() {
       this.$store.commit('ui/toggleModal', {
         name: 'groupInvite',
-        state: { isOpen: true, group: this.details as Group },
+        state: { isOpen: true, group: this.details as Conversation },
       })
     },
     toggleAlerts() {
@@ -169,15 +165,12 @@ export default Vue.extend({
     toggleSearchResult() {
       this.searchQuery = ''
     },
-    // openProfile() {
-    //   this.$store.dispatch('ui/showProfile', this.recipient)
-    // },
     async call(kinds: TrackKind[]) {
       if (!this.enableRTC || !this.details) {
         return
       }
       try {
-        await iridium.webRTC.call(this.details, kinds)
+        await iridium.webRTC.call(this.details as User, kinds)
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
@@ -186,7 +179,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.isActiveCall) {
+      if (!this.enableRTC || this.webRTC.isActiveCall) {
         return
       }
       await this.call(['audio'])

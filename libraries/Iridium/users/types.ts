@@ -1,12 +1,16 @@
-// TODO: Replace User (friends/types.ts) and GroupMemberDetails (groups/types.ts) with User (users/types.ts)
 export type User = {
   did: string
   name: string
   peerId?: string
-  status?: 'online' | 'offline' | 'busy' | 'away'
   seen?: number
   photoHash?: string
+  status?: string
+  accountUrl?: string
 }
+
+export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'
+
+export type UserType = User & { status: UserStatus }
 
 export const UsersError = {
   NETWORK_ERROR: 'errors.users.network',

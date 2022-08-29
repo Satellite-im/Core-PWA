@@ -39,7 +39,7 @@ export default {
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
-    background_call: 'You are currently in a call with',
+    background_call: 'Current call',
   },
   time: {
     now: 'now',
@@ -90,7 +90,7 @@ export default {
       user: 'user sent you something',
     },
     user_sent_group_message: {
-      user: '{user} posted in {group}',
+      message: '{user} posted in {group}',
     },
     pinned: {
       archived_messages: 'Archived Messages',
@@ -104,6 +104,17 @@ export default {
       enter_to: 'enter to',
       save: 'save',
     },
+    group_join: '{name} added {members} to the group.',
+    group_leave: '{name} left the group.',
+    sent_attachment: '{name} sent an attachment.',
+    you_sent_attachment: 'You sent an attachment.',
+    sent_glyph: '{name} sent a glyph.',
+    you_sent_glyph: 'You sent a glyph.',
+    group_join_notice: {
+      added: 'added',
+      to_group: 'to the group.',
+    },
+    group_leave_notice: 'left the group.',
   },
   controls: {
     copy_id: 'Copy ID',
@@ -233,6 +244,8 @@ export default {
       store_pin: 'Store Pin? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
+      browser_warning:
+        'Satellite is optimized for Chromium browsers. You may experience UI and functional issues. We will optimize for more browsers in the future.',
     },
     loading: {
       loading: 'Linking Satellites...',
@@ -528,6 +541,8 @@ export default {
         subtitle: 'Update your profile photo, status, banners and more.',
         status_placeholder: 'Some super interesting status message',
         remove_image: 'Remove',
+        current_status: 'Current Status',
+        detail_updated: 'Profile Updated Successfully',
         info: {
           title: 'Account Info',
           subtitle:
@@ -625,10 +640,7 @@ export default {
     reply_to: 'Reply to',
     multimedia: 'Multimedia content',
     collapse: 'Collapse',
-    replies_separator: ' and ',
-    reply_single: 'Reply from {name}',
-    repliers_less_than_limit: 'Replies from {names}',
-    repliers_more_than_limit: 'Replies from {names} and {leftCount} more ...',
+    repliers: 'Reply from {names} | Replies from {names}',
   },
   errors: {
     accounts: {

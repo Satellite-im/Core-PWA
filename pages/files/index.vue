@@ -32,11 +32,7 @@ export default Vue.extend({
     }),
     directory(): IridiumItem[] {
       const filteredItems = this.searchedItems(this.items, this.searchValue)
-      return this.sortedItems(
-        filteredItems,
-        this.items,
-        this.$route.query.route,
-      )
+      return this.sortedItems(filteredItems, this.$route.query.route)
     },
     searchScope(): string {
       const directoryPath = this.path.map((v) => v.name).join(' › ')

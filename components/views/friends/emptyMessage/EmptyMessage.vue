@@ -13,11 +13,7 @@
       src="~/assets/svg/mascot/sad_curious.svg"
       draggable="false"
     />
-    <InteractablesButton
-      :text="$t('friends.add')"
-      color="primary"
-      @click="navigateAddFriends"
-    >
+    <InteractablesButton :text="$t('friends.add')" @click="navigateAddFriends">
       <user-plus-icon size="1.2x" />
     </InteractablesButton>
   </div>
@@ -26,6 +22,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
+import { RawLocation } from 'vue-router'
 import { FriendsTabs } from '~/store/friends/types'
 
 export default Vue.extend({
@@ -42,9 +39,15 @@ export default Vue.extend({
   methods: {
     navigateAddFriends() {
       this.$store.commit('friends/setActiveTab', FriendsTabs.Add)
-      this.$router.push({
-        path: this.$device.isMobile ? '/mobile/friends' : '/friends',
-      })
+
+      const locPath = this.$device.isMobile ? '/mobile/friends' : '/friends'
+      const location: RawLocation = { path: locPath }
+      if (this.$device.isMobile) {
+        location.query = { route: FriendsTabs.Add }
+      }
+
+      this.$router.push(location)
+      this.$emit('click')
     },
   },
 })
@@ -57,6 +60,7 @@ export default Vue.extend({
   align-items: center;
   gap: @normal-spacing;
   text-align: center;
+  user-select: none;
 
   .mascot-text {
     display: flex;

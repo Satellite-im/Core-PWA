@@ -54,7 +54,11 @@ export type Tracks = {
 export type TrackKind = keyof Tracks
 
 export interface CallEventListeners {
-  INCOMING_CALL: (data: { did: string; callId?: string }) => void
+  INCOMING_CALL: (data: {
+    did: string
+    callId?: string
+    data: SignalData
+  }) => void
   OUTGOING_CALL: (data: { did: string; callId?: string }) => void
   CONNECTED: (data: { did: string; callId?: string }) => void
   HANG_UP: (data: { did: string; callId?: string }) => void

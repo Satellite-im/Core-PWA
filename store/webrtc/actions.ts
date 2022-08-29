@@ -374,11 +374,11 @@ const webRTCActions = {
     }
     const isMuted = state.streamMuted[peerId]?.[kind]
     if (isMuted) {
-      await call.unmute({ peerId, kind })
+      await iridium.webRTC.unmute({ kind })
       dispatch('sounds/playSound', Sounds.UNMUTE, { root: true })
       return
     }
-    await call.mute({ peerId, kind })
+    await iridium.webRTC.mute({ kind })
     dispatch('sounds/playSound', Sounds.MUTE, { root: true })
   },
 
@@ -660,7 +660,6 @@ const webRTCActions = {
       commit('setActiveCall', undefined)
       commit('updateCreatedAt', 0)
       commit('conversation/setCalling', false, { root: true })
-      commit('ui/fullscreen', false, { root: true })
       call.off('INCOMING_CALL', onCallIncoming)
       call.off('OUTGOING_CALL', onCallOutgoing)
       call.off('CONNECTED', onCallConnected)

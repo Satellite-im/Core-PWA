@@ -140,7 +140,7 @@ export default defineNuxtConfig({
 
   toast: {
     position: 'top-center',
-    duration: 1000,
+    duration: 3000,
     containerClass: 'toasty-container',
   },
 
@@ -205,6 +205,7 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: ['@solana'],
     extend(config, ctx) {
       if (ctx.isDev) {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'

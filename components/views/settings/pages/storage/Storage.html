@@ -1,37 +1,31 @@
 <SettingsPage>
   <SettingsUnit>
-    <TypographyTitle :size="6" :text="$t('pages.settings.storage.title')" />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.storage.subtitle')"
-    />
+    <TypographyText as="h2">
+      {{ $t('pages.settings.storage.title') }}
+    </TypographyText>
+    <TypographyText>
+      {{ $t('pages.settings.storage.subtitle') }}
+    </TypographyText>
   </SettingsUnit>
 
   <SettingsUnit v-if="false">
-    <TypographyTitle
-      :size="6"
-      :text="$t('pages.settings.storage.export.title')"
-    />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.storage.export.subtitle')"
-    />
+    <TypographyText as="h3">
+      {{ $t('pages.settings.storage.export.title') }}
+    </TypographyText>
+    <TypographyText>
+      {{ $t('pages.settings.storage.export.subtitle') }}
+    </TypographyText>
     <br />
-    <InteractablesButton
-      color="primary"
-      :text="$t('pages.settings.storage.export.button')"
-    />
+    <InteractablesButton :text="$t('pages.settings.storage.export.button')" />
   </SettingsUnit>
 
   <SettingsUnit>
-    <TypographyTitle
-      :size="6"
-      :text="$t('pages.settings.storage.clear.title')"
-    />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.storage.clear.subtitle')"
-    />
+    <TypographyText as="h3">
+      {{ $t('pages.settings.storage.clear.title') }}
+    </TypographyText>
+    <TypographyText>
+      {{ $t('pages.settings.storage.clear.subtitle') }}
+    </TypographyText>
     <br />
     <InteractablesButton
       v-if="!deleteVerify"

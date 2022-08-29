@@ -1,5 +1,6 @@
 <div class="chatbar-controls">
   <UiComingSoon
+    v-if="!$device.isMobile"
     :tooltipText="$t('coming_soon.send_money')"
     :tooltipPosition="'top'"
   >
@@ -24,7 +25,6 @@
     />
   </button>
   <button
-    v-if="!$device.isMobile"
     v-tooltip.top="$t('ui.send')"
     class="send"
     :disabled="disabled"

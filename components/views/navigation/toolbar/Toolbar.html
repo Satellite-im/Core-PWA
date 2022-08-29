@@ -3,7 +3,7 @@
   <div class="circle-container">
     <template v-if="details">
       <UiUserState v-if="!isGroup" class="circle" :user="details" />
-      <UiGroupIcon v-else :group="details" />
+      <UiGroupIcon v-else :members="members" />
     </template>
   </div>
   <div class="user-info">
@@ -31,7 +31,6 @@
         v-tooltip.bottom="$t('pages.chat.alerts')"
         size="1x"
         :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-        color="primary"
         @click="toggleAlerts"
       />
     </div>

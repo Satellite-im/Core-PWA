@@ -41,6 +41,7 @@ const commonProperties = [
   'ui.settingsRoute',
   'conversation.participants',
   'files',
+  'ui.callHeight',
 ]
 
 const propertiesNoStorePin = [

@@ -81,23 +81,15 @@ export default class WebRTC extends Emitter<WebRTCEventListeners> {
    * @returns
    * @example
    */
-  connect(
-    callId: string,
-    peers?: CallPeerDescriptor[],
-    peerSignals?: { [key: string]: SignalData },
-  ): Call {
+  connect(callId: string, peers?: CallPeerDescriptor[]): Call {
     if (!this.initialized || !this.originator) {
       throw new Error(WebRTCError.NOT_INITIALIZED)
     }
 
     let call = this.calls.get(callId)
-    if (call) {
-      // @ts-ignore
-      call.peerSignals = peerSignals
-      return call
-    }
+    if (call) return call
 
-    call = new Call(callId, peers, peerSignals)
+    call = new Call(callId, peers)
     this.calls.set(callId, call)
     return call
   }

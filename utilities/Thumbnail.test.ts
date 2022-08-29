@@ -3,7 +3,7 @@ import * as Thumbnail from './Thumbnail'
 
 const ThumbnailDefault = Thumbnail.default
 
-describe('', () => {
+describe('Test thumbnail', () => {
   test('txt thumbnail', async () => {
     const testFile = new File(['hello'], 'test_fil.txt', {
       type: 'text/plain',

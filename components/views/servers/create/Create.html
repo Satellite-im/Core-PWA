@@ -26,7 +26,6 @@
           />
           <InteractablesButton
             @click="() => $refs.file.click()"
-            color="primary"
             :text="$t('servers.create.photo_button')"
           />
         </div>
@@ -56,7 +55,6 @@
 
     <div class="submit-container">
       <InteractablesButton
-        color="primary"
         :text="$t('servers.create.create_server')"
         class="create-server-btn"
         @click="confirm"

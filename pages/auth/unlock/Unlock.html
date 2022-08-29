@@ -1,35 +1,30 @@
 <div class="container">
   <div class="decryption-body">
-    <div v-if="step === 'signup'" class="create_pin_section">
-      <div class="heading">
-        <info-icon size="1.5x" />
-        <TypographyText as="h2" color="light" font="heading">
-          {{$t('pages.unlock.create')}}
-        </TypographyText>
-      </div>
-      <TypographyText color="light">
-        {{$t('pages.unlock.choose_pin_description_1')}}
-      </TypographyText>
-      <TypographyText color="light">
-        {{$t('pages.unlock.choose_pin_description_2')}}
-      </TypographyText>
+    <template v-if="step === 'signup'">
+      <UiInfoButton class="info-button">
+        <template #title> {{ $t('pages.unlock.create') }} </template>
+        <template #subtitle> {{ pinDescription }} </template>
+      </UiInfoButton>
+    </template>
+
+    <div class="input-container">
+      <InteractablesInput
+        v-model="pin"
+        type="password"
+        :color="error ? 'danger' : 'primary'"
+        :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
+        :placeholder="$t('pages.unlock.placeholder')"
+        :loading="status === 'loading'"
+        size="sm"
+        autofocus
+        @submit="action"
+        data-cy="pin-label"
+      >
+        <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
+        <chevron-right-icon size="1x" v-else />
+      </InteractablesInput>
+      <TypographyError v-if="error" :text="$t(error)" />
     </div>
-    <InteractablesInput
-      v-model="pin"
-      type="password"
-      :color="error ? 'danger' : 'primary'"
-      :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
-      :placeholder="$t('pages.unlock.placeholder')"
-      :loading="status === 'loading'"
-      size="sm"
-      autofocus
-      @submit="action"
-      data-cy="pin-label"
-    >
-      <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
-      <chevron-right-icon size="1x" v-else />
-    </InteractablesInput>
-    <TypographyError v-if="error" :text="$t(error)" />
     <InteractablesSwitch
       v-model="storePin"
       :label="$t('pages.unlock.store_pin')"
@@ -38,12 +33,12 @@
     <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
       {{$t('pages.unlock.delete_account_label')}}
     </a>
-    <div class="realm-container">
-      <InteractablesRealm />
-    </div>
+    <!-- <InteractablesRealm /> -->
+    <TypographyText v-if="!isChrome" color="error" style="max-width: 600px">
+      {{ $t('pages.unlock.browser_warning') }}
+    </TypographyText>
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
-        color="primary"
         class="random-user-btn"
         :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
         @click="createRandom"

@@ -18,7 +18,7 @@
     </TypographyText>
     <div v-if="item.progress > 0 && item.progress <= 100">
       <UiProgress :progress="item.progress" />
-      <TypographySubtitle :text="`${item.progress}% Uploaded...`" />
+      <TypographyText> {{ `${item.progress}% Uploaded...` }} </TypographyText>
     </div>
   </div>
 </div>
