@@ -17,12 +17,12 @@ export default Vue.extend({
   data() {
     return {
       isQuickchatVisible: false,
-      requests: iridium.friends.state.requests,
+      friends: iridium.friends.state,
     }
   },
   computed: {
     incomingRequestsLength(): number {
-      return Object.values(this.requests).filter(
+      return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => r.status === 'pending' && r.incoming,
       ).length
     },

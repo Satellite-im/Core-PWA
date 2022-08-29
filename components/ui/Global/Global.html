@@ -26,7 +26,7 @@
         :set-close-timeout="5000"
       />
     </UiModal> -->
-    <UiModal v-if="webrtc.incomingCall">
+    <UiModal v-if="incomingCall">
       <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
     </UiModal>
     <UiModal

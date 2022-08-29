@@ -95,7 +95,7 @@ const Chatbar = Vue.extend({
       )
     },
     isSubscribed(): boolean {
-      return iridium.chat.subscriptions[this.$route.params.id]?.connected
+      return iridium.chat.ready
     },
     text: {
       /**

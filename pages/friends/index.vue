@@ -24,7 +24,13 @@ export default Vue.extend({
     }),
     friendsList(): Friend[] {
       return this.friends.friends.map((did) => {
-        return iridium.users.getUser(did)
+        return (
+          iridium.users.getUser(did) || {
+            did,
+            name: did,
+            avatar: '',
+          }
+        )
       })
     },
     activeTab(): FriendsTabs {

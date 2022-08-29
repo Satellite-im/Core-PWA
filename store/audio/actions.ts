@@ -5,6 +5,13 @@ import { ActionsArguments } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default {
+  initialize({ dispatch, state }: ActionsArguments<AudioState>) {
+    iridium.webRTC.on('track', ({ did, kind }) => {
+      if (kind === 'audio' && state.muted && did === iridium.connector?.id) {
+        iridium.webRTC.setStreamMuted(did, { audio: true })
+      }
+    })
+  },
   /**
    * @method toggleMute
    * @description Toggles mute for outgoing audio

@@ -6,6 +6,7 @@ import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'AccountsSettings',
@@ -44,7 +45,13 @@ export default Vue.extend({
       this.showPhrase = !this.showPhrase
     },
     copyAddress() {
-      navigator.clipboard.writeText(this.accounts.active)
+      if (!iridium.connector) return
+      const shortID = iridium.profile.state
+        ? `${iridium.profile.state.name}#${iridium.connector.id.substring(
+            iridium.connector.id.length - 6,
+          )}`
+        : `${iridium.connector?.id}`
+      navigator.clipboard.writeText(shortID)
       this.$toast.show(this.$t('ui.copied') as string)
     },
     copyPhrase() {

@@ -13,7 +13,6 @@ export default Vue.extend({
   data() {
     return {
       friends: [] as Friend[],
-      conversations: iridium.chat.state.conversations,
       isLoading: false,
       error: '' as TranslateResult,
       name: '',

@@ -20,7 +20,6 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -40,44 +39,47 @@ export default Vue.extend({
   data() {
     return {
       searchRecommend,
+      notifications: iridium.notifications.state,
+      chat: iridium.chat.state,
       showAlerts: false,
       searchQuery: '' as string,
       users: iridium.users.state,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
-      webRTC: useWebRTC(),
     }
   },
   computed: {
     ...mapState({
-      notifications: () => Object.entries(iridium.notifications?.state),
       ui: (state) => (state as RootState).ui,
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
       modals: (state) => (state as RootState).ui.modals,
     }),
     ModalWindows: () => ModalWindows,
-    conversationId(): string {
+    conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
     },
+    isActiveCall() {
+      return this.webrtc.activeCall?.callId === this.conversationId
+    },
     conversation(): Conversation {
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.chat.conversations[this.conversationId]
     },
     isGroup(): boolean {
-      return this.conversation.participants.length > 2
+      return this.conversation?.participants.length > 2
     },
     details(): User | Conversation {
       if (this.isGroup) {
-        return iridium.chat.state.conversations[this.conversationId]
+        return this.chat.conversations[this.conversationId]
       }
-      const friendDid = this.conversation.participants.find(
-        (f) => f !== iridium.connector?.id,
+      const friendDid = this.conversation?.participants.find(
+        (f: string) => f !== iridium.connector?.id,
       ) as string
       return this.users[friendDid]
     },
     members(): User[] {
-      return this.conversation.participants.map((did) => {
+      return this.conversation?.participants.map((did) => {
         return iridium.users.getUser(did)
       })
     },
@@ -91,6 +93,7 @@ export default Vue.extend({
       return (this.details as User).status || 'offline'
     },
     enableRTC(): boolean {
+      console.info('enableRTC', this.details, this.isGroup)
       // todo- hook up to usermanager
       if (this.isGroup) {
         const memberIds = this.members.map((m) => m.did)
@@ -100,10 +103,7 @@ export default Vue.extend({
         )
       }
       // Check current recipient is on the user's friends list
-      const friend = Object.values(this.users).find(
-        (f) => f.did === (this.details as User)?.did,
-      )
-      return friend?.status === 'online'
+      return this.details?.status === 'online'
     },
     callTooltipText(): string {
       if (this.isGroup) {
@@ -169,7 +169,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return
       }
-      if (!this.enableRTC || this.webRTC.isActiveCall) {
+      if (!this.enableRTC || this.isActiveCall) {
         return
       }
       await this.call(['audio'])

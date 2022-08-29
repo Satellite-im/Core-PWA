@@ -57,6 +57,7 @@ export default Vue.extend({
     return {
       hasMoreSettings: false,
       featureReadyToShow: false,
+      chat: iridium.chat.state,
     }
   },
   computed: {
@@ -71,7 +72,7 @@ export default Vue.extend({
       if (!this.conversationId) {
         return undefined
       }
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.chat.conversations[this.conversationId]
     },
     isGroup(): boolean {
       return this.conversation?.type === 'group'

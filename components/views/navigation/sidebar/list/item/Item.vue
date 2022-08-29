@@ -20,8 +20,8 @@ export default Vue.extend({
     VueMarkdown,
   },
   props: {
-    conversation: {
-      type: Object as PropType<Conversation>,
+    conversationId: {
+      type: String as PropType<Conversation['id']>,
       required: true,
     },
   },
@@ -30,7 +30,9 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
+      chat: iridium.chat.state,
       groups: iridium.groups.state,
+      users: iridium.users.state,
     }
   },
   computed: {
@@ -39,18 +41,16 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
-    user(): User | undefined {
-      return this.participants.find(
-        (user) => user.did !== iridium.connector?.id,
+    conversation(): Conversation | undefined {
+      return this.chat.conversations[this.conversationId]
+    },
+    userId(): string | undefined {
+      return (this.conversation?.participants || []).find(
+        (did) => did !== iridium.connector?.id,
       )
     },
-    participants(): User[] {
-      return this.conversation.participants.map((did) => {
-        return iridium.users.getUser(did)
-      })
-    },
     contextMenuValues(): ContextMenuItem[] {
-      return this.conversation.type === 'direct'
+      return this.conversation?.type === 'direct'
         ? [
             { text: this.$t('context.send'), func: this.openConversation },
             {
@@ -74,10 +74,10 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
-      if (!Object.keys(this.conversation).length) {
+      if (!Object.keys(this.conversation || {}).length) {
         return []
       }
-      return Object.values(this.conversation.message).sort(
+      return Object.values(this.conversation?.message || {}).sort(
         (a, b) => a.at - b.at,
       )
     },
@@ -105,7 +105,7 @@ export default Vue.extend({
     },
 
     isSelected(): boolean {
-      return this.conversation.id === this.$route.params.id
+      return this.conversation?.id === this.$route.params.id
     },
   },
   watch: {
@@ -143,9 +143,15 @@ export default Vue.extend({
       await iridium.friends
         .friendRemove(this.user.did)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
+      if (this.$route.params.id === this.user.did) {
+        this.$router.replace('/friends')
+      }
       this.isLoading = false
     },
     async leaveGroup() {
+      if (!this.conversation?.id) {
+        return
+      }
       iridium.chat.leaveGroup(this.conversation.id)
     },
     /**
@@ -153,6 +159,9 @@ export default Vue.extend({
      * @description Navigates to user or group conversation
      */
     async openConversation() {
+      if (!this.conversation?.id) {
+        return
+      }
       if (this.$device.isMobile) {
         this.$router.push({ params: { id: this.conversation.id } })
         return

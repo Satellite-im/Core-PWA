@@ -5,7 +5,6 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { User } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -25,11 +24,6 @@ export default Vue.extend({
       required: true,
     },
   },
-  setup() {
-    const { localParticipant, remoteParticipants } = useWebRTC()
-
-    return { localParticipant, remoteParticipants }
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
@@ -41,6 +35,16 @@ export default Vue.extend({
       callHeight: (state) => (state as RootState).ui.callHeight,
       volume: (state) => (state as RootState).audio.volume,
     }),
+    localParticipant(): User | undefined {
+      const p = iridium.webRTC.localParticipant()
+      console.info('localParticipant', p)
+      return p
+    },
+    remoteParticipants(): User[] {
+      const p = iridium.webRTC.remoteParticipants()
+      console.info('remoteParticipants', p)
+      return p
+    },
     height: {
       get(): string {
         return this.callHeight

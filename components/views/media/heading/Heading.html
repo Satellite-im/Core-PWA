@@ -13,7 +13,7 @@
       <maximize-icon v-else data-cy="go-fullscreen" size="1.2x" />
     </button>
   </transition>
-  <TypographyTag v-if="elapsedTime" data-cy="elapsed-time">
-    {{$t('ui.live', { time: elapsedTime })}}
+  <TypographyTag v-if="callTime" data-cy="elapsed-time">
+    {{$t('ui.live', { time: callTime })}}
   </TypographyTag>
 </div>

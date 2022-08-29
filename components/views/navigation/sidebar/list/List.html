@@ -2,7 +2,7 @@
   <SidebarListItem
     v-for="c in sortedConversations"
     :key="c.id"
-    :conversation="c"
+    :conversationId="c.id"
   />
   <FriendsEmptyMessage v-if="!sortedConversations.length" displayImage />
 </div>

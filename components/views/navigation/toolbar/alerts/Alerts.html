@@ -3,20 +3,23 @@
     <flask-conical-icon size="0.85x" />
     <TypographySubtitle :size="6" :text="$t('pages.chat.alerts')" />
   </div>
-  <template v-if="notifications.length">
-<!--    <InteractablesButton-->
-<!--      @click="clearNotifications"-->
-<!--      class="alerts-clear-button"-->
-<!--      color="primary"-->
-<!--      :text="$t('ui.clear_all')"-->
-<!--    />-->
-    <ToolbarAlertsAlert
-      v-for="notification in notifications"
-      v-if="notification[1].type !== 'EMPTY'"
-      :alert="notification[1]"
-      :alertDid="notification[0]"
-      :key="notification.id"
-    />
+  <template>
+    <section v-if="alerts.length">
+      <InteractablesButton
+        @click="clearNotifications"
+        class="alerts-clear-button"
+        color="primary"
+        :text="$t('ui.clear_all')"
+      />
+      <ToolbarAlertsAlert
+        v-for="alert in alerts"
+        v-if="alert.type !== 'EMPTY'"
+        :alert="alert"
+        :key="alert.id"
+      />
+    </section>
+    <section v-else>
+      <TypographySubtitle :size="6" :text="$t('alerts.caught_up')" />
+    </section>
   </template>
-  <TypographySubtitle v-else :size="6" :text="$t('alerts.caught_up')" />
 </div>

@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
 import { SmartphoneIcon } from 'satellite-lucide-icons'
+import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
@@ -38,22 +38,37 @@ export default Vue.extend({
     SmartphoneIcon,
   },
   props: {
-    user: {
-      type: Object as PropType<User>,
+    userId: {
+      type: String as PropType<User['did']>,
       required: true,
-    },
-    isTyping: {
-      type: Boolean,
-      default: false,
     },
     size: {
       type: Number,
       default: 36,
     },
   },
+  data() {
+    const conversationId = iridium.chat.directConversationIdFromDid(this.userId)
+    return {
+      users: iridium.users.state,
+      conversationId,
+      isTyping: conversationId
+        ? iridium.chat.ephemeral.typing[conversationId]
+        : false,
+    }
+  },
   computed: {
+    user() {
+      return (
+        this.users?.[this.userId] || {
+          did: this.userId,
+          name: this.userId,
+          status: 'offline',
+        }
+      )
+    },
     imageSource(): string {
-      return this.user.photoHash
+      return this.user?.photoHash
         ? this.$Config.ipfs.gateway + this.user.photoHash
         : ''
     },

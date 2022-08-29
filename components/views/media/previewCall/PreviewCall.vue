@@ -4,7 +4,6 @@
 import Vue from 'vue'
 import { CornerUpLeftIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -16,20 +15,14 @@ export default Vue.extend({
       default: false,
     },
   },
-  setup() {
-    const { remoteParticipants } = useWebRTC()
-
-    const remoteParticipant = computed(() => {
-      return remoteParticipants.value.length > 0
-        ? remoteParticipants.value[0]
-        : null
-    })
-
-    return { remoteParticipant }
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
   },
   methods: {
     navigateToActiveConversation() {
-      if (!iridium.webRTC.state.activeCall?.callId) {
+      if (!this.webrtc.activeCall) {
         return
       }
       if (this.$device.isMobile) {
@@ -37,7 +30,7 @@ export default Vue.extend({
         this.$store.commit('ui/setSwiperSlideIndex', 1)
         this.$store.commit('ui/showSidebar', false)
       }
-      this.$router.push(`/chat/${iridium.webRTC.state.activeCall.callId}`)
+      this.$router.push(`/chat/${this.webrtc.activeCall.callId}`)
     },
   },
 })

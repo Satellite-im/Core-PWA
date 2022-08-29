@@ -18,10 +18,14 @@ export default Vue.extend({
   },
   methods: {
     copyId() {
-      if (iridium.connector) {
-        navigator.clipboard.writeText(iridium.connector?.id)
-        this.$toast.show(this.$t('ui.copied') as string)
-      }
+      if (!iridium.connector) return
+      const shortID = iridium.profile.state
+        ? `${iridium.profile.state.name}#${iridium.connector.id.substring(
+            iridium.connector.id.length - 6,
+          )}`
+        : `${iridium.connector?.id}`
+      navigator.clipboard.writeText(shortID)
+      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

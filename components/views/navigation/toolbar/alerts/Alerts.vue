@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { FlaskConicalIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
@@ -11,24 +10,17 @@ export default Vue.extend({
   },
   data() {
     return {
-      messages: [],
+      notifications: iridium.notifications.state,
     }
   },
   computed: {
-    ...mapState({
-      notifications: () =>
-        Object.entries(iridium.notifications?.state)
-          .sort((a: any, b: any) => {
-            return b.at - a.at
-          })
-          .filter((a) => {
-            return a
-          }),
-    }),
+    alerts() {
+      return this.notifications.notifications
+    },
   },
   methods: {
     clearNotifications() {
-      this.$store.commit('ui/setNotifications', [])
+      return iridium.notifications.deleteAll()
     },
   },
 })

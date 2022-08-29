@@ -20,7 +20,7 @@ export interface WebRTCState {
     type: 'group' | 'friend'
     data: SignalData
   } | null
-  createdAt: number
+  callStartedAt: number
 }
 
 export enum WebRTCError {

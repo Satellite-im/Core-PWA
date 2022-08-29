@@ -5,7 +5,6 @@ import { mapState } from 'vuex'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -15,11 +14,6 @@ declare module 'vue/types/vue' {
 
 export default Vue.extend({
   name: 'Global',
-  setup() {
-    const { isActiveCall, isBackgroundCall } = useWebRTC()
-
-    return { isActiveCall, isBackgroundCall }
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
@@ -28,6 +22,16 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'media', 'conversation', 'files']),
     ModalWindows: () => ModalWindows,
+    incomingCall() {
+      console.info('incomingCall', this.webrtc.incomingCall)
+      return this.webrtc.incomingCall
+    },
+    isBackgroundCall(): boolean {
+      return iridium.webRTC.isBackgroundCall(this.$route.params.id)
+    },
+    isActiveCall(): boolean {
+      return iridium.webRTC.isActiveCall(this.$route.params.id)
+    },
     showBackgroundCall(): boolean {
       if (!this.$device.isMobile) {
         return this.isBackgroundCall

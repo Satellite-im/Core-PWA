@@ -2,15 +2,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'Chat',
   layout: 'desktop',
-  setup() {
-    const { isActiveCall } = useWebRTC()
-
-    return { isActiveCall }
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
+  computed: {
+    isActiveCall(): boolean {
+      return iridium.webRTC.isActiveCall(this.$route.params.id)
+    },
   },
 })
 </script>

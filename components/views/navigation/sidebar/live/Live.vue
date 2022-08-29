@@ -21,6 +21,7 @@ export default Vue.extend({
       webrtc: iridium.webRTC,
       users: iridium.users.state,
       groups: iridium.groups.state,
+      chat: iridium.chat.state,
     }
   },
   computed: {
@@ -44,7 +45,7 @@ export default Vue.extend({
       if (!this.conversationId) {
         return undefined
       }
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.chat.conversations[this.conversationId]
     },
     isGroup(): boolean {
       return this.conversation?.type === 'group'
@@ -56,7 +57,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return this.groups[this.conversation.id]
       }
-      const participant = this.conversation.participants.find(
+      const participant = this.conversation?.participants.find(
         (f) => f !== iridium.connector?.id,
       )
       if (!participant) {

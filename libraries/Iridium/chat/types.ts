@@ -33,6 +33,7 @@ export type ConversationMessage = {
   glyph?: MessageGlyph
   attachments: MessageAttachment[]
   reactions: { [key: string]: string[] }
+  payload: any
   replyToId?: string
 }
 
@@ -53,11 +54,9 @@ export type Conversation = {
   type: 'direct' | 'group'
   name?: string
   participants: string[]
-  typing?: {
-    [key: string]: boolean
-  }
   createdAt: number
   updatedAt: number
+  lastReadAt: number
   message: {
     [key: string]: ConversationMessage
   }

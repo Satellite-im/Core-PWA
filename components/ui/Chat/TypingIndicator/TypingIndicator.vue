@@ -8,7 +8,8 @@ import { User } from '~/libraries/Iridium/users/types'
 export default Vue.extend({
   data() {
     return {
-      chat: iridium.chat,
+      chat: iridium.chat.state,
+      typing: iridium.chat.ephemeral.typing,
     }
   },
   computed: {
@@ -17,14 +18,14 @@ export default Vue.extend({
       if (!conversationId) {
         return []
       }
-      const conversation = this.chat.getConversation(conversationId)
-      if (!conversation || !conversation.typing) {
+      const conversation = this.chat.conversations[conversationId]
+      if (!conversation) {
         return []
       }
+      const conversationTyping = this.typing[conversationId] || []
 
-      return Object.keys(conversation.typing)
-        .filter((k) => conversation.typing?.[k])
-        .map((did) => iridium.users.getUser(did))
+      return conversationTyping
+        .map((did: string) => iridium.users.getUser(did))
         .filter(Boolean)
     },
     text(): string {

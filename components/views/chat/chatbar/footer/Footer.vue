@@ -17,6 +17,11 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      typing: iridium.chat.ephemeral.typing,
+    }
+  },
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
@@ -26,14 +31,8 @@ export default Vue.extend({
       if (!conversationId) {
         return []
       }
-      const conversation = iridium.chat.getConversation(conversationId)
-      if (!conversation || !conversation.typing) {
-        return []
-      }
-
-      return Object.keys(conversation.typing).filter(
-        (k) => conversation.typing?.[k],
-      )
+      const typing = this.$data.typing[conversationId] || []
+      return typing
     },
     lengthCount() {
       return `${this.ui.chatbarContent.length}/${this.$Config.chat.maxChars}`
