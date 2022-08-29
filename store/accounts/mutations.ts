@@ -1,5 +1,6 @@
 import { AccountsState, RegistrationStatus } from './types'
 import { UserRegistrationData } from '~/types/ui/user'
+import { User } from '~/libraries/BlockchainClient/interfaces'
 
 const mutations = {
   setPin(state: AccountsState, pin: string) {
@@ -45,6 +46,9 @@ const mutations = {
       state: 'online',
       lastUpdate: Date.now(),
     }
+  },
+  async updateUserDetails(state: { details: User }, details: User) {
+    state.details = { ...state.details, ...details }
   },
   setUserPeerId(state: AccountsState, peerId: string) {
     if (state.details) {

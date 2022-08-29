@@ -49,21 +49,28 @@
                       ref="imageInput"
                       @change="selectProfileImage"
                     />
-                    <UiCircle
-                      :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
-                      @click="openFileDialog"
-                      :source="src"
-                      :seed="accounts.active"
-                      :size="isSmallScreen ? 55 : 80"
-                    />
-                    <UiCircle
-                      type="icon"
-                      @click="openFileDialog"
-                      icon="plus"
-                      color="var(--flair-color)"
-                      :size="20"
-                      class="plus-button"
-                    />
+                    <UiComingSoon
+                      style="flex: 1"
+                      :tooltipText="$t('ui.coming_soon')"
+                      :tooltipPosition="'top'"
+                      disabled
+                    >
+                      <UiCircle
+                        :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
+                        @click="openFileDialog"
+                        :source="src"
+                        :seed="accounts.active"
+                        :size="isSmallScreen ? 55 : 80"
+                      />
+                      <UiCircle
+                        type="icon"
+                        @click="openFileDialog"
+                        icon="plus"
+                        color="var(--flair-color)"
+                        :size="20"
+                        class="plus-button"
+                      />
+                    </UiComingSoon>
                   </div>
                 </div>
                 <button
@@ -77,24 +84,25 @@
                   <TypographyTitle :size="6" :text="accounts.details.name" />
                 </div>
                 <div class="status-input">
-                  <UiComingSoon
-                    style="flex: 1"
-                    :tooltipText="$t('ui.coming_soon')"
-                    :tooltipPosition="'top'"
-                    disabled
+                  <form
+                    @submit="updateUserDetail('status', userDetails.status)"
                   >
                     <InteractablesInput
-                      v-model="status"
+                      v-model="userDetails.status"
                       size="xs"
                       type="text"
                       :placeholder="$t('pages.settings.profile.status_placeholder')"
+                      :loading="loading.has('status')"
+                      button-type="submit"
                     >
                       <edit-icon size="1x" />
                     </InteractablesInput>
-                  </UiComingSoon>
+                  </form>
                 </div>
                 <div v-if="!!accounts.details.status" class="status">
-                  <TypographyText as="h6">Current Status</TypographyText>
+                  <TypographyText as="h6">
+                    {{$t('pages.settings.profile.current_status')}}
+                  </TypographyText>
                   <TypographyText>
                     {{ accounts.details.status }}
                   </TypographyText>
@@ -176,7 +184,7 @@
                   disabled
                 >
                   <InteractablesInput
-                    v-model="accountUrl"
+                    v-model="userDetails.accountUrl"
                     size="xs"
                     type="text"
                     :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"

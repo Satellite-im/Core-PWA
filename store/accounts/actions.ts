@@ -8,7 +8,6 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ActionsArguments } from '~/types/store/store'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -16,6 +15,7 @@ import logger from '~/plugins/local/logger'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
+import { User } from '~/libraries/BlockchainClient/interfaces'
 
 export default {
   /**
@@ -282,6 +282,22 @@ export default {
       address: walletAccount.publicKey.toBase58(),
     })
     dispatch('startup', walletAccount)
+  },
+
+  async updateUser({ commit }: ActionsArguments<AccountsState>, details: User) {
+    // update iridium state
+    const detailsKeys = Object.keys(details) as (keyof User)[]
+    await Promise.all(
+      detailsKeys.map(async (key) => {
+        if (Object.prototype.hasOwnProperty.call(details, key)) {
+          const value = details[key as keyof User]
+          await iridium.profile?.set(`/${key}`, value)
+        }
+      }),
+    )
+
+    // update vuex state
+    commit('updateUserDetails', details)
   },
 
   /**

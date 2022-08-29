@@ -13,6 +13,7 @@ import {
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { RootState } from '~/types/store/store'
+import { User } from '~/libraries/BlockchainClient/interfaces'
 
 export default Vue.extend({
   components: {
@@ -26,10 +27,13 @@ export default Vue.extend({
   data() {
     return {
       image: '',
-      status: '',
-      accountUrl: '',
       croppedImage: '',
       showCropper: false,
+      loading: new Set() as Set<keyof User>,
+      userDetails: {
+        status: '',
+        accountUrl: '',
+      } as Partial<User>,
     }
   },
   computed: {
@@ -105,10 +109,28 @@ export default Vue.extend({
         this.toggleCropper()
       }
     },
-    removeProfileImage() {
-      this.croppedImage = ''
-      // TODO: Update with IPFS method
-      // this.$store.dispatch('accounts/updateProfilePhoto', '')
+    /**
+     * @method updateUserDetail
+     * @description Updates user details
+     * @example this.updateUserDetail('name', 'John Doe')
+     */
+    async updateUserDetail(key: keyof User, value: string) {
+      try {
+        this.loading.add(key)
+        await this.$store.dispatch('accounts/updateUser', {
+          [key]: value,
+        })
+        this.$toast.show(
+          this.$t('pages.settings.profile.detail_updated') as string,
+        )
+        this.userDetails[key] = value
+      } catch (e: any) {
+        this.$toast.show(this.$t(e.message) as string)
+      } finally {
+        this.loading.delete(key)
+        // Note: For Vue 2 reactivity
+        this.loading = new Set(...this.loading.entries())
+      }
     },
   },
 })
