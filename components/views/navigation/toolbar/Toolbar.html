@@ -13,8 +13,9 @@
   <div class="controls">
     <button
       class="toggle-alerts"
+      :class="{'with-count': Object.values(notifications).length}"
       data-cy="toolbar-alerts"
-      :data-count="notifications.length"
+      :data-count="Object.values(notifications).length"
       v-tooltip.bottom="$t('pages.chat.alerts')"
       @click="toggleAlerts"
     >

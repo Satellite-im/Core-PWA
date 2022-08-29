@@ -48,11 +48,11 @@ export default Vue.extend({
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
       webRTC: useWebRTC(),
+      notifications: iridium.notifications.state,
     }
   },
   computed: {
     ...mapState({
-      notifications: () => Object.entries(iridium.notifications?.state),
       ui: (state) => (state as RootState).ui,
     }),
     ModalWindows: () => ModalWindows,

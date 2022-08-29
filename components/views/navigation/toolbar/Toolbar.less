@@ -40,17 +40,20 @@
 
     .toggle-alerts {
       position: relative;
-      &[data-count] {
-        &::after {
-          position: absolute;
-          content: attr(data-count);
-          font-size: @font-size-xs;
-          background-color: @red;
-          border-radius: 50%;
-          pointer-events: none;
-          min-width: 18px;
-          left: -8px;
-          top: -8px;
+
+      &.with-count {
+        &[data-count] {
+          &::after {
+            position: absolute;
+            content: attr(data-count);
+            font-size: @font-size-xs;
+            background-color: @red;
+            border-radius: 50%;
+            pointer-events: none;
+            min-width: 18px;
+            left: -8px;
+            top: -8px;
+          }
         }
       }
     }
