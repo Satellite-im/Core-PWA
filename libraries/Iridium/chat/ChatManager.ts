@@ -749,32 +749,24 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(`not yet subscribed to conversation ${conversationId}`)
     }
 
-    const reactionsPath = `/conversations/${conversationId}/message/${messageId}/reactions`
-    const reactions = ((await this.get(reactionsPath)) ?? {}) as {
-      [key: string]: string[]
-    }
+    const reactionsPath = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
+    const reactions = (message.reactions && message.reactions[did]) ?? []
 
-    if (!reactions[did]) {
-      reactions[did] = []
-    }
-
-    const shouldRemove = reactions[did].includes(payload.reaction)
+    const shouldRemove = reactions.includes(payload.reaction)
     if (shouldRemove) {
-      reactions[did] = reactions[did].filter(
-        (reaction) => reaction !== payload.reaction,
-      )
+      reactions.filter((reaction) => reaction !== payload.reaction)
     } else {
-      reactions[did].push(payload.reaction)
+      reactions.push(payload.reaction)
     }
 
-    Vue.set(message, did, reactions[did])
+    Vue.set(message.reactions, did, reactions)
     await this.set(reactionsPath, reactions)
 
     const reaction: MessageReaction = {
       conversationId,
       messageId,
       userId: did,
-      reactions: reactions[did],
+      reactions,
     }
 
     // broadcast the message to connected peers
