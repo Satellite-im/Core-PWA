@@ -1,0 +1,33 @@
+name: Create issues from TODOs
+
+on:
+  workflow_dispatch:
+    inputs:
+      importAll:
+        default: 'false'
+        required: false
+        type: boolean
+        description: 'true'
+
+  push:
+    branches:
+      - dev
+
+permissions:
+  issues: write
+  repository-projects: read
+  contents: read
+
+jobs:
+  todos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Issue Bot
+        uses: derjuulsn/todo-issue@main
+        with:
+          excludePattern: '^(node_modules/)'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
