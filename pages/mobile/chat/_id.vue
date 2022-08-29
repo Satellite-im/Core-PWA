@@ -136,6 +136,7 @@ export default Vue.extend({
     }
     .mobile-list {
       padding: @normal-spacing;
+      height: 100%;
     }
   }
 }

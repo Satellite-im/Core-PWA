@@ -8,12 +8,12 @@
         ref="input"
         class="input font-body font-color-light"
         :class="[
-          `is-${color}`,
-          {
-            'show-clear-button': showClearButton,
-            'is-danger': error || invalid
-          }
-        ]"
+            `is-${color}`,
+            {
+              'show-clear-button': showClearButton,
+              'is-danger': error || invalid,
+            },
+          ]"
         :value="text"
         :type="type"
         :readonly="readonly"
@@ -21,9 +21,9 @@
         :minLength="minLength"
         :maxLength="maxLength"
         :disabled="disabled"
+        data-cy="input-group"
         @keydown.enter="handleSubmit"
         @input="handleInput"
-        data-cy="input-group"
       />
       <div class="append input-options">
         <button v-if="showClearButton && !isEmpty" @click="clearInput">

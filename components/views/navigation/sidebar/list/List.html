@@ -5,5 +5,7 @@
     :conversation="c"
     @slideNext="$emit('slideNext')"
   />
-  <FriendsEmptyMessage v-if="!sortedConversations.length" displayImage />
+  <div v-if="!sortedConversations.length" class="empty-friends-wrapper">
+    <FriendsEmptyMessage displayImage />
+  </div>
 </div>
