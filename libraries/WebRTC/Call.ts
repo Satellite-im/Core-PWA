@@ -281,11 +281,11 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     if (kinds.includes('audio')) {
-      await this.createAudioStream(constraints?.audio || true)
+      await this.createAudioStream(constraints?.audio)
     }
 
     if (kinds.includes('video')) {
-      await this.createVideoStream(constraints?.video || true)
+      await this.createVideoStream(constraints?.video)
     }
 
     return this.streams
@@ -299,9 +299,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    * await call.createAudioStream()
    */
-  async createAudioStream(
-    constraints: MediaTrackConstraints | boolean | undefined,
-  ) {
+  async createAudioStream(constraints?: MediaStreamConstraints['audio']) {
     if (!iridium.connector?.id) return
 
     const audioStream = await navigator.mediaDevices.getUserMedia({
@@ -342,9 +340,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    * await call.createVideoStream()
    */
-  async createVideoStream(
-    constraints: MediaTrackConstraints | boolean | undefined,
-  ) {
+  async createVideoStream(constraints?: MediaStreamConstraints['video']) {
     if (!iridium.connector?.id) return
     const videoStream = await navigator.mediaDevices.getUserMedia({
       video: constraints || true,
@@ -737,6 +733,7 @@ export class Call extends Emitter<CallEventListeners> {
       track.enabled = false
       track.stop()
       stream.removeTrack(track)
+      delete this.streams[did]?.[kind]
     }
 
     // tell all of the peers that we muted the track
@@ -770,20 +767,22 @@ export class Call extends Emitter<CallEventListeners> {
   async unmute({
     kind,
     did = iridium.connector?.id,
+    constraints,
   }: {
     kind: string
     did?: string
+    constraints: MediaStreamConstraints
   }) {
     if (!did) return
 
     if (did === iridium.connector?.id) {
       if (kind === 'audio' && !this.streams[did]?.audio) {
-        await this.createAudioStream(true)
+        await this.createAudioStream(constraints?.audio)
       } else if (
         kind === 'video' &&
         !this.streams[did]?.video?.getVideoTracks()?.length
       ) {
-        await this.createVideoStream(true)
+        await this.createVideoStream(constraints?.video)
       } else if (kind === 'screen' && !this.streams[did]?.screen) {
         await this.createDisplayStream()
       }
@@ -1176,6 +1175,11 @@ export class Call extends Emitter<CallEventListeners> {
       if (!track) return
       track.enabled = false
     })
+
+    if (kind === 'video' || kind === 'screen') {
+      delete this.streams[did]?.[kind]
+    }
+
     this.emit('REMOTE_TRACK_MUTED', {
       did,
       kind,

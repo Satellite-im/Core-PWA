@@ -140,7 +140,7 @@ export default defineNuxtConfig({
 
   toast: {
     position: 'top-center',
-    duration: 1000,
+    duration: 3000,
     containerClass: 'toasty-container',
   },
 

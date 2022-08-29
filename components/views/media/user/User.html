@@ -3,6 +3,7 @@
     v-if="videoStream"
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
+    :class="{flip: isLocal && isLocalVideoFlipped}"
     data-cy="video-stream"
     :src-object.prop="videoStream"
     playsinline

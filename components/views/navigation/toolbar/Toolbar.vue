@@ -44,6 +44,7 @@ export default Vue.extend({
       showAlerts: false,
       searchQuery: '' as string,
       users: iridium.users.state,
+      userStatus: iridium.users.userStatus,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
@@ -79,7 +80,10 @@ export default Vue.extend({
       return this.users[friendDid]
     },
     members(): User[] {
-      return this.conversation?.participants.map((did) => {
+      if (!this.conversation) {
+        return []
+      }
+      return this.conversation.participants.map((did) => {
         return iridium.users.getUser(did)
       })
     },
@@ -90,7 +94,7 @@ export default Vue.extend({
       if (this.isGroup) {
         return this.members.map((m) => m.name).join(', ')
       }
-      return (this.details as User).status || 'offline'
+      return this.userStatus[(this.details as User).did] || 'offline'
     },
     enableRTC(): boolean {
       console.info('enableRTC', this.details, this.isGroup)
@@ -99,7 +103,8 @@ export default Vue.extend({
         const memberIds = this.members.map((m) => m.did)
         return Object.values(this.users).some(
           (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
+            memberIds.includes(friend.did) &&
+            this.userStatus[friend.did] === 'online',
         )
       }
       // Check current recipient is on the user's friends list

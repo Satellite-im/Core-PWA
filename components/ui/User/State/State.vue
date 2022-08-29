@@ -1,29 +1,45 @@
 <template>
   <div
     class="user-state"
-    :class="{ 'is-large': size > 36 }"
-    :style="`width:${size}px; height:${size}px`"
     data-cy="user-state"
+    :style="`width:${size}px; height:${size}px`"
   >
-    <UiCircle
-      :type="imageSource ? 'image' : 'random'"
-      :seed="user.did"
-      :size="size"
-      :source="imageSource"
-      data-cy="satellite-circle-profile"
-    />
-    <div
-      v-if="user.status !== 'mobile' && !isTyping"
-      class="status"
-      :class="{ [`is-${user.status}`]: user.status }"
-    />
-    <smartphone-icon
-      v-else-if="user.status === 'mobile'"
-      class="mobile-status"
-      :class="`is-${user.status}`"
-      size="1x"
-    />
-    <UiChatTypingIndicator v-else />
+    <svg width="40" height="40" viewBox="0 0 40 40" class="mask">
+      <foreignObject
+        x="0"
+        y="0"
+        width="40"
+        height="40"
+        :mask="`url(#${finalMask}-mask)`"
+      >
+        <UiCircle
+          :type="imageSource ? 'image' : 'random'"
+          :seed="user.did"
+          :size="size"
+          :source="imageSource"
+          data-cy="satellite-circle-profile"
+        />
+      </foreignObject>
+      <svg width="28" height="18" x="12" y="22" viewBox="0 0 28 18">
+        <rect
+          :class="`status is-${state}`"
+          width="28"
+          height="18"
+          :mask="`url(#mask-state-${state})`"
+        />
+        <foreignObject
+          v-if="state === 'typing'"
+          x="3"
+          y="9"
+          width="25"
+          height="6"
+        >
+          <div id="typing-loader-container">
+            <div id="typing-loader" />
+          </div>
+        </foreignObject>
+      </svg>
+    </svg>
   </div>
 </template>
 
@@ -32,6 +48,9 @@ import Vue, { PropType } from 'vue'
 import { SmartphoneIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { UserStatus } from '~/libraries/Iridium/users/types'
+import { Config } from '~/config'
 
 export default Vue.extend({
   components: {
@@ -73,6 +92,36 @@ export default Vue.extend({
         : ''
     },
   },
+})
+
+const status = reactive({ data: iridium.users.userStatus })
+
+const userStatus: Ref<UserStatus> = computed(() => {
+  if (props.user.did === iridium.connector?.id) return 'online'
+
+  return status.data[props.user.did] || 'offline'
+})
+
+const state: Ref<UserStatus | 'typing'> = computed(() => {
+  if (props.isTyping) return 'typing'
+
+  return userStatus.value
+})
+
+const finalMask: Ref<string> = computed(() => {
+  if (
+    state.value === 'online' ||
+    state.value === 'offline' ||
+    state.value === 'busy' ||
+    state.value === 'away'
+  )
+    return 'circle'
+
+  return state.value
+})
+
+const imageSource: Ref<string> = computed(() => {
+  return props.user.photoHash ? Config.ipfs.gateway + props.user.photoHash : ''
 })
 </script>
 

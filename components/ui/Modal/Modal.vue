@@ -1,6 +1,6 @@
 <template src="./Modal.html"></template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -13,6 +13,28 @@ export default Vue.extend({
     small: {
       type: Boolean,
       default: false,
+    },
+  },
+  created() {
+    this.addEventListener()
+  },
+  beforeDestroy() {
+    this.removeEventListener()
+  },
+  methods: {
+    close() {
+      this.$emit('close')
+    },
+    handleKeydown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        this.close()
+      }
+    },
+    addEventListener() {
+      document.addEventListener('keydown', this.handleKeydown)
+    },
+    removeEventListener() {
+      document.removeEventListener('keydown', this.handleKeydown)
     },
   },
 })

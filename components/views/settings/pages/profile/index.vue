@@ -13,6 +13,8 @@ import {
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -26,10 +28,13 @@ export default Vue.extend({
   data() {
     return {
       image: '',
-      status: '',
-      accountUrl: '',
       croppedImage: '',
       showCropper: false,
+      loading: new Set() as Set<keyof User>,
+      inputs: {
+        status: '',
+        accountUrl: '',
+      } as Partial<User>,
     }
   },
   computed: {
@@ -37,6 +42,9 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
+    iridiumProfile(): User | undefined {
+      return iridium.profile.state
+    },
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore
@@ -46,7 +54,7 @@ export default Vue.extend({
       if (this.croppedImage) {
         return this.croppedImage
       }
-      const hash = this.accounts?.details?.profilePicture
+      const hash = iridium.profile.state?.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     imageInputRef(): HTMLInputElement {
@@ -105,10 +113,27 @@ export default Vue.extend({
         this.toggleCropper()
       }
     },
-    removeProfileImage() {
-      this.croppedImage = ''
-      // TODO: Update with IPFS method
-      // this.$store.dispatch('accounts/updateProfilePhoto', '')
+    /**
+     * @method updateUserDetail
+     * @description Updates user details
+     * @example this.updateUserDetail('name', 'John Doe')
+     */
+    async updateUserDetail(key: keyof User, value: string) {
+      try {
+        this.loading.add(key)
+        await iridium.profile.updateUser({
+          [key]: value,
+        })
+        this.$toast.show(
+          this.$t('pages.settings.profile.detail_updated') as string,
+        )
+      } catch (e: any) {
+        this.$toast.show(this.$t(e.message) as string)
+      } finally {
+        this.loading.delete(key)
+        // Note: For Vue 2 reactivity
+        this.loading = new Set(...this.loading.entries())
+      }
     },
   },
 })

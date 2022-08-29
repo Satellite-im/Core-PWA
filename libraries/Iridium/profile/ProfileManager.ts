@@ -56,4 +56,16 @@ export default class IridiumProfile extends Emitter {
       await this.iridium.users.setUser(id, { ...this.state })
     }
   }
+
+  async updateUser(details: Partial<User>) {
+    const detailsKeys = Object.keys(details) as (keyof User)[]
+    await Promise.all(
+      detailsKeys.map(async (key) => {
+        if (Object.prototype.hasOwnProperty.call(details, key)) {
+          const value = details[key as keyof User]
+          await this.set(`/${key}`, value)
+        }
+      }),
+    )
+  }
 }

@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { throttle } from 'lodash'
+import { throttle, debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import {
@@ -20,9 +20,28 @@ import {
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
 
+function typingFunction(conversationId: string) {
+  const deb = debounce(() => {
+    iridium.webRTC.sendTyping(conversationId)
+  }, Config.chat.typingInputDebounce)
+
+  return {
+    thr: throttle(deb, Config.chat.typingInputThrottle, { trailing: false }),
+    deb,
+  }
+}
+
 const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
+  },
+  data() {
+    return {
+      typingFunction: null as {
+        thr: ReturnType<typeof throttle>
+        deb: ReturnType<typeof debounce>
+      } | null,
+    }
   },
   computed: {
     ...mapState({
@@ -142,25 +161,16 @@ const Chatbar = Vue.extend({
     if (this.$device.isDesktop) {
       this.$store.dispatch('ui/setChatbarFocus')
     }
+
+    this.typingFunction = typingFunction(this.conversationId)
   },
   methods: {
-    /**
-     * @method throttleTyping
-     * @description Throttles the typing event so that we only send the typing once every two seconds
-     */
-    throttleTyping: throttle(
-      function () {
-        iridium.webRTC.sendTyping(this.conversationId)
-      },
-      Config.chat.typingInputThrottle,
-      { trailing: false },
-    ),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.
      */
     smartTypingStart() {
-      this.throttleTyping(this)
+      this.typingFunction?.thr && this.typingFunction.thr()
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -248,6 +258,8 @@ const Chatbar = Vue.extend({
         this.$store.commit('chat/clearReplyChatbarMessage', { conversationId })
       }
 
+      this.typingFunction?.thr?.cancel()
+      this.typingFunction?.deb?.cancel()
       await iridium.chat?.sendMessage(payload)
     },
     /**

@@ -22,6 +22,8 @@ export type ConversationMessageType =
   | 'glyph'
   | 'divider'
   | 'string'
+  | 'member_join'
+  | 'member_leave'
 
 export type ConversationMessage = {
   id: string
@@ -35,12 +37,20 @@ export type ConversationMessage = {
   reactions: { [key: string]: string[] }
   payload: any
   replyToId?: string
+  members?: string[]
 }
 
 export type ConversationMessagePayload = Omit<
   ConversationMessage,
   'id' | 'from' | 'reactions'
 >
+
+export type MessageReaction = {
+  conversationId: string
+  messageId: string
+  userId: string
+  reactions: string[]
+}
 
 export type MessageReactionPayload = {
   conversationId: string

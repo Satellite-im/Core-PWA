@@ -14,7 +14,7 @@ import type {
 } from '@satellite-im/iridium/src/types'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import type { IridiumManager } from '../IridiumManager'
-import { User, UsersError } from './types'
+import { User, UsersError, UserStatus } from './types'
 import logger from '~/plugins/local/logger'
 import { FriendRequestStatus } from '~/libraries/Iridium/friends/types'
 
@@ -35,6 +35,7 @@ export type IridiumUserPubsub = IridiumPubsubMessage<
 export default class UsersManager extends Emitter<IridiumUserPubsub> {
   public readonly iridium: IridiumManager
   public state: UserState = {}
+  public userStatus: { [key: string]: UserStatus } = {}
 
   private loggerTag = 'iridium/users'
 
@@ -203,7 +204,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    * @param id string (required)
    * @returns user data object if found in the local state
    */
-  getUser(did: IridiumPeerIdentifier) {
+  getUser(did: IridiumPeerIdentifier): User | undefined {
     return this.state[didUtils.didString(did)]
   }
 
@@ -246,6 +247,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     await this.set(`/${did}`, user)
   }
 
+  setUserStatus(did: IridiumPeerIdentifier, status: UserStatus) {
+    Vue.set(this.userStatus, didUtils.didString(did), status)
+  }
+
   async send(event: IridiumUserEvent) {
     return this.iridium.connector?.publish(`/users/announce`, event, {
       encrypt: {
@@ -280,7 +285,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       throw new Error(UsersError.USER_NOT_FOUND)
     }
 
-    Vue.delete(this.state.details, didUtils.didString(did))
+    Vue.delete(this.state, didUtils.didString(did))
     await this.set(`/`, this.state)
     const id = await encoding.hash(
       [user.did, this.iridium.connector?.id].sort(),

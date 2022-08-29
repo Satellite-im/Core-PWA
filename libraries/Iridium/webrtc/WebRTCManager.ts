@@ -21,6 +21,10 @@ const initialState: WebRTCState = {
   activeCall: null,
   streamMuted: {},
   callStartedAt: 0,
+  streamConstraints: {
+    audio: true,
+    video: true,
+  },
 }
 
 type WebRTCAnnounceMessage = {
@@ -47,6 +51,28 @@ export default class WebRTCManager extends Emitter {
     super()
     this.iridium = iridium
     this.state = initialState
+  }
+
+  set streamConstraints(constraints: MediaStreamConstraints) {
+    this.state.streamConstraints = {
+      ...this.state.streamConstraints,
+      ...constraints,
+    }
+  }
+
+  get streamConstraints() {
+    return this.state.streamConstraints
+  }
+
+  set streamConstraints(constraints: MediaStreamConstraints) {
+    this.state.streamConstraints = {
+      ...this.state.streamConstraints,
+      ...constraints,
+    }
+  }
+
+  get streamConstraints() {
+    return this.state.streamConstraints
   }
 
   async init() {
@@ -184,14 +210,26 @@ export default class WebRTCManager extends Emitter {
   private onPeerAnnounce(from: string, _: WebRTCAnnounceMessage) {
     const requestFriend = this.iridium.users.getUser(from)
 
-    if (!requestFriend || requestFriend.status === 'online') return
+    if (!requestFriend) return
 
-    // TO DO : move to usermanager
-    this.iridium.users.setUser(requestFriend.did, {
-      ...requestFriend,
-      status: 'online',
-      seen: Date.now(),
-    })
+    this.iridium.users.setUserStatus(requestFriend.did, payload.status)
+
+    if (payload.status === 'offline') {
+      $WebRTC.calls.forEach((call) => {
+        if (call.peers[did]) {
+          call.destroyPeer(did)
+          delete call.peers[did]
+        }
+      })
+
+      return
+    }
+
+    clearTimeout(this.userStatusMap[did])
+
+    this.userStatusMap[did] = setTimeout(() => {
+      this.iridium.users.setUserStatus(requestFriend.did, 'offline')
+    }, Config.webrtc.announceFrequency * 2)
   }
 
   public async call(recipient: Friend, kinds: TrackKind[]) {
@@ -265,7 +303,8 @@ export default class WebRTCManager extends Emitter {
     })
 
     this.state.callStartedAt = Date.now()
-    await call.createLocalTracks(kinds)
+    const constraints = this.streamConstraints
+    await call.createLocalTracks(kinds, constraints)
 
     this.state.incomingCall = null
     this.state.activeCall = {
@@ -388,6 +427,7 @@ export default class WebRTCManager extends Emitter {
       this.state.activeCall = { callId, did }
       this.state.callStartedAt = Date.now()
 
+      // TODO: wire this up to mute
       this.emit('callConnected', { callId, did })
 
       $Sounds.stopSounds([Sounds.CALL])
@@ -590,7 +630,8 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    await call.createLocalTracks(kinds)
+    const constraints = this.streamConstraints
+    await call.createLocalTracks(kinds, constraints)
     await call.answer(did, data)
   }
 
@@ -620,7 +661,8 @@ export default class WebRTCManager extends Emitter {
     }
     const isMuted = this.state.streamMuted[did]?.[kind]
     if (isMuted) {
-      await call.unmute({ did, kind })
+      const constraints = this.streamConstraints
+      await call.unmute({ did, kind, constraints })
       $Sounds.playSound(Sounds.UNMUTE)
       return
     }
@@ -696,5 +738,31 @@ export default class WebRTCManager extends Emitter {
     )
 
     return dids.map((did) => ({ ...this.iridium.users.getUser(did) }))
+  }
+
+  public async mute({
+    kind = 'audio',
+    did = iridium.connector?.id,
+  }: {
+    kind: string
+    did?: string
+  }) {
+    if (!this.state.activeCall) return
+    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    if (!call) return
+    await call.mute({ kind, did })
+  }
+
+  public async unmute({
+    kind,
+    did = iridium.connector?.id,
+  }: {
+    kind: string
+    did?: string
+  }) {
+    if (!this.state.activeCall) return
+    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    if (!call) return
+    await call.unmute({ did, kind, constraints: this.streamConstraints })
   }
 }

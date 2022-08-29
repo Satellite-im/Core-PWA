@@ -13,6 +13,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/friends/types'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { TrackKind } from '~/libraries/WebRTC/types'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -22,18 +23,6 @@ export default Vue.extend({
     VideoIcon,
     VideoOffIcon,
   },
-  props: {
-    acceptCall: {
-      type: Function,
-      default: () => {},
-      required: false,
-    },
-    denyCall: {
-      type: Function,
-      default: () => {},
-      required: false,
-    },
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
@@ -42,7 +31,7 @@ export default Vue.extend({
   },
   computed: {
     conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
+      return this.incomingCall?.did
     },
     conversation(): Conversation | undefined {
       if (!this.conversationId) {
@@ -57,14 +46,14 @@ export default Vue.extend({
       return this.webrtc.incomingCall
     },
     caller(): User | undefined {
-      if (!this.incomingCall?.did) {
+      if (!this.conversationId) {
         return
       }
       // TODO : fix this later
       if (this.isGroup) {
         return
       }
-      return iridium.users.getUser(this.incomingCall.did)
+      return iridium.users.getUser(this.conversationId)
     },
     callerAvatar(): string {
       if (!this.caller) {
@@ -72,6 +61,37 @@ export default Vue.extend({
       }
       const hash = this.caller.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    },
+  },
+  methods: {
+    /**
+     * @method acceptCall DocsTODO
+     * @description
+     * @example
+     */
+    async acceptCall(kinds: TrackKind[]) {
+      const conversationId = this.webrtc.incomingCall?.callId
+      if (!conversationId) {
+        return
+      }
+
+      await iridium.webRTC
+        .acceptCall(kinds)
+        .catch((e) => this.$toast.error(this.$t(e.message) as string))
+
+      this.$router.push(
+        this.$device.isMobile
+          ? `/mobile/chat/${conversationId}`
+          : `/chat/${conversationId}`,
+      )
+    },
+    /**
+     * @method denyCall DocsTODO
+     * @description
+     * @example
+     */
+    denyCall() {
+      iridium.webRTC.denyCall()
     },
   },
 })

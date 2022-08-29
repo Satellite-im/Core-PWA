@@ -7,10 +7,11 @@ import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
+import { conversationMessageIsNotice } from '~/utilities/chat'
 
 interface ChatItem {
   message: ConversationMessage
-  isSameAuthor: boolean
+  showHeader: boolean
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
@@ -68,10 +69,14 @@ export default Vue.extend({
             (replyMessage) => replyMessage.replyToId === message.id,
           )
           maxTime = Math.max(maxTime, message.at)
+          const showHeader =
+            !isSameAuthor ||
+            (prevMessage && conversationMessageIsNotice(prevMessage)) ||
+            false
 
           return {
             message,
-            isSameAuthor,
+            showHeader,
             timeDiff,
             isNextDay,
             isFirstUnreadMessage,

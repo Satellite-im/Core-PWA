@@ -1,7 +1,8 @@
 import {
-  IridiumMessage,
-  Emitter,
   didUtils,
+  Emitter,
+  encoding,
+  IridiumMessage,
   IridiumPubsubMessage,
   IridiumSetOptions,
   encoding,
@@ -14,15 +15,20 @@ import { CID } from 'multiformats'
 import * as json from 'multiformats/codecs/json'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/agent'
 import type { EmitterCallback } from '@satellite-im/iridium'
+import type {
+  SyncFetchResponse,
+  SyncSubscriptionResponse,
+} from '@satellite-im/iridium/src/sync/agent'
 import { v4 } from 'uuid'
 import {
+  ChatError,
   Conversation,
   ConversationMessage,
-  ChatError,
-  MessageReactionPayload,
   ConversationMessagePayload,
-  MessageAttachment,
   IridiumConversationEvent,
+  MessageAttachment,
+  MessageReaction,
+  MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
@@ -41,7 +47,8 @@ export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
     cid?: string
-    type: 'chat/message'
+    type: 'chat/message' | 'chat/reaction'
+    reaction?: MessageReaction
   }>
 >
 
@@ -65,6 +72,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   public ephemeral: { typing: { [key: string]: string[] } } = { typing: {} }
+
+  private _intervals: { [key: string]: any } = {}
 
   constructor(public readonly iridium: IridiumManager) {
     super()
@@ -266,17 +275,36 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         fromName: friendName?.name,
         at: Date.now(),
         fromAddress: conversationId,
-        title: `New message from ${friendName?.name}`,
+        chatName: conversation.participants.length > 2 ? conversation.name : '',
+        title:
+          conversation.participants.length > 2
+            ? `${friendName?.name} posted in ${conversation.name}`
+            : `New message from ${friendName?.name}`,
         description:
           message.body?.length! > 79
             ? `${message.body?.substring(0, 80)}...`
             : message.body || '',
         image: message.from,
-        type: NotificationType.DIRECT_MESSAGE,
+        type:
+          conversation.participants.length > 2
+            ? NotificationType.GROUP_MESSAGE
+            : NotificationType.DIRECT_MESSAGE,
         seen: false,
       }
 
       this.iridium.notifications?.sendNotification(buildNotification)
+    } else if (type === 'chat/reaction') {
+      const reaction = payload.body.reaction
+      if (!reaction) {
+        return
+      }
+      const reactionsPath = `/conversations/${reaction.conversationId}/message/${reaction.messageId}/reactions/${reaction.userId}`
+      const message = this.getConversationMessage(
+        reaction.conversationId,
+        reaction.messageId,
+      )
+      Vue.set(message.reactions, reaction.userId, reaction.reactions)
+      await this.set(reactionsPath, reaction.reactions)
     }
   }
 
@@ -449,6 +477,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         recipients: newMembers,
       },
     })
+
+    // send a message in the conversation
+    await this.sendMessage({
+      conversationId: id,
+      type: 'member_join',
+      members: newMembers,
+      at: Date.now(),
+      attachments: [],
+    })
   }
 
   async appendParticipantsToConversation(id: string, participants: string[]) {
@@ -473,6 +510,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (!conversation) {
       throw new Error('conversation not found')
     }
+
+    // send a message in the conversation
+    await this.sendMessage({
+      conversationId: id,
+      type: 'member_leave',
+      at: Date.now(),
+      attachments: [],
+    })
 
     const event: IridiumConversationEvent = {
       id,
@@ -516,12 +561,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     await this.iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
   }
 
-  getConversation(id: string): Conversation {
-    const conversation = this.state.conversations[id]
-    if (!conversation) {
-      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-    }
-    return conversation
+
+  getConversation(id: Conversation['id']): Conversation | undefined {
+    return this.state.conversations[id]
   }
 
   getConversationMessage(
@@ -663,7 +705,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const message = this.getConversationMessage(conversationId, messageId)
 
     const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
-    let reactions = ((await this.get(path)) ?? []) as string[]
+
+    if (!this.subscriptions[conversationId]) {
+      // we're not subscribed yet
+      throw new Error(`not yet subscribed to conversation ${conversationId}`)
+    }
+
+    let reactions = (message.reactions && message.reactions[did]) ?? []
 
     const shouldRemove = reactions.includes(payload.reaction)
     if (shouldRemove) {
@@ -675,15 +723,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     message.reactions = { ...message.reactions, [did]: reactions }
     this.set(path, reactions)
 
+
+    const reaction: MessageReaction = {
+      conversationId,
+      messageId,
+      userId: did,
+      reactions,
+    }
     // broadcast the message to connected peers
     await this.iridium.connector.publish(
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/reaction',
-        conversation: conversationId,
-        messageCID: messageId,
-        userId: did,
-        reactions,
+        reaction,
       },
     )
   }

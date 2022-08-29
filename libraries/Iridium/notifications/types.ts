@@ -21,6 +21,7 @@ export enum NotificationType {
 export type Notification = {
   at: number
   id?: string
+  chatName?: string
   type: NotificationType
   fromName: string
   fromAddress?: string

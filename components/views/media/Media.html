@@ -1,19 +1,20 @@
 <div
-  class="mediastream"
   ref="mediastream"
+  class="mediastream"
   data-cy="mediastream"
   :style="`height:${height}`"
 >
-  <MediaHeading :isFullscreen="isFullscreen" @toggle="toggleFullscreen" />
+  <MediaHeading />
   <div class="media">
     <MediaUser
       id="local"
       :user="localParticipant"
-      isLocal
+      is-local
       data-cy="local-video"
     />
     <MediaUser
       v-for="participant in remoteParticipants"
+      :key="participant.did"
       :user="participant"
       data-cy="remote-video"
     />
@@ -25,17 +26,24 @@
       ...
     </div> -->
   </div>
-  <MediaActionsVolume
-    :volume="volume"
-    isPopup
-    @volumeControlValueChange="volumeControlValueChange"
-  />
-  <MediaActionsSettings />
+
+  <!-- <MediaActionsSettings /> -->
   <MediaActions />
+  <div class="controls">
+    <MediaActionsVolume
+      :volume="volume"
+      is-popup
+      @volumeControlValueChange="volumeControlValueChange"
+    />
+    <MediaActionsFullscreen
+      :is-fullscreen="isFullscreen"
+      @toggle="toggleFullscreen"
+    />
+  </div>
   <InteractablesDragBar
     v-if="!isFullscreen"
     side="bottom"
-    showHandle
-    @resize="(val)=> height=val"
+    show-handle
+    @resize="(val) => (height = val)"
   />
 </div>

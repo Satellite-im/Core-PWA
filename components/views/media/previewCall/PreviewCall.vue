@@ -22,15 +22,16 @@ export default Vue.extend({
   },
   methods: {
     navigateToActiveConversation() {
-      if (!this.webrtc.activeCall) {
+      const conversationId = iridium.webRTC.state.activeCall?.callId
+      if (!conversationId) {
         return
       }
-      if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
-        this.$store.commit('ui/showSidebar', false)
-      }
-      this.$router.push(`/chat/${this.webrtc.activeCall.callId}`)
+
+      this.$router.push(
+        this.$device.isMobile
+          ? `/mobile/chat/${conversationId}`
+          : `/chat/${conversationId}`,
+      )
     },
   },
 })

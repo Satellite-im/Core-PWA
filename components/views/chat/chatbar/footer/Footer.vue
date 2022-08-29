@@ -26,7 +26,7 @@ export default Vue.extend({
     ...mapState({
       ui: (state) => (state as RootState).ui,
     }),
-    typingParticipants(): string[] {
+    areTyping(): boolean {
       const conversationId = this.$route.params.id
       if (!conversationId) {
         return []

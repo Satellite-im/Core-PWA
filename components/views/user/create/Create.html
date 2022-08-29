@@ -22,10 +22,8 @@
         </TypographyText>
         <InteractablesImageInput ref="imageInput" @change="selectImage" />
         <InteractablesButton
-          size="small"
           :text="$t('servers.create.photo_button')"
-          outlined
-          @click="() => imageInputRef.click()"
+          @click="imageInputRef.click()"
         />
       </div>
     </div>
@@ -69,7 +67,6 @@
 
       <div class="submit-button-container">
         <InteractablesButton
-          color="primary"
           :text="$t('user.registration.sign_in')"
           :loading="isLoading"
           data-cy="sign-in-button"

@@ -3,7 +3,7 @@
     <InteractablesInput
       v-model="query"
       :placeholder="$t('friends.search_placeholder')"
-      autofocus
+      :autofocus="$device.isDesktop"
       @change="_searchFriend"
     />
     <TypographyError v-if="error" :text="$t(error)" />

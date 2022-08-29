@@ -79,7 +79,9 @@ export default Vue.extend({
     },
     screenStream() {
       if (this.isMuted('screen') || !this.call) return
-      return this.streams?.screen
+      return this.streams?.screen,
+    isLocalVideoFlipped(): boolean {
+      return iridium.settings.state.video.flipLocalStream
     },
   },
   watch: {

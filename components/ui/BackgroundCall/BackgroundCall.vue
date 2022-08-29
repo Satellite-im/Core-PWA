@@ -25,12 +25,15 @@ export default Vue.extend({
       const id = iridium.chat?.directConversationIdFromDid(
         this.webrtc.activeCall.did,
       )
-
-      if (!id || !iridium.chat?.hasConversation(id)) {
+      if (
+        !id ||
+        !iridium.chat?.hasConversation(id) ||
+        !this.remoteParticipant
+      ) {
         return
       }
 
-      this.$router.push(`/chat/${id}`)
+      this.$router.push(`/mobile/chat/${id}`)
     },
   },
 })

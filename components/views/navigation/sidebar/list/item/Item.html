@@ -1,9 +1,9 @@
 <UiContextMenu
   class="item"
-  :class="{'is-loading' : isLoading , selected : isSelected}"
+  :class="{ 'is-loading': isLoading, selected: isSelected }"
   :items="contextMenuValues"
-  @click="openConversation"
   data-cy="sidebar-user"
+  @click="openConversation"
 >
   <template>
     <UiUserState
@@ -27,10 +27,10 @@
     </TypographyText>
     <TypographyText size="sm" data-cy="sidebar-user-name">
       <div
-        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
-        class="ellipsis"
-        :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
         ref="subtitle"
+        class="ellipsis"
+        :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
+        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
       />
     </TypographyText>
   </div>
