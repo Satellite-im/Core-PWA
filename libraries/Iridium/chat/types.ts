@@ -44,6 +44,13 @@ export type ConversationMessagePayload = Omit<
   'id' | 'from' | 'reactions'
 >
 
+export type MessageReaction = {
+  conversationId: string
+  messageId: string
+  userId: string
+  reactions: string[]
+}
+
 export type MessageReactionPayload = {
   conversationId: string
   messageId: string
