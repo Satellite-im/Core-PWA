@@ -111,6 +111,7 @@ export const Config = {
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
     typingInputThrottle: 5000,
+    typingInputDebounce: 1000,
     maxUndoStack: 100,
     batchUndoSeconds: 5,
     searchCharLimit: 256,
