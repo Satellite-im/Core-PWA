@@ -211,4 +211,38 @@ describe('chat.conversationMessageIsNotice', () => {
     })
     expect(result).toMatchSnapshot()
   })
+
+  it('returns true for member_join type', () => {
+    const result: any = chat.conversationMessageIsNotice({
+      id: '',
+      conversationId: '',
+      from: '',
+      type: 'member_join',
+      at: NaN,
+      body: undefined,
+      glyph: undefined,
+      attachments: [],
+      reactions: { key0: [], key2: [], key1: [] },
+      replyToId: undefined,
+      members: undefined,
+    })
+    expect(result).toBeTruthy()
+  })
+
+  it('returns true for member_join type', () => {
+    const result: any = chat.conversationMessageIsNotice({
+      id: '',
+      conversationId: '',
+      from: '',
+      type: 'member_leave',
+      at: NaN,
+      body: undefined,
+      glyph: undefined,
+      attachments: [],
+      reactions: { key0: [], key2: [], key1: [] },
+      replyToId: undefined,
+      members: undefined,
+    })
+    expect(result).toBeTruthy()
+  })
 })
