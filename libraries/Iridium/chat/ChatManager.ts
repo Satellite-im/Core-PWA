@@ -25,6 +25,7 @@ import {
   ConversationMessagePayload,
   IridiumConversationEvent,
   MessageAttachment,
+  MessageReaction,
   MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
@@ -44,7 +45,8 @@ export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
     cid?: string
-    type: 'chat/message'
+    type: 'chat/message' | 'chat/reaction'
+    reaction?: MessageReaction
   }>
 >
 
@@ -352,6 +354,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       }
 
       this.iridium.notifications?.sendNotification(buildNotification)
+    } else if (type === 'chat/reaction') {
+      const reaction = payload.body.reaction
+      if (!reaction) {
+        return
+      }
+      const reactionsPath = `/conversations/${reaction.conversationId}/message/${reaction.messageId}/reactions/${reaction.userId}`
+      const message = this.getConversationMessage(
+        reaction.conversationId,
+        reaction.messageId,
+      )
+      Vue.set(message.reactions, reaction.userId, reaction.reactions)
+      await this.set(reactionsPath, reaction.reactions)
     }
   }
 
@@ -735,8 +749,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error(`not yet subscribed to conversation ${conversationId}`)
     }
 
-    const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
-    let reactions = ((await this.get(path)) ?? []) as string[]
+    const reactionsPath = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
+    let reactions = (message.reactions && message.reactions[did]) ?? []
 
     const shouldRemove = reactions.includes(payload.reaction)
     if (shouldRemove) {
@@ -746,17 +760,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
 
     Vue.set(message.reactions, did, reactions)
-    this.set(path, reactions)
+    await this.set(reactionsPath, reactions)
+
+    const reaction: MessageReaction = {
+      conversationId,
+      messageId,
+      userId: did,
+      reactions,
+    }
 
     // broadcast the message to connected peers
     await this.iridium.connector.publish(
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/reaction',
-        conversation: conversationId,
-        messageCID: messageId,
-        userId: did,
-        reactions,
+        reaction,
       },
     )
   }

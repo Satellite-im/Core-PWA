@@ -1,5 +1,6 @@
 import { AccountsState, RegistrationStatus } from './types'
 import { UserRegistrationData } from '~/types/ui/user'
+import { User } from '~/libraries/BlockchainClient/interfaces'
 
 const mutations = {
   setPin(state: AccountsState, pin: string) {
