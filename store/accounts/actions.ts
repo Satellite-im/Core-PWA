@@ -8,7 +8,6 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ActionsArguments } from '~/types/store/store'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -16,6 +15,7 @@ import logger from '~/plugins/local/logger'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
+import { User } from '~/libraries/BlockchainClient/interfaces'
 
 export default {
   /**
@@ -71,7 +71,7 @@ export default {
         pin,
       )
 
-      await commit('setPhrase', decryptedPhrase)
+      commit('setPhrase', decryptedPhrase)
     }
 
     commit('unlock', pin)
@@ -91,7 +91,7 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    await commit('setAdapter', 'Solana')
+    commit('setAdapter', 'Solana')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     $BlockchainClient.setAdapter(new SolanaAdapter())
 
@@ -102,7 +102,7 @@ export default {
       throw new Error(AccountsError.UNABLE_TO_CREATE_MNEMONIC)
     }
 
-    await commit('setPhrase', userWallet.mnemonic)
+    commit('setPhrase', userWallet.mnemonic)
 
     const { pinHash } = state
     const entropyMessage = IdentityManager.generateEntropyMessage(
@@ -140,7 +140,7 @@ export default {
 
     const encryptedPhrase = await Crypto.encryptWithPassword(mnemonic, pin)
 
-    await commit('setEncryptedPhrase', encryptedPhrase)
+    commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
    * @method loadAccount
@@ -319,7 +319,7 @@ export default {
   ) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto
-    await $Crypto.init(userAccount)
+    $Crypto.init(userAccount)
   },
 
   async startup({

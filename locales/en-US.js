@@ -530,6 +530,8 @@ export default {
         subtitle: 'Update your profile photo, status, banners and more.',
         status_placeholder: 'Some super interesting status message',
         remove_image: 'Remove',
+        current_status: 'Current Status',
+        detail_updated: 'Profile Updated Successfully',
         info: {
           title: 'Account Info',
           subtitle:

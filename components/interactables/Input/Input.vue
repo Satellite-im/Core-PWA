@@ -81,6 +81,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    buttonType: {
+      type: String as PropType<InputType>,
+      default: 'button',
+    },
   },
   computed: {
     isEmpty(): boolean {

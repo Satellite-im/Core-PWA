@@ -39,8 +39,9 @@
       class="button"
       :color="color"
       :disabled="disabled"
-      @click="handleSubmit"
       data-cy="submit-input"
+      :type="buttonType"
+      @click="handleSubmit"
     >
       <UiLoadersSpinner v-if="loading" spinning />
       <slot v-else></slot>
