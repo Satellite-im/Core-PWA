@@ -54,16 +54,15 @@ export default Vue.extend({
     ...mapState({
       notifications: () => Object.entries(iridium.notifications?.state),
       ui: (state) => (state as RootState).ui,
-      audio: (state) => (state as RootState).audio,
-      video: (state) => (state as RootState).video,
-      modals: (state) => (state as RootState).ui.modals,
     }),
     ModalWindows: () => ModalWindows,
-    conversationId(): string {
+    conversationId(): string | undefined {
       return this.$route.params.id
     },
     conversation(): Conversation | undefined {
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.conversationId
+        ? iridium.chat.state.conversations[this.conversationId]
+        : undefined
     },
     isGroup(): boolean {
       if (!this.conversation) {
@@ -71,16 +70,16 @@ export default Vue.extend({
       }
       return this.conversation.participants.length > 2
     },
-    details(): User | Conversation {
+    details(): User | Conversation | undefined {
       if (this.isGroup) {
-        return iridium.chat.state.conversations[this.conversationId]
+        return this.conversation
       }
       const friendDid = this.conversation?.participants.find(
         (f) => f !== iridium.connector?.id,
       ) as string
       return this.users[friendDid]
     },
-    members(): User[] {
+    members(): (User | undefined)[] {
       if (!this.conversation) {
         return []
       }
@@ -93,14 +92,13 @@ export default Vue.extend({
         return ''
       }
       if (this.isGroup) {
-        return this.members.map((m) => m.name).join(', ')
+        return this.members.map((m) => m?.name).join(', ')
       }
       return this.userStatus[(this.details as User).did] || 'offline'
     },
     enableRTC(): boolean {
-      // todo- hook up to usermanager
       if (this.isGroup) {
-        const memberIds = this.members.map((m) => m.did)
+        const memberIds = this.members.map((m) => m?.did)
         return Object.values(this.users).some(
           (friend: Friend) =>
             memberIds.includes(friend.did) &&
@@ -125,12 +123,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    groupInvite() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: true, group: this.details as Conversation },
-      })
-    },
     toggleAlerts() {
       this.$store.commit('ui/clearAllNotifications')
       this.showAlerts = !this.showAlerts
@@ -176,9 +168,6 @@ export default Vue.extend({
       }
     },
     async handleCall() {
-      if (this.isGroup) {
-        return
-      }
       if (!this.enableRTC || this.webRTC.isActiveCall) {
         return
       }

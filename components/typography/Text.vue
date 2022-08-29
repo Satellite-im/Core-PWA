@@ -55,7 +55,7 @@ export default Vue.extend({
       if (this.color) {
         return this.color
       }
-      if (this.as.match('h[1-3]|label')) {
+      if (this.as.match('h[1-6]|label')) {
         return 'light'
       }
       return 'body'
@@ -79,7 +79,7 @@ export default Vue.extend({
       if (this.weight) {
         return this.weight
       }
-      if (this.as.match('h[1-3]')) {
+      if (this.as.match('h[1-6]')) {
         return 'bold'
       }
       return 'normal'
