@@ -50,6 +50,12 @@ export default Vue.extend({
       },
     },
   },
+  mounted() {
+    document.addEventListener('fullscreenchange', this.setFullscreenValue)
+  },
+  beforeDestroy() {
+    document.removeEventListener('fullscreenchange', this.setFullscreenValue)
+  },
   methods: {
     /**
      * @method volumeControlValueChange DocsTODO
@@ -65,11 +71,12 @@ export default Vue.extend({
       if (!document.fullscreenElement) {
         const media = this.$refs.mediastream as HTMLElement
         media.requestFullscreen()
-        this.isFullscreen = true
       } else if (document.exitFullscreen) {
         document.exitFullscreen()
-        this.isFullscreen = false
       }
+    },
+    setFullscreenValue() {
+      this.isFullscreen = Boolean(document.fullscreenElement)
     },
   },
 })
