@@ -6,6 +6,7 @@ describe('Test Solana Adapter', () => {
     const konstruktor = new SolanaAdapter()
     expect(() => konstruktor).not.toThrow(Error)
   })
+  
   it('should sign message but returns error', async () => {
     // because getPayerAccount is not mocked
     const konstruktor = new SolanaAdapter()
@@ -17,12 +18,14 @@ describe('Test Solana Adapter', () => {
       expect(error).toHaveProperty('message', AccountsError.PAYER_NOT_PRESENT)
     }
   })
+  
   it('should get connection status before solanaManager is initialized', () => {
     const konstruktor = new SolanaAdapter()
 
     const result = konstruktor._getConnectionStatus()
     expect(result).toBeFalsy()
   })
+  
   it('should get friendsProgram and return error', () => {
     // because Solana is not initialized
     const konstruktor = new SolanaAdapter()
