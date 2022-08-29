@@ -750,11 +750,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
 
     const reactionsPath = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
-    const reactions = (message.reactions && message.reactions[did]) ?? []
+    let reactions = (message.reactions && message.reactions[did]) ?? []
 
     const shouldRemove = reactions.includes(payload.reaction)
     if (shouldRemove) {
-      reactions.filter((reaction) => reaction !== payload.reaction)
+      reactions = reactions.filter((reaction) => reaction !== payload.reaction)
     } else {
       reactions.push(payload.reaction)
     }
