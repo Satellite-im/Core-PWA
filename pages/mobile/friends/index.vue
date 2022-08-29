@@ -73,12 +73,7 @@ import { Swiper, SwiperOptions } from 'swiper'
 import 'swiper/css'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
-
-enum FriendsTabs {
-  DEFAULT = '',
-  ADD = 'add',
-  REQUESTS = 'requests',
-}
+import { FriendsTabs } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'MobileFriends',
@@ -119,7 +114,7 @@ export default Vue.extend({
         },
       }
     },
-    friendsList(): Friend[] {
+    friendsList(): (Friend | undefined)[] {
       return this.friends.friends
         .map((did) => iridium.users.getUser(did))
         .sort((a, b) =>

@@ -1,18 +1,17 @@
 <template>
   <div>
-    <template v-if="!incomingRequests.length && !outgoingRequests.length">
-      <UiResultsMessage
-        :title="$t('friends.no_requests')"
-        :subtitle="$t('friends.no_requests_subtitle')"
-      />
-    </template>
+    <UiResultsMessage
+      v-if="!incomingRequests.length && !outgoingRequests.length"
+      :title="$t('friends.no_requests')"
+      :subtitle="$t('friends.no_requests_subtitle')"
+    />
 
     <!-- Incoming Requests -->
     <template v-if="incomingRequests.length">
       <div class="padded_divider">
         <TypographyHorizontalRuleText
           plaintext
-          :value="$t('friends.requests')"
+          :value="$t('friends.friend_requests')"
         />
       </div>
       <FriendsFriend
