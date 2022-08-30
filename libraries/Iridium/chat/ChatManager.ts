@@ -749,9 +749,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   setTyping(conversationId: string, did: string, typing: boolean = true) {
-    this.ephemeral.typing[conversationId] = {
-      ...this.ephemeral.typing[conversationId],
-      [did]: typing,
+    this.ephemeral.typing = {
+      ...this.ephemeral.typing,
+      [conversationId]: {
+        ...this.ephemeral.typing[conversationId],
+        [did]: typing,
+      },
     }
   }
 }

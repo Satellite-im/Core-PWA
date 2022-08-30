@@ -6,23 +6,13 @@
     </TypographyText>
     <div class="columns is-mobile">
       <div class="column">
-        <template v-if="isOdd(i + 1)">
-          <TypographyNumberedWord
-            v-for="(word, i) in splitPhrase"
-            :key="word"
-            :word="word"
-            :number="i + 1"
-          />
+        <template v-if="isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
         </template>
       </div>
       <div class="column">
-        <template v-if="!isOdd(i + 1)">
-          <TypographyNumberedWord
-            v-for="(word, i) in splitPhrase"
-            :key="word"
-            :word="word"
-            :number="i + 1"
-          />
+        <template v-if="!isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
         </template>
       </div>
     </div>
