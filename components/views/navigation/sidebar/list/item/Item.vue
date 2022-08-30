@@ -2,10 +2,9 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
-import { RootState } from '~/types/store/store'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -14,7 +13,6 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/friends/types'
-import { conversationMessageIsNotice } from '~/utilities/chat'
 
 export default Vue.extend({
   components: {
@@ -38,10 +36,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-      accounts: (state) => (state as RootState).accounts,
-    }),
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
     conversation(): Conversation | undefined {
       return this.chat.conversations[this.conversationId]

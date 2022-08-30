@@ -1,4 +1,4 @@
-<div id="toolbar">
+<div class="toolbar">
   <InteractablesSidebarToggle v-if="!ui.showSidebar" />
   <div class="circle-container">
     <template v-if="details">
@@ -7,48 +7,32 @@
     </template>
   </div>
   <div class="user-info">
-    <TypographyTitle :size="6" v-if="conversation" :text="conversation.name" />
-    <TypographySubtitle :size="6" :text="subtitleText" />
+    <TypographyText as="h4" v-if="conversation">
+      {{ conversation.name }}
+    </TypographyText>
+    <TypographyText color="dark">{{ subtitleText }}</TypographyText>
   </div>
   <div class="controls">
-    <div class="toggle-alerts" data-cy="toolbar-alerts">
-      <UiCircle
-        v-if="notifications.notifications.length"
-        class="notification-alert"
-        :size="15"
-        color="red"
-        type="icon"
-        :data="notifications.notifications.length"
-        @click="toggleAlerts"
-      >
-        {{notifications.notifications.length}}
-      </UiCircle>
-      <ToolbarAlerts
-        v-if="showAlerts && $device.isDesktop"
-        v-click-outside="toggleAlerts"
-      />
-      <bell-icon
-        v-tooltip.bottom="$t('pages.chat.alerts')"
-        size="1x"
-        :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-        @click="toggleAlerts"
-      />
-    </div>
-    <div
+    <button
+      class="toggle-alerts"
+      :class="{'with-count': notifications.notifications.length}"
+      data-cy="toolbar-alerts"
+      :data-count="Object.values(notifications).length"
+      v-tooltip.bottom="$t('pages.chat.alerts')"
+      @click="toggleAlerts"
+    >
+      <bell-icon size="18" />
+    </button>
+    <ToolbarAlerts v-if="showAlerts" v-click-outside="toggleAlerts" />
+    <button
       v-if="conversation"
       v-tooltip.bottom="callTooltipText"
-      :class="`control-button ${
-          !enableRTC || webrtc.activeCall ? 'disabled' : ''
-        }`"
+      :class="{disabled: !enableRTC || webrtc.activeCall}"
       data-cy="toolbar-enable-audio"
       @click="handleCall"
     >
-      <phone-call-icon
-        size="1x"
-        class="control-icon"
-        :color="isGroup ? 'grey' : ''"
-      />
-    </div>
+      <phone-call-icon size="18" />
+    </button>
     <!-- <div
       :class="`control-button ${!enableRTC || webrtc.BackgroundCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
@@ -56,87 +40,59 @@
       v-if="recipient"
       @click="() => call(['audio', 'video'])"
     >
-      <video-icon size="1x" class="control-icon" />
+      <video-icon size="1x"  />
     </div> -->
+
+    <div class="vertical-divider" />
+
     <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltip-text="$t('coming_soon.archived')"
+      :tooltip-text="$t('market_place.title')"
       :tooltip-position="'bottom'"
-      data-cy="toolbar-archived-messages"
+      data-cy="toolbar-marketplace"
+      @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+      class="disabled"
     >
-      <div
-        v-tooltip.bottom="$t('pages.chat.archived_messages')"
-        :class="ui.showPinned ? 'primary' : ''"
-        @click="$store.commit('ui/togglePinned', !ui.showPinned)"
-      >
-        <archive-icon size="1x" class="control-icon" color="grey" />
-      </div>
+      <shopping-bag-icon size="18" />
     </UiComingSoon>
-    <div class="button-wrapper" v-if="isGroup">
+    <UiComingSoon
+      :tooltip-text="$t('coming_soon.wallet')"
+      :tooltip-position="'bottom'"
+      data-cy="toolbar-wallet"
+      class="disabled"
+    >
+      <button
+        v-tooltip.bottom="$t('wallet.wallet')"
+        @click="() => toggleModal(ModalWindows.WALLET)"
+      >
+        <wallet-icon size="18" />
+      </button>
+    </UiComingSoon>
+
+    <template v-if="isGroup">
       <button
         v-tooltip.bottom="isGroupInviteVisible ? '' : $t('pages.chat.add_member')"
-        class="control-button"
         @click="isGroupInviteVisible = !isGroupInviteVisible"
       >
-        <user-plus-icon size="1x" class="control-icon" />
+        <user-plus-icon size="18" />
       </button>
       <GroupInvite
         v-if="isGroupInviteVisible"
         v-click-outside="() => isGroupInviteVisible = false"
         @close="isGroupInviteVisible = false"
       />
-    </div>
-
-    <div v-if="!$device.isMobile" class="vertical-divider"></div>
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      class="market-place control-button coming-soon"
-      :tooltip-text="$t('market_place.title')"
-      :tooltip-position="'bottom'"
-      data-cy="toolbar-marketplace"
-      @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <shopping-bag-icon class="control-icon" size="1x" color="grey" />
-    </UiComingSoon>
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltip-text="$t('coming_soon.wallet')"
-      :tooltip-position="'bottom'"
-      data-cy="toolbar-wallet"
-    >
-      <div
-        v-tooltip.bottom="$t('wallet.wallet')"
-        @click="() => toggleModal(ModalWindows.WALLET)"
-      >
-        <wallet-icon class="control-icon" size="1x" color="grey" />
-      </div>
-    </UiComingSoon>
-
-    <div v-if="!$device.isMobile" class="vertical-divider"></div>
-    <template v-if="!$device.isMobile">
-      <UiComingSoon
-        v-if="isGroup"
-        :tooltip-text="$t('coming_soon.group_chat_search')"
-        horizontal
-        tooltip-position="bottom"
-      >
-        <SearchInput
-          :placeholder="$t('search.search')"
-          :search-recommend="searchRecommend"
-          @search="handleSearch"
-          @change="handleChange"
-        />
-      </UiComingSoon>
-      <SearchInput
-        v-else
-        :placeholder="$t('search.search')"
-        :search-recommend="searchRecommend"
-        @search="handleSearch"
-        @change="handleChange"
-      />
     </template>
+
+    <div class="vertical-divider" />
+
+    <SearchInput
+      v-if="$device.isDesktop"
+      :placeholder="$t('search.search')"
+      :search-recommend="searchRecommend"
+      @search="handleSearch"
+      @change="handleChange"
+    />
     <SearchResult
-      v-if="!$device.isMobile && searchQuery"
+      v-if="$device.isDesktop && searchQuery"
       :search-query="searchQuery"
       @toggle="toggleSearchResult"
     />

@@ -53,9 +53,6 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      audio: (state) => (state as RootState).audio,
-      video: (state) => (state as RootState).video,
-      modals: (state) => (state as RootState).ui.modals,
     }),
     ModalWindows: () => ModalWindows,
     conversationId(): Conversation['id'] | undefined {
@@ -82,7 +79,7 @@ export default Vue.extend({
       ) as string
       return this.users[friendDid] as User
     },
-    members(): User[] {
+    members(): (User | undefined)[] {
       if (!this.conversation) {
         return []
       }
@@ -95,15 +92,13 @@ export default Vue.extend({
         return ''
       }
       if (this.isGroup) {
-        return this.members.map((m) => m.name).join(', ')
+        return this.members.map((m) => m?.name).join(', ')
       }
       return this.userStatus[(this.details as User).did] || 'offline'
     },
     enableRTC(): boolean {
-      console.info('enableRTC', this.details, this.isGroup)
-      // todo- hook up to usermanager
       if (this.isGroup) {
-        const memberIds = this.members.map((m) => m.did)
+        const memberIds = this.members.map((m) => m?.did)
         return Object.values(this.users).some(
           (friend: User) =>
             memberIds.includes(friend.did) &&
@@ -124,12 +119,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    groupInvite() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'groupInvite',
-        state: { isOpen: true, group: this.details as Conversation },
-      })
-    },
     toggleAlerts() {
       this.$store.commit('ui/clearAllNotifications')
       this.showAlerts = !this.showAlerts
