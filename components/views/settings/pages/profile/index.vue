@@ -118,7 +118,10 @@ export default Vue.extend({
      * @description Updates user details
      * @example this.updateUserDetail('name', 'John Doe')
      */
-    async updateUserDetail(key: keyof User, value: string) {
+    async updateUserDetail(e: SubmitEvent, key: keyof User, value: string) {
+      e.stopPropagation()
+      e.preventDefault()
+
       try {
         this.loading.add(key)
         await iridium.profile.updateUser({
