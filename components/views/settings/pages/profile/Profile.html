@@ -81,7 +81,11 @@
                   <span>{{ $t('pages.settings.profile.remove_image') }}</span>
                 </button>
                 <div class="username">
-                  <form @submit="updateUserDetail('name', inputs.name ?? '')">
+                  <form
+                    @submit="
+                        (e) => updateUserDetail(e, 'name', inputs.name ?? '')
+                      "
+                  >
                     <InteractablesInput
                       v-model="inputs.name"
                       size="xs"
@@ -99,8 +103,9 @@
                 <div class="status-input">
                   <form
                     @submit="
-                      (e) => updateUserDetail(e, 'status', inputs.status ?? '')
-                    "
+                        (e) =>
+                          updateUserDetail(e, 'status', inputs.status ?? '')
+                      "
                   >
                     <InteractablesInput
                       v-model="inputs.status"
@@ -120,9 +125,7 @@
                   <TypographyText as="h6">
                     {{ $t('pages.settings.profile.current_status') }}
                   </TypographyText>
-                  <TypographyText>
-                    {{ profile ? profile.status : '' }}
-                  </TypographyText>
+                  <TypographyText> {{ profile?.status ?? '' }} </TypographyText>
                 </div>
               </div>
             </div>
