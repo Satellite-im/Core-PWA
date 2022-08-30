@@ -11,7 +11,6 @@ import {
 
 import { mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import Group from '~/libraries/Iridium/groups/Group'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
@@ -29,6 +28,7 @@ export default Vue.extend({
   data() {
     return {
       users: iridium.users.state,
+      userStatus: iridium.users.userStatus,
       groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
@@ -74,11 +74,10 @@ export default Vue.extend({
     enableRTC(): boolean {
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
-        return memberIds
-          .map((id) => this.users[id])
-          .some((u) => u.status === 'online')
+        return memberIds.some((id) => this.userStatus[id] === 'online')
       }
-      return (this.details as User | undefined)?.status === 'online'
+      const did = (this.details as User)?.did
+      return ((did && this.userStatus[did]) ?? null) === 'online'
     },
   },
   methods: {

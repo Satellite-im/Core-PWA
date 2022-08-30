@@ -78,7 +78,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     setInterval(() => {
       this.list.forEach(async (user: User) => {
         if (
-          user.status === 'online' &&
+          this.userStatus[user.did] === 'online' &&
           Number(user.seen) < Date.now() - 1000 * 30
         ) {
           logger.info(this.loggerTag, 'user timed out', user)

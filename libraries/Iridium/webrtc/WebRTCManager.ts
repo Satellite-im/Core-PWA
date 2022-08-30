@@ -197,7 +197,7 @@ export default class WebRTCManager extends Emitter {
 
   private onPeerAnnounce(from: string, payload: WebRTCAnnounceMessage) {
     const requestFriend = this.iridium.users.getUser(from)
-
+    console.info('peer announced', { from, requestFriend, payload })
     if (!requestFriend) return
 
     this.iridium.users.setUserStatus(
