@@ -241,11 +241,14 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
         resolve([])
       }, 10000)
 
-      this.once(`searchResults/${id}`, (results: User[]) => {
-        clearTimeout(timeout)
-        logger.info(this.loggerTag, 'peer search results', results)
-        resolve(results)
-      })
+      this.iridium.connector?.p2p.on(
+        `searchResults/${id}`,
+        (results: User[]) => {
+          clearTimeout(timeout)
+          logger.info(this.loggerTag, 'peer search results', results)
+          resolve(results)
+        },
+      )
 
       logger.info(this.loggerTag, 'peer search query', { query, page, id })
       return iridium.p2p.send(iridium.p2p.primaryNodeID, {
