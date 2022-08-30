@@ -88,7 +88,9 @@
                 </div>
                 <div class="status-input">
                   <form
-                    @submit="updateUserDetail('status', inputs.status ?? '')"
+                    @submit="
+                      (e) => updateUserDetail(e, 'status', inputs.status ?? '')
+                    "
                   >
                     <InteractablesInput
                       v-model="inputs.status"
