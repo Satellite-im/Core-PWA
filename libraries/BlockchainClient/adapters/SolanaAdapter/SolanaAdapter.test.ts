@@ -3,8 +3,12 @@ import { AccountsError } from '~/store/accounts/types'
 
 describe('Test Solana Adapter', () => {
   it('should initialize the constructor', () => {
-    const konstruktor = new SolanaAdapter()
-    expect(() => konstruktor).not.toThrow(Error)
+    try {
+      const konstruktor = new SolanaAdapter()
+      expect(konstruktor).toMatchSnapshot()
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+    }
   })
   it('should sign message but returns error', async () => {
     // because getPayerAccount is not mocked
