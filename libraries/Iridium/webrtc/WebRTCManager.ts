@@ -11,13 +11,12 @@ import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
-import { Config } from '~/config'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { User, Friend } from '~/libraries/Iridium/friends/types'
 
 const $Sounds = new SoundManager()
 
-const announceFrequency = 15000
+const announceFrequency = 6942
 
 const initialState: WebRTCState = {
   incomingCall: null,
@@ -49,6 +48,7 @@ export default class WebRTCManager extends Emitter {
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
   public callTime: number = 0
+  public timers: { [key: string]: any } = {}
 
   constructor(iridium: IridiumManager) {
     super()
@@ -91,13 +91,19 @@ export default class WebRTCManager extends Emitter {
   }
 
   private async setupAnnounce() {
-    await this.announce()
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(this.announce())
+      }, 1000)
+    })
     setInterval(this.announce.bind(this), announceFrequency)
   }
 
   async announce() {
+    if (!iridium.connector) return
     const profile = this.iridium.profile.state
-    const friends = iridium.connector && iridium.friends.state.friends
+    const friends = iridium.friends.state.friends
+    if (!profile || !friends) return
     logger.debug(this.loggerTag, 'announce', {
       friends,
     })
@@ -116,25 +122,25 @@ export default class WebRTCManager extends Emitter {
     )
   }
 
-  private onMessage = ({
+  private async onMessage({
     from,
     payload,
   }: IridiumPubsubMessage<
     IridiumDecodedPayload<
       WebRTCCallMessage | WebRTCAnnounceMessage | WebRTCTypingMessage
     >
-  >) => {
+  >) {
     const { type } = payload.body
     const did = didUtils.didString(from)
     switch (type) {
       case 'call':
-        this.onPeerCall(did, payload.body as WebRTCCallMessage)
+        await this.onPeerCall(did, payload.body as WebRTCCallMessage)
         break
       case 'typing':
-        this.onPeerTyping(did, payload.body as WebRTCTypingMessage)
+        await this.onPeerTyping(did, payload.body as WebRTCTypingMessage)
         break
       case 'announce':
-        this.onPeerAnnounce(did, payload.body as WebRTCAnnounceMessage)
+        await this.onPeerAnnounce(did, payload.body as WebRTCAnnounceMessage)
         break
     }
   }
@@ -189,15 +195,19 @@ export default class WebRTCManager extends Emitter {
     const conversation = this.iridium.chat.getConversation(
       message.conversationId,
     )
+    logger.info(this.loggerTag, 'onPeerTyping', { from, conversationId })
     if (!from || !conversation || !conversation.participants.includes(from))
       return
 
-    this.iridium.chat.setTyping(conversationId, from)
+    this.iridium.chat.setTyping(conversationId, from, true)
+    clearTimeout(this.timers[`${conversationId}/typing`])
+    this.timers[`${conversationId}/typing`] = setTimeout(() => {
+      this.iridium.chat.setTyping(conversationId, from, false)
+    }, 5000)
   }
 
   private onPeerAnnounce(from: string, payload: WebRTCAnnounceMessage) {
     const requestFriend = this.iridium.users.getUser(from)
-    console.info('peer announced', { from, requestFriend, payload })
     if (!requestFriend) return
 
     this.iridium.users.setUserStatus(

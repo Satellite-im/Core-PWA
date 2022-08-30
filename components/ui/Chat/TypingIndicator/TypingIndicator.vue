@@ -9,7 +9,7 @@ export default Vue.extend({
   data() {
     return {
       chat: iridium.chat.state,
-      typing: iridium.chat.ephemeral.typing,
+      ephemeral: iridium.chat.ephemeral,
     }
   },
   computed: {
@@ -22,15 +22,18 @@ export default Vue.extend({
       if (!conversation) {
         return []
       }
-      const conversationTyping = this.typing[conversationId] || []
+      const conversationTyping =
+        this.ephemeral.typing[conversationId] ||
+        ({} as { [userId: string]: boolean })
 
-      return conversationTyping
-        .map((did: string) => iridium.users.getUser(did))
-        .filter(Boolean)
+      return Object.entries(conversationTyping)
+        .filter(([_, typing]) => typing)
+        .map(([did]) => iridium.users.getUser(did))
+        .filter(Boolean) as User[]
     },
     text(): string {
       return this.$tc('messaging.typing', this.typingParticipants.length, {
-        user: this.typingParticipants.map((u) => u.name).join(', '),
+        user: this.typingParticipants.map((u: User) => u.name).join(', '),
       })
     },
   },

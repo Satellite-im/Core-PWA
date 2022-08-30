@@ -228,6 +228,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (!this.iridium.connector) {
       return
     }
+    const fromDID = didUtils.didString(from)
     const conversation = this.getConversation(conversationId)
     if (
       !conversation ||
@@ -263,14 +264,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       )
 
       // Remove is_typing indicator upon user message receive
-      clearTimeout(this.iridium.webRTC.timeoutMap[message.from])
       this.ephemeral.typing[conversationId] = (
         this.ephemeral.typing[conversationId] || []
-      ).filter((did) => did !== message.from)
+      ).filter((did) => did !== fromDID)
 
       const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Exclude<Notification, 'id'> = {
-        fromName: friendName?.name || message.from,
+        fromName: friendName?.name || fromDID,
         at: Date.now(),
         fromAddress: conversationId,
         chatName: conversation.participants.length > 2 ? conversation.name : '',
@@ -282,7 +282,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           message.body?.length! > 79
             ? `${message.body?.substring(0, 80)}...`
             : message.body || '',
-        image: message.from,
+        image: fromDID,
         type:
           conversation.participants.length > 2
             ? NotificationType.GROUP_MESSAGE
@@ -293,14 +293,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       this.iridium.notifications?.sendNotification(buildNotification)
     } else if (type === 'chat/reaction') {
       const reaction = payload.body.reaction
+      logger.info('iridium/chatmanager/onConversationMessage', 'reaction', {
+        reaction,
+        from,
+        conversationId,
+      })
       if (!reaction) {
         return
       }
-      const reactionsPath = `/conversations/${reaction.conversationId}/message/${reaction.messageId}/reactions/${reaction.userId}`
       const message = this.getConversationMessage(
         reaction.conversationId,
         reaction.messageId,
       )
+      message.reactions[fromDID] = reaction.reactions
 
       this.state.conversations[conversationId].message = {
         ...this.state.conversations[conversationId].message,
@@ -714,8 +719,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const { conversationId, messageId } = payload
     const message = this.getConversationMessage(conversationId, messageId)
 
-    const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
-
     let reactions = (message.reactions && message.reactions[did]) ?? []
 
     const shouldRemove = reactions.includes(payload.reaction)
@@ -726,7 +729,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
 
     message.reactions = { ...message.reactions, [did]: reactions }
-    this.set(path, reactions)
+    const path = `/conversations/${conversationId}/message/${messageId}`
+    this.set(path, message)
 
     const reaction: MessageReaction = {
       conversationId,
@@ -745,9 +749,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   setTyping(conversationId: string, did: string, typing: boolean = true) {
-    this.ephemeral.typing[conversationId] = {
-      ...this.ephemeral.typing[conversationId],
-      [did]: typing,
+    this.ephemeral.typing = {
+      ...this.ephemeral.typing,
+      [conversationId]: {
+        ...this.ephemeral.typing[conversationId],
+        [did]: typing,
+      },
     }
   }
 }

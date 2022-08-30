@@ -31,8 +31,11 @@ export default Vue.extend({
       croppedImage: '',
       showCropper: false,
       loading: new Set() as Set<keyof User>,
+      profile: iridium.profile.state,
       inputs: {
-        status: '',
+        name: iridium.profile.state?.name,
+        photoHash: iridium.profile.state?.photoHash,
+        status: iridium.profile.state?.status,
         accountUrl: '',
       } as Partial<User>,
     }
@@ -42,9 +45,6 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
-    iridiumProfile(): User | undefined {
-      return iridium.profile.state
-    },
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore

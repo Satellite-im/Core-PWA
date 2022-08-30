@@ -7,9 +7,14 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
+  data() {
+    return {
+      profile: iridium.profile.state,
+    }
+  },
   computed: {
     ...mapState({
-      accounts: (state) => (state as RootState).accounts,
+      accounts: (state: RootState) => state.accounts,
     }),
     src(): string {
       const hash = this.accounts.details?.profilePicture
@@ -19,8 +24,8 @@ export default Vue.extend({
   methods: {
     copyId() {
       if (!iridium.connector) return
-      const shortID = iridium.profile.state
-        ? `${iridium.profile.state.name}#${iridium.connector.id.substring(
+      const shortID = this.profile.state
+        ? `${this.profile.state.name}#${iridium.connector.id.substring(
             iridium.connector.id.length - 6,
           )}`
         : `${iridium.connector?.id}`

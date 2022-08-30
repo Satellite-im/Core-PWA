@@ -1,6 +1,7 @@
 import { Emitter } from '@satellite-im/iridium'
 import { IridiumManager } from '../IridiumManager'
 import { User } from '../Users/types'
+import logger from '~/plugins/local/logger'
 
 export default class IridiumProfile extends Emitter {
   public readonly iridium: IridiumManager
@@ -45,8 +46,12 @@ export default class IridiumProfile extends Emitter {
     return this.iridium.connector?.get<T>(`/profile${path}`, options)
   }
 
-  async set(path: string = '', payload: any, options: any = {}) {
-    await this.iridium.connector?.set(`/profile${path}`, payload, options)
+  async set(path: string = '/', payload: any, options: any = {}) {
+    await this.iridium.connector?.set(
+      `/profile${path === '/' ? '' : `/${path}`}`,
+      payload,
+      options,
+    )
     this.state = await this.get<User>()
   }
 
@@ -58,14 +63,18 @@ export default class IridiumProfile extends Emitter {
   }
 
   async updateUser(details: Partial<User>) {
-    const detailsKeys = Object.keys(details) as (keyof User)[]
-    await Promise.all(
-      detailsKeys.map(async (key) => {
-        if (Object.prototype.hasOwnProperty.call(details, key)) {
-          const value = details[key as keyof User]
-          await this.set(`/${key}`, value)
-        }
-      }),
-    )
+    logger.info('iridium/profile', 'updating user', { details })
+    await this.set('/', { ...this.state, ...details })
+    if (!this.state || !this.iridium.connector?.id) return
+    // tell our peers via user announce
+    await this.iridium.users.send({
+      status: 'changed',
+      user: {
+        did: this.iridium.connector?.id,
+        name: this.state.name,
+        status: this.state.status,
+      },
+      at: Date.now(),
+    })
   }
 }
