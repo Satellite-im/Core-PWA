@@ -31,7 +31,6 @@ export default Vue.extend({
       croppedImage: '',
       showCropper: false,
       loading: new Set() as Set<keyof User>,
-      profile: iridium.profile.state,
       inputs: {
         name: iridium.profile.state?.name,
         photoHash: iridium.profile.state?.photoHash,
@@ -59,6 +58,9 @@ export default Vue.extend({
     },
     imageInputRef(): HTMLInputElement {
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
+    },
+    profile(): User | undefined {
+      return iridium.profile.state
     },
   },
   beforeDestroy() {
