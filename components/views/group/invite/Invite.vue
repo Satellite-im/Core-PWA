@@ -9,6 +9,7 @@ import { User } from '~/libraries/Iridium/users/types'
 export default Vue.extend({
   data() {
     return {
+      chat: iridium.chat.state,
       recipients: [] as User[],
       isLoading: false,
       recipient: '',
@@ -26,7 +27,7 @@ export default Vue.extend({
       if (!this.conversationId) {
         return undefined
       }
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.chat.conversations[this.conversationId]
     },
   },
   methods: {

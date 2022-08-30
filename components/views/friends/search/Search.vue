@@ -1,27 +1,30 @@
 <template>
   <div>
     <InteractablesInput
-      v-model="friendId"
+      v-model.trim="query"
       :placeholder="$t('friends.search_placeholder')"
       :autofocus="$device.isDesktop"
       @change="_searchFriend"
     />
     <TypographyError v-if="error" :text="$t(error)" />
     <UiLoadersLoadingBar v-else-if="searching" />
-    <div v-else-if="!friendId" class="id-container">
+    <div v-else-if="!query" class="id-container">
       <button class="id-button" @click="copyId">
         <TypographyText class="id" color="dark">
           {{ $t('friends.copy_your_id') }}
         </TypographyText>
       </button>
     </div>
-    <FriendsFriend
-      v-else-if="user && user.did"
-      :user="user"
-      is-preview
-      class="friend-item"
-      @requestSent="onFriendRequestSent"
-    />
+    <div v-else-if="matches && matches.length">
+      <FriendsFriend
+        v-for="match in matches"
+        :key="match.did"
+        :user="match"
+        is-preview
+        class="friend-item"
+        @requestSent="onFriendRequestSent"
+      />
+    </div>
   </div>
 </template>
 
@@ -38,10 +41,11 @@ export default Vue.extend({
   data() {
     return {
       error: '',
-      friendId: '',
+      query: '',
       searching: false,
       request: null as FriendRequest | null,
       user: null as User | null,
+      matches: [] as User[],
     }
   },
   computed: {
@@ -51,7 +55,7 @@ export default Vue.extend({
   },
   async mounted() {
     if (this.$route.params && this.$route.params.id) {
-      this.$data.friendId = this.$route.params.id
+      this.query = this.$route.params.id
       this._searchFriend()
     }
     iridium.friends?.on('request/error', (err: string) => {
@@ -60,7 +64,7 @@ export default Vue.extend({
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
-      if (!this.friendId.length) {
+      if (!this.query.length) {
         this.error = ''
         this.user = null
         this.searching = false
@@ -73,31 +77,40 @@ export default Vue.extend({
       this.user = null
       this.error = ''
       this.searching = true
-      const friendId = this.friendId.trim()
-      if (friendId === iridium.connector?.id) {
+      const matches = await iridium.users.searchPeer(this.query)
+      const hasFriend =
+        matches.length === 1 && iridium.friends.isFriend(matches[0].did)
+
+      if (
+        this.query === iridium.connector?.id ||
+        (matches.length === 1 && matches[0].did === iridium.connector?.id)
+      ) {
         this.error = this.$t('friends.self_add') as string
         return
       }
-      await iridium.users.searchPeer(friendId)
-      const hasFriend = iridium.friends.isFriend(friendId)
       if (hasFriend) {
         this.error = this.$t('friends.already_friend') as string
       }
 
-      this.user = iridium.users.getUser(friendId)
+      this.matches = matches
       this.searching = false
     },
     onFriendRequestSent() {
       this.request = null
       this.user = null
-      this.friendId = ''
+      this.query = ''
       // @ts-ignore
       this.$toast.show(this.$t('friends.request_sent') as string)
     },
     copyId() {
-      // @ts-ignore
+      if (!iridium.connector) return
+      const shortID = iridium.profile.state
+        ? `${iridium.profile.state.name}#${iridium.connector.id.substring(
+            iridium.connector.id.length - 6,
+          )}`
+        : `${iridium.connector?.id}`
+      navigator.clipboard.writeText(shortID)
       this.$toast.show(this.$t('ui.copied') as string)
-      navigator.clipboard.writeText(this.accounts.active)
     },
   },
 })

@@ -22,15 +22,9 @@ import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import 'swiper/css'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   name: 'Mobile',
-  setup() {
-    const { isBackgroundCall } = useWebRTC()
-
-    return { isBackgroundCall }
-  },
   data() {
     return {
       settings: iridium.settings.state,
@@ -41,6 +35,9 @@ export default Vue.extend({
     ...mapState({
       isMobileNavVisible: (state) => (state as RootState).ui.isMobileNavVisible,
     }),
+    isBackgroundCall(): boolean {
+      return iridium.webRTC.isBackgroundCall(this.$route.params.id)
+    },
     flair(): Flair {
       return flairs[this.settings.flair]
     },

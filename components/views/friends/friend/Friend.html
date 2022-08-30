@@ -9,6 +9,7 @@
     >
       {{ user.name || user.did }}
     </TypographyText>
+    <TypographyText v-if="isPreview" size="sm">{{ user.did }}</TypographyText>
     <TypographyText v-if="user.status" size="sm">
       {{ user.status }}
     </TypographyText>

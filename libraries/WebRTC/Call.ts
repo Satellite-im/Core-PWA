@@ -237,7 +237,7 @@ export class Call extends Emitter<CallEventListeners> {
 
     return iridium.webRTC.sendWebrtc(did, {
       module: 'webrtc',
-      type: 'peer:call',
+      type: 'call',
       callId: this.callId === did ? iridium.connector?.id : this.callId,
       peers: this.peerDetails,
       did,

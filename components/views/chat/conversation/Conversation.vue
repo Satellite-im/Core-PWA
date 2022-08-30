@@ -3,7 +3,10 @@
 import Vue from 'vue'
 import { ChevronDownIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 
 interface ChatItem {
@@ -23,15 +26,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      conversation:
-        iridium.chat.state.conversations?.[this.$route.params.id] ?? {},
+      chat: iridium.chat.state,
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
+      isBlurred: false,
     }
   },
   computed: {
     myDid(): string {
       return iridium.connector?.id ?? ''
+    },
+    conversation(): Conversation {
+      return this.chat.conversations?.[this.$route.params.id] ?? {}
     },
     messages(): ConversationMessage[] {
       if (!Object.keys(this.conversation).length) {
@@ -42,7 +48,8 @@ export default Vue.extend({
       )
     },
     chatItems(): ChatItem[] {
-      return this.messages
+      let maxTime = 0
+      const messages = this.messages
         .filter((message) => !message.replyToId)
         .slice(-this.numMessages)
         .map((message, index) => {
@@ -61,6 +68,7 @@ export default Vue.extend({
           const replies = this.messages.filter(
             (replyMessage) => replyMessage.replyToId === message.id,
           )
+          maxTime = Math.max(maxTime, message.at)
           const showHeader =
             !isSameAuthor ||
             (prevMessage && conversationMessageIsNotice(prevMessage)) ||
@@ -75,6 +83,10 @@ export default Vue.extend({
             replies,
           }
         })
+      if (maxTime > this.conversation.lastReadAt && !this.isBlurred) {
+        iridium.chat.updateConversationReadAt(this.conversation.id, maxTime)
+      }
+      return messages
     },
     noMore(): boolean {
       return (
@@ -82,6 +94,14 @@ export default Vue.extend({
         this.messages.filter((message) => !message.replyToId).length
       )
     },
+  },
+  async mounted() {
+    window.addEventListener('blur', async () => {
+      this.isBlurred = true
+    })
+    window.addEventListener('focus', async () => {
+      this.isBlurred = false
+    })
   },
   methods: {
     loadMore() {

@@ -2,29 +2,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useCallElapsedTime } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
-  setup() {
-    const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
-    return { elapsedTime, startInterval, clearTimer }
+  components: {
+    MaximizeIcon,
+    MinimizeIcon,
   },
   data() {
     return {
       webrtc: iridium.webRTC.state,
+      callTime: iridium.webRTC.callTime,
     }
-  },
-  watch: {
-    'webrtc.createdAt': {
-      handler() {
-        this.startInterval()
-      },
-      immediate: true,
-    },
-  },
-  beforeDestroy() {
-    this.clearTimer()
   },
 })
 </script>

@@ -1,40 +1,54 @@
-import Vue from 'vue'
-import { Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
-import type { SyncSubscriptionResponse } from '@satellite-im/iridium/src/sync/agent'
+import { didUtils, Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
+import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
 import iridium, { IridiumManager } from '../IridiumManager'
-import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
+import {
+  WebRTCState,
+  WebRTCStreamConstraints,
+} from '~/libraries/Iridium/webrtc/types'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
-import { Friend } from '~/libraries/Iridium/friends/types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
-import { Config } from '~/config'
+import { WebRTCEnum } from '~/libraries/Enums/enums'
+import { User, Friend } from '~/libraries/Iridium/friends/types'
 
 const $Sounds = new SoundManager()
+
+const announceFrequency = 6942
 
 const initialState: WebRTCState = {
   incomingCall: null,
   activeCall: null,
   streamMuted: {},
-  createdAt: 0,
+  callStartedAt: 0,
   streamConstraints: {
     audio: true,
     video: true,
   },
 }
 
+type WebRTCAnnounceMessage = {
+  type: 'announce'
+  status?: 'online' | 'offline'
+}
+type WebRTCCallMessage = {
+  type: 'call'
+  callId: string
+  peers: CallPeerDescriptor[]
+}
+type WebRTCTypingMessage = {
+  type: 'typing'
+  conversationId: string
+}
+
 export default class WebRTCManager extends Emitter {
   public readonly iridium: IridiumManager
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
-  public timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
-  private userStatusMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
-
-  private _subscriptions: {
-    [key: string]: { topic: string; connected: boolean; handler?: Function }
-  } = {}
+  public callTime: number = 0
+  public timers: { [key: string]: any } = {}
 
   constructor(iridium: IridiumManager) {
     super()
@@ -46,7 +60,7 @@ export default class WebRTCManager extends Emitter {
     this.state.streamConstraints = {
       ...this.state.streamConstraints,
       ...constraints,
-    }
+    } as WebRTCStreamConstraints
   }
 
   get streamConstraints() {
@@ -54,324 +68,110 @@ export default class WebRTCManager extends Emitter {
   }
 
   async init() {
-    await this.fetch()
-    // this.setupListeners()
-    await this.subscribeToAnnounce()
-
-    this.iridium.connector?.p2p.on<
-      IridiumPubsubMessage<SyncSubscriptionResponse>
-    >('node/message/sync/subscribe', this.onSyncSubscriptionResponse.bind(this))
-
-    this.iridium.connector?.p2p.on('ready', async () => {
-      if (!this.iridium.connector?.p2p.primaryNodeID) {
-        throw new Error('not connected to primary node')
-      }
-      logger.info(
-        'iridium/webrtcmanager/init',
-        'p2p ready, initializing webrtc...',
-      )
-
-      const channels = [
-        {
-          topic: 'webrtc',
-          handler: this.onMessage,
-        },
-      ]
-
-      channels.forEach(async ({ topic, handler }) => {
-        if (this._subscriptions[topic] !== undefined) return
-
-        this._subscriptions[topic] = { topic, handler, connected: false }
-        logger.info(
-          'iridium/webrtcmanager/init',
-          `requesting sync subscription to ${topic}`,
-        )
-        // ask the sync node to subscribe to this topic
-        await this.iridium.connector?.p2p.send(
-          this.iridium.connector?.p2p.primaryNodeID,
-          {
-            type: 'sync/subscribe',
-            topic,
-          },
-        )
-      })
-    })
-  }
-
-  /**
-   * @param message - pubsub message from the sync node
-   * @description - handle a sync subscription response from the sync node
-   */
-  async onSyncSubscriptionResponse(
-    message: IridiumPubsubMessage<SyncSubscriptionResponse>,
-  ) {
+    if (!this.iridium.connector || !this.iridium.connector.p2p.primaryNodeID) {
+      throw new Error('not connected to primary node')
+    }
     logger.info(
-      'iridium/webrtcmanager/onSyncSubscriptionResponse',
-      'message received from sync node',
-      message,
+      'iridium/webrtcmanager/init',
+      'p2p ready, initializing webrtc...',
     )
-    if (!message.payload.body.topic) {
-      throw new Error('no topic in sync subscription response')
-    }
-    const [channel, subscription] =
-      Object.entries(this._subscriptions).find(
-        ([, { topic }]) => topic === message.payload.body.topic,
-      ) || []
 
-    if (!channel || !subscription) {
-      return
-    }
-    if (subscription?.connected) {
-      throw new Error('subscription already connected')
-    }
-    if (message.payload.body.success) {
-      logger.info(
-        'iridium/webrtcmanager/onSyncSubscriptionResponse',
-        `sync node subscribed to ${message.payload.body.topic}`,
-      )
-      await this.iridium.connector?.subscribe(
-        message.payload.body.topic,
-        subscription.handler
-          ? { handler: subscription.handler.bind(this) }
-          : null,
-      )
-      subscription.connected = true
-      return
-    }
-    logger.warn(
-      'iridium/chatmanager/onSyncSubscriptionResponse',
-      'sync node failed to subscribe',
-      message,
-    )
-  }
-
-  async fetch() {
-    this.state = {
-      ...this.state,
-      ...(await this.get('/')),
-    }
-    return this.state
-  }
-
-  get(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get(`/webRTC${path}`, options)
-  }
-
-  set(path: string = '', payload: any, options: any = {}) {
-    logger.info(this.loggerTag, 'path, paylaod and state', {
-      path,
-      payload,
-      state: this.state,
+    // ask the sync node to subscribe to this topic
+    await this.iridium.connector.subscribe('webrtc', {
+      handler: this.onMessage.bind(this),
+      sync: true,
     })
-    return this.iridium.connector?.set(
-      `/webRTC${path === '/' ? '' : path}`,
-      payload,
-      options,
-    )
-  }
+    await this.setupAnnounce()
 
-  // NOT WORKING RN
-  // private setupListeners() {
-  //   this.iridium.connector?.on('peer:discovery', ({ did }: { did: string }) => {
-  //     const loggerPrefix = 'webrtc/peer:discovery - '
-  //     if (!did) return
-
-  //     const id = this.iridium.chat?.directConversationIdFromDid(did)
-
-  //     if (id && this.iridium.chat?.hasConversation(id)) {
-  //       const conversation = this.iridium.chat?.getConversation(id)
-  //       const connectedParticipant = conversation.participants.find(
-  //         (participant) => participant === did,
-  //       )
-  //       if (connectedParticipant) {
-  //         logger.log(loggerPrefix, `connected participant: ${did}`)
-  //         // this.iridium.chat.updateConversation({
-  //         //   ...conversation,
-  //         //   participants: conversation.participants.map((participant) => {
-  //         //     if (participant.did === connectedParticipant.did) {
-  //         //       return {
-  //         //         ...participant,
-  //         //         status: 'online',
-  //         //       }
-  //         //     }
-  //         //     return participant
-  //         //   }),
-  //         // })
-  //       }
-  //     }
-
-  //     const connectedFriend = this.iridium.friends.getFriend(did)
-
-  //     if (!connectedFriend) return
-
-  //     logger.log(loggerPrefix, `discovered peer: ${did}`)
-
-  //     this.iridium.friends.updateFriend({
-  //       ...connectedFriend,
-  //       status: 'online',
-  //     })
-  //   })
-
-  //   this.iridium.connector?.p2p.on(
-  //     'peer/connect',
-  //     ({ did }: { did: string }) => {
-  //       const loggerPrefix = 'webrtc/peer:connect - '
-
-  //       if (!did) return
-  //       const id = this.iridium.chat?.directConversationIdFromDid(did)
-
-  //       if (id && this.iridium.chat?.hasConversation(id)) {
-  //         const conversation = this.iridium.chat?.getConversation(id)
-  //         const connectedParticipant = conversation.participants.find(
-  //           (participant) => participant === did,
-  //         )
-  //         if (connectedParticipant) {
-  //           logger.log(loggerPrefix, `connected participant: ${did}`)
-  //           // this.iridium.chat.updateConversation({
-  //           //   ...conversation,
-  //           //   participants: conversation.participants.map((participant) => {
-  //           //     if (participant.did === connectedParticipant.did) {
-  //           //       return {
-  //           //         ...participant,
-  //           //         status: 'online',
-  //           //       }
-  //           //     }
-  //           //     return participant
-  //           //   }),
-  //           // })
-  //         }
-  //       }
-
-  //       const connectedFriend = this.iridium.friends.getFriend(did)
-
-  //       if (!connectedFriend) return
-
-  //       logger.log(loggerPrefix, `connected friend: ${did}`)
-
-  //       this.iridium.friends.updateFriend({
-  //         ...connectedFriend,
-  //         status: 'online',
-  //       })
-  //     },
-  //   )
-
-  //   this.iridium.connector?.on(
-  //     'peer:disconnect',
-  //     ({ did }: { did: string }) => {
-  //       const loggerPrefix = 'webrtc/peer:disconnect - '
-
-  //       if (!did) return
-
-  //       const id = this.iridium.chat?.directConversationIdFromDid(did)
-
-  //       if (id && this.iridium.chat?.hasConversation(id)) {
-  //         const conversation = this.iridium.chat?.getConversation(id)
-  //         const disconnectedParticipant = conversation.participants.find(
-  //           (participant) => participant === did,
-  //         )
-  //         if (disconnectedParticipant) {
-  //           logger.log(loggerPrefix, `disconnected participant: ${did}`)
-  //           // this.iridium.chat.updateConversation({
-  //           //   ...conversation,
-  //           //   participants: conversation.participants.map((participant) => {
-  //           //     if (participant.did === disconnectedParticipant.did) {
-  //           //       return {
-  //           //         ...participant,
-  //           //         status: 'offline',
-  //           //       }
-  //           //     }
-  //           //     return participant
-  //           //   }),
-  //           // })
-  //         }
-  //       }
-
-  //       const disconnectedFriend = this.iridium.friends.getFriend(did)
-
-  //       if (!disconnectedFriend) return
-
-  //       logger.log(loggerPrefix, `discovered peer: ${did}`)
-
-  //       this.iridium.friends.updateFriend({
-  //         ...disconnectedFriend,
-  //         status: 'offline',
-  //       })
-
-  //       $WebRTC.calls.forEach((call) => {
-  //         if (call.peers[did]) {
-  //           call.destroyPeer(did)
-  //           delete call.peers[did]
-  //         }
-  //       })
-  //     },
-  //   )
-  // }
-
-  // LATER WILL BE REMOVED
-  private subscribeToAnnounce = async () => {
-    window.addEventListener('beforeunload', () => {
-      this.sendAnnounce('offline')
-    })
-
-    this.sendAnnounce('online')
     setInterval(() => {
-      if (!this.iridium.ready) return
-
-      this.sendAnnounce('online')
-    }, Config.webrtc.announceFrequency)
+      if (this.state.activeCall) {
+        this.callTime = Date.now() - this.state.callStartedAt
+      }
+    }, 1000)
   }
 
-  private sendAnnounce = (status: 'online' | 'offline') => {
-    const users = Object.values(this.iridium.users.state)
-
-    users.forEach((user) => {
-      this.sendWebrtc(user.did, {
-        module: 'webrtc',
-        type: 'peer:announce',
-        status,
-        did: this.iridium.connector?.id,
-        at: Date.now().valueOf(),
-      })
+  private async setupAnnounce() {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(this.announce())
+      }, 1000)
     })
+    setInterval(this.announce.bind(this), announceFrequency)
   }
 
-  private onMessage = ({ payload }: { payload: any }) => {
-    if (!payload.body.module || payload.body.module !== 'webrtc') {
-      return
-    }
+  async announce() {
+    if (!iridium.connector) return
+    const profile = this.iridium.profile.state
+    const friends = iridium.friends.state.friends
+    if (!profile || !friends) return
+    logger.debug(this.loggerTag, 'announce', {
+      friends,
+    })
 
+    if (!friends) return
+    await iridium.connector?.publish(
+      'webrtc',
+      {
+        type: 'announce',
+      },
+      {
+        encrypt: {
+          recipients: friends,
+        },
+      },
+    )
+  }
+
+  private async onMessage({
+    from,
+    payload,
+  }: IridiumPubsubMessage<
+    IridiumDecodedPayload<
+      WebRTCCallMessage | WebRTCAnnounceMessage | WebRTCTypingMessage
+    >
+  >) {
     const { type } = payload.body
-
+    const did = didUtils.didString(from)
     switch (type) {
-      case 'peer:call':
-        this.onPeerCall(payload.body)
+      case 'call':
+        await this.onPeerCall(did, payload.body as WebRTCCallMessage)
         break
-      case 'peer:typing':
-        this.onPeerTyping(payload.body)
+      case 'typing':
+        await this.onPeerTyping(did, payload.body as WebRTCTypingMessage)
         break
-      case 'peer:announce':
-        this.onPeerAnnounce(payload.body)
+      case 'announce':
+        await this.onPeerAnnounce(did, payload.body as WebRTCAnnounceMessage)
         break
     }
   }
 
-  private onPeerCall = async (payload: any) => {
-    const { did, callId, peers } = payload
-
-    const loggerPrefix = 'webrtc/peer:call - '
-    logger.log(loggerPrefix, `incoming call with callId: ${payload.callId}`)
+  private async onPeerCall(from: string, payload: WebRTCCallMessage) {
+    const { callId, peers } = payload
+    const loggerPrefix = 'iridium/webrtc/message/call'
 
     if (!callId) {
-      logger.log(loggerPrefix, `invalid callId`)
+      logger.error(loggerPrefix, `invalid callId`, {
+        from,
+        payload,
+      })
       return
     }
 
-    const call = $WebRTC.getCall(callId)
+    logger.log(loggerPrefix, `incoming call`, {
+      from,
+      callId,
+      peers,
+    })
 
+    const call = $WebRTC.getCall(callId)
     if (!call) {
-      logger.log(loggerPrefix, `create a call...`)
+      logger.info(loggerPrefix, `call not found, creating...`, {
+        from,
+        callId,
+        peers,
+      })
       await this.createCall({
-        did,
+        did: from,
         callId,
         peers,
       })
@@ -383,56 +183,46 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    if (!call.peerConnected[did] && !call.peerDialingDisabled[did]) {
+    if (!call.peerConnected[from] && !call.peerDialingDisabled[from]) {
       logger.log(loggerPrefix, `initiate a call...`)
-      await call.initiateCall(did)
+      await call.initiateCall(from)
+      this.state.callStartedAt = Date.now()
     }
   }
 
-  private onPeerTyping = ({
-    did,
-    conversationId,
-  }: {
-    did: string
-    conversationId: string
-  }) => {
-    const conversation = this.iridium.chat.getConversation(conversationId)
-    if (!did || !conversation) return
+  private onPeerTyping(from: string, message: WebRTCTypingMessage) {
+    const { conversationId } = message
+    const conversation = this.iridium.chat.getConversation(
+      message.conversationId,
+    )
+    logger.info(this.loggerTag, 'onPeerTyping', { from, conversationId })
+    if (!from || !conversation || !conversation.participants.includes(from))
+      return
 
-    if (!this.iridium.chat.typingStatus[conversationId]?.[did]) {
-      this.iridium.chat.setTypingStatus(conversationId, did, true)
-    }
-    clearTimeout(this.timeoutMap[did])
-
-    this.timeoutMap[did] = setTimeout(() => {
-      this.iridium.chat.setTypingStatus(conversationId, did, false)
-    }, Config.chat.typingInputThrottle * 2)
+    this.iridium.chat.setTyping(conversationId, from, true)
+    clearTimeout(this.timers[`${conversationId}/typing`])
+    this.timers[`${conversationId}/typing`] = setTimeout(() => {
+      this.iridium.chat.setTyping(conversationId, from, false)
+    }, 5000)
   }
 
-  private onPeerAnnounce = (payload: any) => {
-    const did = payload.did as string
-    const requestFriend = this.iridium.users.getUser(did)
-
+  private onPeerAnnounce(from: string, payload: WebRTCAnnounceMessage) {
+    const requestFriend = this.iridium.users.getUser(from)
     if (!requestFriend) return
 
-    this.iridium.users.setUserStatus(requestFriend.did, payload.status)
+    this.iridium.users.setUserStatus(
+      requestFriend.did,
+      payload.status || 'online',
+    )
 
     if (payload.status === 'offline') {
       $WebRTC.calls.forEach((call) => {
-        if (call.peers[did]) {
-          call.destroyPeer(did)
-          delete call.peers[did]
+        if (call.peers[from]) {
+          call.destroyPeer(from)
+          delete call.peers[from]
         }
       })
-
-      return
     }
-
-    clearTimeout(this.userStatusMap[did])
-
-    this.userStatusMap[did] = setTimeout(() => {
-      this.iridium.users.setUserStatus(requestFriend.did, 'offline')
-    }, Config.webrtc.announceFrequency * 2)
   }
 
   public async call(recipient: Friend, kinds: TrackKind[]) {
@@ -477,7 +267,11 @@ export default class WebRTCManager extends Emitter {
 
       const peers = participants.map((did) => {
         const user =
-          this.iridium.users.getUser(did) || (this.iridium.profile.state ?? '')
+          this.iridium.users.getUser(did) ||
+          (this.iridium.profile.state ?? {
+            did,
+            name: did,
+          })
 
         return {
           name: user.name,
@@ -499,17 +293,13 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    Vue.set(this.state.streamMuted, this.iridium.connector.id, {
+    this.setStreamMuted(this.iridium.connector.id, {
       audio: !kinds.includes('audio'),
       video: !kinds.includes('video'),
       screen: !kinds.includes('screen'),
     })
 
-    const $nuxt = useNuxtApp()
-    $nuxt.$store.commit('video/setDisabled', !kinds.includes('video'), {
-      root: true,
-    })
-
+    this.state.callStartedAt = Date.now()
     const constraints = this.streamConstraints
     await call.createLocalTracks(kinds, constraints)
 
@@ -522,7 +312,35 @@ export default class WebRTCManager extends Emitter {
     await call.start()
   }
 
-  private createCall = async ({
+  setStreamMuted(
+    did: string,
+    {
+      audio,
+      video,
+      screen,
+      headphones,
+    }: {
+      audio?: boolean
+      video?: boolean
+      screen?: boolean
+      headphones?: boolean
+    } = {},
+  ) {
+    this.state.streamMuted = {
+      ...this.state.streamMuted,
+      [did]: {
+        audio: audio ?? this.state.streamMuted[did]?.audio ?? false,
+        video: video ?? this.state.streamMuted[did]?.video ?? false,
+        screen: screen ?? this.state.streamMuted[did]?.screen ?? false,
+        headphones:
+          headphones ?? this.state.streamMuted[did]?.headphones ?? false,
+      },
+    }
+
+    this.emit('streamMuted', { did, ...this.state.streamMuted[did] })
+  }
+
+  private createCall({
     callId,
     peers,
     did,
@@ -530,7 +348,7 @@ export default class WebRTCManager extends Emitter {
     callId: string
     peers: CallPeerDescriptor[]
     did?: string
-  }) => {
+  }) {
     logger.log('webrtc: creating call', callId + peers)
 
     if (!this.iridium.connector?.id) {
@@ -562,6 +380,7 @@ export default class WebRTCManager extends Emitter {
       did: string
       data: SignalData
     }) => {
+      logger.debug('webrtc/createCall', 'onCallIncoming', { did, data })
       call.peerDialingDisabled[did] = true
       if (this.state.activeCall?.callId === call.callId) {
         call.answer(did, data)
@@ -601,17 +420,12 @@ export default class WebRTCManager extends Emitter {
     call.on('OUTGOING_CALL', onCallOutgoing)
 
     const onCallConnected = async ({ did }: { did: string }) => {
-      const $nuxt = useNuxtApp()
-
       this.state.incomingCall = null
       this.state.activeCall = { callId, did }
-      this.state.createdAt = Date.now()
+      this.state.callStartedAt = Date.now()
 
-      if (!$nuxt.$store.state.audio.muted) {
-        call.unmute({ did: this.iridium.connector?.id, kind: 'audio' })
-      } else {
-        call.mute({ did: this.iridium.connector?.id, kind: 'audio' })
-      }
+      // TODO: wire this up to mute
+      this.emit('callConnected', { callId, did })
 
       $Sounds.stopSounds([Sounds.CALL])
       $Sounds.playSound(Sounds.CONNECTED)
@@ -621,7 +435,7 @@ export default class WebRTCManager extends Emitter {
     const onCallHangup = async () => {
       this.state.incomingCall = null
       this.state.activeCall = null
-      this.state.createdAt = 0
+      this.state.callStartedAt = 0
     }
     call.on('HANG_UP', onCallHangup)
 
@@ -641,18 +455,11 @@ export default class WebRTCManager extends Emitter {
         logger.error('webrtc', 'onCallTrack - connector.id not found')
         return
       }
-      const $nuxt = useNuxtApp()
 
-      let muted: Boolean = true
-      if (kind === 'audio') {
-        muted = $nuxt.$store.state.audio.muted
-      } else if (kind === 'video') {
-        muted = $nuxt.$store.state.video.disabled
-      }
-
-      Vue.set(this.state.streamMuted, this.iridium.connector.id, {
-        ...this.state.streamMuted[this.iridium.connector?.id],
-        [kind]: muted,
+      // emit the track event so that the UI can display/mute the track
+      this.emit('track', {
+        did: this.iridium.connector?.id,
+        kind,
       })
     }
     call.on('LOCAL_TRACK_CREATED', onCallTrack)
@@ -673,10 +480,7 @@ export default class WebRTCManager extends Emitter {
         return
       }
 
-      Vue.set(this.state.streamMuted, this.iridium.connector.id, {
-        ...this.state.streamMuted[this.iridium.connector?.id],
-        [kind]: false,
-      })
+      this.setStreamMuted(this.iridium.connector?.id, { [kind]: false })
     }
     call.on('LOCAL_TRACK_UNMUTED', onLocalTrackUnmuted)
 
@@ -693,6 +497,10 @@ export default class WebRTCManager extends Emitter {
         'webrtc',
         `remote track received: ${track.kind}#${track.id} from ${did} ${track.enabled}`,
       )
+
+      if (!kind) return
+
+      this.setStreamMuted(did, { [kind]: !track.enabled })
     }
     call.on('REMOTE_TRACK_RECEIVED', onCallPeerTrack)
 
@@ -711,10 +519,7 @@ export default class WebRTCManager extends Emitter {
       )
       if (!kind) return
 
-      Vue.set(this.state.streamMuted, did, {
-        ...this.state.streamMuted[did],
-        [kind]: false,
-      })
+      this.setStreamMuted(did, { [kind]: false })
     }
     call.on('REMOTE_TRACK_UNMUTED', onPeerTrackUnmuted)
 
@@ -731,10 +536,7 @@ export default class WebRTCManager extends Emitter {
 
       logger.log('webrtc', `remote track muted: #${trackId} from ${did}`)
 
-      Vue.set(this.state.streamMuted, did, {
-        ...this.state.streamMuted[did],
-        [kind]: true,
-      })
+      this.setStreamMuted(did, { [kind]: true })
     }
     call.on('REMOTE_TRACK_MUTED', onRemoteTrackMuted)
 
@@ -754,19 +556,15 @@ export default class WebRTCManager extends Emitter {
         return
       }
 
-      Vue.set(this.state.streamMuted, this.iridium.connector.id, {
-        ...this.state.streamMuted[this.iridium.connector?.id],
-        [kind]: true,
-      })
+      this.setStreamMuted(this.iridium.connector?.id, { [kind]: true })
     }
     call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
 
     const onStream = async ({ did, kind }: { did: string; kind?: string }) => {
       if (!kind) return
 
-      Vue.set(this.state.streamMuted, did, {
-        ...this.state.streamMuted[did],
-        [kind]: !!this.state.streamMuted[did]?.[kind],
+      this.setStreamMuted(did, {
+        [kind]: this.state.streamMuted?.[did]?.[kind as WebRTCEnum],
       })
     }
     call.on('STREAM', onStream)
@@ -780,7 +578,7 @@ export default class WebRTCManager extends Emitter {
     const onCallDestroy = async () => {
       this.state.incomingCall = null
       this.state.activeCall = null
-      this.state.createdAt = 0
+      this.state.callStartedAt = 0
 
       call.off('INCOMING_CALL', onCallIncoming)
       call.off('OUTGOING_CALL', onCallOutgoing)
@@ -804,7 +602,7 @@ export default class WebRTCManager extends Emitter {
     call.on('ERROR', onCallDestroy)
   }
 
-  public acceptCall = async (kinds: TrackKind[]) => {
+  public async acceptCall(kinds: TrackKind[]) {
     if (!this.iridium.connector?.id) {
       logger.error('webrtc', 'acceptCall - connector.id not found')
       return
@@ -815,15 +613,10 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    Vue.set(this.state.streamMuted, this.iridium.connector.id, {
+    this.setStreamMuted(this.iridium.connector?.id, {
       audio: !kinds.includes('audio'),
       video: !kinds.includes('video'),
       screen: !kinds.includes('screen'),
-    })
-
-    const $nuxt = useNuxtApp()
-    $nuxt.$store.commit('video/setDisabled', !kinds.includes('video'), {
-      root: true,
     })
 
     const { callId, did, data } = this.state.incomingCall
@@ -839,7 +632,7 @@ export default class WebRTCManager extends Emitter {
     await call.answer(did, data)
   }
 
-  public denyCall = () => {
+  public denyCall() {
     if (this.state.activeCall)
       $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
     if (this.state.incomingCall) {
@@ -847,7 +640,7 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  public hangUp = async () => {
+  public async hangUp() {
     if (this.state.activeCall) {
       $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
     }
@@ -855,13 +648,7 @@ export default class WebRTCManager extends Emitter {
     this.state.activeCall = null
   }
 
-  public async toggleMute({
-    did,
-    kind,
-  }: {
-    did: string
-    kind: 'audio' | 'video' | 'screen'
-  }) {
+  public async toggleMute({ did, kind }: { did: string; kind: WebRTCEnum }) {
     if (!this.state.activeCall || !did) {
       return
     }
@@ -884,7 +671,7 @@ export default class WebRTCManager extends Emitter {
    * @method sendTyping
    * @description - send the TYPING event to the other conversation participants
    */
-  public sendTyping = async (conversationId: string) => {
+  public async sendTyping(conversationId: string) {
     const conversation = this.iridium.chat.getConversation(conversationId)
 
     if (!conversation) return
@@ -894,7 +681,7 @@ export default class WebRTCManager extends Emitter {
       'webrtc',
       {
         module: 'webrtc',
-        type: 'peer:typing',
+        type: 'typing',
         did: this.iridium.connector.id,
         conversationId,
         at: Date.now().valueOf(),
@@ -910,6 +697,45 @@ export default class WebRTCManager extends Emitter {
     return this.iridium.connector?.publish('webrtc', payload, {
       encrypt: { recipients: [did] },
     })
+  }
+
+  public isBackgroundCall(callId?: string) {
+    if (!this.state.activeCall?.callId) {
+      return false
+    }
+    return this.state.activeCall.callId !== callId
+  }
+
+  public isActiveCall(callId?: string) {
+    if (!iridium.webRTC.state.activeCall?.callId || !callId) {
+      return false
+    }
+    return iridium.webRTC.state.activeCall.callId === callId
+  }
+
+  public localParticipant(): User | undefined {
+    const id = this.state.activeCall?.did
+    if (!id) {
+      return
+    }
+    return { ...this.iridium.profile.state } as User
+  }
+
+  public remoteParticipants(): User[] {
+    const id = this.state.activeCall?.callId
+
+    if (!id || !this.iridium.chat.hasConversation(id)) {
+      return []
+    }
+
+    const conversation = this.iridium.chat.getConversation(id)
+
+    const dids =
+      conversation?.participants?.filter(
+        (f) => f !== this.iridium.connector?.id,
+      ) || []
+
+    return dids.map((did) => ({ ...this.iridium.users.getUser(did) } as User))
   }
 
   public async mute({

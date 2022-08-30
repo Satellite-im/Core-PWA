@@ -81,14 +81,31 @@
                   <span>{{ $t('pages.settings.profile.remove_image') }}</span>
                 </button>
                 <div class="username">
-                  <TypographyTitle
-                    :size="6"
-                    :text="iridiumProfile ? iridiumProfile.name : ''"
-                  />
+                  <form
+                    @submit="
+                        (e) => updateUserDetail(e, 'name', inputs.name ?? '')
+                      "
+                  >
+                    <InteractablesInput
+                      v-model="inputs.name"
+                      size="xs"
+                      type="text"
+                      :placeholder="
+                          $t('pages.settings.profile.name_placeholder')
+                        "
+                      :loading="loading.has('status')"
+                      button-type="submit"
+                    >
+                      <edit-icon size="1x" />
+                    </InteractablesInput>
+                  </form>
                 </div>
                 <div class="status-input">
                   <form
-                    @submit="updateUserDetail('status', inputs.status ?? '')"
+                    @submit="
+                        (e) =>
+                          updateUserDetail(e, 'status', inputs.status ?? '')
+                      "
                   >
                     <InteractablesInput
                       v-model="inputs.status"
@@ -104,16 +121,11 @@
                     </InteractablesInput>
                   </form>
                 </div>
-                <div
-                  v-if="iridiumProfile && !!iridiumProfile.status"
-                  class="status"
-                >
+                <div v-if="profile && !!profile.status" class="status">
                   <TypographyText as="h6">
                     {{ $t('pages.settings.profile.current_status') }}
                   </TypographyText>
-                  <TypographyText>
-                    {{ iridiumProfile ? iridiumProfile.status : '' }}
-                  </TypographyText>
+                  <TypographyText> {{ profile?.status ?? '' }} </TypographyText>
                 </div>
               </div>
             </div>

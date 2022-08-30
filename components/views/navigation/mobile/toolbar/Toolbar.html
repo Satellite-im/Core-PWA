@@ -9,14 +9,14 @@
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >
-    <phone-call-icon size="1.4x" :color="isGroup ? 'grey' : ''" />
+    <phone-call-icon size="1.4x" />
   </button>
   <button
     :disabled="!enableRTC || isActiveCall"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >
-    <video-icon size="1.4x" :color="isGroup ? 'grey' : ''" />
+    <video-icon size="1.4x" />
   </button>
   <template v-if="details">
     <UiUserState v-if="!isGroup" :user="details" />

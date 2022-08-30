@@ -4,16 +4,17 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    toggleModal: (modalName: string) => void
+  }
+}
 
 export default Vue.extend({
   name: 'Global',
-  setup() {
-    const { isActiveCall, isBackgroundCall } = useWebRTC()
-
-    return { isActiveCall, isBackgroundCall }
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
@@ -22,6 +23,15 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'media', 'conversation', 'files', 'settings']),
     ModalWindows: () => ModalWindows,
+    incomingCall(): WebRTCIncomingCall | null {
+      return this.webrtc.incomingCall
+    },
+    isBackgroundCall(): boolean {
+      return iridium.webRTC.isBackgroundCall(this.$route.params.id)
+    },
+    isActiveCall(): boolean {
+      return iridium.webRTC.isActiveCall(this.$route.params.id)
+    },
   },
   watch: {
     'settings.audioInput'(audioInput: string) {
