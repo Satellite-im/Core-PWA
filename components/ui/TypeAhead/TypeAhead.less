@@ -1,36 +1,77 @@
 .typeahead-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
-  .search-box {
-    position: relative;
+  .input-outer {
+    display: flex;
+    align-items: stretch;
+    flex-grow: 1;
 
-    &.right-icon {
-      input {
-        padding-right: 34px;
+    .search-box {
+      position: relative;
+      display: flex;
+      flex-grow: 1;
+
+      &.right-icon {
+        .input {
+          padding-right: 34px;
+        }
       }
-    }
-    .search-clear {
-      &:extend(.font-primary);
-      &:focus {
-        background: @background;
+
+      .input {
+        flex-grow: 1;
+        padding: 0.5rem;
+        box-shadow: none;
+        background: @input-gradient 100% center;
+        border: none;
+        border-radius: @corner-rounding;
+        border: 1px solid transparent;
+
+        &:focus {
+          background-image: @semitransparent-lightest-gradient;
+        }
+
+        ::placeholder {
+          color: @body;
+        }
+
+        &[type='search']::-webkit-search-cancel-button {
+          display: none;
+        }
       }
-      position: absolute;
-      font-size: @tiny-icon-size;
-      top: 0;
-      right: 0;
-      width: 34px;
-      height: @full;
-      background: transparent;
-      border-color: transparent;
-      cursor: pointer;
-      &:extend(.first-layer);
+
+      &:not(:last-child) .input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 0;
+      }
+
+      .search-clear {
+        &:extend(.font-primary);
+        &:hover {
+          background: @semitransparent-lightest-gradient;
+        }
+        position: absolute;
+        font-size: @tiny-icon-size;
+        top: 0;
+        right: 0;
+        width: 34px;
+        height: @full;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        &:extend(.first-layer);
+      }
     }
   }
 
   .search-options {
     position: absolute;
     left: 0;
-    margin-top: @light-spacing * 1.5;
+    margin-top: @normal-spacing * 2.5;
     &:extend(.bordered);
 
     &:extend(.first-layer);
@@ -38,9 +79,7 @@
     &:extend(.blur);
     &:extend(.full-width);
     &:extend(.round-corners);
-    padding: @xlight-spacing / 2 0;
     .search-option-group {
-      padding: @light-spacing 0;
       li {
         font-size: 16px;
         padding: 5px 10px;

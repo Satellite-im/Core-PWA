@@ -1,60 +1,88 @@
-.container {
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-content: flex-end;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  gap: 40px;
+.signin-container {
+  &:extend(.setup-container);
+  padding: 24px;
 
-  .info-button {
+  .logo-container {
+    width: @full;
     display: flex;
-    justify-content: flex-end;
-  }
-
-  .realm-container {
-    &:extend(.full-width);
-    display: inline-flex;
     justify-content: center;
-    margin: 24px 0 70px 0;
+    align-items: center;
+    padding-bottom: 16px;
+
+    .logoimg {
+      width: 200px;
+      height: 200px;
+    }
   }
 
-  .decryption-body {
-    align-self: center;
+  .signin-body {
+    height: @full;
+    padding-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .info-button {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .realm-container {
+      &:extend(.full-width);
+      display: inline-flex;
+      justify-content: center;
+      margin: 24px 0 72px 0;
+    }
 
     .input-container {
       margin-bottom: 8px;
     }
 
     .delete-link {
-      display: flex;
       font-family: @secondary-font;
-      font-size: 10pt;
-      color: white;
-      margin-top: @normal-spacing;
+      font-size: @font-size-sm;
+      color: @secondary-text;
+      margin: 0 auto;
+      margin-top: 48px;
       &:hover {
         opacity: 0.75;
       }
+      &.disabled {
+        opacity: 0.75;
+      }
+    }
+
+    .random-user-container {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
     }
   }
 
-  .version {
-    justify-content: center;
+  .browser-warning {
+    font-size: @font-size-xs;
+    color: @red;
+    max-width: 600px;
+    text-align: center;
   }
 
-  .random-user-container {
-    margin-top: 10px;
-    display: flex;
+  .version {
+    &:extend(.full-width);
     justify-content: center;
+    padding-bottom: 16px;
   }
 }
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  .container {
-    margin: 0 2rem;
-
-    .decryption-body {
-      &:extend(.full-width);
+@media only screen and (max-width: @mobile-small-breakpoint) {
+  .signin-container {
+    .logo-container {
+      .logoimg {
+        width: 150px;
+        height: 150px;
+      }
+    }
+    .version {
+      padding-bottom: 0;
     }
   }
 }

@@ -1,5 +1,9 @@
-<div class="container">
-  <div class="decryption-body">
+<div class="signin-container">
+  <div class="signin-body">
+    <div class="logo-container">
+      <img src="~/assets/img/logo_center.webp" alt="" class="logoimg" />
+    </div>
+
     <template v-if="step === 'signup'">
       <UiInfoButton class="info-button">
         <template #title> {{ $t('pages.unlock.create') }} </template>
@@ -9,6 +13,7 @@
 
     <div class="input-container">
       <InteractablesInput
+        :disabled="status === 'loading'"
         v-model="pin"
         type="password"
         :color="error ? 'danger' : 'primary'"
@@ -29,16 +34,21 @@
       v-model="storePin"
       :label="$t('pages.unlock.store_pin')"
     />
-    <br />
-    <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
+    <a
+      v-if="step === 'login'"
+      class="delete-link"
+      :class="{disabled:status === 'loading'}"
+      @click="clearAndReset"
+    >
       {{$t('pages.unlock.delete_account_label')}}
     </a>
     <!-- <InteractablesRealm /> -->
-    <TypographyText v-if="!isChrome" color="error" style="max-width: 600px">
+    <TypographyText v-if="!isChrome" color="error" class="browser-warning">
       {{ $t('pages.unlock.browser_warning') }}
     </TypographyText>
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
+        :disabled="status === 'loading'"
         class="random-user-btn"
         :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
         @click="createRandom"

@@ -6,7 +6,7 @@ SolanaAdapter {
   "groupsProgram": null,
   "solanaManager": SolanaManager {
     "accounts": Array [],
-    "clusterApiUrl": "https://api.devnet.solana.com",
+    "clusterApiUrl": "https://little-cold-butterfly.solana-devnet.quiknode.pro/c858efccfbbe7a6a291948c28193ee8d7f510594/",
     "connection": Connection {
       "_blockhashInfo": Object {
         "lastFetch": 0,
@@ -30,7 +30,7 @@ SolanaAdapter {
           "version": 2,
         },
       },
-      "_rpcEndpoint": "https://api.devnet.solana.com",
+      "_rpcEndpoint": "https://little-cold-butterfly.solana-devnet.quiknode.pro/c858efccfbbe7a6a291948c28193ee8d7f510594/",
       "_rpcRequest": [Function],
       "_rpcWebSocket": Client {
         "_events": Object {
@@ -86,7 +86,7 @@ SolanaAdapter {
           },
         },
         "_eventsCount": 10,
-        "address": "wss://api.devnet.solana.com/",
+        "address": "wss://little-cold-butterfly.solana-devnet.quiknode.pro/c858efccfbbe7a6a291948c28193ee8d7f510594/",
         "autoconnect": false,
         "current_reconnects": 0,
         "generate_request_id": [Function],
@@ -103,7 +103,7 @@ SolanaAdapter {
       "_rpcWebSocketGeneration": 0,
       "_rpcWebSocketHeartbeat": null,
       "_rpcWebSocketIdleTimeout": null,
-      "_rpcWsEndpoint": "wss://api.devnet.solana.com/",
+      "_rpcWsEndpoint": "wss://little-cold-butterfly.solana-devnet.quiknode.pro/c858efccfbbe7a6a291948c28193ee8d7f510594/",
       "_subscriptionCallbacksByServerSubscriptionId": Object {},
       "_subscriptionDisposeFunctionsByClientSubscriptionId": Object {},
       "_subscriptionsAutoDisposedByRpc": Set {},

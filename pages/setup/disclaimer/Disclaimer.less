@@ -1,40 +1,23 @@
-.container {
-  display: flex;
-  flex-direction: column;
+.disclaimer-container {
+  &:extend(.setup-container);
   justify-content: center;
-  gap: 32px;
-  padding: 32px 16px;
-
-  .disclaimer-body {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    text-align: center;
-    flex-direction: column;
-    min-width: 250px;
-    max-width: 416px;
-    align-self: center;
-    padding: 0 @normal-spacing;
-
-    .centered-subtitle {
-      margin: @normal-spacing;
-    }
-  }
+  text-align: center;
 
   .buttons {
+    &:extend(.full-width);
     display: flex;
-    gap: 24px;
+    padding: 32px 0;
+    gap: 16px;
+
+    .button {
+      &:extend(.full-width);
+    }
   }
 }
 
 @media only screen and (max-width: @mobile-small-breakpoint) {
-  .container {
-    gap: 56px;
-
-    .disclaimer-body {
-      margin-bottom: 0;
-    }
-
+  .disclaimer-container {
+    padding: 16px 32px;
     .buttons {
       flex-direction: column;
     }

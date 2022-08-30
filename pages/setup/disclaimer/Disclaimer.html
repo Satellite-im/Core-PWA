@@ -1,12 +1,9 @@
-<div class="container">
-  <div class="disclaimer-body">
-    <TypographyText as="h1">
-      {{ $t('pages.disclaimer.title') }}
-    </TypographyText>
-    <TypographyText as="p" color="dark">
-      {{ $t('pages.disclaimer.subtitle') }}
-    </TypographyText>
-  </div>
+<div class="disclaimer-container">
+  <TypographyText as="h1"> {{ $t('pages.disclaimer.title') }} </TypographyText>
+  <TypographyText as="p" color="dark" class="subtitle">
+    {{ $t('pages.disclaimer.subtitle') }}
+  </TypographyText>
+
   <div class="buttons">
     <InteractablesButton
       data-cy="create-account-button"

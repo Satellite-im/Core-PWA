@@ -1,34 +1,28 @@
-<div class="container">
-  <div class="phrase-body">
-    <TypographyText as="h1"> {{ $t('pages.phrase.title') }} </TypographyText>
-    <TypographyText as="p" color="dark" style="margin-bottom: 1.5rem">
-      {{ $t('pages.phrase.write_down') }}
-    </TypographyText>
-    <div class="columns is-mobile">
-      <div class="column">
-        <template v-if="isOdd(i + 1)" v-for="(word, i) in splitPhrase">
-          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
-        </template>
-      </div>
-      <div class="column">
-        <template v-if="!isOdd(i + 1)" v-for="(word, i) in splitPhrase">
-          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
-        </template>
-      </div>
+<div class="phrase-container">
+  <TypographyText as="h1"> {{ $t('pages.phrase.title') }} </TypographyText>
+  <TypographyText as="p" color="dark" class="subtitle">
+    {{ $t('pages.phrase.write_down') }}
+  </TypographyText>
+  <div class="columns">
+    <div class="column">
+      <template v-if="isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+        <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
+      </template>
     </div>
-    <UiSpacer :height="45" />
-    <div class="columns is-mobile">
-      <div class="column">
-        <InteractablesButton
-          :text="$t('pages.settings.accounts.copy_phrase')"
-          @click="copyPhrase"
-        >
-          <clipboard-icon size="1x" />
-        </InteractablesButton>
-      </div>
-      <div class="column">
-        <InteractablesButton :text="$t('pages.phrase.done')" @click="confirm" />
-      </div>
+    <div class="column">
+      <template v-if="!isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+        <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
+      </template>
     </div>
+  </div>
+  <UiSpacer :height="45" />
+  <div class="buttons">
+    <InteractablesButton
+      :text="$t('pages.settings.accounts.copy_phrase')"
+      @click="copyPhrase"
+    >
+      <clipboard-icon size="1x" />
+    </InteractablesButton>
+    <InteractablesButton :text="$t('pages.phrase.done')" @click="confirm" />
   </div>
 </div>

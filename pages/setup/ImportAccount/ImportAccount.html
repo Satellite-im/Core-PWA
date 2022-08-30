@@ -1,50 +1,50 @@
-<div class="container">
-  <div class="input-account-body">
-    <TypographyText as="h1">
-      {{ $t('pages.inputAccount.title') }}
-    </TypographyText>
-    <TypographyText as="p" color="dark" style="margin-bottom: 1.5rem">
-      {{ $t('pages.inputAccount.subtitle') }}
-    </TypographyText>
-    <UiTypeAhead
-      :list="bipList"
-      size="small"
-      type="primary"
-      :currentMatches="phrases.length"
-      :maxMatches="seedPhraseCharsCount"
-      :placeholder="$t('pages.inputAccount.enter')"
-      :clearIcon="true"
-      @onMatch="onMatch"
-      @onSelected="onSelected"
-      @onMultipleSelected="onMultipleSelected"
-      @onRecoverPhraseError="onRecoverPhraseError"
-    />
-    <TypographyError v-if="error" :text="$t(error)" class="input-error" />
-    <div class="columns is-mobile" v-if="phrases.length > 0">
-      <div class="column">
-        <div v-for="word, i in phrases" class="tag-container">
-          <TypographyNumberedWord
-            :word="word"
-            v-if="isOdd(i + 1)"
-            :number="i + 1"
-            @remove="removeWord(i)"
-            isRemoval
-          />
-        </div>
+<div class="import-account-container">
+  <TypographyText as="h1">
+    {{ $t('pages.inputAccount.title') }}
+  </TypographyText>
+  <TypographyText as="p" color="dark" class="subtitle">
+    {{ $t('pages.inputAccount.subtitle') }}
+  </TypographyText>
+  <UiTypeAhead
+    :list="bipList"
+    size="small"
+    type="primary"
+    :currentMatches="phrases.length"
+    :maxMatches="seedPhraseCharsCount"
+    :placeholder="$t('pages.inputAccount.enter')"
+    :clearIcon="true"
+    @onMatch="onMatch"
+    @onSelected="onSelected"
+    @onMultipleSelected="onMultipleSelected"
+    @onRecoverPhraseError="onRecoverPhraseError"
+  />
+  <TypographyError v-if="error" :text="$t(error)" class="input-error" />
+  <div class="columns" v-if="phrases.length > 0">
+    <div class="column">
+      <div v-for="word, i in phrases" class="tag-container">
+        <TypographyNumberedWord
+          :word="word"
+          v-if="isOdd(i + 1)"
+          :number="i + 1"
+          @remove="removeWord(i)"
+          isRemoval
+        />
       </div>
-      <div class="column">
-        <div v-for="word, i in phrases" class="tag-container">
-          <TypographyNumberedWord
-            :word="word"
-            v-if="!isOdd(i + 1)"
-            :number="i + 1"
-            @remove="removeWord(i)"
-            isRemoval
-          />
-        </div>
+    </div>
+    <div class="column">
+      <div v-for="word, i in phrases" class="tag-container">
+        <TypographyNumberedWord
+          :word="word"
+          v-if="!isOdd(i + 1)"
+          :number="i + 1"
+          @remove="removeWord(i)"
+          isRemoval
+        />
       </div>
     </div>
   </div>
+
+  <UiSpacer :height="45" />
   <div class="buttons">
     <InteractablesButton
       :text="$t('pages.inputAccount.reset')"

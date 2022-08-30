@@ -1,30 +1,32 @@
 <div
-  class="typeahead-container"
+  class="typeahead-container input-group"
   data-cy="add-passphrase"
   v-click-outside="lostFocus"
 >
-  <div
-    class="search-box"
-    :class="{'right-icon': clearIcon && searchText.length > 0}"
-  >
-    <input
-      v-model="searchText"
-      :class="`input is-${size} is-${type}`"
-      :placeholder="placeholder"
-      @mousedown="setFocus"
-      @input="update"
-      @keyup.enter="onEnterPressed"
-      @keyup.esc="lostFocus"
-      @keydown.up="onUpBrowseItem"
-      @keydown.down="onDownBrowseItem"
-    />
-    <button
-      v-if="clearIcon && searchText.length > 0"
-      class="search-clear"
-      @click="clearSearch"
+  <div class="input-outer" :class="`font-size-${size}`">
+    <div
+      class="search-box input-inner"
+      :class="{'right-icon': clearIcon && searchText.length > 0}"
     >
-      <delete-icon size="1x" />
-    </button>
+      <input
+        v-model="searchText"
+        :class="`input font-body font-color-light is-${type}`"
+        :placeholder="placeholder"
+        @mousedown="setFocus"
+        @input="update"
+        @keyup.enter="onEnterPressed"
+        @keyup.esc="lostFocus"
+        @keydown.up="onUpBrowseItem"
+        @keydown.down="onDownBrowseItem"
+      />
+      <button
+        v-if="clearIcon && searchText.length > 0"
+        class="search-clear"
+        @click="clearSearch"
+      >
+        <delete-icon size="1x" />
+      </button>
+    </div>
   </div>
   <div v-if="isFocus && searchResults.length" class="search-options">
     <ul class="search-option-group">

@@ -127,8 +127,6 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
       } catch (error: any) {
         this.pin = ''
         this.error = error.message
-      } finally {
-        this.status = 'idle'
       }
     },
     // Create & store a new pin, then decrypt.
@@ -152,6 +150,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
       await this.$store.dispatch('settings/clearLocalStorage')
     },
     async clearAndReset() {
+      if (this.status === 'loading') {
+        return
+      }
       await this.deleteAccount()
       location.reload()
     },
@@ -190,10 +191,11 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
             })
           }
         }
-
         this.$router.replace('/')
       } catch (error: any) {
         this.error = error.message
+      } finally {
+        this.status = 'idle'
       }
     },
   },
