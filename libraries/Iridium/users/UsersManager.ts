@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
@@ -19,8 +18,9 @@ import logger from '~/plugins/local/logger'
 import { FriendRequestStatus } from '~/libraries/Iridium/friends/types'
 
 export type IridiumUserEvent = {
-  to: IridiumPeerIdentifier
-  status: FriendRequestStatus
+  to?: IridiumPeerIdentifier
+  name?: string
+  status: FriendRequestStatus | 'changed'
   user: User
   data?: any
   at: number
@@ -136,10 +136,26 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   private async onUsersAnnounce(message: IridiumUserPubsub) {
     const { from, payload } = message
-    const { status } = payload.body
+    const { status, user } = payload.body
+    logger.info(this.loggerTag, 'user announce', { from, status, user })
 
     if (status === 'removed') {
-      await this.userRemove(from)
+      return this.userRemove(from)
+    }
+
+    // update profile name
+    const localUser = this.getUser(from) as User
+    if (user && user.name) {
+      logger.info(this.loggerTag, 'updating user details', {
+        from,
+        name: user.name,
+        status: user.status,
+      })
+      await this.setUser(from, {
+        ...localUser,
+        name: user.name || localUser.name,
+        status: user.status || localUser.status,
+      })
     }
   }
 
@@ -243,21 +259,36 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async setUser(id: IridiumPeerIdentifier, user: User) {
     const did = didUtils.didString(id)
-    this.state[did] = user
-    await this.set(`/${did}`, user)
+    this.state = { ...this.state, [did]: user }
+
+    // rename chat conversations
+    if (user.name) {
+      const conversations = await this.iridium.chat.state.conversations
+      Object.keys(conversations)
+        .filter((key) => {
+          const others = conversations[key].participants.filter(
+            (p) => p !== this.iridium.connector?.id,
+          )
+          return others.length === 1 && others[0] === did
+        })
+        .forEach((conversationId) => {
+          this.iridium.chat.state.conversations[conversationId].name = user.name
+        })
+    }
+
+    await this.set('/', this.state)
   }
 
   setUserStatus(did: IridiumPeerIdentifier, status: UserStatus) {
-    Vue.set(this.userStatus, didUtils.didString(did), status)
+    this.userStatus[didUtils.didString(did)] = status
   }
 
   async send(event: IridiumUserEvent) {
     return this.iridium.connector?.publish(`/users/announce`, event, {
       encrypt: {
-        recipients: [
-          typeof event.to === 'string' ? event.to : event.to.id,
-          this.iridium.connector?.id,
-        ],
+        recipients: event.to
+          ? [typeof event.to === 'string' ? event.to : event.to.id]
+          : this.iridium.friends.state.friends,
       },
     })
   }
@@ -285,7 +316,8 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       throw new Error(UsersError.USER_NOT_FOUND)
     }
 
-    Vue.delete(this.state, didUtils.didString(did))
+    delete this.state[didUtils.didString(did)]
+    this.state = { ...this.state }
     await this.set(`/`, this.state)
     const id = await encoding.hash(
       [user.did, this.iridium.connector?.id].sort(),
