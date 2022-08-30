@@ -19,11 +19,14 @@ export default class IridiumProfile extends Emitter {
 
     iridium.on('changed', this.onStateChanged.bind(this))
     await this.fetch()
+    iridium.logger.info('iridium/profile', 'profile state loaded', {
+      state: this.state,
+    })
   }
 
   private async fetch() {
-    this.state = await this.iridium.connector?.get('/profile')
-    this.setUser()
+    this.state = await this.get<User>()
+    await this.setUser()
     // TODO: verify schema of profile data, recover from invalid data
   }
 
@@ -38,18 +41,19 @@ export default class IridiumProfile extends Emitter {
     }
   }
 
-  get(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get(`/profile${path}`, options)
+  get<T = any>(path: string = '', options: any = {}) {
+    return this.iridium.connector?.get<T>(`/profile${path}`, options)
   }
 
-  set(path: string = '', payload: any, options: any = {}) {
-    return this.iridium.connector?.set(`/profile${path}`, payload, options)
+  async set(path: string = '', payload: any, options: any = {}) {
+    await this.iridium.connector?.set(`/profile${path}`, payload, options)
+    this.state = await this.get<User>()
   }
 
-  setUser() {
+  async setUser() {
     const id = this.iridium.connector?.id
     if (this.state && id) {
-      this.iridium.users.setUser(id, this.state)
+      await this.iridium.users.setUser(id, { ...this.state })
     }
   }
 

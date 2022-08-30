@@ -192,23 +192,25 @@ export default {
       await iridium.initFromEntropy(entropy)
     }
 
-    logger.debug('accounts/actions/loadAccount', 'fetching iridium profile')
-    const userInfo = await iridium.profile?.get()
-    if (!userInfo?.did) {
+    const profile = await iridium.profile?.get()
+    logger.debug('accounts/actions/loadAccount', 'fetched iridium profile', {
+      profile,
+    })
+    if (!profile?.did) {
       logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
-    iridium.profile.setUser()
+    await iridium.profile.setUser()
     commit('setActiveAccount', iridium.connector?.id)
 
     logger.debug(
       'accounts/actions/loadAccount',
       'user loaded, dispatching setUserDetails & setRegistrationStatus',
-      userInfo,
+      profile,
     )
     commit('setUserDetails', {
-      username: userInfo.name,
-      ...userInfo,
+      username: profile.name,
+      ...profile,
     })
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     await iridium.connector?.waitForSyncNode()
@@ -265,13 +267,14 @@ export default {
     const imagePath = await uploadPicture(userData.image)
     const profile = {
       did: iridium.connector?.id,
-      peerId: iridium.connector?.peerId,
+      peerId: iridium.connector?.peerId.toString(),
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
     await iridium.connector?.waitForSyncNode()
     await iridium.profile?.set('', profile)
+    console.info('setting profile', profile)
     await iridium.sendSyncInit()
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.connector?.id)

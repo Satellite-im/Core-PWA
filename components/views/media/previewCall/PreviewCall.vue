@@ -4,7 +4,6 @@
 import Vue from 'vue'
 import { CornerUpLeftIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
 
 export default Vue.extend({
   components: {
@@ -16,16 +15,15 @@ export default Vue.extend({
       default: false,
     },
   },
-  setup() {
-    const { remoteParticipants } = useWebRTC()
-
-    const remoteParticipant = computed(() => {
-      return remoteParticipants.value.length > 0
-        ? remoteParticipants.value[0]
-        : null
-    })
-
-    return { remoteParticipant }
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
+  computed: {
+    remoteParticipant() {
+      return iridium.webRTC.remoteParticipants()?.[0] ?? undefined
+    },
   },
   methods: {
     navigateToActiveConversation() {

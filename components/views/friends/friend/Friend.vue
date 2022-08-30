@@ -62,7 +62,7 @@ export default Vue.extend({
       ]
     },
     requestIncoming(): boolean | null {
-      return this.request && this.request.to === iridium.connector?.id
+      return this.request && this.request.incoming
     },
   },
   beforeDestroy() {
@@ -88,6 +88,9 @@ export default Vue.extend({
     async removeFriend() {
       this.loading = true
       await iridium.friends?.friendRemove(this.user.did)
+      if (this.$route.params.id === this.user.did) {
+        this.$router.replace('/friends')
+      }
       this.loading = false
     },
     async cancelRequest() {

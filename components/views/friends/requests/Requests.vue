@@ -64,13 +64,14 @@ export default Vue.extend({
   data() {
     return {
       friends: iridium.friends.state,
+      users: iridium.users.state,
     }
   },
   computed: {
     requests(): FriendRequest[] {
       return Object.values(this.friends.requests)
         .map((request) => {
-          const user = iridium.users.getUser(request.user.did)
+          const user = this.users[request.user.did]
           if (!user) {
             return null
           }

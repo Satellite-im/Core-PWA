@@ -16,10 +16,6 @@ export default Vue.extend({
       type: Object as PropType<Notification>,
       required: true,
     },
-    alertDid: {
-      type: String,
-      required: true,
-    },
   },
   computed: {
     setTranslateText(): TranslateResult | undefined {
@@ -50,8 +46,8 @@ export default Vue.extend({
     // },
   },
   methods: {
-    removeNotification(id: string) {
-      iridium.notifications.deleteNotification(this.alertDid)
+    removeNotification() {
+      iridium.notifications.deleteNotification(this.alert.id as string)
     },
     notificationLink(alertType: NotificationType) {
       switch (alertType) {

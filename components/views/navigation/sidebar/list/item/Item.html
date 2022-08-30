@@ -7,11 +7,13 @@
 >
   <template>
     <UiUserState
-      v-if="conversation.type === 'direct'"
-      :user="user"
-      :is-typing="isTyping"
+      v-if="conversation.type === 'direct' && userId"
+      :userId="userId"
     />
-    <UiGroupIcon v-else :members="participants" />
+    <UiGroupIcon
+      v-else-if="conversation.participants"
+      :members="conversation.participants"
+    />
   </template>
   <div class="user-info">
     <TypographyText

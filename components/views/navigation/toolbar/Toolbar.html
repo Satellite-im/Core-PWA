@@ -1,8 +1,10 @@
 <div class="toolbar">
   <InteractablesSidebarToggle v-if="!ui.showSidebar" />
   <div class="circle-container">
-    <UiUserState v-if="!isGroup && details" class="circle" :user="details" />
-    <UiGroupIcon v-else :members="members" />
+    <template v-if="details">
+      <UiUserState v-if="!isGroup" class="circle" :userId="details.did" />
+      <UiGroupIcon v-else :members="members" />
+    </template>
   </div>
   <div class="user-info">
     <TypographyText as="h4" v-if="conversation">
@@ -13,7 +15,7 @@
   <div class="controls">
     <button
       class="toggle-alerts"
-      :class="{'with-count': Object.values(notifications).length}"
+      :class="{'with-count': notifications.notifications.length}"
       data-cy="toolbar-alerts"
       :data-count="Object.values(notifications).length"
       v-tooltip.bottom="$t('pages.chat.alerts')"

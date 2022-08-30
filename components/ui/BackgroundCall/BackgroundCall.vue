@@ -3,46 +3,28 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useCallElapsedTime, useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 export default Vue.extend({
-  setup() {
-    const { remoteParticipants } = useWebRTC()
-    const { elapsedTime, startInterval, clearTimer } = useCallElapsedTime()
-
-    const remoteParticipant = computed(() => {
-      return remoteParticipants.value.length > 0
-        ? remoteParticipants.value[0]
-        : null
-    })
-
-    return {
-      remoteParticipant,
-      elapsedTime,
-      startInterval,
-      clearTimer,
-    }
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
+      callTime: iridium.webRTC.callTime,
     }
   },
-  watch: {
-    'webrtc.createdAt': {
-      handler() {
-        this.startInterval()
-      },
-      immediate: true,
+  computed: {
+    remoteParticipant() {
+      return iridium.webRTC.remoteParticipants()?.[0] ?? undefined
     },
-  },
-  beforeDestroy() {
-    this.clearTimer()
   },
   methods: {
     navigateToActiveConversation() {
+      if (!this.webrtc.activeCall) {
+        return
+      }
+
       const id = iridium.chat?.directConversationIdFromDid(
-        this.remoteParticipant.did,
+        this.webrtc.activeCall.did,
       )
       if (
         !id ||

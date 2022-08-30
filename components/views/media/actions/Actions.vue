@@ -30,7 +30,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      buttonsLoading: [],
+      buttonsLoading: [] as WebRTCEnum[],
       webrtc: iridium.webRTC.state,
     }
   },

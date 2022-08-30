@@ -2,7 +2,7 @@
   <SidebarListItem
     v-for="c in sortedConversations"
     :key="c.id"
-    :conversation="c"
+    :conversationId="c.id"
     @slideNext="$emit('slideNext')"
   />
   <div v-if="!sortedConversations.length" class="empty-friends-wrapper">

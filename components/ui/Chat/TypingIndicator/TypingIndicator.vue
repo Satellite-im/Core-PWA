@@ -6,18 +6,26 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
+  data() {
+    return {
+      chat: iridium.chat.state,
+      typing: iridium.chat.ephemeral.typing,
+    }
+  },
   computed: {
     typingParticipants(): User[] {
       const conversationId = this.$route.params.id
       if (!conversationId) {
         return []
       }
+      const conversation = this.chat.conversations[conversationId]
+      if (!conversation) {
+        return []
+      }
+      const conversationTyping = this.typing[conversationId] || []
 
-      const convTypingStatus = iridium.chat.typingStatus[conversationId] || {}
-
-      return Object.keys(convTypingStatus)
-        .filter((k) => convTypingStatus?.[k])
-        .map((did) => iridium.users.getUser(did))
+      return conversationTyping
+        .map((did: string) => iridium.users.getUser(did))
         .filter(Boolean)
     },
     text(): string {
