@@ -4,8 +4,8 @@ import { AccountsError } from '~/store/accounts/types'
 describe('Test Solana Adapter', () => {
   it('should initialize the constructor', () => {
     try {
-      const konstruktor = new SolanaAdapter()
-      expect(konstruktor).toMatchSnapshot()
+      const instance = new SolanaAdapter()
+      expect(instance).toMatchSnapshot()
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
     }
@@ -13,10 +13,10 @@ describe('Test Solana Adapter', () => {
 
   it('should sign message but returns error', async () => {
     // because getPayerAccount is not mocked
-    const konstruktor = new SolanaAdapter()
+    const instance = new SolanaAdapter()
 
     try {
-      const result = await konstruktor.signMessage('example message')
+      const result = await instance.signMessage('example message')
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', AccountsError.PAYER_NOT_PRESENT)
@@ -24,18 +24,18 @@ describe('Test Solana Adapter', () => {
   })
 
   it('should get connection status before solanaManager is initialized', () => {
-    const konstruktor = new SolanaAdapter()
+    const instance = new SolanaAdapter()
 
-    const result = konstruktor._getConnectionStatus()
+    const result = instance._getConnectionStatus()
     expect(result).toBeFalsy()
   })
 
   it('should get friendsProgram and return error', () => {
     // because Solana is not initialized
-    const konstruktor = new SolanaAdapter()
+    const instance = new SolanaAdapter()
 
     try {
-      const result = konstruktor.friendsProgram
+      const result = instance.friendsProgram
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(
