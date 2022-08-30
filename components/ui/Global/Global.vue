@@ -4,6 +4,8 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -21,8 +23,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'media', 'conversation', 'files', 'settings']),
     ModalWindows: () => ModalWindows,
-    incomingCall() {
-      console.info('incomingCall', this.webrtc.incomingCall)
+    incomingCall(): WebRTCIncomingCall | null {
       return this.webrtc.incomingCall
     },
     isBackgroundCall(): boolean {
@@ -31,11 +32,6 @@ export default Vue.extend({
     isActiveCall(): boolean {
       return iridium.webRTC.isActiveCall(this.$route.params.id)
     },
-    showBackgroundCall(): boolean {
-      if (!this.$device.isMobile) {
-        return this.isBackgroundCall
-      }
-      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
   },
   watch: {
     'settings.audioInput'(audioInput: string) {

@@ -1,7 +1,6 @@
 import {
   didUtils,
   Emitter,
-  encoding,
   IridiumMessage,
   IridiumPubsubMessage,
   IridiumSetOptions,
@@ -13,7 +12,6 @@ import type { AddOptions, AddResult } from 'ipfs-core-types/root'
 import type { IPFS } from 'ipfs-core-types'
 import { CID } from 'multiformats'
 import * as json from 'multiformats/codecs/json'
-import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/agent'
 import type { EmitterCallback } from '@satellite-im/iridium'
 import type {
   SyncFetchResponse,
@@ -272,7 +270,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
       const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Exclude<Notification, 'id'> = {
-        fromName: friendName?.name,
+        fromName: friendName?.name || message.from,
         at: Date.now(),
         fromAddress: conversationId,
         chatName: conversation.participants.length > 2 ? conversation.name : '',
@@ -303,8 +301,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         reaction.conversationId,
         reaction.messageId,
       )
-      Vue.set(message.reactions, reaction.userId, reaction.reactions)
-      await this.set(reactionsPath, reaction.reactions)
+
+      this.state.conversations[conversationId].message = {
+        ...this.state.conversations[conversationId].message,
+        [message.id]: message,
+      }
+      this.set(
+        `/conversations/${conversationId}/message/${message.id}`,
+        message,
+      )
     }
   }
 
@@ -485,6 +490,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       members: newMembers,
       at: Date.now(),
       attachments: [],
+      payload: {},
     })
   }
 
@@ -517,6 +523,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       type: 'member_leave',
       at: Date.now(),
       attachments: [],
+      payload: {},
     })
 
     const event: IridiumConversationEvent = {
@@ -560,7 +567,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.set('/conversations', this.state.conversations)
     await this.iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
   }
-
 
   getConversation(id: Conversation['id']): Conversation | undefined {
     return this.state.conversations[id]
@@ -657,7 +663,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const messageID = (
       await this.iridium.connector.store(partial, {
         syncPin: true,
-        encrypt: { recipients: conversation.participants },
+        encrypt: conversation?.participants
+          ? { recipients: conversation?.participants }
+          : undefined,
       })
     ).toString() as string
     const message: ConversationMessage = {
@@ -690,7 +698,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         cid: message.id,
       },
       {
-        encrypt: { recipients: conversation.participants },
+        encrypt: conversation?.participants
+          ? { recipients: conversation.participants }
+          : undefined,
       },
     )
   }
@@ -706,11 +716,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const path = `/conversations/${conversationId}/message/${messageId}/reactions/${did}`
 
-    if (!this.subscriptions[conversationId]) {
-      // we're not subscribed yet
-      throw new Error(`not yet subscribed to conversation ${conversationId}`)
-    }
-
     let reactions = (message.reactions && message.reactions[did]) ?? []
 
     const shouldRemove = reactions.includes(payload.reaction)
@@ -722,7 +727,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     message.reactions = { ...message.reactions, [did]: reactions }
     this.set(path, reactions)
-
 
     const reaction: MessageReaction = {
       conversationId,

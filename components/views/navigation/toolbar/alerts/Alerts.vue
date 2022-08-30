@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { FlaskConicalIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Notification } from '~/libraries/Iridium/notifications/types'
 export default Vue.extend({
   components: {
     FlaskConicalIcon,
@@ -14,7 +15,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    alerts() {
+    alerts(): Notification[] {
       return this.notifications.notifications
     },
   },

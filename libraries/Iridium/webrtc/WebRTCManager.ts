@@ -2,7 +2,10 @@ import { didUtils, Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
 import iridium, { IridiumManager } from '../IridiumManager'
-import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
+import {
+  WebRTCState,
+  WebRTCStreamConstraints,
+} from '~/libraries/Iridium/webrtc/types'
 import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
@@ -29,6 +32,7 @@ const initialState: WebRTCState = {
 
 type WebRTCAnnounceMessage = {
   type: 'announce'
+  status?: 'online' | 'offline'
 }
 type WebRTCCallMessage = {
   type: 'call'
@@ -44,7 +48,6 @@ export default class WebRTCManager extends Emitter {
   public readonly iridium: IridiumManager
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
-  public timeoutMap: { [key: string]: ReturnType<typeof setTimeout> } = {}
   public callTime: number = 0
 
   constructor(iridium: IridiumManager) {
@@ -57,18 +60,7 @@ export default class WebRTCManager extends Emitter {
     this.state.streamConstraints = {
       ...this.state.streamConstraints,
       ...constraints,
-    }
-  }
-
-  get streamConstraints() {
-    return this.state.streamConstraints
-  }
-
-  set streamConstraints(constraints: MediaStreamConstraints) {
-    this.state.streamConstraints = {
-      ...this.state.streamConstraints,
-      ...constraints,
-    }
+    } as WebRTCStreamConstraints
   }
 
   get streamConstraints() {
@@ -201,35 +193,26 @@ export default class WebRTCManager extends Emitter {
       return
 
     this.iridium.chat.setTyping(conversationId, from)
-    clearTimeout(this.timeoutMap[from])
-    this.timeoutMap[from] = setTimeout(() => {
-      this.iridium.chat.setTyping(conversationId, from, false)
-    }, Config.chat.typingInputThrottle * 3)
   }
 
-  private onPeerAnnounce(from: string, _: WebRTCAnnounceMessage) {
+  private onPeerAnnounce(from: string, payload: WebRTCAnnounceMessage) {
     const requestFriend = this.iridium.users.getUser(from)
 
     if (!requestFriend) return
 
-    this.iridium.users.setUserStatus(requestFriend.did, payload.status)
+    this.iridium.users.setUserStatus(
+      requestFriend.did,
+      payload.status || 'online',
+    )
 
     if (payload.status === 'offline') {
       $WebRTC.calls.forEach((call) => {
-        if (call.peers[did]) {
-          call.destroyPeer(did)
-          delete call.peers[did]
+        if (call.peers[from]) {
+          call.destroyPeer(from)
+          delete call.peers[from]
         }
       })
-
-      return
     }
-
-    clearTimeout(this.userStatusMap[did])
-
-    this.userStatusMap[did] = setTimeout(() => {
-      this.iridium.users.setUserStatus(requestFriend.did, 'offline')
-    }, Config.webrtc.announceFrequency * 2)
   }
 
   public async call(recipient: Friend, kinds: TrackKind[]) {
@@ -274,7 +257,11 @@ export default class WebRTCManager extends Emitter {
 
       const peers = participants.map((did) => {
         const user =
-          this.iridium.users.getUser(did) || (this.iridium.profile.state ?? '')
+          this.iridium.users.getUser(did) ||
+          (this.iridium.profile.state ?? {
+            did,
+            name: did,
+          })
 
         return {
           name: user.name,
@@ -733,11 +720,12 @@ export default class WebRTCManager extends Emitter {
 
     const conversation = this.iridium.chat.getConversation(id)
 
-    const dids = conversation.participants.filter(
-      (f) => f !== this.iridium.connector?.id,
-    )
+    const dids =
+      conversation?.participants?.filter(
+        (f) => f !== this.iridium.connector?.id,
+      ) || []
 
-    return dids.map((did) => ({ ...this.iridium.users.getUser(did) }))
+    return dids.map((did) => ({ ...this.iridium.users.getUser(did) } as User))
   }
 
   public async mute({

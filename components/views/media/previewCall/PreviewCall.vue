@@ -20,6 +20,11 @@ export default Vue.extend({
       webrtc: iridium.webRTC.state,
     }
   },
+  computed: {
+    remoteParticipant() {
+      return iridium.webRTC.remoteParticipants()?.[0] ?? undefined
+    },
+  },
   methods: {
     navigateToActiveConversation() {
       const conversationId = iridium.webRTC.state.activeCall?.callId

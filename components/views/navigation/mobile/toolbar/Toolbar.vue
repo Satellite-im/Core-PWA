@@ -13,10 +13,11 @@ import { mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import Group from '~/libraries/Iridium/groups/Group'
 import { TrackKind } from '~/libraries/WebRTC/types'
-import type { Friend, User } from '~/libraries/Iridium/friends/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 import { GroupState } from '~/libraries/Iridium/groups/GroupManager'
+import { User } from '~/libraries/Iridium/users/types'
+import { Friend } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   components: {
@@ -36,7 +37,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('ui', ['allUnseenNotifications']),
-    isActiveCall() {
+    isActiveCall(): boolean {
       return iridium.webRTC.isActiveCall(this.$route.params.id)
     },
     conversationId(): Conversation['id'] | undefined {
@@ -71,17 +72,13 @@ export default Vue.extend({
       return Object.values(members)
     },
     enableRTC(): boolean {
-      console.info('enableRTC', this.details, this.isGroup)
-      // todo- hook up to usermanager
       if (this.isGroup) {
         const memberIds = this.groupMembers.map((m) => m.id)
-        return this.friends.some(
-          (friend: Friend) =>
-            memberIds.includes(friend.did) && friend.status === 'online',
-        )
+        return memberIds
+          .map((id) => this.users[id])
+          .some((u) => u.status === 'online')
       }
-      // Check current recipient is on the user's friends list
-      return this.details?.status === 'online'
+      return (this.details as User | undefined)?.status === 'online'
     },
   },
   methods: {

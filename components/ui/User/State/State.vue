@@ -45,17 +45,12 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { SmartphoneIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/friends/types'
-import iridium from '~/libraries/Iridium/IridiumManager'
 import { UserStatus } from '~/libraries/Iridium/users/types'
 import { Config } from '~/config'
 
 export default Vue.extend({
-  components: {
-    SmartphoneIcon,
-  },
   props: {
     userId: {
       type: String as PropType<User['did']>,

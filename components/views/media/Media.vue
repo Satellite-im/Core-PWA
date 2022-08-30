@@ -42,7 +42,6 @@ export default Vue.extend({
     },
     remoteParticipants(): User[] {
       const p = iridium.webRTC.remoteParticipants()
-      console.info('remoteParticipants', p)
       return p
     },
     height: {

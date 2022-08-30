@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 export default Vue.extend({
   data() {
@@ -11,15 +12,15 @@ export default Vue.extend({
       callTime: iridium.webRTC.callTime,
     }
   },
+  computed: {
+    remoteParticipant() {
+      return iridium.webRTC.remoteParticipants()?.[0] ?? undefined
+    },
+  },
   methods: {
     navigateToActiveConversation() {
       if (!this.webrtc.activeCall) {
         return
-      }
-
-      if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/showSidebar', false)
       }
 
       const id = iridium.chat?.directConversationIdFromDid(

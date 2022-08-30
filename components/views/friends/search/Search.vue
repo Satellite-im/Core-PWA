@@ -1,7 +1,7 @@
 <template>
   <div>
     <InteractablesInput
-      v-model="query"
+      v-model.trim="query"
       :placeholder="$t('friends.search_placeholder')"
       :autofocus="$device.isDesktop"
       @change="_searchFriend"
@@ -55,7 +55,7 @@ export default Vue.extend({
   },
   async mounted() {
     if (this.$route.params && this.$route.params.id) {
-      this.$data.query = this.$route.params.id
+      this.query = this.$route.params.id
       this._searchFriend()
     }
     iridium.friends?.on('request/error', (err: string) => {
@@ -77,13 +77,12 @@ export default Vue.extend({
       this.user = null
       this.error = ''
       this.searching = true
-      const query = this.query.trim()
-      const matches = await iridium.users.searchPeer(query)
+      const matches = await iridium.users.searchPeer(this.query)
       const hasFriend =
         matches.length === 1 && iridium.friends.isFriend(matches[0].did)
 
       if (
-        query === iridium.connector?.id ||
+        this.query === iridium.connector?.id ||
         (matches.length === 1 && matches[0].did === iridium.connector?.id)
       ) {
         this.error = this.$t('friends.self_add') as string

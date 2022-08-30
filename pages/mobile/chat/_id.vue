@@ -38,7 +38,7 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
 import 'swiper/css'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'MobileChat',
@@ -46,18 +46,17 @@ export default Vue.extend({
     MenuIcon,
   },
   layout: 'mobile',
-  setup() {
-    const { isActiveCall } = useWebRTC()
-
-    return { isActiveCall }
-  },
   data: () => ({
     swiper: undefined as Swiper | undefined,
+    webrtc: iridium.webRTC.state,
   }),
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
     }),
+    isActiveCall(): boolean {
+      return iridium.webRTC.isActiveCall(this.$route.params.id)
+    },
     swiperConfig(): SwiperOptions {
       return {
         noSwipingClass: 'disable-swipe',
