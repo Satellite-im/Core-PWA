@@ -223,11 +223,13 @@ button {
 }
 
 /* Only for Safari to fix selection text background */
-
 @media not all and (min-resolution: 0.001dpcm) {
   @supports (-webkit-appearance: none) {
     ::selection {
       background: rgba(var(--flair-color-rgb), 0.99) !important;
+    }
+    svg {
+      transform: translateZ(0);
     }
   }
 }
