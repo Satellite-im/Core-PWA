@@ -11,7 +11,6 @@ import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
-import { Config } from '~/config'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { User, Friend } from '~/libraries/Iridium/friends/types'
 

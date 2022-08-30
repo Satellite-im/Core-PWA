@@ -1,16 +1,9 @@
 <div id="status">
-  <UiUserState
-    :user="{did: accounts.active, status: accounts.details.state}"
-    :src="src"
-  />
+  <UiUserState :user="profile" :src="src" />
   <div class="user-info" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
-    <TypographyTitle
-      data-cy="user-name"
-      :text="accounts.details.name"
-      :size="6"
-    />
+    <TypographyTitle data-cy="user-name" :text="profile.name" :size="6" />
     <TypographySubtitle
-      :text="accounts.details.status || $t('pages.settings.accounts.no_status')"
+      :text="profile.status || $t('pages.settings.accounts.no_status')"
       :size="6"
     />
   </div>
