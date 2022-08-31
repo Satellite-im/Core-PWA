@@ -390,6 +390,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // ask the sync node to subscribe to this topic
     await this.iridium.connector?.subscribe(`/chat/conversations/${id}`, {
       sync: { offline: true },
+      handler: this.onConversationMessage.bind(this, id),
     })
 
     return id
