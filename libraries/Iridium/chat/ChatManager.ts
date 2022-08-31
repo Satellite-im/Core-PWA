@@ -305,7 +305,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         reaction.conversationId,
         reaction.messageId,
       )
-      message.reactions[fromDID] = reaction.reactions
+      message.reactions = {
+        ...message.reactions,
+        [fromDID]: reaction.reactions,
+      }
 
       this.state.conversations[conversationId].message = {
         ...this.state.conversations[conversationId].message,
