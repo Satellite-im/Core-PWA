@@ -3,7 +3,7 @@
   <div class="circle-container">
     <template v-if="details">
       <UiUserState v-if="!isGroup" class="circle" :userId="details.did" />
-      <UiGroupIcon v-else :members="members" />
+      <UiGroupIcon v-else :members="conversation.participants" />
     </template>
   </div>
   <div class="user-info">
