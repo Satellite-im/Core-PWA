@@ -87,6 +87,17 @@ export default Vue.extend({
         ? (this.$t('controls.call') as string)
         : (this.$t('controls.not_connected') as string)
     },
+    subtitleText(): string {
+      if (this.isGroup) {
+        return (
+          this.conversation?.participants
+            ?.map((did) => this.users[did]?.name)
+            .join(', ') ?? ''
+        )
+      }
+      // todo - replace with user status message set in profile settings
+      return this.userStatus[this.otherDids[0]] || 'offline'
+    },
   },
   methods: {
     toggleAlerts() {
