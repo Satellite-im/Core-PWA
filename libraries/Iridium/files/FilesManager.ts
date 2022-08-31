@@ -51,7 +51,9 @@ export default class FilesManager extends Emitter {
       '/files',
     )
     if (res && 'items' in res) {
-      this.state = res
+      // convert iridium files state to FilesManager state
+      const items = Object.values(res).map((v) => Object.values(v))[0]
+      this.state = { ...res, items }
     }
     this.lastUpdated = Date.now()
   }

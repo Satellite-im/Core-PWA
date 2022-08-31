@@ -1,14 +1,14 @@
-import Vue from 'vue'
 import {
   didUtils,
   Emitter,
   encoding,
   IridiumGetOptions,
   IridiumPeerIdentifier,
+  IridiumPubsubMessage,
 } from '@satellite-im/iridium'
 import type { IridiumMessage } from '@satellite-im/iridium/src/types'
+import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { IridiumManager } from '../IridiumManager'
-import Group from './Group'
 import {
   GroupConfig,
   GroupManagerEvent,
@@ -17,18 +17,23 @@ import {
 } from './types'
 import logger from '~/plugins/local/logger'
 
+export type GroupState = GroupConfig & {
+  id: string
+  origin: string
+}
+
 export type IridiumGroupEvent = {
   to: IridiumPeerIdentifier
   status: GroupManagerEvent
   at: number
-  group: Group
+  group: GroupState
   member?: GroupMemberDetails
   data?: any
 }
 
 export default class GroupManager extends Emitter<IridiumMessage> {
   groupIds?: string[]
-  state: { [key: string]: Group } = {}
+  state: { [key: string]: GroupState } = {}
 
   private loggerTag = 'iridium/groups'
 
@@ -70,7 +75,9 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     )
   }
 
-  private async onGroupsAnnounce(message: IridiumMessage<IridiumGroupEvent>) {
+  private async onGroupsAnnounce(
+    message: IridiumPubsubMessage<IridiumDecodedPayload<IridiumGroupEvent>>,
+  ) {
     const { from, payload } = message
     const { to, at, status, member, group } = payload.body
 
@@ -119,11 +126,14 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       type: 'group',
       participants: Object.values(config.members).map((m) => m.id),
     })
-    Vue.set(this.state, id, {
-      id,
-      origin: this.iridium.connector.id,
-      ...config,
-    })
+    this.state = {
+      ...this.state,
+      [id]: {
+        id,
+        origin: this.iridium.connector?.id,
+        ...config,
+      },
+    }
     await this.iridium.connector.set(`/groups/${id}`, {
       id,
       origin: this.iridium.connector.id,
@@ -132,17 +142,12 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     return id
   }
 
-  async getGroup(groupId: string) {
+  async getGroup(groupId: string): Promise<GroupState> {
     if (this.state[groupId]) {
       return this.state[groupId]
     }
 
-    const group = new Group(groupId, this.iridium)
-    if (!group) {
-      throw new Error(GroupsError.GROUP_NOT_FOUND)
-    }
-    await group.load()
-    return group
+    return this.get(`/${groupId}`)
   }
 
   async getGroupMembers(groupId: string) {
@@ -175,9 +180,9 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.NOT_A_MEMBER)
     }
 
-    Vue.delete(group.members, this.iridium.connector.id)
+    delete group.members[this.iridium.connector.id]
 
-    Object.values(group.members).forEach(async (member) => {
+    Object.values(group.members).forEach(async (member: GroupMemberDetails) => {
       const payload: IridiumGroupEvent = {
         to: member.id,
         status: 'group-member-left',
@@ -194,9 +199,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     })
 
     // remove group from local state and iridium
-    const conversations = this.iridium.chat.state.conversations
-    Vue.delete(conversations, group.id)
-    this.iridium.chat.set('/conversations', conversations)
+    this.iridium.chat.deleteConversation(group.id)
     logger.info(this.loggerTag, 'group left', { groupId, group })
   }
 
@@ -212,7 +215,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.RECIPIENT_NOT_FOUND)
     }
 
-    Vue.delete(members, remotePeerDID)
+    delete members[remotePeerDID]
     await this.iridium.connector.set(`/groups/${groupId}`, {
       id: groupId,
       origin: this.iridium.connector.id,
@@ -250,7 +253,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       photoHash: member.photoHash ?? '',
     }
 
-    Vue.set(members, remotePeerDID, details)
+    members[remotePeerDID] = details
 
     const conversation = this.iridium.chat.getConversation(groupId)
     conversation.participants.push(remotePeerDID)

@@ -22,8 +22,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
-import { RawLocation } from 'vue-router'
-import { FriendsTabs } from '~/store/friends/types'
+import { FriendsTabs } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {
@@ -38,15 +37,9 @@ export default Vue.extend({
   },
   methods: {
     navigateAddFriends() {
-      this.$store.commit('friends/setActiveTab', FriendsTabs.Add)
+      const path = this.$device.isMobile ? '/mobile/friends' : '/friends'
 
-      const locPath = this.$device.isMobile ? '/mobile/friends' : '/friends'
-      const location: RawLocation = { path: locPath }
-      if (this.$device.isMobile) {
-        location.query = { route: FriendsTabs.Add }
-      }
-
-      this.$router.push(location)
+      this.$router.push({ path, query: { route: FriendsTabs.ADD } })
       this.$emit('click')
     },
   },

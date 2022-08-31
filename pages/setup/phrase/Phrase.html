@@ -6,20 +6,14 @@
     </TypographyText>
     <div class="columns is-mobile">
       <div class="column">
-        <TypographyNumberedWord
-          v-for="word, i in splitPhrase"
-          :word="word"
-          v-if="isOdd(i + 1)"
-          :number="i + 1"
-        />
+        <template v-if="isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
+        </template>
       </div>
       <div class="column">
-        <TypographyNumberedWord
-          v-for="word, i in splitPhrase"
-          :word="word"
-          v-if="!isOdd(i + 1)"
-          :number="i + 1"
-        />
+        <template v-if="!isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
+        </template>
       </div>
     </div>
     <UiSpacer :height="45" />

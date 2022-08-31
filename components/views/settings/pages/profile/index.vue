@@ -16,6 +16,8 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 
+type Editables = 'about'
+
 export default Vue.extend({
   components: {
     EditIcon,
@@ -31,8 +33,11 @@ export default Vue.extend({
       croppedImage: '',
       showCropper: false,
       loading: new Set() as Set<keyof User>,
+      editing: new Set() as Set<Editables>,
       inputs: {
-        status: '',
+        name: iridium.profile.state?.name,
+        photoHash: iridium.profile.state?.photoHash,
+        status: iridium.profile.state?.status,
         accountUrl: '',
       } as Partial<User>,
     }
@@ -42,9 +47,6 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
-    iridiumProfile(): User | undefined {
-      return iridium.profile.state
-    },
     sampleProfileInfo: () => sampleProfileInfo,
     isSmallScreen(): boolean {
       // @ts-ignore
@@ -59,6 +61,9 @@ export default Vue.extend({
     },
     imageInputRef(): HTMLInputElement {
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
+    },
+    profile(): User | undefined {
+      return iridium.profile.state
     },
   },
   beforeDestroy() {
@@ -118,7 +123,10 @@ export default Vue.extend({
      * @description Updates user details
      * @example this.updateUserDetail('name', 'John Doe')
      */
-    async updateUserDetail(key: keyof User, value: string) {
+    async updateUserDetail(e: SubmitEvent, key: keyof User, value: string) {
+      e.stopPropagation()
+      e.preventDefault()
+
       try {
         this.loading.add(key)
         await iridium.profile.updateUser({
@@ -134,6 +142,17 @@ export default Vue.extend({
         // Note: For Vue 2 reactivity
         this.loading = new Set(...this.loading.entries())
       }
+    },
+    /**
+     * @method getEditButtonText
+     * @description Returns the label for the edit button
+     * @example this.getEditLabel('about')
+     */
+    getEditButtonText(key: Editables) {
+      if (this.editing.has(key)) {
+        return this.$t('global.save') as string
+      }
+      return this.$t('global.edit') as string
     },
   },
 })

@@ -47,7 +47,9 @@ export default Vue.extend({
       return this.participants.filter((p) => p.did !== iridium.connector?.id)
     },
     onlineParticipants(): UserType[] {
-      return this.otherParticipants.filter((p) => p.status === 'online')
+      return this.otherParticipants.filter(
+        (p) => this.userStatus[p.did] === 'online',
+      )
     },
     /**
      * @method participantsText

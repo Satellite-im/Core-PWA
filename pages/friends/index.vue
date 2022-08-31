@@ -6,15 +6,14 @@ import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 import { Tab } from '~/types/ui/tab'
-import { FriendsTabs } from '~/store/friends/types'
 import { RootState } from '~/types/store/store'
+import { FriendsTabs } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   name: 'Friends',
   layout: (ctx) => (ctx.$device.isMobile ? 'mobile' : 'desktop'),
   data() {
     return {
-      FriendsTabs,
       friends: iridium.friends.state,
     }
   },
@@ -22,13 +21,20 @@ export default Vue.extend({
     ...mapState({
       showSidebar: (state) => (state as RootState).ui.showSidebar,
     }),
-    friendsList(): Friend[] {
+    FriendsTabs: () => FriendsTabs,
+    friendsList(): (Friend | undefined)[] {
       return this.friends.friends.map((did) => {
-        return iridium.users.getUser(did)
+        return (
+          iridium.users.getUser(did) || {
+            did,
+            name: did,
+            avatar: '',
+          }
+        )
       })
     },
     activeTab(): FriendsTabs {
-      return this.$store.state.friends.activeTab
+      return this.$route.query.route as FriendsTabs
     },
     incomingRequests(): FriendRequest[] {
       return Object.values(this.friends.requests).filter(
@@ -39,23 +45,25 @@ export default Vue.extend({
       return [
         {
           text: this.$t('friends.friends'),
-          route: FriendsTabs.Friends,
+          route: FriendsTabs.DEFAULT,
         },
         {
           text: this.$t('friends.add'),
-          route: FriendsTabs.Add,
+          route: FriendsTabs.ADD,
         },
         {
-          text: this.$t('friends.incoming'),
-          route: FriendsTabs.Requests,
+          text: this.$t('friends.requests'),
+          route: FriendsTabs.REQUESTS,
           badge: this.incomingRequests.length,
         },
       ]
     },
   },
   methods: {
-    setRoute(route: FriendsTabs): void {
-      this.$store.commit('friends/setActiveTab', route)
+    setRoute(route: string): void {
+      this.$router.push({
+        query: route ? { route } : {},
+      })
     },
   },
 })

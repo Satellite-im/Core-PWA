@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Solana Adapter should initialize the constructor 1`] = `
+SolanaAdapter {
+  "_friendsProgram": null,
+  "groupsProgram": null,
+  "solanaManager": SolanaManager {
+    "accounts": Array [],
+    "clusterApiUrl": "https://api.devnet.solana.com",
+    "connection": Connection {
+      "_blockhashInfo": Object {
+        "lastFetch": 0,
+        "latestBlockhash": null,
+        "simulatedSignatures": Array [],
+        "transactionSignatures": Array [],
+      },
+      "_commitment": "confirmed",
+      "_confirmTransactionInitialTimeout": undefined,
+      "_disableBlockhashCaching": false,
+      "_nextClientSubscriptionId": 0,
+      "_pollingBlockhash": false,
+      "_rpcBatchRequest": [Function],
+      "_rpcClient": ClientBrowser {
+        "callServer": [Function],
+        "options": Object {
+          "generator": [Function],
+          "notificationIdNull": false,
+          "replacer": null,
+          "reviver": null,
+          "version": 2,
+        },
+      },
+      "_rpcEndpoint": "https://api.devnet.solana.com",
+      "_rpcRequest": [Function],
+      "_rpcWebSocket": Client {
+        "_events": Object {
+          "accountNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "close": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "error": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "logsNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "open": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "programNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "rootNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "signatureNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "slotNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+          "slotsUpdatesNotification": EE {
+            "context": [Circular],
+            "fn": [Function],
+            "once": false,
+          },
+        },
+        "_eventsCount": 10,
+        "address": "wss://api.devnet.solana.com/",
+        "autoconnect": false,
+        "current_reconnects": 0,
+        "generate_request_id": [Function],
+        "max_reconnects": Infinity,
+        "queue": Object {},
+        "ready": false,
+        "reconnect": true,
+        "reconnect_interval": 1000,
+        "rest_options": Object {},
+        "rpc_id": 0,
+        "webSocketFactory": [Function],
+      },
+      "_rpcWebSocketConnected": false,
+      "_rpcWebSocketGeneration": 0,
+      "_rpcWebSocketHeartbeat": null,
+      "_rpcWebSocketIdleTimeout": null,
+      "_rpcWsEndpoint": "wss://api.devnet.solana.com/",
+      "_subscriptionCallbacksByServerSubscriptionId": Object {},
+      "_subscriptionDisposeFunctionsByClientSubscriptionId": Object {},
+      "_subscriptionsAutoDisposedByRpc": Set {},
+      "_subscriptionsByHash": Object {},
+    },
+    "networkIdentifier": "devnet",
+    "publicKeys": Object {},
+  },
+  "usersProgram": null,
+}
+`;

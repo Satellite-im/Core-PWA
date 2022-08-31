@@ -1,17 +1,19 @@
 <UiContextMenu
   class="item"
-  :class="{'is-loading' : isLoading , selected : isSelected}"
+  :class="{ 'is-loading': isLoading, selected: isSelected }"
   :items="contextMenuValues"
-  @click="openConversation"
   data-cy="sidebar-user"
+  @click="openConversation"
 >
   <template>
     <UiUserState
-      v-if="conversation.type === 'direct'"
-      :user="user"
-      :isTyping="isTyping"
+      v-if="conversation.type === 'direct' && userId"
+      :userId="userId"
     />
-    <UiGroupIcon v-else :members="participants" />
+    <UiGroupIcon
+      v-else-if="conversation.participants"
+      :members="conversation.participants"
+    />
   </template>
   <div class="user-info">
     <TypographyText
@@ -25,10 +27,10 @@
     </TypographyText>
     <TypographyText size="sm" data-cy="sidebar-user-name">
       <div
-        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
-        class="ellipsis"
-        :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
         ref="subtitle"
+        class="ellipsis"
+        :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
+        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
       />
     </TypographyText>
   </div>

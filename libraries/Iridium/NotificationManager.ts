@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import {
   Emitter,
   EmitterCallback,
@@ -17,9 +18,9 @@ export default class NotificationManager extends Emitter<Notification> {
   public ready: boolean = false
   public subscriptions: string[] = []
   public state: {
-    notifications: [{ [key: string]: Notification }]
+    notifications: Notification[]
   } = {
-    notifications: [{}],
+    notifications: [],
   }
 
   constructor(public readonly iridium: IridiumManager) {
@@ -33,9 +34,22 @@ export default class NotificationManager extends Emitter<Notification> {
   }
 
   async fetch() {
-    this.state = (await this.iridium.connector?.get('notifications')) || {
-      notifications: [{}],
+    logger.info('iridium/notifications/fetch', 'fetching')
+    const fetched = await this.iridium.connector?.get<{
+      notifications: Notification[]
+    }>('notifications')
+    if (fetched) {
+      this.state.notifications = Array.isArray(fetched.notifications)
+        ? fetched.notifications
+        : fetched.notifications
+        ? Object.values(fetched.notifications)
+        : []
     }
+    logger.info('iridium/notifications/fetch', 'fetched', this.state)
+  }
+
+  get list(): Notification[] {
+    return Object.values(this.state.notifications)
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
@@ -45,32 +59,27 @@ export default class NotificationManager extends Emitter<Notification> {
     )
   }
 
-  set(path: string, payload: any, options: IridiumSetOptions = {}) {
+  async set(path: string, payload: any, options: IridiumSetOptions = {}) {
     logger.info('iridium/notifications', 'path and paylaod', {
       path,
       payload,
     })
-    return this.iridium.connector?.set(
-      `/${path === '/' ? '' : path}`,
+    await this.iridium.connector?.set(
+      `/notifications${path === '/' ? '' : path}`,
       payload,
       options,
     )
-  }
-
-  async filterDeletedNotifications(): Promise<[{ [p: string]: Notification }]> {
-    this.state = (await this.iridium.connector?.get('notifications')) || {
-      notifications: [{}],
-    }
-    return this.state.notifications.sort((a: any, b: any) => {
-      return b.at - a.at
-    })
+    await this.fetch()
   }
 
   async seenAll() {
-    this.state.notifications.forEach((a) => {
-      a[1].seen = true
-      this.iridium.connector?.set(`/notifications/${a[0]}`, a[1])
-    })
+    this.state.notifications = this.state.notifications.map(
+      (a: Notification) => {
+        a.seen = true
+        return a
+      },
+    )
+    await this.save()
   }
 
   async subscribeToNotifications(
@@ -88,36 +97,47 @@ export default class NotificationManager extends Emitter<Notification> {
     this.off(`notifications`, onNotification)
   }
 
-  async deleteNotification(Id: string) {
-    await this.iridium.connector?.set(`/notifications/${Id}`, EmptyNotification)
+  async save() {
+    await this.set('/notifications', this.state.notifications)
+  }
+
+  async deleteNotification(id: string) {
+    Vue.delete(
+      this.state.notifications,
+      this.state.notifications.findIndex((n) => n.id === id),
+    )
+    await this.save()
+  }
+
+  async deleteAll() {
+    this.state.notifications = []
+    await this.save()
   }
 
   /**
    * Send a new notification
    * @method sendNotification
    */
-  async sendNotification(payload: Partial<Notification>) {
+  async sendNotification(notification: Exclude<Notification, 'id'>) {
     if (!this.iridium.connector) return
-    const notificationCID = await this.iridium.connector.store(payload, {})
-    if (!notificationCID) {
+    const notificationID = await this.iridium.connector.store(notification, {})
+    if (!notificationID) {
       throw new Error(NotificationsError.NOTIFICATION_NOT_SENT)
     }
-    await this.iridium.connector.set(
-      `/notifications/${notificationCID}`,
-      payload,
-    )
+    notification.id = notificationID.toString()
+    this.state.notifications = [...this.state.notifications, notification]
+    await this.save()
 
-    this.emit(`notifications/${notificationCID}`, {
-      action: 'notification',
-      message: payload,
+    this.emit(`notifications/send`, {
+      notification,
       from: this.iridium.connector.did,
     })
     const browserNotification = new Notifications()
     await browserNotification.sendNotifications(
-      payload.type!,
-      payload.title!,
-      payload.image!,
-      payload.description!,
+      notification.type!,
+      notification.title!,
+      notification.image!,
+      notification.description!,
     )
   }
 }

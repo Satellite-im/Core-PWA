@@ -97,23 +97,27 @@ export class IridiumManager extends Emitter {
 
     logger.log('iridium/manager', 'initializing profile')
     await this.profile.init()
-    logger.log('iridium/manager', 'initializing users')
-    await this.users.init()
-    logger.log('iridium/manager', 'initializing groups')
-    await this.groups.init()
-    logger.log('iridium/friends', 'initializing friends')
-    await this.friends.init()
-    logger.log('iridium/manager', 'initializing chat')
-    await this.chat.init()
-    logger.log('iridium/manager', 'initializing files')
-    await this.files.init()
-    logger.log('iridium/manager', 'initializing webRTC')
-    await this.webRTC.init()
-    logger.log('iridium/manager', 'initializing settings')
-    await this.settings.init()
-    logger.log('iridium/manager', 'notification settings')
-    await this.notifications.init()
-    logger.log('iridium/manager', 'ready')
+    logger.log('iridium/manager', 'sending sync init')
+
+    this.connector.p2p.on('ready', async () => {
+      logger.log('iridium/manager', 'initializing users')
+      await this.users.init()
+      logger.log('iridium/manager', 'initializing groups')
+      await this.groups.init()
+      logger.log('iridium/friends', 'initializing friends')
+      await this.friends.init()
+      logger.log('iridium/manager', 'initializing chat')
+      await this.chat.init()
+      logger.log('iridium/manager', 'initializing files')
+      await this.files.init()
+      logger.log('iridium/manager', 'initializing webRTC')
+      await this.webRTC.init()
+      logger.log('iridium/manager', 'initializing settings')
+      await this.settings.init()
+      logger.log('iridium/manager', 'notification settings')
+      await this.notifications.init()
+      logger.log('iridium/manager', 'ready')
+    })
 
     await this.sendSyncInit()
 
@@ -127,6 +131,7 @@ export class IridiumManager extends Emitter {
       return
     }
 
+    logger.info('iridium/manager', 'sending sync init', { profile })
     const payload = {
       type: 'sync/init',
       at: Date.now(),

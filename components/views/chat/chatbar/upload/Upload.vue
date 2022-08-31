@@ -4,7 +4,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { PlusIcon } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
-import { SettingsRoutes } from '~/store/ui/types'
 import createThumbnail from '~/utilities/Thumbnail'
 import { blobToBase64 } from '~/utilities/BlobManip'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -64,13 +63,6 @@ const Upload = Vue.extend({
       }
       const newFiles: File[] = [...target?.files]
 
-      if (
-        newFiles.length + this.files.length >
-        this.$Config.chat.uploadMaxLength
-      ) {
-        this.$store.commit('chat/setCountError', true)
-        return
-      }
       const id = this.$route.params.id
 
       const filesToAdd: { file: File; nsfw: boolean }[] = await Promise.all(

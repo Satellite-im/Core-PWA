@@ -13,20 +13,20 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      passPhrase: (state) => (state as RootState).accounts.phrase,
+      passPhrase: (state: RootState) => state.accounts.phrase,
     }),
     splitPhrase(): Array<String> {
       return this.passPhrase.split(' ')
     },
   },
   methods: {
-    isOdd(num: any) {
-      return num % 2
+    isOdd(num: number): boolean {
+      return num % 2 === 1
     },
-    confirm() {
+    confirm(): void {
       this.$router.replace('/')
     },
-    copyPhrase() {
+    copyPhrase(): void {
       navigator.clipboard.writeText(this.passPhrase)
       this.$toast.show(this.$t('ui.copied') as string)
     },

@@ -11,6 +11,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import logger from '~/plugins/local/logger'
 import { AccountsError } from '~/store/accounts/types'
 import { RootState } from '~/types/store/store'
 
@@ -84,6 +85,9 @@ export default Vue.extend({
           return
         }
 
+        logger.error('pages/index/loadAccount', 'error loading account', {
+          error,
+        })
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,
           action: this.loadAccount,

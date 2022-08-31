@@ -1,18 +1,17 @@
 <template>
   <div>
-    <template v-if="!incomingRequests.length && !outgoingRequests.length">
-      <UiResultsMessage
-        :title="$t('friends.no_requests')"
-        :subtitle="$t('friends.no_requests_subtitle')"
-      />
-    </template>
+    <UiResultsMessage
+      v-if="!incomingRequests.length && !outgoingRequests.length"
+      :title="$t('friends.no_requests')"
+      :subtitle="$t('friends.no_requests_subtitle')"
+    />
 
     <!-- Incoming Requests -->
     <template v-if="incomingRequests.length">
       <div class="padded_divider">
         <TypographyHorizontalRuleText
           plaintext
-          :value="$t('friends.requests')"
+          :value="$t('friends.friend_requests')"
         />
       </div>
       <FriendsFriend
@@ -64,13 +63,14 @@ export default Vue.extend({
   data() {
     return {
       friends: iridium.friends.state,
+      users: iridium.users.state,
     }
   },
   computed: {
     requests(): FriendRequest[] {
       return Object.values(this.friends.requests)
         .map((request) => {
-          const user = iridium.users.getUser(request.user.did)
+          const user = this.users[request.user.did]
           if (!user) {
             return null
           }

@@ -189,8 +189,3 @@ export default {
   //   await iridium.friends?.removeFriend(did)
   // },
 }
-
-export const exportForTesting = {
-  friendAccountToIncomingRequest,
-  friendAccountToOutgoingRequest,
-}
