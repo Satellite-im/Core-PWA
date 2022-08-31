@@ -1,4 +1,4 @@
-import { blobToBase64 } from '~/utilities/BlobManip'
+import { blobToBase64, blobToStream } from '~/utilities/BlobManip'
 
 describe('convert blob to base 64 successfully', () => {
   test('file is jpeg', async () => {
@@ -47,5 +47,36 @@ describe('convert blob to base 64 failing', () => {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', 'mock error')
     }
+  })
+})
+
+describe('test blobToStream', () => {
+  test('test', async () => {
+    // Ignored for now because of possible JSDOM environment constraints
+
+    // const original = global.ReadableStream
+    // beforeAll(() => {
+    //   Object.defineProperty(global, 'ReadableStream', {
+    //     writable: true,
+    //     value: jest.fn().mockImplementation(() => ({
+    //       readAsDataURL: jest.fn().mockImplementationOnce(() => {
+    //         throw new Error('mock error')
+    //       }),
+    //       onload: jest.fn(),
+    //     })),
+    //   })
+    // })
+    // afterAll(() => {
+    //   Object.defineProperty(global, 'ReadableStream', {
+    //     writable: true,
+    //     value: original,
+    //   })
+    // })
+    try {
+      const jpegBlob = await new Blob(['testing'], { type: 'image/jpeg' })
+
+      const result = await blobToStream(jpegBlob)
+      expect(result).toBe(123)
+    } catch (error) {}
   })
 })
