@@ -46,7 +46,7 @@ export default class IridiumProfile extends Emitter {
     return this.iridium.connector?.get<T>(`/profile${path}`, options)
   }
 
-  async set(path: string = '/', payload: any, options: any = {}) {
+  async set(path: string = '/', payload: User, options: any = {}) {
     await this.iridium.connector?.set(
       `/profile${path === '/' ? '' : `/${path}`}`,
       payload,
@@ -64,7 +64,7 @@ export default class IridiumProfile extends Emitter {
 
   async updateUser(details: Partial<User>) {
     logger.info('iridium/profile', 'updating user', { details })
-    await this.set('/', { ...this.state, ...details })
+    await this.set('/', { ...this.state, ...(details as User) })
     if (!this.state || !this.iridium.connector?.id) return
     // tell our peers via user announce
     await this.iridium.users.send({

@@ -273,7 +273,7 @@ export default {
       photoHash: imagePath,
     }
     await iridium.connector?.waitForSyncNode()
-    await iridium.profile?.set('', profile)
+    await iridium.profile?.set('/', profile)
     console.info('setting profile', profile)
     await iridium.sendSyncInit()
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
@@ -303,7 +303,7 @@ export default {
     image: string,
   ) {
     const imagePath = await uploadPicture(image)
-    await iridium.profile?.set('/photoHash', imagePath)
+    await iridium.profile?.updateUser({ photoHash: imagePath })
     commit('setPhotoHash', imagePath)
   },
 
