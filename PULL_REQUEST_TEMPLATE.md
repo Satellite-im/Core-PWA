@@ -6,7 +6,7 @@ If this is your first time, please read our contributor guidelines: https://gith
 
 **Which issue(s) this PR fixes** 🔨
 
-Resolve #
+Resolves #
 <!--Add the ticket Github number such as #Resolve #001 to automatically link the PR to the issue-->
 
 **Special notes for reviewers** 🗒️
