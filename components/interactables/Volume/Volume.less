@@ -37,6 +37,14 @@
   &--btt,
   &--ttb {
     height: 8rem;
+    .vue-slider-dot-tooltip-inner {
+      &::after {
+        width: 0;
+        height: 0;
+        border: 5px solid transparent;
+        border-left-color: @flair-color;
+      }
+    }
   }
   &--ltr {
     &:extend(.full-width);

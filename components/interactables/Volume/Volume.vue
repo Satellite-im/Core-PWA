@@ -1,6 +1,6 @@
-<template src="./Volume.html" />
+<template src="./Volume.html"></template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
@@ -11,7 +11,7 @@ export default Vue.extend({
     VueSlider,
   },
   props: {
-    volume: {
+    value: {
       type: Number,
       default: 100,
     },
@@ -24,29 +24,14 @@ export default Vue.extend({
       default: 'btt',
     },
   },
-  data() {
-    return {
-      value: this.volume,
-      /**
-       * @method percentageFormatter DocsTODO
-       * @description
-       * @param volumePercentage
-       * @returns
-       * @example
-       */
-      percentageFormatter: (volumePercentage) => {
-        return volumePercentage + ' %'
-      },
-    }
-  },
   methods: {
     /**
      * @method returnValue DocsTODO
      * @description
      * @example
      */
-    returnValue() {
-      this.$emit('returned-value', this.value)
+    returnValue(v: number) {
+      this.$emit('returned-value', v)
     },
   },
 })
