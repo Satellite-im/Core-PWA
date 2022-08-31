@@ -1,16 +1,36 @@
 .volume-control {
+  width: 20px;
+
+  .inner {
+    background: fade(@midground, 50%);
+    border-radius: 100px;
+    margin: -12px;
+    padding: 12px;
+    margin-bottom: -32px;
+    padding-bottom: 32px;
+  }
+
   &.ltr {
     display: flex;
     justify-content: flex-end;
     flex-direction: row-reverse;
     align-items: center;
+
     .volume-slider {
       display: block;
       max-width: 10rem;
       height: auto;
     }
+
     .volume-icon {
       padding: 0 1rem 0 0;
+    }
+  }
+
+  &.btt {
+    .wrapper {
+      padding: 2rem;
+      margin: -2rem;
     }
   }
 }

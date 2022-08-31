@@ -4,20 +4,17 @@
   data-cy="mediastream"
   :style="`height:${height}`"
 >
-  <MediaHeading />
-  <div class="media">
-    <MediaUser
-      id="local"
-      :user="localParticipant"
-      is-local
-      data-cy="local-video"
-    />
-    <MediaUser
-      v-for="participant in remoteParticipants"
-      :key="participant.did"
-      :user="participant"
-      data-cy="remote-video"
-    />
+  <div class="media" ref="media">
+    <template v-for="stream in streams">
+      <MediaUser
+        :key="stream.participant.did"
+        :user="stream.participant"
+        data-cy="remote-video"
+        :size="mediaUserSize"
+        :stream="stream.stream"
+      />
+    </template>
+
     <!-- <div
       v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
       class="more-user"
@@ -26,8 +23,9 @@
       ...
     </div> -->
   </div>
-
   <!-- <MediaActionsSettings /> -->
+
+  <MediaHeading />
   <MediaActions />
   <div class="controls">
     <MediaActionsVolume
@@ -43,7 +41,6 @@
   <InteractablesDragBar
     v-if="!isFullscreen"
     side="bottom"
-    show-handle
     @resize="(val) => (height = val)"
   />
 </div>

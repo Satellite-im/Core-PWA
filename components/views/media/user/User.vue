@@ -33,9 +33,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    isLocal: {
-      type: Boolean,
-      default: false,
+    stream: String,
+    size: {
+      type: Array,
+      default: () => [320, 180],
     },
   },
   data() {
@@ -61,6 +62,16 @@ export default Vue.extend({
       const hash = this.user.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
+    isLocal(): boolean {
+      return this.user.did === iridium.connector?.id
+    },
+    flipVideo(): boolean {
+      return (
+        this.isLocal &&
+        this.stream === 'video' &&
+        this.videoSettings.flipLocalStream
+      )
+    },
     isPending(): boolean {
       return Boolean(
         this.user.did !== iridium.id &&
@@ -80,8 +91,15 @@ export default Vue.extend({
       if (this.isMuted(WebRTCEnum.SCREEN) || !this.call) return undefined
       return this.streams?.screen
     },
+    hasVideoOrScreen() {
+      return !this.isMuted('video') || !this.isMuted('screen')
+    },
     isLocalVideoFlipped(): boolean {
       return iridium.settings.state.video.flipLocalStream
+    },
+    circleSize(): number {
+      const height = this.size[1] as number
+      return Math.min(96, height / 2)
     },
   },
   watch: {

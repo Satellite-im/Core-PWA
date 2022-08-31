@@ -4,26 +4,27 @@
   flex-direction: column;
   position: relative;
   border-radius: @corner-rounding;
-  min-height: 100px;
+  min-height: 240px;
+  max-height: calc(100vh - 300px);
+  gap: 12px;
 
   .media {
     position: relative;
     display: flex;
     flex: 1;
     justify-content: center;
-    align-items: center;
+    align-content: center;
     flex-wrap: wrap;
-    overflow-y: auto;
+    flex-direction: row;
+    overflow: hidden;
     gap: 8px;
-    padding: 8px;
+    margin: 12px 12px 0;
 
     #local {
       order: -1;
     }
 
     .user {
-      width: 16rem;
-      height: 9rem;
       &.full-video {
         position: absolute;
         width: 100% !important;
@@ -31,6 +32,9 @@
         &:extend(.third-layer);
       }
     }
+  }
+
+  .media-actions {
   }
 
   .controls {
