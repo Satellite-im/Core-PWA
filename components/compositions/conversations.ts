@@ -1,6 +1,7 @@
 import { computed, ComputedRef } from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 
 export function conversationHooks() {
@@ -37,18 +38,27 @@ export function conversationHooks() {
   return { conversation, conversationId, isGroup, otherDids, enableRTC }
 }
 
-export async function call(kinds: TrackKind[]) {
+export async function call({
+  recipient,
+  conversationId,
+  kinds,
+}: {
+  recipient: User['did']
+  conversationId: Conversation['id']
+  kinds: TrackKind[]
+}) {
   // @ts-ignore
   const $nuxt = useNuxtApp()
-  const { enableRTC, otherDids, conversationId } = conversationHooks()
+  const { enableRTC, otherDids } = conversationHooks()
 
   if (!enableRTC.value) {
     return
   }
+  // todo - refactor to accept multiple recipients for group calls
   await iridium.webRTC
     .call({
-      recipient: otherDids.value[0],
-      conversationId: conversationId.value,
+      recipient,
+      conversationId,
       kinds,
     })
     .catch((e) => $nuxt.$toast.error($nuxt.i18n.t(e.message)))

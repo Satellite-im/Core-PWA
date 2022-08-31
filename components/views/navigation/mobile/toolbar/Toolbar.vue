@@ -24,13 +24,18 @@ export default Vue.extend({
     VideoIcon,
   },
   setup() {
-    const { conversation, isGroup, otherDids, enableRTC } = conversationHooks()
+    const { conversation, conversationId, isGroup, otherDids, enableRTC } =
+      conversationHooks()
 
     async function handleCall() {
       if (isGroup.value || !enableRTC.value) {
         return
       }
-      await call(['audio'])
+      await call({
+        recipient: otherDids.value[0],
+        conversationId: conversationId.value,
+        kinds: ['audio'],
+      })
     }
 
     return {

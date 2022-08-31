@@ -232,6 +232,7 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
+  // todo - refactor to accept multiple recipients for group calls
   public async call({
     recipient,
     conversationId,

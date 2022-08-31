@@ -40,7 +40,8 @@ export default Vue.extend({
   setup() {
     // @ts-ignore
     const $nuxt = useNuxtApp()
-    const { conversation, isGroup, otherDids, enableRTC } = conversationHooks()
+    const { conversation, conversationId, isGroup, otherDids, enableRTC } =
+      conversationHooks()
 
     const subtitleText = computed(() => {
       if (isGroup.value) {
@@ -67,7 +68,11 @@ export default Vue.extend({
       if (isGroup.value || !enableRTC.value) {
         return
       }
-      await call(['audio'])
+      await call({
+        recipient: otherDids.value[0],
+        conversationId: conversationId.value,
+        kinds: ['audio'],
+      })
     }
 
     return {
