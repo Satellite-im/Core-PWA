@@ -12,7 +12,7 @@ export function conversationHooks() {
   })
 
   const conversation: ComputedRef<Conversation | undefined> = computed(() => {
-    return iridium.chat.state.conversations[conversationId.value] ?? undefined
+    return iridium.chat.state.conversations[conversationId.value]
   })
 
   const isGroup: ComputedRef<boolean> = computed(() => {
