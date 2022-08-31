@@ -275,9 +275,10 @@ export default {
         'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
     },
     privacy: {
-      title: 'Privacy Settings',
+      title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
+      sectiontitle: 'Permissions',
       notifications: {
         title: 'Notifications',
         subtitle:
@@ -308,7 +309,7 @@ export default {
         title: 'Block NSFW content',
         subtitle: 'If selected, NSFW content will be obscured.',
       },
-      others: 'Others',
+      other: 'Other',
       register: {
         title: 'Register Username Publicly',
         subtitle:
