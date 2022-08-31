@@ -49,7 +49,7 @@ export default Vue.extend({
       )
     },
     isGroup(): boolean {
-      return (this.conversation?.participants || []).length > 2
+      return this.conversation?.type === 'group'
     },
     enableRTC(): boolean {
       return Boolean(
