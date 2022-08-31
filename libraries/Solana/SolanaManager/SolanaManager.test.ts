@@ -60,6 +60,7 @@ describe('SolanaManager.default.generateUserKeypair', () => {
 describe('SolanaManager.default.restoreKeypairFromMnemonic', () => {
   let inst10: any
   let inst9: any
+  let inst8: any
   let inst7: any
   let inst6: any
   let inst5: any
@@ -71,6 +72,7 @@ describe('SolanaManager.default.restoreKeypairFromMnemonic', () => {
   beforeEach(() => {
     inst10 = new SolanaManagerDefault()
     inst9 = new SolanaManagerDefault()
+    inst8 = new SolanaManagerDefault()
     inst7 = new SolanaManagerDefault()
     inst6 = new SolanaManagerDefault()
     inst5 = new SolanaManagerDefault()
@@ -293,6 +295,8 @@ describe('SolanaManager.default.requestAirdrop', () => {
 
 describe('SolanaManager.default.generateDerivedPublicKey', () => {
   let inst10: any
+  let inst9: any
+  let inst8: any
   let inst7: any
   let inst6: any
   let inst4: any
@@ -302,6 +306,8 @@ describe('SolanaManager.default.generateDerivedPublicKey', () => {
 
   beforeEach(() => {
     inst10 = new SolanaManagerDefault()
+    inst9 = new SolanaManagerDefault()
+    inst8 = new SolanaManagerDefault()
     inst7 = new SolanaManagerDefault()
     inst6 = new SolanaManagerDefault()
     inst4 = new SolanaManagerDefault()
@@ -371,7 +377,10 @@ describe('SolanaManager.default.generateDerivedPublicKey', () => {
 
   describe('SolanaManager.default.initializeFromSolanaWallet', () => {
     let inst9: any
+    let inst8: any
+    let inst7: any
     let inst6: any
+    let inst5: any
     let inst4: any
     let inst3: any
     let inst: any
@@ -379,7 +388,10 @@ describe('SolanaManager.default.generateDerivedPublicKey', () => {
 
     beforeEach(() => {
       inst9 = new SolanaManagerDefault()
+      inst8 = new SolanaManagerDefault()
+      inst7 = new SolanaManagerDefault()
       inst6 = new SolanaManagerDefault()
+      inst5 = new SolanaManagerDefault()
       inst4 = new SolanaManagerDefault()
       inst3 = new SolanaManagerDefault()
       inst = new SolanaManagerDefault()
