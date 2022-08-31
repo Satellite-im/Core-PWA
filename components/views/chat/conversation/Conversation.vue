@@ -26,7 +26,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      chat: iridium.chat.state,
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
       isBlurred: false,
@@ -37,7 +36,7 @@ export default Vue.extend({
       return iridium.connector?.id ?? ''
     },
     conversation(): Conversation {
-      return this.chat.conversations?.[this.$route.params.id] ?? {}
+      return iridium.chat.state.conversations?.[this.$route.params.id] ?? {}
     },
     messages(): ConversationMessage[] {
       if (!Object.keys(this.conversation).length) {

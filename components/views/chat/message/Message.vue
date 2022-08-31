@@ -64,7 +64,7 @@ export default Vue.extend({
     author(): User {
       return this.message.from === iridium.connector?.id
         ? (iridium.profile.state as User)
-        : iridium.users.getUser(this.message.from) || {
+        : iridium.users.state[this.message.from] || {
             did: this.message.from,
             name: this.message.from,
             photoHash: '',

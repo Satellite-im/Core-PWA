@@ -6,10 +6,7 @@
   @click="openConversation"
 >
   <template>
-    <UiUserState
-      v-if="conversation.type === 'direct' && userId"
-      :userId="userId"
-    />
+    <UiUserState v-if="conversation.type === 'direct' && user" :user="user" />
     <UiGroupIcon
       v-else-if="conversation.participants"
       :members="conversation.participants"

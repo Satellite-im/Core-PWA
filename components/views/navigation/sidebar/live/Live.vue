@@ -20,7 +20,7 @@ export default Vue.extend({
     return {
       webrtc: iridium.webRTC,
       users: iridium.users.state,
-      userStatus: iridium.users.userStatus,
+      userStatus: iridium.users.ephemeral.status,
       groups: iridium.groups.state,
       chat: iridium.chat.state,
     }

@@ -52,7 +52,7 @@ export default Vue.extend({
         )
       }
       // todo - replace with user status message set in profile settings
-      return iridium.users.userStatus[otherDids.value[0]] || 'offline'
+      return iridium.users.ephemeral.status[otherDids.value[0]] || 'offline'
     })
 
     const callTooltipText = computed(() => {

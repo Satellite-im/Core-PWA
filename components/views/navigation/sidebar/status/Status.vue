@@ -3,12 +3,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { UserStatus, User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   data() {
-    return {
-      profile: iridium.profile.state,
-    }
+    return { status: 'online' }
+  },
+  computed: {
+    profile(): User | undefined {
+      return iridium.profile.state
+    },
   },
   methods: {
     copyId() {

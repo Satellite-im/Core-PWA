@@ -3,8 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { UserPlusIcon } from 'satellite-lucide-icons'
-import iridium from '~/libraries/Iridium/IridiumManager'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -12,13 +12,12 @@ export default Vue.extend({
   },
   data() {
     return {
-      chat: iridium.chat.state,
-      users: iridium.users.state,
+      loading: false,
     }
   },
   computed: {
     sortedConversations(): Conversation[] {
-      return Object.values(this.chat.conversations).sort(
+      return Object.values(iridium.chat.state.conversations).sort(
         (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
       )
     },
@@ -26,7 +25,7 @@ export default Vue.extend({
   methods: {
     lastMessageTimestamp(conversation: Conversation): number {
       const messages = Object.values(
-        this.chat.conversations[conversation.id].message,
+        iridium.chat.state.conversations[conversation.id].message,
       ).sort((a, b) => a.at - b.at)
       return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
     },

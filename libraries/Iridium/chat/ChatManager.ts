@@ -13,10 +13,7 @@ import type { IPFS } from 'ipfs-core-types'
 import { CID } from 'multiformats'
 import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
-import type {
-  SyncFetchResponse,
-  SyncSubscriptionResponse,
-} from '@satellite-im/iridium/src/sync/agent'
+import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/agent'
 import { v4 } from 'uuid'
 import {
   ChatError,
@@ -79,6 +76,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   async init() {
     const fetched = await this.get<State>()
     this.state.conversations = fetched?.conversations || {}
+    logger.info('iridium/chatmanager', 'init - done', this.state)
     const conversations = Object.values(this.state.conversations)
     const iridium = this.iridium.connector
     if (!iridium) {
@@ -213,11 +211,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   get<T = IridiumDocument>(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get<T>(`/chat${path}`, options)
+    return this.iridium.connector?.get<T>(
+      `/chat${path === '/' ? '' : path}`,
+      options,
+    )
   }
 
   set(path: string = '', payload: any, options: IridiumSetOptions = {}) {
-    return this.iridium.connector?.set(`/chat${path}`, payload, options)
+    return this.iridium.connector?.set(
+      `/chat${path === '/' ? '' : path}`,
+      payload,
+      options,
+    )
   }
 
   async onConversationMessage(
@@ -253,9 +258,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         { message, cid, from, conversationId },
       )
 
-      this.state.conversations[conversationId].message = {
-        ...this.state.conversations[conversationId].message,
-        [message.id]: message,
+      this.state.conversations = {
+        ...this.state.conversations,
+        [conversationId]: {
+          ...this.state.conversations[conversationId],
+          message: {
+            ...this.state.conversations[conversationId].message,
+            [message.id]: message,
+          },
+        },
       }
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
@@ -263,9 +274,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       )
 
       // Remove is_typing indicator upon user message receive
-      this.ephemeral.typing[conversationId] = (
-        this.ephemeral.typing[conversationId] || []
-      ).filter((did) => did !== fromDID)
+      this.ephemeral.typing = {
+        ...this.ephemeral.typing,
+        [conversationId]: (this.ephemeral.typing[conversationId] || []).filter(
+          (did) => did !== fromDID,
+        ),
+      }
 
       const friendName = this.iridium.users.getUser(message?.from)
       const buildNotification: Exclude<Notification, 'id'> = {
@@ -309,9 +323,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         [fromDID]: reaction.reactions,
       }
 
-      this.state.conversations[conversationId].message = {
-        ...this.state.conversations[conversationId].message,
-        [message.id]: message,
+      this.state.conversations = {
+        ...this.state.conversations,
+        [conversationId]: {
+          ...this.state.conversations[conversationId],
+          message: {
+            ...this.state.conversations[conversationId].message,
+            [message.id]: message,
+          },
+        },
       }
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
@@ -565,12 +585,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async deleteConversation(id: string) {
-    this.state.conversations = Object.keys(this.state.conversations)
-      .filter((k) => k !== id)
-      .reduce((acc, key: string) => {
-        acc[key] = this.state.conversations[key]
-        return acc
-      }, {} as { [key: string]: Conversation })
+    delete this.state.conversations[id]
+    this.state.conversations = { ...this.state.conversations }
 
     this.set('/conversations', this.state.conversations)
     await this.iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
@@ -717,14 +733,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error('message not sent, failed to store')
     }
 
-    this.state.conversations[conversationId].message = {
-      ...this.state.conversations?.[conversationId]?.message,
-      [message.id]: message,
-    }
-
-    this.state.conversations[conversationId] = {
-      ...this.state.conversations[conversationId],
-      lastReadAt: Date.now(),
+    this.state = {
+      ...this.state,
+      conversations: {
+        ...this.state.conversations,
+        [conversationId]: {
+          ...this.state.conversations[conversationId],
+          message: {
+            ...this.state.conversations?.[conversationId]?.message,
+            [message.id]: message,
+          },
+          lastReadAt: Date.now(),
+        },
+      },
     }
     await this.set(
       `/conversations/${conversationId}`,

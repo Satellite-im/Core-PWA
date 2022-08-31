@@ -38,7 +38,7 @@ import {
   TrashIcon,
   UserPlusIcon,
 } from 'satellite-lucide-icons'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -60,6 +60,9 @@ export default Vue.extend({
   data() {
     return {
       loading: false,
+      status(): string {
+        return iridium.users.ephemeral.status[this.user.did] || 'offline'
+      },
     }
   },
   methods: {

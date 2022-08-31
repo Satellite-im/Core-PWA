@@ -16,6 +16,7 @@ import { ProfileInfo } from '~/types/profile/profile'
 import { Tab } from '~/types/ui/tab'
 
 import { AddFriendEnum } from '~/libraries/Enums/enums'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -83,6 +84,13 @@ export default Vue.extend({
       }
       return this.friends.all.some(
         (e: Friend) => e.textilePubkey === this.ui.userProfile.textilePubkey,
+      )
+    },
+    status() {
+      return (
+        (this.ui.userProfile &&
+          iridium.users.ephemeral.status[this.ui.userProfile.did]) ||
+        'offline'
       )
     },
   },

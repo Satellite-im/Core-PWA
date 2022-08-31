@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
@@ -7,7 +8,6 @@ import {
   IridiumPubsubMessage,
 } from '@satellite-im/iridium'
 import type {
-  IridiumMessage,
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
@@ -15,12 +15,11 @@ import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import type { IridiumManager } from '../IridiumManager'
 import { User, UsersError, UserStatus } from './types'
 import logger from '~/plugins/local/logger'
-import { FriendRequestStatus } from '~/libraries/Iridium/friends/types'
 
 export type IridiumUserEvent = {
   to?: IridiumPeerIdentifier
   name?: string
-  status: FriendRequestStatus | 'changed'
+  status: UserStatus | 'changed' | 'removed'
   user: User
   data?: any
   at: number
@@ -35,7 +34,7 @@ export type IridiumUserPubsub = IridiumPubsubMessage<
 export default class UsersManager extends Emitter<IridiumUserPubsub> {
   public readonly iridium: IridiumManager
   public state: UserState = {}
-  public userStatus: { [key: string]: UserStatus } = {}
+  public ephemeral: { status: { [key: string]: UserStatus } } = { status: {} }
 
   private loggerTag = 'iridium/users'
 
@@ -55,10 +54,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     }
 
     logger.log(this.loggerTag, 'initializing')
-    const pubsub = iridium.pubsub.subscriptions()
-    logger.info(this.loggerTag, 'pubsub', pubsub)
+
     await this.fetch()
     logger.log(this.loggerTag, 'users state loaded', this.state)
+
     logger.info(this.loggerTag, 'subscribing to announce topic')
     await iridium.subscribe<IridiumUserPubsub>('/users/announce', {
       handler: this.onUsersAnnounce.bind(this),
@@ -70,23 +69,23 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       logger.info(this.loggerTag, 'peer disconnected', peer)
       this.setUser(peer.did, {
         ...this.state[peer.did],
-        status: 'offline',
         seen: Date.now(),
       })
+      this.setUserStatus(peer.did, 'offline')
     })
 
     setInterval(() => {
       this.list.forEach(async (user: User) => {
         if (
-          this.userStatus[user.did] === 'online' &&
+          this.ephemeral.status[user.did] === 'online' &&
           Number(user.seen) < Date.now() - 1000 * 30
         ) {
           logger.info(this.loggerTag, 'user timed out', user)
           this.iridium.users.setUser(user.did, {
             ...user,
-            status: 'offline',
             seen: Date.now(),
           })
+          this.iridium.users.setUserStatus(user.did, 'offline')
         }
       })
     }, 10000)
@@ -149,12 +148,17 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       logger.info(this.loggerTag, 'updating user details', {
         from,
         name: user.name,
-        status: user.status,
+        status: this.ephemeral.status[user.did],
       })
+      this.ephemeral = {
+        status: {
+          ...this.ephemeral.status,
+          [user.did]: (status || 'offline') as UserStatus,
+        },
+      }
       await this.setUser(from, {
         ...localUser,
         name: user.name || localUser.name,
-        status: user.status || localUser.status,
       })
     }
   }
@@ -259,7 +263,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async setUser(id: IridiumPeerIdentifier, user: User) {
     const did = didUtils.didString(id)
-    this.state = { ...this.state, [did]: user }
+    this.state = { ...this.state, [did]: { ...this.state[did], ...user } }
 
     // rename chat conversations
     if (user.name) {
@@ -276,11 +280,23 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
         })
     }
 
+    logger.info(this.loggerTag, 'set user', { id, user })
     await this.set('/', this.state)
   }
 
   setUserStatus(did: IridiumPeerIdentifier, status: UserStatus) {
-    this.userStatus[didUtils.didString(did)] = status
+    // this.userStatus = { ...this.userStatus, [didUtils.didString(did)]: status }
+    // Vue.set(this.userStatus, didUtils.didString(did), status)
+    this.ephemeral = {
+      status: {
+        ...this.ephemeral.status,
+        [didUtils.didString(did)]: status,
+      },
+    }
+  }
+
+  getUserStatus(did: IridiumPeerIdentifier) {
+    return this.ephemeral.status[didUtils.didString(did)]
   }
 
   async send(event: IridiumUserEvent) {
@@ -337,6 +353,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
         user: {
           name: profile.name,
           did: profile.did,
+          status: profile.status || '',
         },
       }
       logger.info(this.loggerTag, 'announce remove user', {

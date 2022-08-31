@@ -102,9 +102,8 @@ export default class NotificationManager extends Emitter<Notification> {
   }
 
   async deleteNotification(id: string) {
-    Vue.delete(
-      this.state.notifications,
-      this.state.notifications.findIndex((n) => n.id === id),
+    this.state.notifications = this.state.notifications.filter(
+      (n) => n.id !== id,
     )
     await this.save()
   }

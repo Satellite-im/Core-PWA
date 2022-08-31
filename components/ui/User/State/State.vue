@@ -50,8 +50,8 @@ import { User, UserStatus } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   props: {
-    userId: {
-      type: String as PropType<User['did']>,
+    user: {
+      type: Object as PropType<User>,
       required: true,
     },
     size: {
@@ -60,28 +60,29 @@ export default Vue.extend({
     },
   },
   data() {
-    const conversationId = iridium.chat.directConversationIdFromDid(this.userId)
+    const conversationId = iridium.chat.directConversationIdFromDid(
+      this.user.did,
+    )
     return {
-      users: iridium.users.state,
-      userStatus: iridium.users.userStatus,
       conversationId,
-      isTyping: conversationId
-        ? iridium.chat.ephemeral.typing[conversationId]
-        : false,
     }
   },
   computed: {
-    user(): User {
-      return (
-        this.users?.[this.userId] || {
-          did: this.userId,
-          name: this.userId,
-          status: 'offline',
-        }
-      )
-    },
     status(): UserStatus {
-      return this.userStatus[this.userId] || 'offline'
+      if (this.user?.did && !iridium.users.ephemeral.status[this.user.did]) {
+        iridium.users.setUserStatus(this.user.did, 'offline')
+      }
+
+      return this.user.did === iridium.connector?.id
+        ? 'online'
+        : iridium.users.ephemeral.status[this.user.did] || 'offline'
+    },
+    isTyping(): boolean {
+      return this.conversationId
+        ? iridium.chat.ephemeral.typing[this.conversationId]?.includes(
+            this.user?.did,
+          )
+        : false
     },
     imageSource(): string {
       return this.user?.photoHash

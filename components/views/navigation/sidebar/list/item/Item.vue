@@ -12,7 +12,8 @@ import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User, UserStatus } from '~/libraries/Iridium/users/types'
+import logger from '~/plugins/local/logger'
 
 export default Vue.extend({
   components: {
@@ -28,27 +29,24 @@ export default Vue.extend({
     return {
       isLoading: false,
       timestamp: '' as string | TranslateResult,
-      timeoutId: undefined as NodeJS.Timeout | undefined,
+      timeoutId: undefined as any,
       chat: iridium.chat.state,
-      typing: iridium.chat.ephemeral.typing,
-      groups: iridium.groups.state,
       users: iridium.users.state,
     }
   },
   computed: {
-    ...mapGetters('settings', ['getTimestamp', 'getDate']),
     conversation(): Conversation | undefined {
       return this.chat.conversations[this.conversationId]
-    },
-    userId(): string | undefined {
-      return (this.conversation?.participants || []).find(
-        (did) => did !== iridium.connector?.id,
-      )
     },
     isTyping(): boolean {
       if (!this.user) return false
 
-      return (this.typing[this.conversation.id] || []).includes(this.user.did)
+      return (
+        !!this.conversation &&
+        (iridium.chat.ephemeral.typing[this.conversation.id] || []).includes(
+          this.user.did,
+        )
+      )
     },
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation?.type === 'direct'
@@ -122,6 +120,22 @@ export default Vue.extend({
 
     isSelected(): boolean {
       return this.conversation?.id === this.$route.params.id
+    },
+    user(): User | undefined {
+      const userId =
+        (this.conversation?.participants || []).find(
+          (did) => did !== iridium.connector?.id,
+        ) || ''
+      return (
+        iridium.users.state[userId] || {
+          did: userId,
+          name: userId,
+          status: '',
+        }
+      )
+    },
+    status(): UserStatus {
+      return iridium.users.ephemeral.status[this.user?.did || ''] || 'offline'
     },
   },
   watch: {
@@ -237,15 +251,13 @@ export default Vue.extend({
         return
       }
       if (this.$dayjs().isSame(lastMsg, 'day')) {
-        this.timestamp = this.getTimestamp({
-          time: lastMsg,
-        })
+        this.timestamp = ''
       } else if (this.$dayjs().diff(lastMsg, 'day') <= 1) {
         this.timestamp = this.$t('time.yesterday')
       } else if (this.$dayjs().diff(lastMsg, 'day') <= 2) {
         this.timestamp = '2 d'
       } else {
-        this.timestamp = this.getDate(lastMsg)
+        this.timestamp = ''
       }
       const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
       this.clearTimeoutId()

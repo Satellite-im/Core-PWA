@@ -13,7 +13,8 @@ import type {
 } from '@satellite-im/iridium/src/types'
 import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import type { IridiumManager } from '../IridiumManager'
-import { FriendRequest, FriendRequestStatus, FriendsError, User } from './types'
+import { User } from '../users/types'
+import { FriendRequest, FriendRequestStatus, FriendsError } from './types'
 import logger from '~/plugins/local/logger'
 import {
   Notification,
@@ -128,15 +129,14 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    */
   async fetch() {
     const fetched = (await this.get('/')) || { friends: [], requests: {} }
-    this.state = {
-      requests: fetched?.requests || {},
-      friends: !fetched.friends
-        ? []
-        : Array.isArray(fetched.friends)
-        ? fetched.friends
-        : Object.values(fetched.friends),
-      blocked: fetched.blocked || [],
-    }
+    this.state.requests = fetched?.requests || {}
+    this.state.friends = !fetched.friends
+      ? []
+      : Array.isArray(fetched.friends)
+      ? fetched.friends
+      : Object.values(fetched.friends)
+    this.state.blocked = fetched.blocked || []
+    logger.info(this.loggerTag, 'fetched', this.state)
     return this.state
   }
 
@@ -324,12 +324,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
       const user = this.iridium.users.getUser(did)
 
+      if (!user) return
       const buildNotification: Exclude<Notification, 'id'> = {
         fromName: user.name,
         at: request.at,
         title: 'New Request',
         description: `New ${NotificationType.FRIEND_REQUEST} From ${user.name}`,
-        image: user.photoHash || '',
+        image: user.photoHash?.toString() || '',
         type: NotificationType.FRIEND_REQUEST,
         seen: false,
       }
