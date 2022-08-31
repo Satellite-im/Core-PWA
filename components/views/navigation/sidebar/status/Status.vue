@@ -2,8 +2,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -12,20 +10,11 @@ export default Vue.extend({
       profile: iridium.profile.state,
     }
   },
-  computed: {
-    ...mapState({
-      accounts: (state: RootState) => state.accounts,
-    }),
-    src(): string {
-      const hash = this.accounts.details?.profilePicture
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
-    },
-  },
   methods: {
     copyId() {
       if (!iridium.connector) return
-      const shortID = this.profile.state
-        ? `${this.profile.state.name}#${iridium.connector.id.substring(
+      const shortID = this.profile
+        ? `${this.profile.name}#${iridium.connector.id.substring(
             iridium.connector.id.length - 6,
           )}`
         : `${iridium.connector?.id}`
