@@ -90,16 +90,6 @@ export default Vue.extend({
     hangUp() {
       this.webrtc.hangUp()
     },
-    async call(kinds: TrackKind[]) {
-      if (!this.enableRTC || !this.details) {
-        return
-      }
-      try {
-        await this.webrtc.call(this.details, kinds)
-      } catch (e: any) {
-        this.$toast.error(this.$t(e.message) as string)
-      }
-    },
   },
 })
 </script>

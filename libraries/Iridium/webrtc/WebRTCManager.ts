@@ -13,6 +13,7 @@ import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { User, Friend } from '~/libraries/Iridium/friends/types'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const $Sounds = new SoundManager()
 
@@ -231,23 +232,25 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  public async call(recipient: Friend, kinds: TrackKind[]) {
+  public async call({
+    recipient,
+    conversationId,
+    kinds,
+  }: {
+    recipient: User['did']
+    conversationId: Conversation['id']
+    kinds: TrackKind[]
+  }) {
     if (!this.iridium.connector?.id) {
       logger.error('webrtc', 'call - connector.id not found')
       return
     }
 
-    if (!recipient) {
-      logger.error('webrtc', 'call - recipent not found')
+    if (!this.iridium.chat?.hasConversation(conversationId)) {
       return
     }
 
-    const id = iridium.chat?.directConversationIdFromDid(recipient.did)
-    if (!id || !this.iridium.chat?.hasConversation(id)) {
-      return
-    }
-
-    const conversation = this.iridium.chat?.getConversation(id)
+    const conversation = this.iridium.chat?.getConversation(conversationId)
 
     if (!conversation) {
       return
@@ -285,10 +288,10 @@ export default class WebRTCManager extends Emitter {
         }
       })
 
-      await this.createCall({
+      this.createCall({
         callId,
         peers,
-        did: recipient.did,
+        did: recipient,
       })
     }
 

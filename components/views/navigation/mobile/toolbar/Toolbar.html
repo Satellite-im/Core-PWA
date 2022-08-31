@@ -5,21 +5,19 @@
   <TypographyTitle :size="6" v-if="conversation" :text="conversation.name" />
   <button
     class="phone"
-    :disabled="!enableRTC || isActiveCall"
+    :disabled="!enableRTC || webrtc.activeCall"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >
     <phone-call-icon size="1.4x" />
   </button>
   <button
-    :disabled="!enableRTC || isActiveCall"
+    :disabled="!enableRTC || webrtc.activeCall"
     data-cy="toolbar-enable-audio"
     @click="handleCall"
   >
     <video-icon size="1.4x" />
   </button>
-  <template v-if="details">
-    <UiUserState v-if="!isGroup" :user="details" />
-    <UiGroupIcon v-else :group="details" />
-  </template>
+  <UiUserState v-if="!isGroup" :userId="otherDids[0]" />
+  <UiGroupIcon v-else :members="conversation?.participants" />
 </div>
