@@ -108,18 +108,24 @@ export default class WebRTCManager extends Emitter {
       friends,
     })
 
-    if (!friends) return
-    await iridium.connector?.publish(
-      'webrtc',
-      {
-        type: 'announce',
-      },
-      {
-        encrypt: {
-          recipients: friends,
+    if (!friends || !(profile.name && iridium.connector.p2p.ready)) return
+
+    try {
+      await iridium.connector?.publish(
+        'webrtc',
+        {
+          type: 'announce',
         },
-      },
-    )
+        {
+          encrypt: {
+            recipients: friends,
+          },
+        },
+      )
+    } catch (e) {
+      const error = e as Error
+      logger.error(this.loggerTag, 'announce failed to publish', error)
+    }
   }
 
   private async onMessage({

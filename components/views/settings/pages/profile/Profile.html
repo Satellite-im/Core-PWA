@@ -76,7 +76,7 @@
                 <button
                   v-if="src"
                   class="remove-button"
-                  @click="updateUserDetail('photoHash', '')"
+                  @click="(e) => updateUserDetail(e, 'photoHash', '')"
                 >
                   <span>{{ $t('pages.settings.profile.remove_image') }}</span>
                 </button>
@@ -91,7 +91,7 @@
                       size="xs"
                       type="text"
                       :placeholder="
-                          $t('pages.settings.profile.name_placeholder')
+                          $t('user.registration.username_placeholder')
                         "
                       :loading="loading.has('status')"
                       button-type="submit"
@@ -99,6 +99,7 @@
                       <edit-icon size="1x" />
                     </InteractablesInput>
                   </form>
+                  <TypographyTitle :size="6" :text="profile?.name ?? ''" />
                 </div>
                 <div class="status-input">
                   <form
@@ -112,8 +113,8 @@
                       size="xs"
                       type="text"
                       :placeholder="
-                          $t('pages.settings.profile.status_placeholder')
-                        "
+                        $t('pages.settings.profile.status_placeholder')
+                      "
                       :loading="loading.has('status')"
                       button-type="submit"
                     >
@@ -134,7 +135,7 @@
 
         <div class="profile-section">
           <!-- About Me -->
-          <div>
+          <form @submit="(e) => submitEdit(e)" @click="">
             <div class="section-title">
               <div class="title-wrapper">
                 <align-left-icon size="1.5x" class="section-icon" />
@@ -144,20 +145,9 @@
                 />
               </div>
               <div>
-                <UiComingSoon
-                  style="flex: 1"
-                  :tooltip-text="$t('ui.coming_soon')"
-                  :tooltip-position="'top'"
-                  disabled
-                >
-                  <button
-                    v-tooltip.top="$t('ui.coming_soon')"
-                    class="edit-button"
-                    @click="() => {}"
-                  >
-                    {{ $t('global.edit') }}
-                  </button>
-                </UiComingSoon>
+                <button class="edit-button" type="submit">
+                  {{ getEditButtonText('about') }}
+                </button>
               </div>
             </div>
             <div class="about-main">
@@ -167,10 +157,23 @@
                   :text="$t('pages.settings.profile.about.subtitle')"
                 />
               </div>
-              <!-- TODO: Enable when about me is implemented -->
-              <!-- <TypographySubtitle :size="6" :text="sampleProfileInfo.about" /> -->
+              <div
+                class="about-input-wrapper"
+                :class="{'readonly': !editing.has('about')}"
+              >
+                <ChatbarEditable
+                  v-model="inputs.about"
+                  ref="editable"
+                  :placeholder="$t('ui.talk')"
+                  :enabled="editing.has('about')"
+                />
+                <!-- :focus="editing.has('about')" -->
+                <!-- :class="{'has-command' : hasCommand}" -->
+                <!-- @keydown="handleInputKeydown" -->
+                <!-- @paste="handlePaste" -->
+              </div>
             </div>
-          </div>
+          </form>
 
           <!-- Your Accounts -->
           <div>
@@ -208,8 +211,8 @@
                     size="xs"
                     type="text"
                     :placeholder="
-                        $t('pages.settings.profile.accounts.url_placeholder')
-                      "
+                      $t('pages.settings.profile.accounts.url_placeholder')
+                    "
                   >
                     <edit-icon size="1x" />
                   </InteractablesInput>
@@ -221,8 +224,8 @@
                   <TypographySubtitle
                     :size="6"
                     :text="
-                        $t('pages.settings.profile.accounts.subtitle_accounts')
-                      "
+                      $t('pages.settings.profile.accounts.subtitle_accounts')
+                    "
                   />
                 </div>
 

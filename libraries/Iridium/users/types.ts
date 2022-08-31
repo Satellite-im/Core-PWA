@@ -1,11 +1,14 @@
+import { CID } from 'multiformats'
+
 export type User = {
   did: string
   name: string
   peerId?: string
   seen?: number
-  photoHash?: string
+  photoHash?: string | CID
   status?: string
   accountUrl?: string
+  about?: string
 }
 
 export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'

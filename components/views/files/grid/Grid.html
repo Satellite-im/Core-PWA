@@ -3,7 +3,7 @@
     <FilesGridItem
       v-for="item in directory"
       :item="item"
-      :key="item.id + item.modified.toString()"
+      :key="item.id + item.modified?.toString()"
       @like="(item) => $emit('like', item)"
       @share="(item) => $emit('share', item)"
       @rename="(item) => $emit('rename', item)"

@@ -53,7 +53,7 @@ export enum SettingsRoutes {
   AUDIO_AND_VIDEO = 'audio & Video',
   KEY_BINDS = 'keybinds',
   ACCOUNTS_AND_DEVICES = 'accounts & Devices',
-  PRIVACY = 'privacy',
+  PRIVACY_AND_PERMISSIONS = 'privacy & Permissions',
   DEVELOPER = 'developer',
   INFO = 'info',
   NOTIFICATIONS = 'notifications',

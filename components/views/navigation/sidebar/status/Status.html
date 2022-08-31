@@ -1,5 +1,5 @@
 <div id="status">
-  <UiUserState :user="profile" :src="src" />
+  <UiUserState :userId="profile.did" />
   <div class="user-info" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
     <TypographyTitle data-cy="user-name" :text="profile.name" :size="6" />
     <TypographySubtitle

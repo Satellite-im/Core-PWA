@@ -5,18 +5,18 @@
   </div>
   <div class="main-content">
     <div
-      v-if="activeTab === FriendsTabs.Friends && !friendsList.length"
+      v-if="!activeTab && !friendsList.length"
       class="empty-friends-container"
     >
       <FriendsEmptyMessage class="empty-friends" />
     </div>
     <FriendsFriend
       v-for="user in friendsList"
-      v-else-if="activeTab === FriendsTabs.Friends"
+      v-else-if="!activeTab"
       :key="user.did"
       :user="user"
     />
-    <FriendsAdd v-else-if="activeTab === FriendsTabs.Add" />
-    <FriendsRequests v-else-if="activeTab === FriendsTabs.Requests" />
+    <FriendsAdd v-else-if="activeTab === FriendsTabs.ADD" />
+    <FriendsRequests v-else-if="activeTab === FriendsTabs.REQUESTS" />
   </div>
 </div>
