@@ -35,9 +35,6 @@ export default Vue.extend({
 
   data() {
     return {
-      users: iridium.users.state,
-      userStatus: iridium.users.userStatus,
-      isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
       chat: iridium.chat.state,
     }
