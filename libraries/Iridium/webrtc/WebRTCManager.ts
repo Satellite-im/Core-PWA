@@ -108,7 +108,7 @@ export default class WebRTCManager extends Emitter {
       friends,
     })
 
-    if (!friends) return
+    if (!friends || !(profile.name && iridium.connector.p2p.ready)) return
 
     try {
       await iridium.connector?.publish(
