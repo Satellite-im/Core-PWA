@@ -276,9 +276,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       // Remove is_typing indicator upon user message receive
       this.ephemeral.typing = {
         ...this.ephemeral.typing,
-        [conversationId]: (this.ephemeral.typing[conversationId] || []).filter(
-          (did) => did !== fromDID,
-        ),
+        [conversationId]: (
+          this.ephemeral.typing?.[conversationId] || []
+        ).filter((did) => did !== fromDID),
       }
 
       const friendName = this.iridium.users.getUser(message?.from)

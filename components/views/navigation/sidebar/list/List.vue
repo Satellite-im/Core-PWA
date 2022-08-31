@@ -13,6 +13,7 @@ export default Vue.extend({
   data() {
     return {
       loading: false,
+      friends: iridium.friends.state,
     }
   },
   computed: {
