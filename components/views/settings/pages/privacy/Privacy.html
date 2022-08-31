@@ -9,7 +9,7 @@
   </SettingsSection>
   <TypographyHorizontalRuleText
     plaintext
-    :value="$t('pages.privacy.sectiontitle')"
+    :value="$t('pages.privacy.permissions')"
   />
   <SettingsSection>
     <SettingsUnit
@@ -17,7 +17,8 @@
       :text="$t('pages.privacy.notifications.subtitle')"
     >
       <InteractablesSwitch
-        v-model="notifications"
+        :isEnabled="permissions.includes('notifications')"
+        @click="handlePermissions('notification')"
         :isLocked="loading.includes('notifications')"
       />
     </SettingsUnit>
@@ -26,7 +27,8 @@
       :text="$t('pages.privacy.microphone.subtitle')"
     >
       <InteractablesSwitch
-        v-model="microphone"
+        :isEnabled="permissions.includes('microphone')"
+        @click="handlePermissions('microphone')"
         :isLocked="loading.includes('microphone')"
       />
     </SettingsUnit>
@@ -35,7 +37,8 @@
       :text="$t('pages.privacy.camera.subtitle')"
     >
       <InteractablesSwitch
-        v-model="camera"
+        :isEnabled="permissions.includes('camera')"
+        @click="handlePermissions('camera')"
         :isLocked="loading.includes('camera')"
       />
     </SettingsUnit>

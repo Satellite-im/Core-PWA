@@ -17,6 +17,7 @@ export default Vue.extend({
       lengthError: false as boolean,
       loading: [] as string[],
       privacySettings: iridium.settings.state.privacy,
+      permissions: [] as string[],
     }
   },
   computed: {
@@ -27,38 +28,6 @@ export default Vue.extend({
       userThread: (state) => (state as RootState).textile.userThread,
     }),
     ...mapGetters('textile', ['getInitialized']),
-    notifications: {
-      async set(notifications: boolean) {
-        console.log('notifications allowed:', notifications)
-      },
-      get(): any {
-        return null
-      },
-    },
-    microphone: {
-      async set(microphone: boolean) {
-        console.log('microphone allowed:', microphone)
-      },
-      get(): any {
-        return null
-      },
-    },
-    camera: {
-      async set(camera: boolean) {
-        console.log('camera allowed:', camera)
-      },
-      get(): any {
-        return null
-      },
-    },
-    screenshare: {
-      async set(screenshare: boolean) {
-        console.log('screenshare allowed:', screenshare)
-      },
-      get(): any {
-        return null
-      },
-    },
     embeddedLinks: {
       set(state: boolean) {
         iridium.settings.set('/privacy/embeddedLinks', state)
@@ -146,6 +115,11 @@ export default Vue.extend({
       get(): string {
         return this.settings.ownInfo
       },
+    },
+  },
+  methods: {
+    handlePermissions(type: string) {
+      // todo ask permissions
     },
   },
 })

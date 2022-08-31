@@ -278,7 +278,7 @@ export default {
       title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
-      sectiontitle: 'Permissions',
+      permissions: 'Permissions',
       notifications: {
         title: 'Notifications',
         subtitle:
