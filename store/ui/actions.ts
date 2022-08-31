@@ -119,6 +119,6 @@ export default {
     if (this.$device.isMobile) {
       this.$router.push('/mobile/settings')
     }
-    commit('setSettingsRoute', SettingsRoutes.PRIVACY)
+    commit('setSettingsRoute', SettingsRoutes.PRIVACY_AND_PERMISSIONS)
   },
 }

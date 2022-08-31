@@ -27,6 +27,87 @@ export default Vue.extend({
       userThread: (state) => (state as RootState).textile.userThread,
     }),
     ...mapGetters('textile', ['getInitialized']),
+    notifications: {
+      async set(notifications: boolean) {
+        console.log('notifications allowed:', notifications)
+      },
+      get(): any {
+        return null
+      },
+    },
+    microphone: {
+      async set(microphone: boolean) {
+        console.log('microphone allowed:', microphone)
+      },
+      get(): any {
+        return null
+      },
+    },
+    camera: {
+      async set(camera: boolean) {
+        console.log('camera allowed:', camera)
+      },
+      get(): any {
+        return null
+      },
+    },
+    screenshare: {
+      async set(screenshare: boolean) {
+        console.log('screenshare allowed:', screenshare)
+      },
+      get(): any {
+        return null
+      },
+    },
+    embeddedLinks: {
+      set(state: boolean) {
+        iridium.settings.set('/privacy/embeddedLinks', state)
+      },
+      get(): boolean {
+        return this.privacySettings.embeddedLinks
+      },
+    },
+    consentScan: {
+      async set(consentToScan: boolean) {
+        this.loading.push('consentScan')
+        await iridium.settings.set('/privacy/consentToScan', consentToScan)
+        this.loading.splice(this.loading.indexOf('consentScan'), 1)
+      },
+      get(): boolean {
+        return this.privacySettings.consentToScan
+      },
+    },
+    blockNsfw: {
+      async set(blockNsfw: boolean) {
+        this.loading.push('blockNsfw')
+        await iridium.settings.set('/privacy/blockNsfw', blockNsfw)
+        this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
+      },
+      get(): boolean {
+        return this.privacySettings.blockNsfw
+      },
+    },
+    registry: {
+      get(): boolean {
+        return !this.accounts ? false : this.accounts.registry
+      },
+    },
+    storePin: {
+      set(state: boolean) {
+        this.$store.commit('accounts/setStorePin', state)
+      },
+      get(): boolean {
+        return !this.accounts ? false : this.accounts.storePin
+      },
+    },
+    displayCurrentActivity: {
+      set(state: boolean) {
+        iridium.settings.set('/privacy/displayCurrentActivity', state)
+      },
+      get(): boolean {
+        return this.privacySettings.displayCurrentActivity
+      },
+    },
     serverTypes(): { text: TranslateResult; value: string }[] {
       return [
         {
@@ -64,55 +145,6 @@ export default Vue.extend({
       },
       get(): string {
         return this.settings.ownInfo
-      },
-    },
-    registry: {
-      get(): boolean {
-        return !this.accounts ? false : this.accounts.registry
-      },
-    },
-    storePin: {
-      set(state: boolean) {
-        this.$store.commit('accounts/setStorePin', state)
-      },
-      get(): boolean {
-        return !this.accounts ? false : this.accounts.storePin
-      },
-    },
-    embeddedLinks: {
-      set(state: boolean) {
-        iridium.settings.set('/privacy/embeddedLinks', state)
-      },
-      get(): boolean {
-        return this.privacySettings.embeddedLinks
-      },
-    },
-    consentScan: {
-      async set(consentToScan: boolean) {
-        this.loading.push('consentScan')
-        await iridium.settings.set('/privacy/consentToScan', consentToScan)
-        this.loading.splice(this.loading.indexOf('consentScan'), 1)
-      },
-      get(): boolean {
-        return this.privacySettings.consentToScan
-      },
-    },
-    blockNsfw: {
-      async set(blockNsfw: boolean) {
-        this.loading.push('blockNsfw')
-        await iridium.settings.set('/privacy/blockNsfw', blockNsfw)
-        this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
-      },
-      get(): boolean {
-        return this.privacySettings.blockNsfw
-      },
-    },
-    displayCurrentActivity: {
-      set(state: boolean) {
-        iridium.settings.set('/privacy/displayCurrentActivity', state)
-      },
-      get(): boolean {
-        return this.privacySettings.displayCurrentActivity
       },
     },
   },
