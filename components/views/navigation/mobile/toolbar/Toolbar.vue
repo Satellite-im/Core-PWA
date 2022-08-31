@@ -13,6 +13,7 @@ import { mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { conversationHooks } from '~/components/compositions/conversations'
 
 export default Vue.extend({
   components: {
@@ -21,6 +22,17 @@ export default Vue.extend({
     MenuIcon,
     VideoIcon,
   },
+  setup() {
+    const { conversation, isGroup, otherDids, enableRTC } = conversationHooks()
+
+    return {
+      conversation,
+      isGroup,
+      otherDids,
+      enableRTC,
+    }
+  },
+
   data() {
     return {
       users: iridium.users.state,
@@ -34,28 +46,6 @@ export default Vue.extend({
     ...mapGetters('ui', ['allUnseenNotifications']),
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
-    },
-    conversation(): Conversation | undefined {
-      if (!this.conversationId) {
-        return undefined
-      }
-      return this.chat.conversations[this.conversationId]
-    },
-    otherDids(): Conversation['participants'] {
-      return (
-        this.conversation?.participants.filter(
-          (did) => did !== iridium.connector?.id,
-        ) ?? []
-      )
-    },
-    isGroup(): boolean {
-      return this.conversation?.type === 'group'
-    },
-    enableRTC(): boolean {
-      return Boolean(
-        this.otherDids?.filter((did) => this.userStatus[did] === 'online')
-          .length,
-      )
     },
   },
   methods: {

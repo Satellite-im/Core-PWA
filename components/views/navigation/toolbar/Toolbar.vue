@@ -1,7 +1,7 @@
 <template src="./Toolbar.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { computed } from 'vue'
 import {
   PhoneCallIcon,
   ArchiveIcon,
@@ -19,6 +19,7 @@ import { ModalWindows } from '~/store/ui/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { conversationHooks } from '~/components/compositions/conversations'
 
 export default Vue.extend({
   components: {
@@ -35,6 +36,41 @@ export default Vue.extend({
       default: false,
     },
   },
+  setup() {
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    const { conversation, isGroup, otherDids, enableRTC } = conversationHooks()
+
+    const subtitleText = computed(() => {
+      if (isGroup.value) {
+        return (
+          conversation?.value?.participants
+            ?.map((did) => iridium.users.state[did]?.name)
+            .join(', ') ?? ''
+        )
+      }
+      // todo - replace with user status message set in profile settings
+      return iridium.users.userStatus[otherDids.value[0]] || 'offline'
+    })
+
+    const callTooltipText = computed(() => {
+      if (isGroup.value) {
+        return $nuxt.$i18n.t('coming_soon.group_call')
+      }
+      return $nuxt.$i18n.t(
+        enableRTC.value ? 'controls.call' : 'controls.not_connected',
+      )
+    })
+
+    return {
+      conversation,
+      isGroup,
+      otherDids,
+      enableRTC,
+      subtitleText,
+      callTooltipText,
+    }
+  },
   data() {
     return {
       searchRecommend,
@@ -42,9 +78,6 @@ export default Vue.extend({
       chat: iridium.chat.state,
       showAlerts: false,
       searchQuery: '' as string,
-      users: iridium.users.state,
-      userStatus: iridium.users.userStatus,
-      groups: iridium.groups.state,
       isGroupInviteVisible: false,
       webrtc: iridium.webRTC.state,
     }
@@ -56,47 +89,6 @@ export default Vue.extend({
     ModalWindows: () => ModalWindows,
     conversationId(): Conversation['id'] | undefined {
       return this.$route.params.id
-    },
-    conversation(): Conversation | undefined {
-      return (
-        (this.conversationId && this.chat.conversations[this.conversationId]) ||
-        undefined
-      )
-    },
-    otherDids(): Conversation['participants'] {
-      return (
-        this.conversation?.participants.filter(
-          (did) => did !== iridium.connector?.id,
-        ) ?? []
-      )
-    },
-    isGroup(): boolean {
-      return this.conversation?.type === 'group'
-    },
-    enableRTC(): boolean {
-      return Boolean(
-        this.otherDids?.filter((did) => this.userStatus[did] === 'online')
-          .length,
-      )
-    },
-    callTooltipText(): string {
-      if (this.isGroup) {
-        return this.$t('coming_soon.group_call') as string
-      }
-      return this.enableRTC
-        ? (this.$t('controls.call') as string)
-        : (this.$t('controls.not_connected') as string)
-    },
-    subtitleText(): string {
-      if (this.isGroup) {
-        return (
-          this.conversation?.participants
-            ?.map((did) => this.users[did]?.name)
-            .join(', ') ?? ''
-        )
-      }
-      // todo - replace with user status message set in profile settings
-      return this.userStatus[this.otherDids[0]] || 'offline'
     },
   },
   methods: {
