@@ -16,6 +16,8 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 
+type Editables = 'about'
+
 export default Vue.extend({
   components: {
     EditIcon,
@@ -31,6 +33,7 @@ export default Vue.extend({
       croppedImage: '',
       showCropper: false,
       loading: new Set() as Set<keyof User>,
+      editing: new Set() as Set<Editables>,
       inputs: {
         name: iridium.profile.state?.name,
         photoHash: iridium.profile.state?.photoHash,
@@ -139,6 +142,17 @@ export default Vue.extend({
         // Note: For Vue 2 reactivity
         this.loading = new Set(...this.loading.entries())
       }
+    },
+    /**
+     * @method getEditButtonText
+     * @description Returns the label for the edit button
+     * @example this.getEditLabel('about')
+     */
+    getEditButtonText(key: Editables) {
+      if (this.editing.has(key)) {
+        return this.$t('global.save') as string
+      }
+      return this.$t('global.edit') as string
     },
   },
 })
