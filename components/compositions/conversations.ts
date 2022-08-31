@@ -1,6 +1,7 @@
 import { computed, ComputedRef } from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { TrackKind } from '~/libraries/WebRTC/types'
 
 export function conversationHooks() {
   // @ts-ignore
@@ -33,5 +34,22 @@ export function conversationHooks() {
     )
   })
 
-  return { conversation, isGroup, otherDids, enableRTC }
+  return { conversation, conversationId, isGroup, otherDids, enableRTC }
+}
+
+export async function call(kinds: TrackKind[]) {
+  // @ts-ignore
+  const $nuxt = useNuxtApp()
+  const { enableRTC, otherDids, conversationId } = conversationHooks()
+
+  if (!enableRTC.value) {
+    return
+  }
+  await iridium.webRTC
+    .call({
+      recipient: otherDids.value[0],
+      conversationId: conversationId.value,
+      kinds,
+    })
+    .catch((e) => $nuxt.$toast.error($nuxt.i18n.t(e.message)))
 }

@@ -11,9 +11,10 @@ import {
 
 import { mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { TrackKind } from '~/libraries/WebRTC/types'
-import { Conversation } from '~/libraries/Iridium/chat/types'
-import { conversationHooks } from '~/components/compositions/conversations'
+import {
+  conversationHooks,
+  call,
+} from '~/components/compositions/conversations'
 
 export default Vue.extend({
   components: {
@@ -25,11 +26,19 @@ export default Vue.extend({
   setup() {
     const { conversation, isGroup, otherDids, enableRTC } = conversationHooks()
 
+    async function handleCall() {
+      if (isGroup.value || !enableRTC.value) {
+        return
+      }
+      await call(['audio'])
+    }
+
     return {
       conversation,
       isGroup,
       otherDids,
       enableRTC,
+      handleCall,
     }
   },
 
@@ -41,31 +50,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('ui', ['allUnseenNotifications']),
-    conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
-    },
-  },
-  methods: {
-    async call(kinds: TrackKind[]) {
-      if (!this.enableRTC || !this.conversationId) {
-        return
-      }
-      try {
-        await iridium.webRTC.call({
-          recipient: this.otherDids[0],
-          conversationId: this.conversationId,
-          kinds,
-        })
-      } catch (e: any) {
-        this.$toast.error(this.$t(e.message) as string)
-      }
-    },
-    async handleCall() {
-      if (this.isGroup || !this.enableRTC) {
-        return
-      }
-      await this.call(['audio'])
-    },
   },
 })
 </script>

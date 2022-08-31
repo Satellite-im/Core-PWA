@@ -16,10 +16,11 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
-import { TrackKind } from '~/libraries/WebRTC/types'
 import { RootState } from '~/types/store/store'
-import { Conversation } from '~/libraries/Iridium/chat/types'
-import { conversationHooks } from '~/components/compositions/conversations'
+import {
+  conversationHooks,
+  call,
+} from '~/components/compositions/conversations'
 
 export default Vue.extend({
   components: {
@@ -62,6 +63,13 @@ export default Vue.extend({
       )
     })
 
+    async function handleCall() {
+      if (isGroup.value || !enableRTC.value) {
+        return
+      }
+      await call(['audio'])
+    }
+
     return {
       conversation,
       isGroup,
@@ -69,6 +77,7 @@ export default Vue.extend({
       enableRTC,
       subtitleText,
       callTooltipText,
+      handleCall,
     }
   },
   data() {
@@ -87,9 +96,6 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
     }),
     ModalWindows: () => ModalWindows,
-    conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
-    },
   },
   methods: {
     toggleAlerts() {
@@ -125,26 +131,6 @@ export default Vue.extend({
      */
     toggleSearchResult() {
       this.searchQuery = ''
-    },
-    async call(kinds: TrackKind[]) {
-      if (!this.enableRTC || !this.conversationId) {
-        return
-      }
-      try {
-        await iridium.webRTC.call({
-          recipient: this.otherDids[0],
-          conversationId: this.conversationId,
-          kinds,
-        })
-      } catch (e: any) {
-        this.$toast.error(this.$t(e.message) as string)
-      }
-    },
-    async handleCall() {
-      if (this.isGroup || !this.enableRTC) {
-        return
-      }
-      await this.call(['audio'])
     },
   },
 })
