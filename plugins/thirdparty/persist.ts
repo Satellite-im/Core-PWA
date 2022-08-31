@@ -17,6 +17,7 @@ const mutationsBlacklist = [
   'chat/addFile',
   'textile/setMessageLoading',
   'groups/setSubscriptionId',
+  'video',
 ]
 
 // State properties path to blacklist saving to store
