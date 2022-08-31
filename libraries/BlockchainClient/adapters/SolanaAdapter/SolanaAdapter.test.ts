@@ -29,19 +29,4 @@ describe('Test Solana Adapter', () => {
     const result = instance._getConnectionStatus()
     expect(result).toBeFalsy()
   })
-
-  it('should get friendsProgram and return error', () => {
-    // because Solana is not initialized
-    const instance = new SolanaAdapter()
-
-    try {
-      const result = instance.friendsProgram
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty(
-        'message',
-        'Unable to get FriendsProgram instance: Solana not initialized yet',
-      )
-    }
-  })
 })

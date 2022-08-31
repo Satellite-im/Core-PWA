@@ -1,16 +1,4 @@
 import {
-  PhantomWalletAdapter,
-  SolflareWalletAdapter,
-  SlopeWalletAdapter,
-  CoinbaseWalletAdapter,
-  BitKeepWalletAdapter,
-  Coin98WalletAdapter,
-  ExodusWalletAdapter,
-  GlowWalletAdapter,
-  TokenPocketWalletAdapter,
-  SpotWalletAdapter,
-} from '@solana/wallet-adapter-wallets'
-import {
   BaseMessageSignerWalletAdapter,
   WalletReadyState,
 } from '@solana/wallet-adapter-base'
@@ -89,7 +77,7 @@ export default class MultiWalletManager {
    */
   async setWallet(wallet: string) {
     this.wallet = wallet
-    this.setWalletAdapter(this._adapterPicker(wallet))
+    this.setWalletAdapter(await this._adapterPicker(wallet))
     if (this.WalletAdapter instanceof MetamaskAdapter) {
       window.console.log('Metamask wallet provider selected')
       await this.WalletAdapter.setProvider()
@@ -108,55 +96,88 @@ export default class MultiWalletManager {
    * @returns the adapter based on the wallet name
    * @param wallet
    **/
-  _adapterPicker(wallet: String) {
+  async _adapterPicker(wallet: String) {
     switch (wallet) {
-      case 'Phantom':
+      case 'Phantom': {
         window.console.log('Phantom wallet selected')
-        return new PhantomWalletAdapter()
+        // dynamic import of the wallet adapter
+        const PhantomWalletAdapter = await import(
+          '@solana/wallet-adapter-phantom'
+        )
+        return new PhantomWalletAdapter.PhantomWalletAdapter()
+      }
 
-      case 'Slope':
+      case 'Slope': {
         window.console.log('Slope wallet selected')
-        return new SlopeWalletAdapter()
+        const SlopeWalletAdapter = await import('@solana/wallet-adapter-slope')
+        return new SlopeWalletAdapter.SlopeWalletAdapter()
+      }
 
-      case 'Solflare':
+      case 'Solflare': {
         window.console.log('Solflare wallet selected')
-        return new SolflareWalletAdapter()
+        const SolflareWalletAdapter = await import(
+          '@solana/wallet-adapter-solflare'
+        )
+        return new SolflareWalletAdapter.SolflareWalletAdapter()
+      }
 
-      case 'Coinbase':
+      case 'Coinbase': {
         window.console.log('Coinbase wallet selected')
-        return new CoinbaseWalletAdapter()
+        const CoinbaseWalletAdapter = await import(
+          '@solana/wallet-adapter-coinbase'
+        )
+        return new CoinbaseWalletAdapter.CoinbaseWalletAdapter()
+      }
 
-      case 'Bitkeep':
+      case 'Bitkeep': {
         window.console.log('Bitkeep wallet selected')
-        return new BitKeepWalletAdapter()
+        const BitKeepWalletAdapter = await import(
+          '@solana/wallet-adapter-bitkeep'
+        )
+        return new BitKeepWalletAdapter.BitKeepWalletAdapter()
+      }
 
-      case 'Coin98':
+      case 'Coin98': {
         window.console.log('Coin98 wallet selected')
-        return new Coin98WalletAdapter()
+        const Coin98WalletAdapter = await import(
+          '@solana/wallet-adapter-coin98'
+        )
+        return new Coin98WalletAdapter.Coin98WalletAdapter()
+      }
 
-      case 'Exodus':
+      case 'Exodus': {
         window.console.log('Exodus wallet selected')
-        return new ExodusWalletAdapter()
+        const ExodusWalletAdapter = await import(
+          '@solana/wallet-adapter-Exodus'
+        )
+        return new ExodusWalletAdapter.ExodusWalletAdapter()
+      }
 
-      case 'Glow':
+      case 'Glow': {
         window.console.log('Glow wallet selected')
-        return new GlowWalletAdapter()
+        const GlowWalletAdapter = await import('@solana/wallet-adapter-Glow')
+        return new GlowWalletAdapter.GlowWalletAdapter()
+      }
 
-      case 'BitKeep':
+      case 'BitKeep': {
         window.console.log('BitKeep wallet selected')
-        return new BitKeepWalletAdapter()
-      case 'Metamask':
-        window.console.log('Metamask wallet selected')
-        return new MetamaskAdapter()
-      case 'WalletConnect':
-        window.console.log('WalletConnect wallet selected')
-        return new WalletConnectAdapter()
-      case 'TokenPocket':
+        const BitKeepWalletAdapter = await import(
+          '@solana/wallet-adapter-BitKeep'
+        )
+        return new BitKeepWalletAdapter.BitKeepWalletAdapter()
+      }
+      case 'TokenPocket': {
         window.console.log('TokenPocket wallet selected')
-        return new TokenPocketWalletAdapter()
-      case 'Spot':
+        const TokenPocketWalletAdapter = await import(
+          '@solana/wallet-adapter-TokenPocket'
+        )
+        return new TokenPocketWalletAdapter.TokenPocketWalletAdapter()
+      }
+      case 'Spot': {
         window.console.log('Spot wallet selected')
-        return new SpotWalletAdapter()
+        const SpotWalletAdapter = await import('@solana/wallet-adapter-spot')
+        return new SpotWalletAdapter.SpotWalletAdapter()
+      }
 
       default:
         throw new Error('Wallet not found')

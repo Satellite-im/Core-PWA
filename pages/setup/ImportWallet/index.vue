@@ -29,12 +29,6 @@ export default Vue.extend({
   mounted() {
     this.loading = false
     window.console.log(this.detectedWallets)
-    // this.error = 'amamaiodmoi'
-
-    /* await this.$store.dispatch('accounts/connectWallet')
-      this.$router.push('/') */
-
-    // search for wallets and assing array result to this.detectedWallets, assing to this.error in case of errors or if nothing was found
   },
   methods: {
     getImgUrl(pic: String) {

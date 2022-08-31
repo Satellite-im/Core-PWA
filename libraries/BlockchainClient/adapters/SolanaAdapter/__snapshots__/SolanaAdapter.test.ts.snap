@@ -2,8 +2,6 @@
 
 exports[`Test Solana Adapter should initialize the constructor 1`] = `
 SolanaAdapter {
-  "_friendsProgram": null,
-  "groupsProgram": null,
   "solanaManager": SolanaManager {
     "accounts": Array [],
     "clusterApiUrl": "https://api.devnet.solana.com",
@@ -112,6 +110,5 @@ SolanaAdapter {
     "networkIdentifier": "devnet",
     "publicKeys": Object {},
   },
-  "usersProgram": null,
 }
 `;

@@ -10,8 +10,6 @@ import {
   TokenPocketWalletAdapter,
   SpotWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
-import { WalletReadyState } from '@solana/wallet-adapter-base'
-
 export interface walletList {
   name: string
   icon: string
