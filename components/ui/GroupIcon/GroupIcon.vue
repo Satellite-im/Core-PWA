@@ -2,18 +2,25 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
     members: {
-      type: Array as PropType<User[]>,
+      type: Array as PropType<Conversation['participants']>,
       required: true,
     },
     size: {
       type: Number,
       default: 36,
     },
+  },
+  data() {
+    return {
+      users: iridium.users.state,
+    }
   },
   computed: {
     /**
@@ -34,6 +41,15 @@ export default Vue.extend({
     groupIconSize(): number {
       if (this.members.length > 1) return 25
       return 36
+    },
+    membersInfo(): User[] {
+      return this.members.map(
+        (did) =>
+          this.users?.[did] || {
+            did,
+            name: did,
+          },
+      )
     },
   },
   methods: {
