@@ -72,6 +72,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     })
     await Promise.all(
       this.state.friends.map(async (friendDid) => {
+        await iridium.users.searchPeer(friendDid)
         if (!iridium.connector) return
         if (!iridium.connector.p2p.hasPeer(friendDid)) {
           logger.info(
@@ -154,9 +155,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     // }
 
     const request = await this.getRequest(from).catch(() => undefined)
-    await iridium.users.searchPeer(payload.body.user.did)
-    const user =
-      iridium.users.getUser(payload.body.user.did) || payload.body.user
+    let user = iridium.users.getUser(payload.body.user.did) || payload.body.user
+    if (!user) {
+      ;[user] = await iridium.users.searchPeer(payload.body.user.did)
+    }
     if (!request && status === 'pending') {
       await this.requestCreate(from, true, user)
     } else if (request && status === 'accepted') {

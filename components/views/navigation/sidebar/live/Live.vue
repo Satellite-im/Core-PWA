@@ -22,6 +22,7 @@ export default Vue.extend({
       userStatus: iridium.users.ephemeral.status,
       groups: iridium.groups.state,
       chat: iridium.chat.state,
+      profile: iridium.profile.state,
     }
   },
   computed: {
