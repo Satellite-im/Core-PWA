@@ -40,7 +40,6 @@ import {
   Notification,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
-
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
@@ -623,33 +622,66 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async addFile(
-    upload: ChatFileUpload,
+    {
+      upload,
+      conversationId,
+    }: { upload: ChatFileUpload; conversationId: string },
     options?: AddOptions,
-  ): Promise<MessageAttachment> {
+  ): Promise<MessageAttachment | false> {
     if (upload.file.size === 0) {
       throw new Error('TODO')
     }
+    const safer = await this.upload(upload.file, conversationId)
+    if (!safer) {
+      return false
+    }
     const thumbnailBlob = await createThumbnail(upload.file, 400)
-
     return {
-      id: (await this.upload(upload.file, options)).path,
+      cid: safer.cid,
       name: upload.file.name,
       size: upload.file.size,
       nsfw: await isNSFW(upload.file),
+      safe: safer.valid,
       type: Object.values(FILE_TYPE).includes(upload.file.type as FILE_TYPE)
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: thumbnailBlob
-        ? (await this.upload(thumbnailBlob, options)).path
-        : '',
+      thumbnail: thumbnailBlob,
     }
   }
 
-  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
-    return await (this.iridium.connector?.ipfs as IPFS).add(
-      blobToStream(file),
-      options,
+  async upload(
+    file: File,
+    conversationId: string,
+  ): Promise<{ cid: string; valid: boolean } | undefined> {
+    const conversation = this.getConversation(conversationId)
+    if (!this.iridium.connector?.p2p.primaryNodeID) {
+      throw new Error('not connected to primary node')
+    }
+
+    const fileBuffer = await file.arrayBuffer()
+    const cid = await this.iridium.connector?.store(
+      { fileBuffer, name: file.name, size: file.size, type: file.type },
+      {
+        syncPin: true,
+        encrypt: {
+          recipients: [
+            ...conversation.participants,
+            this.iridium.connector?.p2p.primaryNodeID,
+          ],
+        },
+      },
     )
+
+    return new Promise((resolve) => {
+      this.iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
+        const { payload } = msg
+        const { body } = payload
+        if (body.originalCID === cid.toString()) {
+          resolve({ cid: body.cid, valid: body.valid })
+        }
+        setTimeout(() => resolve(undefined), 30000)
+      })
+    })
   }
 
   /**

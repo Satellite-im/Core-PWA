@@ -13,13 +13,9 @@
       {{placeholderText}}
     </figcaption>
   </figure>
-  <ui-image-container
-    v-else
-    class="image-container"
-    :nsfw="image.nsfw && blockNsfw"
-  >
+  <ui-image-container v-else class="image-container" :nsfw="image.nsfw">
     <img
-      :src="image.url"
+      :src="image.thumbnail"
       @click="clickHandler"
       @error="onImageError"
       data-cy="chat-image"
