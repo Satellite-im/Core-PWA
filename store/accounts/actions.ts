@@ -351,6 +351,7 @@ export default {
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
     dispatch('audio/initialize', null, { root: true })
     dispatch('video/initialize', null, { root: true })
+    await iridium.sendSyncInit()
   },
   async connectWallet({
     commit,
