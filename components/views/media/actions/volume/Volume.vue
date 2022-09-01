@@ -43,19 +43,15 @@ export default Vue.extend({
   },
   methods: {
     toggleSlider() {
-      console.log('toggle')
       this.sliderVisible = !this.showSlider
     },
     showSlider() {
-      console.log('show')
       this.sliderVisible = true
     },
     hideSlider(event: Event) {
-      console.log('hide')
       this.sliderVisible = false
     },
     toggleMute() {
-      console.log('toggle to this.lastVal', this.lastVal)
       if (this.volume) {
         this.lastVal = this.volume
       }

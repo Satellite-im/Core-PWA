@@ -51,7 +51,6 @@ export default Vue.extend({
     }),
     localParticipant(): User | undefined {
       const p = iridium.webRTC.localParticipant()
-      console.info('localParticipant', p)
       return p
     },
     remoteParticipants(): User[] {
@@ -132,7 +131,6 @@ export default Vue.extend({
     getOptimalBoxDimensions(
       params: OptimalBoxDomensionsParams,
     ): [number, number] {
-      console.log(params)
       let prevWidth = 0
       let prevHeight = 0
       let width = 0
@@ -150,7 +148,6 @@ export default Vue.extend({
           return [prevWidth, prevHeight]
         }
       }
-      console.log([width, height])
       return [width, height]
     },
     scaleHeight() {
@@ -158,7 +155,6 @@ export default Vue.extend({
         parseInt(this.height as string, 10) +
         this.windowHeight / window.innerHeight +
         'px'
-      console.log(this.height)
       this.windowHeight = window.innerHeight
     },
     /**
