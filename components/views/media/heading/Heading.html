@@ -1,5 +1,5 @@
-<div class="heading">
+<div class="media-heading">
   <TypographyTag v-if="callTime" data-cy="elapsed-time">
-    {{$t('ui.live', { time: callTime })}}
+    {{$t('ui.live', { time: formatDuration(callTime / 1000) })}}
   </TypographyTag>
 </div>
