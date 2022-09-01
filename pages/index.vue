@@ -52,7 +52,7 @@ export default Vue.extend({
   methods: {
     eventuallyRedirect() {
       if (this.accounts.lastVisited === this.$route.path) {
-        console.info('redirect')
+        console.info('redirect a')
         return this.$router.replace(
           this.$device.isMobile ? '/mobile/chat' : '/friends',
         )
@@ -60,12 +60,12 @@ export default Vue.extend({
 
       const matcher = this.$router.match(this.accounts.lastVisited)
       if (matcher.matched.length > 0) {
-        console.info('redirect')
+        console.info('redirect b')
         this.$router.replace(this.accounts.lastVisited)
         return
       }
 
-      console.info('redirect')
+      console.info('redirect c')
       this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
     },
     /**
@@ -78,14 +78,14 @@ export default Vue.extend({
     async loadAccount() {
       try {
         await this.$store.dispatch('accounts/loadAccount')
+        logger.info('pages/index/loadAccount', 'success')
+        return
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          console.info('redirect - not registered')
           await this.$router.replace('/auth/register')
           return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
-          console.info('redirect - derivation failed')
           await this.$router.replace('/setup/disclaimer')
           return
         }
@@ -97,9 +97,8 @@ export default Vue.extend({
           state: true,
           action: this.loadAccount,
         })
+        this.eventuallyRedirect()
       }
-
-      this.eventuallyRedirect()
     },
   },
 })

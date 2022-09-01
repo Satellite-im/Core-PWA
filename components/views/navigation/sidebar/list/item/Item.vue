@@ -30,16 +30,16 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as any,
-      conversations: iridium.chat.state.conversations,
+      statuses: iridium.users.ephemeral.status[this.conversationId],
+      userId: (
+        iridium.chat.state.conversations[this.conversationId]?.participants ||
+        []
+      ).find((did) => did !== iridium.connector?.id) as string,
     }
   },
   computed: {
     conversation(): Conversation {
-      console.info(
-        'computing conversation (detected state change)',
-        this.conversations,
-      )
-      return this.conversations[this.conversationId]
+      return iridium.chat.state.conversations[this.conversationId]
     },
     isTyping(): boolean {
       if (!this.user) return false
@@ -76,10 +76,13 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
-      console.info('computing new messages')
-      return Object.values(this.conversation.message).sort(
-        (a, b) => a.at - b.at,
+      console.info(
+        'computing new messages',
+        iridium.chat.state.conversations[this.conversationId],
       )
+      return Object.values(
+        iridium.chat.state.conversations[this.conversationId].message,
+      ).sort((a, b) => a.at - b.at)
     },
 
     lastMessageDisplay(): string {
@@ -122,32 +125,14 @@ export default Vue.extend({
     isSelected(): boolean {
       return this.conversation?.id === this.$route.params.id
     },
-    user(): User | undefined {
-      const userId =
-        (this.conversation?.participants || []).find(
-          (did) => did !== iridium.connector?.id,
-        ) || ''
-      if (!iridium.users.state[userId]) {
-        iridium.users.state[userId] = {
-          did: userId,
-          name: userId,
-          status: '',
-        }
-      }
-      return iridium.users.state[userId]
+    user(): User {
+      return iridium.users.state[this.userId]
     },
     status(): UserStatus {
-      const did = this.user?.did || ''
-      if (!iridium.users.ephemeral.status[did]) {
-        iridium.users.ephemeral.status[did] = 'offline'
-      }
-      return iridium.users.ephemeral.status[did]
+      return iridium.users.ephemeral.status[this.user.did]
     },
   },
   watch: {
-    conversations() {
-      this.conversation = iridium.chat.state.conversations[this.conversationId]
-    },
     messages: {
       handler() {
         this.setTimestamp()

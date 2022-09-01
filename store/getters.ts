@@ -3,12 +3,11 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 
 const getters = {
   allPrerequisitesReady: (state: RootState): boolean => {
-    console.info(
-      'checking ready state',
-      state.accounts.details?.did,
+    return ![
       iridium.ready,
-    )
-    return Boolean(iridium.ready && state.accounts.details?.did)
+      !!iridium.profile.state?.did,
+      !!state.accounts.details?.did,
+    ].some((value) => !value)
   },
 }
 

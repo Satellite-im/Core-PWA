@@ -5,7 +5,6 @@ import memoize from 'lodash/memoize'
 import { RawLocation } from 'vue-router'
 import { Config } from '~/config'
 import { RootStore } from '~/types/store/store'
-import iridium from '~/libraries/Iridium/IridiumManager'
 interface Arguments {
   store: RootStore
   redirect: (location: RawLocation) => void
@@ -49,9 +48,7 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  const ready = allPrerequisitesReady && iridium.ready
-  console.info('redirect - not ready')
-  if (!ready) return eventuallyRedirect('/')
+  if (!allPrerequisitesReady) return eventuallyRedirect('/')
 
   store.commit('accounts/setLastVisited', route.path)
 }

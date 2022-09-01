@@ -56,6 +56,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     logger.log(this.loggerTag, 'initializing')
 
     await this.fetch()
+    this.ephemeral.status = Object.keys(this.state).reduce(
+      (acc, did) => ({ ...acc, [did]: 'offline' }),
+      {},
+    )
     logger.log(this.loggerTag, 'users state loaded', this.state)
 
     logger.info(this.loggerTag, 'subscribing to announce topic')

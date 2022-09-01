@@ -43,7 +43,6 @@ export default Vue.extend({
   data() {
     return {
       settings: iridium.settings.state,
-      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
@@ -60,6 +59,9 @@ export default Vue.extend({
       return (
         this.$route.path.includes('files') || this.$route.path.includes('chat')
       )
+    },
+    ready(): boolean {
+      return iridium.ready && !!iridium.profile.state?.did
     },
   },
   methods: {
