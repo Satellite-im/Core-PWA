@@ -202,21 +202,20 @@ export default {
     }
     iridium.on('ready', () => {
       logger.info('accounts/actions/loadAccount', 'iridium ready')
-      commit('setActiveAccount', iridium.connector?.id)
+      commit('setActiveAccount', iridium.id)
 
       logger.debug(
         'accounts/actions/loadAccount',
         'user loaded, dispatching setUserDetails & setRegistrationStatus',
         profile,
       )
-      commit('setUserDetails', {
-        username: profile.name,
-        ...profile,
-      })
+      commit('setUserDetails', profile)
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       logger.info('accounts/actions/loadAccount', 'finished')
       return dispatch('startup')
     })
+
+    await iridium.sendSyncInit()
   },
   /**
    * @method registerUser
@@ -267,6 +266,20 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
     if (!iridium.connector) {
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'signing message for iridium',
+      )
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'dispatching iridium/initializeFromEntropy',
+      )
+      await iridium.initFromEntropy(entropy)
+    }
+
+    if (!iridium.connector) {
       throw new Error('iridium not initialized')
     }
 
@@ -277,25 +290,28 @@ export default {
     }
 
     const profile = {
+<<<<<<< HEAD
       did: iridium.connector.id,
       peerId: iridium.connector.peerId.toString(),
+=======
+      did: iridium.id,
+      peerId: iridium.connector?.peerId.toString(),
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
+<<<<<<< HEAD
 
+=======
+    console.info('accounts/actions/registerUser', 'registering user', profile)
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     await iridium.profile?.set('/', profile)
-    iridium.on('ready', () => {
-      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-      commit('setActiveAccount', iridium.connector?.id)
-      commit('setUserDetails', {
-        username: userData.name,
-        status: userData.status,
-        photoHash: imagePath,
-        address: walletAccount.publicKey.toBase58(),
-      })
-      return dispatch('startup', walletAccount)
-    })
+    logger.info('accounts/actions/registerUser', 'iridium ready')
+    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+    commit('setActiveAccount', iridium.id)
+    commit('setUserDetails', profile)
+    return dispatch('startup', walletAccount)
   },
 
   /**
@@ -342,6 +358,8 @@ export default {
     state,
   }: ActionsArguments<AccountsState>) {
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
+    dispatch('audio/initialize', null, { root: true })
+    dispatch('video/initialize', null, { root: true })
   },
   async connectWallet({
     commit,

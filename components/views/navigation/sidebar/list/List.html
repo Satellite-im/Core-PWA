@@ -1,8 +1,8 @@
 <div class="list hover-scroll">
   <SidebarListItem
-    v-for="id in conversationIds"
-    :key="id"
-    :conversation-id="id"
+    v-for="conversation in sortedConversations"
+    :key="conversation.id"
+    :conversation-id="conversation.id"
     @slideNext="$emit('slideNext')"
   />
 </div>

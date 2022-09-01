@@ -29,15 +29,15 @@ export class IridiumManager extends Emitter {
 
   constructor() {
     super()
-    this.profile = new ProfileManager(this)
-    this.groups = new GroupManager(this)
-    this.friends = new FriendsManager(this)
-    this.chat = new ChatManager(this)
-    this.files = new FilesManager(this)
-    this.webRTC = new WebRTCManager(this)
-    this.settings = new SettingsManager(this)
-    this.notifications = new NotificationManager(this)
-    this.users = new UsersManager(this)
+    this.profile = new ProfileManager()
+    this.groups = new GroupManager()
+    this.friends = new FriendsManager()
+    this.chat = new ChatManager()
+    this.files = new FilesManager()
+    this.webRTC = new WebRTCManager()
+    this.settings = new SettingsManager()
+    this.notifications = new NotificationManager()
+    this.users = new UsersManager()
   }
 
   /**
@@ -55,6 +55,13 @@ export class IridiumManager extends Emitter {
     logger.log('iridium/manager', 'init()')
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
     return this.initFromEntropy(seed)
+  }
+
+  get id(): string {
+    if (!this.connector) {
+      throw new Error('Iridium not initialized')
+    }
+    return this.connector.id
   }
 
   /**

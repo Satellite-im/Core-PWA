@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { RootState } from '~/types/store/store'
@@ -16,13 +16,13 @@ export default Vue.extend({
       error: false,
       storePin: false,
       decrypting: false,
+      ready: false,
     }
   },
   computed: {
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
     }),
-    ...mapGetters(['allPrerequisitesReady']),
     hasToRegister(): boolean {
       return this.accounts.registrationStatus === RegistrationStatus.UNKNOWN
     },
@@ -44,17 +44,6 @@ export default Vue.extend({
       return this.accounts.registrationStatus === RegistrationStatus.REGISTERED
     },
   },
-  watch: {
-    allPrerequisitesReady(nextValue) {
-      if (!nextValue) return
-      this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
-    },
-  },
-  mounted() {
-    if (this.allPrerequisitesReady) {
-      this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
-    }
-  },
   methods: {
     async confirm(userData: UserRegistrationData) {
       try {
@@ -63,6 +52,7 @@ export default Vue.extend({
           image: userData.photoHash,
           status: userData.status,
         })
+        await this.$router.replace('/')
       } catch (error: any) {
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,

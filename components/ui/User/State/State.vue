@@ -64,7 +64,10 @@ export default Vue.extend({
       this.user.did,
     )
     if (!iridium.users.ephemeral.status[this.user.did]) {
-      iridium.users.ephemeral.status[this.user.did] = 'offline'
+      iridium.users.ephemeral.status = {
+        ...iridium.users.ephemeral.status,
+        [this.user.did]: 'offline',
+      }
     }
     return {
       conversationId,

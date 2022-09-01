@@ -1,26 +1,19 @@
 import { Emitter } from '@satellite-im/iridium'
-import { IridiumManager } from '../IridiumManager'
 import { User } from '../Users/types'
+import iridium from '../IridiumManager'
 import logger from '~/plugins/local/logger'
 
 export default class IridiumProfile extends Emitter {
-  public readonly iridium: IridiumManager
   public state?: User
 
-  constructor(iridium: IridiumManager) {
-    super()
-    this.iridium = iridium
-  }
-
   async init() {
-    const iridium = this.iridium.connector
     if (!iridium) {
       throw new Error('cannot initialize profile, no iridium connector')
     }
 
     iridium.on('changed', this.onStateChanged.bind(this))
     await this.fetch()
-    iridium.logger.info('iridium/profile', 'profile state loaded', {
+    logger.info('iridium/profile', 'profile state loaded', {
       state: this.state,
     })
   }
@@ -35,7 +28,7 @@ export default class IridiumProfile extends Emitter {
     return {
       did: this.state?.did || '',
       name: this.state?.name || this.state?.did || '',
-      status: this.state?.status || 'offline',
+      status: this.state?.status || '',
       photoHash: this.state?.photoHash || '',
     }
   }
@@ -52,11 +45,11 @@ export default class IridiumProfile extends Emitter {
   }
 
   get<T = any>(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get<T>(`/profile${path}`, options)
+    return iridium.connector?.get<T>(`/profile${path}`, options)
   }
 
   async set(path: string = '/', payload: User, options: any = {}) {
-    await this.iridium.connector?.set(
+    await iridium.connector?.set(
       `/profile${path === '/' ? '' : `/${path}`}`,
       payload,
       options,
@@ -65,21 +58,21 @@ export default class IridiumProfile extends Emitter {
   }
 
   async setUser() {
-    const id = this.iridium.connector?.id
+    const id = iridium.id
     if (this.state && id) {
-      await this.iridium.users.setUser(id, { ...this.state })
+      await iridium.users.setUser(id, { ...this.state })
     }
   }
 
   async updateUser(details: Partial<User>) {
     logger.info('iridium/profile', 'updating user', { details })
     await this.set('/', { ...this.state, ...(details as User) })
-    if (!this.state || !this.iridium.connector?.id) return
+    if (!this.state || !iridium.id) return
     // tell our peers via user announce
-    await this.iridium.users.send({
+    await iridium.users.send({
       status: 'changed',
       user: {
-        did: this.iridium.connector?.id,
+        did: iridium.id,
         name: this.state.name,
         status: this.state.status,
       },

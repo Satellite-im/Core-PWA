@@ -18,7 +18,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      webrtc: iridium.webRTC,
       users: iridium.users.state,
       userStatus: iridium.users.ephemeral.status,
       groups: iridium.groups.state,
@@ -59,7 +58,7 @@ export default Vue.extend({
         return this.groups[this.conversation.id]
       }
       const participant = this.conversation?.participants.find(
-        (f) => f !== iridium.connector?.id,
+        (f) => f !== iridium.id,
       )
       if (!participant) {
         return

@@ -1,7 +1,7 @@
 import { didUtils, Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
-import iridium, { IridiumManager } from '../IridiumManager'
+import iridium from '../IridiumManager'
 import {
   WebRTCState,
   WebRTCStreamConstraints,
@@ -12,8 +12,13 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
+<<<<<<< HEAD
 import { User } from '~/libraries/Iridium/users/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+=======
+import { Friend } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
 
 const $Sounds = new SoundManager()
 
@@ -228,6 +233,7 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
+<<<<<<< HEAD
   // todo - refactor to accept multiple recipients for group calls
   public async call({
     recipient,
@@ -239,6 +245,10 @@ export default class WebRTCManager extends Emitter {
     kinds: TrackKind[]
   }) {
     if (!iridium.connector?.id) {
+=======
+  public async call(recipient: Friend, kinds: TrackKind[]) {
+    if (!iridium.id) {
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
       logger.error('webrtc', 'call - connector.id not found')
       return
     }
@@ -247,7 +257,16 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
+<<<<<<< HEAD
     const conversation = iridium.chat?.getConversation(conversationId)
+=======
+    const id = iridium.chat?.directConversationIdFromDid(recipient.did)
+    if (!id || !iridium.chat?.hasConversation(id)) {
+      return
+    }
+
+    const conversation = iridium.chat?.getConversation(id)
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
 
     if (!conversation) {
       return
@@ -299,12 +318,15 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
+<<<<<<< HEAD
     this.setStreamMuted(iridium.connector.id, {
       audio: !kinds.includes('audio'),
       video: !kinds.includes('video'),
       screen: !kinds.includes('screen'),
     })
 
+=======
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     this.state.callStartedAt = Date.now()
     const constraints = this.streamConstraints
     await call.createLocalTracks(kinds, constraints)
@@ -312,7 +334,11 @@ export default class WebRTCManager extends Emitter {
     this.state.incomingCall = null
     this.state.activeCall = {
       callId,
+<<<<<<< HEAD
       did: iridium.connector.id,
+=======
+      did: iridium.id,
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     }
 
     await call.start()
@@ -357,22 +383,54 @@ export default class WebRTCManager extends Emitter {
   }) {
     logger.log('webrtc: creating call', callId + peers)
 
+<<<<<<< HEAD
     if (!iridium.connector?.id) {
+=======
+    if (!iridium.id) {
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
       logger.error('webrtc', 'call - connector.id not found')
       return
     }
 
+<<<<<<< HEAD
     if (!$WebRTC.initialized && iridium.connector?.id) {
       $WebRTC.init(iridium.connector?.id)
     }
 
     const usedCallId = callId === iridium.connector?.id ? did : callId
+=======
+    if (!$WebRTC.initialized && iridium.id) {
+      $WebRTC.init(iridium.id)
+    }
+
+    const usedCallId = callId === iridium.id ? did : callId
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
 
     if (!usedCallId) {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
 
     const call = $WebRTC.connect(usedCallId, peers)
+    this.setStreamMuted(iridium.id, {
+      audio: true,
+      video: true,
+      screen: true,
+    })
+    if (did) {
+      this.setStreamMuted(did, {
+        audio: true,
+        video: true,
+        screen: true,
+      })
+    } else {
+      peers.forEach((peer) => {
+        this.setStreamMuted(peer.id, {
+          audio: true,
+          video: true,
+          screen: true,
+        })
+      })
+    }
 
     if (!call) {
       logger.log('webrtc/createCall', 'call invalid')
@@ -457,14 +515,22 @@ export default class WebRTCManager extends Emitter {
 
       if (!kind) return
 
+<<<<<<< HEAD
       if (!iridium.connector?.id) {
+=======
+      if (!iridium.id) {
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
         logger.error('webrtc', 'onCallTrack - connector.id not found')
         return
       }
 
       // emit the track event so that the UI can display/mute the track
       this.emit('track', {
+<<<<<<< HEAD
         did: iridium.connector?.id,
+=======
+        did: iridium.id,
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
         kind,
       })
     }
@@ -481,12 +547,20 @@ export default class WebRTCManager extends Emitter {
       logger.log('webrtc', `local track unmuted: ${track.kind}#${track.id}`)
       if (!kind) return
 
+<<<<<<< HEAD
       if (!iridium.connector?.id) {
+=======
+      if (!iridium.id) {
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
         logger.error('webrtc', 'onCallTrack - connector.id not found')
         return
       }
 
+<<<<<<< HEAD
       this.setStreamMuted(iridium.connector?.id, { [kind]: false })
+=======
+      this.setStreamMuted(iridium.id, { [kind]: false })
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     }
     call.on('LOCAL_TRACK_UNMUTED', onLocalTrackUnmuted)
 
@@ -557,22 +631,24 @@ export default class WebRTCManager extends Emitter {
 
       logger.log('webrtc', `local track removed: ${kind}#${track.id}`)
 
+<<<<<<< HEAD
       if (!iridium.connector?.id) {
+=======
+      if (!iridium.id) {
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
         logger.error('webrtc', 'onLocalTrackRemoved - connector.id not found')
         return
       }
 
+<<<<<<< HEAD
       this.setStreamMuted(iridium.connector?.id, { [kind]: true })
+=======
+      this.setStreamMuted(iridium.id, { [kind]: true })
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     }
     call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
 
-    const onStream = async ({ did, kind }: { did: string; kind?: string }) => {
-      if (!kind) return
-
-      this.setStreamMuted(did, {
-        [kind]: this.state.streamMuted?.[did]?.[kind as WebRTCEnum],
-      })
-    }
+    const onStream = async ({ did, kind }: { did: string; kind?: string }) => {}
     call.on('STREAM', onStream)
 
     const onAnswered = async ({ did }: { did: string }) => {
@@ -609,7 +685,11 @@ export default class WebRTCManager extends Emitter {
   }
 
   public async acceptCall(kinds: TrackKind[]) {
+<<<<<<< HEAD
     if (!iridium.connector?.id) {
+=======
+    if (!iridium.id) {
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
       logger.error('webrtc', 'acceptCall - connector.id not found')
       return
     }
@@ -619,12 +699,15 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
+<<<<<<< HEAD
     this.setStreamMuted(iridium.connector?.id, {
       audio: !kinds.includes('audio'),
       video: !kinds.includes('video'),
       screen: !kinds.includes('screen'),
     })
 
+=======
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     const { callId, did, data } = this.state.incomingCall
 
     const call = $WebRTC.getCall(callId)
@@ -688,7 +771,11 @@ export default class WebRTCManager extends Emitter {
       {
         module: 'webrtc',
         type: 'typing',
+<<<<<<< HEAD
         did: iridium.connector.id,
+=======
+        did: iridium.id,
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
         conversationId,
         at: Date.now().valueOf(),
       },
@@ -737,15 +824,19 @@ export default class WebRTCManager extends Emitter {
     const conversation = iridium.chat.getConversation(id)
 
     const dids =
+<<<<<<< HEAD
       conversation?.participants?.filter((f) => f !== iridium.connector?.id) ||
       []
+=======
+      conversation?.participants?.filter((f) => f !== iridium.id) || []
+>>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
 
     return dids.map((did) => ({ ...iridium.users.getUser(did) } as User))
   }
 
   public async mute({
     kind = 'audio',
-    did = iridium.connector?.id,
+    did = iridium.id,
   }: {
     kind: string
     did?: string
@@ -758,7 +849,7 @@ export default class WebRTCManager extends Emitter {
 
   public async unmute({
     kind,
-    did = iridium.connector?.id,
+    did = iridium.id,
   }: {
     kind: string
     did?: string

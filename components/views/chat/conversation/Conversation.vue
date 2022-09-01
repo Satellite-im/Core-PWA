@@ -33,7 +33,7 @@ export default Vue.extend({
   },
   computed: {
     myDid(): string {
-      return iridium.connector?.id ?? ''
+      return iridium.id ?? ''
     },
     conversation(): Conversation {
       return iridium.chat.state.conversations?.[this.$route.params.id] ?? {}

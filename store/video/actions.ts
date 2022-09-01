@@ -2,8 +2,31 @@ import type { VideoState } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import logger from '~/plugins/local/logger'
 
 const videoActions = {
+  initialize({ state, commit }: ActionsArguments<VideoState>) {
+    commit('setDisabled', true)
+    logger.info('store/video/actions.initialize', 'initializing video store')
+    if (iridium.id) {
+      iridium.webRTC.mute({ did: iridium.id, kind: 'video' })
+    }
+    iridium.webRTC.on('track', ({ did, kind }) => {
+      if (kind === 'video') {
+        logger.info(
+          'store/video/actions.initialize',
+          'initializing video track',
+          { did, disabled: state.disabled },
+        )
+        if (did === iridium.id) {
+          iridium.webRTC[state.disabled ? 'mute' : 'unmute']({
+            kind: 'video',
+            did,
+          })
+        }
+      }
+    })
+  },
   async toggleMute({ state, commit, rootState }: ActionsArguments<VideoState>) {
     const { activeCall } = iridium.webRTC.state
     const call = activeCall && $WebRTC.getCall(activeCall.callId)
@@ -11,13 +34,14 @@ const videoActions = {
       return
     }
 
+    console.info('toggle video mute', state.disabled)
     if (!state.disabled) {
-      await iridium.webRTC.mute({ kind: 'video' })
       commit('setDisabled', true)
+      await iridium.webRTC.mute({ kind: 'video' })
       return
     }
-    await iridium.webRTC.unmute({ kind: 'video' })
     commit('setDisabled', false)
+    await iridium.webRTC.unmute({ kind: 'video' })
   },
 }
 

@@ -46,10 +46,7 @@ export default Vue.extend({
       return this.webrtc.activeCall ? this.video.disabled : false
     },
     screenMuted(): boolean {
-      return Boolean(
-        iridium.connector?.id &&
-          this.webrtc.streamMuted[iridium.connector?.id]?.screen,
-      )
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.screen)
     },
   },
   methods: {

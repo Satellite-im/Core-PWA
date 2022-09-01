@@ -49,7 +49,7 @@ export default Vue.extend({
       })
     },
     otherParticipants(): User[] {
-      return this.participants.filter((p) => p.did !== iridium.connector?.id)
+      return this.participants.filter((p) => p.did !== iridium.id)
     },
     onlineParticipants(): User[] {
       return this.otherParticipants.filter(

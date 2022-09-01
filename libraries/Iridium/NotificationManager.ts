@@ -5,10 +5,9 @@ import {
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium'
-import { IridiumManager } from '~/libraries/Iridium/IridiumManager'
+import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import {
-  EmptyNotification,
   Notification,
   NotificationsError,
 } from '~/libraries/Iridium/notifications/types'
@@ -23,10 +22,6 @@ export default class NotificationManager extends Emitter<Notification> {
     notifications: [],
   }
 
-  constructor(public readonly iridium: IridiumManager) {
-    super()
-  }
-
   async init() {
     await this.fetch()
     this.ready = true
@@ -35,7 +30,7 @@ export default class NotificationManager extends Emitter<Notification> {
 
   async fetch() {
     logger.info('iridium/notifications/fetch', 'fetching')
-    const fetched = await this.iridium.connector?.get<{
+    const fetched = await iridium.connector?.get<{
       notifications: Notification[]
     }>('notifications')
     if (fetched) {
@@ -53,7 +48,7 @@ export default class NotificationManager extends Emitter<Notification> {
   }
 
   get(path: string, options: IridiumGetOptions = {}) {
-    return this.iridium.connector?.get(
+    return iridium.connector?.get(
       `/notifications${path === '/' ? '' : path}`,
       options,
     )
@@ -64,7 +59,7 @@ export default class NotificationManager extends Emitter<Notification> {
       path,
       payload,
     })
-    await this.iridium.connector?.set(
+    await iridium.connector?.set(
       `/notifications${path === '/' ? '' : path}`,
       payload,
       options,
@@ -118,8 +113,8 @@ export default class NotificationManager extends Emitter<Notification> {
    * @method sendNotification
    */
   async sendNotification(notification: Exclude<Notification, 'id'>) {
-    if (!this.iridium.connector) return
-    const notificationID = await this.iridium.connector.store(notification, {})
+    if (!iridium.connector) return
+    const notificationID = await iridium.connector.store(notification, {})
     if (!notificationID) {
       throw new Error(NotificationsError.NOTIFICATION_NOT_SENT)
     }
@@ -129,7 +124,7 @@ export default class NotificationManager extends Emitter<Notification> {
 
     this.emit(`notifications/send`, {
       notification,
-      from: this.iridium.connector.did,
+      from: iridium.connector.did,
     })
     const browserNotification = new Notifications()
     await browserNotification.sendNotifications(

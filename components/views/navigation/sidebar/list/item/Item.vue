@@ -30,16 +30,28 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as any,
-      statuses: iridium.users.ephemeral.status[this.conversationId],
-      userId: (
-        iridium.chat.state.conversations[this.conversationId]?.participants ||
-        []
-      ).find((did) => did !== iridium.connector?.id) as string,
+      conversations: iridium.chat.state.conversations,
+      statuses: iridium.users.ephemeral.status,
+      users: iridium.users.state,
     }
   },
   computed: {
     conversation(): Conversation {
       return iridium.chat.state.conversations[this.conversationId]
+    },
+    userId(): string {
+      const userId =
+        (this.conversation.participants || []).find(
+          (participant) => participant !== iridium.id,
+        ) || ''
+
+      return userId
+    },
+    user(): User {
+      return iridium.users.state[this.userId]
+    },
+    status(): UserStatus {
+      return iridium.users.ephemeral.status?.[this.userId] || 'offline'
     },
     isTyping(): boolean {
       if (!this.user) return false
@@ -76,15 +88,10 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
-      console.info(
-        'computing new messages',
-        iridium.chat.state.conversations[this.conversationId],
-      )
       return Object.values(
         iridium.chat.state.conversations[this.conversationId].message,
       ).sort((a, b) => a.at - b.at)
     },
-
     lastMessageDisplay(): string {
       const message = this.messages.at(-1)
       if (!message) {
@@ -97,7 +104,7 @@ export default Vue.extend({
         .filter((name) => name)
         .join(', ')
 
-      const fromSelf = message.from === iridium.connector?.id
+      const fromSelf = message.from === iridium.id
 
       if (message.attachments.length) {
         return fromSelf
@@ -121,15 +128,8 @@ export default Vue.extend({
 
       return message.body || ''
     },
-
     isSelected(): boolean {
       return this.conversation?.id === this.$route.params.id
-    },
-    user(): User {
-      return iridium.users.state[this.userId]
-    },
-    status(): UserStatus {
-      return iridium.users.ephemeral.status[this.user.did]
     },
   },
   watch: {

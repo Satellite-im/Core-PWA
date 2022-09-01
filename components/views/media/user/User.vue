@@ -10,11 +10,12 @@ import {
   MicOffIcon,
 } from 'satellite-lucide-icons'
 import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
+import { Call } from '~/libraries/WebRTC/Call'
 
 export default Vue.extend({
   components: {
@@ -39,8 +40,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      webrtc: iridium.webRTC.state,
-      videoSettings: iridium.settings.state.video,
       isTalking: false,
       audioStreamUtils: null as AudioStreamUtils | null,
     }
@@ -50,13 +49,13 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    call() {
-      if (!this.webrtc.activeCall?.callId) return
-      return $WebRTC.getCall(this.webrtc.activeCall.callId)
+    call(): Call | void {
+      if (!iridium.webRTC.state.activeCall?.callId) return
+      return $WebRTC.getCall(iridium.webRTC.state.activeCall.callId)
     },
-    streams() {
+    streams(): any {
       if (!this.user.did || !this.call) return
-      return this.call.streams[this.user.did]
+      return this.call?.streams[this.user.did]
     },
     src(): string {
       const hash = this.user.photoHash
@@ -64,21 +63,21 @@ export default Vue.extend({
     },
     isPending(): boolean {
       return Boolean(
-        this.user.did !== iridium.connector?.id &&
-          this.webrtc.activeCall &&
-          !this.webrtc.callStartedAt,
+        this.user.did !== iridium.id &&
+          iridium.webRTC.state.activeCall &&
+          !iridium.webRTC.state.callStartedAt,
       )
     },
-    audioStream() {
-      if (this.isMuted('audio') || !this.call) return
+    audioStream(): MediaStream | undefined {
+      if (this.isMuted(WebRTCEnum.AUDIO) || !this.call) return
       return this.streams?.audio
     },
-    videoStream() {
-      if (this.isMuted('video') || !this.call) return
+    videoStream(): MediaStream | undefined {
+      if (this.isMuted(WebRTCEnum.VIDEO) || !this.call) return
       return this.streams?.video
     },
     screenStream(): MediaStream | undefined {
-      if (this.isMuted('screen') || !this.call) return undefined
+      if (this.isMuted(WebRTCEnum.SCREEN) || !this.call) return undefined
       return this.streams?.screen
     },
     isLocalVideoFlipped(): boolean {
@@ -118,10 +117,11 @@ export default Vue.extend({
   },
   methods: {
     isMuted(kind: WebRTCEnum) {
-      return (
+      const muted =
         !this.user.did ||
-        Boolean(this.webrtc.streamMuted[this.user.did]?.[kind] ?? true)
-      )
+        Boolean(iridium.webRTC.state.streamMuted[this.user.did]?.[kind])
+      console.info('isMuted', kind, this.user, muted)
+      return muted
     },
   },
 })

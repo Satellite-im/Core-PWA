@@ -12,7 +12,7 @@ import type {
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
-import type { IridiumManager } from '../IridiumManager'
+import iridium from '../IridiumManager'
 import { User, UsersError, UserStatus } from './types'
 import logger from '~/plugins/local/logger'
 
@@ -32,24 +32,17 @@ export type IridiumUserPubsub = IridiumPubsubMessage<
 >
 
 export default class UsersManager extends Emitter<IridiumUserPubsub> {
-  public readonly iridium: IridiumManager
   public state: UserState = {}
   public ephemeral: { status: { [key: string]: UserStatus } } = { status: {} }
 
   private loggerTag = 'iridium/users'
-
-  constructor(iridium: IridiumManager) {
-    super()
-    this.iridium = iridium
-  }
 
   get list() {
     return Object.values(this.state)
   }
 
   async init() {
-    const iridium = this.iridium.connector
-    if (!iridium) {
+    if (!iridium.connector) {
       throw new Error('cannot initialize users, no iridium connector')
     }
 
@@ -63,13 +56,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     logger.log(this.loggerTag, 'users state loaded', this.state)
 
     logger.info(this.loggerTag, 'subscribing to announce topic')
-    await iridium.subscribe<IridiumUserPubsub>('/users/announce', {
+    await iridium.connector.subscribe<IridiumUserPubsub>('/users/announce', {
       handler: this.onUsersAnnounce.bind(this),
       sync: true,
     })
     logger.log(this.loggerTag, 'listening for user activity', this.state)
 
-    this.iridium.connector?.p2p.on('peer/disconnect', (peer) => {
+    iridium.connector?.p2p.on('peer/disconnect', (peer) => {
       logger.info(this.loggerTag, 'peer disconnected', peer)
       this.setUser(peer.did, {
         ...this.state[peer.did],
@@ -83,23 +76,18 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       await this.loadUserData()
     }, 10000)
 
-    this.iridium.connector?.p2p.on(
-      'node/message/sync/searchPeer',
-      (message) => {
-        const peers = message.payload.body.peers as User[]
-        peers.forEach((peer) => {
-          this.setUser(peer.did, peer)
-        })
-        this.emit(
-          `searchResults${
-            message.payload.body.request
-              ? `/${message.payload.body.request}`
-              : ''
-          }`,
-          peers,
-        )
-      },
-    )
+    iridium.connector?.p2p.on('node/message/sync/searchPeer', (message) => {
+      const peers = message.payload.body.peers as User[]
+      peers.forEach((peer) => {
+        this.setUser(peer.did, peer)
+      })
+      this.emit(
+        `searchResults${
+          message.payload.body.request ? `/${message.payload.body.request}` : ''
+        }`,
+        peers,
+      )
+    })
 
     logger.info(this.loggerTag, 'initialized', this)
     this.emit('ready', {})
@@ -108,7 +96,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   async stop() {
     // announce that we're going offline
     await this.send({
-      user: this.iridium.profile.getUser(),
+      user: iridium.profile.getUser(),
       status: 'offline',
       at: Date.now(),
     })
@@ -121,17 +109,17 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
         Number(user.seen) < Date.now() - 1000 * 30
       ) {
         logger.info(this.loggerTag, 'user timed out', user)
-        this.iridium.users.setUser(user.did, {
+        iridium.users.setUser(user.did, {
           ...user,
           seen: Date.now(),
         })
-        this.iridium.users.setUserStatus(user.did, 'offline')
+        iridium.users.setUserStatus(user.did, 'offline')
       }
     })
   }
 
   async unsubscribe() {
-    await this.iridium.connector?.unsubscribe(`/users/announce`)
+    await iridium.connector?.unsubscribe(`/users/announce`)
   }
 
   /**
@@ -165,12 +153,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
         name: user.name,
         status: this.ephemeral.status[user.did],
       })
-      this.ephemeral = {
-        status: {
-          ...this.ephemeral.status,
-          [user.did]: (status || 'offline') as UserStatus,
-        },
-      }
+      this.setUserStatus(user.did, (status || 'offline') as UserStatus)
       await this.setUser(from, {
         ...localUser,
         name: user.name || localUser.name,
@@ -186,11 +169,11 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    * @returns iridium's connector result
    */
   get<T = any>(path: string, options: IridiumGetOptions = {}): Promise<T> {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(UsersError.NETWORK_ERROR)
     }
-    return this.iridium.connector?.get<T>(
+    return iridium.connector?.get<T>(
       `/users${path === '/' ? '' : path}`,
       options,
     )
@@ -211,7 +194,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       state: this.state,
     })
 
-    return this.iridium.connector?.set(
+    return iridium.connector?.set(
       `/users${path === '/' ? '' : path}`,
       payload,
       options,
@@ -244,14 +227,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async searchPeer(query: string, page: number = 0): Promise<User[]> {
-    const iridium = this.iridium.connector
-    if (!iridium) {
+    if (!iridium.connector) {
       return []
     }
 
     return new Promise<User[]>((resolve) => {
       const id = v4()
-      if (!iridium.p2p.primaryNodeID) {
+      if (!iridium.connector?.p2p.primaryNodeID) {
         return resolve([])
       }
 
@@ -267,7 +249,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       })
 
       logger.info(this.loggerTag, 'peer search query', { query, page, id })
-      return iridium.p2p.send(iridium.p2p.primaryNodeID, {
+      return iridium.connector.p2p.send(iridium.connector.p2p.primaryNodeID, {
         type: 'sync/searchPeer',
         id,
         query,
@@ -282,16 +264,16 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
     // rename chat conversations
     if (user.name) {
-      const conversations = await this.iridium.chat.state.conversations
+      const conversations = await iridium.chat.state.conversations
       Object.keys(conversations)
         .filter((key) => {
           const others = conversations[key].participants.filter(
-            (p) => p !== this.iridium.connector?.id,
+            (p) => p !== iridium.id,
           )
           return others.length === 1 && others[0] === did
         })
         .forEach((conversationId) => {
-          this.iridium.chat.state.conversations[conversationId].name = user.name
+          iridium.chat.state.conversations[conversationId].name = user.name
         })
     }
 
@@ -300,14 +282,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   setUserStatus(did: IridiumPeerIdentifier, status: UserStatus) {
-    // this.userStatus = { ...this.userStatus, [didUtils.didString(did)]: status }
-    // Vue.set(this.userStatus, didUtils.didString(did), status)
-    this.ephemeral = {
-      status: {
-        ...this.ephemeral.status,
-        [didUtils.didString(did)]: status,
-      },
-    }
+    this.ephemeral.status[didUtils.didString(did)] = status || 'offline'
   }
 
   getUserStatus(did: IridiumPeerIdentifier) {
@@ -315,11 +290,11 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async send(event: IridiumUserEvent) {
-    return this.iridium.connector?.publish(`/users/announce`, event, {
+    return iridium.connector?.publish(`/users/announce`, event, {
       encrypt: {
         recipients: event.to
           ? [typeof event.to === 'string' ? event.to : event.to.id]
-          : this.iridium.friends.state.friends,
+          : iridium.friends.state.friends,
       },
     })
   }
@@ -331,11 +306,11 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    * @returns Promise<void>
    */
   async userRemove(did: IridiumPeerIdentifier): Promise<void> {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(UsersError.NETWORK_ERROR)
     }
-    const profile = await this.iridium.profile?.get()
+    const profile = await iridium.profile?.get()
     if (!profile) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(UsersError.NETWORK_ERROR)
@@ -350,17 +325,15 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     delete this.state[didUtils.didString(did)]
     this.state = { ...this.state }
     await this.set(`/`, this.state)
-    const id = await encoding.hash(
-      [user.did, this.iridium.connector?.id].sort(),
-    )
-    if (id && this.iridium.chat.hasConversation(id)) {
-      this.iridium.chat.deleteConversation(id)
+    const id = await encoding.hash([user.did, iridium.id].sort())
+    if (id && iridium.chat.hasConversation(id)) {
+      iridium.chat.deleteConversation(id)
     }
 
     logger.info(this.loggerTag, 'user removed', { did, user })
 
     // Announce to the remote user
-    if (didUtils.didString(did) !== this.iridium.connector?.id) {
+    if (didUtils.didString(did) !== iridium.id) {
       const payload: IridiumUserEvent = {
         to: did,
         status: 'removed',
