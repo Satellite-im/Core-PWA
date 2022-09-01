@@ -49,7 +49,7 @@ export class IridiumManager extends Emitter {
    */
   async init({ pass, wallet }: { pass: string; wallet: Account }) {
     this.connector?.on('stopping', async () => {
-      await this.webRTC.stop?.()
+      await this.users.stop?.()
     })
 
     logger.log('iridium/manager', 'init()')
