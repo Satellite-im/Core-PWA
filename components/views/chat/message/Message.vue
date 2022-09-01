@@ -60,11 +60,6 @@ export default Vue.extend({
       return this.$route.params.id
     },
     author(): User | undefined {
-      console.info(
-        'author',
-        this.message.from,
-        iridium.users.state[this.message.from],
-      )
       return this.message.from === iridium.id
         ? (iridium.profile.state as User)
         : iridium.users.state[this.message.from]

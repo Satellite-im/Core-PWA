@@ -26,7 +26,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'accounts']),
     isMe(): boolean {
-      return iridium.connector?.did === this.user?.did
+      return iridium.id === this.user?.did
     },
     src(): string {
       const hash = this.user?.photoHash

@@ -290,22 +290,13 @@ export default {
     }
 
     const profile = {
-<<<<<<< HEAD
-      did: iridium.connector.id,
-      peerId: iridium.connector.peerId.toString(),
-=======
       did: iridium.id,
       peerId: iridium.connector?.peerId.toString(),
->>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
-<<<<<<< HEAD
 
-=======
-    console.info('accounts/actions/registerUser', 'registering user', profile)
->>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     await iridium.profile?.set('/', profile)
     logger.info('accounts/actions/registerUser', 'iridium ready')
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)

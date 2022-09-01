@@ -642,38 +642,34 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
   }
 
-<<<<<<< HEAD
   async upload(
     file: File,
     conversationId: string,
   ): Promise<{ cid: string; valid: boolean } | undefined> {
     const conversation = this.getConversation(conversationId)
-    if (!this.iridium.connector?.p2p.primaryNodeID) {
+    if (!iridium.connector?.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
+    }
+    if (!conversation) {
+      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
 
     const fileBuffer = await file.arrayBuffer()
-    const cid = await this.iridium.connector?.store(
+    const cid = await iridium.connector?.store(
       { fileBuffer, name: file.name, size: file.size, type: file.type },
       {
         syncPin: true,
         encrypt: {
           recipients: [
             ...conversation.participants,
-            this.iridium.connector?.p2p.primaryNodeID,
+            iridium.connector?.p2p.primaryNodeID,
           ],
         },
       },
-=======
-  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
-    return await (iridium.connector?.ipfs as IPFS).add(
-      blobToStream(file),
-      options,
->>>>>>> 65ada70dc (feat(chat): misc. cleanup, middleware improvements, webrtc mute changes)
     )
 
     return new Promise((resolve) => {
-      this.iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
+      iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
         const { payload } = msg
         const { body } = payload
         if (body.originalCID === cid.toString()) {
