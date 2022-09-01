@@ -90,7 +90,9 @@ export default class WebRTCManager extends Emitter {
   }
 
   private async setupAnnounce() {
-    await this.announce()
+    await new Promise((resolve) =>
+      setTimeout(() => this.announce().then(() => resolve(true)), 1000),
+    )
     setInterval(this.announce.bind(this), announceFrequency)
   }
 

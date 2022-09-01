@@ -31,6 +31,15 @@ export default class IridiumProfile extends Emitter {
     // TODO: verify schema of profile data, recover from invalid data
   }
 
+  getUser(): User {
+    return {
+      did: this.state?.did || '',
+      name: this.state?.name || this.state?.did || '',
+      status: this.state?.status || 'offline',
+      photoHash: this.state?.photoHash || '',
+    }
+  }
+
   onStateChanged(state: { path: string; value: any }) {
     if (state.path.startsWith('/profile')) {
       if (!state.value?.profile) {

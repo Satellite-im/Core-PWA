@@ -101,6 +101,15 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     this.emit('ready', {})
   }
 
+  async stop() {
+    // announce that we're going offline
+    await this.send({
+      user: this.iridium.profile.getUser(),
+      status: 'offline',
+      at: Date.now(),
+    })
+  }
+
   async loadUserData() {
     this.list.forEach(async (user: User) => {
       if (

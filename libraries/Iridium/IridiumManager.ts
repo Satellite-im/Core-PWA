@@ -48,6 +48,10 @@ export class IridiumManager extends Emitter {
    * @returns a promise that resolves when the initialization completes
    */
   async init({ pass, wallet }: { pass: string; wallet: Account }) {
+    this.connector?.on('stopping', async () => {
+      await this.webRTC.stop?.()
+    })
+
     logger.log('iridium/manager', 'init()')
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
     return this.initFromEntropy(seed)

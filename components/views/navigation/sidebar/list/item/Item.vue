@@ -30,13 +30,16 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as any,
-      chat: iridium.chat.state,
-      users: iridium.users.state,
+      conversations: iridium.chat.state.conversations,
     }
   },
   computed: {
-    conversation(): Conversation | undefined {
-      return this.chat.conversations[this.conversationId]
+    conversation(): Conversation {
+      console.info(
+        'computing conversation (detected state change)',
+        this.conversations,
+      )
+      return this.conversations[this.conversationId]
     },
     isTyping(): boolean {
       if (!this.user) return false
@@ -73,9 +76,7 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
-      if (!this.conversation || Object.keys(this.conversation).length) {
-        return []
-      }
+      console.info('computing new messages')
       return Object.values(this.conversation.message).sort(
         (a, b) => a.at - b.at,
       )
@@ -136,13 +137,17 @@ export default Vue.extend({
       return iridium.users.state[userId]
     },
     status(): UserStatus {
-      if (!iridium.users.ephemeral.status[this.user?.did || '']) {
-        iridium.users.ephemeral.status[this.user?.did || ''] = 'offline'
+      const did = this.user?.did || ''
+      if (!iridium.users.ephemeral.status[did]) {
+        iridium.users.ephemeral.status[did] = 'offline'
       }
-      return iridium.users.ephemeral.status[this.user?.did || '']
+      return iridium.users.ephemeral.status[did]
     },
   },
   watch: {
+    conversations() {
+      this.conversation = iridium.chat.state.conversations[this.conversationId]
+    },
     messages: {
       handler() {
         this.setTimestamp()
