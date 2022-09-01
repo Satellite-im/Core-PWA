@@ -45,8 +45,7 @@ const mutations = {
   ) {
     state.files[id]
       ? state.files[id].push(file)
-      : Vue.set(state.files, id, [file])
-    // Vue can't detect new objects automatically, hence set syntax https://forum.vuejs.org/t/mutation-not-updating-data-in-vuex/102124
+      : (state.files = { ...state.files, [id]: [file] })
   },
   removeFile(
     state: ChatState,
@@ -71,7 +70,8 @@ const mutations = {
     state.files[id][index].progress = progress
   },
   deleteFiles(state: ChatState, address: string) {
-    Vue.delete(state.files, address)
+    delete state.files[address]
+    state.files = { ...state.files }
   },
   setCountError(state: ChatState, countError: boolean) {
     state.countError = countError
@@ -89,7 +89,7 @@ const mutations = {
       message,
     }: { conversationId: Conversation['id']; message: string },
   ) {
-    Vue.set(state.draftMessages, conversationId, message)
+    state.draftMessages[conversationId] = message
   },
   setReplyChatbarMessage(
     state: ChatState,
@@ -98,13 +98,17 @@ const mutations = {
       message,
     }: { conversationId: Conversation['id']; message: ConversationMessage },
   ) {
-    Vue.set(state.replyChatbarMessages, conversationId, message)
+    state.replyChatbarMessages = {
+      ...state.replyChatbarMessages,
+      [conversationId]: message,
+    }
   },
   clearReplyChatbarMessage(
     state: ChatState,
     { conversationId }: { conversationId: Conversation['id'] },
   ) {
-    Vue.delete(state.replyChatbarMessages, conversationId)
+    delete state.replyChatbarMessages[conversationId]
+    state.replyChatbarMessages = { ...state.replyChatbarMessages }
   },
 }
 

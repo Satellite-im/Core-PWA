@@ -448,7 +448,7 @@ const webRTCActions = {
           friendToPeerDescriptor(friend),
         )
         .concat({
-          id: iridium.connector?.id as string,
+          id: iridium.id as string,
           name: rootState.accounts.details?.name as string,
         })
     }

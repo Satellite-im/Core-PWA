@@ -11,7 +11,7 @@
       :size="6"
       :text="user.last_message"
     />
-    <TypographySubtitle v-else :size="6" :text="user.status" />
+    <TypographySubtitle v-else :size="6" :text="status" />
   </div>
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />

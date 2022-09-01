@@ -17,13 +17,7 @@
       <FriendsFriend
         v-for="request in incomingRequests"
         :key="request.from"
-        :user="
-          request.user || {
-            did: request.did,
-            name: request.user.name,
-            status: 'offline',
-          }
-        "
+        :user="request.user"
         :request="request"
       />
     </template>
@@ -39,13 +33,7 @@
       <FriendsFriend
         v-for="request in outgoingRequests"
         :key="request.from"
-        :user="
-          request.user || {
-            did: request.did,
-            name: request.user.name,
-            status: 'offline',
-          }
-        "
+        :user="request.user"
         :request="request"
       />
     </template>
@@ -70,11 +58,14 @@ export default Vue.extend({
     requests(): FriendRequest[] {
       return Object.values(this.friends.requests)
         .map((request) => {
-          const user = this.users[request.user.did]
-          if (!user) {
-            return null
+          if (!this.users[request.user.did]) {
+            this.users[request.user.did] = {
+              did: request.user.did,
+              name: request.user.did,
+              status: 'offline',
+            }
           }
-          return { ...request, user }
+          return { ...request, user: this.users[request.user.did] }
         })
         .filter(notNull)
     },

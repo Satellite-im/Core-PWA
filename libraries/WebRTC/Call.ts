@@ -68,11 +68,11 @@ export class Call extends Emitter<CallEventListeners> {
 
     this.callId = callId
 
-    if (!iridium.connector?.id) {
+    if (!iridium.id) {
       throw new Error('local peerId not found')
     }
 
-    if (this.callId === iridium.connector?.id) {
+    if (this.callId === iridium.id) {
       throw new Error('callId cannot be the same as localId')
     }
 
@@ -99,7 +99,7 @@ export class Call extends Emitter<CallEventListeners> {
   async requestPeerCalls(force = false) {
     await Promise.all(
       this.peerDetails.map(async ({ id: did }) => {
-        if (did === iridium.connector?.id) {
+        if (did === iridium.id) {
           return
         }
         if (this.isCallee[did]) {
@@ -153,7 +153,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @param asCaller Initiate the call as a caller
    */
   createPeer(did: string, asCaller: boolean = false) {
-    if (this.peers[did] || !iridium.connector?.id) {
+    if (this.peers[did] || !iridium.id) {
       return
     }
     const pd = this.peerDetails.find((pd) => pd.id === did)
@@ -165,8 +165,8 @@ export class Call extends Emitter<CallEventListeners> {
       {
         initiator: asCaller,
         streams: [
-          this.streams[iridium.connector.id]?.audio,
-          this.streams[iridium.connector.id]?.video,
+          this.streams[iridium.id]?.audio,
+          this.streams[iridium.id]?.video,
         ].filter(Boolean),
         offerOptions: {
           offerToReceiveAudio: true,
@@ -238,7 +238,7 @@ export class Call extends Emitter<CallEventListeners> {
     return iridium.webRTC.sendWebrtc(did, {
       module: 'webrtc',
       type: 'call',
-      callId: this.callId === did ? iridium.connector?.id : this.callId,
+      callId: this.callId === did ? iridium.id : this.callId,
       peers: this.peerDetails,
       did,
       at: Date.now().valueOf(),
@@ -300,22 +300,27 @@ export class Call extends Emitter<CallEventListeners> {
    * await call.createAudioStream()
    */
   async createAudioStream(constraints?: MediaStreamConstraints['audio']) {
-    if (!iridium.connector?.id) return
+    if (!iridium.id) return
 
     const audioStream = await navigator.mediaDevices.getUserMedia({
       audio: constraints || true,
     })
 
-    if (!this.streams[iridium.connector.id]) {
-      this.streams[iridium.connector.id] = {}
+    if (!this.streams[iridium.id]) {
+      this.streams[iridium.id] = {}
     }
-    if (!this.tracks[iridium.connector.id]) {
-      this.tracks[iridium.connector.id] = new Set()
+    if (!this.tracks[iridium.id]) {
+      this.tracks[iridium.id] = new Set()
     }
 
     const audioTrack = audioStream.getAudioTracks()[0]
-    this.streams[iridium.connector.id].audio = audioStream
-    this.tracks[iridium.connector.id].add(audioTrack)
+    this.streams[iridium.id].audio = audioStream
+    this.tracks[iridium.id].add(audioTrack)
+
+    // mute if needed
+    if (iridium.webRTC.state.streamMuted[iridium.id]?.audio) {
+      audioTrack.enabled = false
+    }
 
     this.emit('LOCAL_TRACK_CREATED', {
       track: audioTrack,
@@ -341,21 +346,26 @@ export class Call extends Emitter<CallEventListeners> {
    * await call.createVideoStream()
    */
   async createVideoStream(constraints?: MediaStreamConstraints['video']) {
-    if (!iridium.connector?.id) return
+    if (!iridium.id) return
     const videoStream = await navigator.mediaDevices.getUserMedia({
       video: constraints || true,
     })
-    if (!this.streams[iridium.connector.id]) {
-      this.streams[iridium.connector.id] = {}
+    if (!this.streams[iridium.id]) {
+      this.streams[iridium.id] = {}
     }
-    if (!this.tracks[iridium.connector.id]) {
-      this.tracks[iridium.connector.id] = new Set()
+    if (!this.tracks[iridium.id]) {
+      this.tracks[iridium.id] = new Set()
     }
 
     const videoTrack = videoStream.getVideoTracks()[0]
 
-    this.streams[iridium.connector.id].video = videoStream
-    this.tracks[iridium.connector.id].add(videoTrack)
+    this.streams[iridium.id].video = videoStream
+    this.tracks[iridium.id].add(videoTrack)
+
+    // mute if needed
+    if (iridium.webRTC.state.streamMuted[iridium.id]?.audio) {
+      videoTrack.enabled = false
+    }
 
     this.emit('LOCAL_TRACK_CREATED', {
       track: videoTrack,
@@ -383,7 +393,7 @@ export class Call extends Emitter<CallEventListeners> {
     if (!navigator.mediaDevices.getDisplayMedia) {
       throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
-    if (!iridium.connector?.id) return
+    if (!iridium.id) return
     let screenStream: MediaStream
 
     try {
@@ -398,19 +408,24 @@ export class Call extends Emitter<CallEventListeners> {
       return
     }
 
-    if (!this.streams[iridium.connector.id]) {
-      this.streams[iridium.connector.id] = {}
+    if (!this.streams[iridium.id]) {
+      this.streams[iridium.id] = {}
     }
-    if (!this.tracks[iridium.connector.id]) {
-      this.tracks[iridium.connector.id] = new Set()
+    if (!this.tracks[iridium.id]) {
+      this.tracks[iridium.id] = new Set()
     }
 
     const screenTrack = screenStream.getVideoTracks()[0]
     screenTrack.enabled = true
 
-    this.screenStreams[iridium.connector.id] = screenStream.id
-    this.streams[iridium.connector.id].screen = screenStream
-    this.tracks[iridium.connector.id].add(screenTrack)
+    this.screenStreams[iridium.id] = screenStream.id
+    this.streams[iridium.id].screen = screenStream
+    this.tracks[iridium.id].add(screenTrack)
+
+    // mute if needed
+    if (iridium.webRTC.state.streamMuted.video) {
+      screenTrack.enabled = false
+    }
 
     this.emit('LOCAL_TRACK_CREATED', {
       track: screenTrack,
@@ -422,7 +437,7 @@ export class Call extends Emitter<CallEventListeners> {
       Object.values(this.peers).map(async (peer) => {
         iridium.webRTC.sendWebrtc(peer.id, {
           type: 'peer:screenshare',
-          did: iridium.connector?.id,
+          did: iridium.id,
           streamId: screenStream.id,
           trackId: screenTrack.id,
           at: Date.now().valueOf(),
@@ -456,7 +471,7 @@ export class Call extends Emitter<CallEventListeners> {
       await this.createVideoStream(constraints.video)
     }
 
-    if (this.streams[iridium.connector?.id].screen) {
+    if (this.streams[iridium.id].screen) {
       await this.createDisplayStream()
     }
   }
@@ -476,7 +491,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @returns the local tracks from the media stream
    */
   getLocalTracks() {
-    return this.tracks[iridium.connector?.id]
+    return this.tracks[iridium.id]
   }
 
   /**
@@ -486,7 +501,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   getRemoteTracks() {
     return Object.keys(this.tracks)
-      .filter((did) => did !== iridium.connector?.id)
+      .filter((did) => did !== iridium.id)
       .map((did) => this.tracks[did])
       .reduce(
         (acc: MediaStreamTrack[], tracks) => acc.concat(Object.values(tracks)),
@@ -520,7 +535,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   allRemoteStreams() {
     return Object.keys(this.streams)
-      .filter((did) => did !== iridium.connector?.id)
+      .filter((did) => did !== iridium.id)
       .map((did) => this.streams[did])
   }
 
@@ -534,7 +549,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   getRemoteStreams(kind: string) {
     return Object.keys(this.streams)
-      .filter((did) => did !== iridium.connector?.id)
+      .filter((did) => did !== iridium.id)
       .map((did) => this.streams[did]?.[kind])
   }
 
@@ -546,7 +561,7 @@ export class Call extends Emitter<CallEventListeners> {
    * const localStreams = call.getLocalStreams()
    */
   getLocalStreams() {
-    return this.streams[iridium.connector?.id]
+    return this.streams[iridium.id]
   }
 
   /**
@@ -558,7 +573,7 @@ export class Call extends Emitter<CallEventListeners> {
    * const localStream = call.getLocalStream('video')
    */
   getLocalStream(kind: string) {
-    return this.streams[iridium.connector?.id]?.[kind]
+    return this.streams[iridium.id]?.[kind]
   }
 
   /**
@@ -594,7 +609,7 @@ export class Call extends Emitter<CallEventListeners> {
    * const hasLocalStream = call.hasLocalStream()
    */
   hasLocalStream() {
-    return Object.entries(this.streams[iridium.connector?.id] || {}).length > 0
+    return Object.entries(this.streams[iridium.id] || {}).length > 0
   }
 
   /**
@@ -627,11 +642,11 @@ export class Call extends Emitter<CallEventListeners> {
   async deny() {
     await Promise.all(
       this.peerDetails
-        .filter((p) => p.id !== iridium.connector?.id)
+        .filter((p) => p.id !== iridium.id)
         .map(async (peer) => {
           iridium.webRTC.sendWebrtc(peer.id, {
             type: 'peer:hangup',
-            did: iridium.connector?.id,
+            did: iridium.id,
             callId: this.callId,
             at: Date.now().valueOf(),
           })
@@ -649,7 +664,7 @@ export class Call extends Emitter<CallEventListeners> {
     this.deny()
     this.emit('HANG_UP', {
       callId: this.callId,
-      did: iridium.connector?.id,
+      did: iridium.id,
     })
 
     this.destroy()
@@ -694,7 +709,7 @@ export class Call extends Emitter<CallEventListeners> {
     if (andEmit) {
       this.emit('DESTROY', {
         callId: this.callId,
-        did: iridium.connector?.id,
+        did: iridium.id,
       })
     }
   }
@@ -706,7 +721,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async mute({
     kind = 'audio',
-    did = iridium.connector?.id,
+    did = iridium.id,
   }: {
     kind: string
     did?: string
@@ -719,6 +734,7 @@ export class Call extends Emitter<CallEventListeners> {
       )
     }
 
+    iridium.webRTC.setStreamMuted(did, { [kind]: true })
     let track: MediaStreamTrack
     if (kind === 'audio') {
       track = stream.getAudioTracks()[0]
@@ -737,14 +753,13 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     // tell all of the peers that we muted the track
-    if (did === iridium.connector?.id) {
+    if (did === iridium.id) {
       await Promise.all(
         Object.values(this.peers).map((peer) =>
           iridium.webRTC.sendWebrtc(peer.id, {
             type: 'peer:mute',
-            did: iridium.connector?.id,
-            callId:
-              this.callId === peer.id ? iridium.connector?.id : this.callId,
+            did: iridium.id,
+            callId: this.callId === peer.id ? iridium.id : this.callId,
             trackId: track.id,
             kind,
             at: Date.now().valueOf(),
@@ -766,7 +781,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   async unmute({
     kind,
-    did = iridium.connector?.id,
+    did = iridium.id,
     constraints,
   }: {
     kind: string
@@ -775,7 +790,8 @@ export class Call extends Emitter<CallEventListeners> {
   }) {
     if (!did) return
 
-    if (did === iridium.connector?.id) {
+    iridium.webRTC.setStreamMuted(did, { [kind]: false })
+    if (did === iridium.id) {
       if (kind === 'audio' && !this.streams[did]?.audio) {
         await this.createAudioStream(constraints?.audio)
       } else if (
@@ -797,7 +813,7 @@ export class Call extends Emitter<CallEventListeners> {
       kind === 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
     track.enabled = true
 
-    if (did !== iridium.connector?.id) {
+    if (did !== iridium.id) {
       return
     }
 
@@ -805,8 +821,8 @@ export class Call extends Emitter<CallEventListeners> {
       Object.values(this.peers).map((peer) =>
         iridium.webRTC.sendWebrtc(peer.id, {
           type: 'peer:unmute',
-          did: iridium.connector?.id,
-          callId: this.callId === peer.id ? iridium.connector?.id : this.callId,
+          did: iridium.id,
+          callId: this.callId === peer.id ? iridium.id : this.callId,
           trackId: track.id,
           kind,
           at: Date.now().valueOf(),
@@ -939,8 +955,8 @@ export class Call extends Emitter<CallEventListeners> {
 
     iridium.webRTC.sendWebrtc(peer.id, {
       type: 'peer:signal',
-      did: iridium.connector?.id,
-      callId: this.callId === peer.id ? iridium.connector?.id : this.callId,
+      did: iridium.id,
+      callId: this.callId === peer.id ? iridium.id : this.callId,
       data,
       at: Date.now().valueOf(),
     })
@@ -957,7 +973,7 @@ export class Call extends Emitter<CallEventListeners> {
   //  */
   // async send(type: string, data: any) {
   //   await Object.values(this.peers).map(async (peer) => {
-  //     await peer.send({ did: iridium.connector?.id, type, ...data })
+  //     await peer.send({ did: iridium.id, type, ...data })
   //   })
   // }
 
@@ -970,17 +986,17 @@ export class Call extends Emitter<CallEventListeners> {
       callId: this.callId,
       did: peer.id,
     })
-    if (!this.screenStreams[iridium.connector?.id]) {
+    if (!this.screenStreams[iridium.id]) {
       return
     }
 
     // tell the peer to start screen sharing
-    const screenStream = this.streams[iridium.connector?.id]?.screen
+    const screenStream = this.streams[iridium.id]?.screen
     const screenTrack = screenStream?.getVideoTracks()[0]
 
     iridium.webRTC.sendWebrtc(peer.id, {
       type: 'peer:screenshare',
-      did: iridium.connector?.id,
+      did: iridium.id,
       streamId: screenStream.id,
       trackId: screenTrack.id,
       at: Date.now().valueOf(),
@@ -1111,8 +1127,7 @@ export class Call extends Emitter<CallEventListeners> {
     this.peerDetails = this.peerDetails.filter((peer) => peer.id !== did)
 
     if (
-      Object.values(this.peers).filter((p) => p.id !== iridium.connector?.id)
-        .length === 0
+      Object.values(this.peers).filter((p) => p.id !== iridium.id).length === 0
     ) {
       this.active = false
       this.destroy()

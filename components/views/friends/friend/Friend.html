@@ -10,9 +10,7 @@
       {{ user.name || user.did }}
     </TypographyText>
     <TypographyText v-if="isPreview" size="sm">{{ user.did }}</TypographyText>
-    <TypographyText v-if="user.status" size="sm">
-      {{ user.status }}
-    </TypographyText>
+    <TypographyText v-if="status" size="sm"> {{ status }} </TypographyText>
   </div>
   <div class="spacer"></div>
   <div class="controls" v-if="user && !request && isPreview">

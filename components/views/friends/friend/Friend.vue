@@ -10,8 +10,9 @@ import {
   SmartphoneIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
-import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
+import { FriendRequest } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { User, UserStatus } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -63,6 +64,9 @@ export default Vue.extend({
     },
     requestIncoming(): boolean | null {
       return this.request && this.request.incoming
+    },
+    status(): UserStatus {
+      return iridium.users.ephemeral.status[this.user.did] || 'offline'
     },
   },
   beforeDestroy() {
