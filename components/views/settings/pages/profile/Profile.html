@@ -161,7 +161,7 @@
                 class="about-input-wrapper"
                 :class="{'readonly': !editing.has('about')}"
               >
-                <ChatbarEditable
+                <InteractablesEditable
                   v-model="inputs.about"
                   ref="editable"
                   :placeholder="$t('ui.talk')"
