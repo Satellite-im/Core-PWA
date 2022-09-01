@@ -78,6 +78,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       {},
     )
 
+    iridium.connector?.p2p.on<
+      IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
+    >('node/message/sync/fetch', this.onSyncFetchResponse.bind(this))
+
+    iridium.connector?.subscribe<
+      IridiumPubsubMessage<IridiumDecodedPayload<IridiumConversationEvent>>
+    >('/chat/announce', {
+      handler: this.onConversationAnnounce.bind(this),
+    })
+
     for (const conversation of conversations) {
       const topic = `/chat/conversations/${conversation.id}`
       logger.info(
