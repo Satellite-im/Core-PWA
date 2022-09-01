@@ -1,0 +1,29 @@
+.welcome-modal {
+  .welcome-content {
+    display: inline-flex;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    padding: @normal-spacing;
+    max-width: 40rem;
+    min-width: 300px;
+
+    pre {
+      white-space: pre-wrap;
+      text-align: left;
+      &:extend(.bordered);
+      &:extend(.background-semitransparent-dark);
+      &:extend(.round-corners);
+      max-height: 30vh;
+      &:extend(.font-muted);
+    }
+
+    .button {
+      width: calc(@half - 0.25rem);
+    }
+    .mascot {
+      max-height: 15em;
+    }
+  }
+}

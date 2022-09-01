@@ -1,0 +1,52 @@
+<div class="welcome-modal">
+  <UiModal nopad>
+    <div class="welcome-content" v-click-outside="toggleVisibility">
+      <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
+      <UiSpacer :height="50" />
+      <TypographyTitle
+        v-if="releaseData && releaseData.tag_name"
+        :size="6"
+        :text="`Update ${releaseData.tag_name} is Here!`"
+      />
+      <pre v-if="releaseData && releaseData.body">
+        <vue-markdown :source="releaseData.body" :breaks="false"/>
+      </pre>
+      <div class="update-modal-spinner" v-if="isLoading">
+        <UiLoadersSpinner spinning />
+      </div>
+
+      <TypographyText v-if="requiresUpdate">
+        {{ $t('modal.update_modal.update_required') }}
+      </TypographyText>
+
+      <UiSpacer :height="50" />
+      <div>
+        <!-- <InteractablesButton
+          v-if="requiresUpdate"
+          type="danger"
+          size="small"
+          :action="skipVersion"
+          text="Skip Update"
+        >
+          <x-icon size="1x" />
+        </InteractablesButton> -->
+        <!-- <InteractablesButton
+          v-if="requiresUpdate"
+          type="primary"
+          size="small"
+          :action="clearAndReload"
+          text="Update Now"
+        >
+          <refresh-cw-icon size="1x" />
+        </InteractablesButton> -->
+        <InteractablesButton
+          v-if="!requiresUpdate"
+          @click="skipVersion"
+          :text="$t('modal.update_modal.got_it')"
+        >
+          <refresh-cw-icon size="1x" />
+        </InteractablesButton>
+      </div>
+    </div>
+  </UiModal>
+</div>

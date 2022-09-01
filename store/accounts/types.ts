@@ -23,6 +23,7 @@ export interface AccountsState {
   phrase: string
   error: string
   encryptedPhrase: string
+  welcomePopup?: boolean
   registered: boolean
   details?: User
   registrationStatus: RegistrationStatus
