@@ -73,9 +73,9 @@ describe('test blobToStream', () => {
     //   })
     // })
     try {
-      const jpegBlob = await new Blob(['testing'], { type: 'image/jpeg' })
+      const textBlob = await new Blob(['testing'], { type: 'text/plain' })
 
-      const result = await blobToStream(jpegBlob)
+      const result = await blobToStream(textBlob)
       expect(result).toBe(123)
     } catch (error) {}
   })
