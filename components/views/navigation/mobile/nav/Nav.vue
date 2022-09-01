@@ -35,9 +35,7 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
     }),
     status(): UserStatus {
-      return this.accounts.details
-        ? iridium.users.ephemeral.status[this.accounts.details.did] || 'offline'
-        : 'offline'
+      return 'online'
     },
     isMobileNavVisible: {
       get(): boolean {

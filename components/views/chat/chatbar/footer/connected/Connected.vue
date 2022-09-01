@@ -37,11 +37,16 @@ export default Vue.extend({
     participants(): User[] {
       if (!this.conversation) return []
 
-      return this.conversation.participants.map((did) => ({
-        ...iridium.users.getUser(did),
-        did,
-        status: this.userStatus[did] || 'offline',
-      }))
+      return this.conversation.participants.map((did: string) => {
+        if (!iridium.users.ephemeral.status[did]) {
+          iridium.users.ephemeral.status[did] = 'offline'
+        }
+        return {
+          ...iridium.users.getUser(did),
+          did,
+          status: iridium.users.ephemeral.status[did],
+        } as User
+      })
     },
     otherParticipants(): User[] {
       return this.participants.filter((p) => p.did !== iridium.connector?.id)

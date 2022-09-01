@@ -62,13 +62,16 @@ export default Vue.extend({
       return this.$route.params.id
     },
     author(): User {
+      if (!iridium.users.state[this.message.from]) {
+        iridium.users.state[this.message.from] = {
+          did: this.message.from,
+          name: this.message.from,
+          status: 'offline',
+        }
+      }
       return this.message.from === iridium.connector?.id
         ? (iridium.profile.state as User)
-        : iridium.users.state[this.message.from] || {
-            did: this.message.from,
-            name: this.message.from,
-            photoHash: '',
-          }
+        : iridium.users.state[this.message.from]
     },
     avatarSrc(): string | undefined {
       return (

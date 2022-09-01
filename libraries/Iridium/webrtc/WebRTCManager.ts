@@ -90,11 +90,7 @@ export default class WebRTCManager extends Emitter {
   }
 
   private async setupAnnounce() {
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.announce())
-      }, 1000)
-    })
+    await this.announce()
     setInterval(this.announce.bind(this), announceFrequency)
   }
 
@@ -107,7 +103,12 @@ export default class WebRTCManager extends Emitter {
       friends,
     })
 
-    if (!friends || !(profile.name && iridium.connector.p2p.ready)) return
+    if (
+      !friends ||
+      !friends.length ||
+      !(profile.name && iridium.connector.p2p.ready)
+    )
+      return
 
     try {
       await iridium.connector?.publish(

@@ -66,7 +66,10 @@ export default Vue.extend({
       return this.request && this.request.incoming
     },
     status(): UserStatus {
-      return iridium.users.ephemeral.status[this.user.did] || 'offline'
+      if (!iridium.users.ephemeral.status[this.user.did]) {
+        iridium.users.setUserStatus(this.user.did, 'offline')
+      }
+      return iridium.users.ephemeral.status[this.user.did]
     },
   },
   beforeDestroy() {

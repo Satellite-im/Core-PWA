@@ -69,13 +69,17 @@ export default Vue.extend({
   },
   computed: {
     status(): UserStatus {
-      if (this.user?.did && !iridium.users.ephemeral.status[this.user.did]) {
+      if (
+        this.user?.did &&
+        this.user.did !== iridium.connector?.id &&
+        !iridium.users.ephemeral.status[this.user.did]
+      ) {
         iridium.users.setUserStatus(this.user.did, 'offline')
       }
 
       return this.user.did === iridium.connector?.id
         ? 'online'
-        : iridium.users.ephemeral.status[this.user.did] || 'offline'
+        : iridium.users.ephemeral.status[this.user.did]
     },
     isTyping(): boolean {
       return this.conversationId

@@ -73,10 +73,10 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
-      if (!Object.keys(this.conversation || {}).length) {
+      if (!this.conversation || Object.keys(this.conversation).length) {
         return []
       }
-      return Object.values(this.conversation?.message || {}).sort(
+      return Object.values(this.conversation.message).sort(
         (a, b) => a.at - b.at,
       )
     },
@@ -126,16 +126,20 @@ export default Vue.extend({
         (this.conversation?.participants || []).find(
           (did) => did !== iridium.connector?.id,
         ) || ''
-      return (
-        iridium.users.state[userId] || {
+      if (!iridium.users.state[userId]) {
+        iridium.users.state[userId] = {
           did: userId,
           name: userId,
           status: '',
         }
-      )
+      }
+      return iridium.users.state[userId]
     },
     status(): UserStatus {
-      return iridium.users.ephemeral.status[this.user?.did || ''] || 'offline'
+      if (!iridium.users.ephemeral.status[this.user?.did || '']) {
+        iridium.users.ephemeral.status[this.user?.did || ''] = 'offline'
+      }
+      return iridium.users.ephemeral.status[this.user?.did || '']
     },
   },
   watch: {
@@ -161,7 +165,7 @@ export default Vue.extend({
     this.setTimestamp()
   },
   beforeDestroy() {
-    this.clearTimeoutId()
+    clearTimeout(this.timeoutId)
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
@@ -173,9 +177,6 @@ export default Vue.extend({
       await iridium.friends
         .friendRemove(this.user.did)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
-      if (this.$route.params.id === this.user.did) {
-        this.$router.replace('/friends')
-      }
       this.isLoading = false
     },
     async leaveGroup() {
@@ -244,8 +245,8 @@ export default Vue.extend({
       }
       const lastMsg = this.messages.at(-1)?.at
 
+      clearTimeout(this.timeoutId)
       if (this.$dayjs().diff(lastMsg, 'second') < 30) {
-        this.clearTimeoutId()
         this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
         this.timestamp = this.$t('time.now')
         return
@@ -260,17 +261,11 @@ export default Vue.extend({
         this.timestamp = ''
       }
       const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
-      this.clearTimeoutId()
       // update timestamp at midnight tonight
       this.timeoutId = setTimeout(
         () => this.setTimestamp(),
         midnight - Date.now(),
       )
-    },
-    clearTimeoutId() {
-      if (this.timeoutId) {
-        clearTimeout(this.timeoutId)
-      }
     },
   },
 })

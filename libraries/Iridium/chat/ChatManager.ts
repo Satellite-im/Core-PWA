@@ -67,15 +67,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   public ephemeral: { typing: { [key: string]: string[] } } = { typing: {} }
 
-  private _intervals: { [key: string]: any } = {}
-
   constructor(public readonly iridium: IridiumManager) {
     super()
   }
 
   async init() {
     const fetched = await this.get<State>()
-    this.state.conversations = fetched?.conversations || {}
+    this.state = {
+      ...this.state,
+      conversations: {
+        ...this.state.conversations,
+        ...(fetched?.conversations || {}),
+      },
+    }
     logger.info('iridium/chatmanager', 'init - done', this.state)
     const conversations = Object.values(this.state.conversations)
     const iridium = this.iridium.connector
@@ -258,13 +262,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         { message, cid, from, conversationId },
       )
 
-      this.state.conversations = {
-        ...this.state.conversations,
-        [conversationId]: {
-          ...this.state.conversations[conversationId],
-          message: {
-            ...this.state.conversations[conversationId].message,
-            [message.id]: message,
+      this.state = {
+        ...this.state,
+        conversations: {
+          ...this.state.conversations,
+          [conversationId]: {
+            ...this.state.conversations[conversationId],
+            message: {
+              ...this.state.conversations[conversationId].message,
+              [message.id]: message,
+            },
           },
         },
       }
@@ -323,13 +330,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         [fromDID]: reaction.reactions,
       }
 
-      this.state.conversations = {
-        ...this.state.conversations,
-        [conversationId]: {
-          ...this.state.conversations[conversationId],
-          message: {
-            ...this.state.conversations[conversationId].message,
-            [message.id]: message,
+      this.state = {
+        ...this.state,
+        conversations: {
+          ...this.state.conversations,
+          [conversationId]: {
+            ...this.state.conversations[conversationId],
+            message: {
+              ...this.state.conversations[conversationId].message,
+              [message.id]: message,
+            },
           },
         },
       }
@@ -402,9 +412,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       updatedAt: Date.now(),
       lastReadAt: 0,
     }
-    this.state.conversations = {
-      ...this.state.conversations,
-      [id]: conversation,
+    this.state = {
+      ...this.state,
+      conversations: {
+        ...this.state.conversations,
+        [id]: conversation,
+      },
     }
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)

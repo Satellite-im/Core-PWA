@@ -12,13 +12,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      loading: false,
+      loading: true,
       friends: iridium.friends.state,
+      chat: iridium.chat.state,
     }
   },
   computed: {
+    conversations(): { [id: string]: Conversation } {
+      return iridium.chat.state.conversations
+    },
     sortedConversations(): Conversation[] {
-      return Object.values(iridium.chat.state.conversations).sort(
+      console.info('conversations', this.conversations)
+      return Object.values(this.conversations).sort(
         (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
       )
     },
@@ -29,6 +34,14 @@ export default Vue.extend({
         iridium.chat.state.conversations[conversation.id].message,
       ).sort((a, b) => a.at - b.at)
       return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
+    },
+  },
+  watch: {
+    conversations: {
+      handler() {
+        this.loading = false
+      },
+      deep: true,
     },
   },
 })

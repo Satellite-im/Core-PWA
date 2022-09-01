@@ -52,17 +52,20 @@ export default Vue.extend({
   methods: {
     eventuallyRedirect() {
       if (this.accounts.lastVisited === this.$route.path) {
-        this.$router.replace(
+        console.info('redirect')
+        return this.$router.replace(
           this.$device.isMobile ? '/mobile/chat' : '/friends',
         )
-        return
       }
 
       const matcher = this.$router.match(this.accounts.lastVisited)
       if (matcher.matched.length > 0) {
+        console.info('redirect')
         this.$router.replace(this.accounts.lastVisited)
+        return
       }
 
+      console.info('redirect')
       this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
     },
     /**
@@ -77,10 +80,12 @@ export default Vue.extend({
         await this.$store.dispatch('accounts/loadAccount')
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
+          console.info('redirect - not registered')
           await this.$router.replace('/auth/register')
           return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
+          console.info('redirect - derivation failed')
           await this.$router.replace('/setup/disclaimer')
           return
         }

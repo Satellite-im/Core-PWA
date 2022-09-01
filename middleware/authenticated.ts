@@ -33,11 +33,13 @@ export default function ({ store, route, redirect }: Arguments) {
 
   // If the user is not authenticated
   if (locked) {
+    console.info('redirect - locked')
     return eventuallyRedirect('/auth/unlock')
   }
 
   // If the wallet has not been created yet
   if (!locked && phrase === '' && !route.path.includes('setup')) {
+    console.info('redirect - locked')
     return eventuallyRedirect('/setup/disclaimer')
   }
 
@@ -48,6 +50,7 @@ export default function ({ store, route, redirect }: Arguments) {
   }
 
   const ready = allPrerequisitesReady && iridium.ready
+  console.info('redirect - not ready')
   if (!ready) return eventuallyRedirect('/')
 
   store.commit('accounts/setLastVisited', route.path)

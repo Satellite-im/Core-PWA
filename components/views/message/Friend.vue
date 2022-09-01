@@ -45,7 +45,10 @@ export default Vue.extend({
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     status(): string {
-      return iridium.users.ephemeral.status[this.user.address] || 'offline'
+      if (!iridium.users.ephemeral.status[this.user.did]) {
+        iridium.users.setUserStatus(this.user.did, 'offline')
+      }
+      return iridium.users.ephemeral.status[this.user.address]
     },
   },
   watch: {

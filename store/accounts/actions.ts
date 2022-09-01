@@ -178,7 +178,7 @@ export default {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    if (!iridium.ready) {
+    if (!iridium.connector) {
       logger.debug(
         'accounts/actions/loadAccount',
         'signing message for iridium',
@@ -200,21 +200,23 @@ export default {
       logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
-    await iridium.profile.setUser()
-    commit('setActiveAccount', iridium.connector?.id)
+    iridium.on('ready', () => {
+      logger.info('accounts/actions/loadAccount', 'iridium ready')
+      commit('setActiveAccount', iridium.connector?.id)
 
-    logger.debug(
-      'accounts/actions/loadAccount',
-      'user loaded, dispatching setUserDetails & setRegistrationStatus',
-      profile,
-    )
-    commit('setUserDetails', {
-      username: profile.name,
-      ...profile,
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'user loaded, dispatching setUserDetails & setRegistrationStatus',
+        profile,
+      )
+      commit('setUserDetails', {
+        username: profile.name,
+        ...profile,
+      })
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      logger.info('accounts/actions/loadAccount', 'finished')
+      return dispatch('startup')
     })
-    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    await iridium.connector?.waitForSyncNode()
-    dispatch('startup')
   },
   /**
    * @method registerUser
@@ -264,6 +266,10 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
+    if (!iridium.connector) {
+      throw new Error('iridium not initialized')
+    }
+
     const imagePath = await uploadPicture(userData.image)
 
     if (!iridium.connector) {
@@ -278,19 +284,18 @@ export default {
       photoHash: imagePath,
     }
 
-    await iridium.connector.waitForSyncNode()
     await iridium.profile?.set('/', profile)
-    console.info('setting profile', profile)
-    await iridium.sendSyncInit()
-    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    commit('setActiveAccount', iridium.connector.id)
-    commit('setUserDetails', {
-      username: userData.name,
-      status: userData.status,
-      photoHash: imagePath,
-      address: walletAccount.publicKey.toBase58(),
+    iridium.on('ready', () => {
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      commit('setActiveAccount', iridium.connector?.id)
+      commit('setUserDetails', {
+        username: userData.name,
+        status: userData.status,
+        photoHash: imagePath,
+        address: walletAccount.publicKey.toBase58(),
+      })
+      return dispatch('startup', walletAccount)
     })
-    dispatch('startup', walletAccount)
   },
 
   /**

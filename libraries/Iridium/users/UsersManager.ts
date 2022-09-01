@@ -74,20 +74,9 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       this.setUserStatus(peer.did, 'offline')
     })
 
-    setInterval(() => {
-      this.list.forEach(async (user: User) => {
-        if (
-          this.ephemeral.status[user.did] === 'online' &&
-          Number(user.seen) < Date.now() - 1000 * 30
-        ) {
-          logger.info(this.loggerTag, 'user timed out', user)
-          this.iridium.users.setUser(user.did, {
-            ...user,
-            seen: Date.now(),
-          })
-          this.iridium.users.setUserStatus(user.did, 'offline')
-        }
-      })
+    await this.loadUserData()
+    setInterval(async () => {
+      await this.loadUserData()
     }, 10000)
 
     this.iridium.connector?.p2p.on(
@@ -112,6 +101,22 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     this.emit('ready', {})
   }
 
+  async loadUserData() {
+    this.list.forEach(async (user: User) => {
+      if (
+        this.ephemeral.status[user.did] === 'online' &&
+        Number(user.seen) < Date.now() - 1000 * 30
+      ) {
+        logger.info(this.loggerTag, 'user timed out', user)
+        this.iridium.users.setUser(user.did, {
+          ...user,
+          seen: Date.now(),
+        })
+        this.iridium.users.setUserStatus(user.did, 'offline')
+      }
+    })
+  }
+
   async unsubscribe() {
     await this.iridium.connector?.unsubscribe(`/users/announce`)
   }
@@ -123,10 +128,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    */
   async fetch() {
     const fetched = await this.get('/')
-    this.state = Object.keys(fetched).reduce((acc, key: string) => {
-      acc[key] = { ...fetched[key], status: 'offline' }
-      return acc
-    }, this.state)
+    this.state = { ...fetched }
   }
 
   async getUsers(): Promise<{ [key: string]: User }> {

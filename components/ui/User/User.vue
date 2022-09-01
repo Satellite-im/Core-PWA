@@ -35,7 +35,10 @@ export default Vue.extend({
   },
   computed: {
     status(): string {
-      return iridium.users.ephemeral.status[this.user.did] || 'offline'
+      if (!iridium.users.ephemeral.status[this.user.did]) {
+        iridium.users.ephemeral.status[this.user.did] = 'offline'
+      }
+      return iridium.users.ephemeral.status[this.user.did]
     },
   },
 })
