@@ -1,13 +1,14 @@
 export function formatDuration(duration: number) {
   const d = Math.floor(duration)
-  const s = d % 60
-  const m = Math.floor(d / 60) % 60
   const h = Math.floor(d / 3600) % 60
-  const mp = String(m).padStart(2, '0')
-  const sp = String(s).padStart(2, '0')
+  const m = Math.floor(d / 60) % 60
+  const s = d % 60
   if (h) {
-    const hp = String(h).padStart(2, '0')
-    return `${hp}:${mp}:${sp}`
+    return `${pad(h)}:${pad(m)}:${pad(s)}`
   }
-  return `${mp}:${sp}`
+  return `${pad(m)}:${pad(s)}`
+}
+
+function pad(val: number): string {
+  return String(val).padStart(2, '0')
 }
