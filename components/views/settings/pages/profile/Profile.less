@@ -42,6 +42,7 @@
 
       .subtitle {
         margin-bottom: @light-spacing;
+        user-select: none;
       }
 
       .photo {
@@ -99,7 +100,7 @@
   .profile-section {
     display: flex;
     flex-direction: column;
-    gap: 64px;
+    gap: 40px;
   }
 }
 
@@ -120,6 +121,7 @@
   justify-content: space-between;
   gap: @light-spacing;
   margin-bottom: @normal-spacing;
+  user-select: none;
 
   .title-wrapper {
     display: flex;
@@ -149,6 +151,7 @@
 
   .subtitle {
     grid-area: subtitle;
+    user-select: none;
   }
 
   .photo {
@@ -167,6 +170,7 @@
   .username {
     align-self: center;
     grid-area: username;
+    user-select: none;
   }
 
   .status-input {
@@ -177,6 +181,7 @@
     grid-area: status;
     margin-top: @normal-spacing;
     padding: 0 8px;
+    user-select: none;
   }
 }
 
@@ -212,9 +217,30 @@
     display: flex;
     justify-content: space-between;
     gap: @normal-spacing;
+    user-select: none;
 
     .subtitle {
       margin-bottom: 0;
+    }
+  }
+
+  .about-input-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 0 8px;
+    margin: 0 -8px;
+    position: relative;
+    border-radius: @corner-rounding;
+    border: 1px solid transparent;
+    background: linear-gradient(
+      0deg,
+      rgba(34, 44, 63, 0.5) 0%,
+      rgba(36, 40, 57, 0.5) 100%
+    );
+
+    &.readonly {
+      background: transparent;
     }
   }
 
@@ -244,6 +270,7 @@
       justify-content: space-between;
       gap: @normal-spacing;
       margin-bottom: 0;
+      user-select: none;
 
       .subtitle {
         margin-bottom: 0;

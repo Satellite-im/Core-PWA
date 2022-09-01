@@ -667,6 +667,7 @@ export default {
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
       invalid_file: 'Please upload a valid image type such as JPG, PNG or SVG',
+      connector_not_present: 'Iridium connector not found',
     },
     friends: {
       request_already_sent: 'You have already sent a request to this user',

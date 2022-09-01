@@ -15,7 +15,7 @@ import logger from '~/plugins/local/logger'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
-import { User } from '~/libraries/BlockchainClient/interfaces'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default {
   /**
@@ -265,19 +265,25 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
     const imagePath = await uploadPicture(userData.image)
+
+    if (!iridium.connector) {
+      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
+    }
+
     const profile = {
-      did: iridium.connector?.id,
-      peerId: iridium.connector?.peerId.toString(),
+      did: iridium.connector.id,
+      peerId: iridium.connector.peerId.toString(),
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
-    await iridium.connector?.waitForSyncNode()
+
+    await iridium.connector.waitForSyncNode()
     await iridium.profile?.set('/', profile)
     console.info('setting profile', profile)
     await iridium.sendSyncInit()
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    commit('setActiveAccount', iridium.connector?.id)
+    commit('setActiveAccount', iridium.connector.id)
     commit('setUserDetails', {
       username: userData.name,
       status: userData.status,
