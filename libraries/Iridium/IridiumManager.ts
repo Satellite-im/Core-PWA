@@ -156,6 +156,7 @@ export class IridiumManager extends Emitter {
       name: profile?.name || this.id,
       avatar: profile?.photoHash || '',
     }
+
     await connector.p2p.send(connector.p2p.primaryNodeID, payload)
   }
 }
