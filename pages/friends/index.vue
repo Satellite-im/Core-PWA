@@ -24,13 +24,14 @@ export default Vue.extend({
     FriendsTabs: () => FriendsTabs,
     friendsList(): (Friend | undefined)[] {
       return this.friends.friends.map((did) => {
-        return (
-          iridium.users.getUser(did) || {
+        if (!iridium.users.state[did]) {
+          iridium.users.state[did] = {
             did,
             name: did,
-            avatar: '',
+            status: 'offline',
           }
-        )
+        }
+        return iridium.users.state[did]
       })
     },
     activeTab(): FriendsTabs {

@@ -8,7 +8,7 @@ import {
 } from '@satellite-im/iridium'
 import type { IridiumMessage } from '@satellite-im/iridium/src/types'
 import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
-import { IridiumManager } from '../IridiumManager'
+import iridium from '../IridiumManager'
 import {
   GroupConfig,
   GroupManagerEvent,
@@ -37,24 +37,21 @@ export default class GroupManager extends Emitter<IridiumMessage> {
 
   private loggerTag = 'iridium/groups'
 
-  constructor(private readonly iridium: IridiumManager) {
-    super()
-    this.iridium = iridium
-  }
-
   async init() {
-    const iridium = this.iridium.connector
-    if (!iridium) {
+    if (!iridium.connector) {
       throw new Error('cannot initialize groups, no iridium connector')
     }
 
-    iridium.pubsub.on('/groups/announce', this.onGroupsAnnounce.bind(this))
+    iridium.connector.pubsub.on(
+      '/groups/announce',
+      this.onGroupsAnnounce.bind(this),
+    )
 
     await this.fetch()
   }
 
   private async fetch() {
-    this.state = (await this.iridium.connector?.get('/groups')) || {}
+    this.state = (await iridium.connector?.get('/groups')) || {}
   }
 
   /**
@@ -65,11 +62,11 @@ export default class GroupManager extends Emitter<IridiumMessage> {
    * @returns iridium's connector result
    */
   get<T = any>(path: string, options: IridiumGetOptions = {}): Promise<T> {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(GroupsError.NETWORK_ERROR)
     }
-    return this.iridium.connector?.get<T>(
+    return iridium.connector?.get<T>(
       `/groups${path === '/' ? '' : path}`,
       options,
     )
@@ -81,7 +78,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     const { from, payload } = message
     const { to, at, status, member, group } = payload.body
 
-    if (to !== this.iridium.connector?.id) return
+    if (to !== iridium.id) return
     const request = await this.getGroupAnnouncement(from).catch(() => undefined)
     switch (status) {
       case 'group-member-left':
@@ -112,15 +109,15 @@ export default class GroupManager extends Emitter<IridiumMessage> {
    * @returns a string UUID of the created groupChat
    */
   async createGroup(config: Omit<GroupConfig, 'origin'>): Promise<string> {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       return ''
     }
     const id = await encoding.hash({
       timestamp: Date.now(),
-      origin: this.iridium.connector?.id,
+      origin: iridium.id,
     })
 
-    await this.iridium.chat.createConversation({
+    await iridium.chat.createConversation({
       id,
       name: config.name,
       type: 'group',
@@ -130,13 +127,13 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       ...this.state,
       [id]: {
         id,
-        origin: this.iridium.connector?.id,
+        origin: iridium.id,
         ...config,
       },
     }
-    await this.iridium.connector.set(`/groups/${id}`, {
+    await iridium.connector.set(`/groups/${id}`, {
       id,
-      origin: this.iridium.connector.id,
+      origin: iridium.id,
       ...config,
     })
     return id
@@ -156,7 +153,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
   }
 
   async send(event: IridiumGroupEvent) {
-    return this.iridium.connector?.publish(`/groups/announce`, event, {
+    return iridium.connector?.publish(`/groups/announce`, event, {
       encrypt: {
         recipients: [typeof event.to === 'string' ? event.to : event.to.id],
       },
@@ -164,23 +161,23 @@ export default class GroupManager extends Emitter<IridiumMessage> {
   }
 
   async leaveGroup(groupId: string) {
-    const profile = await this.iridium.profile?.get()
+    const profile = await iridium.profile?.get()
 
-    if (!this.iridium.connector || !profile) {
+    if (!iridium.connector || !profile) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(GroupsError.NETWORK_ERROR)
     }
     // unsubscribe from group chat
     const group = await this.getGroup(groupId)
-    await this.iridium.chat.unsubscribeFromConversation(group.id)
+    await iridium.chat.unsubscribeFromConversation(group.id)
 
     // announce to group members
-    if (!group.members?.[this.iridium.connector.id]) {
+    if (!group.members?.[iridium.id]) {
       logger.error(this.loggerTag, 'not a member of group')
       throw new Error(GroupsError.NOT_A_MEMBER)
     }
 
-    delete group.members[this.iridium.connector.id]
+    delete group.members[iridium.id]
 
     Object.values(group.members).forEach(async (member: GroupMemberDetails) => {
       const payload: IridiumGroupEvent = {
@@ -189,7 +186,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
         at: Date.now(),
         group,
         member: {
-          id: this.iridium.connector?.id as string,
+          id: iridium.id as string,
           name: profile?.name,
           photoHash: profile?.photoHash,
         },
@@ -199,12 +196,12 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     })
 
     // remove group from local state and iridium
-    this.iridium.chat.deleteConversation(group.id)
+    iridium.chat.deleteConversation(group.id)
     logger.info(this.loggerTag, 'group left', { groupId, group })
   }
 
   async removeMemberFromGroup(groupId: string, remotePeerDID: string) {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(GroupsError.NETWORK_ERROR)
     }
@@ -216,9 +213,9 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     }
 
     delete members[remotePeerDID]
-    await this.iridium.connector.set(`/groups/${groupId}`, {
+    await iridium.connector.set(`/groups/${groupId}`, {
       id: groupId,
-      origin: this.iridium.connector.id,
+      origin: iridium.id,
       group,
     })
     logger.info(this.loggerTag, 'member removed from group', {
@@ -229,7 +226,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
   }
 
   async addMemberToGroup(groupId: string, remotePeerDID: string) {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
       throw new Error(GroupsError.NETWORK_ERROR)
     }
@@ -241,7 +238,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.CANNOT_ADD_MEMBER)
     }
 
-    const member = this.iridium.users.getUser(remotePeerDID)
+    const member = iridium.users.getUser(remotePeerDID)
     if (!member) {
       logger.error(this.loggerTag, 'friend not found')
       throw new Error(GroupsError.CANNOT_ADD_MEMBER)
@@ -250,15 +247,15 @@ export default class GroupManager extends Emitter<IridiumMessage> {
     const details: GroupMemberDetails = {
       id: remotePeerDID,
       name: member.name,
-      photoHash: member.photoHash ?? '',
+      photoHash: member.photoHash?.toString() || '',
     }
 
     members[remotePeerDID] = details
 
-    const conversation = this.iridium.chat.getConversation(groupId)
-    conversation.participants.push(remotePeerDID)
+    const conversation = iridium.chat.getConversation(groupId)
+    conversation?.participants.push(remotePeerDID)
 
-    await this.iridium.connector.set(
+    await iridium.connector.set(
       `/groups/${groupId}/members/${remotePeerDID}`,
       details,
     )

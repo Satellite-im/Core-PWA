@@ -1,8 +1,8 @@
 <div class="list hover-scroll">
   <SidebarListItem
-    v-for="c in sortedConversations"
-    :key="c.id"
-    :conversationId="c.id"
+    v-for="conversation in sortedConversations"
+    :key="conversation.id"
+    :conversation-id="conversation.id"
     @slideNext="$emit('slideNext')"
   />
   <div v-if="!sortedConversations.length" class="empty-friends-wrapper">

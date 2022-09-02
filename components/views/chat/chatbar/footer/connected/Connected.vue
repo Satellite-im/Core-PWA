@@ -7,7 +7,7 @@ import { CircleIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { UserType } from '~/libraries/Iridium/users/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -15,7 +15,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      userStatus: iridium.users.userStatus,
+      userStatus: iridium.users.ephemeral.status,
     }
   },
   computed: {
@@ -34,19 +34,24 @@ export default Vue.extend({
     isGroup(): boolean {
       return this.conversation?.type === 'group'
     },
-    participants(): UserType[] {
+    participants(): User[] {
       if (!this.conversation) return []
 
-      return this.conversation.participants.map((did) => ({
-        ...iridium.users.getUser(did),
-        did,
-        status: this.userStatus[did] || 'offline',
-      }))
+      return this.conversation.participants.map((did: string) => {
+        if (!iridium.users.ephemeral.status[did]) {
+          iridium.users.ephemeral.status[did] = 'offline'
+        }
+        return {
+          ...iridium.users.getUser(did),
+          did,
+          status: iridium.users.ephemeral.status[did],
+        } as User
+      })
     },
-    otherParticipants(): UserType[] {
-      return this.participants.filter((p) => p.did !== iridium.connector?.id)
+    otherParticipants(): User[] {
+      return this.participants.filter((p) => p.did !== iridium.id)
     },
-    onlineParticipants(): UserType[] {
+    onlineParticipants(): User[] {
       return this.otherParticipants.filter(
         (p) => this.userStatus[p.did] === 'online',
       )

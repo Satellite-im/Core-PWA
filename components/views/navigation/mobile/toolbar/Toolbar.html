@@ -1,9 +1,10 @@
 <div class="toolbar">
-  <button v-if="$route.params.id" @click="$emit('slidePrev')">
+  <button title="previous" v-if="$route.params.id" @click="$emit('slidePrev')">
     <menu-icon class="font-color-flair" size="1.5x" />
   </button>
   <TypographyTitle :size="6" :text="conversation?.name" />
   <button
+    title="call"
     class="phone"
     :disabled="!enableRTC || webrtc.activeCall"
     data-cy="toolbar-enable-audio"
@@ -12,6 +13,7 @@
     <phone-call-icon size="1.4x" />
   </button>
   <button
+    title="video call"
     :disabled="!enableRTC || webrtc.activeCall"
     data-cy="toolbar-enable-audio"
     @click="handleCall"

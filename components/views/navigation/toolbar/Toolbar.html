@@ -1,8 +1,10 @@
 <div class="toolbar">
   <InteractablesSidebarToggle v-if="!ui.showSidebar" />
   <div class="circle-container">
-    <UiUserState v-if="!isGroup" class="circle" :userId="otherDids[0]" />
-    <UiGroupIcon v-else :members="conversation.participants" />
+    <template v-if="details">
+      <UiUserState v-if="!isGroup" class="circle" :user="details" />
+      <UiGroupIcon v-else :members="members" />
+    </template>
   </div>
   <div class="user-info">
     <TypographyText as="h4" v-if="conversation">
@@ -12,6 +14,7 @@
   </div>
   <div class="controls">
     <button
+      title="notifications"
       class="toggle-alerts"
       :class="{'with-count': notifications.notifications.length}"
       data-cy="toolbar-alerts"
@@ -23,6 +26,7 @@
     </button>
     <ToolbarAlerts v-if="showAlerts" v-click-outside="toggleAlerts" />
     <button
+      title="call"
       v-if="conversation"
       v-tooltip.bottom="callTooltipText"
       :class="{disabled: !enableRTC || webrtc.activeCall}"
@@ -59,6 +63,7 @@
       class="disabled"
     >
       <button
+        title="wallet"
         v-tooltip.bottom="$t('wallet.wallet')"
         @click="() => toggleModal(ModalWindows.WALLET)"
       >

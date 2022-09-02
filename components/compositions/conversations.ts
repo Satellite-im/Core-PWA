@@ -30,7 +30,7 @@ export function conversationHooks() {
   const enableRTC: ComputedRef<boolean> = computed(() => {
     return Boolean(
       otherDids.value?.filter(
-        (did) => iridium.users.userStatus[did] === 'online',
+        (did) => iridium.users.ephemeral.status[did] === 'online',
       ).length,
     )
   })

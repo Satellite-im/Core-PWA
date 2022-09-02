@@ -1,10 +1,4 @@
-export type User = {
-  did: string
-  name: string
-  seen?: number
-  status?: 'online' | 'offline' | 'busy' | 'away' | 'invisible'
-  photoHash?: string
-}
+import { User } from '../users/types'
 
 export type Friend = User & {}
 

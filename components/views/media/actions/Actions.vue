@@ -40,16 +40,13 @@ export default Vue.extend({
       video: (state) => (state as RootState).video,
     }),
     audioMuted(): boolean {
-      return this.audio.muted
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.audio)
     },
     videoMuted(): boolean {
-      return this.video.disabled
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.video)
     },
     screenMuted(): boolean {
-      return Boolean(
-        iridium.connector?.id &&
-          this.webrtc.streamMuted[iridium.connector?.id]?.screen,
-      )
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.screen)
     },
   },
   methods: {
@@ -59,7 +56,7 @@ export default Vue.extend({
      * @example
      */
     async toggleMute(kind: WebRTCEnum) {
-      if (!iridium.connector?.id) return
+      if (!iridium.id) return
 
       this.buttonsLoading.push(kind)
       try {
@@ -70,7 +67,7 @@ export default Vue.extend({
         } else {
           await iridium.webRTC.toggleMute({
             kind,
-            did: iridium.connector.id,
+            did: iridium.id,
           })
         }
       } catch (e: any) {

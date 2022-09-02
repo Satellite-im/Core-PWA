@@ -12,7 +12,6 @@ import { RootState } from '~/types/store/store'
 import {
   Conversation,
   ConversationMessage,
-  ConversationMessageType,
 } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -50,7 +49,6 @@ export default Vue.extend({
     ...mapState({
       ui: (state) => (state as RootState).ui,
       chat: (state) => (state as RootState).chat,
-      textile: (state) => (state as RootState).textile,
       accounts: (state) => (state as RootState).accounts,
     }),
     ...mapGetters({
@@ -61,18 +59,14 @@ export default Vue.extend({
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
-    author(): User {
-      return this.message.from === iridium.connector?.id
+    author(): User | undefined {
+      return this.message.from === iridium.id
         ? (iridium.profile.state as User)
-        : iridium.users.getUser(this.message.from) || {
-            did: this.message.from,
-            name: this.message.from,
-            photoHash: '',
-          }
+        : iridium.users.state[this.message.from]
     },
     avatarSrc(): string | undefined {
       return (
-        this.author.photoHash &&
+        this.author?.photoHash &&
         this.$Config.ipfs.gateway + this.author.photoHash
       )
     },
@@ -104,7 +98,7 @@ export default Vue.extend({
       ]
       if (this.message.type === 'text') {
         // if your own text message
-        if (this.accounts.details?.textilePubkey === this.message.from) {
+        if (this.accounts.details?.did === this.message.from) {
           return [
             ...mainList,
             { text: this.$t('context.copy_msg'), func: this.copyMessage },
@@ -164,7 +158,7 @@ export default Vue.extend({
     showQuickProfile(e: MouseEvent) {
       const openQuickProfile = () => {
         this.$store.dispatch('ui/showQuickProfile', {
-          textilePublicKey: this.group.from,
+          did: this.message.from,
           position: { x: e.x, y: e.y },
         })
       }
@@ -289,11 +283,11 @@ export default Vue.extend({
      */
     editMessage() {
       const { id, payload, type, from } = this.message
-      if (type === 'text' && from === this.accounts.details?.textilePubkey) {
+      if (type === 'text' && from === this.accounts.details?.did) {
         this.$store.commit('ui/setEditMessage', {
           id,
           payload,
-          from: this.group.id,
+          from: this.message.from,
         })
       }
     },
@@ -305,12 +299,12 @@ export default Vue.extend({
       this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: message,
-        from: this.group.id,
+        from: this.message.from,
       })
       this.$store.commit('ui/saveEditMessage', {
         id: this.message.id,
         payload: message,
-        from: this.group.id,
+        from: this.message.from,
       })
 
       if (message !== this.message.payload) {
@@ -336,13 +330,13 @@ export default Vue.extend({
       this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: '',
-        from: this.group.id,
+        from: this.message.from,
       })
 
       this.$store.commit('ui/saveEditMessage', {
         id: this.message.id,
         payload: 'message',
-        from: this.group.id,
+        from: this.message.from,
       })
     },
     async getImageBlob(imageSrc: string) {

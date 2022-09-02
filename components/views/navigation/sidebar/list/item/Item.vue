@@ -12,7 +12,7 @@ import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User, UserStatus } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -29,26 +29,39 @@ export default Vue.extend({
       isLoading: false,
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
-      chat: iridium.chat.state,
-      typing: iridium.chat.ephemeral.typing,
-      groups: iridium.groups.state,
+      conversations: iridium.chat.state.conversations,
+      statuses: iridium.users.ephemeral.status,
       users: iridium.users.state,
     }
   },
   computed: {
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
-    conversation(): Conversation | undefined {
-      return this.chat.conversations[this.conversationId]
+    conversation(): Conversation {
+      return iridium.chat.state.conversations[this.conversationId]
     },
-    userId(): string | undefined {
-      return (this.conversation?.participants || []).find(
-        (did) => did !== iridium.connector?.id,
-      )
+    userId(): string {
+      const userId =
+        (this.conversation.participants || []).find(
+          (participant) => participant !== iridium.id,
+        ) || ''
+
+      return userId
+    },
+    user(): User {
+      return iridium.users.state[this.userId]
+    },
+    status(): UserStatus {
+      return iridium.users.ephemeral.status?.[this.userId] || 'offline'
     },
     isTyping(): boolean {
       if (!this.user) return false
 
-      return (this.typing[this.conversation.id] || []).includes(this.user.did)
+      return (
+        !!this.conversation &&
+        (iridium.chat.ephemeral.typing[this.conversation.id] || []).includes(
+          this.user.did,
+        )
+      )
     },
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation?.type === 'direct'
@@ -75,14 +88,10 @@ export default Vue.extend({
           ]
     },
     messages(): ConversationMessage[] {
-      if (!Object.keys(this.conversation || {}).length) {
-        return []
-      }
-      return Object.values(this.conversation?.message || {}).sort(
-        (a, b) => a.at - b.at,
-      )
+      return Object.values(
+        iridium.chat.state.conversations[this.conversationId].message,
+      ).sort((a, b) => a.at - b.at)
     },
-
     lastMessageDisplay(): string {
       const message = this.messages.at(-1)
       if (!message) {
@@ -95,7 +104,7 @@ export default Vue.extend({
         .filter((name) => name)
         .join(', ')
 
-      const fromSelf = message.from === iridium.connector?.id
+      const fromSelf = message.from === iridium.id
 
       if (message.attachments.length) {
         return fromSelf
@@ -119,7 +128,6 @@ export default Vue.extend({
 
       return message.body || ''
     },
-
     isSelected(): boolean {
       return this.conversation?.id === this.$route.params.id
     },
@@ -147,7 +155,7 @@ export default Vue.extend({
     this.setTimestamp()
   },
   beforeDestroy() {
-    this.clearTimeoutId()
+    clearTimeout(this.timeoutId)
     this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
@@ -159,9 +167,6 @@ export default Vue.extend({
       await iridium.friends
         .friendRemove(this.user.did)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
-      if (this.$route.params.id === this.user.did) {
-        this.$router.replace('/friends')
-      }
       this.isLoading = false
     },
     async leaveGroup() {
@@ -230,8 +235,8 @@ export default Vue.extend({
       }
       const lastMsg = this.messages.at(-1)?.at
 
+      clearTimeout(this.timeoutId)
       if (this.$dayjs().diff(lastMsg, 'second') < 30) {
-        this.clearTimeoutId()
         this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
         this.timestamp = this.$t('time.now')
         return
@@ -248,17 +253,11 @@ export default Vue.extend({
         this.timestamp = this.getDate(lastMsg)
       }
       const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
-      this.clearTimeoutId()
       // update timestamp at midnight tonight
       this.timeoutId = setTimeout(
         () => this.setTimestamp(),
         midnight - Date.now(),
       )
-    },
-    clearTimeoutId() {
-      if (this.timeoutId) {
-        clearTimeout(this.timeoutId)
-      }
     },
   },
 })

@@ -122,7 +122,7 @@ describe('init', () => {
     })
   })
 
-  it('should setProfilePicture', () => {
+  it.skip('should setProfilePicture', () => {
     const localStateForUnitTest = { ...state }
     inst.setProfilePicture(
       localStateForUnitTest,
@@ -149,7 +149,7 @@ describe('init', () => {
     })
   })
 
-  it('should setUserDetails', () => {
+  it.skip('should setUserDetails', () => {
     const localStateForUnitTest = { ...state }
     const newDetails = {
       username: 'username',
@@ -190,7 +190,7 @@ describe('init', () => {
     })
   })
 
-  it('should updateMailboxId', () => {
+  it.skip('should updateMailboxId', () => {
     const localStateForUnitTest = { ...state }
     inst.updateMailboxId(localStateForUnitTest, 'mailbox')
 

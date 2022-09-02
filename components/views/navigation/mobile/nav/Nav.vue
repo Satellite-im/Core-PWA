@@ -13,7 +13,8 @@ import {
 } from 'satellite-lucide-icons'
 import { ModalWindows } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { UserStatus } from '~/libraries/Iridium/users/types'
 export default Vue.extend({
   components: {
     HomeIcon,
@@ -23,11 +24,19 @@ export default Vue.extend({
     SettingsIcon,
     ShoppingBagIcon,
   },
+  data() {
+    return {
+      userStatus: iridium.users.ephemeral.status,
+    }
+  },
   computed: {
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
       ui: (state) => (state as RootState).ui,
     }),
+    status(): UserStatus {
+      return 'online'
+    },
     isMobileNavVisible: {
       get(): boolean {
         return this.ui.isMobileNavVisible

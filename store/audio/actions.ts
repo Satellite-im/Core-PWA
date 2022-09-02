@@ -3,12 +3,35 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import logger from '~/plugins/local/logger'
 
 export default {
-  initialize({ dispatch, state }: ActionsArguments<AudioState>) {
+  initialize({ state, commit }: ActionsArguments<AudioState>) {
+    commit('setMuted', true)
+    logger.info('store/audio/actions.initialize', 'initializing audio store')
+    if (iridium.id) {
+      iridium.webRTC.setStreamMuted(iridium.id, {
+        video: state.muted,
+      })
+    }
     iridium.webRTC.on('track', ({ did, kind }) => {
-      if (kind === 'audio' && state.muted && did === iridium.connector?.id) {
-        iridium.webRTC.setStreamMuted(did, { audio: true })
+      if (kind === 'audio') {
+        logger.info(
+          'store/video/actions.initialize',
+          'initializing audio track',
+          { did, state },
+        )
+        if (did === iridium.id) {
+          iridium.webRTC[state.muted ? 'mute' : 'unmute']({
+            kind: 'audio',
+            did,
+          })
+        } else {
+          iridium.webRTC[state.deafened ? 'mute' : 'unmute']({
+            kind: 'audio',
+            did,
+          })
+        }
       }
     })
   },
@@ -35,13 +58,14 @@ export default {
       return
     }
 
+    console.info('toggle audio mute', state.muted)
     if (!state.muted) {
-      await iridium.webRTC.mute({ kind: 'audio' })
       commit('setMute', true)
+      await iridium.webRTC.mute({ kind: 'audio' })
       return
     }
-    await iridium.webRTC.unmute({ kind: 'audio' })
     commit('setMute', false)
+    await iridium.webRTC.unmute({ kind: 'audio' })
   },
   /**
    * @method toggleDeafen

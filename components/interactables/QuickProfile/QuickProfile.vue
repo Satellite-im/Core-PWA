@@ -3,8 +3,9 @@
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
-import { User } from '~/types/ui/user'
+import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -25,11 +26,17 @@ export default Vue.extend({
   computed: {
     ...mapState(['ui', 'accounts']),
     isMe(): boolean {
-      return this.accounts.details.textilePubkey === this.user?.textilePubkey
+      return iridium.id === this.user?.did
     },
     src(): string {
-      const hash = this.user?.profilePicture
+      const hash = this.user?.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    },
+    status(): UserStatus {
+      return (
+        (this.user && iridium.users.ephemeral.status[this.user.did]) ||
+        'offline'
+      )
     },
   },
   watch: {
@@ -86,21 +93,27 @@ export default Vue.extend({
       }
     },
     sendMessage() {
+      if (!this.user) return
       if (this.$Config.regex.empty.test(this.text)) {
         this.isEmptyMessage = true
         return
       }
-      this.$store.dispatch('textile/sendTextMessage', {
-        to: this.user?.textilePubkey,
-        text: this.text,
+      const conversationId = iridium.chat.directConversationIdFromDid(
+        this.user.did,
+      ) as string
+      iridium.chat.sendMessage({
+        at: Date.now(),
+        type: 'text',
+        body: this.text,
+        conversationId,
+        attachments: [],
+        payload: {},
       })
       this.close()
     },
     openProfile() {
       if (this.user) {
-        const isMe = this.user.address === this.accounts.active
-
-        if (isMe) {
+        if (this.isMe) {
           this.close()
           this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
           // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
