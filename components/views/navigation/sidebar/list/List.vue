@@ -18,9 +18,7 @@ export default Vue.extend({
   },
   computed: {
     sortedConversations(): Conversation[] {
-      return Object.values(iridium.chat.state.conversations).sort(
-        (a, b) => a.updatedAt - b.updatedAt,
-      )
+      return iridium.chat.getSortedConversations()
     },
   },
 })
