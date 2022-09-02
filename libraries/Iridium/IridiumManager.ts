@@ -115,8 +115,15 @@ export class IridiumManager extends Emitter {
       this.connector.p2p.on('ready', this.onP2pReady.bind(this))
     }
 
-    logger.log('iridium/manager', 'sending sync init')
-    await this.sendSyncInit()
+    this.profile.on('ready', this.onProfileChange.bind(this))
+    this.profile.on('changed', this.onProfileChange.bind(this))
+  }
+
+  async onProfileChange() {
+    if (this.profile.state?.did) {
+      logger.log('iridium/manager', 'sending sync init')
+      await this.sendSyncInit()
+    }
   }
 
   async onP2pReady() {

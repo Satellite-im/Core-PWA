@@ -5,6 +5,7 @@ import logger from '~/plugins/local/logger'
 
 export default class IridiumProfile extends Emitter {
   public state?: User
+  public ready?: boolean = false
 
   async init() {
     if (!iridium) {
@@ -13,6 +14,8 @@ export default class IridiumProfile extends Emitter {
 
     iridium.on('changed', this.onStateChanged.bind(this))
     await this.fetch()
+    this.ready = true
+    this.emit('ready', this.state)
     logger.info('iridium/profile', 'profile state loaded', {
       state: this.state,
     })
@@ -35,7 +38,7 @@ export default class IridiumProfile extends Emitter {
 
   onStateChanged(state: { path: string; value: any }) {
     if (state.path.startsWith('/profile')) {
-      if (!state.value?.profile) {
+      if (!state.value?.profile || !state.value?.profile?.did) {
         return
       }
       this.state = state.value?.profile
