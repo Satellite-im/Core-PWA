@@ -13,7 +13,6 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User, UserStatus } from '~/libraries/Iridium/users/types'
-import logger from '~/plugins/local/logger'
 
 export default Vue.extend({
   components: {
@@ -29,13 +28,14 @@ export default Vue.extend({
     return {
       isLoading: false,
       timestamp: '' as string | TranslateResult,
-      timeoutId: undefined as any,
+      timeoutId: undefined as NodeJS.Timeout | undefined,
       conversations: iridium.chat.state.conversations,
       statuses: iridium.users.ephemeral.status,
       users: iridium.users.state,
     }
   },
   computed: {
+    ...mapGetters('settings', ['getTimestamp', 'getDate']),
     conversation(): Conversation {
       return iridium.chat.state.conversations[this.conversationId]
     },
@@ -242,13 +242,15 @@ export default Vue.extend({
         return
       }
       if (this.$dayjs().isSame(lastMsg, 'day')) {
-        this.timestamp = ''
+        this.timestamp = this.getTimestamp({
+          time: lastMsg,
+        })
       } else if (this.$dayjs().diff(lastMsg, 'day') <= 1) {
         this.timestamp = this.$t('time.yesterday')
       } else if (this.$dayjs().diff(lastMsg, 'day') <= 2) {
         this.timestamp = '2 d'
       } else {
-        this.timestamp = ''
+        this.timestamp = this.getDate(lastMsg)
       }
       const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
       // update timestamp at midnight tonight
