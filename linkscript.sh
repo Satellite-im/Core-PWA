@@ -2,7 +2,7 @@
 if [ ! -d ./linked-iridium ]; then
   git clone https://github.com/Satellite-im/iridium.git ./linked-iridium
   cp .env ./linked-iridium/.env
-  cd ./.linked-iridium
+  cd ./linked-iridium
 else
   cd ./linked-iridium
   git pull -f
