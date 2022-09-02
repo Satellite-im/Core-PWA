@@ -110,8 +110,10 @@ export class IridiumManager extends Emitter {
     await this.profile.init()
 
     if (this.connector.p2p.ready) {
+      logger.debug('iridium/manager', 'p2p already ready')
       await this.onP2pReady()
     } else {
+      logger.debug('iridium/manager', 'waiting for p2p readiness')
       this.connector.p2p.on('ready', this.onP2pReady.bind(this))
     }
 
@@ -151,11 +153,13 @@ export class IridiumManager extends Emitter {
   async sendSyncInit() {
     const connector = this.connector
     if (!connector?.p2p.primaryNodeID) {
-      logger.warn('iridium/manager', 'no primary node, cannot send sync init')
+      logger.warn('iridium/manager', 'no primary node, cannot send sync init', {
+        primaryNodeID: connector?.p2p.primaryNodeID,
+        ready: connector?.p2p.ready,
+      })
       return
     }
     const profile = this.profile.state
-
     logger.info('iridium/manager', 'sending sync init', { profile })
     const payload = {
       type: 'sync/init',
