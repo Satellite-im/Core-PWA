@@ -24,8 +24,14 @@ export default Vue.extend({
     VideoIcon,
   },
   setup() {
-    const { conversation, conversationId, isGroup, otherDids, enableRTC } =
-      conversationHooks()
+    const {
+      conversation,
+      conversationId,
+      isGroup,
+      otherDids,
+      enableRTC,
+      userDetails,
+    } = conversationHooks()
 
     async function handleCall() {
       if (isGroup.value || !enableRTC.value) {
@@ -43,6 +49,7 @@ export default Vue.extend({
       isGroup,
       otherDids,
       enableRTC,
+      userDetails,
       handleCall,
     }
   },

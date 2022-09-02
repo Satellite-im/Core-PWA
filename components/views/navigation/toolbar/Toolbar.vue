@@ -1,7 +1,7 @@
 <template src="./Toolbar.html"></template>
 
 <script lang="ts">
-import Vue, { computed } from 'vue'
+import Vue, { computed, ComputedRef } from 'vue'
 import {
   PhoneCallIcon,
   ArchiveIcon,
@@ -21,6 +21,7 @@ import {
   conversationHooks,
   call,
 } from '~/components/compositions/conversations'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -40,10 +41,16 @@ export default Vue.extend({
   setup() {
     // @ts-ignore
     const $nuxt = useNuxtApp()
-    const { conversation, conversationId, isGroup, otherDids, enableRTC } =
-      conversationHooks()
+    const {
+      conversation,
+      conversationId,
+      isGroup,
+      otherDids,
+      enableRTC,
+      userDetails,
+    } = conversationHooks()
 
-    const subtitleText = computed(() => {
+    const subtitleText: ComputedRef<string> = computed(() => {
       if (isGroup.value) {
         return (
           conversation?.value?.participants
@@ -55,7 +62,7 @@ export default Vue.extend({
       return iridium.users.ephemeral.status[otherDids.value[0]] || 'offline'
     })
 
-    const callTooltipText = computed(() => {
+    const callTooltipText: ComputedRef<string> = computed(() => {
       if (isGroup.value) {
         return $nuxt.$i18n.t('coming_soon.group_call')
       }
@@ -82,6 +89,7 @@ export default Vue.extend({
       enableRTC,
       subtitleText,
       callTooltipText,
+      userDetails,
       handleCall,
     }
   },
