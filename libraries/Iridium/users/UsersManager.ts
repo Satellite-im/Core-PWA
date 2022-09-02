@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
@@ -47,14 +46,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     }
 
     logger.log(this.loggerTag, 'initializing')
-
     await this.fetch()
+
+    logger.log(this.loggerTag, 'fetched', this.state)
     this.ephemeral.status = Object.keys(this.state).reduce(
       (acc, did) => ({ ...acc, [did]: 'offline' }),
       {},
     )
-    logger.log(this.loggerTag, 'users state loaded', this.state)
-
     logger.info(this.loggerTag, 'subscribing to announce topic')
     await iridium.connector.subscribe<IridiumUserPubsub>('/users/announce', {
       handler: this.onUsersAnnounce.bind(this),
@@ -74,7 +72,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     await this.loadUserData()
     setInterval(async () => {
       await this.loadUserData()
-    }, 10000)
+    }, 1800000)
 
     iridium.connector?.p2p.on('node/message/sync/searchPeer', (message) => {
       const peers = message.payload.body.peers as User[]
@@ -89,8 +87,8 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       )
     })
 
-    logger.info(this.loggerTag, 'initialized', this)
-    this.emit('ready', {})
+    logger.info(this.loggerTag, 'initialized')
+    return this.emit('ready', { users: this.state })
   }
 
   async stop() {
@@ -228,23 +226,29 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async searchPeer(query: string, page: number = 0): Promise<User[]> {
     if (!iridium.connector) {
+      logger.error(this.loggerTag, 'network error (no connector)')
       return []
     }
 
     return new Promise<User[]>((resolve) => {
       const id = v4()
       if (!iridium.connector?.p2p.primaryNodeID || !iridium.ready) {
+        logger.warn('iridium/usermanager', 'no primary node, cannot search', {
+          primaryNodeID: iridium?.connector?.p2p.primaryNodeID,
+          p2pReady: iridium?.connector?.p2p.ready,
+          iridiumReady: iridium?.ready,
+        })
         return resolve([])
       }
 
       const timeout = setTimeout(() => {
         logger.warn(this.loggerTag, 'peer search timeout', { query })
         resolve([])
-      }, 10000)
+      }, 30000)
 
       this.once(`searchResults/${id}`, (results: User[]) => {
+        logger.debug(this.loggerTag, 'search results received', results)
         clearTimeout(timeout)
-        logger.info(this.loggerTag, 'peer search results', results)
         resolve(results)
       })
 
