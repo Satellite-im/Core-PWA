@@ -35,7 +35,19 @@ export function conversationHooks() {
     )
   })
 
-  return { conversation, conversationId, isGroup, otherDids, enableRTC }
+  // for a DM
+  const userDetails: ComputedRef<User> = computed(() => {
+    return iridium.users.state[otherDids.value[0]]
+  })
+
+  return {
+    conversation,
+    conversationId,
+    isGroup,
+    otherDids,
+    enableRTC,
+    userDetails,
+  }
 }
 
 export async function call({
