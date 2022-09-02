@@ -9,47 +9,43 @@
   </SettingsSection>
   <TypographyHorizontalRuleText
     plaintext
-    :value="$t('pages.privacy.permissions')"
+    :value="$t('pages.privacy.permissions.title')"
   />
   <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.notifications.title')"
       :text="$t('pages.privacy.notifications.subtitle')"
     >
-      <InteractablesSwitch
-        :isEnabled="permissions.includes('notifications')"
-        @click="handlePermissions('notification')"
-        :isLocked="loading.includes('notifications')"
+      <InteractablesPermissions
+        :state="getPermissionState('notifications')"
+        @click="handlePermission('notifications')"
       />
     </SettingsUnit>
     <SettingsUnit
       :title="$t('pages.privacy.microphone.title')"
       :text="$t('pages.privacy.microphone.subtitle')"
     >
-      <InteractablesSwitch
-        :isEnabled="permissions.includes('microphone')"
-        @click="handlePermissions('microphone')"
-        :isLocked="loading.includes('microphone')"
+      <InteractablesPermissions
+        :state="getPermissionState('microphone')"
+        @click="handlePermission('microphone')"
       />
     </SettingsUnit>
     <SettingsUnit
       :title="$t('pages.privacy.camera.title')"
       :text="$t('pages.privacy.camera.subtitle')"
     >
-      <InteractablesSwitch
-        :isEnabled="permissions.includes('camera')"
-        @click="handlePermissions('camera')"
-        :isLocked="loading.includes('camera')"
+      <InteractablesPermissions
+        :state="getPermissionState('camera')"
+        @click="handlePermission('camera')"
       />
     </SettingsUnit>
     <SettingsUnit
       :title="$t('pages.privacy.screenshare.title')"
       :text="$t('pages.privacy.screenshare.subtitle')"
     >
-      <InteractablesSwitch
-        v-model="screenshare"
-        :isLocked="loading.includes('screenshare')"
-      />
+      <TypographyText color="error">
+        {{ $t('pages.privacy.screenshare.note') }}
+      </TypographyText>
     </SettingsUnit>
   </SettingsSection>
 
