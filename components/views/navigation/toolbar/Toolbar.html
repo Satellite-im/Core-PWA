@@ -7,10 +7,12 @@
     </template>
   </div>
   <div class="user-info">
-    <TypographyText as="h4" v-if="conversation">
+    <TypographyText class="header" as="h4" v-if="conversation">
       {{ conversation.name }}
     </TypographyText>
-    <TypographyText color="dark">{{ subtitleText }}</TypographyText>
+    <TypographyText class="header" color="dark">
+      {{ subtitleText }}
+    </TypographyText>
   </div>
   <div class="controls">
     <button

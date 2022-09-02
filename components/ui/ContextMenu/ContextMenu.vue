@@ -50,11 +50,12 @@
             :class="{ danger: item.type === 'danger' }"
             @click="(e) => handleAction(e, item.func)"
           >
-            <TypographySubtitle
-              :text="item.text"
+            <TypographyText
               :size="6"
               :class="{ danger: item.type === 'danger' }"
-            />
+            >
+              {{ item.text }}
+            </TypographyText>
           </button>
         </template>
       </div>

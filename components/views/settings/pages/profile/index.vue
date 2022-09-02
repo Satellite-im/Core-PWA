@@ -37,7 +37,7 @@ export default Vue.extend({
       inputs: {
         name: iridium.profile.state?.name ?? '',
         photoHash: iridium.profile.state?.photoHash ?? '',
-        status: iridium.profile.state?.status ?? '',
+        status: '',
         about: iridium.profile.state?.about ?? '',
         accountUrl: '',
       } as Partial<User>,
@@ -65,9 +65,6 @@ export default Vue.extend({
     },
     profile(): User | undefined {
       return iridium.profile.state
-    },
-    aboutChanged(): boolean {
-      return this.inputs.about !== this.profile?.about
     },
   },
   beforeDestroy() {
@@ -170,14 +167,15 @@ export default Vue.extend({
      * @description Updates input value
      * @example this.submitEdit('name', 'John Doe')
      */
-    submitEdit(e: SubmitEvent) {
+    submitEdit(e: SubmitEvent, key: Editables) {
       e.stopPropagation()
       e.preventDefault()
-      const about = this.inputs.about || ''
-      if (this.editing.has('about') && this.aboutChanged) {
-        this.updateUserDetail(e, 'about', about)
+      const value = this.inputs[key] || ''
+      const valueChanged = this.profile?.[key] !== value
+      if (this.editing.has(key) && valueChanged) {
+        this.updateUserDetail(e, key, value)
       }
-      this.toggleEditing('about')
+      this.toggleEditing(key)
     },
     /**
      * @method getEditButtonText

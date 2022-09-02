@@ -223,35 +223,65 @@
       margin-bottom: 0;
     }
   }
+}
 
-  .about-input-wrapper {
-    display: flex;
-    align-items: flex-end;
-    gap: 0.5rem;
-    padding: 0 8px;
-    margin: 0 -8px;
-    position: relative;
-    border-radius: @corner-rounding;
-    border: 1px solid transparent;
-    background: linear-gradient(
-      0deg,
-      rgba(34, 44, 63, 0.5) 0%,
-      rgba(36, 40, 57, 0.5) 100%
-    );
+.editable-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 8px;
+  margin: 0 -8px;
+  position: relative;
+  border-radius: @corner-rounding;
+  border: 1px solid transparent;
+  background: linear-gradient(
+    0deg,
+    rgba(34, 44, 63, 0.5) 0%,
+    rgba(36, 40, 57, 0.5) 100%
+  );
 
-    &.readonly {
-      background: transparent;
-    }
+  &.username,
+  &.readonly {
+    background: transparent;
   }
 
-  .edit-button {
-    font-style: italic;
-    white-space: nowrap;
-    color: @text-muted;
+  &.username {
+    padding: 0;
+    margin: 0;
+    border: none;
+
+    .username-label {
+      flex-grow: 1;
+      &:extend(.ellipsis);
+    }
+
+    .edit-button {
+      padding: 8px;
+      opacity: 0;
+
+      &.active,
+      &:focus {
+        opacity: 1;
+      }
+    }
 
     &:hover {
-      opacity: 0.8;
+      .edit-button {
+        opacity: 1;
+        cursor: pointer;
+      }
     }
+  }
+}
+
+.edit-button {
+  font-style: italic;
+  white-space: nowrap;
+  color: @text-muted;
+  transition: @animation-speed-long ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
   }
 }
 
