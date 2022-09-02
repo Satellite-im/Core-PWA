@@ -78,6 +78,7 @@ export default Vue.extend({
       this.error = ''
       this.searching = true
       const matches = await iridium.users.searchPeer(this.query)
+      console.info('search matches', matches)
       const hasFriend =
         matches.length === 1 && iridium.friends.isFriend(matches[0].did)
 
