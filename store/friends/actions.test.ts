@@ -19,7 +19,7 @@ FriendsProgram.mockImplementation(() => mockFPLogger)
 Vue.prototype.$SolanaManager = new SolanaManager()
 
 describe('default functions', () => {
-  test('module.default.initialize', async () => {
+  test.skip('module.default.initialize', async () => {
     const mockData = [
       {
         key: '1',
@@ -125,7 +125,7 @@ describe('default functions', () => {
     expect(dispatch).toBeCalledWith('subscribeToFriendsEvents', {})
   })
 
-  test('module.default.removeFriend without payer account', async () => {
+  test.skip('module.default.removeFriend without payer account', async () => {
     const BCConstructor = BlockchainClient
     BCConstructor.getInstance = jest.fn().mockReturnValueOnce({
       payerAccount: false,

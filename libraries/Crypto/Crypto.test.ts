@@ -25,7 +25,7 @@ describe('Test crypto', () => {
     }
   })
   test('getPublicKey', () => {
-    function toHexString(byteArray) {
+    function toHexString(byteArray: Iterable<unknown> | ArrayLike<unknown>) {
       // From https://stackoverflow.com/a/34310051
       return Array.from(byteArray, function (byte) {
         return ('0' + (byte & 0xff).toString(16)).slice(-2)

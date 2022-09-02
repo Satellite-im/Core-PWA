@@ -1,23 +1,29 @@
-import * as module from './types'
+import { themes, languages, defaultKeybinds, KeybindKeys } from './types'
 
-describe('Test Iridium/settings/types', () => {
-  it('should return themes', () => {
-    expect(module.themes).toMatchSnapshot()
+describe('themes', () => {
+  test('check themes export type', () => {
+    expect(themes).toEqual({
+      default: 'Default',
+      moonlessNight: 'Moonless Night',
+    })
   })
+})
 
-  it('should return flairs', () => {
-    expect(module.flairs).toMatchSnapshot()
+describe('languages', () => {
+  test('check languages export type', () => {
+    expect(languages).toEqual({
+      en_US: 'English (USA)',
+    })
   })
+})
 
-  it('should return languages', () => {
-    expect(module.languages).toMatchSnapshot()
-  })
-
-  it('should return default sounds', () => {
-    expect(module.defaultSounds).toMatchSnapshot()
-  })
-
-  it('should return default keybinds', () => {
-    expect(module.defaultKeybinds).toMatchSnapshot()
+describe('defaultKeybinds', () => {
+  test('check defaultKeybinds export type', () => {
+    expect(defaultKeybinds).toEqual({
+      [KeybindKeys.TOGGLE_MUTE]: 'alt+m',
+      [KeybindKeys.TOGGLE_DEAFEN]: 'alt+d',
+      [KeybindKeys.OPEN_SETTINGS]: 'alt+s',
+      [KeybindKeys.CALL_ACTIVE_CHAT]: 'alt+c',
+    })
   })
 })

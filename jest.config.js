@@ -16,6 +16,7 @@ module.exports = {
     '!**/startup.js',
     '!**/*.eslintrc.js',
     '!**/iridium/**',
+    '!**/*.disabled.ts',
     '!**/linked-iridium/**',
   ],
   moduleDirectories: ['node_modules', 'src'],
