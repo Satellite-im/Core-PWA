@@ -58,7 +58,9 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('accounts/loadAccount')
         logger.info('pages/index/loadAccount', 'success')
-        return this.$router.replace('/friends')
+        return this.$router.replace(
+          this.$device.isMobile ? 'mobile/chat' : '/friends',
+        )
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           await this.$router.replace('/auth/register')
