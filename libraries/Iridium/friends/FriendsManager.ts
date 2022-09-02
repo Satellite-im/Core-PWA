@@ -130,7 +130,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns updated state
    */
   async fetch() {
-    const fetched = (await this.get('/')) || { friends: [], requests: {} }
+    const fetched = ((await this.get('/')) as FriendState) || {
+      friends: [],
+      requests: {},
+    }
     this.state.requests = fetched?.requests || {}
     this.state.friends = !fetched.friends
       ? []
@@ -257,10 +260,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   async requestCreate(
     id: IridiumPeerIdentifier,
     incoming = false,
-    user: User = {
-      name: 'TODOfoo',
-      did: didUtils.didString(id),
-    },
+    user: User,
   ): Promise<void> {
     const did = didUtils.didString(id)
     if (this.isFriend(did)) {
@@ -284,7 +284,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     const request: FriendRequest = {
-      user: user || { did, name: did },
+      user,
       status: 'pending',
       incoming,
       at: Date.now(),
