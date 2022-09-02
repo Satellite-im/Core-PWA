@@ -82,6 +82,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
     >('node/message/sync/fetch', this.onSyncFetchResponse.bind(this))
 
+    iridium.connector?.p2p.on<
+      IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
+    >('node/message/sync/validate', this.onSyncValidate.bind(this))
+
     iridium.connector?.subscribe<
       IridiumPubsubMessage<IridiumDecodedPayload<IridiumConversationEvent>>
     >('/chat/announce', {
@@ -203,6 +207,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
   }
 
+  async onSyncValidate(
+    message: IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>,
+  ) {
+    // TODO: decide what we want to do with validation results
+  }
+
   async onConversationMessage(
     conversationId: string,
     { from, payload }: ConversationPubsubEvent,
@@ -230,6 +240,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         throw new Error('no message in payload')
       }
 
+      message.attachments.map(async (attachment) => {
+        if (!this.iridium.connector?.p2p.primaryNodeID) {
+          return
+        }
+        await this.iridium.connector?.p2p.send(
+          this.iridium.connector?.p2p.primaryNodeID,
+          {
+            cid: attachment.cid,
+            type: 'sync/validate',
+          },
+        )
+      })
       logger.info(
         'iridium/chatmanager/onConversationMessage',
         'message received',
