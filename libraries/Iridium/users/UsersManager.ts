@@ -233,7 +233,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
     return new Promise<User[]>((resolve) => {
       const id = v4()
-      if (!iridium.connector?.p2p.primaryNodeID) {
+      if (!iridium.connector?.p2p.primaryNodeID || !iridium.ready) {
         return resolve([])
       }
 
@@ -249,7 +249,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       })
 
       logger.info(this.loggerTag, 'peer search query', { query, page, id })
-      return iridium.connector.p2p.send(iridium.connector.p2p.primaryNodeID, {
+      iridium.connector.p2p.send(iridium.connector.p2p.primaryNodeID, {
         type: 'sync/searchPeer',
         id,
         query,
