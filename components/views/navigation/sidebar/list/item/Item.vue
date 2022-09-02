@@ -4,6 +4,7 @@
 import Vue, { PropType } from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
+import { mapGetters } from 'vuex'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
