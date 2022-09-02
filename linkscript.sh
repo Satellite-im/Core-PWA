@@ -1,4 +1,5 @@
 #!/bin/bash
+export PNPM_HOME=./.pnpm-links/
 if [ ! -d ./linked-iridium ]; then
   git clone https://github.com/Satellite-im/iridium.git ./linked-iridium
   cp .env ./linked-iridium/.env
