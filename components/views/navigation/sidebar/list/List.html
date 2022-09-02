@@ -1,4 +1,4 @@
-<div class="list hover-scroll">
+<div class="list hover-scroll" :class="{loading: !iridium.ready}">
   <UiLoadersFriend v-if="!iridium.ready" :count="9" />
   <template v-else>
     <SidebarListItem

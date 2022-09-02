@@ -1,5 +1,9 @@
 .list {
-  overflow-y: scroll;
+  overflow-y: auto;
+
+  &.loading {
+    overflow-y: hidden;
+  }
 
   .empty-friends-wrapper {
     display: flex;
