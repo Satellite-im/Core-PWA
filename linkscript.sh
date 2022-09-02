@@ -13,7 +13,7 @@ corepack prepare pnpm@latest --activate
 pnpm i --unsafe-perm
 pnpm build:ipfs
 pnpm build:browser
-pnpm link --global
+yarn link
 cd ..
 grep -v "@satellite-im/iridium" package.json > tmppackage && mv tmppackage package.json
-pnpm link @satellite-im/iridium --global
+yarn link @satellite-im/iridium
