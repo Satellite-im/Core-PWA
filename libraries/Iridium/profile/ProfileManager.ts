@@ -19,9 +19,8 @@ export default class IridiumProfile extends Emitter {
   }
 
   private async fetch() {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
     this.state = await this.get<User>()
-    // await this.setUser()
+    await this.setUser()
     // TODO: verify schema of profile data, recover from invalid data
   }
 
