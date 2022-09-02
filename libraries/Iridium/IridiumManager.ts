@@ -143,17 +143,18 @@ export class IridiumManager extends Emitter {
 
   async sendSyncInit() {
     const connector = this.connector
-    const profile = this.profile.state
-    if (!connector?.p2p.primaryNodeID || !profile) {
+    if (!connector?.p2p.primaryNodeID) {
+      logger.warn('iridium/manager', 'no primary node, cannot send sync init')
       return
     }
+    const profile = this.profile.state
 
     logger.info('iridium/manager', 'sending sync init', { profile })
     const payload = {
       type: 'sync/init',
       at: Date.now(),
-      name: profile.name,
-      avatar: profile.photoHash,
+      name: profile?.name || this.id,
+      avatar: profile?.photoHash || '',
     }
     await connector.p2p.send(connector.p2p.primaryNodeID, payload)
   }
