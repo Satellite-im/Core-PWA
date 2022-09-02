@@ -61,7 +61,7 @@ export default Vue.extend({
           if (!this.users[request.user.did]) {
             this.users[request.user.did] = {
               did: request.user.did,
-              name: request.user.did,
+              name: request.user.name,
               status: 'offline',
             }
           }
