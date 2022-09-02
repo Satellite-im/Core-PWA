@@ -14,6 +14,7 @@ export default Vue.extend({
     return {
       loading: false,
       chat: iridium.chat.state,
+      iridium,
     }
   },
   computed: {
