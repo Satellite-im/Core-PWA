@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call } from '~/libraries/WebRTC/Call'
@@ -15,7 +15,11 @@ type OptimalBoxDomensionsParams = {
   numBoxes: number
   aspectRatio: number
   gap: number
-  // minBoxWidth: number
+}
+
+type Stream = {
+  participant: User | undefined
+  stream: string
 }
 
 export default Vue.extend({
@@ -41,7 +45,9 @@ export default Vue.extend({
       isFullscreen: false,
       resizeObserver: null as ResizeObserver | null,
       mediaUserSize: [160, 90],
+      presenterUserSize: [160, 90],
       windowHeight: window.innerHeight,
+      presenter: null as Stream | null,
     }
   },
   computed: {
@@ -71,7 +77,7 @@ export default Vue.extend({
       }
       return $WebRTC.getCall(this.webrtc.activeCall.callId)
     },
-    streams(): any[] {
+    streams(): Stream[] {
       if (!this.call) {
         return []
       }
@@ -95,17 +101,17 @@ export default Vue.extend({
   },
   watch: {
     streams() {
-      this.calculateMediaUserSize()
+      this.calculateUserSizes()
     },
   },
   mounted() {
     document.addEventListener('fullscreenchange', this.setFullscreenValue)
     document.addEventListener('resize', this.scaleHeight)
     this.resizeObserver = new ResizeObserver(() => {
-      this.calculateMediaUserSize()
+      this.calculateUserSizes()
     })
-    const media = this.$refs.media as HTMLElement
-    this.resizeObserver.observe(media)
+    const mediastream = this.$refs.mediastream as HTMLElement
+    this.resizeObserver.observe(mediastream)
   },
   beforeDestroy() {
     document.removeEventListener('fullscreenchange', this.setFullscreenValue)
@@ -178,6 +184,14 @@ export default Vue.extend({
     setFullscreenValue() {
       this.isFullscreen = Boolean(document.fullscreenElement)
     },
+    togglePresenter(stream: Stream) {
+      if (this.presenter === stream) {
+        this.presenter = null
+        return
+      }
+      this.presenter = stream
+      this.calculateUserSizes()
+    },
     calculateMediaUserSize() {
       const media = this.$refs.media as HTMLElement
       this.mediaUserSize = this.getOptimalBoxDimensions({
@@ -187,6 +201,26 @@ export default Vue.extend({
         numBoxes: this.streams.length,
         gap: 10,
       })
+    },
+    calculatePresenterUserSize() {
+      const presenter = this.$refs.presenter as HTMLElement
+      if (!presenter) {
+        console.log('no preseneter')
+        return
+      }
+      console.log('calc pres size')
+      this.presenterUserSize = this.getOptimalBoxDimensions({
+        containerWidth: presenter.clientWidth,
+        containerHeight: presenter.clientHeight,
+        aspectRatio: 16 / 9,
+        numBoxes: 1,
+        gap: 0,
+      })
+    },
+    calculateUserSizes() {
+      console.log('calculateUserSizes')
+      this.calculateMediaUserSize()
+      this.calculatePresenterUserSize()
     },
   },
 })

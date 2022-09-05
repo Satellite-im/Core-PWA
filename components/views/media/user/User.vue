@@ -133,6 +133,9 @@ export default Vue.extend({
   beforeDestroy() {
     this.audioStreamUtils?.destroy()
   },
+  mounted() {
+    this.$emit('mounted')
+  },
   methods: {
     isMuted(kind: WebRTCEnum) {
       const muted =

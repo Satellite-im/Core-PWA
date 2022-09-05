@@ -3,6 +3,7 @@
   class="user"
   :class="{'talking': isTalking}"
   :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
+  @click="$emit('click', $event)"
 >
   <video
     v-if="stream === 'video'"
@@ -59,4 +60,6 @@
     :src-object.prop="audioStream"
     autoplay
   />
+
+  <div class="talking-outline"></div>
 </div>

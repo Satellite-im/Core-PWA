@@ -7,8 +7,16 @@
   transition: box-shadow @animation-speed-long ease;
   cursor: pointer;
 
-  &.talking {
+  .talking-outline {
+    position: absolute;
+    inset: 0;
     box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.9) inset;
+    border-radius: @corner-rounding;
+    opacity: 0;
+  }
+
+  &.talking .talking-outline {
+    opacity: 1;
   }
 
   .video-stream {
