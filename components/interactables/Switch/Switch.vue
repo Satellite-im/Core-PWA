@@ -38,7 +38,32 @@ export default Vue.extend({
       default: false,
     },
   },
+  computed: {
+    isFocused() {
+      return this.$refs.switch === document.activeElement
+    },
+    container(): HTMLElement {
+      return this.$refs.container as HTMLElement
+    },
+  },
+  mounted() {
+    this.addKeydownListener()
+  },
+  beforeDestroy() {
+    this.removeKeydownListener()
+  },
   methods: {
+    addKeydownListener() {
+      this.container.addEventListener('keydown', this.handleKeydown)
+    },
+    removeKeydownListener() {
+      this.container.removeEventListener('keydown', this.handleKeydown)
+    },
+    handleKeydown(event: KeyboardEvent) {
+      if (this.isFocused && event.key === 'Enter') {
+        this.$emit('toggle', !this.isEnabled)
+      }
+    },
     /**
      * @method toggle DocsTODO
      * @description
