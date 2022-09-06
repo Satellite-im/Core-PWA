@@ -8,7 +8,6 @@ import { UsersIcon, PlusIcon, FolderIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
-import { User } from '~/libraries/Iridium/users/types'
 export default Vue.extend({
   components: {
     UsersIcon,
@@ -19,7 +18,6 @@ export default Vue.extend({
     return {
       isQuickchatVisible: false,
       friends: iridium.friends.state,
-      profile: iridium.profile.state as User,
     }
   },
   computed: {

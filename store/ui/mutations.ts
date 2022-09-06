@@ -9,7 +9,6 @@ import {
 import { MessageGroup } from '~/types/messaging'
 import { Channel } from '~/types/ui/server'
 import { FileMessage } from '~/types/textile/mailbox'
-import { ActionsArguments } from '~/types/store/store'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {

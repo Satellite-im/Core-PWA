@@ -18,9 +18,6 @@ export default Vue.extend({
   data() {
     return {
       profile: iridium.profile.state,
-      hasMinorUpdate: false,
-      requiresUpdate: false,
-      releaseData: {},
       isLoading: false,
     }
   },
