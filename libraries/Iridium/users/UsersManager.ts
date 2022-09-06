@@ -80,7 +80,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     await this.loadUserData()
     setInterval(async () => {
       await this.loadUserData()
-    }, 60000)
+    }, 1800000)
 
     iridium.connector?.p2p.on('node/message/sync/searchPeer', (message) => {
       const peers = message.payload.body.peers as User[]
