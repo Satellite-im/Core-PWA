@@ -136,7 +136,6 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    */
   async fetch() {
     const fetched = await this.get('/')
-    console.info('fetched users state', fetched)
     this.state = { ...fetched }
   }
 
