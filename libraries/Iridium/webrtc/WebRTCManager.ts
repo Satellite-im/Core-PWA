@@ -17,7 +17,7 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const $Sounds = new SoundManager()
 
-const announceFrequency = 6942
+const announceFrequency = 15000
 
 const initialState: WebRTCState = {
   incomingCall: null,
@@ -76,7 +76,7 @@ export default class WebRTCManager extends Emitter {
     )
 
     // ask the sync node to subscribe to this topic
-    await iridium.connector.subscribe('webrtc', {
+    await iridium.connector.subscribe('/webrtc/announce', {
       handler: this.onMessage.bind(this),
       sync: true,
     })
@@ -91,7 +91,7 @@ export default class WebRTCManager extends Emitter {
 
   private async setupAnnounce() {
     await new Promise((resolve) =>
-      setTimeout(() => this.announce().then(() => resolve(true)), 1000),
+      setTimeout(() => this.announce().then(() => resolve(true)), 5000),
     )
     setInterval(this.announce.bind(this), announceFrequency)
   }
@@ -114,7 +114,7 @@ export default class WebRTCManager extends Emitter {
 
     try {
       await iridium.connector?.publish(
-        'webrtc',
+        '/webrtc/announce',
         {
           type: 'announce',
         },
@@ -692,9 +692,8 @@ export default class WebRTCManager extends Emitter {
 
     // broadcast the message to connected peers
     await iridium.connector?.publish(
-      'webrtc',
+      '/webrtc/announce',
       {
-        module: 'webrtc',
         type: 'typing',
         did: iridium.id,
         conversationId,
@@ -708,7 +707,7 @@ export default class WebRTCManager extends Emitter {
 
   // WILL BE REPLACED ONCE DIRECT SEND WITH IRIDIUM WORKS
   public sendWebrtc(did: string, payload: any) {
-    return iridium.connector?.publish('webrtc', payload, {
+    return iridium.connector?.publish('/webrtc/announce', payload, {
       encrypt: { recipients: [did] },
     })
   }

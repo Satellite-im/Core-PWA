@@ -46,7 +46,7 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  if (!iridium.profile.state?.did) {
+  if (!iridium.ready) {
     return eventuallyRedirect('/')
   }
 

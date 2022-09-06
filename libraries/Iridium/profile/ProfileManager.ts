@@ -62,7 +62,7 @@ export default class IridiumProfile extends Emitter {
 
   async setUser() {
     const id = iridium.id
-    if (this.state && id) {
+    if (this.state && id && iridium.users.ready) {
       await iridium.users.setUser(id, { ...this.state })
     }
   }

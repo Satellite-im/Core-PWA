@@ -106,29 +106,49 @@ export class IridiumManager extends Emitter {
     doc.seen = Date.now()
     await this.connector.set('/', doc)
 
-    logger.log('iridium/manager', 'initializing profile')
-    await this.profile.init()
-
-    if (this.connector.p2p.ready) {
-      logger.debug('iridium/manager', 'p2p already ready')
-      await this.onP2pReady()
-    } else {
-      logger.debug('iridium/manager', 'waiting for p2p readiness')
-      this.connector.p2p.on('ready', this.onP2pReady.bind(this))
-    }
+    this.connector.p2p.on('nodeReady', this.onP2pReady.bind(this))
+    this.connector.on('ready', this.onP2pReady.bind(this))
 
     this.profile.on('ready', this.onProfileChange.bind(this))
     this.profile.on('changed', this.onProfileChange.bind(this))
+
+    logger.log('iridium/manager', 'initializing profile')
+    await this.profile.init()
+    await new Promise((resolve) =>
+      setTimeout(() => this.sendSyncInit().then(() => resolve(true)), 5000),
+    )
   }
 
   async onProfileChange() {
+    logger.debug('iridium/manager', 'profile changed', {
+      primaryNodeID: this.connector?.p2p.primaryNodeID,
+      p2pReady: this.connector?.p2p.ready,
+      did: this.profile.state?.did,
+    })
+    if (!this.connector?.p2p.primaryNodeID || !this.connector.p2p.ready) {
+      return
+    }
     if (this.profile.state?.did) {
-      logger.log('iridium/manager', 'sending sync init')
-      await this.sendSyncInit()
+      logger.log(
+        'iridium/manager',
+        `sending sync init for ${
+          this.profile.state.name
+        }#${this.profile.state.did.substring(8)}`,
+      )
+      if (this.connector?.p2p.ready) {
+        await this.sendSyncInit()
+      }
     }
   }
 
   async onP2pReady() {
+    if (!this.profile.state?.did || !this.connector?.p2p.primaryNodeID) {
+      logger.debug(
+        'iridium/manager',
+        'p2p ready but no profile or primary node',
+      )
+    }
+    if (this.ready) return
     logger.log('iridium/manager', 'initializing users')
     await this.users.init()
     logger.log('iridium/manager', 'initializing groups')
@@ -166,9 +186,11 @@ export class IridiumManager extends Emitter {
       at: Date.now(),
       name: profile?.name || this.id,
       avatar: profile?.photoHash || '',
+      status: profile?.status || '',
+      photoHash: profile?.photoHash || '',
     }
 
-    await connector.p2p.send(connector.p2p.primaryNodeID, payload)
+    await connector.send(connector.p2p.primaryNodeID, payload)
   }
 }
 
