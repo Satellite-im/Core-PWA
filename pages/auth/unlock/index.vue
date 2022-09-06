@@ -191,7 +191,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           }
         }
 
-        this.$router.replace('/')
+        if (this.$route.path !== '/') {
+          this.$router.replace('/')
+        }
       } catch (error: any) {
         this.error = error.message
       }

@@ -48,7 +48,10 @@ export default Vue.extend({
         this.error = error.message
         return
       }
-      this.$router.replace('/')
+
+      if (this.$route.path !== '/') {
+        this.$router.replace('/')
+      }
     },
     isOdd(num: number) {
       return num % 2

@@ -214,8 +214,6 @@ export default {
       logger.info('accounts/actions/loadAccount', 'finished')
       return dispatch('startup')
     })
-
-    await iridium.sendSyncInit()
   },
   /**
    * @method registerUser
@@ -298,7 +296,6 @@ export default {
     }
 
     await iridium.profile?.set('/', profile)
-    logger.info('accounts/actions/registerUser', 'iridium ready')
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
@@ -351,7 +348,6 @@ export default {
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
     dispatch('audio/initialize', null, { root: true })
     dispatch('video/initialize', null, { root: true })
-    await iridium.sendSyncInit()
   },
   async connectWallet({
     commit,

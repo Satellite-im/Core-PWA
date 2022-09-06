@@ -7,6 +7,8 @@ import { TranslateResult } from 'vue-i18n'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { RootState } from '~/types/store/store'
 import { UserRegistrationData } from '~/types/ui/user'
+import logger from '~/plugins/local/logger'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'RegisterScreen',
@@ -52,7 +54,19 @@ export default Vue.extend({
           image: userData.photoHash,
           status: userData.status,
         })
-        await this.$router.replace('/')
+        logger.info('pages/index/registerUser', 'success, waiting for ready', {
+          ready: iridium.ready,
+        })
+        const onReady = () => {
+          this.$router.replace(
+            this.$device.isMobile ? 'mobile/chat' : '/friends',
+          )
+        }
+        if (iridium.ready) {
+          onReady()
+        } else {
+          iridium.on('ready', onReady)
+        }
       } catch (error: any) {
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,

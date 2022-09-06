@@ -236,7 +236,6 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     return iridium.webRTC.sendWebrtc(did, {
-      module: 'webrtc',
       type: 'call',
       callId: this.callId === did ? iridium.id : this.callId,
       peers: this.peerDetails,
@@ -859,7 +858,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _bindBusListeners() {
     this._listener = this._bindEventListeners.bind(this)
-    iridium.connector?.pubsub.on('webrtc', this._listener)
+    iridium.connector?.pubsub.on('/webrtc/announce', this._listener)
   }
 
   /**
@@ -901,7 +900,7 @@ export class Call extends Emitter<CallEventListeners> {
    * this._unbindBusListeners();
    */
   protected async _unbindBusListeners() {
-    iridium.connector?.pubsub.off('webrtc', this._listener)
+    iridium.connector?.pubsub.off('/webrtc/announce', this._listener)
   }
 
   /**

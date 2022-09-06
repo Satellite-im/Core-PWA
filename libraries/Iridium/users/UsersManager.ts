@@ -33,6 +33,7 @@ export type IridiumUserPubsub = IridiumPubsubMessage<
 export default class UsersManager extends Emitter<IridiumUserPubsub> {
   public state: UserState = {}
   public ephemeral: { status: { [key: string]: UserStatus } } = { status: {} }
+  public ready: boolean = false
 
   private loggerTag = 'iridium/users'
 
@@ -47,6 +48,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
     logger.log(this.loggerTag, 'initializing')
     await this.fetch()
+
+    iridium.connector?.on('/peer/announce', (message: IridiumPubsubMessage) => {
+      iridium.users.setUserStatus(
+        message.from,
+        message.payload.body.status || 'online',
+      )
+    })
 
     logger.log(this.loggerTag, 'fetched', this.state)
     this.ephemeral.status = Object.keys(this.state).reduce(
@@ -88,6 +96,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     })
 
     logger.info(this.loggerTag, 'initialized')
+    this.ready = true
     return this.emit('ready', { users: this.state })
   }
 
