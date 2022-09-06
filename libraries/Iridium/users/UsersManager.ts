@@ -102,6 +102,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async stop() {
     // announce that we're going offline
+    const user = iridium.profile.getUser()
+    logger.info(this.loggerTag, 'sending offline status announcement', {
+      user,
+    })
     await this.send({
       user: iridium.profile.getUser(),
       status: 'offline',
@@ -303,13 +307,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async send(event: IridiumUserEvent) {
-    return iridium.connector?.publish(`/users/announce`, event, {
-      encrypt: {
-        recipients: event.to
-          ? [typeof event.to === 'string' ? event.to : event.to.id]
-          : iridium.friends.state.friends,
-      },
-    })
+    return iridium.connector?.publish(`/users/announce`, event)
   }
 
   /**
