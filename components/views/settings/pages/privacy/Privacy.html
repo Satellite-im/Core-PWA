@@ -7,20 +7,56 @@
       </TypographyText>
     </SettingsUnit>
   </SettingsSection>
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.privacy.permissions')"
+  />
   <SettingsSection>
     <SettingsUnit
-      :title="$t('pages.privacy.register.title')"
-      :text="$t('pages.privacy.register.subtitle')"
+      :title="$t('pages.privacy.notifications.title')"
+      :text="$t('pages.privacy.notifications.subtitle')"
     >
-      <InteractablesSwitch isLocked v-model="registry" />
+      <InteractablesSwitch
+        :isEnabled="permissions.includes('notifications')"
+        @click="handlePermissions('notification')"
+        :isLocked="loading.includes('notifications')"
+      />
     </SettingsUnit>
     <SettingsUnit
-      :title="$t('pages.privacy.pin.title')"
-      :text="$t('pages.privacy.pin.subtitle')"
+      :title="$t('pages.privacy.microphone.title')"
+      :text="$t('pages.privacy.microphone.subtitle')"
     >
-      <InteractablesSwitch v-model="storePin" />
+      <InteractablesSwitch
+        :isEnabled="permissions.includes('microphone')"
+        @click="handlePermissions('microphone')"
+        :isLocked="loading.includes('microphone')"
+      />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.camera.title')"
+      :text="$t('pages.privacy.camera.subtitle')"
+    >
+      <InteractablesSwitch
+        :isEnabled="permissions.includes('camera')"
+        @click="handlePermissions('camera')"
+        :isLocked="loading.includes('camera')"
+      />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.screenshare.title')"
+      :text="$t('pages.privacy.screenshare.subtitle')"
+    >
+      <InteractablesSwitch
+        v-model="screenshare"
+        :isLocked="loading.includes('screenshare')"
+      />
     </SettingsUnit>
   </SettingsSection>
+
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.privacy.filesharing')"
+  />
   <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.embeds.title')"
@@ -28,14 +64,6 @@
     >
       <InteractablesSwitch v-model="embeddedLinks" />
     </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.privacy.activity.title')"
-      :text="$t('pages.privacy.activity.subtitle')"
-    >
-      <InteractablesSwitch v-model="displayCurrentActivity" />
-    </SettingsUnit>
-  </SettingsSection>
-  <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.consentScan.title')"
       :text="$t('pages.privacy.consentScan.subtitle')"
@@ -55,9 +83,29 @@
       />
     </SettingsUnit>
   </SettingsSection>
-  <TypographyText v-if="loading.length">
-    {{ $t('pages.privacy.updating') }}
-  </TypographyText>
+
+  <TypographyHorizontalRuleText plaintext :value="$t('pages.privacy.other')" />
+  <SettingsSection>
+    <SettingsUnit
+      :title="$t('pages.privacy.register.title')"
+      :text="$t('pages.privacy.register.subtitle')"
+    >
+      <InteractablesSwitch isLocked v-model="registry" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.pin.title')"
+      :text="$t('pages.privacy.pin.subtitle')"
+    >
+      <InteractablesSwitch v-model="storePin" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.activity.title')"
+      :text="$t('pages.privacy.activity.subtitle')"
+    >
+      <InteractablesSwitch v-model="displayCurrentActivity" />
+    </SettingsUnit>
+  </SettingsSection>
+
   <!-- <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
@@ -71,6 +119,11 @@
     </SettingsUnit>
   </SettingsSection> -->
 
+  <TypographyHorizontalRuleText
+    v-if="serverType === 'own'"
+    plaintext
+    :value="$t('pages.privacy.ownserver')"
+  />
   <SettingsSection
     v-if="serverType === 'own'"
     class="columns is-desktop ownInfo-input-part"
@@ -102,4 +155,8 @@
       </span>
     </SettingsUnit>
   </SettingsSection>
+
+  <TypographyText v-if="loading.length">
+    {{ $t('pages.privacy.updating') }}
+  </TypographyText>
 </SettingsPage>

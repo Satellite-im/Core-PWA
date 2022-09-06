@@ -21,7 +21,7 @@ export default {
   ) {
     return iridium.groups?.createGroup({
       name,
-      origin: iridium.connector?.id,
+      origin: iridium.id,
       members: {},
     })
   },

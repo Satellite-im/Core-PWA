@@ -57,7 +57,7 @@ export default Vue.extend({
           return
         }
         const participants = [
-          iridium.connector.id,
+          iridium.id,
           ...this.friends.map((friend) => friend.did),
         ]
         const id = await iridium.chat.createGroupConversation({

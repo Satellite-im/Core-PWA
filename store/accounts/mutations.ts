@@ -1,6 +1,5 @@
 import { AccountsState, RegistrationStatus } from './types'
-import { UserRegistrationData } from '~/types/ui/user'
-import { User } from '~/libraries/BlockchainClient/interfaces'
+import { User } from '~/libraries/Iridium/users/types'
 
 const mutations = {
   setPin(state: AccountsState, pin: string) {
@@ -34,17 +33,15 @@ const mutations = {
   },
   setProfilePicture(state: AccountsState, image: string) {
     if (state.details) {
-      state.details.profilePicture = image
+      state.details.photoHash = image
     }
   },
-  setUserDetails(state: AccountsState, details: UserRegistrationData) {
+  setUserDetails(state: AccountsState, details: User) {
     state.details = {
-      name: details.username,
+      did: details.did,
+      name: details.name,
       status: details.status,
-      profilePicture: details.photoHash,
-      address: state.active,
-      state: 'online',
-      lastUpdate: Date.now(),
+      photoHash: details.photoHash,
     }
   },
   setUserPeerId(state: AccountsState, peerId: string) {
@@ -52,14 +49,6 @@ const mutations = {
       state.details = {
         ...state.details,
         peerId,
-      }
-    }
-  },
-  updateMailboxId(state: AccountsState, mailboxId: string) {
-    if (state.details) {
-      state.details = {
-        ...state.details,
-        mailboxId,
       }
     }
   },

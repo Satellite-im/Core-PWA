@@ -15,7 +15,7 @@ import BlockchainClient from '~/libraries/BlockchainClient'
 import logger from '~/plugins/local/logger'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
-import { User } from '~/libraries/BlockchainClient/interfaces'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default {
   /**
@@ -178,7 +178,7 @@ export default {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    if (!iridium.ready) {
+    if (!iridium.connector) {
       logger.debug(
         'accounts/actions/loadAccount',
         'signing message for iridium',
@@ -200,21 +200,22 @@ export default {
       logger.error('accounts/actions/loadAccount', 'user not registered')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
-    await iridium.profile.setUser()
-    commit('setActiveAccount', iridium.connector?.id)
+    iridium.on('ready', () => {
+      logger.info('accounts/actions/loadAccount', 'iridium ready')
+      commit('setActiveAccount', iridium.id)
 
-    logger.debug(
-      'accounts/actions/loadAccount',
-      'user loaded, dispatching setUserDetails & setRegistrationStatus',
-      profile,
-    )
-    commit('setUserDetails', {
-      username: profile.name,
-      ...profile,
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'user loaded, dispatching setUserDetails & setRegistrationStatus',
+        profile,
+      )
+      commit('setUserDetails', profile)
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      logger.info('accounts/actions/loadAccount', 'finished')
+      return dispatch('startup')
     })
-    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    await iridium.connector?.waitForSyncNode()
-    dispatch('startup')
+
+    await iridium.sendSyncInit()
   },
   /**
    * @method registerUser
@@ -264,27 +265,44 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
+    if (!iridium.connector) {
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'signing message for iridium',
+      )
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'dispatching iridium/initializeFromEntropy',
+      )
+      await iridium.initFromEntropy(entropy)
+    }
+
+    if (!iridium.connector) {
+      throw new Error('iridium not initialized')
+    }
+
     const imagePath = await uploadPicture(userData.image)
+
+    if (!iridium.connector) {
+      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
+    }
+
     const profile = {
-      did: iridium.connector?.id,
+      did: iridium.id,
       peerId: iridium.connector?.peerId.toString(),
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
-    await iridium.connector?.waitForSyncNode()
+
     await iridium.profile?.set('/', profile)
-    console.info('setting profile', profile)
-    await iridium.sendSyncInit()
+    logger.info('accounts/actions/registerUser', 'iridium ready')
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    commit('setActiveAccount', iridium.connector?.id)
-    commit('setUserDetails', {
-      username: userData.name,
-      status: userData.status,
-      photoHash: imagePath,
-      address: walletAccount.publicKey.toBase58(),
-    })
-    dispatch('startup', walletAccount)
+    commit('setActiveAccount', iridium.id)
+    commit('setUserDetails', profile)
+    return dispatch('startup', walletAccount)
   },
 
   /**
@@ -331,6 +349,9 @@ export default {
     state,
   }: ActionsArguments<AccountsState>) {
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
+    dispatch('audio/initialize', null, { root: true })
+    dispatch('video/initialize', null, { root: true })
+    await iridium.sendSyncInit()
   },
   async connectWallet({
     commit,

@@ -20,7 +20,7 @@
   <TypographyText color="dark" size="sm">
     {{ user.publicKey ? `${user.publicKey.substr(0, 23)}...` : `` }}
   </TypographyText>
-  <TypographyText> {{ user.status }} </TypographyText>
+  <TypographyText> {{ status }} </TypographyText>
   <template v-if="!isMe">
     <UiHorizontalRule />
     <InteractablesInput

@@ -35,9 +35,10 @@ export default Vue.extend({
       loading: new Set() as Set<keyof User>,
       editing: new Set() as Set<Editables>,
       inputs: {
-        name: iridium.profile.state?.name,
-        photoHash: iridium.profile.state?.photoHash,
-        status: iridium.profile.state?.status,
+        name: iridium.profile.state?.name ?? '',
+        photoHash: iridium.profile.state?.photoHash ?? '',
+        status: '',
+        about: iridium.profile.state?.about ?? '',
         accountUrl: '',
       } as Partial<User>,
     }
@@ -130,18 +131,51 @@ export default Vue.extend({
       try {
         this.loading.add(key)
         await iridium.profile.updateUser({
-          [key]: value,
+          [key]: value.trim(),
         })
+        const inputs = this.inputs as { [key in keyof User]: string }
+        inputs[key] = value.trim()
         this.$toast.show(
           this.$t('pages.settings.profile.detail_updated') as string,
         )
       } catch (e: any) {
-        this.$toast.show(this.$t(e.message) as string)
+        this.$toast.error(this.$t(e.message) as string)
       } finally {
         this.loading.delete(key)
         // Note: For Vue 2 reactivity
         this.loading = new Set(...this.loading.entries())
       }
+    },
+    /**
+     * @method toggleEditing
+     * @description Toggles editing state of a field
+     * @example this.toggleEditing('name')
+     */
+    toggleEditing(key: Editables) {
+      if (this.editing.has(key)) {
+        this.editing.delete(key)
+        // Note: For Vue 2 reactivity
+        this.editing = new Set(...this.editing.entries())
+      } else {
+        this.editing.add(key)
+        // Note: For Vue 2 reactivity
+        this.editing = new Set(...this.editing.entries())
+      }
+    },
+    /**
+     * @method submitEdit
+     * @description Updates input value
+     * @example this.submitEdit('name', 'John Doe')
+     */
+    submitEdit(e: SubmitEvent, key: Editables) {
+      e.stopPropagation()
+      e.preventDefault()
+      const value = this.inputs[key] || ''
+      const valueChanged = this.profile?.[key] !== value
+      if (this.editing.has(key) && valueChanged) {
+        this.updateUserDetail(e, key, value)
+      }
+      this.toggleEditing(key)
     },
     /**
      * @method getEditButtonText

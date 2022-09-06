@@ -7,7 +7,7 @@
       <div class="details-info">
         <img :src="sample.imageUrl" alt="" class="photo-sm" />
         <UiUserState
-          :user="{address: ui.userProfile.address, state: ui.userProfile.state}"
+          :user="ui.userProfile.did"
           :size="80"
           :src="profilePictureSrc"
         />

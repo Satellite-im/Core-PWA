@@ -5,7 +5,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { RadioIcon, XIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { TrackKind } from '~/libraries/WebRTC/types'
 import { GroupMemberDetails } from '~/libraries/Iridium/groups/types'
 import Group from '~/libraries/Iridium/groups/Group'
 import type { Friend, User } from '~/libraries/Iridium/friends/types'
@@ -18,11 +17,11 @@ export default Vue.extend({
   },
   data() {
     return {
-      webrtc: iridium.webRTC,
       users: iridium.users.state,
-      userStatus: iridium.users.userStatus,
+      userStatus: iridium.users.ephemeral.status,
       groups: iridium.groups.state,
       chat: iridium.chat.state,
+      profile: iridium.profile.state,
     }
   },
   computed: {
@@ -59,7 +58,7 @@ export default Vue.extend({
         return this.groups[this.conversation.id]
       }
       const participant = this.conversation?.participants.find(
-        (f) => f !== iridium.connector?.id,
+        (f) => f !== iridium.id,
       )
       if (!participant) {
         return
@@ -89,16 +88,6 @@ export default Vue.extend({
   methods: {
     hangUp() {
       this.webrtc.hangUp()
-    },
-    async call(kinds: TrackKind[]) {
-      if (!this.enableRTC || !this.details) {
-        return
-      }
-      try {
-        await this.webrtc.call(this.details, kinds)
-      } catch (e: any) {
-        this.$toast.error(this.$t(e.message) as string)
-      }
     },
   },
 })

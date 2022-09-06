@@ -78,12 +78,13 @@ export default Vue.extend({
       this.error = ''
       this.searching = true
       const matches = await iridium.users.searchPeer(this.query)
+      console.info('search matches', matches)
       const hasFriend =
         matches.length === 1 && iridium.friends.isFriend(matches[0].did)
 
       if (
-        this.query === iridium.connector?.id ||
-        (matches.length === 1 && matches[0].did === iridium.connector?.id)
+        this.query === iridium.id ||
+        (matches.length === 1 && matches[0].did === iridium.id)
       ) {
         this.error = this.$t('friends.self_add') as string
         return
@@ -105,10 +106,10 @@ export default Vue.extend({
     copyId() {
       if (!iridium.connector) return
       const shortID = iridium.profile.state
-        ? `${iridium.profile.state.name}#${iridium.connector.id.substring(
-            iridium.connector.id.length - 6,
+        ? `${iridium.profile.state.name}#${iridium.id.substring(
+            iridium.id.length - 6,
           )}`
-        : `${iridium.connector?.id}`
+        : `${iridium.id}`
       navigator.clipboard.writeText(shortID)
       this.$toast.show(this.$t('ui.copied') as string)
     },

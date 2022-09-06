@@ -7,8 +7,8 @@
 >
   <template>
     <UiUserState
-      v-if="conversation.type === 'direct' && userId"
-      :userId="userId"
+      v-if="conversation.type === 'direct' && user && status"
+      :user="user"
     />
     <UiGroupIcon
       v-else-if="conversation.participants"

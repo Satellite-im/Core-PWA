@@ -12,23 +12,13 @@ export default Vue.extend({
   },
   data() {
     return {
+      loading: false,
       chat: iridium.chat.state,
-      users: iridium.users.state,
     }
   },
   computed: {
     sortedConversations(): Conversation[] {
-      return Object.values(this.chat.conversations).sort(
-        (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
-      )
-    },
-  },
-  methods: {
-    lastMessageTimestamp(conversation: Conversation): number {
-      const messages = Object.values(
-        this.chat.conversations[conversation.id].message,
-      ).sort((a, b) => a.at - b.at)
-      return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
+      return iridium.chat.getSortedConversations()
     },
   },
 })

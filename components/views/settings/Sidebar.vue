@@ -87,8 +87,8 @@ export default Vue.extend({
               text: 'Accounts & Devices',
             },
             {
-              to: SettingsRoutes.PRIVACY,
-              text: 'Privacy',
+              to: SettingsRoutes.PRIVACY_AND_PERMISSIONS,
+              text: 'Privacy & Permissions',
             },
           ],
         },

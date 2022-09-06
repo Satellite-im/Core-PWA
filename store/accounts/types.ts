@@ -1,4 +1,4 @@
-import { User } from '~/types/ui/user'
+import { User } from '~/libraries/Iridium/users/types'
 
 export enum RegistrationStatus {
   UNKNOWN = 'unknown',
@@ -40,6 +40,7 @@ export enum AccountsError {
   USER_NOT_REGISTERED = 'errors.accounts.user_not_registered',
   USER_ALREADY_REGISTERED = 'errors.accounts.user_already_registered',
   PAYER_NOT_PRESENT = 'errors.accounts.payer_not_present',
+  CONNECTOR_NOT_PRESENT = 'errors.accounts.connector_not_present',
 }
 
 export interface UserRegistrationPayload {

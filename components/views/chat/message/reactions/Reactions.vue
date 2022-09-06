@@ -75,7 +75,7 @@ export default Vue.extend({
       if (!iridium.connector) {
         return false
       }
-      return reaction.dids.includes(iridium.connector.id)
+      return reaction.dids.includes(iridium.id)
     },
     emojiReaction() {
       this.$store.commit('ui/settingReaction', {

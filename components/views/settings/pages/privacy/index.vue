@@ -17,6 +17,7 @@ export default Vue.extend({
       lengthError: false as boolean,
       loading: [] as string[],
       privacySettings: iridium.settings.state.privacy,
+      permissions: [] as string[],
     }
   },
   computed: {
@@ -27,6 +28,55 @@ export default Vue.extend({
       userThread: (state) => (state as RootState).textile.userThread,
     }),
     ...mapGetters('textile', ['getInitialized']),
+    embeddedLinks: {
+      set(state: boolean) {
+        iridium.settings.set('/privacy/embeddedLinks', state)
+      },
+      get(): boolean {
+        return this.privacySettings.embeddedLinks
+      },
+    },
+    consentScan: {
+      async set(consentToScan: boolean) {
+        this.loading.push('consentScan')
+        await iridium.settings.set('/privacy/consentToScan', consentToScan)
+        this.loading.splice(this.loading.indexOf('consentScan'), 1)
+      },
+      get(): boolean {
+        return this.privacySettings.consentToScan
+      },
+    },
+    blockNsfw: {
+      async set(blockNsfw: boolean) {
+        this.loading.push('blockNsfw')
+        await iridium.settings.set('/privacy/blockNsfw', blockNsfw)
+        this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
+      },
+      get(): boolean {
+        return this.privacySettings.blockNsfw
+      },
+    },
+    registry: {
+      get(): boolean {
+        return !this.accounts ? false : this.accounts.registry
+      },
+    },
+    storePin: {
+      set(state: boolean) {
+        this.$store.commit('accounts/setStorePin', state)
+      },
+      get(): boolean {
+        return !this.accounts ? false : this.accounts.storePin
+      },
+    },
+    displayCurrentActivity: {
+      set(state: boolean) {
+        iridium.settings.set('/privacy/displayCurrentActivity', state)
+      },
+      get(): boolean {
+        return this.privacySettings.displayCurrentActivity
+      },
+    },
     serverTypes(): { text: TranslateResult; value: string }[] {
       return [
         {
@@ -66,54 +116,10 @@ export default Vue.extend({
         return this.settings.ownInfo
       },
     },
-    registry: {
-      get(): boolean {
-        return !this.accounts ? false : this.accounts.registry
-      },
-    },
-    storePin: {
-      set(state: boolean) {
-        this.$store.commit('accounts/setStorePin', state)
-      },
-      get(): boolean {
-        return !this.accounts ? false : this.accounts.storePin
-      },
-    },
-    embeddedLinks: {
-      set(state: boolean) {
-        iridium.settings.set('/privacy/embeddedLinks', state)
-      },
-      get(): boolean {
-        return this.privacySettings.embeddedLinks
-      },
-    },
-    consentScan: {
-      async set(consentToScan: boolean) {
-        this.loading.push('consentScan')
-        await iridium.settings.set('/privacy/consentToScan', consentToScan)
-        this.loading.splice(this.loading.indexOf('consentScan'), 1)
-      },
-      get(): boolean {
-        return this.privacySettings.consentToScan
-      },
-    },
-    blockNsfw: {
-      async set(blockNsfw: boolean) {
-        this.loading.push('blockNsfw')
-        await iridium.settings.set('/privacy/blockNsfw', blockNsfw)
-        this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
-      },
-      get(): boolean {
-        return this.privacySettings.blockNsfw
-      },
-    },
-    displayCurrentActivity: {
-      set(state: boolean) {
-        iridium.settings.set('/privacy/displayCurrentActivity', state)
-      },
-      get(): boolean {
-        return this.privacySettings.displayCurrentActivity
-      },
+  },
+  methods: {
+    handlePermissions(type: string) {
+      // todo ask permissions
     },
   },
 })

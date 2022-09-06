@@ -80,48 +80,57 @@
                 >
                   <span>{{ $t('pages.settings.profile.remove_image') }}</span>
                 </button>
-                <div class="username">
-                  <form
-                    @submit="
-                        (e) => updateUserDetail(e, 'name', inputs.name ?? '')
-                      "
+                <form
+                  class="editable-wrapper username"
+                  @submit="
+                    (e) => submitEdit(e, 'name')
+                  "
+                >
+                  <typography-text
+                    v-if="!editing.has('name')"
+                    class="username-label"
                   >
-                    <InteractablesInput
-                      v-model="inputs.name"
-                      size="xs"
-                      type="text"
-                      :placeholder="
-                          $t('user.registration.username_placeholder')
-                        "
-                      :loading="loading.has('status')"
-                      button-type="submit"
-                    >
-                      <edit-icon size="1x" />
-                    </InteractablesInput>
-                  </form>
-                  <TypographyTitle :size="6" :text="profile?.name ?? ''" />
-                </div>
-                <div class="status-input">
-                  <form
-                    @submit="
+                    {{ inputs.name }}
+                  </typography-text>
+
+                  <InteractablesInput
+                    v-else
+                    v-model="inputs.name"
+                    class="username-input"
+                    :placeholder="$t('user.registration.username_placeholder')"
+                    autofocus
+                    transparent
+                  />
+
+                  <button
+                    class="edit-button"
+                    :class="{active: editing.has('name')}"
+                    type="submit"
+                  >
+                    {{ getEditButtonText('name') }}
+                  </button>
+                </form>
+                <form
+                  class="status-input"
+                  @click="editing.add('status')"
+                  @submit="
                         (e) =>
                           updateUserDetail(e, 'status', inputs.status ?? '')
                       "
-                  >
-                    <InteractablesInput
-                      v-model="inputs.status"
-                      size="xs"
-                      type="text"
-                      :placeholder="
+                >
+                  <InteractablesInput
+                    v-model="inputs.status"
+                    size="xs"
+                    type="text"
+                    :placeholder="
                         $t('pages.settings.profile.status_placeholder')
                       "
-                      :loading="loading.has('status')"
-                      button-type="submit"
-                    >
-                      <edit-icon size="1x" />
-                    </InteractablesInput>
-                  </form>
-                </div>
+                    :loading="loading.has('status')"
+                    button-type="submit"
+                  >
+                    <edit-icon size="1x" />
+                  </InteractablesInput>
+                </form>
                 <div v-if="profile && !!profile.status" class="status">
                   <TypographyText as="h6">
                     {{ $t('pages.settings.profile.current_status') }}
@@ -135,7 +144,7 @@
 
         <div class="profile-section">
           <!-- About Me -->
-          <form @submit="(e) => submitEdit(e)" @click="">
+          <form @submit="(e) => submitEdit(e, 'about')">
             <div class="section-title">
               <div class="title-wrapper">
                 <align-left-icon size="1.5x" class="section-icon" />
@@ -158,19 +167,14 @@
                 />
               </div>
               <div
-                class="about-input-wrapper"
+                class="editable-wrapper"
                 :class="{'readonly': !editing.has('about')}"
               >
-                <ChatbarEditable
+                <InteractablesEditable
                   v-model="inputs.about"
-                  ref="editable"
                   :placeholder="$t('ui.talk')"
                   :enabled="editing.has('about')"
                 />
-                <!-- :focus="editing.has('about')" -->
-                <!-- :class="{'has-command' : hasCommand}" -->
-                <!-- @keydown="handleInputKeydown" -->
-                <!-- @paste="handlePaste" -->
               </div>
             </div>
           </form>

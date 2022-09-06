@@ -107,6 +107,9 @@ export default Vue.extend({
       this.swiper.slideNext()
     }
   },
+  beforeDestroy() {
+    this.isMobileNavVisible = true
+  },
 })
 </script>
 

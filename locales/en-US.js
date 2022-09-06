@@ -286,14 +286,31 @@ export default {
         'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
     },
     privacy: {
-      title: 'Privacy Settings',
+      title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
-      serverType: {
-        title: 'Signaling Servers',
+      permissions: 'Permissions',
+      notifications: {
+        title: 'Notifications',
         subtitle:
-          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and CPU usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+          'Allow Satellite to send you notifications when you receive new messages, friend requests, etc.',
       },
+      microphone: {
+        title: 'Microphone',
+        subtitle:
+          'Allow Satellite to use input from your microphone in voice and video calls.',
+      },
+      camera: {
+        title: 'Camera',
+        subtitle:
+          'Allow Satellite to see your beautiful face and show it in video calls.',
+      },
+      screenshare: {
+        title: 'Screen Sharing',
+        subtitle:
+          'Show the other users your screen during voice and video calls.',
+      },
+      filesharing: 'File sharing',
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
@@ -303,20 +320,7 @@ export default {
         title: 'Block NSFW content',
         subtitle: 'If selected, NSFW content will be obscured.',
       },
-      ownInfo: {
-        title: 'Set my own Signaling Server',
-        subtitle:
-          'Enter your http, udp, or websocket URL for your signaling server here',
-        placeholder: 'Please enter ...',
-        lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
-        formatErrorMsg:
-          'Invalid input format. Please add on the following format',
-        errorSampleUrl1: '- http://localhost:3000',
-        errorSampleUrl2: '- wss://www.example.com/socketserver',
-        satelliteServer: 'Satellite + Public Signaling Servers',
-        publicServer: 'Only Public Signaling Servers',
-        userDefinedServer: 'Set my own',
-      },
+      other: 'Other',
       register: {
         title: 'Register Username Publicly',
         subtitle:
@@ -336,6 +340,26 @@ export default {
         title: 'Enable External Embeds',
         subtitle:
           'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
+      },
+      ownserver: 'Own server',
+      serverType: {
+        title: 'Signaling Servers',
+        subtitle:
+          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and CPU usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+      },
+      ownInfo: {
+        title: 'Set my own Signaling Server',
+        subtitle:
+          'Enter your http, udp, or websocket URL for your signaling server here',
+        placeholder: 'Please enter ...',
+        lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
+        formatErrorMsg:
+          'Invalid input format. Please add on the following format',
+        errorSampleUrl1: '- http://localhost:3000',
+        errorSampleUrl2: '- wss://www.example.com/socketserver',
+        satelliteServer: 'Satellite + Public Signaling Servers',
+        publicServer: 'Only Public Signaling Servers',
+        userDefinedServer: 'Set my own',
       },
       updating: 'Updating remote settings',
     },
@@ -654,6 +678,7 @@ export default {
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
       invalid_file: 'Please upload a valid image type such as JPG, PNG or SVG',
+      connector_not_present: 'Iridium connector not found',
     },
     friends: {
       request_already_sent: 'You have already sent a request to this user',

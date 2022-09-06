@@ -10,15 +10,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import logger from '~/plugins/local/logger'
 import { AccountsError } from '~/store/accounts/types'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'Main',
+  data() {
+    return {
+      iridium,
+    }
+  },
   computed: {
-    ...mapGetters(['allPrerequisitesReady']),
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
     }),
@@ -28,14 +33,6 @@ export default Vue.extend({
         default:
           return this.$i18n.t('user.loading.loading_account').toString()
       }
-    },
-  },
-  watch: {
-    allPrerequisitesReady: {
-      handler(nextValue) {
-        if (!nextValue) return
-        this.eventuallyRedirect()
-      },
     },
   },
   async mounted() {
@@ -50,21 +47,6 @@ export default Vue.extend({
     this.$store.dispatch('ui/activateKeybinds')
   },
   methods: {
-    eventuallyRedirect() {
-      if (this.accounts.lastVisited === this.$route.path) {
-        this.$router.replace(
-          this.$device.isMobile ? '/mobile/chat' : '/friends',
-        )
-        return
-      }
-
-      const matcher = this.$router.match(this.accounts.lastVisited)
-      if (matcher.matched.length > 0) {
-        this.$router.replace(this.accounts.lastVisited)
-      }
-
-      this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
-    },
     /**
      * @method loadAccount
      * @description Load user account by dispatching the loadAccount action in store/accounts/actions.ts,
@@ -75,6 +57,10 @@ export default Vue.extend({
     async loadAccount() {
       try {
         await this.$store.dispatch('accounts/loadAccount')
+        logger.info('pages/index/loadAccount', 'success')
+        return this.$router.replace(
+          this.$device.isMobile ? 'mobile/chat' : '/friends',
+        )
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           await this.$router.replace('/auth/register')
@@ -92,9 +78,8 @@ export default Vue.extend({
           state: true,
           action: this.loadAccount,
         })
+        this.$router.replace('/')
       }
-
-      this.eventuallyRedirect()
     },
   },
 })

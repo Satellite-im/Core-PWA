@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 import { User } from '~/types/ui/user'
 
@@ -42,6 +43,12 @@ export default Vue.extend({
     src(): string {
       const hash = this.user?.profilePicture
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    },
+    status(): string {
+      if (!iridium.users.ephemeral.status[this.user.did]) {
+        iridium.users.setUserStatus(this.user.did, 'offline')
+      }
+      return iridium.users.ephemeral.status[this.user.address]
     },
   },
   watch: {

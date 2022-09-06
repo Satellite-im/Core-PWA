@@ -30,6 +30,18 @@
           padding-right: 2rem;
         }
 
+        &.transparent {
+          padding: 0;
+          border: none;
+          background: #fff0;
+          flex-grow: 1;
+
+          &:focus {
+            outline: none;
+            background: #fff0;
+          }
+        }
+
         &:focus {
           background-image: @semitransparent-lightest-gradient;
         }

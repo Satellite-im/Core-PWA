@@ -7,7 +7,7 @@ import type { IPFS } from 'ipfs-core-types'
 import type { AddOptions, AddResult } from 'ipfs-core-types/root'
 import { createWriteStream } from 'streamsaver'
 import { v4 as uuidv4 } from 'uuid'
-import type { IridiumManager } from '../IridiumManager'
+import iridium from '../IridiumManager'
 import logger from '~/plugins/local/logger'
 import {
   IridiumDirectory,
@@ -23,33 +23,24 @@ import { Config } from '~/config'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 export default class FilesManager extends Emitter {
-  public readonly iridium: IridiumManager
   public lastUpdated: number = 0 // local, will be used to update the delta after remote operations
   public state: { items: IridiumItem[] } = { items: [] }
 
-  constructor(iridium: IridiumManager) {
-    super()
-    this.iridium = iridium
-  }
-
   async init() {
-    if (!this.iridium.connector) {
+    if (!iridium.connector) {
       throw new Error('cannot initialize files, no iridium connector')
     }
 
-    const iridium = this.iridium.connector
     logger.log('iridium/files', 'initializing')
     await this.fetch()
     logger.log('iridium/files', 'files state loaded', this.state)
-    await iridium.subscribe('/files/announce')
+    await iridium.connector.subscribe('/files/announce')
 
     this.emit('ready', {})
   }
 
   async fetch() {
-    const res = await this.iridium.connector?.get<{ items: IridiumItem[] }>(
-      '/files',
-    )
+    const res = await iridium.connector?.get<{ items: IridiumItem[] }>('/files')
     if (res && 'items' in res) {
       // convert iridium files state to FilesManager state
       const items = Object.values(res).map((v) => Object.values(v))[0]
@@ -59,7 +50,7 @@ export default class FilesManager extends Emitter {
   }
 
   get(path: string = '', options: IridiumGetOptions = {}) {
-    return this.iridium.connector?.get(`/files${path}`, options)
+    return iridium.connector?.get(`/files${path}`, options)
   }
 
   set(path: string, payload: any, options: IridiumSetOptions = {}) {
@@ -67,7 +58,7 @@ export default class FilesManager extends Emitter {
       path,
       payload,
     })
-    return this.iridium.connector?.set(
+    return iridium.connector?.set(
       `/files${path === '/' ? '' : path}`,
       payload,
       options,
@@ -152,7 +143,7 @@ export default class FilesManager extends Emitter {
    * @param {AddOptions} options
    */
   async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
-    return await (this.iridium.connector?.ipfs as IPFS).add(
+    return await (iridium.connector?.ipfs as IPFS).add(
       blobToStream(file),
       options,
     )
@@ -196,9 +187,9 @@ export default class FilesManager extends Emitter {
    */
   private unpinItem(item: IridiumFile) {
     // TODO - confirm this actually works when we can connect to ipfs
-    this.iridium.connector?.ipfs.pin.rm(item.id)
+    iridium.connector?.ipfs.pin.rm(item.id)
     if (item.thumbnail && item.thumbnail !== item.id) {
-      this.iridium.connector?.ipfs.pin.rm(item.thumbnail)
+      iridium.connector?.ipfs.pin.rm(item.thumbnail)
     }
   }
 
@@ -270,7 +261,7 @@ export default class FilesManager extends Emitter {
 
     window.onunload = () => writer.abort()
 
-    for await (const bytes of (this.iridium.connector?.ipfs as IPFS).cat(path, {
+    for await (const bytes of (iridium.connector?.ipfs as IPFS).cat(path, {
       length: size,
     })) {
       writer.write(bytes)
@@ -285,9 +276,7 @@ export default class FilesManager extends Emitter {
    */
   async fetchThumbnail(path: string, type?: FILE_TYPE): Promise<Blob> {
     const data = []
-    for await (const bytes of (this.iridium.connector?.ipfs as IPFS).cat(
-      path,
-    )) {
+    for await (const bytes of (iridium.connector?.ipfs as IPFS).cat(path)) {
       data.push(bytes)
     }
     return new Blob(data, { type })

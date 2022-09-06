@@ -16,14 +16,6 @@ export const Notifications = class Notifications {
   constructor() {
     const envinfo = new EnvInfo()
     this.currentPlatform = envinfo.currentPlatform
-    if (this.currentPlatform === PlatformTypeEnum.WEB) {
-      // all mount needs for web/pwa
-      if (this.notificationPermission !== 'granted' && isSupported()) {
-        Notification.requestPermission().then((result: any) => {
-          this.notificationPermission = result
-        })
-      }
-    }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // These are shown in the notification as options the user can interact with outside of the app
@@ -132,6 +124,11 @@ export const Notifications = class Notifications {
       this.currentPlatform === PlatformTypeEnum.WEB ||
       this.currentPlatform === PlatformTypeEnum.ELECTRON
     ) {
+      if (this.notificationPermission !== 'granted' && isSupported()) {
+        Notification.requestPermission().then((result: any) => {
+          this.notificationPermission = result
+        })
+      }
       // browser notification api
       await new Notification(`${titleText}`, {
         tag: String(new Date().getTime()),

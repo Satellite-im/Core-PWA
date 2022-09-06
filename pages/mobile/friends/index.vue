@@ -87,6 +87,7 @@ export default Vue.extend({
   data: () => ({
     swiper: undefined as Swiper | undefined,
     friends: iridium.friends.state,
+    users: iridium.users.state,
   }),
   computed: {
     route(): FriendsTabs {
@@ -116,7 +117,7 @@ export default Vue.extend({
     },
     friendsList(): (Friend | undefined)[] {
       return this.friends.friends
-        .map((did) => iridium.users.getUser(did))
+        .map((did) => iridium.users.state[did])
         .sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
         )
