@@ -1,5 +1,7 @@
 import { ChatState, ChatFileUpload } from './types'
+import InitialChatState from './state'
 import * as module from '~/store/chat/mutations'
+import { stat } from 'fs'
 
 describe('module.default.setChatReply', () => {
   test('0', () => {
@@ -231,6 +233,34 @@ describe('misc', () => {
       address: 'address1',
     }
     module.default.addFile(state, obj)
+    expect(state.files).toMatchSnapshot()
+  })
+
+  test('module.default.addFile with existing files array', () => {
+    const obj = {
+      file: {
+        file: 'path2',
+        url: 'string2',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+      address: 'address1',
+    }
+    module.default.addFile(state, obj)
+    const obj2 = {
+      file: {
+        file: 'path3',
+        url: 'string3',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+      address: 'address1',
+    }
+    module.default.addFile(state, obj2)
     expect(state.files).toMatchSnapshot()
   })
 })
@@ -980,25 +1010,6 @@ describe.skip('module.default.deleteFiles', () => {
 })
 
 describe('misc', () => {
-  const InitialChatState = (): ChatState => ({
-    replies: [],
-    chatTexts: [],
-    files: {},
-    countError: false,
-    currentChat: {
-      direction: 'TOP',
-      hasNextPage: true,
-      isMessagesLoading: false,
-      isScrollOver: true,
-      lastLoadedMessageId: '',
-      messages: [],
-      offset: 0,
-      page: 1,
-      showOlderMessagesInfo: false,
-      size: 10,
-    },
-  })
-
   test('module.setCountError', () => {
     const argument = true
     const localState = { ...InitialChatState }
@@ -1102,5 +1113,43 @@ describe('misc', () => {
         },
       ],
     })
+  })
+
+  test('module.default.deleteFiles', () => {
+    const state = {
+      ...InitialChatState,
+      files: {
+        file1: [
+          {
+            file: 'path2',
+            url: 'string2',
+            nsfw: {
+              checking: false,
+              status: false,
+            },
+            progress: 0,
+          },
+        ],
+      },
+    }
+
+    module.default.deleteFiles(state, 'file1')
+    expect(state.files).toEqual({})
+  })
+
+  test('module.default.setDraftMessage', () => {
+    const state = {
+      ...InitialChatState,
+      draftMessages: {
+        conversation_id: 'no_message',
+      },
+    }
+    const argument = {
+      conversationId: 'conversation_id',
+      message: 'message',
+    }
+
+    module.default.setDraftMessage(state, argument)
+    expect(state.draftMessages[argument.conversationId]).toBe(argument.message)
   })
 })
