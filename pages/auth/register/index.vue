@@ -54,12 +54,19 @@ export default Vue.extend({
           image: userData.photoHash,
           status: userData.status,
         })
-        logger.info('pages/index/registerUser', 'success, waiting for ready')
-        iridium.on('ready', () => {
+        logger.info('pages/index/registerUser', 'success, waiting for ready', {
+          ready: iridium.ready,
+        })
+        const onReady = () => {
           this.$router.replace(
             this.$device.isMobile ? 'mobile/chat' : '/friends',
           )
-        })
+        }
+        if (iridium.ready) {
+          onReady()
+        } else {
+          iridium.on('ready', onReady)
+        }
       } catch (error: any) {
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,

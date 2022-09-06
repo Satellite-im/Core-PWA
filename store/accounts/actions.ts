@@ -296,7 +296,6 @@ export default {
     }
 
     await iridium.profile?.set('/', profile)
-    logger.info('accounts/actions/registerUser', 'iridium ready')
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
