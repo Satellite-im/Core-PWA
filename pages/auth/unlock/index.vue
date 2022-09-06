@@ -88,19 +88,6 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
       })
     },
     /**
-     * @method toggleWelcomePopup
-     * @description This toggles the welcome modal on and off
-     * @returns void
-     * @example this.toggleWelcomePopup()
-     */
-    toggleWelcomePopup(): void {
-      this.$store.commit('ui/toggleModal', {
-        name: 'welcome',
-        state: !this.ui.modals.welcome,
-      })
-    },
-
-    /**
      * @method getIcon DocsTODO
      * @description
      * @returns

@@ -23,6 +23,7 @@ export default Vue.extend({
     }),
     FriendsTabs: () => FriendsTabs,
     friendsList(): (Friend | undefined)[] {
+      // this.toggleWelcomePopup()
       return this.friends.friends.map((did) => {
         if (!iridium.users.state[did]) {
           iridium.users.state[did] = {

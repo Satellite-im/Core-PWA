@@ -19,6 +19,7 @@ const InitialUIState = (): UIState => ({
     wallet: false,
     walletMini: false,
     error: false,
+    welcome: true,
     changelog: false,
     glyph: false,
     userProfile: false,

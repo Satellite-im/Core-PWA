@@ -1,50 +1,42 @@
 <div class="welcome-modal">
   <UiModal nopad>
-    <div class="welcome-content" v-click-outside="toggleVisibility">
+    <div class="welcome-content">
       <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
       <UiSpacer :height="50" />
       <TypographyTitle
-        v-if="releaseData && releaseData.tag_name"
         :size="6"
-        :text="`Update ${releaseData.tag_name} is Here!`"
+        :text="$t('welcome_message.welcome', {user: profile.name})"
       />
-      <pre v-if="releaseData && releaseData.body">
-        <vue-markdown :source="releaseData.body" :breaks="false"/>
-      </pre>
       <div class="update-modal-spinner" v-if="isLoading">
         <UiLoadersSpinner spinning />
       </div>
-
-      <TypographyText v-if="requiresUpdate">
-        {{ $t('modal.update_modal.update_required') }}
+      <UiSpacer :height="30" />
+      <TypographyText>
+        {{ $t('welcome_message.ea_warning') }}
       </TypographyText>
-
-      <UiSpacer :height="50" />
-      <div>
-        <!-- <InteractablesButton
-          v-if="requiresUpdate"
-          type="danger"
-          size="small"
-          :action="skipVersion"
-          text="Skip Update"
-        >
-          <x-icon size="1x" />
-        </InteractablesButton> -->
-        <!-- <InteractablesButton
-          v-if="requiresUpdate"
-          type="primary"
-          size="small"
-          :action="clearAndReload"
-          text="Update Now"
-        >
-          <refresh-cw-icon size="1x" />
-        </InteractablesButton> -->
+      <UiSpacer :height="20" />
+      <TypographyText>
+        {{ $t('welcome_message.permissions') }}
+      </TypographyText>
+      <UiSpacer :height="20" />
+      <TypographyText>
+        {{ $t('welcome_message.file_scanning_permissions') }}
+      </TypographyText>
+      <UiSpacer :height="20" />
+      <div class="dismiss-controls">
         <InteractablesButton
-          v-if="!requiresUpdate"
-          @click="skipVersion"
+          type="primary"
+          @click="toggleVisibility"
           :text="$t('modal.update_modal.got_it')"
         >
-          <refresh-cw-icon size="1x" />
+          <check-icon size="1x" />
+        </InteractablesButton>
+        <InteractablesButton
+          @click="dismissForever"
+          color="danger"
+          :text="$t('welcome_message.dismiss_forever')"
+        >
+          <x-icon size="1x" />
         </InteractablesButton>
       </div>
     </div>

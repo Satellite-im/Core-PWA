@@ -3,18 +3,21 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { RefreshCwIcon, XIcon } from 'satellite-lucide-icons'
+import { RefreshCwIcon, XIcon, CheckIcon } from 'satellite-lucide-icons'
 import VueMarkdown from 'vue-markdown'
-import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
+import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
     RefreshCwIcon,
+    CheckIcon,
     XIcon,
     VueMarkdown,
   },
   data() {
     return {
+      profile: iridium.profile.state,
       hasMinorUpdate: false,
       requiresUpdate: false,
       releaseData: {},
@@ -22,38 +25,24 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
-  },
-  async mounted() {
-    await this.getReleaseBody()
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
   },
   methods: {
-    /* clearAndReload() {
-     commented out until we can test this - we probably won't want to clean all of local storage'
-       localStorage.removeItem('local-version')
-       window.location.reload()
-     }, */
-    skipVersion() {
-      localStorage.setItem('local-version', this.$config.clientVersion)
-      this.$data.requiresUpdate = false
-      this.$data.hasMinorUpdate = false
-      this.toggleVisibility()
-    },
-    async getReleaseBody() {
-      this.isLoading = true
-      try {
-        await ReleaseNotes().then((releaseData) => {
-          this.releaseData = releaseData
-        })
-      } finally {
-        this.isLoading = false
-      }
-    },
     toggleVisibility() {
       this.$store.commit('ui/toggleModal', {
-        name: 'changelog',
-        state: !this.ui.modals.changelog,
+        name: 'welcome',
+        state: !this.ui.modals.welcome,
       })
+      this.$store.commit('ui/welcomeDismiss')
+    },
+    dismissForever() {
+      this.$store.commit('ui/toggleModal', {
+        name: 'welcome',
+        state: !this.ui.modals.welcome,
+      })
+      this.$store.dispatch('accounts/setWelcomeMessageDismiss')
     },
   },
 })

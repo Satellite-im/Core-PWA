@@ -57,6 +57,7 @@ Object {
     "userProfile": false,
     "wallet": false,
     "walletMini": false,
+    "welcome": true,
   },
   "mostEmojiUsed": Array [],
   "notifications": Array [],
