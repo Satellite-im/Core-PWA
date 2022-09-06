@@ -24,6 +24,7 @@ export default function ({ store, route, redirect }: Arguments) {
 
   const eventuallyRedirect = memoize(
     (path: string) => {
+      console.info(`redirecting to ${path}`)
       if (route.path === path) return
       redirect(path)
     },
@@ -46,11 +47,11 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  if (!iridium.ready) {
+  if (!iridium.ready && route.path !== '/') {
     return eventuallyRedirect('/')
   }
 
-  if (route && route.path === '/') {
+  if (route && route.path === '/' && iridium.ready) {
     return eventuallyRedirect('/friends')
   }
 
