@@ -55,7 +55,7 @@ export default Vue.extend({
         logger.info('pages/index/loadAccount', 'success, waiting for ready')
         iridium.on('ready', () => {
           this.$router.replace(
-            this.$device.isMobile ? 'mobile/chat' : '/friends',
+            this.$device.isMobile ? '/mobile/chat' : '/friends',
           )
         })
       } catch (error: any) {
