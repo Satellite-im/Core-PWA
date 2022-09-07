@@ -1,12 +1,13 @@
 <div
   ref="mediastream"
   class="mediastream"
-  :class="{ 'has-presenter': presenter !== null }"
+  :class="{ 'has-presenter': presenter !== null, 'is-fullscreen': isFullscreen }"
   data-cy="mediastream"
   :style="`height:${height}`"
 >
-  <div v-if="presenter !== null" class="presenter" ref="presenter">
+  <div v-show="presenter !== null" class="presenter" ref="presenter">
     <MediaUser
+      v-if="presenter !== null"
       :user="presenter.participant"
       :size="presenterUserSize"
       :stream="presenter.stream"

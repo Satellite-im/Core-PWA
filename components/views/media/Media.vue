@@ -105,16 +105,28 @@ export default Vue.extend({
     },
   },
   mounted() {
+    const media = this.$refs.media as HTMLElement
+    const presenter = this.$refs.presenter as HTMLElement
+
     document.addEventListener('fullscreenchange', this.setFullscreenValue)
     document.addEventListener('resize', this.scaleHeight)
-    this.resizeObserver = new ResizeObserver(() => {
-      this.calculateUserSizes()
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === media) {
+          this.calculateMediaUserSize(entry)
+        } else if (entry.target === presenter) {
+          this.calculatePresenterUserSize(entry)
+        }
+      })
     })
-    const mediastream = this.$refs.mediastream as HTMLElement
-    this.resizeObserver.observe(mediastream)
+    this.resizeObserver.observe(media)
+    this.resizeObserver.observe(presenter)
   },
   beforeDestroy() {
     document.removeEventListener('fullscreenchange', this.setFullscreenValue)
+    document.removeEventListener('resize', this.scaleHeight)
+    this.resizeObserver?.disconnect()
   },
   methods: {
     getBoxDimensionsForLayout(
@@ -158,9 +170,10 @@ export default Vue.extend({
     },
     scaleHeight() {
       this.height =
-        parseInt(this.height as string, 10) +
-        this.windowHeight / window.innerHeight +
-        'px'
+        String(
+          parseInt(this.height as string, 10) +
+            this.windowHeight / window.innerHeight,
+        ) + 'px'
       this.windowHeight = window.innerHeight
     },
     /**
@@ -192,33 +205,30 @@ export default Vue.extend({
       this.presenter = stream
       this.calculateUserSizes()
     },
-    calculateMediaUserSize() {
+    calculateMediaUserSize(entry?: ResizeObserverEntry) {
       const media = this.$refs.media as HTMLElement
       this.mediaUserSize = this.getOptimalBoxDimensions({
-        containerWidth: media.clientWidth,
-        containerHeight: media.clientHeight,
+        containerWidth: entry?.contentRect.width ?? media.clientWidth,
+        containerHeight: entry?.contentRect.height ?? media.clientHeight,
         aspectRatio: 16 / 9,
         numBoxes: this.streams.length,
         gap: 10,
       })
     },
-    calculatePresenterUserSize() {
+    calculatePresenterUserSize(entry?: ResizeObserverEntry) {
       const presenter = this.$refs.presenter as HTMLElement
       if (!presenter) {
-        console.log('no preseneter')
         return
       }
-      console.log('calc pres size')
       this.presenterUserSize = this.getOptimalBoxDimensions({
-        containerWidth: presenter.clientWidth,
-        containerHeight: presenter.clientHeight,
+        containerWidth: entry?.contentRect.width ?? presenter.clientWidth,
+        containerHeight: entry?.contentRect.height ?? presenter.clientHeight,
         aspectRatio: 16 / 9,
         numBoxes: 1,
         gap: 0,
       })
     },
     calculateUserSizes() {
-      console.log('calculateUserSizes')
       this.calculateMediaUserSize()
       this.calculatePresenterUserSize()
     },
