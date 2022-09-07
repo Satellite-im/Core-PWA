@@ -13,9 +13,9 @@ import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Call } from '~/libraries/WebRTC/Call'
+import { useWebrtc } from '~/components/compositions/webrtc'
 
 export default Vue.extend({
   components: {
@@ -38,6 +38,15 @@ export default Vue.extend({
       default: false,
     },
   },
+  setup() {
+    console.log('MANUEL setup')
+    const { streams, screenStreams } = useWebrtc()
+
+    return {
+      streams,
+      screenStreams,
+    }
+  },
   data() {
     return {
       isTalking: false,
@@ -49,14 +58,16 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    call(): Call | void {
+    call(): Call | undefined {
       if (!iridium.webRTC.state.activeCall?.callId) return
-      return $WebRTC.getCall(iridium.webRTC.state.activeCall.callId)
+      return iridium.webRTC.state.calls.get(
+        iridium.webRTC.state.activeCall.callId,
+      )
     },
-    streams(): any {
-      if (!this.user.did || !this.call) return
-      return this.call?.streams[this.user.did]
-    },
+    // streams(): any {
+    //   if (!this.user.did || !this.call) return
+    //   return this.call?.streams[this.user.did]
+    // },
     src(): string {
       const hash = this.user.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
@@ -69,16 +80,17 @@ export default Vue.extend({
       )
     },
     audioStream(): MediaStream | undefined {
+      console.log('MANUEL', this.streams)
       if (this.isMuted(WebRTCEnum.AUDIO) || !this.call) return
-      return this.streams?.audio
+      return this.streams?.[this.user.did]?.audio
     },
     videoStream(): MediaStream | undefined {
       if (this.isMuted(WebRTCEnum.VIDEO) || !this.call) return
-      return this.streams?.video
+      return this.streams?.[this.user.did]?.video
     },
     screenStream(): MediaStream | undefined {
       if (this.isMuted(WebRTCEnum.SCREEN) || !this.call) return undefined
-      return this.streams?.screen
+      return this.streams?.[this.user.did]?.screen
     },
     isLocalVideoFlipped(): boolean {
       return iridium.settings.state.video.flipLocalStream

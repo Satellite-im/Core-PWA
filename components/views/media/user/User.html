@@ -1,11 +1,12 @@
 <div v-if="call" class="user" :class="{'talking': isTalking}">
+  {{Object.keys(streams[user.did] || {})}}
   <video
-    v-if="videoStream"
+    v-if="streams[user.did]?.video"
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
     :class="{flip: isLocal && isLocalVideoFlipped}"
     data-cy="video-stream"
-    :src-object.prop="videoStream"
+    :src-object.prop="streams[user.did]?.video"
     playsinline
     autoplay
   />
