@@ -1,6 +1,5 @@
 import type { VideoState } from './types'
 import { ActionsArguments } from '~/types/store/store'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 
@@ -28,8 +27,8 @@ const videoActions = {
     })
   },
   async toggleMute({ state, commit, rootState }: ActionsArguments<VideoState>) {
-    const { activeCall } = iridium.webRTC.state
-    const call = activeCall && $WebRTC.getCall(activeCall.callId)
+    const { activeCall, calls } = iridium.webRTC.state
+    const call = activeCall && calls.get(activeCall.callId)
     if (!call) {
       return
     }
