@@ -33,6 +33,7 @@ export type IridiumUserPubsub = IridiumPubsubMessage<
 export default class UsersManager extends Emitter<IridiumUserPubsub> {
   public state: UserState = {}
   public ephemeral: { status: { [key: string]: UserStatus } } = { status: {} }
+  public ready: boolean = false
 
   private loggerTag = 'iridium/users'
 
@@ -47,6 +48,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
     logger.log(this.loggerTag, 'initializing')
     await this.fetch()
+
+    iridium.connector?.on('/peer/announce', (message: IridiumPubsubMessage) => {
+      iridium.users.setUserStatus(
+        message.from,
+        message.payload.body.status || 'online',
+      )
+    })
 
     logger.log(this.loggerTag, 'fetched', this.state)
     this.ephemeral.status = Object.keys(this.state).reduce(
@@ -88,11 +96,16 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     })
 
     logger.info(this.loggerTag, 'initialized')
+    this.ready = true
     return this.emit('ready', { users: this.state })
   }
 
   async stop() {
     // announce that we're going offline
+    const user = iridium.profile.getUser()
+    logger.info(this.loggerTag, 'sending offline status announcement', {
+      user,
+    })
     await this.send({
       user: iridium.profile.getUser(),
       status: 'offline',
@@ -294,13 +307,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async send(event: IridiumUserEvent) {
-    return iridium.connector?.publish(`/users/announce`, event, {
-      encrypt: {
-        recipients: event.to
-          ? [typeof event.to === 'string' ? event.to : event.to.id]
-          : iridium.friends.state.friends,
-      },
-    })
+    return iridium.connector?.publish(`/users/announce`, event)
   }
 
   /**

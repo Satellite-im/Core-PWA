@@ -289,7 +289,6 @@ export default {
       title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
-      permissions: 'Permissions',
       notifications: {
         title: 'Notifications',
         subtitle:
@@ -309,6 +308,13 @@ export default {
         title: 'Screen Sharing',
         subtitle:
           'Show the other users your screen during voice and video calls.',
+        note: "Screen sharing is an operating system setting labeled as 'Screen Recording', to allow access you will need to enable browser access to screen recording in your OS",
+      },
+      permissions: {
+        title: 'Permissions',
+        ask_permission: 'Ask Permission',
+        granted: 'Permission Granted',
+        denied: 'Permission Denied',
       },
       filesharing: 'File sharing',
       consentScan: {

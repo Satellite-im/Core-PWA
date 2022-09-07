@@ -18,11 +18,6 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'Main',
-  data() {
-    return {
-      iridium,
-    }
-  },
   computed: {
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
@@ -57,10 +52,12 @@ export default Vue.extend({
     async loadAccount() {
       try {
         await this.$store.dispatch('accounts/loadAccount')
-        logger.info('pages/index/loadAccount', 'success')
-        return this.$router.replace(
-          this.$device.isMobile ? 'mobile/chat' : '/friends',
-        )
+        logger.info('pages/index/loadAccount', 'success, waiting for ready')
+        iridium.on('ready', () => {
+          this.$router.replace(
+            this.$device.isMobile ? '/mobile/chat' : '/friends',
+          )
+        })
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
           await this.$router.replace('/auth/register')

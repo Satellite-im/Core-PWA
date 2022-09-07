@@ -12,7 +12,8 @@ export default class IridiumProfile extends Emitter {
       throw new Error('cannot initialize profile, no iridium connector')
     }
 
-    iridium.on('changed', this.onStateChanged.bind(this))
+    logger.info('iridium/profile', 'profile init')
+    iridium.connector?.on('changed', this.onStateChanged.bind(this))
     await this.fetch()
     this.ready = true
     this.emit('ready', this.state)
@@ -37,10 +38,16 @@ export default class IridiumProfile extends Emitter {
   }
 
   onStateChanged(state: { path: string; value: any }) {
+    logger.info('iridium/profile', 'state changed', { state })
     if (state.path.startsWith('/profile')) {
       if (!state.value?.profile || !state.value?.profile?.did) {
+        logger.info(
+          'iridium/profile',
+          'profile state changed, but profile not detected',
+        )
         return
       }
+      logger.info('iridium/profile', 'profile state changed', state)
       this.state = state.value?.profile
       this.setUser()
       this.emit('changed', state)
@@ -62,7 +69,7 @@ export default class IridiumProfile extends Emitter {
 
   async setUser() {
     const id = iridium.id
-    if (this.state && id) {
+    if (this.state && id && iridium.users.ready) {
       await iridium.users.setUser(id, { ...this.state })
     }
   }

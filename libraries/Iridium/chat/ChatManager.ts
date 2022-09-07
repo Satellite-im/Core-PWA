@@ -241,11 +241,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       }
 
       message.attachments.map(async (attachment) => {
-        if (!this.iridium.connector?.p2p.primaryNodeID) {
+        if (!iridium.connector?.p2p.primaryNodeID) {
           return
         }
-        await this.iridium.connector?.p2p.send(
-          this.iridium.connector?.p2p.primaryNodeID,
+        await iridium.connector?.p2p.send(
+          iridium.connector?.p2p.primaryNodeID,
           {
             cid: attachment.cid,
             type: 'sync/validate',
@@ -593,9 +593,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async deleteConversation(id: string) {
     delete this.state.conversations[id]
-    this.state = {
-      conversations: { ...this.state.conversations },
-    }
+    this.state.conversations = { ...this.state.conversations }
 
     this.set('/conversations', this.state.conversations)
     await iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
@@ -679,36 +677,39 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     conversationId: string,
   ): Promise<{ cid: string; valid: boolean } | undefined> {
     const conversation = this.getConversation(conversationId)
-    if (!iridium.connector?.p2p.primaryNodeID) {
-      throw new Error('not connected to primary node')
-    }
-    if (!conversation) {
-      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-    }
-
     const fileBuffer = await file.arrayBuffer()
-    const cid = await iridium.connector?.store(
-      { fileBuffer, name: file.name, size: file.size, type: file.type },
-      {
-        syncPin: true,
-        encrypt: {
-          recipients: [
-            ...conversation.participants,
-            iridium.connector?.p2p.primaryNodeID,
-          ],
-        },
-      },
-    )
 
     return new Promise((resolve) => {
-      iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
-        const { payload } = msg
-        const { body } = payload
-        if (body.originalCID === cid.toString()) {
-          resolve({ cid: body.cid, valid: body.valid })
-        }
-        setTimeout(() => resolve(undefined), 30000)
-      })
+      if (!iridium.connector?.p2p.primaryNodeID) {
+        throw new Error('not connected to primary node')
+      }
+      if (!conversation?.participants) {
+        throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+      }
+
+      iridium.connector
+        ?.store(
+          { fileBuffer, name: file.name, size: file.size, type: file.type },
+          {
+            syncPin: true,
+            encrypt: {
+              recipients: [
+                ...conversation.participants,
+                iridium.connector?.p2p.primaryNodeID,
+              ],
+            },
+          },
+        )
+        .then((cid) => {
+          iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
+            const { payload } = msg
+            const { body } = payload
+            if (body.originalCID === cid.toString()) {
+              resolve({ cid: body.cid, valid: body.valid })
+            }
+          })
+          setTimeout(() => resolve(undefined), 30000)
+        })
     })
   }
 
