@@ -1,4 +1,10 @@
-#actions {
+.media-actions {
+  &:extend(.round-corners);
+  display: inline-flex;
+  justify-content: center;
+  align-self: center;
+  justify-self: flex-end;
+
   .button {
     width: 3rem;
     height: 2rem;
@@ -13,10 +19,4 @@
     margin: 0;
     border-radius: 0;
   }
-  &:extend(.light-padding);
-  &:extend(.round-corners);
-  display: inline-flex;
-  justify-content: center;
-  align-self: center;
-  justify-self: flex-end;
 }

@@ -37,44 +37,28 @@ export default Vue.extend({
   },
   data() {
     return {
-      showSlider: false,
+      sliderVisible: false,
+      lastVal: 0,
     }
   },
-  mounted() {
-    document.addEventListener('click', this.hideSlider)
-  },
-  beforeDestroy() {
-    document.removeEventListener('click', this.hideSlider)
-  },
   methods: {
-    /**
-     * @method toggleSlider DocsTODO
-     * @description
-     * @example
-     */
     toggleSlider() {
-      this.showSlider = !this.showSlider
+      this.sliderVisible = !this.showSlider
     },
-    /**
-     * @method hideSlider DocsTODO
-     * @description
-     * @param event
-     * @example
-     */
+    showSlider() {
+      this.sliderVisible = true
+    },
     hideSlider(event: Event) {
-      const vgroup = this.$refs.volumegroup as Element
-      if (vgroup && vgroup.contains(event.target as Node) === false) {
-        this.showSlider = false
-      }
+      this.sliderVisible = false
     },
-    /**
-     * @method receivedValue DocsTODO
-     * @description
-     * @param volume
-     * @example
-     */
-    receivedValue(volume: Number) {
-      this.$emit('volumeControlValueChange', volume)
+    toggleMute() {
+      if (this.volume) {
+        this.lastVal = this.volume
+      }
+      this.$emit('volumeControlValueChange', this.volume ? 0 : this.lastVal)
+    },
+    receivedValue(value: number) {
+      this.$emit('volumeControlValueChange', value)
     },
   },
 })

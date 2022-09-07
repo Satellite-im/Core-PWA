@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { formatDuration } from '~/utilities/duration'
 
 export default Vue.extend({
   components: {
@@ -12,9 +13,17 @@ export default Vue.extend({
   },
   data() {
     return {
-      webrtc: iridium.webRTC.state,
-      callTime: iridium.webRTC.callTime,
+      callTime: 0,
+      formatDuration,
     }
+  },
+  mounted() {
+    setInterval(this.updateCallTime, 1000)
+  },
+  methods: {
+    updateCallTime() {
+      this.callTime = iridium.webRTC.callTime
+    },
   },
 })
 </script>

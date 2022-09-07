@@ -1,31 +1,36 @@
 <div
   :class="`volume-control ${direction}`"
   ref="volumegroup"
-  @mousedown="hideSlider"
+  v-click-outside="hideSlider"
   tabindex="0"
+  @mouseover="showSlider"
+  @mouseleave="hideSlider"
 >
-  <InteractablesVolume
-    v-if="!isPopup || showSlider"
-    :volume="volume"
-    :direction="direction"
-    @returned-value="receivedValue"
-  />
+  <div class="wrapper" v-if="!isPopup || sliderVisible">
+    <div class="inner">
+      <InteractablesVolume
+        :value="volume"
+        :direction="direction"
+        @change="receivedValue"
+      />
+    </div>
+  </div>
   <button
     v-if="!plain"
     class="volume-icon"
     data-cy="volume-icon"
-    @click="toggleSlider"
+    @click="toggleMute"
   >
     <volume-2-icon v-if="volume >= 70" data-cy="volume-at-max" size="1.2x" />
     <volume-1-icon
       v-if="volume > 30 && volume < 70"
       data-cy="volume-less-than-70"
-      size="1.4x"
+      size="1.2x"
     />
     <volume-icon
       v-if="volume > 0 && volume <= 30"
       data-cy="volume-less-than-30"
-      size="1.4x"
+      size="1.2x"
     />
     <volume-x-icon v-if="volume == 0" data-cy="volume-at-min" size="1.2x" />
   </button>

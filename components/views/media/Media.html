@@ -1,23 +1,38 @@
 <div
   ref="mediastream"
   class="mediastream"
+  :class="{ 'has-presenter': presenter !== null, 'is-fullscreen': isFullscreen }"
   data-cy="mediastream"
   :style="`height:${height}`"
 >
-  <MediaHeading />
-  <div class="media">
+  <div v-show="presenter !== null" class="presenter" ref="presenter">
     <MediaUser
-      id="local"
-      :user="localParticipant"
-      is-local
-      data-cy="local-video"
+      v-if="presenter !== null"
+      :user="presenter.participant"
+      :size="presenterUserSize"
+      :stream="presenter.stream"
+      @click="() => togglePresenter(null)"
+      @mounted="calculateUserSizes"
     />
-    <MediaUser
-      v-for="participant in remoteParticipants"
-      :key="participant.did"
-      :user="participant"
-      data-cy="remote-video"
-    />
+  </div>
+
+  <div
+    class="media"
+    :class="{ 'has-presenter': presenter !== null }"
+    ref="media"
+  >
+    <template v-for="stream in streams">
+      <MediaUser
+        :key="stream.participant.did + stream.stream"
+        :user="stream.participant"
+        data-cy="remote-video"
+        :size="mediaUserSize"
+        :stream="stream.stream"
+        :class="{ 'is-presenter': presenter === stream }"
+        @click="() => togglePresenter(stream)"
+      />
+    </template>
+
     <!-- <div
       v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
       class="more-user"
@@ -26,8 +41,9 @@
       ...
     </div> -->
   </div>
-
   <!-- <MediaActionsSettings /> -->
+
+  <MediaHeading />
   <MediaActions />
   <div class="controls">
     <MediaActionsVolume
@@ -43,7 +59,6 @@
   <InteractablesDragBar
     v-if="!isFullscreen"
     side="bottom"
-    show-handle
     @resize="(val) => (height = val)"
   />
 </div>
