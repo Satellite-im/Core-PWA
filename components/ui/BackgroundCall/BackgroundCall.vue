@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 export default Vue.extend({
   data() {

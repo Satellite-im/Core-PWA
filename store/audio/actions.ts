@@ -1,6 +1,5 @@
 import type { AudioState } from './types'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { ActionsArguments } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
@@ -41,8 +40,8 @@ export default {
    * @example @click="toggleMute"
    */
   async toggleMute({ state, commit, dispatch }: ActionsArguments<AudioState>) {
-    const { activeCall } = iridium.webRTC.state
-    const call = activeCall && $WebRTC.getCall(activeCall.callId)
+    const { activeCall, calls } = iridium.webRTC.state
+    const call = activeCall && calls.get(activeCall.callId)
 
     dispatch(
       'sounds/stopSounds',
