@@ -56,12 +56,10 @@ export default Vue.extend({
       volume: (state) => (state as RootState).audio.volume,
     }),
     localParticipant(): User | undefined {
-      const p = iridium.webRTC.localParticipant()
-      return p
+      return iridium.webRTC.localParticipant()
     },
     remoteParticipants(): User[] {
-      const p = iridium.webRTC.remoteParticipants()
-      return p
+      return iridium.webRTC.remoteParticipants()
     },
     height: {
       get(): string {
