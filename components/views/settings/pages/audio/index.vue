@@ -40,7 +40,6 @@ export default Vue.extend({
       stream: null,
       featureReadyToShow: false,
       updateInterval: null,
-      loading: [] as string[],
       captureMouses: [
         {
           value: CaptureMouseTypes.always,
@@ -61,7 +60,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      userThread: (state) => (state as RootState).textile.userThread,
       settings: (state) => (state as RootState).settings,
       audio: (state) => (state as RootState).audio,
     }),
@@ -138,10 +136,8 @@ export default Vue.extend({
       },
     },
     flipVideo: {
-      async set(value: boolean) {
-        this.loading.push('flipVideo')
-        await iridium.settings.set('/video/flipLocalStream', value)
-        this.loading.splice(this.loading.indexOf('flipVideo'), 1)
+      set(value: boolean) {
+        iridium.settings.set('/video/flipLocalStream', value)
       },
       get(): boolean {
         return this.iridiumSettings.video.flipLocalStream
