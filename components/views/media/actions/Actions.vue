@@ -17,6 +17,7 @@ import { mapState } from 'vuex'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { PeerMutedState, StreamMutedState } from '~/store/webrtc/types'
 
 export default Vue.extend({
   components: {
@@ -39,6 +40,12 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
+    mutedState(): PeerMutedState | undefined {
+      if (!iridium.connector) {
+        return
+      }
+      return this.webrtc.streamMuted[iridium.connector.id]
+    },
     audioMuted(): boolean {
       return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.audio)
     },

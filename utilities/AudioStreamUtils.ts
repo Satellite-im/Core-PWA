@@ -1,7 +1,7 @@
 import { AudioState } from '~/store/audio/types'
 
-const IS_TALKING_SENSITIVITY = 3 // %
-const TALKING_OFF_DELAY = 300 // ms
+const IS_TALKING_SENSITIVITY = 10 // %
+const TALKING_OFF_DELAY = 500 // ms
 
 export class AudioStreamUtils {
   stream: MediaStream

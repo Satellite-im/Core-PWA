@@ -593,9 +593,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async deleteConversation(id: string) {
     delete this.state.conversations[id]
-    this.state = {
-      conversations: { ...this.state.conversations },
-    }
+    this.state.conversations = { ...this.state.conversations }
 
     this.set('/conversations', this.state.conversations)
     await iridium.connector?.unsubscribe(`/chat/conversations/${id}`)

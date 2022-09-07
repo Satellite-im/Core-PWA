@@ -1,6 +1,12 @@
-<div v-if="call" class="user" :class="{'talking': isTalking}">
+<div
+  v-if="call"
+  class="user"
+  :class="{'talking': isTalking}"
+  :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
+  @click="$emit('click', $event)"
+>
   <video
-    v-if="videoStream"
+    v-if="stream === 'video'"
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
     :class="{flip: isLocal && isLocalVideoFlipped}"
@@ -10,35 +16,36 @@
     autoplay
   />
 
+  <video
+    v-else-if="stream === 'screen'"
+    :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
+    :class="['video-stream', { flip: flipVideo }]"
+    data-cy="screen-stream"
+    :src-object.prop="screenStream"
+    playsinline
+    autoplay
+  />
+
   <div
     v-else
     class="voice-user"
     :class="{calling: audioStream, loading: isPending && !isLocal}"
   >
-    <TypographyTag :title="user.name" class="ellipsis tag" inverted>
-      {{user.name}}
-    </TypographyTag>
     <UiLoadersScaleLoader v-if="isPending && !isLocal" class="loader" />
     <UiCircle
       v-else
       :type="src ? 'image' : 'random'"
       :seed="user.did"
-      :size="$device.isMobile ? 36 : 65"
+      :size="circleSize"
       data-cy="media-user-circle"
       :source="src"
       color="transparent"
     />
   </div>
 
-  <video
-    v-if="screenStream"
-    :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
-    class="video-stream"
-    data-cy="screen-stream"
-    :src-object.prop="screenStream"
-    playsinline
-    autoplay
-  />
+  <TypographyTag :title="user.name" class="username" inverted>
+    {{user.name}}
+  </TypographyTag>
 
   <div class="indicators" v-if="!isPending || isLocal">
     <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
@@ -53,4 +60,6 @@
     :src-object.prop="audioStream"
     autoplay
   />
+
+  <div class="talking-outline"></div>
 </div>
