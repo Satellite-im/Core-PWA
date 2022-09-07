@@ -108,6 +108,11 @@ export default class NotificationManager extends Emitter<Notification> {
     await this.save()
   }
 
+  async askPermissions() {
+    const Notification = new Notifications()
+    await Notification.requestNotificationPermission()
+  }
+
   /**
    * Send a new notification
    * @method sendNotification
