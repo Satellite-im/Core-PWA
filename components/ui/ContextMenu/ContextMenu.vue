@@ -47,10 +47,10 @@
             v-if="item.text !== 'quickReaction'"
             :key="String(item.text) + '-action'"
             class="action-button"
-            :class="{ danger: item.type === 'danger' }"
+            :class="item?.type"
             @click="(e) => handleAction(e, item.func)"
           >
-            <TypographyText :class="{ danger: item.type === 'danger' }">
+            <TypographyText :color="item?.type === 'danger' ? 'error' : 'body'">
               {{ item.text }}
             </TypographyText>
           </button>
@@ -137,18 +137,17 @@ export default Vue.extend({
     margin: 0 @normal-spacing;
 
     &:extend(.background-semitransparent-dark);
-    &:extend(.font-secondary);
     &:extend(.round-corners);
-
-    .danger {
-      color: @red;
-    }
 
     .action-button {
       height: 56px;
       justify-content: center;
       align-items: center;
-      width: @full;
+      width: 100%;
+
+      &.disabled {
+        opacity: 0.7;
+      }
 
       &:not(:last-child) {
         border-bottom: 0.5px solid @foreground;

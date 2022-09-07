@@ -66,12 +66,15 @@ export default Vue.extend({
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation?.type === 'direct'
         ? [
-            { text: this.$t('context.send'), func: this.openConversation },
             {
-              text: this.$t('context.profile'),
-              func: () =>
-                this.$store.dispatch('ui/showProfile', this.conversation),
+              text: this.$t('context.voice'),
+              func: this.status === 'online' ? this.call : () => {},
+              type: this.status === 'online' ? 'primary' : 'disabled',
             },
+            // {
+            //   text: this.$t('context.profile'),
+            //   func: () => this.$store.dispatch('ui/showProfile', this.user),
+            // },
             {
               text: this.$t('context.remove'),
               func: this.removeFriend,
@@ -79,7 +82,12 @@ export default Vue.extend({
             },
           ]
         : [
-            { text: this.$t('context.send'), func: this.openConversation },
+            {
+              text: this.$t('context.voice'),
+              func: () => {},
+              type: 'disabled',
+            },
+
             {
               text: this.$t('context.leave_group'),
               func: this.leaveGroup,
@@ -192,6 +200,15 @@ export default Vue.extend({
         return
       }
       this.$router.push(`/chat/${this.conversation.id}`)
+    },
+    async call() {
+      await iridium.webRTC
+        .call({
+          recipient: this.userId,
+          conversationId: this.conversationId,
+          kinds: ['audio'],
+        })
+        .catch((e) => this.$toast.error(this.$t(e.message) as string))
     },
     /**
      * @method markdownToHtml

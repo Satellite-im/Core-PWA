@@ -862,8 +862,7 @@ export default {
     rename: 'Rename',
     delete: 'Delete',
     // SidebarListItem
-    send: 'Send Message',
-    voice: 'Start Call',
+    voice: 'Call',
     video: 'Video Call',
     remove: 'Remove Friend',
     leave_group: 'Leave Group',

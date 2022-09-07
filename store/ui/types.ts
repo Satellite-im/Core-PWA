@@ -62,7 +62,7 @@ export enum SettingsRoutes {
   REALMS = 'realms',
 }
 
-export type ContextMenuItemTypes = 'primary' | 'danger'
+export type ContextMenuItemTypes = 'primary' | 'danger' | 'disabled'
 
 export interface ContextMenuItem {
   text: string | TranslateResult

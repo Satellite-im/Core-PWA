@@ -2,7 +2,7 @@
   class="context-menu"
   data-cy="context-menu"
   ref="contextMenu"
-  v-bind:style="{ left: ui.contextMenuPosition.x + 'px', 
+  :style="{ left: ui.contextMenuPosition.x + 'px', 
   top: ui.contextMenuPosition.y + 'px' }"
   v-click-outside="close"
 >
@@ -11,7 +11,7 @@
     <p
       v-if="item.text !== 'quickReaction'"
       data-cy="context-menu-option"
-      :class="{'red': item.type === 'danger'}"
+      :class="item?.type"
       @click="handle(item.func)"
     >
       {{ item.text }}
