@@ -26,6 +26,7 @@ export class IridiumManager extends Emitter {
   webRTC: WebRTCManager
   settings: SettingsManager
   users: UsersManager
+  syncTimeout?: NodeJS.Timeout
 
   constructor() {
     super()
@@ -203,29 +204,36 @@ export class IridiumManager extends Emitter {
   }
 
   async sendSyncInit() {
-    const connector = this.connector
-    if (!connector?.p2p.primaryNodeID) {
-      logger.warn('iridium/manager', 'no primary node, cannot send sync init', {
-        primaryNodeID: connector?.p2p.primaryNodeID,
-        ready: connector?.p2p.ready,
-      })
-      return
-    }
-    const profile = this.profile.state
-    if (!profile?.did) {
-      return
-    }
-    logger.info('iridium/manager', 'sending sync init', { profile })
-    const payload = {
-      type: 'sync/init',
-      at: Date.now(),
-      name: profile?.name || this.id,
-      avatar: profile?.photoHash || '',
-      status: profile?.status || '',
-      photoHash: profile?.photoHash || '',
-    }
+    clearTimeout(this.syncTimeout)
+    this.syncTimeout = setTimeout(() => {
+      const connector = this.connector
+      if (!connector?.p2p.primaryNodeID) {
+        logger.warn(
+          'iridium/manager',
+          'no primary node, cannot send sync init',
+          {
+            primaryNodeID: connector?.p2p.primaryNodeID,
+            ready: connector?.p2p.ready,
+          },
+        )
+        return
+      }
+      const profile = this.profile.state
+      if (!profile?.did) {
+        return
+      }
+      logger.info('iridium/manager', 'sending sync init', { profile })
+      const payload = {
+        type: 'sync/init',
+        at: Date.now(),
+        name: profile?.name || this.id,
+        avatar: profile?.photoHash || '',
+        status: profile?.status || '',
+        photoHash: profile?.photoHash || '',
+      }
 
-    await connector.send(connector.p2p.primaryNodeID, payload)
+      connector.send(connector.p2p.primaryNodeID, payload)
+    }, 3000)
   }
 }
 
