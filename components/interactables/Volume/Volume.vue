@@ -30,8 +30,8 @@ export default Vue.extend({
      * @description
      * @example
      */
-    returnValue(v: number) {
-      this.$emit('returned-value', v)
+    returnValue(value: number) {
+      this.$emit('change', value)
     },
   },
 })
