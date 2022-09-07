@@ -299,6 +299,7 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
+    await iridium.sendSyncInit()
     return dispatch('startup', walletAccount)
   },
 
