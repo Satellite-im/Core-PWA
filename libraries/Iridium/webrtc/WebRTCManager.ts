@@ -432,9 +432,6 @@ export default class WebRTCManager extends Emitter {
           type,
           data,
         }
-
-        // TODO: wire to reactivity
-        this.emit('callAnswered', {})
       }
       $Sounds.playSound(Sounds.CALL)
     }
@@ -630,8 +627,6 @@ export default class WebRTCManager extends Emitter {
     call.on('DESTROY', onCallDestroy)
     call.on('ERROR', onCallDestroy)
 
-    // TODO: test
-    console.log('MANUEL emit on call created', this.state)
     this.emit('callCreated', {})
   }
 

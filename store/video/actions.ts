@@ -28,7 +28,7 @@ const videoActions = {
   },
   async toggleMute({ state, commit, rootState }: ActionsArguments<VideoState>) {
     const { activeCall, calls } = iridium.webRTC.state
-    const call = activeCall && calls.get(activeCall.callId)
+    const call = activeCall && calls[activeCall.callId]
     if (!call) {
       return
     }

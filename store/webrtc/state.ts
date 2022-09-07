@@ -9,6 +9,7 @@ const InitialWebRTCState = (): WebRTCState => ({
   createdAt: 0,
   elapsedTime: '',
   interval: null,
+  streamIds: {},
 })
 
 export default InitialWebRTCState

@@ -41,7 +41,7 @@ export default {
    */
   async toggleMute({ state, commit, dispatch }: ActionsArguments<AudioState>) {
     const { activeCall, calls } = iridium.webRTC.state
-    const call = activeCall && calls.get(activeCall.callId)
+    const call = activeCall && calls[activeCall.callId]
 
     dispatch(
       'sounds/stopSounds',
