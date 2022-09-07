@@ -28,6 +28,7 @@ export interface WebRTCState {
   streamMuted: StreamMutedState
   activeCall: WebRTCActiveCall | null
   incomingCall: WebRTCIncomingCall | null
+  callTime: number
   callStartedAt: number
   streamConstraints: WebRTCStreamConstraints
 }

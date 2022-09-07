@@ -13,16 +13,16 @@ export default Vue.extend({
   },
   data() {
     return {
-      callTime: 0,
-      formatDuration,
+      webrtc: iridium.webRTC.state,
+      callTimeString: '',
     }
   },
-  mounted() {
-    setInterval(this.updateCallTime, 1000)
-  },
-  methods: {
-    updateCallTime() {
-      this.callTime = iridium.webRTC.callTime
+  watch: {
+    webrtc: {
+      handler() {
+        this.callTimeString = this.$dayjs(this.webrtc.callStartedAt).toNow(true)
+      },
+      deep: true,
     },
   },
 })
