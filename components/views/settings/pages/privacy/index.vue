@@ -135,7 +135,6 @@ export default Vue.extend({
       )
     },
     getPermissionState(name: string) {
-      console.log('######', this.permissions)
       return (
         this.permissions.find((perm) => perm?.name === name)?.state || 'loading'
       )
