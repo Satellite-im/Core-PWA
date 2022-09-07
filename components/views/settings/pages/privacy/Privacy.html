@@ -13,30 +13,13 @@
   />
   <SettingsSection>
     <SettingsUnit
-      :title="$t('pages.privacy.notifications.title')"
-      :text="$t('pages.privacy.notifications.subtitle')"
+      v-for="perm in permissions"
+      :title="$t(`pages.privacy.${perm.name}.title`)"
+      :text="$t(`pages.privacy.${perm.name}.subtitle`)"
     >
       <InteractablesPermissions
-        :state="getPermissionState('notifications')"
-        @click="handlePermission('notifications')"
-      />
-    </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.privacy.microphone.title')"
-      :text="$t('pages.privacy.microphone.subtitle')"
-    >
-      <InteractablesPermissions
-        :state="getPermissionState('microphone')"
-        @click="handlePermission('microphone')"
-      />
-    </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.privacy.camera.title')"
-      :text="$t('pages.privacy.camera.subtitle')"
-    >
-      <InteractablesPermissions
-        :state="getPermissionState('camera')"
-        @click="handlePermission('camera')"
+        :state="perm.state"
+        @click="handlePermission(perm.name)"
       />
     </SettingsUnit>
     <SettingsUnit
