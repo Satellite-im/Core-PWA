@@ -2,9 +2,9 @@
 export PNPM_HOME=./.pnpm-links/
 if [ ! -d ./linked-iridium ]; then
   if [[ -z "${DEPLOY_ENV}" ]]; then
-    git clone https://github.com/Satellite-im/iridium.git#${DEPLOY_ENV} ./linked-iridium
-  else
     git clone https://github.com/Satellite-im/iridium.git#dev ./linked-iridium
+  else
+    git clone https://github.com/Satellite-im/iridium.git#${DEPLOY_ENV} ./linked-iridium
   fi
   cp .env ./linked-iridium/.env
   cd ./linked-iridium
