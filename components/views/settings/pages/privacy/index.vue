@@ -145,7 +145,11 @@ export default Vue.extend({
       )
 
       if (targetElement) {
-        this.permissions.splice(this.permissions.indexOf(targetElement), 1)
+        this.permissions.splice(this.permissions.indexOf(targetElement), 1, {
+          name: permName,
+          state: newState,
+        })
+        return
       }
       this.permissions.push({ name: permName, state: newState })
     },

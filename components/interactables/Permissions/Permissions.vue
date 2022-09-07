@@ -1,18 +1,18 @@
 <template>
   <div class="permissions-container">
+    <TypographyText v-if="state === 'granted'" color="success">
+      {{ $t('pages.privacy.permissions.granted') }}
+    </TypographyText>
     <InteractablesButton
-      v-if="state === 'prompt'"
+      v-else-if="state === 'prompt'"
       color="primary"
       :text="$t('pages.privacy.permissions.ask_permission')"
       @click="$emit('click', $event)"
     />
-    <TypographyText v-if="state === 'granted'" color="success">
-      {{ $t('pages.privacy.permissions.granted') }}
-    </TypographyText>
-    <TypographyText v-if="state === 'denied'" color="error">
+    <TypographyText v-else-if="state === 'denied'" color="error">
       {{ $t('pages.privacy.permissions.denied') }}
     </TypographyText>
-    <UiLoadersLoadingBar v-if="state === 'loading'" />
+    <UiLoadersLoadingBar v-else-if="state === 'loading'" />
   </div>
 </template>
 
