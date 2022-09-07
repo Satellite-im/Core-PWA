@@ -153,6 +153,7 @@ export class IridiumManager extends Emitter {
       return
     }
     if (this.ready) return
+    this.ready = true
     logger.info('iridium/manager', 'initializing users')
     await this.users.init()
     await Promise.all(
@@ -198,7 +199,6 @@ export class IridiumManager extends Emitter {
       at: Date.now(),
     })
 
-    this.ready = true
     this.emit('ready', {})
   }
 
