@@ -214,6 +214,7 @@ export default Vue.extend({
   overflow: hidden;
   box-shadow: @ui-shadow-large;
   &:extend(.no-select);
+  padding: 8px;
 }
 
 .dragging {

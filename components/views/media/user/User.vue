@@ -100,16 +100,8 @@ export default Vue.extend({
     },
   },
   watch: {
-    audioStream(stream) {
-      this.audioStreamUtils?.destroy()
-
-      if (!stream) {
-        this.isTalking = false
-        return
-      }
-
-      this.audioStreamUtils = new AudioStreamUtils(stream, this.audio)
-      this.audioStreamUtils.start()
+    audioStream(stream: MediaStream | undefined) {
+      this.initializeAudioStreamUtils(stream)
     },
     'audioStreamUtils.isTalking'(isTalking) {
       this.isTalking = isTalking
@@ -127,6 +119,9 @@ export default Vue.extend({
       }
     }
   },
+  mounted() {
+    this.initializeAudioStreamUtils(this.audioStream)
+  },
   beforeDestroy() {
     this.audioStreamUtils?.destroy()
   },
@@ -134,6 +129,15 @@ export default Vue.extend({
     this.$emit('mounted')
   },
   methods: {
+    initializeAudioStreamUtils(stream: MediaStream | undefined) {
+      this.audioStreamUtils?.destroy()
+      if (!stream) {
+        this.isTalking = false
+        return
+      }
+      this.audioStreamUtils = new AudioStreamUtils(stream, this.audio)
+      this.audioStreamUtils.start()
+    },
     isMuted(kind: WebRTCEnum) {
       const muted =
         !this.user.did ||
