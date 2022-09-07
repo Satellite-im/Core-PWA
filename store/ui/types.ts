@@ -85,7 +85,7 @@ export interface UIState {
   modals: {
     [key in ModalWindows]: boolean | object
   }
-  welcomeMessage: boolean
+  isWelcomeMessage: boolean
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean

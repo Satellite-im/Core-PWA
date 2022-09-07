@@ -43,10 +43,6 @@ const mutations = {
       status: details.status,
       photoHash: details.photoHash,
     }
-    state.welcomePopup = true
-  },
-  dismissWelcome(state: AccountsState) {
-    state.welcomePopup = false
   },
   setUserPeerId(state: AccountsState, peerId: string) {
     if (state.details) {

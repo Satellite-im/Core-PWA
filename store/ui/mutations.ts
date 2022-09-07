@@ -105,10 +105,10 @@ export default {
     state.isReacted = status
   },
   welcomeDismiss(state: UIState) {
-    state.welcomeMessage = false
+    state.isWelcomeMessage = false
   },
   welcomeSet(state: UIState, welcome: boolean) {
-    state.welcomeMessage = welcome
+    state.isWelcomeMessage = welcome
   },
   /**
    * @method sendMessage DocsTODO

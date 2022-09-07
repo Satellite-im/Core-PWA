@@ -40,6 +40,7 @@ Object {
   "isReacted": false,
   "isScrollOver": false,
   "isTyping": false,
+  "isWelcomeMessage": true,
   "messages": Array [],
   "modals": Object {
     "callToAction": false,

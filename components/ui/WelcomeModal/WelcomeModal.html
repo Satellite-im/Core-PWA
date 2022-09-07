@@ -2,30 +2,25 @@
   <UiModal nopad>
     <div class="welcome-content">
       <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
-      <UiSpacer :height="50" />
-      <TypographyTitle
-        :size="6"
-        :text="$t('welcome_message.welcome', {user: profile.name})"
-      />
-      <div class="update-modal-spinner" v-if="isLoading">
-        <UiLoadersSpinner spinning />
-      </div>
-      <UiSpacer :height="30" />
-      <TypographyText>
+      <TypographyText
+        class="text-gap"
+        :as="'h2'"
+        :weight="'regular'"
+      >
+      {{$t('welcome_message.welcome', {user: profile.name})}}
+      </TypographyText>
+      <UiLoadersSpinner v-if="isLoading" spinning />
+      <TypographyText class="text-gap">
         {{ $t('welcome_message.ea_warning') }}
       </TypographyText>
-      <UiSpacer :height="20" />
-      <TypographyText>
+      <TypographyText class="text-gap">
         {{ $t('welcome_message.permissions') }}
       </TypographyText>
-      <UiSpacer :height="20" />
-      <TypographyText>
+      <TypographyText class="text-gap">
         {{ $t('welcome_message.file_scanning_permissions') }}
       </TypographyText>
-      <UiSpacer :height="20" />
-      <div class="dismiss-controls">
+      <div class="dismiss-controls text-gap">
         <InteractablesButton
-          type="primary"
           @click="toggleVisibility"
           :text="$t('modal.update_modal.got_it')"
         >

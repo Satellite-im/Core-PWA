@@ -9,7 +9,7 @@ export type User = {
   photoHash?: string | CID
   accountUrl?: string
   about?: string
-  welcomeMessage?: boolean
+  isWelcomeMessage?: boolean
 }
 
 export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'
