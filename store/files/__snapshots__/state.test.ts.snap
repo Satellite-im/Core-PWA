@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test files/state should match the initial state snapshot 1`] = `[Function]`;
-
 exports[`Test files/state the function should match the initial state snapshot 1`] = `
 Object {
   "currentUpload": undefined,
