@@ -17,7 +17,7 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const $Sounds = new SoundManager()
 
-const announceFrequency = 15000
+const announceFrequency = 60000
 
 const initialState: WebRTCState = {
   incomingCall: null,
