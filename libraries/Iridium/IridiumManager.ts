@@ -212,6 +212,9 @@ export class IridiumManager extends Emitter {
       return
     }
     const profile = this.profile.state
+    if (!profile?.did) {
+      return
+    }
     logger.info('iridium/manager', 'sending sync init', { profile })
     const payload = {
       type: 'sync/init',
