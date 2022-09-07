@@ -75,13 +75,13 @@ export const Notifications = class Notifications {
    * @returns
    * @example
    */
-  requestNotificationPermission(): any {
+  async requestNotificationPermission(): any {
     if (
       (this.currentPlatform === PlatformTypeEnum.WEB ||
         this.currentPlatform === PlatformTypeEnum.ELECTRON) &&
       isSupported()
     ) {
-      Notification.requestPermission()
+      await Notification.requestPermission()
     }
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // and maybe iOS?

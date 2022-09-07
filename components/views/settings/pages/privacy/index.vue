@@ -8,6 +8,8 @@ import { validURL } from '~/libraries/ui/Common'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
+type PermissionObject = { name: string; state: string }
+
 export default Vue.extend({
   name: 'PrivacySettings',
   layout: 'settings',
@@ -17,7 +19,7 @@ export default Vue.extend({
       lengthError: false as boolean,
       loading: [] as string[],
       privacySettings: iridium.settings.state.privacy,
-      permissions: [] as string[],
+      permissions: [] as PermissionObject[],
     }
   },
   computed: {
@@ -117,9 +119,76 @@ export default Vue.extend({
       },
     },
   },
+  mounted() {
+    this.checkBrowserPermissions()
+  },
   methods: {
-    handlePermissions(type: string) {
-      // todo ask permissions
+    checkBrowserPermissions() {
+      const permissionCheck = ['notifications', 'microphone', 'camera']
+      permissionCheck.forEach((permName) =>
+        navigator.permissions.query({ name: permName }).then((result) => {
+          result.onchange = (e) => {
+            this.updatePermissionState(permName, e.currentTarget.state)
+          }
+          this.permissions.push({ name: permName, state: result.state })
+        }),
+      )
+    },
+    getPermissionState(name: string) {
+      return (
+        this.permissions.find((perm) => perm?.name === name)?.state || 'loading'
+      )
+    },
+    updatePermissionState(permName: string, newState: string) {
+      const targetElement = this.permissions.find(
+        (perm) => perm.name === permName,
+      )
+
+      if (targetElement) {
+        this.permissions.splice(this.permissions.indexOf(targetElement), 1)
+      }
+      this.permissions.push({ name: permName, state: newState })
+    },
+    async handlePermission(permName: string) {
+      this.loading.push(permName)
+      navigator.permissions.query({ name: permName }).then(async (result) => {
+        if (result.state === 'granted' || result.state === 'denied') {
+          this.loading.splice(this.loading.indexOf(permName), 1)
+          return
+        }
+
+        await this.askPermission(permName)
+        this.loading.splice(this.loading.indexOf(permName), 1)
+      })
+    },
+    async askPermission(permName: string) {
+      if (permName === 'notifications') {
+        await iridium.notifications.askPermissions()
+        return
+      }
+
+      try {
+        let stream
+        /*  
+       // delete the comment to toggle screensharing, 
+       // NOTE: this permission doesn't exist on browsers
+       if (permName === 'screen') {
+          stream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+          })
+        } */
+        if (permName === 'microphone' || permName === 'camera') {
+          stream = await navigator.mediaDevices.getUserMedia({
+            [permName === 'microphone' ? 'audio' : 'video']: true,
+          })
+        }
+        const tracks = stream?.getTracks()
+        tracks?.forEach((track) => {
+          track?.stop()
+        })
+      } catch (e) {
+        console.log(e)
+      }
     },
   },
 })
