@@ -2,7 +2,7 @@
   :class="[`button size-${size} color-${color}`, {
     'outlined': outlined,
   }]"
-  :disabled="loading"
+  :disabled="disabled || loading"
   :type="type"
   ref="button"
   @click="handleClick"

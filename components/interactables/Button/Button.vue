@@ -1,4 +1,5 @@
 <template src="./Button.html"></template>
+
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
@@ -30,7 +31,10 @@ export default Vue.extend({
       type: String,
       default: 'button',
     },
-    disabled: Boolean,
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
