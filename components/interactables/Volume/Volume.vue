@@ -33,6 +33,9 @@ export default Vue.extend({
     returnValue(value: number) {
       this.$emit('change', value)
     },
+    percentageFormatter(value: number) {
+      return `${value}%`
+    },
   },
 })
 </script>
