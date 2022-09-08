@@ -23,6 +23,7 @@ const initialState: WebRTCState = {
   incomingCall: null,
   activeCall: null,
   streamMuted: {},
+  callTime: 0,
   callStartedAt: 0,
   streamConstraints: {
     audio: true,
@@ -47,7 +48,6 @@ type WebRTCTypingMessage = {
 export default class WebRTCManager extends Emitter {
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
-  public callTime: number = 0
   public timers: { [key: string]: any } = {}
 
   constructor() {
@@ -84,7 +84,7 @@ export default class WebRTCManager extends Emitter {
 
     setInterval(() => {
       if (this.state.activeCall) {
-        this.callTime = Date.now() - this.state.callStartedAt
+        this.state.callTime = Date.now() - this.state.callStartedAt
       }
     }, 1000)
   }

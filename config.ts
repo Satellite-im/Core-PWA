@@ -1,25 +1,24 @@
 // eslint-disable-next-line import/named
 import { Commitment } from '@solana/web3.js'
+import type { IridiumConfig } from '@satellite-im/iridium'
 
-const syncNodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
+const nodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
   '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
 ]
-console.log('debug: | syncNodes', syncNodes)
-
+const gateways = process.env.NUXT_ENV_IRIDIUM_GATEWAYS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
 export const Config = {
   debug: true,
   iridium: {
-    syncNodes,
+    nodes,
+    gateways,
     ipfs: {
       config: {
-        Addresses: {
-          Swarm: syncNodes,
-          Delegate: syncNodes,
-        },
-        Bootstrap: syncNodes,
+        Bootstrap: nodes,
       },
     },
-  },
+  } as Partial<IridiumConfig>,
   ipfs: {
     gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
@@ -206,13 +205,13 @@ export const Config = {
   },
   seedPhraseCharsCount: 12,
   pip: {
-    /* Grid config, image splitting the screen in `rows x columns` 
+    /* Grid config, image splitting the screen in `rows x columns`
      _____ _____
     |_____|_____|
     |_____|_____|
     |_____|_____|
     |_____|_____|
-    
+
     Depending on the center of the Pip, it will land on a specific slot
     */
     rows: [0, 1, 2, 3] as const,

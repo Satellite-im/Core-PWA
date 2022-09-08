@@ -65,6 +65,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     await iridium.connector.subscribe<IridiumUserPubsub>('/users/announce', {
       handler: this.onUsersAnnounce.bind(this),
       sync: true,
+      decode: false,
     })
     logger.log(this.loggerTag, 'listening for user activity', this.state)
 
@@ -248,7 +249,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
     return new Promise<User[]>((resolve) => {
       const id = v4()
-      if (!iridium.connector?.p2p.primaryNodeID || !iridium.ready) {
+      if (
+        !iridium.connector?.p2p.primaryNodeID ||
+        !iridium.connector?.p2p.nodeReady
+      ) {
         logger.warn('iridium/usermanager', 'no primary node, cannot search', {
           primaryNodeID: iridium?.connector?.p2p.primaryNodeID,
           p2pReady: iridium?.connector?.p2p.ready,
@@ -260,7 +264,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       const timeout = setTimeout(() => {
         logger.warn(this.loggerTag, 'peer search timeout', { query })
         resolve([])
-      }, 30000)
+      }, 5000)
 
       this.once(`searchResults/${id}`, (results: User[]) => {
         logger.debug(this.loggerTag, 'search results received', results)
