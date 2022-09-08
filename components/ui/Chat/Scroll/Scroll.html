@@ -1,9 +1,4 @@
-<div
-  :class="classObject"
-  ref="scrollRef"
-  @scroll="onScrolled()"
-  v-scroll-lock="true"
->
+<div :class="classObject" ref="scrollRef" @scroll="onScrolled()">
   <div ref="scrollContent" class="chat-scroll-content">
     <slot />
   </div>
