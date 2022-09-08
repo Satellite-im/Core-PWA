@@ -89,6 +89,27 @@ describe('Manage sounds', () => {
     )
   })
 
+  test('sound stops but argument is empty array', () => {
+    const result: any = inst.stopSounds(
+      {
+        state: {
+          newMessage: true,
+          hangup: true,
+          call: true,
+          mute: true,
+          unmute: true,
+          deafen: true,
+          undeafen: true,
+          upload: true,
+          connected: true,
+        },
+      },
+      [],
+    )
+
+    expect(result).toBeUndefined()
+  })
+
   test('sound does not stop', () => {
     const result: any = inst.stopSounds(
       {
@@ -132,5 +153,26 @@ describe('Manage sounds', () => {
 
     expect(spy).toHaveBeenCalled()
     expect(spy).toHaveBeenLastCalledWith(false)
+  })
+
+  test('playingSounds', () => {
+    const result = inst.playingSounds(
+      {
+        state: {
+          newMessage: true,
+          hangup: true,
+          call: true,
+          mute: false,
+          unmute: true,
+          deafen: true,
+          undeafen: true,
+          upload: true,
+          connected: true,
+        },
+      },
+      false,
+    )
+
+    expect(result).toEqual([])
   })
 })
