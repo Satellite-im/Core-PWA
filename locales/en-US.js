@@ -7,7 +7,6 @@ export default {
     wallet: 'Wallet\nComing Soon',
     archived: 'Archived Messages\nComing Soon',
     group_call: 'Group Call\nComing Soon',
-    sidebar_search: 'Friends and Group Search\nComing Soon',
     group_chat_search: 'Group Chat Search\nComing Soon',
   },
   global: {
@@ -40,6 +39,7 @@ export default {
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
     background_call: 'Current call',
+    no_results: 'No results found',
   },
   time: {
     now: 'now',
@@ -176,7 +176,6 @@ export default {
         for_1: 'Searching for',
         for_2: 'in',
         all: 'all directories',
-        empty: 'No results found',
         placeholder: 'Search...',
         enable_global: 'Enable Global Search',
         disable_global: 'Disable Global Search',

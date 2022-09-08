@@ -10,6 +10,12 @@ export default Vue.extend({
   components: {
     UserPlusIcon,
   },
+  props: {
+    filter: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       loading: false,
@@ -18,7 +24,15 @@ export default Vue.extend({
   },
   computed: {
     sortedConversations(): Conversation[] {
-      return iridium.chat.getSortedConversations()
+      const conv = iridium.chat.getSortedConversations()
+      if (!this.filter) {
+        return conv
+      }
+      return conv.filter((c) => {
+        return c.name
+          ?.toLocaleLowerCase()
+          .includes(this.filter.toLocaleLowerCase())
+      })
     },
   },
 })

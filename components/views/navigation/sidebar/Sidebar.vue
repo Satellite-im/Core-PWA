@@ -18,6 +18,7 @@ export default Vue.extend({
     return {
       isQuickchatVisible: false,
       friends: iridium.friends.state,
+      filter: '',
     }
   },
   computed: {

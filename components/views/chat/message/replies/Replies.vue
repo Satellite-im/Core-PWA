@@ -56,7 +56,7 @@ export default Vue.extend({
     accordionText(): string {
       const uniqueRepliers = [
         ...new Set(this.replies.map((reply) => reply.from)),
-      ].map((r) => iridium.users.getUser(r).name)
+      ].map((r) => iridium.users.getUser(r)?.name)
       return this.$tc('conversation.repliers', uniqueRepliers.length, {
         names: uniqueRepliers.join(', '),
       })

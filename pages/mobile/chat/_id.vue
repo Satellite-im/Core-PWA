@@ -7,15 +7,20 @@
       >
         <div class="search-container">
           <InteractablesInput
+            v-model="filter"
             class="search"
+            type="search"
             :placeholder="`${$t('ui.search')}...`"
-            show-clear
           />
           <button v-if="$route.params.id" @click="swiper.slideNext()">
             <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
-        <SidebarList class="mobile-list" @slideNext="swiper.slideNext()" />
+        <SidebarList
+          class="mobile-list"
+          :filter="filter"
+          @slideNext="swiper.slideNext()"
+        />
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
@@ -49,6 +54,7 @@ export default Vue.extend({
   data: () => ({
     swiper: undefined as Swiper | undefined,
     webrtc: iridium.webRTC.state,
+    filter: '',
   }),
   computed: {
     ...mapState({

@@ -1,19 +1,12 @@
 <div class="sidebar">
   <div class="sidebar-inner">
     <div class="sidebar-search">
-      <UiComingSoon
-        style="flex: 1"
-        :tooltipText="$t('coming_soon.sidebar_search')"
-        :tooltipPosition="'bottom'"
-        disabled
-      >
-        <InteractablesInput
-          :placeholder="`${$t('ui.search')}...`"
-          size="xs"
-          disabled
-          showClear
-        />
-      </UiComingSoon>
+      <InteractablesInput
+        v-model="filter"
+        type="search"
+        size="sm"
+        :placeholder="`${$t('ui.search')}...`"
+      />
       <InteractablesSidebarToggle />
     </div>
     <div class="sidebar-nav">
@@ -55,7 +48,7 @@
         @toggle="toggleModal"
       />
     </div>
-    <SidebarList />
+    <SidebarList :filter="filter" />
   </div>
   <div class="controls">
     <SidebarLive />

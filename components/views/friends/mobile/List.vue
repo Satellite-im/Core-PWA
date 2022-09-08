@@ -17,7 +17,7 @@
 </template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   props: {
