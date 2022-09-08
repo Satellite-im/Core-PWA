@@ -9,6 +9,7 @@
   @mousemove.stop="handleMouseMove"
   @mouseenter="handleMouseEnter"
   @mouseleave="handleMouseLeave"
+  :aria-label="label || text"
 >
   <UiLoadersSpinner class="spinner" v-if="loading" spinning />
   <div v-else class="content">
