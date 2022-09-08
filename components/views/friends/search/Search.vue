@@ -6,7 +6,9 @@
       :autofocus="$device.isDesktop"
       @change="_searchFriend"
     />
-    <TypographyError v-if="error" :text="$t(error)" />
+    <TypographyText v-if="error" color="danger">
+      {{ $t(error) }}
+    </TypographyText>
     <UiLoadersLoadingBar v-else-if="searching" />
     <div v-else-if="!query" class="id-container">
       <button class="id-button" @click="copyId">

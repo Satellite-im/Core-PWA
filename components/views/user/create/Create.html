@@ -11,7 +11,7 @@
       <div class="image-container">
         <UiCircle
           :type="croppedImage ? 'image' : 'random'"
-          :seed="accountAddress"
+          :seed="myDid"
           :source="croppedImage"
           :size="120"
         />
@@ -21,10 +21,14 @@
           {{ $t('user.registration.photo_text') }}
         </TypographyText>
         <InteractablesImageInput ref="imageInput" @change="selectImage" />
-        <InteractablesButton
-          :text="$t('servers.create.photo_button')"
-          @click="imageInputRef.click()"
-        />
+        <!-- TODO: Enable after safer is implemented -->
+        <!-- <InteractablesButton -->
+        <!-- :text="$t('servers.create.photo_button')" -->
+        <!-- @click="imageInputRef.click()" -->
+        <!-- /> -->
+
+        <!-- TODO: Remove after safer is implemented -->
+        <InteractablesButton :text="$t('ui.coming_soon')" :disabled="true" />
       </div>
     </div>
 
@@ -56,14 +60,14 @@
         />
       </div>
 
-      <template v-if="error.length">
-        <TypographyError
-          v-for="e in error"
-          :key="e"
-          :text="e"
-          data-cy="error-message"
-        />
-      </template>
+      <TypographyText
+        v-for="e in error"
+        :key="e"
+        color="danger"
+        data-cy="error-message"
+      >
+        {{ e }}
+      </TypographyText>
 
       <div class="submit-button-container">
         <InteractablesButton

@@ -51,5 +51,7 @@
   <span v-if="showLimit" class="char-limit">
     {{ text.length }}/{{ maxLength }}
   </span>
-  <TypographyError v-if="error" class="error" :text="error" small />
+  <TypographyText v-if="error" as="small" color="danger">
+    {{ error }}
+  </TypographyText>
 </div>

@@ -45,7 +45,7 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    live: 'Live {time}',
+    live: 'Live for {time}',
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
@@ -288,7 +288,6 @@ export default {
       title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
-      permissions: 'Permissions',
       notifications: {
         title: 'Notifications',
         subtitle:
@@ -308,6 +307,13 @@ export default {
         title: 'Screen Sharing',
         subtitle:
           'Show the other users your screen during voice and video calls.',
+        note: "Screen sharing is an operating system setting labeled as 'Screen Recording', to allow access you will need to enable browser access to screen recording in your OS",
+      },
+      permissions: {
+        title: 'Permissions',
+        ask_permission: 'Ask Permission',
+        granted: 'Permission Granted',
+        denied: 'Permission Denied',
       },
       filesharing: 'File sharing',
       consentScan: {
@@ -590,6 +596,7 @@ export default {
           title: 'About Me',
           subtitle:
             'Let your friends know who you are! Your about me will display on your profile.',
+          placeholder: 'Enter a short introduction about yourself...',
         },
         accounts: {
           title: 'Your Accounts',
@@ -866,8 +873,7 @@ export default {
     rename: 'Rename',
     delete: 'Delete',
     // SidebarListItem
-    send: 'Send Message',
-    voice: 'Start Call',
+    voice: 'Call',
     video: 'Video Call',
     remove: 'Remove Friend',
     leave_group: 'Leave Group',

@@ -6,7 +6,7 @@ export type TextColor =
   | 'light'
   | 'dark'
   | 'flair'
-  | 'error'
+  | 'danger'
   | 'white'
   | 'success'
 export type Weight = 'regular' | 'bold'

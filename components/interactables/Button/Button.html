@@ -2,13 +2,14 @@
   :class="[`button size-${size} color-${color}`, {
     'outlined': outlined,
   }]"
-  :disabled="loading"
+  :disabled="disabled || loading"
   :type="type"
   ref="button"
   @click="handleClick"
   @mousemove.stop="handleMouseMove"
   @mouseenter="handleMouseEnter"
   @mouseleave="handleMouseLeave"
+  :aria-label="label || text"
 >
   <UiLoadersSpinner class="spinner" v-if="loading" spinning />
   <div v-else class="content">

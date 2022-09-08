@@ -28,6 +28,7 @@ export default Vue.extend({
       settingsRoute: (state) => (state as RootState).ui.settingsRoute,
     }),
     menuOptions(): SidebarGrouping[] {
+      // TODO: Replace all text entries with i18n
       return [
         {
           title: 'User Settings',

@@ -52,25 +52,25 @@ export default defineNuxtConfig({
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon_16.png',
+        href: '/favicon_16.png',
         sizes: '16x16',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon_32.png',
+        href: '/favicon_32.png',
         sizes: '32x32',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon.png',
+        href: '/favicon.png',
         sizes: '96x96',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon.png',
+        href: '/favicon.png',
       },
     ],
   },
@@ -90,8 +90,6 @@ export default defineNuxtConfig({
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/thirdparty/multiselect.ts' },
-    { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
     { src: '~/plugins/thirdparty/tooltip.ts' },
     // Local
@@ -168,7 +166,7 @@ export default defineNuxtConfig({
       permissions: ['unlimitedStorage', 'fullscreen'],
     },
     icon: {
-      source: '/static/favicon.png',
+      source: '/favicon.png',
     },
     workbox: {
       // uncomment next line to test local

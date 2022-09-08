@@ -1,14 +1,15 @@
 .error-network-container {
   &:extend(.modal-gradient);
-  padding: 1rem;
+  padding: 32px;
+  max-width: 550px;
 
   .modal-body {
     .custom-modal-content {
-      padding: 0 1rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 24px;
 
       .mascot {
         width: 15rem;
@@ -19,17 +20,11 @@
       .title {
         font-size: 1.9rem;
         color: @secondary-text;
-        margin-top: 2rem;
         text-align: center;
-      }
-
-      .subtitle {
-        margin-top: 2rem;
       }
 
       .action {
         width: 100%;
-        margin-top: 1rem;
 
         .text {
           margin: 0 0.5rem;
@@ -39,8 +34,28 @@
   }
 }
 
-@media only screen and (min-width: @mobile-breakpoint) {
+@media (max-width: @mobile-breakpoint) {
   .error-network-container {
-    max-width: 550px;
+    padding: 16px;
+    height: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .modal-body {
+      max-width: 550px;
+
+      .custom-modal-content {
+        .mascot {
+          width: 10rem;
+          height: 10rem;
+        }
+
+        .title {
+          font-size: 1.5rem;
+        }
+      }
+    }
   }
 }

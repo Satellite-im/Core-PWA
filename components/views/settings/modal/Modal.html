@@ -5,37 +5,42 @@
       class="page"
       :class="{profile: ui.settingsRoute === SettingsRoutes.PROFILE}"
     >
+      <!-- user settings -->
       <SettingsPagesPersonalize
-        v-if="ui.settingsRoute === SettingsRoutes.PERSONALIZE"
-      />
-      <SettingsPagesAccounts
-        v-if="ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
-      />
-      <SettingsPagesAudio
-        v-if="ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
-      />
-      <SettingsPagesDeveloper
-        v-if="ui.settingsRoute === SettingsRoutes.DEVELOPER"
-      />
-      <SettingsPagesInfo v-if="ui.settingsRoute === SettingsRoutes.INFO" />
-      <SettingsPagesKeybinds
-        v-if="ui.settingsRoute === SettingsRoutes.KEY_BINDS"
-      />
-      <SettingsPagesNotifications
-        v-if="ui.settingsRoute === SettingsRoutes.NOTIFICATIONS"
+        v-show="ui.settingsRoute === SettingsRoutes.PERSONALIZE"
       />
       <SettingsPagesProfile
-        v-if="ui.settingsRoute === SettingsRoutes.PROFILE"
+        v-show="ui.settingsRoute === SettingsRoutes.PROFILE"
       />
+      <SettingsPagesAudio
+        v-show="ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
+      />
+      <!-- developer -->
+      <!-- <SettingsPagesDeveloper
+        v-show="ui.settingsRoute === SettingsRoutes.DEVELOPER"
+      />
+      <SettingsPagesNotifications
+        v-show="ui.settingsRoute === SettingsRoutes.NOTIFICATIONS"
+      /> -->
+      <SettingsPagesInfo v-show="ui.settingsRoute === SettingsRoutes.INFO" />
+      <!-- app settings -->
+      <!-- <SettingsPagesRealms
+        v-show="ui.settingsRoute === SettingsRoutes.REALMS"
+      /> -->
       <SettingsPagesStorage
-        v-if="ui.settingsRoute === SettingsRoutes.STORAGE"
+        v-show="ui.settingsRoute === SettingsRoutes.STORAGE"
       />
       <SettingsPagesNetwork
-        v-if="ui.settingsRoute === SettingsRoutes.NETWORK"
+        v-show="ui.settingsRoute === SettingsRoutes.NETWORK"
       />
-      <SettingsPagesRealms v-if="ui.settingsRoute === SettingsRoutes.REALMS" />
+      <SettingsPagesKeybinds
+        v-show="ui.settingsRoute === SettingsRoutes.KEY_BINDS"
+      />
+      <SettingsPagesAccounts
+        v-show="ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
+      />
       <SettingsPagesPrivacy
-        v-if="ui.settingsRoute === SettingsRoutes.PRIVACY_AND_PERMISSIONS"
+        v-show="ui.settingsRoute === SettingsRoutes.PRIVACY_AND_PERMISSIONS"
       />
     </div>
     <InteractablesClose data-cy="settings-close-button" :action="close" />

@@ -1,5 +1,6 @@
 import { SignalData } from 'simple-peer'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
+import { Call } from '~/libraries/WebRTC/Call'
 
 export type PeerMutedState = {
   [key in WebRTCEnum]: boolean
@@ -28,8 +29,10 @@ export interface WebRTCState {
   streamMuted: StreamMutedState
   activeCall: WebRTCActiveCall | null
   incomingCall: WebRTCIncomingCall | null
+  callTime: number
   callStartedAt: number
   streamConstraints: WebRTCStreamConstraints
+  calls: { [key: string]: Call }
 }
 
 export enum WebRTCError {

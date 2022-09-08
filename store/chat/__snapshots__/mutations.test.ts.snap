@@ -15,6 +15,37 @@ Object {
 }
 `;
 
+exports[`misc module.default.addFile with existing files array 1`] = `
+Object {
+  "undefined": Array [
+    Object {
+      "file": "path2",
+      "nsfw": Object {
+        "checking": false,
+        "status": false,
+      },
+      "url": "string2",
+    },
+    Object {
+      "file": "path2",
+      "nsfw": Object {
+        "checking": false,
+        "status": false,
+      },
+      "url": "string2",
+    },
+    Object {
+      "file": "path3",
+      "nsfw": Object {
+        "checking": false,
+        "status": false,
+      },
+      "url": "string3",
+    },
+  ],
+}
+`;
+
 exports[`module.default.addFile 0 1`] = `undefined`;
 
 exports[`module.default.addFile 1 1`] = `undefined`;

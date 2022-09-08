@@ -27,6 +27,7 @@ const Controls = Vue.extend({
     return {
       searchValue: '' as string,
       newFolderName: '' as string,
+      // todo - switch to a set
       errors: [] as Array<string | TranslateResult>,
     }
   },
@@ -128,7 +129,7 @@ const Controls = Vue.extend({
             options: { progress: this.setProgress },
           })
           .catch((e) => {
-            // ensure there aren't any duplicate error messages
+            // todo - switch to a set - ensure there aren't any duplicate error messages
             if (!this.errors.includes(this.$t(e?.message)))
               this.errors.push(this.$t(e?.message ?? ''))
           })

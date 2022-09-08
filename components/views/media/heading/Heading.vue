@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { formatDuration } from '~/utilities/duration'
 
 export default Vue.extend({
   components: {
@@ -13,8 +14,16 @@ export default Vue.extend({
   data() {
     return {
       webrtc: iridium.webRTC.state,
-      callTime: iridium.webRTC.callTime,
+      callTimeString: '',
     }
+  },
+  watch: {
+    webrtc: {
+      handler() {
+        this.callTimeString = this.$dayjs(this.webrtc.callStartedAt).toNow(true)
+      },
+      deep: true,
+    },
   },
 })
 </script>

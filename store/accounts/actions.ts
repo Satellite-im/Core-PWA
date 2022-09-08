@@ -302,6 +302,7 @@ export default {
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
     commit('ui/welcomeSet', true, { root: true })
+    await iridium.sendSyncInit()
     return dispatch('startup', walletAccount)
   },
   async setWelcomeMessageDismiss({ commit }: ActionsArguments<AccountsState>) {

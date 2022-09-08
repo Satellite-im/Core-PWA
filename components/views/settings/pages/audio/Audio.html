@@ -62,11 +62,11 @@
       <div class="meter-container">
         <UiMeter :value="micLevel" :height="5" solid />
       </div>
-      <MediaActionsVolume
-        :volume="audio.inputVolume"
+      <InteractablesVolume
+        :value="audio.inputVolume"
         direction="ltr"
         plain
-        @volumeControlValueChange="inputVolumeControlValueChange"
+        @change="inputVolumeControlValueChange"
       />
     </SettingsUnit>
     <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
@@ -74,11 +74,11 @@
       <div class="meter-container">
         <UiMeter :value="0" :height="5" solid />
       </div>
-      <MediaActionsVolume
-        :volume="audio.volume"
+      <InteractablesVolume
+        :value="audio.volume"
         direction="ltr"
         plain
-        @volumeControlValueChange="volumeControlValueChange"
+        @change="volumeControlValueChange"
       />
     </SettingsUnit>
   </SettingsSection>
@@ -167,10 +167,7 @@
       :title="$t('pages.settings.video.flipVideo.title')"
       :text="$t('pages.settings.video.flipVideo.subtitle')"
     >
-      <InteractablesSwitch
-        v-model="flipVideo"
-        :isLocked="loading.includes('flipVideo')"
-      />
+      <InteractablesSwitch v-model="flipVideo" />
     </SettingsUnit>
   </SettingsSection>
 
@@ -201,7 +198,4 @@
     :value="$t('pages.settings.notifications.title')"
   />
   <SettingsPagesAudioSounds />
-  <TypographyText v-if="loading.length">
-    {{ $t('pages.privacy.updating') }}
-  </TypographyText>
 </SettingsPage>

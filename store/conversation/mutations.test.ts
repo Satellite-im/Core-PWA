@@ -3,6 +3,7 @@ import {
   ConversationConnection,
   ConversationState,
 } from './types'
+import InitialConversationState from './state'
 import * as mutations from '~/store/conversation/mutations'
 
 describe('mutations.default.setConversation', () => {
@@ -263,5 +264,16 @@ describe('misc', () => {
     expect(state.participants).toEqual([argument, argument3])
     // Both argument 2 and argument 3 are identical; both assertions will return true
     expect(result).toBe(undefined)
+  })
+
+  test('mutations.default.resetConversation', () => {
+    const state = InitialConversationState()
+
+    mutations.default.resetConversation(state)
+
+    expect(state.id).toEqual('')
+    expect(state.type).toEqual('friend')
+    expect(state.calling).toEqual(false)
+    expect(state.participants).toEqual([])
   })
 })

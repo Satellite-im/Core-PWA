@@ -19,11 +19,11 @@
         autofocus
         @submit="action"
         data-cy="pin-label"
+        :error="$t(error)"
       >
         <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
         <chevron-right-icon size="1x" v-else />
       </InteractablesInput>
-      <TypographyError v-if="error" :text="$t(error)" />
     </div>
     <InteractablesSwitch
       v-model="storePin"
@@ -31,10 +31,10 @@
     />
     <br />
     <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
-      {{$t('pages.unlock.delete_account_label')}}
+      {{ $t('pages.unlock.delete_account_label') }}
     </a>
     <!-- <InteractablesRealm /> -->
-    <TypographyText v-if="!isChrome" color="error" style="max-width: 600px">
+    <TypographyText v-if="!isChrome" color="danger" style="max-width: 600px">
       {{ $t('pages.unlock.browser_warning') }}
     </TypographyText>
     <div class="random-user-container" v-if="isDev">

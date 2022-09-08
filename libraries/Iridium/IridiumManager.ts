@@ -26,6 +26,7 @@ export class IridiumManager extends Emitter {
   webRTC: WebRTCManager
   settings: SettingsManager
   users: UsersManager
+  syncTimeout?: NodeJS.Timeout
 
   constructor() {
     super()
@@ -52,7 +53,7 @@ export class IridiumManager extends Emitter {
       await this.users.stop?.()
     })
 
-    logger.log('iridium/manager', 'init()')
+    logger.info('iridium/manager', 'init()')
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
     return this.initFromEntropy(seed)
   }
@@ -72,23 +73,23 @@ export class IridiumManager extends Emitter {
    * @returns a promise that resolves when the initialization completes
    */
   async initFromEntropy(entropy: Uint8Array) {
-    logger.log('iridium/manager', 'initFromEntropy()')
+    logger.info('iridium/manager', 'initFromEntropy()')
     this.connector = await createIridiumIPFS(entropy, {
+      ...Config.iridium,
       logger,
-      nodes: Config.iridium.syncNodes,
     })
 
-    logger.log('iridium/manager', 'connector initialized', {
+    logger.info('iridium/manager', 'connector initialized', {
       id: this.connector.id,
     })
 
-    logger.log('iridium/manager', 'starting IPFS')
+    logger.info('iridium/manager', 'starting IPFS')
     await this.connector.start()
 
     // check for existing root document
     let doc = (await this.connector.get('/')) || {}
     if (!doc.id) {
-      logger.log('iridium/manager', 'creating new root document', doc)
+      logger.info('iridium/manager', 'creating new root document', doc)
       doc = {
         id: this.connector.id,
         profile: {},
@@ -101,7 +102,7 @@ export class IridiumManager extends Emitter {
         indexes: {},
       }
     } else {
-      logger.log('iridium/manager', 'loaded root document', doc)
+      logger.info('iridium/manager', 'loaded root document', doc)
     }
     doc.seen = Date.now()
     await this.connector.set('/', doc)
@@ -114,31 +115,29 @@ export class IridiumManager extends Emitter {
     this.profile.on('ready', this.onProfileChange.bind(this))
     this.profile.on('changed', this.onProfileChange.bind(this))
 
-    logger.log('iridium/manager', 'initializing profile')
+    logger.info('iridium/manager', 'initializing profile')
     await this.profile.init()
-    await new Promise((resolve) =>
-      setTimeout(() => this.sendSyncInit().then(() => resolve(true)), 3000),
-    )
+    await this.connector?.waitForSyncNode(5000)
+    await this.sendSyncInit()
   }
 
   async onProfileChange() {
     logger.debug('iridium/manager', 'profile changed', {
       primaryNodeID: this.connector?.p2p.primaryNodeID,
-      p2pReady: this.connector?.p2p.ready,
-      did: this.profile.state?.did,
+      nodeReady: this.connector?.p2p.nodeReady,
     })
-    if (!this.connector?.p2p.ready) {
+    if (!this.connector?.p2p.primaryNodeID || !this.connector?.p2p.nodeReady) {
       return
     }
-    if (this.profile.state?.did) {
-      await this.sendSyncInit()
-    }
+    await this.sendSyncInit()
   }
 
   async onP2pReady() {
     if (
       !this.profile.state?.did ||
       !this.connector?.p2p.primaryNodeID ||
+      !this.connector?.p2p.hasNode ||
+      !this.connector?.p2p.nodeReady ||
       !this.connector.p2p.ready
     ) {
       logger.debug(
@@ -147,54 +146,94 @@ export class IridiumManager extends Emitter {
         {
           primaryNodeID: this.connector?.p2p.primaryNodeID,
           p2pReady: this.connector?.p2p.ready,
+          nodeReady: this.connector?.p2p.nodeReady,
+          hasNode: this.connector?.p2p.hasNode,
           did: this.profile.state?.did,
         },
       )
       return
     }
     if (this.ready) return
-    logger.log('iridium/manager', 'initializing users')
-    await this.users.init()
-    logger.log('iridium/manager', 'initializing groups')
-    await this.groups.init()
-    logger.log('iridium/manager', 'initializing files')
-    await this.files.init()
-    logger.log('iridium/manager', 'initializing webRTC')
-    await this.webRTC.init()
-    logger.log('iridium/manager', 'initializing settings')
-    await this.settings.init()
-    logger.log('iridium/manager', 'notification settings')
-    await this.notifications.init()
-    logger.log('iridium/friends', 'initializing friends')
-    await this.friends.init()
-    logger.log('iridium/manager', 'initializing chat')
-    await this.chat.init()
-    logger.log('iridium/manager', 'ready')
     this.ready = true
+    logger.info('iridium/manager', 'initializing users')
+    await this.users.init()
+    await Promise.all(
+      [
+        async () => {
+          logger.info('iridium/manager', 'initializing groups')
+          await this.groups.init()
+        },
+        async () => {
+          logger.info('iridium/manager', 'initializing files')
+          await this.files.init()
+        },
+        async () => {
+          logger.info('iridium/manager', 'initializing webRTC')
+          await this.webRTC.init()
+        },
+        async () => {
+          logger.info('iridium/manager', 'initializing settings')
+          await this.settings.init()
+        },
+        async () => {
+          logger.info('iridium/manager', 'notification settings')
+          await this.notifications.init()
+        },
+        async () => {
+          logger.info('iridium/friends', 'initializing friends')
+          await this.friends.init()
+        },
+        async () => {
+          logger.info('iridium/manager', 'initializing chat')
+          await this.chat.init()
+        },
+      ].map((f) => f()),
+    )
+    logger.info('iridium/manager', 'ready')
+
+    logger.info(
+      'iridium/manager',
+      'sending sync/fetch to retrieve offline messages',
+    )
+    await this.connector.p2p.send(this.connector.p2p.primaryNodeID, {
+      type: 'sync/fetch',
+      at: Date.now(),
+    })
+
     this.emit('ready', {})
   }
 
   async sendSyncInit() {
-    const connector = this.connector
-    if (!connector?.p2p.primaryNodeID) {
-      logger.warn('iridium/manager', 'no primary node, cannot send sync init', {
-        primaryNodeID: connector?.p2p.primaryNodeID,
-        ready: connector?.p2p.ready,
-      })
-      return
-    }
-    const profile = this.profile.state
-    logger.info('iridium/manager', 'sending sync init', { profile })
-    const payload = {
-      type: 'sync/init',
-      at: Date.now(),
-      name: profile?.name || this.id,
-      avatar: profile?.photoHash || '',
-      status: profile?.status || '',
-      photoHash: profile?.photoHash || '',
-    }
+    clearTimeout(this.syncTimeout)
+    this.syncTimeout = setTimeout(() => {
+      const connector = this.connector
+      if (!connector?.p2p.primaryNodeID) {
+        logger.warn(
+          'iridium/manager',
+          'no primary node, cannot send sync init',
+          {
+            primaryNodeID: connector?.p2p.primaryNodeID,
+            ready: connector?.p2p.ready,
+          },
+        )
+        return
+      }
+      const profile = this.profile.state
+      if (!profile?.did) {
+        return
+      }
+      logger.info('iridium/manager', 'sending sync init', { profile })
+      const payload = {
+        type: 'sync/init',
+        at: Date.now(),
+        name: profile?.name || this.id,
+        avatar: profile?.photoHash || '',
+        status: profile?.status || '',
+        photoHash: profile?.photoHash || '',
+      }
 
-    await connector.send(connector.p2p.primaryNodeID, payload)
+      connector.send(connector.p2p.primaryNodeID, payload)
+    }, 3000)
   }
 }
 

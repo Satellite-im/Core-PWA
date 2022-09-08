@@ -13,7 +13,6 @@ import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Call } from '~/libraries/WebRTC/Call'
 
@@ -33,15 +32,17 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    isLocal: {
-      type: Boolean,
-      default: false,
+    stream: String,
+    size: {
+      type: Array,
+      default: () => [320, 180],
     },
   },
   data() {
     return {
       isTalking: false,
       audioStreamUtils: null as AudioStreamUtils | null,
+      settings: iridium.settings.state,
     }
   },
   computed: {
@@ -49,17 +50,27 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    call(): Call | void {
+    call(): Call | undefined {
       if (!iridium.webRTC.state.activeCall?.callId) return
-      return $WebRTC.getCall(iridium.webRTC.state.activeCall.callId)
+      return iridium.webRTC.state.calls[iridium.webRTC.state.activeCall.callId]
     },
-    streams(): any {
+    streams(): Call['streams'] | undefined {
       if (!this.user.did || !this.call) return
       return this.call?.streams[this.user.did]
     },
     src(): string {
       const hash = this.user.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    },
+    isLocal(): boolean {
+      return this.user.did === iridium.connector?.id
+    },
+    flipVideo(): boolean {
+      return (
+        this.isLocal &&
+        this.stream === 'video' &&
+        this.settings.video.flipLocalStream
+      )
     },
     isPending(): boolean {
       return Boolean(
@@ -80,8 +91,12 @@ export default Vue.extend({
       if (this.isMuted(WebRTCEnum.SCREEN) || !this.call) return undefined
       return this.streams?.screen
     },
-    isLocalVideoFlipped(): boolean {
-      return iridium.settings.state.video.flipLocalStream
+    hasVideoOrScreen(): boolean {
+      return !this.isMuted(WebRTCEnum.VIDEO) || !this.isMuted(WebRTCEnum.SCREEN)
+    },
+    circleSize(): number {
+      const height = this.size[1] as number
+      return Math.min(96, height / 2)
     },
   },
   watch: {
@@ -114,6 +129,9 @@ export default Vue.extend({
   },
   beforeDestroy() {
     this.audioStreamUtils?.destroy()
+  },
+  mounted() {
+    this.$emit('mounted')
   },
   methods: {
     isMuted(kind: WebRTCEnum) {

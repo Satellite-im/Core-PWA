@@ -65,6 +65,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     await iridium.connector.subscribe<IridiumUserPubsub>('/users/announce', {
       handler: this.onUsersAnnounce.bind(this),
       sync: true,
+      decode: false,
     })
     logger.log(this.loggerTag, 'listening for user activity', this.state)
 
@@ -102,6 +103,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async stop() {
     // announce that we're going offline
+    const user = iridium.profile.getUser()
+    logger.info(this.loggerTag, 'sending offline status announcement', {
+      user,
+    })
     await this.send({
       user: iridium.profile.getUser(),
       status: 'offline',
@@ -230,6 +235,9 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    * @returns user data object if found in the local state
    */
   getUser(did: IridiumPeerIdentifier): User | undefined {
+    if (did.toString() === iridium.connector?.id) {
+      return iridium.profile.state
+    }
     return this.state[didUtils.didString(did)]
   }
 
@@ -241,7 +249,10 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
     return new Promise<User[]>((resolve) => {
       const id = v4()
-      if (!iridium.connector?.p2p.primaryNodeID || !iridium.ready) {
+      if (
+        !iridium.connector?.p2p.primaryNodeID ||
+        !iridium.connector?.p2p.nodeReady
+      ) {
         logger.warn('iridium/usermanager', 'no primary node, cannot search', {
           primaryNodeID: iridium?.connector?.p2p.primaryNodeID,
           p2pReady: iridium?.connector?.p2p.ready,
@@ -253,7 +264,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       const timeout = setTimeout(() => {
         logger.warn(this.loggerTag, 'peer search timeout', { query })
         resolve([])
-      }, 30000)
+      }, 5000)
 
       this.once(`searchResults/${id}`, (results: User[]) => {
         logger.debug(this.loggerTag, 'search results received', results)
@@ -303,13 +314,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async send(event: IridiumUserEvent) {
-    return iridium.connector?.publish(`/users/announce`, event, {
-      encrypt: {
-        recipients: event.to
-          ? [typeof event.to === 'string' ? event.to : event.to.id]
-          : iridium.friends.state.friends,
-      },
-    })
+    return iridium.connector?.publish(`/users/announce`, event)
   }
 
   /**

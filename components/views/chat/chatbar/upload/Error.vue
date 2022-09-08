@@ -1,6 +1,6 @@
 <template>
   <div class="file-error">
-    <TypographyText color="error">
+    <TypographyText color="danger">
       {{ $t('errors.chat.drop_file_count') }}
     </TypographyText>
     <x-icon

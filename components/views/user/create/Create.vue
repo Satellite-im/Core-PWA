@@ -2,9 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { RootState } from '~/types/store/store'
 import { isEmbeddableImage, isHeic } from '~/utilities/FileType'
+import iridium from '~/libraries/Iridium/IridiumManager'
+
 const convert = require('heic-convert')
 
 export default Vue.extend({
@@ -20,9 +20,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      accountAddress: (state) => (state as RootState).accounts.active,
-    }),
+    myDid(): string | undefined {
+      return iridium.connector?.id
+    },
     /**
      * @method isInvalidName
      * @description returns boolean based on current name input

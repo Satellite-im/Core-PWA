@@ -1,7 +1,7 @@
 import { AudioState } from '~/store/audio/types'
 
-const IS_TALKING_SENSITIVITY = 3 // %
-const TALKING_OFF_DELAY = 300 // ms
+const IS_TALKING_THRESHOLD = 20 // %
+const TALK_OFF_TIMEOUT_MS = 500
 
 export class AudioStreamUtils {
   stream: MediaStream
@@ -10,6 +10,7 @@ export class AudioStreamUtils {
   requestId: number | null = null
   level = 0
   isTalking = false
+  talkOffTimeout: NodeJS.Timeout | null = null
 
   constructor(stream: MediaStream, audio?: AudioState) {
     this.stream = stream
@@ -78,19 +79,17 @@ export class AudioStreamUtils {
   }
 
   private updateIsTalking(micLevel: number) {
-    const talking = Math.round(micLevel) > IS_TALKING_SENSITIVITY
-    let talkingOffBuffer
-
-    if (!talking && this.isTalking) {
-      talkingOffBuffer = setTimeout(() => {
-        this.isTalking = false
-      }, TALKING_OFF_DELAY)
-    } else if (talking && !this.isTalking) {
+    const isTalking = Math.round(micLevel) > IS_TALKING_THRESHOLD
+    if (isTalking) {
       this.isTalking = true
-
-      if (talkingOffBuffer) {
-        clearTimeout(talkingOffBuffer)
+      if (this.talkOffTimeout) {
+        clearTimeout(this.talkOffTimeout)
+        this.talkOffTimeout = null
       }
+    } else if (!this.talkOffTimeout) {
+      this.talkOffTimeout = setTimeout(() => {
+        this.isTalking = false
+      }, TALK_OFF_TIMEOUT_MS)
     }
   }
 }

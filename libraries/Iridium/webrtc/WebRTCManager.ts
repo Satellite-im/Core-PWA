@@ -6,10 +6,9 @@ import {
   WebRTCState,
   WebRTCStreamConstraints,
 } from '~/libraries/Iridium/webrtc/types'
-import { CallPeerDescriptor } from '~/libraries/WebRTC/Call'
+import { Call, CallPeerDescriptor } from '~/libraries/WebRTC/Call'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { TrackKind } from '~/libraries/WebRTC/types'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import logger from '~/plugins/local/logger'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { User } from '~/libraries/Iridium/users/types'
@@ -17,17 +16,19 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 
 const $Sounds = new SoundManager()
 
-const announceFrequency = 15000
+const announceFrequency = 60000
 
 const initialState: WebRTCState = {
   incomingCall: null,
   activeCall: null,
   streamMuted: {},
+  callTime: 0,
   callStartedAt: 0,
   streamConstraints: {
     audio: true,
     video: true,
   },
+  calls: {},
 }
 
 type WebRTCAnnounceMessage = {
@@ -47,7 +48,6 @@ type WebRTCTypingMessage = {
 export default class WebRTCManager extends Emitter {
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
-  public callTime: number = 0
   public timers: { [key: string]: any } = {}
 
   constructor() {
@@ -84,7 +84,7 @@ export default class WebRTCManager extends Emitter {
 
     setInterval(() => {
       if (this.state.activeCall) {
-        this.callTime = Date.now() - this.state.callStartedAt
+        this.state.callTime = Date.now() - this.state.callStartedAt
       }
     }, 1000)
   }
@@ -171,7 +171,7 @@ export default class WebRTCManager extends Emitter {
       peers,
     })
 
-    const call = $WebRTC.getCall(callId)
+    const call = this.state.calls[callId]
     if (!call) {
       logger.info(loggerPrefix, `call not found, creating...`, {
         from,
@@ -219,7 +219,7 @@ export default class WebRTCManager extends Emitter {
     iridium.users.setUserStatus(requestFriend.did, payload.status || 'online')
 
     if (payload.status === 'offline') {
-      $WebRTC.calls.forEach((call) => {
+      Object.values(this.state.calls).forEach((call) => {
         if (call.peers[from]) {
           call.destroyPeer(from)
           delete call.peers[from]
@@ -268,7 +268,7 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    if (!$WebRTC.calls.has(callId)) {
+    if (!this.state.calls[callId]) {
       logger.log('webrtc', `call - call not found: ${callId}, creating...`)
 
       const peers = participants.map((did) => {
@@ -292,7 +292,7 @@ export default class WebRTCManager extends Emitter {
       })
     }
 
-    const call = $WebRTC.getCall(callId)
+    const call = this.state.calls[callId]
 
     if (!call) {
       logger.log('webrtc', `call - call not ready: ${callId}`)
@@ -362,9 +362,9 @@ export default class WebRTCManager extends Emitter {
       return
     }
 
-    if (!$WebRTC.initialized && iridium.id) {
-      $WebRTC.init(iridium.id)
-    }
+    // if (!$WebRTC.initialized && iridium.id) {
+    //   $WebRTC.init(iridium.id)
+    // }
 
     const usedCallId = callId === iridium.id ? did : callId
 
@@ -372,7 +372,9 @@ export default class WebRTCManager extends Emitter {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
 
-    const call = $WebRTC.connect(usedCallId, peers)
+    const call = this.state.calls[callId] || new Call(callId, peers)
+    this.state.calls = { ...this.state.calls, [callId]: call }
+
     this.setStreamMuted(iridium.id, {
       audio: true,
       video: true,
@@ -614,12 +616,18 @@ export default class WebRTCManager extends Emitter {
       call.off('ANSWERED', onAnswered)
       call.off('DESTROY', onCallDestroy)
       call.off('ERROR', onCallDestroy)
-      $WebRTC.destroyCall(call.callId)
+
+      // Destroy call
+      call.destroy(true, false)
+      delete this.state.calls[callId]
+
       $Sounds.stopSounds([Sounds.CALL])
       $Sounds.playSound(Sounds.HANGUP)
     }
     call.on('DESTROY', onCallDestroy)
     call.on('ERROR', onCallDestroy)
+
+    this.emit('callCreated', {})
   }
 
   public async acceptCall(kinds: TrackKind[]) {
@@ -635,7 +643,7 @@ export default class WebRTCManager extends Emitter {
 
     const { callId, did, data } = this.state.incomingCall
 
-    const call = $WebRTC.getCall(callId)
+    const call = this.state.calls[callId]
 
     if (!call) {
       return
@@ -647,16 +655,18 @@ export default class WebRTCManager extends Emitter {
   }
 
   public denyCall() {
-    if (this.state.activeCall)
-      $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
+    if (this.state.activeCall) {
+      this.state.calls[this.state.activeCall.callId]?.destroy()
+    }
+
     if (this.state.incomingCall) {
-      $WebRTC.getCall(this.state.incomingCall.callId)?.destroy()
+      this.state.calls[this.state.incomingCall.callId]?.destroy()
     }
   }
 
   public async hangUp() {
     if (this.state.activeCall) {
-      $WebRTC.getCall(this.state.activeCall.callId)?.destroy()
+      this.state.calls[this.state.activeCall.callId]?.destroy()
     }
     this.state.incomingCall = null
     this.state.activeCall = null
@@ -666,7 +676,7 @@ export default class WebRTCManager extends Emitter {
     if (!this.state.activeCall || !did) {
       return
     }
-    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    const call = this.state.calls[this.state.activeCall.callId]
     if (!call) {
       return
     }
@@ -757,7 +767,7 @@ export default class WebRTCManager extends Emitter {
     did?: string
   }) {
     if (!this.state.activeCall) return
-    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    const call = this.state.calls[this.state.activeCall.callId]
     if (!call) return
     await call.mute({ kind, did })
   }
@@ -770,7 +780,7 @@ export default class WebRTCManager extends Emitter {
     did?: string
   }) {
     if (!this.state.activeCall) return
-    const call = $WebRTC.getCall(this.state.activeCall.callId)
+    const call = this.state.calls[this.state.activeCall.callId]
     if (!call) return
     await call.unmute({ did, kind, constraints: this.streamConstraints })
   }

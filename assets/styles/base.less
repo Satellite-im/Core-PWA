@@ -185,14 +185,6 @@ a.link {
   &:extend(.font-flair);
 }
 
-.context-menu {
-  p {
-    &:hover {
-      &:extend(.background-flair);
-    }
-  }
-}
-
 .simple-menu {
   .active {
     &:extend(.background-flair);
@@ -259,9 +251,6 @@ button {
     .vue-slider-dot-tooltip-inner {
       font-family: @secondary-font;
       &:extend(.background-flair);
-      &::after {
-        border-top-color: @flair-color !important;
-      }
     }
   }
 }
