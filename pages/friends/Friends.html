@@ -10,9 +10,12 @@
     >
       <FriendsEmptyMessage class="empty-friends" />
     </div>
-    <template v-show="!activeTab">
-      <FriendsFriend v-for="user in friendsList" :key="user.did" :user="user" />
-    </template>
+    <FriendsFriend
+      v-show="!activeTab"
+      v-for="user in friendsList"
+      :key="user.did"
+      :user="user"
+    />
     <FriendsAdd v-show="activeTab === FriendsTabs.ADD" />
     <FriendsRequests v-show="activeTab === FriendsTabs.REQUESTS" />
   </div>
