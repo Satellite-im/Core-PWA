@@ -21,10 +21,14 @@
           {{ $t('user.registration.photo_text') }}
         </TypographyText>
         <InteractablesImageInput ref="imageInput" @change="selectImage" />
-        <InteractablesButton
-          :text="$t('servers.create.photo_button')"
-          @click="imageInputRef.click()"
-        />
+        <!-- TODO: Enable after safer is implemented -->
+        <!-- <InteractablesButton -->
+        <!-- :text="$t('servers.create.photo_button')" -->
+        <!-- @click="imageInputRef.click()" -->
+        <!-- /> -->
+
+        <!-- TODO: Remove after safer is implemented -->
+        <InteractablesButton :text="$t('ui.coming_soon')" :disabled="true" />
       </div>
     </div>
 
