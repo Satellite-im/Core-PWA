@@ -72,6 +72,7 @@ export default Vue.extend({
               return
             }
             if (activeIndex === 0) {
+              this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
             }
@@ -88,6 +89,8 @@ export default Vue.extend({
     settingsRoute(val) {
       if (val) {
         this.swiper?.slideNext()
+      } else {
+        this.swiper?.slidePrev()
       }
     },
   },

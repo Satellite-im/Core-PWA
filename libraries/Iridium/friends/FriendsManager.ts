@@ -321,9 +321,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         payload,
       })
 
-      const user = iridium.users.getUser(did)
+      iridium.users.setUser(did, user)
 
-      if (!user) return
       const buildNotification: Exclude<Notification, 'id'> = {
         fromName: user.name,
         at: request.at,

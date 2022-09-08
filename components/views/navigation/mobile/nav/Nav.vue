@@ -11,7 +11,7 @@ import {
   SettingsIcon,
   ShoppingBagIcon,
 } from 'satellite-lucide-icons'
-import { ModalWindows } from '~/store/ui/types'
+import { ModalWindows, SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { UserStatus } from '~/libraries/Iridium/users/types'
@@ -55,6 +55,9 @@ export default Vue.extend({
     },
     isActiveRoute(route: string): boolean {
       return this.$route.path.includes(route)
+    },
+    emptySettingsRoute() {
+      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
     },
   },
 })

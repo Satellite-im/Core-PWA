@@ -75,3 +75,10 @@ export async function call({
     })
     .catch((e) => $nuxt.$toast.error($nuxt.i18n.t(e.message)))
 }
+
+export default function useConversation() {
+  return {
+    ...conversationHooks(),
+    call,
+  }
+}
