@@ -29,7 +29,7 @@
         <TypographyText>
           {{ $t('pages.settings.profile.info.language')}}
         </TypographyText>
-        <multiselect
+        <!-- <multiselect
           :options="[]"
           :multiple="true"
           :close-on-select="false"
@@ -46,7 +46,7 @@
           <span slot="noResult"
             >{{ $t('pages.settings.profile.info.noResult') }}</span
           >
-        </multiselect>
+        </multiselect> -->
         <div class="mg-half">
           <InteractablesChip
             v-for="(lng, i) in info.languages"
