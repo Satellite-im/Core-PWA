@@ -5,36 +5,39 @@
       class="page"
       :class="{profile: ui.settingsRoute === SettingsRoutes.PROFILE}"
     >
+      <!-- user settings -->
       <SettingsPagesPersonalize
         v-show="ui.settingsRoute === SettingsRoutes.PERSONALIZE"
-      />
-      <SettingsPagesAccounts
-        v-show="ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
-      />
-      <SettingsPagesAudio
-        v-show="ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
-      />
-      <SettingsPagesDeveloper
-        v-show="ui.settingsRoute === SettingsRoutes.DEVELOPER"
-      />
-      <SettingsPagesInfo v-show="ui.settingsRoute === SettingsRoutes.INFO" />
-      <SettingsPagesKeybinds
-        v-show="ui.settingsRoute === SettingsRoutes.KEY_BINDS"
-      />
-      <SettingsPagesNotifications
-        v-show="ui.settingsRoute === SettingsRoutes.NOTIFICATIONS"
       />
       <SettingsPagesProfile
         v-show="ui.settingsRoute === SettingsRoutes.PROFILE"
       />
+      <SettingsPagesAudio
+        v-show="ui.settingsRoute === SettingsRoutes.AUDIO_AND_VIDEO"
+      />
+      <!-- developer -->
+      <!-- <SettingsPagesDeveloper
+        v-show="ui.settingsRoute === SettingsRoutes.DEVELOPER"
+      />
+      <SettingsPagesNotifications
+        v-show="ui.settingsRoute === SettingsRoutes.NOTIFICATIONS"
+      /> -->
+      <SettingsPagesInfo v-show="ui.settingsRoute === SettingsRoutes.INFO" />
+      <!-- app settings -->
+      <!-- <SettingsPagesRealms
+        v-show="ui.settingsRoute === SettingsRoutes.REALMS"
+      /> -->
       <SettingsPagesStorage
         v-show="ui.settingsRoute === SettingsRoutes.STORAGE"
       />
       <SettingsPagesNetwork
         v-show="ui.settingsRoute === SettingsRoutes.NETWORK"
       />
-      <SettingsPagesRealms
-        v-show="ui.settingsRoute === SettingsRoutes.REALMS"
+      <SettingsPagesKeybinds
+        v-show="ui.settingsRoute === SettingsRoutes.KEY_BINDS"
+      />
+      <SettingsPagesAccounts
+        v-show="ui.settingsRoute === SettingsRoutes.ACCOUNTS_AND_DEVICES"
       />
       <SettingsPagesPrivacy
         v-show="ui.settingsRoute === SettingsRoutes.PRIVACY_AND_PERMISSIONS"
