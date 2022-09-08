@@ -35,6 +35,11 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    // aria label for accessibility
+    label: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
