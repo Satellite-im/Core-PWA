@@ -48,19 +48,13 @@
       :title="$t('pages.privacy.consentScan.title')"
       :text="$t('pages.privacy.consentScan.subtitle')"
     >
-      <InteractablesSwitch
-        v-model="consentScan"
-        :isLocked="loading.includes('consentScan')"
-      />
+      <InteractablesSwitch v-model="consentScan" />
     </SettingsUnit>
     <SettingsUnit
       :title="$t('pages.privacy.nsfw.title')"
       :text="$t('pages.privacy.nsfw.subtitle')"
     >
-      <InteractablesSwitch
-        v-model="blockNsfw"
-        :isLocked="loading.includes('blockNsfw')"
-      />
+      <InteractablesSwitch v-model="blockNsfw" />
     </SettingsUnit>
   </SettingsSection>
 
@@ -135,8 +129,4 @@
       </span>
     </SettingsUnit>
   </SettingsSection>
-
-  <TypographyText v-if="loading.length">
-    {{ $t('pages.privacy.updating') }}
-  </TypographyText>
 </SettingsPage>

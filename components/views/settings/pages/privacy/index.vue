@@ -17,7 +17,6 @@ export default Vue.extend({
     return {
       formatError: false as boolean,
       lengthError: false as boolean,
-      loading: [] as string[],
       privacySettings: iridium.settings.state.privacy,
       permissions: [] as PermissionObject[],
     }
@@ -27,7 +26,6 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       accounts: (state) => (state as RootState).accounts,
       settings: (state) => (state as RootState).settings,
-      userThread: (state) => (state as RootState).textile.userThread,
     }),
     ...mapGetters('textile', ['getInitialized']),
     embeddedLinks: {
@@ -39,20 +37,16 @@ export default Vue.extend({
       },
     },
     consentScan: {
-      async set(consentToScan: boolean) {
-        this.loading.push('consentScan')
-        await iridium.settings.set('/privacy/consentToScan', consentToScan)
-        this.loading.splice(this.loading.indexOf('consentScan'), 1)
+      set(consentToScan: boolean) {
+        iridium.settings.set('/privacy/consentToScan', consentToScan)
       },
       get(): boolean {
         return this.privacySettings.consentToScan
       },
     },
     blockNsfw: {
-      async set(blockNsfw: boolean) {
-        this.loading.push('blockNsfw')
-        await iridium.settings.set('/privacy/blockNsfw', blockNsfw)
-        this.loading.splice(this.loading.indexOf('blockNsfw'), 1)
+      set(blockNsfw: boolean) {
+        iridium.settings.set('/privacy/blockNsfw', blockNsfw)
       },
       get(): boolean {
         return this.privacySettings.blockNsfw

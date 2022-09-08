@@ -167,10 +167,7 @@
       :title="$t('pages.settings.video.flipVideo.title')"
       :text="$t('pages.settings.video.flipVideo.subtitle')"
     >
-      <InteractablesSwitch
-        v-model="flipVideo"
-        :isLocked="loading.includes('flipVideo')"
-      />
+      <InteractablesSwitch v-model="flipVideo" />
     </SettingsUnit>
   </SettingsSection>
 
@@ -201,7 +198,4 @@
     :value="$t('pages.settings.notifications.title')"
   />
   <SettingsPagesAudioSounds />
-  <TypographyText v-if="loading.length">
-    {{ $t('pages.privacy.updating') }}
-  </TypographyText>
 </SettingsPage>
