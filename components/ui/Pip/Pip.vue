@@ -19,6 +19,7 @@
 import Vue from 'vue'
 import { throttle } from 'lodash'
 import { Config } from '~/config'
+import { animate, easeOutBack, lerp } from '~/utilities/animation'
 
 type ColumnType = typeof Config.pip.columns[number]
 type RowType = typeof Config.pip.rows[number]
@@ -27,6 +28,8 @@ type QuarterType = {
   x: ColumnType
   y: RowType
 }
+
+const DRAG_INTERVAL_MS = 1000 / 60
 
 function isLeftButton(e: MouseEvent) {
   const evt = e || window.event
@@ -49,6 +52,9 @@ export default Vue.extend({
       quarter: { x: Config.pip.columns.length - 1, y: 0 } as QuarterType,
       isDragging: false,
       isEnlarged: false,
+      dragInterval: null as NodeJS.Timer | null,
+      mouseX: 0,
+      mouseY: 0,
     }
   },
   computed: {
@@ -80,10 +86,11 @@ export default Vue.extend({
     },
     moveToQuarter(quarter: QuarterType) {
       const blockHeight = window.innerHeight / Config.pip.rows.length
+      let x: number, y: number
       switch (quarter.x > Config.pip.columns.length / 2 - 1) {
         case false:
-          this.x = Config.pip.windowMargin
-          this.y =
+          x = Config.pip.windowMargin
+          y =
             // take into account smaller window height
             blockHeight > this.elHeight
               ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
@@ -92,8 +99,8 @@ export default Vue.extend({
               : Config.pip.windowMargin
           break
         case true:
-          this.x = window.innerWidth - this.elWidth - Config.pip.windowMargin
-          this.y =
+          x = window.innerWidth - this.elWidth - Config.pip.windowMargin
+          y =
             // take into account smaller window height
             blockHeight > this.elHeight
               ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
@@ -102,6 +109,18 @@ export default Vue.extend({
               : Config.pip.windowMargin
           break
       }
+
+      const oldX = this.x
+      const oldY = this.y
+
+      animate({
+        timing: easeOutBack,
+        draw: (v) => {
+          this.x = lerp(oldX, x, v)
+          this.y = lerp(oldY, y, v)
+        },
+        duration: 500,
+      })
     },
     mouseDown(e: MouseEvent) {
       if (
@@ -121,8 +140,12 @@ export default Vue.extend({
       document.addEventListener('mouseup', this.mouseUp)
       document.addEventListener('mousemove', this.mouseMove)
       // TODO: document.body.style.pointerEvents = 'none'
+      this.mouseX = e.clientX
+      this.mouseY = e.clientY
+      this.dragInterval = setInterval(this.dragUpdate, DRAG_INTERVAL_MS)
     },
     mouseUp() {
+      clearInterval(this.dragInterval)
       this.isDragging = false
       document.removeEventListener('mouseup', this.mouseUp)
       document.removeEventListener('mousemove', this.mouseMove)
@@ -130,28 +153,28 @@ export default Vue.extend({
       this.moveToQuarter(this.quarter)
       // TODO: document.body.style.pointerEvents = 'auto'
     },
-    mouseMove: throttle(
-      function (e) {
-        let finalX = e.clientX - this.offsetX
-        if (finalX < 0) {
-          finalX = 0
-        } else if (finalX + this.elWidth > window.innerWidth) {
-          finalX = window.innerWidth - this.elWidth
-        }
+    mouseMove(e: MouseEvent) {
+      this.mouseX = e.clientX
+      this.mouseY = e.clientY
+    },
+    dragUpdate() {
+      let finalX = this.mouseX - this.offsetX
+      if (finalX < 0) {
+        finalX = 0
+      } else if (finalX + this.elWidth > window.innerWidth) {
+        finalX = window.innerWidth - this.elWidth
+      }
 
-        let finalY = e.clientY - this.offsetY
-        if (finalY < 0) {
-          finalY = 0
-        } else if (finalY + this.elHeight > window.innerHeight) {
-          finalY = window.innerHeight - this.elHeight
-        }
+      let finalY = this.mouseY - this.offsetY
+      if (finalY < 0) {
+        finalY = 0
+      } else if (finalY + this.elHeight > window.innerHeight) {
+        finalY = window.innerHeight - this.elHeight
+      }
 
-        this.x = finalX
-        this.y = finalY
-      },
-      Config.pip.throttleTime,
-      { trailing: false },
-    ),
+      this.x = (this.x * 2 + finalX) / 3
+      this.y = (this.y * 2 + finalY) / 3
+    },
     onResize: throttle(function () {
       this.moveToQuarter(this.quarter)
     }, Config.pip.throttleTime),
@@ -180,7 +203,7 @@ export default Vue.extend({
   position: absolute;
   inset: 0;
   /* transition: transform 800ms ease-out; cubic-bezier(0.2, 0.57, 0.67, 1.53)*/
-  transition: all 400ms cubic-bezier(0.2, 0.885, 0.32, 1.5);
+  /* transition: all 400ms cubic-bezier(0.2, 0.885, 0.32, 1.5); */
   transition-delay: 1ms;
   border-radius: 5px;
   box-sizing: border-box;
@@ -189,6 +212,7 @@ export default Vue.extend({
   cursor: -moz-grab;
   cursor: -webkit-grab;
   overflow: hidden;
+  box-shadow: @ui-shadow-large;
   &:extend(.no-select);
 }
 
