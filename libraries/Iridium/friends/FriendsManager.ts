@@ -163,7 +163,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       ;[user] = await iridium.users.searchPeer(payload.body.user.did)
     }
     if (!request && status === 'pending') {
-      await this.requestCreate(from, true, user)
+      await this.requestCreate(user, true)
     } else if (request && status === 'accepted') {
       await this.requestAccept(from)
     } else if (request && status === 'rejected') {
@@ -253,16 +253,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   /**
    * @method requestCreate
    * @description create a friend request and announce it to the remote user
-   * @param did - IridiumPeerIdentifier (required)
-   * @param incoming - boolean (default=false)
+   * @param user IridiumUser (required)
+   * @param incoming boolean (required)
    * @returns Promise<void>
    */
-  async requestCreate(
-    id: IridiumPeerIdentifier,
-    incoming = false,
-    user: User,
-  ): Promise<void> {
-    const did = didUtils.didString(id)
+  async requestCreate(user: User, incoming: boolean): Promise<void> {
+    const did = didUtils.didString(user.did)
     if (this.isFriend(did)) {
       logger.error(this.loggerTag, 'already a friend', { did })
       throw new Error(FriendsError.FRIEND_EXISTS)
