@@ -204,6 +204,11 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: ['@solana'],
+    splitChunks: {
+      layouts: false,
+      pages: false,
+      commons: false,
+    },
     extend(config, ctx) {
       if (ctx.isDev) {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
