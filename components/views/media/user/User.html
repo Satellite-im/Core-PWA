@@ -9,7 +9,7 @@
     v-if="stream === 'video'"
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
-    :class="{flip: isLocal && isLocalVideoFlipped}"
+    :class="{ flip: flipVideo }"
     data-cy="video-stream"
     :src-object.prop="videoStream"
     playsinline
@@ -19,7 +19,7 @@
   <video
     v-else-if="stream === 'screen'"
     :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
-    :class="['video-stream', { flip: flipVideo }]"
+    class="video-stream"
     data-cy="screen-stream"
     :src-object.prop="screenStream"
     playsinline

@@ -43,6 +43,7 @@ export default Vue.extend({
     return {
       isTalking: false,
       audioStreamUtils: null as AudioStreamUtils | null,
+      settings: iridium.settings.state,
     }
   },
   computed: {
@@ -69,7 +70,7 @@ export default Vue.extend({
       return (
         this.isLocal &&
         this.stream === 'video' &&
-        this.videoSettings.flipLocalStream
+        this.settings.video.flipLocalStream
       )
     },
     isPending(): boolean {
@@ -91,11 +92,8 @@ export default Vue.extend({
       if (this.isMuted(WebRTCEnum.SCREEN) || !this.call) return undefined
       return this.streams?.screen
     },
-    hasVideoOrScreen() {
-      return !this.isMuted('video') || !this.isMuted('screen')
-    },
-    isLocalVideoFlipped(): boolean {
-      return iridium.settings.state.video.flipLocalStream
+    hasVideoOrScreen(): boolean {
+      return !this.isMuted(WebRTCEnum.VIDEO) || !this.isMuted(WebRTCEnum.SCREEN)
     },
     circleSize(): number {
       const height = this.size[1] as number
