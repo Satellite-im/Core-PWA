@@ -3,23 +3,22 @@
     <div class="welcome-content">
       <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
       <TypographyText
-        class="text-gap"
         :as="'h2'"
         :weight="'regular'"
       >
       {{$t('welcome_message.welcome', {user: profile.name})}}
       </TypographyText>
       <UiLoadersSpinner v-if="isLoading" spinning />
-      <TypographyText class="text-gap">
+      <TypographyText>
         {{ $t('welcome_message.ea_warning') }}
       </TypographyText>
-      <TypographyText class="text-gap">
+      <TypographyText>
         {{ $t('welcome_message.permissions') }}
       </TypographyText>
-      <TypographyText class="text-gap">
+      <TypographyText>
         {{ $t('welcome_message.file_scanning_permissions') }}
       </TypographyText>
-      <div class="dismiss-controls text-gap">
+      <div class="dismiss-controls">
         <InteractablesButton
           @click="toggleVisibility"
           :text="$t('modal.update_modal.got_it')"
