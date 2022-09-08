@@ -9,7 +9,7 @@
       :text="$t('pages.privacy.permissions.ask_permission')"
       @click="$emit('click', $event)"
     />
-    <TypographyText v-else-if="state === 'denied'" color="error">
+    <TypographyText v-else-if="state === 'denied'" color="danger">
       {{ $t('pages.privacy.permissions.denied') }}
     </TypographyText>
     <UiLoadersLoadingBar v-else-if="state === 'loading'" />

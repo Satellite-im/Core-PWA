@@ -60,14 +60,14 @@
         />
       </div>
 
-      <template v-if="error.length">
-        <TypographyError
-          v-for="e in error"
-          :key="e"
-          :text="e"
-          data-cy="error-message"
-        />
-      </template>
+      <TypographyText
+        v-for="e in error"
+        :key="e"
+        color="danger"
+        data-cy="error-message"
+      >
+        {{ e }}
+      </TypographyText>
 
       <div class="submit-button-container">
         <InteractablesButton
