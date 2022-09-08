@@ -1,5 +1,5 @@
 .list {
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .empty-friends-wrapper {
     display: flex;
@@ -7,5 +7,13 @@
     align-items: center;
     height: 100%;
     padding: 16px 0;
+
+    .no-result {
+      text-align: center;
+      word-break: break-all;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
   }
 }
