@@ -50,7 +50,7 @@
             :class="item?.type"
             @click="(e) => handleAction(e, item.func)"
           >
-            <TypographyText :color="item?.type === 'danger' ? 'error' : 'body'">
+            <TypographyText :color="item?.type">
               {{ item.text }}
             </TypographyText>
           </button>
@@ -146,7 +146,7 @@ export default Vue.extend({
       width: 100%;
 
       &.disabled {
-        opacity: 0.7;
+        opacity: 0.5;
       }
 
       &:not(:last-child) {

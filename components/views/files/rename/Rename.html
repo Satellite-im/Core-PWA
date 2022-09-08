@@ -1,13 +1,13 @@
 <div class="rename" data-cy="files-rename">
   <InteractablesClose :action="closeModal" />
-  <TypographyTitle :size="3" :text="$t('modal.rename')" />
+  <TypographyText as="h3"> {{ $t('modal.rename') }} </TypographyText>
   <InteractablesInput
     v-model="text"
     ref="inputGroup"
     data-cy="files-rename-input"
     @submit="renameItem"
+    :error="error"
   >
     <save-icon size="1.3x" />
   </InteractablesInput>
-  <TypographyError v-if="error" :text="error" />
 </div>

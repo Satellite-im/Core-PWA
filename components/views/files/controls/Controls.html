@@ -61,7 +61,9 @@
   <div v-if="errors.length" class="error-container">
     <alert-triangle-icon size="1.3x" />
     <div>
-      <TypographyError v-for="error in errors" :key="error" :text="error" />
+      <TypographyText v-for="error in errors" :key="error" color="danger">
+        {{ $t(error) }}
+      </TypographyText>
     </div>
     <x-icon size="1.3x" class="close" @click="errors = []" />
   </div>

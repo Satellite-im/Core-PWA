@@ -72,6 +72,7 @@ export default Vue.extend({
         ['h5', 'sm'],
         ['h6', 'xs'],
         ['label', 'sm'],
+        ['small', 'sm'],
       ])
       return map.get(this.as) || 'md'
     },

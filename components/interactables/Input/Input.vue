@@ -113,7 +113,7 @@ export default Vue.extend({
   },
   methods: {
     handleSubmit(event: InputEvent) {
-      if (this.disabled || this.loading || this.error || this.invalid) {
+      if (this.disabled || this.loading || this.invalid) {
         return
       }
       this.$emit('submit', event)
