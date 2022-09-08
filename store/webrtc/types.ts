@@ -23,6 +23,7 @@ export interface WebRTCState {
   createdAt: number
   elapsedTime: string
   interval: ReturnType<typeof setInterval> | null
+  streamIds: { [did: string]: { [kind: string]: string } }
 }
 
 export enum WebRTCError {

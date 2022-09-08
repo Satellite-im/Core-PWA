@@ -5,7 +5,6 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { Call } from '~/libraries/WebRTC/Call'
 import { RootState } from '~/types/store/store'
 
@@ -73,7 +72,7 @@ export default Vue.extend({
       if (!this.webrtc.activeCall?.callId) {
         return
       }
-      return $WebRTC.getCall(this.webrtc.activeCall.callId)
+      return this.webrtc.calls[this.webrtc.activeCall.callId]
     },
     streams(): Stream[] {
       if (!this.call) {

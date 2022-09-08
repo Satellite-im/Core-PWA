@@ -13,7 +13,6 @@ import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Call } from '~/libraries/WebRTC/Call'
 
@@ -51,11 +50,11 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
-    call(): Call | void {
+    call(): Call | undefined {
       if (!iridium.webRTC.state.activeCall?.callId) return
-      return $WebRTC.getCall(iridium.webRTC.state.activeCall.callId)
+      return iridium.webRTC.state.calls[iridium.webRTC.state.activeCall.callId]
     },
-    streams(): any {
+    streams(): Call['streams'] | undefined {
       if (!this.user.did || !this.call) return
       return this.call?.streams[this.user.did]
     },

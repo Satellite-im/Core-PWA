@@ -3,7 +3,7 @@
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText
         v-if="item.isNextDay"
-        :value="item.message.at"
+        :value="item.message.at.toString()"
       />
       <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
       <Message
