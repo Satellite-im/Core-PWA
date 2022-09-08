@@ -11,9 +11,6 @@
             <button @click="next('request')">
               <user-check-icon />
             </button>
-            <button>
-              <more-vertical-icon />
-            </button>
           </div>
         </div>
         <FriendsMobileList v-if="friendsList.length" :list="friendsList" />
@@ -65,7 +62,6 @@
 import Vue from 'vue'
 import {
   ArrowLeftIcon,
-  MoreVerticalIcon,
   UserPlusIcon,
   UserCheckIcon,
 } from 'satellite-lucide-icons'
@@ -79,7 +75,6 @@ export default Vue.extend({
   name: 'MobileFriends',
   components: {
     ArrowLeftIcon,
-    MoreVerticalIcon,
     UserPlusIcon,
     UserCheckIcon,
   },
@@ -139,6 +134,14 @@ export default Vue.extend({
             sensitivity: 'base',
           }),
         )
+    },
+  },
+  watch: {
+    route() {
+      // return to main tab if route is not valid
+      if (!this.route && this.swiper?.activeIndex === 1) {
+        this.swiper.slideTo(0)
+      }
     },
   },
   mounted() {

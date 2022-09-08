@@ -82,9 +82,7 @@
                 </button>
                 <form
                   class="editable-wrapper username"
-                  @submit="
-                    (e) => submitEdit(e, 'name')
-                  "
+                  @submit="(e) => submitEdit(e, 'name')"
                 >
                   <typography-text
                     v-if="!editing.has('name')"
@@ -97,14 +95,16 @@
                     v-else
                     v-model="inputs.name"
                     class="username-input"
-                    :placeholder="$t('user.registration.username_placeholder')"
+                    :placeholder="
+                      $t('user.registration.username_placeholder')
+                    "
                     autofocus
                     transparent
                   />
 
                   <button
                     class="edit-button"
-                    :class="{active: editing.has('name')}"
+                    :class="[{ active: editing.has('name') }, { mobile: $device.isMobile }]"
                     type="submit"
                   >
                     {{ getEditButtonText('name') }}
@@ -114,17 +114,16 @@
                   class="status-input"
                   @click="editing.add('status')"
                   @submit="
-                        (e) =>
-                          updateUserDetail(e, 'status', inputs.status ?? '')
-                      "
+                    (e) => updateUserDetail(e, 'status', inputs.status ?? '')
+                  "
                 >
                   <InteractablesInput
                     v-model="inputs.status"
                     size="xs"
                     type="text"
                     :placeholder="
-                        $t('pages.settings.profile.status_placeholder')
-                      "
+                      $t('pages.settings.profile.status_placeholder')
+                    "
                     :loading="loading.has('status')"
                     button-type="submit"
                   >
@@ -167,12 +166,13 @@
                 />
               </div>
               <div
+                v-show="inputs.about || editing.has('about')"
                 class="editable-wrapper"
-                :class="{'readonly': !editing.has('about')}"
+                :class="{ readonly: !editing.has('about') }"
               >
                 <InteractablesEditable
                   v-model="inputs.about"
-                  :placeholder="$t('ui.talk')"
+                  :placeholder="$t('pages.settings.profile.about.placeholder')"
                   :enabled="editing.has('about')"
                 />
               </div>

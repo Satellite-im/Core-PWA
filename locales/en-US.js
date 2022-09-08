@@ -586,6 +586,7 @@ export default {
           title: 'About Me',
           subtitle:
             'Let your friends know who you are! Your about me will display on your profile.',
+          placeholder: 'Enter a short introduction about yourself...',
         },
         accounts: {
           title: 'Your Accounts',
