@@ -54,7 +54,7 @@ export default Vue.extend({
       if (isGroup.value) {
         return (
           conversation?.value?.participants
-            ?.map((did) => iridium.users.state[did]?.name)
+            ?.map((did) => iridium.users.getUser(did)?.name)
             .join(', ') ?? ''
         )
       }
