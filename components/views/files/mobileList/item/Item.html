@@ -8,7 +8,7 @@
   <ui-image-container
     v-if="thumbnail && gridLayout"
     class="image-container"
-    :nsfw="item.nsfw && blockNsfw"
+    :nsfw="item.nsfw"
   >
     <img :src="thumbnail" draggable="false" />
   </ui-image-container>

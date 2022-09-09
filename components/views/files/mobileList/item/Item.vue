@@ -41,7 +41,6 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
       gridLayout: (state) => (state as RootState).files.gridLayout,
     }),
     modifiedDate(): Date {

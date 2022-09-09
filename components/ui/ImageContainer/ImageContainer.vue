@@ -1,15 +1,22 @@
 <template>
-  <div class="image-container" :class="{ 'image-container-nsfw': nsfw }">
+  <div class="image-container" :class="{ nsfw: nsfw && blockNsfw }">
     <slot />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import iridium from '~/libraries/Iridium/IridiumManager'
+
 export default {
   props: {
     nsfw: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    blockNsfw(): boolean {
+      return iridium.settings.state.privacy.blockNsfw
     },
   },
 }
@@ -30,9 +37,8 @@ export default {
   background-size: 16px 16px;
   background-position: 0 0, 8px 8px;
 
-  &-nsfw {
-    background-color: @background;
-    background-image: none;
+  &.nsfw {
+    background: @background;
 
     img {
       filter: blur(40px);
