@@ -47,13 +47,15 @@
     />
   </div>
 
-  <TypographyTag :title="user.name" class="username" inverted>
-    {{user.name}}
-  </TypographyTag>
+  <div class="info-overlay">
+    <TypographyTag :title="user.name" class="username" inverted>
+      {{user.name}}
+    </TypographyTag>
 
-  <div class="indicators" v-if="!isPending || isLocal">
-    <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
-      <mic-off-icon />
+    <div class="indicators" v-if="!isPending || isLocal">
+      <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
+        <mic-off-icon />
+      </div>
     </div>
   </div>
 

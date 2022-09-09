@@ -72,18 +72,23 @@
     }
   }
 
+  .info-overlay {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    padding: 8px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
   .username {
-    position: absolute;
-    align-self: flex-start;
-    justify-self: flex-start;
     &:extend(.ellipsis);
-    margin: 8px;
     transition: opacity @animation-speed ease;
   }
 
   .username,
   .indicator {
-    background: fade(@foreground-alt, 20%);
+    background: fade(@foreground-alt, 40%);
     backdrop-filter: blur(8px);
     box-shadow: 0 1px 4px fade(@foreground, 10%);
   }
@@ -93,11 +98,7 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: @light-spacing;
-  gap: @light-spacing;
+  gap: 8px;
 
   .indicator {
     position: relative;
