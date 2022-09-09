@@ -59,13 +59,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     logger.log(this.loggerTag, 'friends state loaded', this.state)
 
     logger.info(this.loggerTag, 'subscribing to announce topic')
-    await iridium.connector.subscribe<IridiumFriendPubsub>(
-      '/friends/announce',
-      {
-        handler: this.onFriendsAnnounce.bind(this),
-        sync: { offline: true },
-      },
-    )
+    iridium.connector.subscribe<IridiumFriendPubsub>('/friends/announce', {
+      handler: this.onFriendsAnnounce.bind(this),
+      sync: { offline: true },
+    })
     // connect to all friends
     logger.info(this.loggerTag, 'connecting to friends', {
       friends: this.state.friends,

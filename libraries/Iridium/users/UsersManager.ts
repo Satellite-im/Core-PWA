@@ -62,7 +62,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       {},
     )
     logger.info(this.loggerTag, 'subscribing to announce topic')
-    await iridium.connector.subscribe<IridiumUserPubsub>('/users/announce', {
+    iridium.connector.subscribe<IridiumUserPubsub>('/users/announce', {
       handler: this.onUsersAnnounce.bind(this),
       sync: true,
       decode: false,
