@@ -598,7 +598,7 @@ export default {
           placeholder: 'Enter a short introduction about yourself...',
         },
         accounts: {
-          title: 'Your Accounts',
+          title: 'Your Accounts (Coming Soon)',
           subtitle_url: 'Share your blog, website, or portfolio URL.',
           url_placeholder: 'Enter URL...',
           subtitle_accounts:
