@@ -7,6 +7,16 @@
   transition: box-shadow @animation-speed-long ease;
   cursor: pointer;
 
+  &.is-presenter-thumbnail .video-stream {
+    filter: brightness(70%);
+  }
+
+  &:not(.is-presenter-thumbnail):not(.is-presenter):hover {
+    .video-stream {
+      filter: brightness(85%);
+    }
+  }
+
   .talking-outline {
     position: absolute;
     inset: 0;
@@ -31,12 +41,6 @@
 
     &.flip {
       transform: scaleX(-1);
-    }
-  }
-
-  &:hover {
-    .video-stream {
-      filter: brightness(90%);
     }
   }
 

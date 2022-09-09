@@ -27,16 +27,6 @@ export default Vue.extend({
       type: Array as PropType<Array<User>>,
       default: () => [],
     },
-    maxViewableUsers: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    fullscreenMaxViewableUsers: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
   },
   data() {
     return {

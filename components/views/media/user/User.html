@@ -1,7 +1,11 @@
 <div
   v-if="call"
   class="user"
-  :class="{'talking': isTalking}"
+  :class="{
+    'talking': isTalking,
+    'is-presenter': isPresenter,
+    'is-presenter-thumbnail': isPresenterThumbnail
+  }"
   :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
   @click="$emit('click', $event)"
 >
