@@ -18,7 +18,6 @@ export enum ModalWindows {
   WALLET_MINI = 'walletMini',
   ERROR = 'error',
   CHANGELOG = 'changelog',
-  WELCOME = 'welcome',
   GLYPH = 'glyph',
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
@@ -85,7 +84,6 @@ export interface UIState {
   modals: {
     [key in ModalWindows]: boolean | object
   }
-  isWelcomeMessage: boolean
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean

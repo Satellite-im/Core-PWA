@@ -67,6 +67,9 @@ const mutations = {
   setEntropy(state: AccountsState, entropyMessage: string) {
     state.entropyMessage = entropyMessage
   },
+  setNewAccount(state: AccountsState, val: boolean) {
+    state.isNewAccount = val
+  },
 }
 
 export default mutations

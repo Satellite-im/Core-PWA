@@ -1,38 +1,19 @@
-<div class="welcome-modal">
-  <UiModal nopad>
-    <div class="welcome-content">
-      <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
-      <TypographyText
-        :as="'h2'"
-        :weight="'regular'"
-      >
+<UiModal nopad>
+  <div class="welcome-content">
+    <img src="~/assets/svg/mascot/new_things.svg" class="mascot" />
+    <TypographyText as="h2" class="header">
       {{$t('welcome_message.welcome', {user: profile.name})}}
-      </TypographyText>
-      <UiLoadersSpinner v-if="isLoading" spinning />
-      <TypographyText>
-        {{ $t('welcome_message.ea_warning') }}
-      </TypographyText>
-      <TypographyText>
-        {{ $t('welcome_message.permissions') }}
-      </TypographyText>
-      <TypographyText>
-        {{ $t('welcome_message.file_scanning_permissions') }}
-      </TypographyText>
-      <div class="dismiss-controls">
-        <InteractablesButton
-          @click="toggleVisibility"
-          :text="$t('modal.update_modal.got_it')"
-        >
-          <check-icon size="1x" />
-        </InteractablesButton>
-        <InteractablesButton
-          @click="dismissForever"
-          color="danger"
-          :text="$t('welcome_message.dismiss_forever')"
-        >
-          <x-icon size="1x" />
-        </InteractablesButton>
-      </div>
-    </div>
-  </UiModal>
-</div>
+    </TypographyText>
+    <TypographyText> {{ $t('welcome_message.ea_warning') }} </TypographyText>
+    <TypographyText> {{ $t('welcome_message.permissions') }} </TypographyText>
+    <TypographyText>
+      {{ $t('welcome_message.file_scanning_permissions') }}
+    </TypographyText>
+    <InteractablesButton
+      @click="closeModal"
+      :text="$t('modal.update_modal.got_it')"
+    >
+      <check-icon size="1x" />
+    </InteractablesButton>
+  </div>
+</UiModal>

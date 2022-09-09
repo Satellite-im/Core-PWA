@@ -78,6 +78,7 @@
     />
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
     <FilesView v-if="files.preview" />
+    <UiWelcomeModal v-if="accounts.isNewAccount" />
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />

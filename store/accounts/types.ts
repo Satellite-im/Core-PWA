@@ -27,6 +27,7 @@ export interface AccountsState {
   details?: User
   registrationStatus: RegistrationStatus
   lastVisited: string
+  isNewAccount: boolean
 }
 
 export enum AccountsError {

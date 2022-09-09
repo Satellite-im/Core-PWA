@@ -17,6 +17,7 @@ const InitialAccountsState = (): AccountsState => ({
   lastVisited: '/',
   adapter: '',
   entropyMessage: '',
+  isNewAccount: false,
 })
 
 export default InitialAccountsState

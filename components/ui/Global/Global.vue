@@ -21,7 +21,14 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'media', 'conversation', 'files', 'settings']),
+    ...mapState([
+      'ui',
+      'media',
+      'conversation',
+      'files',
+      'settings',
+      'accounts',
+    ]),
     ModalWindows: () => ModalWindows,
     incomingCall(): WebRTCIncomingCall | null {
       return this.webrtc.incomingCall
