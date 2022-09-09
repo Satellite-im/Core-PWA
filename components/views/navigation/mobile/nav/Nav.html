@@ -21,7 +21,9 @@
     @click="$router.push('/mobile/friends')"
     data-cy="mobile-nav-friends"
   >
-    <users-icon size="1.5x" />
+    <UiDotBadge :show="hasFriendRequests">
+      <users-icon size="1.5x" />
+    </UiDotBadge>
   </button>
   <!-- NOTE: Returns to the main settings screen if the user is already in settings -->
   <button
