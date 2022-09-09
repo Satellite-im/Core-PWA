@@ -1,7 +1,11 @@
 <div
   v-if="call"
   class="user"
-  :class="{'talking': isTalking}"
+  :class="{
+    'talking': isTalking,
+    'is-presenter': isPresenter,
+    'is-presenter-thumbnail': isPresenterThumbnail
+  }"
   :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
   @click="$emit('click', $event)"
 >
@@ -43,13 +47,15 @@
     />
   </div>
 
-  <TypographyTag :title="user.name" class="username" inverted>
-    {{user.name}}
-  </TypographyTag>
+  <div class="info-overlay">
+    <TypographyTag :title="user.name" class="username" inverted>
+      {{user.name}}
+    </TypographyTag>
 
-  <div class="indicators" v-if="!isPending || isLocal">
-    <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
-      <mic-off-icon />
+    <div class="indicators" v-if="!isPending || isLocal">
+      <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
+        <mic-off-icon />
+      </div>
     </div>
   </div>
 
@@ -61,5 +67,5 @@
     autoplay
   />
 
-  <div class="talking-outline"></div>
+  <div v-if="!hideTalkingIndicator" class="talking-outline"></div>
 </div>

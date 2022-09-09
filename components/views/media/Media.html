@@ -13,6 +13,8 @@
       :stream="presenter.stream"
       @click="() => togglePresenter(null)"
       @mounted="calculateUserSizes"
+      is-presenter
+      hide-talking-indicator
     />
   </div>
 
@@ -28,20 +30,12 @@
         data-cy="remote-video"
         :size="mediaUserSize"
         :stream="stream.stream"
-        :class="{ 'is-presenter': presenter === stream }"
+        :is-presenter-thumbnail="presenter === stream"
+        :hide-talking-indicator="stream.hideTalkingIndicator"
         @click="() => togglePresenter(stream)"
       />
     </template>
-
-    <!-- <div
-      v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
-      class="more-user"
-      :class="{full: ui.fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
-    >
-      ...
-    </div> -->
   </div>
-  <!-- <MediaActionsSettings /> -->
 
   <MediaHeading />
   <MediaActions />

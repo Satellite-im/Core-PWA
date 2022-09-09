@@ -37,7 +37,7 @@ export default Vue.extend({
     },
     stream: {
       type: String,
-      default: null,
+      required: true,
     },
     size: {
       type: Array,
@@ -45,6 +45,18 @@ export default Vue.extend({
         MEDIA_USER_DIMENSIONS.width,
         MEDIA_USER_DIMENSIONS.height,
       ],
+    },
+    hideTalkingIndicator: {
+      type: Boolean,
+      default: false,
+    },
+    isPresenter: {
+      type: Boolean,
+      default: false,
+    },
+    isPresenterThumbnail: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

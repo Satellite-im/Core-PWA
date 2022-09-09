@@ -1,6 +1,6 @@
 import { AudioState } from '~/store/audio/types'
 
-const IS_TALKING_THRESHOLD = 20 // %
+const IS_TALKING_THRESHOLD = 10 // %
 const TALK_OFF_TIMEOUT_MS = 500
 
 export class AudioStreamUtils {
