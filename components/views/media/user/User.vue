@@ -16,7 +16,10 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Call } from '~/libraries/WebRTC/Call'
 
+export const MEDIA_USER_DIMENSIONS = { width: 320, height: 180 }
+
 export default Vue.extend({
+  name: 'MediaUser',
   components: {
     VideoIcon,
     VideoOffIcon,
@@ -32,10 +35,16 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
-    stream: String,
+    stream: {
+      type: String,
+      default: null,
+    },
     size: {
       type: Array,
-      default: () => [320, 180],
+      default: () => [
+        MEDIA_USER_DIMENSIONS.width,
+        MEDIA_USER_DIMENSIONS.height,
+      ],
     },
   },
   data() {
@@ -121,12 +130,10 @@ export default Vue.extend({
   },
   mounted() {
     this.initializeAudioStreamUtils(this.audioStream)
+    this.$emit('mounted')
   },
   beforeDestroy() {
     this.audioStreamUtils?.destroy()
-  },
-  mounted() {
-    this.$emit('mounted')
   },
   methods: {
     initializeAudioStreamUtils(stream: MediaStream | undefined) {
@@ -142,7 +149,6 @@ export default Vue.extend({
       const muted =
         !this.user.did ||
         Boolean(iridium.webRTC.state.streamMuted[this.user.did]?.[kind])
-      console.info('isMuted', kind, this.user, muted)
       return muted
     },
   },
