@@ -1,6 +1,7 @@
 <template>
   <div>
     <InteractablesInput
+      v-if="$route.query.route === 'add'"
       v-model.trim="query"
       :placeholder="$t('friends.search_placeholder')"
       :autofocus="$device.isDesktop"
