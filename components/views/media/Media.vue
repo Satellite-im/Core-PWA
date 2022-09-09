@@ -19,6 +19,7 @@ type OptimalBoxDomensionsParams = {
 type Stream = {
   participant: User | undefined
   stream: string
+  hideTalkingIndicator: boolean
 }
 
 export default Vue.extend({
@@ -80,7 +81,11 @@ export default Vue.extend({
           streams = streams.filter((s) => s !== 'audio')
         }
         return streams.map((stream) => {
-          return { participant, stream }
+          return {
+            participant,
+            stream,
+            hideTalkingIndicator: streams.length > 1 && stream !== 'video',
+          }
         })
       })
       return participantStreams.flat()

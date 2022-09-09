@@ -149,9 +149,6 @@ export default Vue.extend({
   },
   methods: {
     initializeAudioStreamUtils(stream: MediaStream | undefined) {
-      if (this.hideTalkingIndicator) {
-        return
-      }
       this.audioStreamUtils?.destroy()
       if (!stream) {
         this.isTalking = false

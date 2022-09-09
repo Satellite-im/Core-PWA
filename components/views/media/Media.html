@@ -31,6 +31,7 @@
         :size="mediaUserSize"
         :stream="stream.stream"
         :is-presenter-thumbnail="presenter === stream"
+        :hide-talking-indicator="stream.hideTalkingIndicator"
         @click="() => togglePresenter(stream)"
       />
     </template>
