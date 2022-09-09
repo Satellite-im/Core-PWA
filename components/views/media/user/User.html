@@ -1,11 +1,14 @@
 <div
   v-if="call"
   class="user"
-  :class="{
-    'talking': isTalking,
-    'is-presenter': isPresenter,
-    'is-presenter-thumbnail': isPresenterThumbnail
-  }"
+  :class="[
+    {
+      'talking': isTalking,
+      'is-presenter': isPresenter,
+      'is-presenter-thumbnail': isPresenterThumbnail
+    },
+    `stream-${stream}`
+  ]"
   :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
   @click="$emit('click', $event)"
 >

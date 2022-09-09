@@ -9,15 +9,15 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: -50px;
-    transition: 0.2s ease-in-out;
-    transition-delay: 0.2s;
+    transition: bottom @animation-speed-long ease;
+    transition-delay: 300ms;
+    bottom: -50%;
   }
   &-button {
     position: absolute;
-    top: @light-spacing;
-    left: @light-spacing;
-    visibility: hidden;
+    top: 0;
+    left: 0;
+    margin: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,11 +25,10 @@
     height: @indicator-size;
     opacity: 0;
     border-radius: 100%;
-    background-color: @foreground-alt;
-    box-shadow: -2px 2px 30px rgba(18, 18, 22, 0.45),
-      0px 1px 2px rgba(43, 43, 59, 0.65);
-    transition: 0.2s ease-in-out;
-    transition-delay: 0.2s;
+    background: fade(@foreground-alt, 20%);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 4px fade(@foreground, 100%);
+    transition: opacity @animation-speed-long ease;
 
     svg {
       color: @white;
@@ -40,12 +39,11 @@
 
   &:hover:not(.dragging) {
     .preview-call-button {
-      visibility: visible;
-      opacity: 0.5;
+      opacity: 1;
     }
     .preview-call-actions {
-      top: auto;
-      bottom: 5px;
+      bottom: 8px;
+      transition-delay: 0ms;
     }
   }
 }

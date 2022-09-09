@@ -220,5 +220,7 @@ export const Config = {
     windowMargin: 80, // pixels
     enlargeFactor: 1.25,
     preventDragClass: '.drag-stop', // add this class to pip children that should not trigger drag/resize
+    width: 320,
+    height: 180,
   },
 }
