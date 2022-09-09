@@ -84,43 +84,41 @@ export default Vue.extend({
         y: Math.floor(containerCenter.y / blockHeight),
       }
     },
-    moveToQuarter(quarter: QuarterType) {
+    moveToQuarter(quarter: QuarterType, useAnimation = false) {
       const blockHeight = window.innerHeight / Config.pip.rows.length
-      let x: number, y: number
+      let x: number
       switch (quarter.x > Config.pip.columns.length / 2 - 1) {
         case false:
           x = Config.pip.windowMargin
-          y =
-            // take into account smaller window height
-            blockHeight > this.elHeight
-              ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
-              : quarter.y > Config.pip.rows.length / 2 - 1
-              ? window.innerHeight - this.elHeight - Config.pip.windowMargin
-              : Config.pip.windowMargin
           break
         case true:
           x = window.innerWidth - this.elWidth - Config.pip.windowMargin
-          y =
-            // take into account smaller window height
-            blockHeight > this.elHeight
-              ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
-              : quarter.y > Config.pip.rows.length / 2 - 1
-              ? window.innerHeight - this.elHeight - Config.pip.windowMargin
-              : Config.pip.windowMargin
           break
       }
+      const y =
+        // take into account smaller window height
+        blockHeight > this.elHeight
+          ? blockHeight * quarter.y + blockHeight / 2 - this.elHeight / 2
+          : quarter.y > Config.pip.rows.length / 2 - 1
+          ? window.innerHeight - this.elHeight - Config.pip.windowMargin
+          : Config.pip.windowMargin
 
       const oldX = this.x
       const oldY = this.y
 
-      animate({
-        timing: easeOutBack,
-        draw: (v) => {
-          this.x = lerp(oldX, x, v)
-          this.y = lerp(oldY, y, v)
-        },
-        duration: 500,
-      })
+      if (useAnimation) {
+        animate({
+          timing: easeOutBack,
+          draw: (v) => {
+            this.x = lerp(oldX, x, v)
+            this.y = lerp(oldY, y, v)
+          },
+          duration: 500,
+        })
+      } else {
+        this.x = x
+        this.y = y
+      }
     },
     mouseDown(e: MouseEvent) {
       if (
@@ -150,7 +148,7 @@ export default Vue.extend({
       document.removeEventListener('mouseup', this.mouseUp)
       document.removeEventListener('mousemove', this.mouseMove)
       this.quarter = this.calcPosition() as QuarterType
-      this.moveToQuarter(this.quarter)
+      this.moveToQuarter(this.quarter, true)
       // TODO: document.body.style.pointerEvents = 'auto'
     },
     mouseMove(e: MouseEvent) {
@@ -178,7 +176,7 @@ export default Vue.extend({
       })
     },
     onResize: throttle(function () {
-      this.moveToQuarter(this.quarter, false)
+      this.moveToQuarter(this.quarter)
     }, Config.pip.throttleTime),
     doubleClick(e: MouseEvent) {
       if ((e.target as HTMLElement).closest(Config.pip.preventDragClass)) return
@@ -194,7 +192,7 @@ export default Vue.extend({
           ? Config.pip.enlargeFactor
           : 1 / Config.pip.enlargeFactor)
       this.isEnlarged = !this.isEnlarged
-      this.moveToQuarter(this.quarter)
+      this.moveToQuarter(this.quarter, true)
     },
   },
 })
