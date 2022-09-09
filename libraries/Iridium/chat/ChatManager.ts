@@ -342,7 +342,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const messages = Object.values(
       this.state.conversations[conversation.id].message,
     ).sort((a, b) => a.at - b.at)
-    return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
+    return messages.at(-1)?.at ?? (conversation.createdAt || 0)
   }
 
   getSortedConversations(): Conversation[] {

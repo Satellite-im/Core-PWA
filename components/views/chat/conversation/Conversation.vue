@@ -82,8 +82,15 @@ export default Vue.extend({
             replies,
           }
         })
-      if (maxTime > this.conversation.lastReadAt && !this.isBlurred) {
-        iridium.chat.updateConversationReadAt(this.conversation.id, maxTime)
+      if (
+        (!maxTime || maxTime > this.conversation.lastReadAt) &&
+        !this.isBlurred
+      ) {
+        const currentTimestamp = this.$dayjs().valueOf()
+        iridium.chat.updateConversationReadAt(
+          this.conversation.id,
+          maxTime || currentTimestamp,
+        )
       }
       return messages
     },

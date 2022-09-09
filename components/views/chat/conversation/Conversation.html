@@ -5,7 +5,10 @@
         v-if="item.isNextDay"
         :value="item.message.at.toString()"
       />
-      <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
+      <UiCaretDivider
+        v-if="item.isFirstUnreadMessage"
+        :text="$t('messaging.new_messages')"
+      />
       <Message
         :key="item.message.id"
         :message="item.message"
