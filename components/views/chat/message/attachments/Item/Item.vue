@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 import { DownloadIcon, FileIcon } from 'satellite-lucide-icons'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { isMimeEmbeddableImage } from '~/utilities/FileType'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -13,7 +14,7 @@ export default Vue.extend({
   },
   props: {
     attachment: {
-      type: {} as PropType<MessageAttachment>,
+      type: Object as PropType<MessageAttachment>,
       required: true,
     },
   },
@@ -21,11 +22,13 @@ export default Vue.extend({
     isEmbeddable(): boolean {
       return isMimeEmbeddableImage(this.attachment.type)
     },
+    subtitle(): string {
+      return `${this.$filesize(this.attachment.size)} - ${this.attachment.type}`
+    },
   },
   methods: {
     download() {
-      const anchor = this.$refs.download as HTMLAnchorElement
-      anchor.click()
+      iridium.chat.downloadAttachment(this.attachment.cid)
     },
   },
 })

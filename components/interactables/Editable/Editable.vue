@@ -46,7 +46,7 @@ declare module 'vue/types/vue' {
   }
 }
 
-export default Vue.extend({
+const Editable = Vue.extend({
   mixins: [WithHistory],
   props: {
     value: {
@@ -302,6 +302,8 @@ export default Vue.extend({
     },
   },
 })
+export type EditableRef = InstanceType<typeof Editable>
+export default Editable
 </script>
 <style lang="less">
 // non-Retina-specific stuff here

@@ -29,9 +29,7 @@ import { Friend } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import { ChatFileUpload } from '~/store/chat/types'
-import createThumbnail from '~/utilities/Thumbnail'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
-import { blobToStream } from '~/utilities/BlobManip'
 import isNSFW from '~/utilities/NSFW'
 import {
   Notification,
@@ -210,6 +208,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   async onSyncValidate(
     message: IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>,
   ) {
+    console.log('test sync validate', message)
     // TODO: decide what we want to do with validation results
   }
 
@@ -644,21 +643,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.off(`conversations/${id}`, onMessage)
   }
 
-  async addFile(
-    {
-      upload,
-      conversationId,
-    }: { upload: ChatFileUpload; conversationId: string },
-    options?: AddOptions,
-  ): Promise<MessageAttachment | false> {
+  async addFile({
+    upload,
+    conversationId,
+  }: {
+    upload: ChatFileUpload
+    conversationId: string
+  }): Promise<MessageAttachment | null> {
     if (upload.file.size === 0) {
       throw new Error('TODO')
     }
     const safer = await this.upload(upload.file, conversationId)
     if (!safer) {
-      return false
+      return null
     }
-    const thumbnailBlob = await createThumbnail(upload.file, 400)
+
     return {
       cid: safer.cid,
       name: upload.file.name,
@@ -668,7 +667,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       type: Object.values(FILE_TYPE).includes(upload.file.type as FILE_TYPE)
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: thumbnailBlob,
     }
   }
 
@@ -711,6 +709,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           setTimeout(() => resolve(undefined), 30000)
         })
     })
+  }
+
+  async downloadAttachment(cid: MessageAttachment['cid']) {
+    const x = await iridium.connector?.load(cid)
+    console.log(x)
   }
 
   /**
