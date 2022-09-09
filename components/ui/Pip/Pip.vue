@@ -11,7 +11,7 @@
     @mousedown.stop="mouseDown"
     @dblclick="doubleClick"
   >
-    <slot :dragging="isDragging" :width="elWidth" :height="elHeigth" />
+    <slot :dragging="isDragging" :width="elWidth" :height="elHeight" />
   </div>
 </template>
 
