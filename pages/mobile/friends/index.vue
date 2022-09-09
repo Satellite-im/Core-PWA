@@ -9,7 +9,9 @@
               <user-plus-icon />
             </button>
             <button @click="next('request')">
-              <user-check-icon />
+              <UiDotBadge :show="hasFriendRequests">
+                <user-check-icon />
+              </UiDotBadge>
             </button>
           </div>
         </div>
@@ -135,6 +137,9 @@ export default Vue.extend({
           }),
         )
     },
+    hasFriendRequests(): boolean {
+      return this.incomingRequests.length > 0
+    },
   },
   watch: {
     route() {
@@ -214,15 +219,18 @@ export default Vue.extend({
       align-items: center;
       gap: 1.5rem;
       padding: 1rem;
+
       .button-container {
         display: flex;
         margin-left: auto;
         gap: 2rem;
       }
+
       .arrow {
         color: @flair-color;
       }
     }
+
     .bottom {
       flex: 1;
       overflow-y: scroll;

@@ -15,6 +15,8 @@ import { ModalWindows, SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { UserStatus } from '~/libraries/Iridium/users/types'
+import { FriendRequest } from '~/libraries/Iridium/friends/types'
+
 export default Vue.extend({
   components: {
     HomeIcon,
@@ -27,6 +29,7 @@ export default Vue.extend({
   data() {
     return {
       userStatus: iridium.users.ephemeral.status,
+      friends: iridium.friends.state,
     }
   },
   computed: {
@@ -44,6 +47,14 @@ export default Vue.extend({
       set(value: boolean) {
         this.$store.commit('ui/setIsMobileNavVisible', value)
       },
+    },
+    incomingRequests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
+      )
+    },
+    hasFriendRequests(): boolean {
+      return this.incomingRequests.length > 0
     },
   },
   methods: {
