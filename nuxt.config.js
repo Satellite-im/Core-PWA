@@ -86,7 +86,6 @@ export default defineNuxtConfig({
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // Third Party
-    { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
