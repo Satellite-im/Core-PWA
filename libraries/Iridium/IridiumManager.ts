@@ -117,7 +117,7 @@ export class IridiumManager extends Emitter {
 
     logger.info('iridium/manager', 'initializing profile')
     await this.profile.init()
-    await this.connector?.waitForSyncNode(5000)
+    await this.connector?.waitForSyncNode(3000)
     await this.sendSyncInit()
   }
 
@@ -233,7 +233,7 @@ export class IridiumManager extends Emitter {
       }
 
       connector.send(connector.p2p.primaryNodeID, payload)
-    }, 3000)
+    }, 1000)
   }
 }
 

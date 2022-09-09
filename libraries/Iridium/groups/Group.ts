@@ -36,7 +36,7 @@ export default class Group extends Emitter<IridiumMessage> {
 
     this.state = await this.iridium.connector?.get(`/groups/${this.id}`)
     this.iridium.connector.on(`/groups/${this.id}`, this._onWireMessage)
-    await this.iridium.connector.subscribe(`/groups/${this.id}`)
+    this.iridium.connector.subscribe(`/groups/${this.id}`)
   }
 
   async unsubscribe() {
