@@ -172,8 +172,10 @@ export default Vue.extend({
         finalY = window.innerHeight - this.elHeight
       }
 
-      this.x = (this.x * 2 + finalX) / 3
-      this.y = (this.y * 2 + finalY) / 3
+      requestAnimationFrame(() => {
+        this.x = (this.x * 2 + finalX) / 3
+        this.y = (this.y * 2 + finalY) / 3
+      })
     },
     onResize: throttle(function () {
       this.moveToQuarter(this.quarter, false)
