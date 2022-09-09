@@ -199,9 +199,15 @@
                     :text="$t('pages.settings.profile.accounts.subtitle_url')"
                     class="accounts-subtitle-text"
                   />
-                  <div v-tooltip.top="$t('controls.edit')">
-                    <info-icon size="1.5x" class="section-icon-tooltip" />
-                  </div>
+                  <UiInfoButton class="info-button">
+                    <template #title>
+                      {{ $t('pages.settings.profile.accounts.title') }}
+                    </template>
+                    <template #subtitle
+                      >{{ $t('pages.settings.profile.accounts.subtitle_url')
+                      }}</template
+                    >
+                  </UiInfoButton>
                 </div>
 
                 <UiComingSoon
@@ -217,6 +223,7 @@
                     :placeholder="
                       $t('pages.settings.profile.accounts.url_placeholder')
                     "
+                    disabled
                   >
                     <edit-icon size="1x" />
                   </InteractablesInput>
