@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`animation.animate timing 4, duration 60 1`] = `undefined`;
+
+exports[`animation.animate timing 4, duration 2500 1`] = `undefined`;
+
+exports[`animation.animate timing 200, duration 15 1`] = `undefined`;
+
+exports[`animation.animate timing 1000, duration 0.0001 1`] = `undefined`;
+
+exports[`animation.animate timing 1000, duration 2500 1`] = `undefined`;
+
+exports[`animation.animate timing Infinity, duration Infinity 1`] = `undefined`;
+
+exports[`animation.easeOutBack easeOutBack0 1`] = `-2.220446049250313e-16`;
+
+exports[`animation.easeOutBack easeOutBack1 1`] = `1`;
+
+exports[`animation.easeOutBack easeOutBack1.0 1`] = `1`;
+
+exports[`animation.easeOutBack easeOutBack2 1`] = `4.4`;
+
+exports[`animation.easeOutBack easeOutBack70 1`] = `3468069514`;
+
+exports[`animation.easeOutBack easeOutBackNaN 1`] = `NaN`;
+
+exports[`animation.lerp 1, 320, 1 1`] = `320`;
+
+exports[`animation.lerp 90, 90, 0 1`] = `90`;
+
+exports[`animation.lerp 100, 550, 0 1`] = `100`;
+
+exports[`animation.lerp 350, 380, 1 1`] = `380`;
+
+exports[`animation.lerp 410, 550, 1 1`] = `550`;
+
+exports[`animation.lerp Infinity, Infinity, Infinity 1`] = `NaN`;
