@@ -1,6 +1,5 @@
 .image {
   display: flex;
-  flex-grow: 0;
   border-radius: @corner-rounding;
 
   .image-container {
@@ -8,7 +7,7 @@
 
     img {
       cursor: pointer;
-      width: @full;
+      width: 100%;
       object-fit: cover;
       max-width: 300px;
       &:extend(.round-corners);
@@ -20,46 +19,8 @@
     text-align: center;
     max-width: 200px;
     &:extend(.no-select);
-    pointer-events: none;
     &-img {
-      padding: @normal-spacing;
-    }
-    &-caption {
-      color: @secondary-text;
-      font-family: @primary-font;
-      font-size: @mini-text-size;
+      padding: 16px;
     }
   }
-}
-
-.text {
-  margin-top: 5px;
-}
-
-.file-info {
-  grid-row: auto;
-}
-
-.dl-text {
-  display: flex;
-  float: right;
-}
-.icon {
-  margin-right: 5px;
-}
-.imag-icon {
-  margin: 10px 5px -5px -1px;
-}
-
-.dl-icon-text {
-  grid-row: auto;
-
-  .name-text {
-    text-overflow: ellipsis;
-    margin-bottom: 10px;
-  }
-}
-
-.size-text {
-  margin-bottom: 10px;
 }

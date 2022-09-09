@@ -80,10 +80,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
     >('node/message/sync/fetch', this.onSyncFetchResponse.bind(this))
 
-    iridium.connector?.p2p.on<
-      IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
-    >('node/message/sync/validate', this.onSyncValidate.bind(this))
-
     iridium.connector?.subscribe<
       IridiumPubsubMessage<IridiumDecodedPayload<IridiumConversationEvent>>
     >('/chat/announce', {
@@ -203,13 +199,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       payload,
       options,
     )
-  }
-
-  async onSyncValidate(
-    message: IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>,
-  ) {
-    console.log('test sync validate', message)
-    // TODO: decide what we want to do with validation results
   }
 
   async onConversationMessage(
@@ -654,16 +643,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error('TODO')
     }
     const safer = await this.upload(upload.file, conversationId)
-    if (!safer) {
+    if (!safer || !safer.valid) {
       return null
     }
 
+    const syncPinResult = await iridium.connector?.load(safer.cid)
+
     return {
-      cid: safer.cid,
+      cid: syncPinResult.cid,
       name: upload.file.name,
       size: upload.file.size,
       nsfw: await isNSFW(upload.file),
-      safe: safer.valid,
       type: Object.values(FILE_TYPE).includes(upload.file.type as FILE_TYPE)
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
@@ -709,11 +699,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           setTimeout(() => resolve(undefined), 30000)
         })
     })
-  }
-
-  async downloadAttachment(cid: MessageAttachment['cid']) {
-    const x = await iridium.connector?.load(cid)
-    console.log(x)
   }
 
   /**

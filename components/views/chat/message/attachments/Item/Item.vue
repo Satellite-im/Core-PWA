@@ -18,6 +18,9 @@ export default Vue.extend({
       required: true,
     },
   },
+  data: () => ({
+    dataURL: '',
+  }),
   computed: {
     isEmbeddable(): boolean {
       return isMimeEmbeddableImage(this.attachment.type)
@@ -27,8 +30,15 @@ export default Vue.extend({
     },
   },
   methods: {
-    download() {
-      iridium.chat.downloadAttachment(this.attachment.cid)
+    async download() {
+      const anchor = this.$refs.download as HTMLAnchorElement
+      const { fileBuffer } = await iridium.connector?.load(this.attachment.cid)
+      this.dataURL = URL.createObjectURL(
+        new Blob([fileBuffer], { type: this.attachment.type }),
+      )
+      anchor.href = this.dataURL
+      anchor.click()
+      URL.revokeObjectURL(this.dataURL)
     },
   },
 })

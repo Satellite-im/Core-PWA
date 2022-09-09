@@ -1,8 +1,8 @@
 import { TranslateResult } from 'vue-i18n'
-import { FileMessage } from '~/types/textile/mailbox'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 import { Alert } from '~/libraries/ui/Alerts'
+import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -106,7 +106,7 @@ export interface UIState {
   }
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
-  chatImageOverlay?: FileMessage
+  chatImageOverlay?: MessageAttachment & { dataURL: string }
   isMobileNavVisible: boolean
   callHeight: string
 }

@@ -1,12 +1,10 @@
 <template src="./Image.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
 import { ImageIcon, DownloadIcon } from 'satellite-lucide-icons'
-import { FileMessagePayload } from '../Embeds/File/types'
-// @ts-ignore
 import placeholderImage from '~/assets/svg/mascot/sad_curious.svg'
-import { RootState } from '~/types/store/store'
+import { MessageAttachment } from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -14,30 +12,30 @@ export default Vue.extend({
     DownloadIcon,
   },
   props: {
-    alt: {
-      type: String,
-      default: 'Image',
-    },
-    image: {
-      type: Object as PropType<FileMessagePayload>,
+    attachment: {
+      type: Object as PropType<MessageAttachment>,
       required: true,
     },
   },
-  data() {
-    return {
-      placeholderSrc: placeholderImage,
-      placeholderText: this.$t('errors.chat.failed_load'),
-      usePlaceholder: false,
-    }
+  data: () => ({
+    placeholderSrc: placeholderImage,
+    usePlaceholder: false,
+    dataURL: '',
+  }),
+  async mounted() {
+    const { fileBuffer } = await iridium.connector?.load(this.attachment.cid)
+    const blob = new Blob([fileBuffer], { type: this.attachment.type })
+    this.dataURL = URL.createObjectURL(blob)
   },
-  computed: {
-    ...mapState({
-      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
-    }),
+  beforeDestroy() {
+    URL.revokeObjectURL(this.dataURL)
   },
   methods: {
-    clickHandler(event: MouseEvent): void {
-      this.$store.commit('ui/setChatImageOverlay', this.image)
+    imageClick() {
+      this.$store.commit('ui/setChatImageOverlay', {
+        ...this.attachment,
+        dataURL: this.dataURL,
+      })
     },
     onImageError() {
       this.usePlaceholder = true
