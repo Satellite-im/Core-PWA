@@ -40,7 +40,6 @@ Object {
   "isReacted": false,
   "isScrollOver": false,
   "isTyping": false,
-  "isWelcomeMessage": true,
   "messages": Array [],
   "modals": Object {
     "callToAction": false,
@@ -58,7 +57,6 @@ Object {
     "userProfile": false,
     "wallet": false,
     "walletMini": false,
-    "welcome": true,
   },
   "mostEmojiUsed": Array [],
   "notifications": Array [],

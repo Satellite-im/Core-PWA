@@ -2,10 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { UsersIcon, PlusIcon, FolderIcon } from 'satellite-lucide-icons'
-
-import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
@@ -27,9 +24,6 @@ export default Vue.extend({
         (r: FriendRequest) => r.status === 'pending' && r.incoming,
       ).length
     },
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-    }),
   },
   methods: {
     toggleModal() {
