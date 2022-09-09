@@ -12,17 +12,17 @@ exports[`animation.animate timing 1000, duration 2500 1`] = `undefined`;
 
 exports[`animation.animate timing Infinity, duration Infinity 1`] = `undefined`;
 
-exports[`animation.easeOutBack easeOutBack0 1`] = `-2.220446049250313e-16`;
+exports[`animation.easeOutBack easeOutBack 0 1`] = `-2.220446049250313e-16`;
 
-exports[`animation.easeOutBack easeOutBack1 1`] = `1`;
+exports[`animation.easeOutBack easeOutBack 1 1`] = `1`;
 
-exports[`animation.easeOutBack easeOutBack1.0 1`] = `1`;
+exports[`animation.easeOutBack easeOutBack 1.0 1`] = `1`;
 
-exports[`animation.easeOutBack easeOutBack2 1`] = `4.4`;
+exports[`animation.easeOutBack easeOutBack 2 1`] = `4.4`;
 
-exports[`animation.easeOutBack easeOutBack70 1`] = `3468069514`;
+exports[`animation.easeOutBack easeOutBack 70 1`] = `3468069514`;
 
-exports[`animation.easeOutBack easeOutBackNaN 1`] = `NaN`;
+exports[`animation.easeOutBack easeOutBack NaN 1`] = `NaN`;
 
 exports[`animation.lerp 1, 320, 1 1`] = `320`;
 
