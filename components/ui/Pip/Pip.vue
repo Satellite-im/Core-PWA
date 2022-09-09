@@ -6,13 +6,12 @@
       transform: transform,
       width: `${elWidth}px`,
       height: `${elHeight}px`,
-      padding: `${padding}px`,
     }"
     :class="{ dragging: isDragging }"
     @mousedown.stop="mouseDown"
     @dblclick="doubleClick"
   >
-    <slot :dragging="isDragging" />
+    <slot :dragging="isDragging" :width="elWidth" :height="elHeigth" />
   </div>
 </template>
 
@@ -21,9 +20,6 @@ import Vue from 'vue'
 import { throttle } from 'lodash'
 import { Config } from '~/config'
 import { animate, easeOutBack, lerp } from '~/utilities/animation'
-import { MEDIA_USER_DIMENSIONS } from '~/components/views/media/user/User.vue'
-
-const PIP_PADDING = 8
 
 type ColumnType = typeof Config.pip.columns[number]
 type RowType = typeof Config.pip.rows[number]
@@ -51,15 +47,14 @@ export default Vue.extend({
       y: Config.pip.windowMargin,
       offsetX: 0,
       offsetY: 0,
-      elWidth: MEDIA_USER_DIMENSIONS.width + PIP_PADDING * 2,
-      elHeight: MEDIA_USER_DIMENSIONS.height + PIP_PADDING * 2,
+      elWidth: Config.pip.width,
+      elHeight: Config.pip.height,
       quarter: { x: Config.pip.columns.length - 1, y: 0 } as QuarterType,
       isDragging: false,
       isEnlarged: false,
       dragInterval: null as NodeJS.Timer | null,
       mouseX: 0,
       mouseY: 0,
-      padding: PIP_PADDING,
     }
   },
   computed: {
@@ -150,7 +145,7 @@ export default Vue.extend({
       this.dragInterval = setInterval(this.dragUpdate, DRAG_INTERVAL_MS)
     },
     mouseUp() {
-      clearInterval(this.dragInterval)
+      clearInterval(this.dragInterval as NodeJS.Timer)
       this.isDragging = false
       document.removeEventListener('mouseup', this.mouseUp)
       document.removeEventListener('mousemove', this.mouseMove)
@@ -181,7 +176,7 @@ export default Vue.extend({
       this.y = (this.y * 2 + finalY) / 3
     },
     onResize: throttle(function () {
-      this.moveToQuarter(this.quarter)
+      this.moveToQuarter(this.quarter, false)
     }, Config.pip.throttleTime),
     doubleClick(e: MouseEvent) {
       if ((e.target as HTMLElement).closest(Config.pip.preventDragClass)) return

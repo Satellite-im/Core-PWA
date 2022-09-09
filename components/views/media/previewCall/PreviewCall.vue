@@ -4,6 +4,8 @@
 import Vue from 'vue'
 import { CornerUpLeftIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
+import { WebRTCEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {
@@ -14,6 +16,14 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    width: {
+      type: Number,
+      required: true,
+    },
+    height: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -21,13 +31,25 @@ export default Vue.extend({
     }
   },
   computed: {
-    remoteParticipant() {
+    remoteParticipant(): User | undefined {
       return iridium.webRTC.remoteParticipants()?.[0] ?? undefined
+    },
+    remoteStream(): WebRTCEnum | undefined {
+      if (!this.remoteParticipant) {
+        return
+      }
+      const muted = this.webrtc.streamMuted[this.remoteParticipant.did]
+      if (!muted) {
+        return
+      }
+      const streams = ['screen', 'video', 'audio'] as WebRTCEnum[]
+      const stream = streams.find((stream) => !muted[stream])
+      return stream
     },
   },
   methods: {
     navigateToActiveConversation() {
-      const conversationId = iridium.webRTC.state.activeCall?.callId
+      const conversationId = this.webrtc.activeCall?.callId
       if (!conversationId) {
         return
       }

@@ -38,10 +38,21 @@
     object-fit: cover;
     box-shadow: none;
     transition: filter @animation-speed-long ease;
+    background-color: @black;
 
     &.flip {
       transform: scaleX(-1);
     }
+  }
+
+  &:hover {
+    .video-stream {
+      filter: brightness(90%);
+    }
+  }
+
+  &.stream-screen .video-stream {
+    object-fit: contain;
   }
 
   .voice-user {

@@ -14,9 +14,7 @@ import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
-import { Call } from '~/libraries/WebRTC/Call'
-
-export const MEDIA_USER_DIMENSIONS = { width: 320, height: 180 }
+import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
 
 export default Vue.extend({
   name: 'MediaUser',
@@ -41,10 +39,7 @@ export default Vue.extend({
     },
     size: {
       type: Array,
-      default: () => [
-        MEDIA_USER_DIMENSIONS.width,
-        MEDIA_USER_DIMENSIONS.height,
-      ],
+      required: true,
     },
     hideTalkingIndicator: {
       type: Boolean,
@@ -75,7 +70,7 @@ export default Vue.extend({
       if (!iridium.webRTC.state.activeCall?.callId) return
       return iridium.webRTC.state.calls[iridium.webRTC.state.activeCall.callId]
     },
-    streams(): Call['streams'] | undefined {
+    streams(): CallPeerStreams | undefined {
       if (!this.user.did || !this.call) return
       return this.call?.streams[this.user.did]
     },
