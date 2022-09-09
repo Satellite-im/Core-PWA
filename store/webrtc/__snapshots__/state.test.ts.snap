@@ -9,6 +9,7 @@ Object {
   "initialized": false,
   "interval": null,
   "originator": "",
+  "streamIds": Object {},
   "streamMuted": Object {},
 }
 `;
