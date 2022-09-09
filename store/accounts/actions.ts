@@ -210,6 +210,7 @@ export default {
         profile,
       )
       commit('setUserDetails', profile)
+      commit('ui/welcomeSet', profile.isWelcomeMessage, { root: true })
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       logger.info('accounts/actions/loadAccount', 'finished')
       return dispatch('startup')
@@ -292,6 +293,7 @@ export default {
       peerId: iridium.connector?.peerId.toString(),
       name: userData.name,
       status: userData.status,
+      isWelcomeMessage: true,
       photoHash: imagePath,
     }
 
@@ -299,8 +301,13 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
+    commit('ui/welcomeSet', true, { root: true })
     await iridium.sendSyncInit()
     return dispatch('startup', walletAccount)
+  },
+  async setWelcomeMessageDismiss({ commit }: ActionsArguments<AccountsState>) {
+    await iridium.profile?.updateUser({ isWelcomeMessage: false })
+    commit('ui/welcomeDismiss', {}, { root: true })
   },
 
   /**

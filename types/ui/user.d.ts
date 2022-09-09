@@ -11,6 +11,7 @@ export type User = {
   unreadCount?: number
   profilePicture: string
   badge?: BadgeType
+  welcomeMessage?: boolean
   userAccount?: any
   mailboxId?: string
   peerId?: string

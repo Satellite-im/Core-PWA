@@ -1,4 +1,4 @@
-import { User } from '~/libraries/Iridium/users/types'
+import { User } from '~/types/ui/user'
 
 export enum RegistrationStatus {
   UNKNOWN = 'unknown',

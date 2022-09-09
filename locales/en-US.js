@@ -9,6 +9,16 @@ export default {
     group_call: 'Group Call\nComing Soon',
     group_chat_search: 'Group Chat Search\nComing Soon',
   },
+  welcome_message: {
+    dismiss_forever: 'Dismiss Forever',
+    welcome: 'Welcome {user}!',
+    ea_warning:
+      'Thank you so much for joining us in our Early Access. Things are changing rapidly so please be patient with us and check back regularly for updates and improvements.',
+    permissions:
+      'Please be sure to enable permissions which can be found in settings',
+    file_scanning_permissions:
+      'In order to share files/use the encrypted file storage on our network you must consent to file scanning which can be found under settings in the Privacy and Permissions tab.',
+  },
   global: {
     name: 'Satellite.im',
     encrypted: 'Encrypted',
