@@ -68,7 +68,10 @@ describe('animation.animate', () => {
   test('timing 4, duration 60', () => {
     const result: any = animation.animate({
       timing: () => 4,
-      draw: () => undefined,
+      draw: (v) => {
+        this.x = animation.lerp(10, 100, 2)
+        this.y = animation.lerp(100, 10, 2)
+      },
       duration: 60,
     })
     expect(result).toMatchSnapshot()
@@ -77,7 +80,10 @@ describe('animation.animate', () => {
   test('timing 200, duration 15', () => {
     const result: any = animation.animate({
       timing: () => 200,
-      draw: () => undefined,
+      draw: (v) => {
+        this.x = animation.lerp(10, 100, 2)
+        this.y = animation.lerp(100, 10, 2)
+      },
       duration: 15,
     })
     expect(result).toMatchSnapshot()
@@ -86,7 +92,10 @@ describe('animation.animate', () => {
   test('timing 1000, duration 0.0001', () => {
     const result: any = animation.animate({
       timing: () => 1000,
-      draw: () => undefined,
+      draw: (v) => {
+        this.x = animation.lerp(10, 100, 2)
+        this.y = animation.lerp(100, 10, 2)
+      },
       duration: 0.0001,
     })
     expect(result).toMatchSnapshot()
@@ -95,7 +104,10 @@ describe('animation.animate', () => {
   test('timing 4, duration 2500', () => {
     const result: any = animation.animate({
       timing: () => 4,
-      draw: () => undefined,
+      draw: (v) => {
+        this.x = animation.lerp(10, 100, 2)
+        this.y = animation.lerp(100, 10, 2)
+      },
       duration: 2500,
     })
     expect(result).toMatchSnapshot()
@@ -104,7 +116,10 @@ describe('animation.animate', () => {
   test('timing 1000, duration 2500', () => {
     const result: any = animation.animate({
       timing: () => 1000,
-      draw: () => undefined,
+      draw: (v) => {
+        this.x = animation.lerp(10, 100, 2)
+        this.y = animation.lerp(100, 10, 2)
+      },
       duration: 2500,
     })
     expect(result).toMatchSnapshot()
@@ -113,7 +128,10 @@ describe('animation.animate', () => {
   test('timing Infinity, duration Infinity', () => {
     const result: any = animation.animate({
       timing: () => Infinity,
-      draw: () => undefined,
+      draw: (v) => {
+        this.x = animation.lerp(10, 100, 2)
+        this.y = animation.lerp(100, 10, 2)
+      },
       duration: Infinity,
     })
     expect(result).toMatchSnapshot()
