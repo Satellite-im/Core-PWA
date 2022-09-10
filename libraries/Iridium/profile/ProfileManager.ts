@@ -31,7 +31,7 @@ export default class IridiumProfile extends Emitter {
   getUser(): User {
     return {
       did: this.state?.did || '',
-      name: this.state?.name || this.state?.did || '',
+      name: this.state?.name || '',
       status: this.state?.status || '',
       photoHash: this.state?.photoHash || '',
     }

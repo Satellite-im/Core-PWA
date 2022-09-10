@@ -226,10 +226,9 @@ export class IridiumManager extends Emitter {
       const payload = {
         type: 'sync/init',
         at: Date.now(),
-        name: profile?.name || this.id,
-        avatar: profile?.photoHash || '',
-        status: profile?.status || '',
-        photoHash: profile?.photoHash || '',
+        name: profile?.name,
+        avatar: profile?.photoHash,
+        status: profile?.status,
       }
 
       connector.send(connector.p2p.primaryNodeID, payload)
