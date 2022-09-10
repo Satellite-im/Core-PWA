@@ -1,4 +1,5 @@
 import * as module from './mutations'
+import { FilesState } from '~/store/files/types'
 
 const initialState = {
   downloadList: ['item1', 'item2', 'item3'],
@@ -18,9 +19,19 @@ const initialState = {
   rename: '',
 }
 
+let localizedInitialState: FilesState
+
 describe('Test files/mutations', () => {
+  beforeEach(() => {
+    localizedInitialState = { ...initialState }
+  })
+
+  it('should set status', () => {
+    module.default.toggleSearchAll(localizedInitialState)
+    expect(localizedInitialState.search.searchAll).toBeFalsy()
+  })
+
   it('should push new downloaded file into the addDownload array', () => {
-    const localizedInitialState = { ...initialState }
     module.default.addDownload(localizedInitialState, 'item4')
     expect(localizedInitialState.downloadList).toEqual([
       'item1',
@@ -31,26 +42,69 @@ describe('Test files/mutations', () => {
   })
 
   it('should rename file', () => {
-    const localizedInitialState = { ...initialState }
     module.default.setRename(localizedInitialState, 'file2')
     expect(localizedInitialState.rename).toBe('file2')
   })
 
   it('should set search value', () => {
-    const localizedInitialState = { ...initialState }
     module.default.setSearchValue(localizedInitialState, 'new search value')
     expect(localizedInitialState.search.value).toBe('new search value')
   })
 
   it('should negate grid layout', () => {
-    const localizedInitialState = { ...initialState }
     module.default.toggleLayout(localizedInitialState)
     expect(localizedInitialState.gridLayout).toBeTruthy()
   })
 
+  it('should negate grid layout from true to false', () => {
+    module.default.toggleLayout({ ...localizedInitialState, gridLayout: false })
+    expect(localizedInitialState.gridLayout).toBeFalsy()
+  })
+
   it('should negate search all toggle', () => {
-    const localizedInitialState = { ...initialState }
     module.default.toggleSearchAll(localizedInitialState)
-    expect(localizedInitialState.search.searchAll).toBeFalsy()
+    expect(localizedInitialState.search.searchAll).toBeTruthy()
+  })
+
+  it('should set status', () => {
+    module.default.setStatus(localizedInitialState, 'status')
+    expect(localizedInitialState.status).toEqual('status')
+  })
+
+  it('should set preview', () => {
+    module.default.setPreview(localizedInitialState, 'example file hash')
+    expect(localizedInitialState.preview).toEqual('example file hash')
+  })
+
+  it('should set path', () => {
+    const argument = [
+      {
+        id: 'id',
+        name: 'name',
+      },
+    ]
+    module.default.setPath(localizedInitialState, argument)
+    expect(localizedInitialState.path).toEqual(argument)
+  })
+
+  it('should set path with two arrays', () => {
+    const argument = [
+      {
+        id: 'id',
+        name: 'name',
+      },
+      {
+        id: 'id2',
+        name: 'name2',
+      },
+    ]
+    module.default.setPath(localizedInitialState, argument)
+    expect(localizedInitialState.path).toEqual(argument)
+  })
+
+  it('should set path with an empty array', () => {
+    const argument = []
+    module.default.setPath(localizedInitialState, argument)
+    expect(localizedInitialState.path).toEqual(argument)
   })
 })

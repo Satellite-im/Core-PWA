@@ -17,7 +17,7 @@ describe('Circle.addressToNumber', () => {
   })
 })
 
-describe('Circle.stringToColor', () => {
+describe('Circle.stringToColor generated', () => {
   test('0', () => {
     const result: any = Circle.toHex('<?xml version="1.0" ?>\n<a b="c"/>\n')
     expect(result).toMatchSnapshot()
@@ -31,5 +31,23 @@ describe('Circle.stringToColor', () => {
   test('2', () => {
     const result: any = Circle.toHex('')
     expect(result).toMatchSnapshot()
+  })
+})
+
+describe('Circle.stringToColor', () => {
+  it('should convert first did to color', () => {
+    const argument: string =
+      'did:key:z6MkiM2pazmVDL8BgUoRP1V3KU6tufrhMJbXQAEUD76ZVyZp '
+    const result: string = Circle.stringToColor(argument)
+
+    expect(result).toBe('#3867d6')
+  })
+
+  it('should convert second did to color', () => {
+    const argument: string =
+      'did:key:z6MkgJXKqJSredVSd6W21oXyjFjVaD5kBLfewRT4Gm6L5Nww'
+    const result: string = Circle.stringToColor(argument)
+
+    expect(result).toBe('#2bcbba')
   })
 })

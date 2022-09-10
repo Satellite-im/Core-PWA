@@ -2,11 +2,23 @@ import { Howler } from 'howler'
 import actions from './actions'
 import { Sounds } from '~/libraries/SoundManager/SoundManager'
 
-describe('Manage sounds', () => {
-  let inst: any
+const InitialParams = {
+  newMessage: true,
+  hangup: true,
+  call: true,
+  mute: true,
+  unmute: true,
+  deafen: true,
+  undeafen: true,
+  upload: true,
+  connected: true,
+}
+
+describe('Test sounds/actions', () => {
+  let instance: any
 
   beforeEach(() => {
-    inst = actions
+    instance = actions
   })
 
   test('sound plays', () => {
@@ -20,19 +32,9 @@ describe('Manage sounds', () => {
       return Promise.resolve()
     }
 
-    const result: any = inst.playSound(
+    const result: any = instance.playSound(
       {
-        state: {
-          newMessage: true,
-          hangup: true,
-          call: true,
-          mute: true,
-          unmute: true,
-          deafen: true,
-          undeafen: true,
-          upload: true,
-          connected: true,
-        },
+        state: { ...InitialParams },
       },
       Sounds.CALL,
     )
@@ -49,18 +51,11 @@ describe('Manage sounds', () => {
       return Promise.resolve()
     }
 
-    const result: any = inst.playSound(
+    const result: any = instance.playSound(
       {
         state: {
-          newMessage: true,
-          hangup: true,
+          ...InitialParams,
           call: false,
-          mute: true,
-          unmute: true,
-          deafen: true,
-          undeafen: true,
-          upload: true,
-          connected: true,
         },
       },
       Sounds.CALL,
@@ -71,37 +66,31 @@ describe('Manage sounds', () => {
   })
 
   test('sound stops', () => {
-    const result: any = inst.stopSounds(
+    const result: any = instance.stopSounds(
       {
-        state: {
-          newMessage: true,
-          hangup: true,
-          call: true,
-          mute: true,
-          unmute: true,
-          deafen: true,
-          undeafen: true,
-          upload: true,
-          connected: true,
-        },
+        state: { ...InitialParams },
       },
       [Sounds.CALL],
     )
   })
 
+  test('sound stops but argument is empty array', () => {
+    const result: any = instance.stopSounds(
+      {
+        state: { ...InitialParams },
+      },
+      [],
+    )
+
+    expect(result).toBeUndefined()
+  })
+
   test('sound does not stop', () => {
-    const result: any = inst.stopSounds(
+    const result: any = instance.stopSounds(
       {
         state: {
-          newMessage: true,
-          hangup: true,
+          ...InitialParams,
           call: false,
-          mute: true,
-          unmute: true,
-          deafen: true,
-          undeafen: true,
-          upload: true,
-          connected: true,
         },
       },
       [Sounds.CALL],
@@ -113,18 +102,11 @@ describe('Manage sounds', () => {
 
   test('setMuteSounds', () => {
     const spy = jest.spyOn(Howler, 'mute')
-    inst.setMuteSounds(
+    instance.setMuteSounds(
       {
         state: {
-          newMessage: true,
-          hangup: true,
-          call: true,
+          ...InitialParams,
           mute: false,
-          unmute: true,
-          deafen: true,
-          undeafen: true,
-          upload: true,
-          connected: true,
         },
       },
       false,
@@ -132,5 +114,19 @@ describe('Manage sounds', () => {
 
     expect(spy).toHaveBeenCalled()
     expect(spy).toHaveBeenLastCalledWith(false)
+  })
+
+  test('playingSounds', () => {
+    const result = instance.playingSounds(
+      {
+        state: {
+          ...InitialParams,
+          mute: false,
+        },
+      },
+      false,
+    )
+
+    expect(result).toEqual([])
   })
 })
