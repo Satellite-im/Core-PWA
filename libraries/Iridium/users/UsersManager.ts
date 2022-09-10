@@ -78,7 +78,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       this.setUserStatus(peer.did, 'offline')
     })
 
-    await this.loadUserData()
+    this.loadUserData()
     setInterval(async () => {
       await this.loadUserData()
     }, 1800000)
@@ -264,7 +264,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       const timeout = setTimeout(() => {
         logger.warn(this.loggerTag, 'peer search timeout', { query })
         resolve([])
-      }, 5000)
+      }, 10000)
 
       this.once(`searchResults/${id}`, (results: User[]) => {
         logger.debug(this.loggerTag, 'search results received', results)

@@ -32,20 +32,15 @@ export default class FilesManager extends Emitter {
     }
 
     logger.log('iridium/files', 'initializing')
-    await this.fetch()
+    this.fetch()
     logger.log('iridium/files', 'files state loaded', this.state)
-    await iridium.connector.subscribe('/files/announce')
+    iridium.connector.subscribe('/files/announce')
 
     this.emit('ready', {})
   }
 
   async fetch() {
     const res = await iridium.connector?.get<{ items: IridiumItem[] }>('/files')
-    if (res && 'items' in res) {
-      // convert iridium files state to FilesManager state
-      const items = Object.values(res).map((v) => Object.values(v))[0]
-      this.state = { ...res, items }
-    }
     this.lastUpdated = Date.now()
   }
 

@@ -76,7 +76,7 @@ export default class WebRTCManager extends Emitter {
     )
 
     // ask the sync node to subscribe to this topic
-    await iridium.connector.subscribe('/webrtc/announce', {
+    iridium.connector.subscribe('/webrtc/announce', {
       handler: this.onMessage.bind(this),
       sync: true,
     })
