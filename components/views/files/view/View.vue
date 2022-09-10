@@ -30,7 +30,6 @@ export default Vue.extend({
     ...mapState({
       file: (state) => (state as RootState).files.preview,
       downloadList: (state) => (state as RootState).files.downloadList,
-      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
     isDownloading(): boolean {
       return this.file?.name

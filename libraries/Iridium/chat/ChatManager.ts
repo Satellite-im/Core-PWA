@@ -28,7 +28,6 @@ import { Friend } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import { ChatFileUpload } from '~/store/chat/types'
-import createThumbnail from '~/utilities/Thumbnail'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
@@ -79,10 +78,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     iridium.connector?.p2p.on<
       IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
     >('node/message/sync/fetch', this.onSyncFetchResponse.bind(this))
-
-    iridium.connector?.p2p.on<
-      IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
-    >('node/message/sync/validate', this.onSyncValidate.bind(this))
 
     iridium.connector?.subscribe<
       IridiumPubsubMessage<IridiumDecodedPayload<IridiumConversationEvent>>
@@ -203,12 +198,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       payload,
       options,
     )
-  }
-
-  async onSyncValidate(
-    message: IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>,
-  ) {
-    // TODO: decide what we want to do with validation results
   }
 
   async onConversationMessage(
@@ -642,31 +631,31 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.off(`conversations/${id}`, onMessage)
   }
 
-  async addFile(
-    {
-      upload,
-      conversationId,
-    }: { upload: ChatFileUpload; conversationId: string },
-    options?: AddOptions,
-  ): Promise<MessageAttachment | false> {
+  async addFile({
+    upload,
+    conversationId,
+  }: {
+    upload: ChatFileUpload
+    conversationId: string
+  }): Promise<MessageAttachment | null> {
     if (upload.file.size === 0) {
       throw new Error('TODO')
     }
     const safer = await this.upload(upload.file, conversationId)
-    if (!safer) {
-      return false
+    if (!safer || !safer.valid) {
+      return null
     }
-    const thumbnailBlob = await createThumbnail(upload.file, 400)
+
+    const syncPinResult = await iridium.connector?.load(safer.cid)
+
     return {
-      cid: safer.cid,
+      cid: syncPinResult.cid,
       name: upload.file.name,
       size: upload.file.size,
       nsfw: await isNSFW(upload.file),
-      safe: safer.valid,
       type: Object.values(FILE_TYPE).includes(upload.file.type as FILE_TYPE)
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: thumbnailBlob,
     }
   }
 

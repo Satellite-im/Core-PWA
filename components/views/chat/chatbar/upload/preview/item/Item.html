@@ -5,7 +5,7 @@
   <ui-image-container
     v-if="item.thumbnail"
     class="image-container"
-    :nsfw="item.nsfw && blockNsfw"
+    :nsfw="item.nsfw"
   >
     <img :src="item.thumbnail" draggable="false" />
   </ui-image-container>

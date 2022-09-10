@@ -19,6 +19,8 @@ import {
   ConversationMessagePayload,
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
+import notNull from '~/utilities/notNull'
+import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
 
 function typingFunction(conversationId: string) {
   const deb = debounce(() => {
@@ -41,6 +43,7 @@ const Chatbar = Vue.extend({
         thr: ReturnType<typeof throttle>
         deb: ReturnType<typeof debounce>
       } | null,
+      activeUpload: false,
     }
   },
   computed: {
@@ -207,26 +210,25 @@ const Chatbar = Vue.extend({
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
       const conversationId = this.$route.params.id
-
-      const attachments: (MessageAttachment | false)[] = await Promise.all(
-        this.files.map(
-          async (upload, index): Promise<MessageAttachment | false> => {
-            return await iridium.chat.addFile(
-              { upload, conversationId },
-              {
-                progress: (bytes) => {
-                  this.$store.commit('chat/setFileProgress', {
-                    id: conversationId,
-                    index,
-                    progress: Math.floor((bytes / upload.file.size) * 100),
-                  })
-                },
-              },
-            )
-          },
-        ),
+      this.activeUpload = true
+      const attachments = await Promise.all(
+        this.files.map(async (upload, index) => {
+          return await iridium.chat.addFile(
+            { upload, conversationId },
+            // {
+            //   progress: (bytes) => {
+            //     this.$store.commit('chat/setFileProgress', {
+            //       id: conversationId,
+            //       index,
+            //       progress: Math.floor((bytes / upload.file.size) * 100),
+            //     })
+            //   },
+            // },
+          )
+        }),
       )
-      return attachments.filter((a) => a) as MessageAttachment[]
+      this.activeUpload = false
+      return attachments.filter(notNull)
     },
     /**
      * @method sendMessage
@@ -236,10 +238,11 @@ const Chatbar = Vue.extend({
      */
     async sendMessage() {
       if (
-        !this.files.length &&
-        (this.text.length > this.$Config.chat.maxChars ||
-          !this.text.trim().length ||
-          !this.isSubscribed)
+        (!this.files.length &&
+          (this.text.length > this.$Config.chat.maxChars ||
+            !this.text.trim().length ||
+            !this.isSubscribed)) ||
+        this.activeUpload
       ) {
         return
       }
@@ -295,6 +298,7 @@ const Chatbar = Vue.extend({
           return f.kind !== MessagingTypesEnum.STRING
         })
         .map((f) => f.getAsFile())
+        .filter(notNull)
 
       if (files.length && this.$refs.upload) {
         ;(this.$refs.upload as ChatbarUploadRef).handleFile({
@@ -303,18 +307,10 @@ const Chatbar = Vue.extend({
       }
     },
     handleChatTextFromOutside(text: string) {
-      this.$refs.editable?.handleTextFromOutside(text)
-    },
-    /**
-     * @method sendFiles
-     * @description Sends action to Upload the file to textile.
-     */
-    async sendFiles() {
-      // set id in case recipient changes during send
-      const conversationId = this.$route.params.id
-      // send files logic
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/deleteFiles', conversationId)
+      if (!this.$refs.editable) {
+        return
+      }
+      ;(this.$refs.editable as EditableRef).handleTextFromOutside(text)
     },
   },
 })

@@ -2,13 +2,17 @@
   <div class="size-container">
     <ui-image-container
       class="image-container"
-      :nsfw="chatImageOverlay.nsfw && blockNsfw"
+      :nsfw="chatImageOverlay.nsfw"
       @click.stop
     >
-      <img :src="chatImageOverlay.url" />
+      <img :src="chatImageOverlay.dataURL" />
     </ui-image-container>
-    <a :href="chatImageOverlay.url" target="_blank">
-      {{ $t('files.view_original') }}
+    <a
+      :href="chatImageOverlay.dataURL"
+      :download="chatImageOverlay.name"
+      :rel="$t('controls.download')"
+    >
+      {{ $t('controls.download') }}
     </a>
   </div>
 </div>

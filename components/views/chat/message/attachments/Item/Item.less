@@ -3,19 +3,19 @@
   flex-direction: column;
   flex-grow: 0;
   justify-content: stretch;
-  background: @semitransparent-lighter-gradient;
-  box-shadow: @ui-shadow;
   border-radius: 4px;
   overflow: hidden;
 
   .details {
     display: flex;
-    gap: 1rem;
+    gap: 16px;
     align-items: center;
     justify-content: stretch;
-    padding: 0.5rem 1rem;
     width: 300px;
+    padding: 8px 16px;
     overflow: hidden;
+    background: @semitransparent-lighter-gradient;
+    box-shadow: @ui-shadow;
 
     > * {
       flex-shrink: 0;
@@ -24,11 +24,10 @@
     .file-info {
       flex: 1;
       overflow: hidden;
-      cursor: pointer;
     }
-  }
 
-  .download-link {
-    display: none;
+    .download-link {
+      display: none;
+    }
   }
 }

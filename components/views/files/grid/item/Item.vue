@@ -42,7 +42,6 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
     /**
      * @returns {string} if directory, child count. if file, size

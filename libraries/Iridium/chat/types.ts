@@ -12,8 +12,6 @@ export type MessageAttachment = {
   type: FILE_TYPE
   size: number
   nsfw: boolean
-  safe: boolean
-  thumbnail?: File
 }
 
 export type ConversationMessageType =

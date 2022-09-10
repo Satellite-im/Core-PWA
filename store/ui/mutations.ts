@@ -1,14 +1,7 @@
 import { without } from 'lodash'
-import {
-  EnhancerInfo,
-  Position,
-  RecentGlyph,
-  SettingsRoutes,
-  UIState,
-} from './types'
+import { Position, SettingsRoutes, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
-import { Channel } from '~/types/ui/server'
-import { FileMessage } from '~/types/textile/mailbox'
+import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -39,8 +32,11 @@ export default {
   chatbarContent(state: UIState, content: string) {
     state.chatbarContent = content
   },
-  setChatImageOverlay(state: UIState, image: FileMessage | undefined) {
-    state.chatImageOverlay = image
+  setChatImageOverlay(
+    state: UIState,
+    file?: MessageAttachment & { dataURL: string },
+  ) {
+    state.chatImageOverlay = file
   },
   toggleEnhancers(state: UIState, options: EnhancerInfo) {
     state.enhancers = {

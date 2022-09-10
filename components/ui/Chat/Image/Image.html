@@ -4,19 +4,22 @@
       class="image-placeholder-img"
       data-cy="chat-image-placeholder"
       :src="placeholderSrc"
-      :alt="placeholderText"
+      alt=""
     />
-    <figcaption
-      class="image-placeholder-caption"
-      data-cy="image-placeholder-caption"
-    >
-      {{placeholderText}}
+    <figcaption data-cy="image-placeholder-caption">
+      <TypographyText font="heading" size="xs">
+        {{ $t('errors.chat.failed_load') }}
+      </TypographyText>
     </figcaption>
   </figure>
-  <ui-image-container v-else class="image-container" :nsfw="image.nsfw">
+  <ui-image-container
+    v-else-if="dataURL"
+    class="image-container"
+    :nsfw="attachment.nsfw"
+  >
     <img
-      :src="image.thumbnail"
-      @click="clickHandler"
+      :src="dataURL"
+      @click="imageClick"
       @error="onImageError"
       data-cy="chat-image"
     />

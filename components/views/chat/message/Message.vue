@@ -1,4 +1,4 @@
-<template src="./Message.html" />
+<template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
