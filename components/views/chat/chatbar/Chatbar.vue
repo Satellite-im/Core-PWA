@@ -43,6 +43,7 @@ const Chatbar = Vue.extend({
         thr: ReturnType<typeof throttle>
         deb: ReturnType<typeof debounce>
       } | null,
+      activeUpload: false,
     }
   },
   computed: {
@@ -209,7 +210,7 @@ const Chatbar = Vue.extend({
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
       const conversationId = this.$route.params.id
-
+      this.activeUpload = true
       const attachments = await Promise.all(
         this.files.map(async (upload, index) => {
           return await iridium.chat.addFile(
@@ -226,6 +227,7 @@ const Chatbar = Vue.extend({
           )
         }),
       )
+      this.activeUpload = false
       return attachments.filter(notNull)
     },
     /**
@@ -236,10 +238,11 @@ const Chatbar = Vue.extend({
      */
     async sendMessage() {
       if (
-        !this.files.length &&
-        (this.text.length > this.$Config.chat.maxChars ||
-          !this.text.trim().length ||
-          !this.isSubscribed)
+        (!this.files.length &&
+          (this.text.length > this.$Config.chat.maxChars ||
+            !this.text.trim().length ||
+            !this.isSubscribed)) ||
+        this.activeUpload
       ) {
         return
       }
