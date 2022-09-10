@@ -8,12 +8,11 @@ import {
   IridiumDocument,
 } from '@satellite-im/iridium'
 import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
-import type { AddOptions, AddResult } from 'ipfs-core-types/root'
-import type { IPFS } from 'ipfs-core-types'
+import type { AddOptions } from 'ipfs-core-types/root'
 import { CID } from 'multiformats'
 import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
-import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/agent'
+import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
 import {
   ChatError,
@@ -93,7 +92,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `requesting sync subscription to ${topic}`,
       )
       // ask the sync node to subscribe to this topic
-      await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
+      iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
         sync: {
           offline: true,
         },
@@ -405,7 +404,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversations/${id}`, conversation)
 
     // ask the sync node to subscribe to this topic
-    await iridium.connector?.subscribe(`/chat/conversations/${id}`, {
+    iridium.connector?.subscribe(`/chat/conversations/${id}`, {
       sync: { offline: true },
       handler: this.onConversationMessage.bind(this, id),
     })
