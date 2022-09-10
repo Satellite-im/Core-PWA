@@ -22,14 +22,14 @@
       font="heading"
       weight="bold"
       data-cy="sidebar-user-name"
-      :color="hasUnreadMessages ? 'light' : 'dark'"
+      :color="!!unreadCount ? 'light' : 'dark'"
     >
       {{ conversation.name }}
     </TypographyText>
     <TypographyText
       size="sm"
-      :color="hasUnreadMessages ? 'light' : 'dark'"
-      :weight="hasUnreadMessages ? 'bold' : ''"
+      :color="!!unreadCount ? 'light' : 'dark'"
+      :weight="!!unreadCount ? 'bold' : ''"
       data-cy="sidebar-user-name"
     >
       <div
@@ -44,7 +44,7 @@
     <TypographyText v-if="messages.length" color="dark" size="xs">
       {{ timestamp }}
     </TypographyText>
-    <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->
+    <TypographyTag v-if="!!unreadCount" :text="unreadCount" />
   </div>
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
