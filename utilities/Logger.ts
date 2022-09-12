@@ -19,12 +19,13 @@ export type LogLevelEnum = keyof typeof colors
  */
 export default class Logger {
   public level: string
-
+  public lastTime: number
   constructor(
     level: LogLevelEnum = process.env.NODE_ENV === 'production'
       ? 'prod'
       : 'debug',
   ) {
+    this.lastTime = Date.now()
     this.level = level
   }
 
@@ -47,16 +48,18 @@ export default class Logger {
       return
     }
     const hasData = Object.keys(data).length >= 1
-
+    const newTime = Date.now() - this.lastTime
     ;(hasData ? console.groupCollapsed : console.log)(
-      `%c${tag}%c${desc}`,
+      `${newTime}  %c${tag}%c${desc}`,
       `color:${colors[level][2]};background:${colors[level][0]};border-radius:2px 0 0 2px;padding:0.1rem 0.5rem;border-right:none;`,
       `color:${colors[level][2]};background:${colors[level][1]};border-radius:0 2px 2px 0;padding: 0.1rem 0.5rem;border-left: none;`,
     )
     if (hasData) {
       console.log(data)
+
       console.groupEnd()
     }
+    this.lastTime = Date.now()
   }
 
   /**

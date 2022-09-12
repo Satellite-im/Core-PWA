@@ -30,24 +30,15 @@
   }
 
   .user-chat-details {
+    display: flex;
+    flex-direction: column;
     align-self: flex-start;
+    gap: 4px;
 
-    .is-text {
-      margin: 0;
-      line-height: 2;
-      padding: 0;
-      font-size: @micro-text-size;
-      &:extend(.font-muted);
+    .tag {
+      align-self: flex-end;
+      min-width: 16px;
     }
-  }
-
-  .tag {
-    height: 18px;
-    padding: 0.35rem;
-    font-weight: bold;
-    align-self: flex-end;
-    float: right;
-    margin: 0.5rem 0 0 0;
   }
 
   .user-loader {

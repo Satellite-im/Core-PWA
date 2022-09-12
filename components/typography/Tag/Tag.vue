@@ -1,7 +1,7 @@
 <template>
   <TypographyText
     class="tag"
-    :class="{ inverted: inverted }"
+    :class="{ inverted, small }"
     color="white"
     size="xs"
   >
@@ -21,6 +21,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    small: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
@@ -36,6 +40,10 @@ export default Vue.extend({
   &.inverted {
     background: @semitransparent-dark-gradient;
     box-shadow: none;
+  }
+
+  &.small {
+    padding: 2px 6px;
   }
 }
 </style>
