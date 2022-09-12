@@ -27,9 +27,9 @@
     <div class="body">
       <MessageMarkdown
         v-if="message.body"
-        :text="wrapEmoji(markdownToHtml(message.body))"
+        :text="markdownToHtml"
         class="markdown"
-        :class="{ bigmoji: containsOnlyEmoji(message.body) }"
+        :class="{ bigmoji: containsOnlyEmoji }"
         data-cy="chat-message"
       />
       <MessageAttachments
