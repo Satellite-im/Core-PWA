@@ -96,6 +96,13 @@ export default Vue.extend({
       }
       return messages.reverse()
     },
+    isLastChatItemAuthor(): boolean {
+      const lastItem = this.chatItems.at(0)
+      if (!lastItem || !iridium.connector) {
+        return false
+      }
+      return lastItem.message.from === iridium.connector.id
+    },
     noMore(): boolean {
       return (
         this.numMessages >=
@@ -118,8 +125,8 @@ export default Vue.extend({
       this.isLockedToBottom = container.scrollTop >= 0
     })
     this.mutationObserver = new MutationObserver(() => {
-      if (this.isLockedToBottom) {
-        container.scrollTop = 0
+      if (this.isLockedToBottom || this.isLastChatItemAuthor) {
+        container.scrollTo(0, 0)
       }
     })
     this.mutationObserver.observe(container, {
