@@ -15,6 +15,7 @@
     "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "test": "jest --silent",
+    "testdev": "jest",
     "summary": "jest --silent --coverage --coverageReporters='text-summary'",
     "cy:run": "cypress run --browser chrome headless",
     "cy:first": "xvfb-run -a cypress run --config-file cypress-first.config.js --browser chrome",

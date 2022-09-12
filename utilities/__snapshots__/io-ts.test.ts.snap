@@ -59,3 +59,36 @@ Type {
   "validate": [Function],
 }
 `;
+
+exports[`Test io-ts 1 1`] = `
+Object {
+  "_tag": "Left",
+  "left": Array [
+    Object {
+      "context": Array [
+        Object {
+          "actual": Object {
+            "france": "Jean",
+            "india": "Amartya",
+            "uk": "John",
+          },
+          "key": "",
+          "type": Type {
+            "decode": [Function],
+            "encode": [Function],
+            "is": [Function],
+            "name": "Names",
+            "validate": [Function],
+          },
+        },
+      ],
+      "message": undefined,
+      "value": Object {
+        "france": "Jean",
+        "india": "Amartya",
+        "uk": "John",
+      },
+    },
+  ],
+}
+`;
