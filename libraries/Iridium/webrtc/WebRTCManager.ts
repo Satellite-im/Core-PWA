@@ -13,6 +13,9 @@ import logger from '~/plugins/local/logger'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { User } from '~/libraries/Iridium/users/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import Peer from '~/libraries/WebRTC/Peer'
+import { Config } from '~/config'
+import { Wire } from '~/libraries/WebRTC/Wire'
 
 const $Sounds = new SoundManager()
 
@@ -44,6 +47,10 @@ type WebRTCTypingMessage = {
   type: 'typing'
   conversationId: string
 }
+type WebRTCSignalMessage = {
+  type: 'signal'
+  conversationId: string
+}
 
 export default class WebRTCManager extends Emitter {
   public state: WebRTCState
@@ -53,6 +60,7 @@ export default class WebRTCManager extends Emitter {
   constructor() {
     super()
     this.state = initialState
+    this.wire = new Wire()
   }
 
   set streamConstraints(constraints: MediaStreamConstraints) {
@@ -75,12 +83,22 @@ export default class WebRTCManager extends Emitter {
       'p2p ready, initializing webrtc...',
     )
 
+    // Subscribe to wire messages
+    // this.wire?.on('bus:message', (type, message) => {
+    //   console.log('MANUEL bus message', type, message)
+    // })
+
+    // Initialize the Wire
+    this.wire.init()
+
+    await this.wire.setupAnnounce()
+
     // ask the sync node to subscribe to this topic
-    iridium.connector.subscribe('/webrtc/announce', {
-      handler: this.onMessage.bind(this),
-      sync: true,
-    })
-    await this.setupAnnounce()
+    // await iridium.connector.subscribe('/webrtc/announce', {
+    //   handler: this.onMessage.bind(this),
+    //   sync: true,
+    // })
+    // await this.setupAnnounce()
 
     setInterval(() => {
       if (this.state.activeCall) {
@@ -120,7 +138,11 @@ export default class WebRTCManager extends Emitter {
         },
         {
           encrypt: {
-            recipients: friends,
+            recipients: friends.filter(
+              (friend) =>
+                this.rtcConnections[friend]?.connected &&
+                !this.isTrying[friend],
+            ),
           },
         },
       )
@@ -135,7 +157,10 @@ export default class WebRTCManager extends Emitter {
     payload,
   }: IridiumPubsubMessage<
     IridiumDecodedPayload<
-      WebRTCCallMessage | WebRTCAnnounceMessage | WebRTCTypingMessage
+      | WebRTCCallMessage
+      | WebRTCAnnounceMessage
+      | WebRTCTypingMessage
+      | WebRTCSignalMessage
     >
   >) {
     const { type } = payload.body
@@ -218,6 +243,13 @@ export default class WebRTCManager extends Emitter {
 
     iridium.users.setUserStatus(requestFriend.did, payload.status || 'online')
 
+    // const peer = new Peer('', requestFriend.did, {
+    //   initiator: true,
+    //   config: { iceServers: Config.webrtc.iceServers },
+    // })
+
+    // this.rtcConnections[requestFriend.did] = peer
+
     if (payload.status === 'offline') {
       Object.values(this.state.calls).forEach((call) => {
         if (call.peers[from]) {
@@ -227,6 +259,20 @@ export default class WebRTCManager extends Emitter {
       })
     }
   }
+
+  // protected _bindPeerListeners(peer: CallPeer) {
+  //   peer.on('signal', this._onSignal.bind(this, peer))
+  //   peer.on('connect', this._onConnect.bind(this, peer))
+  //   peer.on('error', this._onError.bind(this, peer))
+  //   peer.on('close', this._onClose.bind(this, peer))
+  // }
+
+  // protected _unbindPeerListeners(peer: CallPeer) {
+  //   peer.off('signal', this._onSignal)
+  //   peer.off('connect', this._onConnect)
+  //   peer.off('error', this._onError)
+  //   peer.off('close', this._onClose)
+  // }
 
   // todo - refactor to accept multiple recipients for group calls
   public async call({
@@ -361,10 +407,6 @@ export default class WebRTCManager extends Emitter {
       logger.error('webrtc', 'call - connector.id not found')
       return
     }
-
-    // if (!$WebRTC.initialized && iridium.id) {
-    //   $WebRTC.init(iridium.id)
-    // }
 
     const usedCallId = callId === iridium.id ? did : callId
 
