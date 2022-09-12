@@ -30,9 +30,13 @@
       :label="$t('pages.unlock.store_pin')"
     />
     <br />
-    <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
+    <button
+      v-if="step === 'login'"
+      class="delete-link font-size-sm"
+      @click="clearAndReset"
+    >
       {{ $t('pages.unlock.delete_account_label') }}
-    </a>
+    </button>
     <!-- <InteractablesRealm /> -->
     <TypographyText v-if="!isChrome" color="danger" style="max-width: 600px">
       {{ $t('pages.unlock.browser_warning') }}
