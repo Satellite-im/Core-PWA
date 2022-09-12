@@ -10,6 +10,7 @@ import {
 import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import type { AddOptions } from 'ipfs-core-types/root'
 import { CID } from 'multiformats'
+import { sha256 } from 'multiformats/hashes/sha2'
 import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
@@ -717,20 +718,25 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions: {},
       attachments: payload.attachments,
     }
-    const messageID = (
-      await iridium.connector.store(partial, {
-        syncPin: true,
+
+    const bytes = json.encode(partial)
+    const payloadHash = await sha256.digest(bytes)
+    const tempCid = CID.create(1, json.code, payloadHash)
+    await iridium.connector.publish(
+      `/chat/conversations/${conversationId}`,
+      {
+        type: 'chat/message',
+        cid: tempCid,
+      },
+      {
         encrypt: conversation?.participants
-          ? { recipients: conversation?.participants }
+          ? { recipients: conversation.participants }
           : undefined,
-      })
-    ).toString() as string
-    const message: ConversationMessage = {
+      },
+    )
+    const tempMessage: ConversationMessage = {
       ...partial,
-      id: messageID,
-    }
-    if (message.id === undefined) {
-      throw new Error('message not sent, failed to store')
+      id: tempCid.toString() as string,
     }
 
     this.state.conversations = {
@@ -739,7 +745,34 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ...this.state.conversations[conversationId],
         message: {
           ...this.state.conversations?.[conversationId]?.message,
-          [message.id]: message,
+          [tempMessage.id]: tempMessage,
+        },
+        lastReadAt: Date.now(),
+      },
+    }
+    const messageID = (
+      await iridium.connector.store(partial, {
+        syncPin: true,
+        encrypt: conversation?.participants
+          ? { recipients: conversation?.participants }
+          : undefined,
+      })
+    ).toString() as string
+    console.log(messageID, tempMessage)
+    const message: ConversationMessage = {
+      ...partial,
+      id: messageID,
+    }
+    if (message.id === undefined) {
+      throw new Error('message not sent, failed to store')
+    }
+    this.state.conversations = {
+      ...this.state.conversations,
+      [conversationId]: {
+        ...this.state.conversations[conversationId],
+        message: {
+          ...this.state.conversations?.[conversationId]?.message,
+          [tempMessage.id]: message,
         },
         lastReadAt: Date.now(),
       },
