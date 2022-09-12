@@ -29,6 +29,8 @@ export default Vue.extend({
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
       isBlurred: false,
+      mutationObserver: null as MutationObserver | null,
+      isLockedToBottom: true,
     }
   },
   computed: {
@@ -101,13 +103,33 @@ export default Vue.extend({
       )
     },
   },
-  async mounted() {
+  mounted() {
     window.addEventListener('blur', async () => {
       this.isBlurred = true
     })
     window.addEventListener('focus', async () => {
       this.isBlurred = false
     })
+    const container = this.$refs.container as HTMLElement
+    if (!container) {
+      return
+    }
+    container.addEventListener('scroll', () => {
+      this.isLockedToBottom = container.scrollTop >= 0
+    })
+    this.mutationObserver = new MutationObserver(() => {
+      if (this.isLockedToBottom) {
+        container.scrollTop = 0
+      }
+    })
+    this.mutationObserver.observe(container, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    })
+  },
+  beforeDestroy() {
+    this.mutationObserver?.disconnect()
   },
   methods: {
     loadMore() {
