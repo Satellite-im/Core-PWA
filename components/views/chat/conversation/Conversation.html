@@ -1,4 +1,11 @@
 <div class="conversation" ref="container">
+  <UiChatEncrypted />
+  <UiChatInfiniteScroll
+    :isLoading="isLoadingMore"
+    :noMore="noMore"
+    @loadMore="loadMore"
+  />
+  <UiLoadersMessage :count="3" v-if="false" />
   <div class="messages">
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText
@@ -17,11 +24,4 @@
       />
     </template>
   </div>
-  <UiChatEncrypted />
-  <UiChatInfiniteScroll
-    :isLoading="isLoadingMore"
-    :noMore="noMore"
-    @loadMore="loadMore"
-  />
-  <UiLoadersMessage :count="3" v-if="false" />
 </div>

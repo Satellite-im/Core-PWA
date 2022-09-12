@@ -1,4 +1,8 @@
-<UiContextMenu class="chat-message-container" :items="contextMenuValues">
+<UiContextMenu
+  class="chat-message-container"
+  :class="{ 'show-header': showHeader }"
+  :items="contextMenuValues"
+>
   <MessageNotice v-if="isNotice" :message="message" />
   <div
     v-else

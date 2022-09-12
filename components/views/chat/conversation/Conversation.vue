@@ -29,6 +29,8 @@ export default Vue.extend({
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
       isBlurred: false,
+      mutationObserver: null as MutationObserver | null,
+      isLockedToBottom: true,
     }
   },
   computed: {
@@ -94,6 +96,13 @@ export default Vue.extend({
       }
       return messages
     },
+    isLastChatItemAuthor(): boolean {
+      const lastItem = this.chatItems.at(-1)
+      if (!lastItem || !iridium.connector) {
+        return false
+      }
+      return lastItem.message.from === iridium.connector.id
+    },
     noMore(): boolean {
       return (
         this.numMessages >=
@@ -101,13 +110,39 @@ export default Vue.extend({
       )
     },
   },
-  async mounted() {
+  mounted() {
     window.addEventListener('blur', async () => {
       this.isBlurred = true
     })
     window.addEventListener('focus', async () => {
       this.isBlurred = false
     })
+    const container = this.$refs.container as HTMLElement
+    if (!container) {
+      return
+    }
+    container.addEventListener('scroll', () => {
+      this.isLockedToBottom =
+        container.scrollTop === container.scrollHeight - container.clientHeight
+    })
+    const scrollToBottom = () => {
+      const y = container.scrollHeight - container.clientHeight
+      container.scrollTo(0, y)
+    }
+    scrollToBottom()
+    this.mutationObserver = new MutationObserver(() => {
+      if (this.isLockedToBottom || this.isLastChatItemAuthor) {
+        scrollToBottom()
+      }
+    })
+    this.mutationObserver.observe(container, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    })
+  },
+  beforeDestroy() {
+    this.mutationObserver?.disconnect()
   },
   methods: {
     loadMore() {

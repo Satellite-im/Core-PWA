@@ -1,6 +1,6 @@
 .conversation {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   flex: 1;
   overflow-y: auto;
   justify-content: space-between;
@@ -13,6 +13,12 @@
     margin: 0 @normal-spacing;
     padding-bottom: @normal-spacing;
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+
+    .caret_divider + .chat-message-container.show-header {
+      margin-top: 0;
+    }
   }
 
   &-infiniteScroll.is-reversed {
