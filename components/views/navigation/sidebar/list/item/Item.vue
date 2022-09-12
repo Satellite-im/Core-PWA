@@ -13,6 +13,7 @@ import {
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { User, UserStatus } from '~/libraries/Iridium/users/types'
+import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 
 export default Vue.extend({
   components: {
@@ -244,8 +245,7 @@ export default Vue.extend({
      * @param str String to check against
      */
     containsOnlyEmoji(str: string): boolean {
-      // return str.match(this.$Config.regex.isEmoji) !== null
-      return false
+      return onlyHasEmoji(str)
     },
     /**
      * @description set timestamp

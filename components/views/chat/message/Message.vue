@@ -16,6 +16,7 @@ import {
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
+import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 
 export default Vue.extend({
   components: {
@@ -198,7 +199,7 @@ export default Vue.extend({
      * @param str String to check against
      */
     containsOnlyEmoji(str: string): boolean {
-      return str.match(this.$Config.regex.isEmoji) !== null
+      return onlyHasEmoji(str)
     },
     /**
      * @method copyMessage
