@@ -141,7 +141,8 @@ export const Config = {
     invalid: /[/:"*?<>|~#%&+{}\\]+/,
     // Regex to check if string contains only emoji's.
     isEmoji:
-      /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
+      // /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
+      /^(\u00A9|\u00AE|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
     emojiWrapper: /[\p{Emoji_Presentation}\u200D]+/gu,
     // Check for link

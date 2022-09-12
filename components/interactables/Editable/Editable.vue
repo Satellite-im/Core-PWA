@@ -7,6 +7,9 @@
       autocapitalize="off"
       class="editable-input"
       data-cy="editable-input"
+      @compositionupdate="handleCompositionChange"
+      @compositionstart="handleCompositionChange"
+      @compositionend="handleCompositionChange"
       @selectstart="onSelectStart"
       @input="onInput"
       @keydown="handleInputKeydown"
@@ -70,6 +73,7 @@ const Editable = Vue.extend({
     return {
       currentPosition: 0,
       currentRange: null as Range | null,
+      onComposition: false,
     }
   },
   watch: {
@@ -178,6 +182,8 @@ const Editable = Vue.extend({
      * @param {KeyboardEvent} e The keydown event
      */
     handleInputKeydown(e: KeyboardEvent) {
+      if (this.onComposition) return
+
       switch (e.key) {
         case KeybindingEnum.BACKSPACE:
         case KeybindingEnum.DELETE:
@@ -219,11 +225,26 @@ const Editable = Vue.extend({
       this.$emit('drop', e)
     },
     /**
+     * @method handleCompositionChange
+     * @description Handles the composition event
+     * @param {InputEvent} e The input event
+     */
+    handleCompositionChange(e: InputEvent) {
+      if (e.type === 'compositionend') {
+        this.onComposition = false
+        this.onInput(e)
+      } else if (!this.onComposition) {
+        this.onComposition = true
+      }
+    },
+    /**
      * @method onInput
      * @description Handles the input event and emits same event to parent
      * @param {KeyboardEvent} e The input event
      */
     onInput(e: InputEvent) {
+      if (this.onComposition) return
+
       if (e.inputType === 'historyUndo') {
         this.undo()
         return
@@ -302,9 +323,11 @@ const Editable = Vue.extend({
     },
   },
 })
+
 export type EditableRef = InstanceType<typeof Editable>
 export default Editable
 </script>
+
 <style lang="less">
 // non-Retina-specific stuff here
 @media not screen and (-webkit-min-device-pixel-ratio: 2),
