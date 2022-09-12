@@ -18,7 +18,7 @@ import logger from '~/plugins/local/logger'
 export type IridiumUserEvent = {
   to?: IridiumPeerIdentifier
   name?: string
-  status: UserStatus | 'changed' | 'removed'
+  status: UserStatus | 'removed'
   user: User
   data?: any
   at: number
@@ -165,7 +165,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
         name: user.name,
         status: this.ephemeral.status[user.did],
       })
-      this.setUserStatus(user.did, (status || 'offline') as UserStatus)
+      this.setUserStatus(user.did, status)
       await this.setUser(from, {
         ...localUser,
         name: user.name || localUser.name,

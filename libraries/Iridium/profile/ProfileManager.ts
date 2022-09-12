@@ -80,7 +80,7 @@ export default class IridiumProfile extends Emitter {
     if (!this.state || !iridium.id) return
     // tell our peers via user announce
     await iridium.users.send({
-      status: 'changed',
+      status: 'online',
       user: {
         did: iridium.id,
         name: this.state.name,
