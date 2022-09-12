@@ -417,6 +417,10 @@ export class Call extends Emitter<CallEventListeners> {
     const screenTrack = screenStream.getVideoTracks()[0]
     screenTrack.enabled = true
 
+    screenTrack.addEventListener('ended', (event) => {
+      this.mute({ kind: 'screen', did: iridium.id })
+    })
+
     this.screenStreams[iridium.id] = screenStream.id
     this.streams[iridium.id].screen = screenStream
     this.tracks[iridium.id].add(screenTrack)
