@@ -94,7 +94,7 @@ export default Vue.extend({
           maxTime || currentTimestamp,
         )
       }
-      return messages
+      return messages.reverse()
     },
     noMore(): boolean {
       return (
