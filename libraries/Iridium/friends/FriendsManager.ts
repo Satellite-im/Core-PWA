@@ -58,60 +58,72 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.fetch()
     logger.log(this.loggerTag, 'friends state loaded', this.state)
 
-    logger.info(this.loggerTag, 'subscribing to announce topic')
-    iridium.connector.subscribe<IridiumFriendPubsub>('/friends/announce', {
-      handler: this.onFriendsAnnounce.bind(this),
-      sync: { offline: true },
-    })
     // connect to all friends
-    logger.info(this.loggerTag, 'connecting to friends', {
-      friends: this.state.friends,
-    })
-    await Promise.all(
-      this.state.friends.map(async (friendDid) => {
-        await iridium.users.searchPeer(friendDid)
-        if (!iridium.connector) return
-        if (!iridium.connector.p2p.hasPeer(friendDid)) {
-          logger.info(
-            this.loggerTag,
-            'registering friend as peer with iridium:',
-            { friendDid },
-          )
-          await iridium.connector.p2p.addPeer({ did: friendDid, type: 'peer' })
-        }
-        if (!iridium.users.hasUser(friendDid)) {
-          await iridium.users.searchPeer(friendDid)
-        }
-      }),
-    )
+    await Promise.all([
+      async () => {
+        logger.info(this.loggerTag, 'subscribing to announce topic')
 
-    logger.info(
-      this.loggerTag,
-      'connecting to requested friends',
-      this.state.requests,
-    )
+        await iridium.connector.subscribe<IridiumFriendPubsub>(
+          '/friends/announce',
+          {
+            handler: this.onFriendsAnnounce.bind(this),
+            sync: { offline: true },
+          },
+        )
+      },
+      async () => {
+        logger.info(this.loggerTag, 'connecting to friends', {
+          friends: this.state.friends,
+        })
 
-    await Promise.all(
-      Object.values(this.state.requests)
-        .filter((request) => request.incoming)
-        .map(async (request) => {
-          if (!iridium.connector) return
-          if (!iridium.connector.p2p.hasPeer(request.user.did)) {
-            logger.info(
-              this.loggerTag,
-              'registering requested friend as peer with iridium',
-              request,
-            )
-            await iridium.connector.p2p.addPeer({
-              did: request.user.did,
-              type: 'peer',
-            })
-          }
-          if (!iridium.users.hasUser(request.user.did)) {
-            await iridium.users.searchPeer(request.user.did)
-          }
-        }),
-    )
+        await Promise.all(
+          this.state.friends.map(async (friendDid) => {
+            await iridium.users.searchPeer(friendDid)
+            if (!iridium.connector) return
+            if (!iridium.connector.p2p.hasPeer(friendDid)) {
+              logger.info(
+                this.loggerTag,
+                'registering friend as peer with iridium:',
+                { friendDid },
+              )
+              await iridium.connector.p2p.addPeer({
+                did: friendDid,
+                type: 'peer',
+              })
+            }
+            if (!iridium.users.hasUser(friendDid)) {
+              await iridium.users.searchPeer(friendDid)
+            }
+          }),
+        )
+      },
+      async () => {
+        logger.info(this.loggerTag, 'connecting to friends', {
+          friends: this.state.friends,
+        })
+        await Promise.all(
+          Object.values(this.state.requests)
+            .filter((request) => request.incoming)
+            .map(async (request) => {
+              if (!iridium.connector) return
+              if (!iridium.connector.p2p.hasPeer(request.user.did)) {
+                logger.info(
+                  this.loggerTag,
+                  'registering requested friend as peer with iridium',
+                  request,
+                )
+                await iridium.connector.p2p.addPeer({
+                  did: request.user.did,
+                  type: 'peer',
+                })
+              }
+              if (!iridium.users.hasUser(request.user.did)) {
+                await iridium.users.searchPeer(request.user.did)
+              }
+            }),
+        )
+      },
+    ])
 
     logger.info(this.loggerTag, 'initialized', this)
     this.emit('ready', {})
