@@ -31,3 +31,18 @@ describe('IoTS.fromEnum', () => {
     expect(result).toMatchSnapshot()
   })
 })
+
+describe('Test io-ts', () => {
+  test('1', () => {
+    type Country = 'uk' | 'france' | 'india'
+
+    const argument: Record<Country, string> = {
+      uk: 'John',
+      france: 'Jean',
+      india: 'Amartya',
+    }
+    const func = IoTS.fromEnum('Names', argument)
+    const result = func.decode(argument)
+    expect(result).toMatchSnapshot()
+  })
+})
