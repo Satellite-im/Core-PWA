@@ -27,7 +27,13 @@
           height="18"
           :mask="`url(#mask-state-${status})`"
         />
-        <foreignObject v-if="isTyping" x="3" y="9" width="25" height="6">
+        <foreignObject
+          v-if="status === 'typing'"
+          x="3"
+          y="9"
+          width="25"
+          height="6"
+        >
           <div id="typing-loader-container">
             <div id="typing-loader" />
           </div>
