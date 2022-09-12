@@ -11,7 +11,13 @@ export type User = {
   about?: string
 }
 
-export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'
+export type UserStatus =
+  | 'online'
+  | 'offline'
+  | 'busy'
+  | 'away'
+  | 'mobile'
+  | 'typing'
 
 export const UsersError = {
   NETWORK_ERROR: 'errors.users.network',

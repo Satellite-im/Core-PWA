@@ -10,7 +10,7 @@
         y="0"
         width="40"
         height="40"
-        :mask="`url(#circle-mask)`"
+        :mask="`url(#${finalMask}-mask)`"
       >
         <UiCircle
           :type="imageSource ? 'image' : 'random'"
@@ -27,13 +27,7 @@
           height="18"
           :mask="`url(#mask-state-${status})`"
         />
-        <foreignObject
-          v-if="status === 'typing'"
-          x="3"
-          y="9"
-          width="25"
-          height="6"
-        >
+        <foreignObject v-if="isTyping" x="3" y="9" width="25" height="6">
           <div id="typing-loader-container">
             <div id="typing-loader" />
           </div>
@@ -53,6 +47,10 @@ export default Vue.extend({
     user: {
       type: Object as PropType<User>,
       required: true,
+    },
+    isTyping: {
+      type: Boolean,
+      default: false,
     },
     size: {
       type: Number,
@@ -75,16 +73,29 @@ export default Vue.extend({
   },
   computed: {
     status(): UserStatus {
-      return this.user.did === iridium.id
-        ? 'online'
-        : iridium.users.ephemeral.status[this.user.did]
+      if (this.isTyping) {
+        return 'typing'
+      }
+      if (this.user.did === iridium.id) {
+        return 'online'
+      }
+      return iridium.users.ephemeral.status[this.user.did]
     },
-    isTyping(): boolean {
-      return this.conversationId
-        ? iridium.chat.ephemeral.typing[this.conversationId]?.includes(
-            this.user?.did,
-          )
-        : false
+    finalMask(): string {
+      if (this.isTyping) {
+        return 'typing'
+      }
+
+      const state = this.status
+      if (
+        state === 'online' ||
+        state === 'offline' ||
+        state === 'busy' ||
+        state === 'away'
+      ) {
+        return 'circle'
+      }
+      return state
     },
     imageSource(): string {
       return this.user?.photoHash

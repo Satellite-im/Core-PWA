@@ -33,6 +33,7 @@ export default Vue.extend({
       conversations: iridium.chat.state.conversations,
       statuses: iridium.users.ephemeral.status,
       users: iridium.users.state,
+      ephemeral: iridium.chat.ephemeral,
     }
   },
   computed: {
@@ -67,10 +68,9 @@ export default Vue.extend({
       if (!this.user) return false
 
       return (
-        !!this.conversation &&
-        (iridium.chat.ephemeral.typing[this.conversation.id] || []).includes(
-          this.user.did,
-        )
+        (this.conversation.id &&
+          this.ephemeral.typing[this.conversation.id][this.user.did]) ||
+        false
       )
     },
     contextMenuValues(): ContextMenuItem[] {
