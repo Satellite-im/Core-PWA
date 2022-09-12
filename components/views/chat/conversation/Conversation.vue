@@ -53,37 +53,37 @@ export default Vue.extend({
       const messages = this.messages
         .filter((message) => !message.replyToId)
         .slice(-this.numMessages)
-        .map((message, index) => {
-          const prevMessage = index >= 0 ? this.messages[index - 1] : undefined
-          const isSameAuthor = prevMessage
-            ? message.from === prevMessage.from
-            : false
-          const timeDiff = prevMessage ? message.at - prevMessage.at : 0
-          const isNextDay = prevMessage
-            ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
-            : false
-          const lastReadAt = this.conversation.lastReadAt
-          const isFirstUnreadMessage =
-            message.at > lastReadAt &&
-            (prevMessage ? prevMessage.at <= lastReadAt : true)
-          const replies = this.messages.filter(
-            (replyMessage) => replyMessage.replyToId === message.id,
-          )
-          maxTime = Math.max(maxTime, message.at)
-          const showHeader =
-            !isSameAuthor ||
-            (prevMessage && conversationMessageIsNotice(prevMessage)) ||
-            false
+      const items = messages.map((message, index) => {
+        const prevMessage = index >= 0 ? messages[index - 1] : undefined
+        const isSameAuthor = prevMessage
+          ? message.from === prevMessage.from
+          : false
+        const timeDiff = prevMessage ? message.at - prevMessage.at : 0
+        const isNextDay = prevMessage
+          ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
+          : false
+        const lastReadAt = this.conversation.lastReadAt
+        const isFirstUnreadMessage =
+          message.at > lastReadAt &&
+          (prevMessage ? prevMessage.at <= lastReadAt : true)
+        const replies = messages.filter(
+          (replyMessage) => replyMessage.replyToId === message.id,
+        )
+        maxTime = Math.max(maxTime, message.at)
+        const showHeader =
+          !isSameAuthor ||
+          (prevMessage && conversationMessageIsNotice(prevMessage)) ||
+          false
 
-          return {
-            message,
-            showHeader,
-            timeDiff,
-            isNextDay,
-            isFirstUnreadMessage,
-            replies,
-          }
-        })
+        return {
+          message,
+          showHeader,
+          timeDiff,
+          isNextDay,
+          isFirstUnreadMessage,
+          replies,
+        }
+      })
       if (
         (!maxTime || maxTime > this.conversation.lastReadAt) &&
         !this.isBlurred
@@ -94,7 +94,7 @@ export default Vue.extend({
           maxTime || currentTimestamp,
         )
       }
-      return messages
+      return items
     },
     isLastChatItemAuthor(): boolean {
       const lastItem = this.chatItems.at(-1)
