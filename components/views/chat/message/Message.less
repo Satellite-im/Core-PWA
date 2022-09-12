@@ -8,6 +8,12 @@
   }
 }
 
+.chat-message-container {
+  &.show-header {
+    margin-top: @normal-spacing;
+  }
+}
+
 .chat-message {
   display: grid;
   text-align: left;
@@ -46,7 +52,6 @@
       'avatar body body'
       'avatar footer footer';
     grid-template-columns: 52px auto 1fr;
-    margin-top: @normal-spacing;
 
     .timestamp {
       margin-left: @light-spacing;

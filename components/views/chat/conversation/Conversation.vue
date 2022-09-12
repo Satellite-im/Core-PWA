@@ -94,10 +94,10 @@ export default Vue.extend({
           maxTime || currentTimestamp,
         )
       }
-      return messages.reverse()
+      return messages
     },
     isLastChatItemAuthor(): boolean {
-      const lastItem = this.chatItems.at(0)
+      const lastItem = this.chatItems.at(-1)
       if (!lastItem || !iridium.connector) {
         return false
       }
@@ -122,11 +122,17 @@ export default Vue.extend({
       return
     }
     container.addEventListener('scroll', () => {
-      this.isLockedToBottom = container.scrollTop >= 0
+      this.isLockedToBottom =
+        container.scrollTop === container.scrollHeight - container.clientHeight
     })
+    const scrollToBottom = () => {
+      const y = container.scrollHeight - container.clientHeight
+      container.scrollTo(0, y)
+    }
+    scrollToBottom()
     this.mutationObserver = new MutationObserver(() => {
       if (this.isLockedToBottom || this.isLastChatItemAuthor) {
-        container.scrollTo(0, 0)
+        scrollToBottom()
       }
     })
     this.mutationObserver.observe(container, {
