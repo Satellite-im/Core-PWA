@@ -640,7 +640,7 @@ export default {
       recent_messages: 'Go to most recent messages',
       infinite_scroll: {
         loading: 'Loading ...',
-        no_more: 'No more data.',
+        no_more: 'No more messages.',
       },
       add_reaction: 'Add reaction',
     },
