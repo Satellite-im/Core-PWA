@@ -42,10 +42,11 @@ export default Vue.extend({
     /* 
       Returns number of unread messages for this conversation id
     */
-    unreadCount(): number {
-      return Object.values(
+    unreadCount(): string | number {
+      const count = Object.values(
         iridium.chat.state.conversations[this.conversationId].message,
       ).filter((a) => a.at > this.conversation.lastReadAt).length
+      return count > 99 ? '99+' : count
     },
     userId(): string {
       const userId =

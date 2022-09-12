@@ -28,8 +28,8 @@
     </TypographyText>
     <TypographyText
       size="sm"
-      :color="!!unreadCount ? 'light' : 'dark'"
-      :weight="!!unreadCount ? 'bold' : ''"
+      :color="unreadCount ? 'light' : 'dark'"
+      :weight="unreadCount ? 'bold' : ''"
       data-cy="sidebar-user-name"
     >
       <div
@@ -44,7 +44,7 @@
     <TypographyText v-if="messages.length" color="dark" size="xs">
       {{ timestamp }}
     </TypographyText>
-    <TypographyTag v-if="!!unreadCount" :text="unreadCount" />
+    <TypographyTag v-if="unreadCount" class="tag" :text="unreadCount" small />
   </div>
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
