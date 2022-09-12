@@ -1,9 +1,9 @@
-<div class="image">
+<UiContextMenu class="image" :items="contextMenuValues">
   <figure class="image-placeholder" v-if="usePlaceholder">
     <img
       class="image-placeholder-img"
       data-cy="chat-image-placeholder"
-      :src="placeholderSrc"
+      :src="placeholderImage"
       alt=""
     />
     <figcaption data-cy="image-placeholder-caption">
@@ -20,8 +20,15 @@
     <img
       :src="dataURL"
       @click="imageClick"
-      @error="onImageError"
+      @error="() => usePlaceholder = true"
       data-cy="chat-image"
     />
   </ui-image-container>
-</div>
+  <a
+    v-show="false"
+    ref="download"
+    :href="dataURL"
+    :rel="$t('controls.download')"
+    :download="attachment.name"
+  />
+</UiContextMenu>

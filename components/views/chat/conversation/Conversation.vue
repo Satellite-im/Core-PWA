@@ -66,7 +66,7 @@ export default Vue.extend({
         const isFirstUnreadMessage =
           message.at > lastReadAt &&
           (prevMessage ? prevMessage.at <= lastReadAt : true)
-        const replies = messages.filter(
+        const replies = this.messages.filter(
           (replyMessage) => replyMessage.replyToId === message.id,
         )
         maxTime = Math.max(maxTime, message.at)

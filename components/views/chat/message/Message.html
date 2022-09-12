@@ -1,14 +1,11 @@
-<UiContextMenu
-  class="chat-message-container"
-  :class="{ 'show-header': showHeader }"
-  :items="contextMenuValues"
->
+<div class="chat-message-container" :class="{ 'show-header': showHeader }">
   <MessageNotice v-if="isNotice" :message="message" />
   <div
     v-else
     class="chat-message"
     :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo }"
   >
+    <!-- todo - add user options context menu -->
     <template v-if="showHeader">
       <div class="avatar">
         <UiCircle
@@ -23,8 +20,9 @@
         </span>
       </div>
     </template>
+    <!-- todo end -->
     <div class="timestamp">{{ timestamp }}</div>
-    <div class="body">
+    <UiContextMenu class="body" :items="contextMenuValues">
       <MessageMarkdown
         v-if="message.body"
         :text="markdownToHtml"
@@ -32,12 +30,8 @@
         :class="{ bigmoji: containsOnlyEmoji }"
         data-cy="chat-message"
       />
-      <MessageAttachments
-        v-if="message.attachments.length"
-        :attachments="message.attachments"
-      />
-      <MessageGlyph v-if="message.glyph" :glyph="message.glyph" />
-      <span class="status editing" v-if="message.editingAt">
+      <MessageGlyph v-else-if="message.glyph" :glyph="message.glyph" />
+      <!-- <span class="status editing" v-if="message.editingAt">
         <UiLoadersSpinner spinning />
       </span>
       <span
@@ -46,7 +40,7 @@
         v-else-if="message.editedAt"
       >
         ({{$t('ui.edited')}})
-      </span>
+      </span> -->
       <MessageActions
         :setReplyChatbarMessage="setReplyChatbarMessage"
         :emojiReaction="emojiReaction"
@@ -54,10 +48,15 @@
         :message="message"
         :hideReply="hideReplyAction"
       />
-    </div>
+    </UiContextMenu>
+    <MessageAttachments
+      v-if="message.attachments.length"
+      class="attachments"
+      :attachments="message.attachments"
+    />
     <div class="footer">
       <MessageReactions :message="message" :emojiReaction="emojiReaction" />
       <MessageReplies :replies="replies" v-if="replies.length" />
     </div>
   </div>
-</UiContextMenu>
+</div>
