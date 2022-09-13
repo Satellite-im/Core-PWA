@@ -216,14 +216,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     ) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
+    console.log(payload)
     const { type, cid } = payload.body
     if (type === 'chat/message') {
       let message: ConversationMessage
-      if (cid) {
-        message = await iridium.connector.load(cid)
-        message.id = cid
-      } else if (payload.body.message) {
+      if (payload.body.message) {
         message = payload.body.message
+        console.log(payload)
       } else {
         throw new Error('no message in payload')
       }
@@ -722,11 +721,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const bytes = json.encode(partial)
     const payloadHash = await sha256.digest(bytes)
     const tempCid = CID.create(1, json.code, payloadHash)
+    const message: ConversationMessage = {
+      ...partial,
+      id: tempCid.toString() as string,
+    }
     await iridium.connector.publish(
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/message',
-        cid: tempCid,
+        cid: tempCid.toString() as string,
+        message,
       },
       {
         encrypt: conversation?.participants
@@ -734,66 +738,30 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           : undefined,
       },
     )
-    const tempMessage: ConversationMessage = {
-      ...partial,
-      id: tempCid.toString() as string,
+    this.state.conversations = {
+      ...this.state.conversations,
+      [conversationId]: {
+        ...this.state.conversations[conversationId],
+        message: {
+          ...this.state.conversations?.[conversationId]?.message,
+          [message.id]: message,
+        },
+        lastReadAt: Date.now(),
+      },
     }
 
-    this.state.conversations = {
-      ...this.state.conversations,
-      [conversationId]: {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations?.[conversationId]?.message,
-          [tempMessage.id]: tempMessage,
-        },
-        lastReadAt: Date.now(),
-      },
-    }
-    const messageID = (
-      await iridium.connector.store(partial, {
-        syncPin: true,
-        encrypt: conversation?.participants
-          ? { recipients: conversation?.participants }
-          : undefined,
-      })
-    ).toString() as string
-    console.log(messageID, tempMessage)
-    const message: ConversationMessage = {
-      ...partial,
-      id: messageID,
-    }
+    await iridium.connector.store(partial, {
+      syncPin: true,
+      encrypt: conversation?.participants
+        ? { recipients: conversation?.participants }
+        : undefined,
+    })
     if (message.id === undefined) {
       throw new Error('message not sent, failed to store')
-    }
-    this.state.conversations = {
-      ...this.state.conversations,
-      [conversationId]: {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations?.[conversationId]?.message,
-          [tempMessage.id]: message,
-        },
-        lastReadAt: Date.now(),
-      },
     }
     await this.set(
       `/conversations/${conversationId}`,
       this.state.conversations[conversationId],
-    )
-
-    // broadcast the message to connected peers
-    await iridium.connector.publish(
-      `/chat/conversations/${conversationId}`,
-      {
-        type: 'chat/message',
-        cid: message.id,
-      },
-      {
-        encrypt: conversation?.participants
-          ? { recipients: conversation.participants }
-          : undefined,
-      },
     )
   }
 
