@@ -9,7 +9,6 @@
     <UiUserState
       v-if="conversation.type === 'direct' && user && status"
       :user="user"
-      :conversationId="conversationId"
     />
     <UiGroupIcon
       v-else-if="conversation.participants"

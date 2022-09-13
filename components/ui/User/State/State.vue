@@ -58,27 +58,31 @@ export default Vue.extend({
       type: Number,
       default: 36,
     },
-    conversationId: {
-      type: String,
-      default: '',
-    },
   },
   data() {
+    const conversationId = iridium.chat.directConversationIdFromDid(
+      this.user.did,
+    )
+    if (!iridium.users.ephemeral.status[this.user.did]) {
+      iridium.users.ephemeral.status = {
+        ...iridium.users.ephemeral.status,
+        [this.user.did]: 'offline',
+      }
+    }
     return {
-      users: iridium.users,
-      chat: iridium.chat,
+      conversationId,
     }
   },
   computed: {
     status(): UserStatus {
       return this.user.did === iridium.id
         ? 'online'
-        : this.users.ephemeral.status?.[this.user.did] ?? 'offline'
+        : iridium.users.ephemeral.status[this.user.did]
     },
     isTyping(): boolean {
-      return this.conversationId.length
-        ? this.chat.ephemeral.typing[this.conversationId]?.includes(
-            this.user.did,
+      return this.conversationId
+        ? iridium.chat.ephemeral.typing[this.conversationId]?.includes(
+            this.user?.did,
           )
         : false
     },
