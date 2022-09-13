@@ -39,7 +39,6 @@ export class IridiumManager extends Emitter {
     this.settings = new SettingsManager()
     this.notifications = new NotificationManager()
     this.users = new UsersManager()
-    window.i = this
   }
 
   /**
