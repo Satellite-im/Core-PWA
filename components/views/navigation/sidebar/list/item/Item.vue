@@ -37,6 +37,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters('settings', ['getTimestamp', 'getDate']),
+    subtitle(): string {
+      const html = this.markdownToHtml(this.lastMessageDisplay)
+      const firstLine = html.split('<br>')[0]
+      return this.wrapEmoji(firstLine)
+    },
     conversation(): Conversation {
       return iridium.chat.state.conversations[this.conversationId]
     },

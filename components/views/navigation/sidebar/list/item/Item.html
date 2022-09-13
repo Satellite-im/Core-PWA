@@ -37,7 +37,7 @@
         ref="subtitle"
         class="ellipsis"
         :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
-        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
+        v-html="subtitle"
       />
     </TypographyText>
   </div>
