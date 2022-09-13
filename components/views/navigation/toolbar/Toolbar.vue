@@ -50,13 +50,9 @@ export default Vue.extend({
       userDetails,
     } = conversationHooks()
 
-    const subtitleText: ComputedRef<string> = computed(() => {
+    const subtitleText: ComputedRef<string | undefined> = computed(() => {
       if (isGroup.value) {
-        return (
-          conversation?.value?.participants
-            ?.map((did) => iridium.users.getUser(did)?.name)
-            .join(', ') ?? ''
-        )
+        return
       }
       // todo - replace with user status message set in profile settings
       return iridium.users.ephemeral.status[otherDids.value[0]] || 'offline'

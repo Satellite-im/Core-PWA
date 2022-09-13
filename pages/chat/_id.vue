@@ -1,23 +1,42 @@
 <template src="./Chat.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { computed, ComputedRef, reactive } from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { conversationHooks } from '~/components/compositions/conversations'
 
 export default Vue.extend({
   name: 'Chat',
   layout: 'desktop',
-  data() {
-    return {
-      webrtc: iridium.webRTC.state,
-    }
-  },
-  computed: {
-    isActiveCall(): boolean {
-      return iridium.webRTC.isActiveCall(this.$route.params.id)
-    },
+  setup() {
+    const { conversationId, conversation, isGroup } = conversationHooks()
+
+    const state = reactive({
+      webrtc: iridium.webRTC,
+    })
+
+    const isActiveCall: ComputedRef<boolean> = computed(() => {
+      return state.webrtc.isActiveCall(conversationId.value)
+    })
+
+    return { conversation, isGroup, isActiveCall }
   },
 })
 </script>
 
-<style lang="less" src="./Chat.less" scoped></style>
+<style lang="less" scoped>
+.chat {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-end;
+  padding: 16px 0 16px 16px;
+  min-width: 0;
+
+  .conversation-wrapper {
+    display: flex;
+    overflow: hidden;
+    flex: 1;
+  }
+}
+</style>
