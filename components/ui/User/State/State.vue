@@ -5,13 +5,7 @@
     :style="`width:${size}px; height:${size}px`"
   >
     <svg width="40" height="40" viewBox="0 0 40 40" class="mask">
-      <foreignObject
-        x="0"
-        y="0"
-        width="40"
-        height="40"
-        :mask="`url(#circle-mask)`"
-      >
+      <foreignObject x="0" y="0" width="40" height="40" :mask="mask">
         <UiCircle
           :type="imageSource ? 'image' : 'random'"
           :seed="user.did"
@@ -27,15 +21,9 @@
           height="18"
           :mask="`url(#mask-state-${status})`"
         />
-        <foreignObject
-          v-if="status === 'typing'"
-          x="3"
-          y="9"
-          width="25"
-          height="6"
-        >
-          <div id="typing-loader-container">
-            <div id="typing-loader" />
+        <foreignObject v-if="isTyping" x="3" y="9" width="25" height="6">
+          <div class="typing-loader-container">
+            <div class="typing-loader" />
           </div>
         </foreignObject>
       </svg>
@@ -70,22 +58,31 @@ export default Vue.extend({
     }
   },
   computed: {
-    status(): UserStatus {
+    status(): UserStatus | 'typing' {
+      if (this.isTyping) {
+        return 'typing'
+      }
       return this.user.did === iridium.id
         ? 'online'
         : this.users.ephemeral.status?.[this.user.did] ?? 'offline'
     },
     isTyping(): boolean {
-      return this.conversationId.length
-        ? this.chat.ephemeral.typing[this.conversationId]?.includes(
-            this.user.did,
-          )
-        : false
+      if (!this.conversationId.length) {
+        return false
+      }
+      return (
+        this.chat.ephemeral.typing?.[this.conversationId]?.includes(
+          this.user.did,
+        ) ?? false
+      )
     },
     imageSource(): string {
       return this.user?.photoHash
         ? this.$Config.ipfs.gateway + this.user.photoHash
         : ''
+    },
+    mask(): string {
+      return `url(#${this.isTyping ? 'typing' : 'circle'}-mask)`
     },
   },
 })
