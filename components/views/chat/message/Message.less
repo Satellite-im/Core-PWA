@@ -96,6 +96,37 @@
       animation-name: emoji-appear;
       animation-duration: 500ms;
     }
+
+    .status {
+      font-size: @font-size-xs;
+      color: @gray;
+      &.editing {
+        vertical-align: bottom;
+        margin-top: 0;
+      }
+    }
+
+    .markdown {
+      white-space: break-spaces;
+      word-wrap: break-word;
+      display: inline;
+      align-items: center;
+      strong {
+        &:extend(.font-secondary);
+      }
+      p {
+        font-size: @text-size;
+        display: inline;
+      }
+      a {
+        color: @satellite-color;
+        &:hover,
+        &:focus {
+          color: @satellite-color;
+          text-decoration: underline;
+        }
+      }
+    }
   }
 
   .footer {
@@ -104,112 +135,13 @@
     padding: 0;
   }
 
-  &:not(.is-replying-to):hover {
+  &:not(.is-replying-to):not(.is-editing):hover {
     > .body {
       &:extend(.background-semitransparent-light);
     }
 
     > .body > .message-actions {
       opacity: 1;
-    }
-  }
-}
-
-.is-message {
-  &:extend(.font-primary);
-  .pinned-message {
-    &:extend(.round-corners);
-    padding: @normal-spacing;
-    margin-top: @normal-spacing;
-    margin-bottom: @light-spacing;
-
-    .pinned-badge {
-      top: -(@light-spacing);
-      left: @light-spacing;
-      padding: 0 @light-spacing;
-      border-radius: @corner-rounding-smaller;
-      font-size: @mini-text-size;
-      position: absolute;
-    }
-  }
-  .sat-icon-container {
-    margin-right: @light-spacing;
-    margin-top: 0.3rem;
-    width: 20px;
-    height: 20px;
-  }
-  .inline-meta {
-    margin-bottom: @light-spacing;
-    display: flex;
-    .is-text {
-      opacity: 0.8;
-      margin-top: 0.3rem;
-      margin-left: @light-spacing;
-    }
-    .satellite-circle {
-      position: relative;
-      svg {
-        margin: -0.2rem;
-        width: 13px;
-        height: 13px;
-      }
-    }
-  }
-  .markdown {
-    white-space: break-spaces;
-    word-wrap: break-word;
-    display: inline;
-    align-items: center;
-    strong {
-      &:extend(.font-secondary);
-    }
-    p {
-      font-size: @text-size;
-      display: inline;
-    }
-    // override bulma link style
-    a {
-      color: @satellite-color;
-      &:hover,
-      &:focus {
-        color: @satellite-color;
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .message-container {
-    position: relative;
-    word-break: break-word;
-    font-family: @secondary-font;
-    font-size: @text-size;
-  }
-  &:hover {
-    &:extend(.background-semitransparent-light);
-    .message-container > .message-actions {
-      display: flex;
-    }
-  }
-  .glyph {
-    width: 192px;
-    height: 192px;
-  }
-  .emoji {
-    font-size: 15pt;
-    font-style: initial;
-  }
-  .bigmoji {
-    .emoji {
-      font-size: 36pt;
-      animation-name: emoji-appear;
-      animation-duration: 500ms;
-    }
-  }
-  .status {
-    font-size: @micro-text-size;
-    &.editing {
-      vertical-align: bottom;
-      margin-top: 0;
     }
   }
 }

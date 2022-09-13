@@ -1,12 +1,14 @@
 <template src="./Edit.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
-
+import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import { SmileIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 import Editable from '~/components/interactables/Editable/Editable.vue'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -15,7 +17,8 @@ export default Vue.extend({
   },
   props: {
     message: {
-      type: String,
+      type: Object as PropType<ConversationMessage>,
+      default: null,
       required: true,
     },
     maxChars: {
@@ -29,15 +32,21 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     lengthCount(): number {
       return this.content.length
     },
     charlimit(): boolean {
       return this.lengthCount > this.maxChars
     },
+    isError(): boolean {
+      return this.charlimit || !this.content.length
+    },
   },
   mounted() {
-    this.content = this.message
+    this.content = this.message.body ?? ''
   },
   methods: {
     saveMessage() {
@@ -67,6 +76,12 @@ export default Vue.extend({
         default:
           break
       }
+    },
+    emojiReaction() {
+      this.$store.commit('ui/toggleEnhancers', {
+        show: !this.ui.enhancers.show,
+        floating: true,
+      })
     },
   },
 })
