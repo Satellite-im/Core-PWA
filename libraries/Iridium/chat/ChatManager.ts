@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import {
   didUtils,
   Emitter,
@@ -58,7 +59,11 @@ export type Conversations = {
 export default class ChatManager extends Emitter<ConversationMessage> {
   public ready: boolean = false
   public state: State = initialState
-  public ephemeral: { typing: { [key: string]: string[] } } = { typing: {} }
+  public ephemeral: {
+    typing: { [key: Conversation['id']]: string[] | undefined }
+  } = {
+    typing: {},
+  }
 
   async init() {
     const fetched = await this.get<State>()
@@ -67,14 +72,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       ...(fetched?.conversations || {}),
     }
     const conversations = Object.values(this.state.conversations)
-    this.ephemeral.typing = Object.keys(this.state.conversations).reduce(
-      (acc: { [key: string]: string[] }, key: string) => {
-        acc[key] = []
-        return acc
-      },
-      {},
-    )
-
     iridium.connector?.p2p.on<
       IridiumPubsubMessage<IridiumDecodedPayload<SyncFetchResponse>>
     >('node/message/sync/fetch', this.onSyncFetchResponse.bind(this))
@@ -255,12 +252,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       )
 
       // Remove is_typing indicator upon user message receive
-      this.ephemeral.typing = {
-        ...this.ephemeral.typing,
-        [conversationId]: (
-          this.ephemeral.typing?.[conversationId] || []
-        ).filter((did) => did !== fromDID),
-      }
+      this.setTyping(conversationId, fromDID, false)
 
       const friendName = iridium.users.getUser(message?.from)
       const buildNotification: Exclude<Notification, 'id'> = {
@@ -796,13 +788,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     })
   }
 
-  setTyping(conversationId: string, did: string, typing: boolean = true) {
-    this.ephemeral.typing = {
-      ...this.ephemeral.typing,
-      [conversationId]: {
-        ...this.ephemeral.typing[conversationId],
-        [did]: typing,
-      },
+  setTyping(conversationId: string, did: string, typing: boolean) {
+    const typingList = this.ephemeral.typing[conversationId]
+    if (!typing && typingList) {
+      const index = typingList.indexOf(did)
+      typingList.splice(index, 1)
+      return
+    }
+    if (!typingList) {
+      Vue.set(this.ephemeral.typing, conversationId, [did])
+    } else {
+      typingList.push(did)
     }
   }
 }
