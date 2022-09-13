@@ -176,7 +176,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       message.payload.body.messages,
     )
     // let the sync node know we've stored these messages
-    await iridium.connector?.p2p.send(iridium.connector?.p2p.primaryNodeID, {
+    iridium.connector?.p2p.send(iridium.connector?.p2p.primaryNodeID, {
       type: 'sync/delivered',
       messages: message.payload.body.messages?.map(
         (message: { cid: string }) => message.cid,
@@ -227,17 +227,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         throw new Error('no message in payload')
       }
 
-      message.attachments.map(async (attachment) => {
+      message.attachments.forEach((attachment) => {
         if (!iridium.connector?.p2p.primaryNodeID) {
           return
         }
-        await iridium.connector?.p2p.send(
-          iridium.connector?.p2p.primaryNodeID,
-          {
-            cid: attachment.cid,
-            type: 'sync/validate',
-          },
-        )
+        iridium.connector?.p2p.send(iridium.connector?.p2p.primaryNodeID, {
+          cid: attachment.cid,
+          type: 'sync/validate',
+        })
       })
       logger.info(
         'iridium/chatmanager/onConversationMessage',

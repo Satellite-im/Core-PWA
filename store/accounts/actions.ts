@@ -196,7 +196,13 @@ export default {
       profile,
     })
     if (!profile?.did) {
-      logger.error('accounts/actions/loadAccount', 'user not registered')
+      try {
+        this.$router.replace('/auth/register')
+      } catch (_) {}
+      logger.error(
+        'accounts/actions/loadAccount',
+        'user not registered, redirecting',
+      )
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
     iridium.on('ready', () => {

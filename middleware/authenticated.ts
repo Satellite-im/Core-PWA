@@ -12,6 +12,19 @@ interface Arguments {
   route: NuxtRouteConfig
 }
 
+let redirectDebounce: NodeJS.Timer
+window?.addEventListener('beforeunload', () => {
+  clearTimeout(redirectDebounce)
+})
+
+window?.addEventListener('popstate', () => {
+  clearTimeout(redirectDebounce)
+})
+
+window?.addEventListener('pushstate', () => {
+  clearTimeout(redirectDebounce)
+})
+
 /**
  * @method
  * @description
@@ -24,15 +37,14 @@ export default function ({ store, route, redirect }: Arguments) {
 
   const eventuallyRedirect = memoize(
     (path: string) => {
-      console.info(`redirecting to ${path}`)
       if (route.path === path) return
       redirect(path)
     },
     () => redirect,
   )
 
-  // If the user is not authenticated
-  if (locked) {
+  const isAuth = route.path.startsWith('/auth')
+  if (locked && !isAuth) {
     return eventuallyRedirect('/auth/unlock')
   }
 
@@ -47,11 +59,11 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  if (!iridium.ready && route.path !== '/') {
+  if (!iridium.ready && route.path !== '/' && !isAuth) {
     return eventuallyRedirect('/')
   }
 
-  if (route && route.path === '/' && iridium.ready) {
+  if (route && (route.path === '/' || isAuth) && iridium.ready) {
     return eventuallyRedirect('/friends')
   }
 
