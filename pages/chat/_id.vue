@@ -33,10 +33,17 @@ export default Vue.extend({
   padding: 16px 0 16px 16px;
   min-width: 0;
 
-  .conversation-wrapper {
+  .outer-wrapper {
     display: flex;
     overflow: hidden;
-    flex: 1;
+    flex-grow: 1;
+    gap: 8px;
+
+    .inner-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
   }
 }
 </style>

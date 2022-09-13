@@ -643,6 +643,7 @@ export default {
         no_more: 'No more messages.',
       },
       add_reaction: 'Add reaction',
+      members: 'Members - {count}',
     },
     newMessage: {
       new_message: 'New Message',

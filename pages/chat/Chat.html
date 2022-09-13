@@ -5,9 +5,11 @@
     :max-viewable-users="10"
     :fullscreen-max-viewable-users="20"
   />
-  <div class="conversation-wrapper">
-    <Conversation />
+  <div class="outer-wrapper">
+    <div class="inner-wrapper">
+      <Conversation />
+      <Chatbar />
+    </div>
     <UserList v-if="isGroup">asdasd</UserList>
   </div>
-  <Chatbar />
 </div>

@@ -1,8 +1,10 @@
 <template>
   <div class="user-list hover-scroll">
-    <TypographyText>Members - {{ userDetails.length }}</TypographyText>
+    <TypographyText>
+      {{ $t('pages.chat.members', { count: userDetails.length }) }}
+    </TypographyText>
     <div v-for="user in userDetails" :key="user.did" class="user">
-      <UiUserState :user="user" />
+      <UiUserState :user="user" :conversation-id="conversationId" />
       <TypographyText class="ellipsis">
         {{ user.name }}
       </TypographyText>
@@ -49,6 +51,7 @@ export default Vue.extend({
   overflow-y: auto;
   background: @foreground-gradient;
   box-shadow: @ui-shadow;
+  user-select: none;
 
   .user {
     display: flex;
