@@ -11,7 +11,6 @@
     display: flex;
     flex-direction: column;
     gap: @normal-spacing;
-    padding: @normal-spacing;
     box-shadow: @ui-shadow;
     max-height: calc(100% - @sidebar-controls-height);
     &:extend(.round-corners);
@@ -20,6 +19,7 @@
     .sidebar-search {
       display: flex;
       gap: @normal-spacing;
+      padding: 16px 16px 0;
       .toggle-sidebar {
         cursor: pointer;
         &:extend(.filter-glow);
@@ -31,11 +31,13 @@
       flex-direction: column;
       gap: @light-spacing;
       position: relative;
+      padding: 0 16px;
     }
 
     .quick-toggle {
       align-self: flex-end;
       position: relative;
+      margin-right: 16px;
       button {
         align-items: center;
         justify-content: center;
@@ -44,6 +46,10 @@
         border-radius: 50%;
         background-color: @foreground-alt;
       }
+    }
+
+    .conversation-list {
+      padding: 0 16px;
     }
 
     .users {
