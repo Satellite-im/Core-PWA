@@ -142,7 +142,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    */
   async fetch() {
     const fetched = await this.get('/')
-    Vue.set(this, 'state', fetched)
+    Vue.set(this, 'state', fetched || {})
   }
 
   async getUsers(): Promise<{ [key: string]: User }> {
@@ -237,9 +237,9 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    */
   getUser(did: IridiumPeerIdentifier): User | undefined {
     if (did.toString() === iridium.connector?.id) {
-      return iridium.profile.state
+      return iridium.profile?.state
     }
-    return this.state[didUtils.didString(did)]
+    return this.state?.[didUtils.didString(did)]
   }
 
   async searchPeer(query: string, page: number = 0): Promise<User[]> {
