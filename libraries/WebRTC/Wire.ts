@@ -132,11 +132,22 @@ export class Wire extends Emitter<WireEventListeners> {
     peer.off('data', this.onPeerData.bind(this, id))
   }
 
-  onPeerSignal(id: string, data: Peer.SignalData) {
+  async onPeerSignal(id: string, data: Peer.SignalData) {
     const peer = this.peers[id].peer
     if (!peer) return
 
-    this._bus?.sendMessage({ type: 'signal', data }, { recipients: [id] })
+    if (peer.connected && iridium.connector?.did) {
+      const encodedMessage = await encoding.encodePayload(
+        { type: 'signal', data },
+        iridium.connector.did,
+        { sign: true },
+      )
+
+      peer.send(encodedMessage)
+    } else {
+      this._bus?.sendMessage({ type: 'signal', data }, { recipients: [id] })
+    }
+
     logger.debug(this.loggerTag, 'SIGNAL SENT', {
       data,
       id,
