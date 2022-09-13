@@ -95,6 +95,8 @@ export default class WebRTCManager extends Emitter {
       iridium.users.setUserStatus(did, 'offline')
     })
 
+    this.wire.on('wire:message', this.onMessage.bind(this))
+
     // Initialize the Wire
     await this.wire.init()
 
@@ -103,15 +105,6 @@ export default class WebRTCManager extends Emitter {
         this.state.callTime = Date.now() - this.state.callStartedAt
       }
     }, 1000)
-
-    this.wire.on('wire:message', this.onMessage.bind(this))
-
-    setTimeout(() => {
-      this.wire.sendMessage(
-        { prova: 'test' },
-        { recipients: iridium.friends.state.friends },
-      )
-    }, 10000)
   }
 
   private async onMessage({
@@ -699,7 +692,11 @@ export default class WebRTCManager extends Emitter {
         conversationId,
         at: Date.now().valueOf(),
       },
-      { recipients: conversation.participants },
+      {
+        recipients: conversation.participants.filter(
+          (participant) => participant !== iridium.id,
+        ),
+      },
     )
   }
 
