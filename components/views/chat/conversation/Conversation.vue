@@ -111,12 +111,8 @@ export default Vue.extend({
     },
   },
   mounted() {
-    window.addEventListener('blur', async () => {
-      this.isBlurred = true
-    })
-    window.addEventListener('focus', async () => {
-      this.isBlurred = false
-    })
+    window.addEventListener('blur', this.handleBlur)
+    window.addEventListener('focus', this.handleFocus)
     const container = this.$refs.container as HTMLElement
     if (!container) {
       return
@@ -142,9 +138,17 @@ export default Vue.extend({
     })
   },
   beforeDestroy() {
+    window.removeEventListener('blur', this.handleBlur)
+    window.removeEventListener('focus', this.handleFocus)
     this.mutationObserver?.disconnect()
   },
   methods: {
+    handleBlur() {
+      this.isBlurred = true
+    },
+    handleFocus() {
+      this.isBlurred = false
+    },
     loadMore() {
       // TODO: we'll want to instead call iridium in this method once paginated
       // fetching is added, for now we'll just take a slice.
