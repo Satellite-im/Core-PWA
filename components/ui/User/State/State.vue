@@ -5,7 +5,13 @@
     :style="`width:${size}px; height:${size}px`"
   >
     <svg width="40" height="40" viewBox="0 0 40 40" class="mask">
-      <foreignObject x="0" y="0" width="40" height="40" :mask="mask">
+      <foreignObject
+        x="0"
+        y="0"
+        width="40"
+        height="40"
+        :mask="`url(#${isTyping ? 'typing' : 'circle'}-mask)`"
+      >
         <UiCircle
           :type="imageSource ? 'image' : 'random'"
           :seed="user.did"
@@ -20,7 +26,7 @@
         x="12"
         y="22"
         viewBox="0 0 28 18"
-        :mask="innermask"
+        :mask="`url(#mask-state-${status})`"
       >
         <rect :class="`status is-${status}`" width="28" height="18" />
         <foreignObject v-if="isTyping" x="3" y="9" width="25" height="6">
@@ -82,12 +88,6 @@ export default Vue.extend({
       return this.user?.photoHash
         ? this.$Config.ipfs.gateway + this.user.photoHash
         : ''
-    },
-    mask(): string {
-      return `url(#${this.isTyping ? 'typing' : 'circle'}-mask)`
-    },
-    innermask(): string {
-      return `url(#mask-state-${this.status})`
     },
   },
 })
