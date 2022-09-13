@@ -85,8 +85,6 @@ export class Call extends Emitter<CallEventListeners> {
     this.constraints = Config.webrtc.constraints
     this.peerDetails = peers || []
     this._bindBusListeners()
-
-    console.log('CALL', 'creating a new peer', callId)
   }
 
   /**
@@ -1188,8 +1186,11 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the on hangup event. Used for the hang up
    * after the call started
    */
-  protected _onBusHangup({ payload }: { payload: any }) {
+  protected _onBusHangup({ payload }: IridiumMessage<IridiumDocument>) {
     const { did, callId } = payload.body
+
+    // It's related to another call
+    if (callId !== this.callId) return
 
     this.peerDialingDisabled[did] = true
     this.isCallee[did] = false

@@ -69,25 +69,28 @@ export default Vue.extend({
       if (!this.call) {
         return []
       }
+
       const muted = Object.entries(iridium.webRTC.state.streamMuted)
-      const participantStreams = muted.map(([did, mutedStreams]) => {
-        const participant = iridium.users.getUser(did)
-        let streams = Object.entries(mutedStreams)
-          .filter(([k, v]) => !v && k !== 'headphones')
-          .map(([k]) => k)
-        streams.unshift('audio')
-        streams = Array.from(new Set(streams))
-        if (streams.length > 1) {
-          streams = streams.filter((s) => s !== 'audio')
-        }
-        return streams.map((stream) => {
-          return {
-            participant,
-            stream,
-            hideTalkingIndicator: streams.length > 1 && stream !== 'video',
+      const participantStreams = muted
+        .filter(([did]) => did === iridium.id || Boolean(this.call?.peers[did]))
+        .map(([did, mutedStreams]) => {
+          const participant = iridium.users.getUser(did)
+          let streams = Object.entries(mutedStreams)
+            .filter(([k, v]) => !v && k !== 'headphones')
+            .map(([k]) => k)
+          streams.unshift('audio')
+          streams = Array.from(new Set(streams))
+          if (streams.length > 1) {
+            streams = streams.filter((s) => s !== 'audio')
           }
+          return streams.map((stream) => {
+            return {
+              participant,
+              stream,
+              hideTalkingIndicator: streams.length > 1 && stream !== 'video',
+            }
+          })
         })
-      })
       return participantStreams.flat()
     },
   },
