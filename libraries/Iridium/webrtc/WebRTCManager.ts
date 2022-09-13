@@ -224,20 +224,6 @@ export default class WebRTCManager extends Emitter {
     }
   }
 
-  // protected _bindPeerListeners(peer: CallPeer) {
-  //   peer.on('signal', this._onSignal.bind(this, peer))
-  //   peer.on('connect', this._onConnect.bind(this, peer))
-  //   peer.on('error', this._onError.bind(this, peer))
-  //   peer.on('close', this._onClose.bind(this, peer))
-  // }
-
-  // protected _unbindPeerListeners(peer: CallPeer) {
-  //   peer.off('signal', this._onSignal)
-  //   peer.off('connect', this._onConnect)
-  //   peer.off('error', this._onError)
-  //   peer.off('close', this._onClose)
-  // }
-
   // todo - refactor to accept multiple recipients for group calls
   public async call({
     recipient,
@@ -706,27 +692,23 @@ export default class WebRTCManager extends Emitter {
 
     if (!conversation) return
 
-    // broadcast the message to connected peers
-    await iridium.connector?.publish(
-      '/webrtc/announce',
+    this.wire.sendMessage(
       {
         type: 'typing',
         did: iridium.id,
         conversationId,
         at: Date.now().valueOf(),
       },
-      {
-        encrypt: { recipients: conversation.participants },
-      },
+      { recipients: conversation.participants },
     )
   }
 
   // WILL BE REPLACED ONCE DIRECT SEND WITH IRIDIUM WORKS
-  public sendWebrtc(did: string, payload: any) {
-    return iridium.connector?.publish('/webrtc/announce', payload, {
-      encrypt: { recipients: [did] },
-    })
-  }
+  // public sendWebrtc(did: string, payload: any) {
+  //   return iridium.connector?.publish('/webrtc/announce', payload, {
+  //     encrypt: { recipients: [did] },
+  //   })
+  // }
 
   public isBackgroundCall(callId?: string) {
     if (!this.state.activeCall?.callId) {
