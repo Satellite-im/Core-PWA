@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { didUtils, Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
@@ -373,7 +374,7 @@ export default class WebRTCManager extends Emitter {
     }
 
     const call = this.state.calls[callId] || new Call(callId, peers)
-    this.state.calls = { ...this.state.calls, [callId]: call }
+    Vue.set(this.state.calls, callId, call)
 
     this.setStreamMuted(iridium.id, {
       audio: true,

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
@@ -141,7 +142,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
    */
   async fetch() {
     const fetched = await this.get('/')
-    this.state = { ...fetched }
+    Vue.set(this, 'state', fetched)
   }
 
   async getUsers(): Promise<{ [key: string]: User }> {
@@ -284,7 +285,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async setUser(id: IridiumPeerIdentifier, user: User) {
     const did = didUtils.didString(id)
-    this.state = { ...this.state, [did]: { ...this.state[did], ...user } }
+    Vue.set(this.state, did, user)
 
     // rename chat conversations
     if (user.name) {
@@ -340,8 +341,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       throw new Error(UsersError.USER_NOT_FOUND)
     }
 
-    delete this.state[didUtils.didString(did)]
-    this.state = { ...this.state }
+    Vue.delete(this.state, didUtils.didString(did))
     await this.set(`/`, this.state)
     const id = await encoding.hash([user.did, iridium.id].sort())
     if (id && iridium.chat.hasConversation(id)) {

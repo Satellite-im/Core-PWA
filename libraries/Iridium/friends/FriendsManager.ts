@@ -145,13 +145,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       friends: [],
       requests: {},
     }
-    this.state.requests = fetched?.requests || {}
-    this.state.friends = !fetched.friends
-      ? []
-      : Array.isArray(fetched.friends)
-      ? fetched.friends
-      : Object.values(fetched.friends)
-    this.state.blocked = fetched.blocked || []
+    Vue.set(this.state, 'requests', fetched.requests || {})
+    Vue.set(this.state, 'friends', fetched.friends || [])
+    Vue.set(this.state, 'blocked', fetched.blocked || [])
     logger.info(this.loggerTag, 'fetched', this.state)
     return this.state
   }
@@ -297,10 +293,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       at: Date.now(),
     }
 
-    this.state.requests = {
-      ...this.state.requests,
-      [did]: request,
-    }
+    Vue.set(this.state.requests, did, request)
     await this.set(`/requests/${did}`, request)
     logger.info(this.loggerTag, 'friend request created', {
       did,
@@ -362,12 +355,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     const id = didUtils.didString(did)
-    this.state.requests = Object.keys(this.state.requests)
-      .filter((key) => key !== id)
-      .reduce((acc, key: string) => {
-        acc[key] = this.state.requests[key]
-        return acc
-      }, {} as { [key: string]: FriendRequest })
+    Vue.delete(this.state.requests, id)
     await this.set(`/requests`, this.state.requests)
     logger.info(this.loggerTag, 'request rejected', {
       did,
@@ -447,14 +435,8 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     request.status = 'accepted'
-    delete this.state.requests[did]
-    this.state.friends = [...this.state.friends, did]
-    this.state.requests = Object.keys(this.state.requests)
-      .filter((key) => key !== did)
-      .reduce((acc, key: string) => {
-        acc[key] = this.state.requests[key]
-        return acc
-      }, {} as { [key: string]: FriendRequest })
+    Vue.delete(this.state.requests, did)
+    Vue.set(this.state, 'friends', [...new Set([...this.state.friends, did])])
     await this.set(`/friends`, this.state.friends)
     await this.set(`/requests`, this.state.requests)
 
@@ -510,7 +492,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       return
     }
 
-    this.state.friends = this.state.friends.filter((id) => id !== did)
+    Vue.set(
+      this.state,
+      'friends',
+      this.state.friends.filter((f) => f !== did),
+    )
     await this.set(`/friends`, this.state.friends)
     const id = iridium.chat.directConversationIdFromDid(did)
     if (id) {

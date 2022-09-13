@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import {
   didUtils,
   Emitter,
@@ -62,10 +63,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
   async init() {
     const fetched = await this.get<State>()
-    this.state.conversations = {
-      ...this.state.conversations,
-      ...(fetched?.conversations || {}),
-    }
+    Vue.set(this, 'state', fetched || initialState)
     const conversations = Object.values(this.state.conversations)
     this.ephemeral.typing = Object.keys(this.state.conversations).reduce(
       (acc: { [key: string]: string[] }, key: string) => {
@@ -242,25 +240,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         { message, cid, from, conversationId },
       )
 
-      this.state.conversations[conversationId] = {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations[conversationId].message,
-          [message.id]: message,
-        },
-      }
+      Vue.set(
+        this.state.conversations?.[conversationId]?.message,
+        message.id,
+        message,
+      )
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
         message,
       )
 
       // Remove is_typing indicator upon user message receive
-      this.ephemeral.typing = {
-        ...this.ephemeral.typing,
-        [conversationId]: (
-          this.ephemeral.typing?.[conversationId] || []
-        ).filter((did) => did !== fromDID),
-      }
+      Vue.delete(this.ephemeral.typing?.[conversationId], fromDID)
 
       const friendName = iridium.users.getUser(message?.from)
       const buildNotification: Exclude<Notification, 'id'> = {
@@ -304,13 +295,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         [fromDID]: reaction.reactions,
       }
 
-      this.state.conversations[conversationId] = {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations[conversationId].message,
-          [message.id]: message,
-        },
-      }
+      Vue.set(
+        this.state.conversations?.[conversationId]?.message,
+        message.id,
+        message,
+      )
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
         message,
@@ -393,10 +382,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       updatedAt: Date.now(),
       lastReadAt: 0,
     }
-    this.state.conversations = {
-      ...this.state.conversations,
-      [id]: conversation,
-    }
+    Vue.set(this.state.conversations, id, conversation)
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
@@ -419,10 +405,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     conversation.lastReadAt = readAt
     conversation.updatedAt = Date.now()
-    this.state.conversations = {
-      ...this.state.conversations,
-      [conversationId]: conversation,
-    }
+    Vue.set(this.state.conversations, conversationId, conversation)
     await this.set(`/conversations/${conversationId}`, conversation)
     this.emit(`conversations/${conversationId}`, conversation)
   }
@@ -576,8 +559,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async deleteConversation(id: string) {
-    delete this.state.conversations[id]
-    this.state.conversations = { ...this.state.conversations }
+    Vue.delete(this.state.conversations, id)
 
     this.set('/conversations', this.state.conversations)
     await iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
@@ -730,17 +712,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error('message not sent, failed to store')
     }
 
-    this.state.conversations = {
-      ...this.state.conversations,
-      [conversationId]: {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations?.[conversationId]?.message,
-          [message.id]: message,
-        },
-        lastReadAt: Date.now(),
-      },
-    }
+    Vue.set(
+      this.state.conversations?.[conversationId]?.message,
+      message.id,
+      message,
+    )
+    Vue.set(
+      this.state.conversations?.[conversationId],
+      'lastReadAt',
+      Date.now(),
+    )
     await this.set(
       `/conversations/${conversationId}`,
       this.state.conversations[conversationId],
@@ -779,7 +760,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions.push(payload.reaction)
     }
 
-    message.reactions = { ...message.reactions, [did]: reactions }
+    Vue.set(message.reactions, did, reactions)
     const path = `/conversations/${conversationId}/message/${messageId}`
     this.set(path, message)
 

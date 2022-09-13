@@ -154,6 +154,7 @@ export class IridiumManager extends Emitter {
       return
     }
     if (this.ready) return
+    this.ready = true
 
     logger.info('iridium/manager', 'initializing users')
     this.users.init()
@@ -165,7 +166,6 @@ export class IridiumManager extends Emitter {
     this.chat.init()
 
     logger.info('iridium/manager', 'ready')
-    this.ready = true
     this.emit('ready', {})
 
     logger.info(
