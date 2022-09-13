@@ -216,13 +216,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     ) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
-    console.log(payload)
     const { type, cid } = payload.body
     if (type === 'chat/message') {
       let message: ConversationMessage
       if (payload.body.message) {
         message = payload.body.message
-        console.log(payload)
       } else {
         throw new Error('no message in payload')
       }
