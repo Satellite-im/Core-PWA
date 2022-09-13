@@ -14,13 +14,15 @@
           data-cy="satellite-circle-profile"
         />
       </foreignObject>
-      <svg width="28" height="18" x="12" y="22" viewBox="0 0 28 18">
-        <rect
-          :class="`status is-${status}`"
-          width="28"
-          height="18"
-          :mask="`url(#mask-state-${status})`"
-        />
+      <svg
+        width="28"
+        height="18"
+        x="12"
+        y="22"
+        viewBox="0 0 28 18"
+        :mask="innermask"
+      >
+        <rect :class="`status is-${status}`" width="28" height="18" />
         <foreignObject v-if="isTyping" x="3" y="9" width="25" height="6">
           <div class="typing-loader-container">
             <div class="typing-loader" />
@@ -83,6 +85,9 @@ export default Vue.extend({
     },
     mask(): string {
       return `url(#${this.isTyping ? 'typing' : 'circle'}-mask)`
+    },
+    innermask(): string {
+      return `url(#mask-state-${this.status})`
     },
   },
 })
