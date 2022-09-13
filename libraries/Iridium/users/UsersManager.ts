@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
@@ -287,7 +288,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async setUser(id: IridiumPeerIdentifier, user: User) {
     const did = didUtils.didString(id)
-    this.state = { ...this.state, [did]: { ...this.state[did], ...user } }
+    Vue.set(this.state, did, user)
 
     // rename chat conversations
     if (user.name) {
@@ -309,11 +310,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   setUserStatus(did: IridiumPeerIdentifier, status: UserStatus) {
-    this.ephemeral.status[didUtils.didString(did)] = status || 'offline'
-  }
-
-  getUserStatus(did: IridiumPeerIdentifier) {
-    return this.ephemeral.status[didUtils.didString(did)]
+    Vue.set(this.ephemeral.status, didUtils.didString(did), status || 'offline')
   }
 
   async send(event: IridiumUserEvent) {
