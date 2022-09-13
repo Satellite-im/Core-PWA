@@ -23,7 +23,6 @@ import { Config } from '~/config'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 
 export default class FilesManager extends Emitter {
-  public lastUpdated: number = 0 // local, will be used to update the delta after remote operations
   public state: { items: IridiumItem[] } = { items: [] }
 
   async init() {
@@ -41,7 +40,10 @@ export default class FilesManager extends Emitter {
 
   async fetch() {
     const res = await iridium.connector?.get<{ items: IridiumItem[] }>('/files')
-    this.lastUpdated = Date.now()
+    if (!res?.items) {
+      return
+    }
+    this.state.items = res.items
   }
 
   get(path: string = '', options: IridiumGetOptions = {}) {
