@@ -723,7 +723,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       ...partial,
       id: tempCid.toString() as string,
     }
-    await iridium.connector.publish(
+    iridium.connector.publish(
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/message',
@@ -757,7 +757,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (message.id === undefined) {
       throw new Error('message not sent, failed to store')
     }
-    await this.set(
+    this.set(
       `/conversations/${conversationId}`,
       this.state.conversations[conversationId],
     )
