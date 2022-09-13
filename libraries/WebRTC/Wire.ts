@@ -280,7 +280,7 @@ export class Wire extends Emitter<WireEventListeners> {
     }
 
     // Fallback to pubsub for offline users
-    this._bus?.sendMessage(message, { recipients: offline })
+    // this._bus?.sendMessage(message, { recipients: offline })
   }
 
   async announce() {
