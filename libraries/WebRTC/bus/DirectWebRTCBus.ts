@@ -1,6 +1,6 @@
 import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
 import Peer from 'simple-peer'
-import type { SignalData, Instance } from 'simple-peer'
+import type { Instance } from 'simple-peer'
 import { Bus, BusListeners, BusOptions } from '~/libraries/WebRTC/bus/bus'
 import Emitter from '~/libraries/WebRTC/Emitter'
 
@@ -9,17 +9,16 @@ export class DirectWebrtc
   implements Bus<IridiumMessage<IridiumDocument>, { recipients: string[] }>
 {
   type: string
-  private peers: {
-    [did: string]: {
-      peer: Instance
-      initiator: boolean
-      isConnecting: boolean
-    }
-  } = {}
+  private peer: Instance
+  id: string
 
-  constructor() {
+  constructor(id: string, peer: Instance) {
     super()
     this.type = 'direct_webrtc'
+    this.peer = peer
+    this.id = id
+
+    this.bindPeerListeners()
   }
 
   onMessage(message: IridiumMessage<IridiumDocument>) {
@@ -29,51 +28,28 @@ export class DirectWebrtc
   sendMessage(
     message: IridiumDocument,
     opts: BusOptions<{ recipients: string[] }>,
-  ) {}
-
-  createPeer(id: string, opts?: Peer.Options) {
-    if (this.peers[id]) throw new Error('Peer already exists')
-
-    const peer = new Peer(opts)
-
-    this.peers[id] = {
-      peer,
-      initiator: Boolean(opts?.initiator),
-      isConnecting: true,
-    }
-
-    this.bindPeerListeners(id)
+  ) {
+    this.peer.send(JSON.stringify(message))
   }
 
-  private bindPeerListeners(id: string) {
-    const peer = this.peers[id].peer
-    if (!peer) return
-
-    peer.on('signal', this.onSignal.bind(this, id))
+  private bindPeerListeners() {
+    this.peer.on('data', this.onData.bind(this))
   }
 
-  private unbindPeerListeners(id: string) {
-    const peer = this.peers[id].peer
-    if (!peer) return
-
-    peer.off('signal', this.onSignal.bind(this, id))
+  private unbindPeerListeners() {
+    this.peer.off('data', this.onData.bind(this))
   }
 
-  onSignal(id: string, data: SignalData) {
-    this.emit('signal', { type: this.type, signalData: data, from: id })
+  onData(data: IridiumDocument) {
+    // this.emit('signal', { type: this.type, signalData: data, from: id })
   }
 
-  isConnected(id: string) {
-    return Boolean(this.peers[id]?.peer?.connected)
-  }
-
-  isConnecting(id: string) {
-    return Boolean(this.peers[id]?.isConnecting)
+  isConnected() {
+    return this.peer.connected
   }
 
   destroy() {
-    Object.keys(this.peers).forEach((did) => this.unbindPeerListeners(did))
-
-    this.peers = {}
+    this.unbindPeerListeners()
+    this.peer.destroy()
   }
 }

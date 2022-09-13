@@ -1,4 +1,9 @@
-import { didUtils, Emitter, IridiumPubsubMessage } from '@satellite-im/iridium'
+import {
+  didUtils,
+  Emitter,
+  IridiumMessage,
+  IridiumDocument,
+} from '@satellite-im/iridium'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
 import iridium from '../IridiumManager'
@@ -13,13 +18,11 @@ import logger from '~/plugins/local/logger'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { User } from '~/libraries/Iridium/users/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
-import Peer from '~/libraries/WebRTC/Peer'
-import { Config } from '~/config'
 import { Wire } from '~/libraries/WebRTC/Wire'
 
 const $Sounds = new SoundManager()
 
-const announceFrequency = 60000
+// const announceFrequency = 60000
 
 const initialState: WebRTCState = {
   incomingCall: null,
@@ -56,6 +59,7 @@ export default class WebRTCManager extends Emitter {
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
   public timers: { [key: string]: any } = {}
+  private wire: Wire
 
   constructor() {
     super()
@@ -83,97 +87,57 @@ export default class WebRTCManager extends Emitter {
       'p2p ready, initializing webrtc...',
     )
 
-    // Subscribe to wire messages
-    // this.wire?.on('bus:message', (type, message) => {
-    //   console.log('MANUEL bus message', type, message)
-    // })
+    this.wire.on('peer:connect', ({ did }) => {
+      iridium.users.setUserStatus(did, 'online')
+    })
+
+    this.wire.on('peer:disconnect', ({ did }) => {
+      iridium.users.setUserStatus(did, 'offline')
+    })
 
     // Initialize the Wire
-    this.wire.init()
-
-    await this.wire.setupAnnounce()
-
-    // ask the sync node to subscribe to this topic
-    // await iridium.connector.subscribe('/webrtc/announce', {
-    //   handler: this.onMessage.bind(this),
-    //   sync: true,
-    // })
-    // await this.setupAnnounce()
+    await this.wire.init()
 
     setInterval(() => {
       if (this.state.activeCall) {
         this.state.callTime = Date.now() - this.state.callStartedAt
       }
     }, 1000)
-  }
 
-  private async setupAnnounce() {
-    await new Promise((resolve) =>
-      setTimeout(() => this.announce().then(() => resolve(true)), 5000),
-    )
-    setInterval(this.announce.bind(this), announceFrequency)
-  }
+    this.wire.on('wire:message', this.onMessage.bind(this))
 
-  async announce() {
-    if (!iridium.connector) return
-    const profile = iridium.profile.state
-    const friends = iridium.friends.state.friends
-    if (!profile || !friends) return
-    logger.debug(this.loggerTag, 'announce', {
-      friends,
-    })
-
-    if (
-      !friends ||
-      !friends.length ||
-      !(profile.name && iridium.connector.p2p.ready)
-    )
-      return
-
-    try {
-      await iridium.connector?.publish(
-        '/webrtc/announce',
-        {
-          type: 'announce',
-        },
-        {
-          encrypt: {
-            recipients: friends.filter(
-              (friend) =>
-                this.rtcConnections[friend]?.connected &&
-                !this.isTrying[friend],
-            ),
-          },
-        },
+    setTimeout(() => {
+      this.wire.sendMessage(
+        { prova: 'test' },
+        { recipients: iridium.friends.state.friends },
       )
-    } catch (e) {
-      const error = e as Error
-      logger.error(this.loggerTag, 'announce failed to publish', error)
-    }
+    }, 10000)
   }
 
   private async onMessage({
-    from,
-    payload,
-  }: IridiumPubsubMessage<
-    IridiumDecodedPayload<
-      | WebRTCCallMessage
-      | WebRTCAnnounceMessage
-      | WebRTCTypingMessage
-      | WebRTCSignalMessage
-    >
-  >) {
-    const { type } = payload.body
-    const did = didUtils.didString(from)
-    switch (type) {
+    type,
+    message,
+  }: {
+    type: string
+    message: IridiumMessage<IridiumDocument>
+  }) {
+    logger.debug(this.loggerTag, 'Wire message', { type, message })
+    const did = didUtils.didString(message.from)
+    switch (message.payload?.body.type) {
       case 'call':
-        await this.onPeerCall(did, payload.body as WebRTCCallMessage)
+        await this.onPeerCall(did, message.payload.body as WebRTCCallMessage)
         break
       case 'typing':
-        await this.onPeerTyping(did, payload.body as WebRTCTypingMessage)
+        await this.onPeerTyping(
+          did,
+          message.payload.body as WebRTCTypingMessage,
+        )
         break
       case 'announce':
-        await this.onPeerAnnounce(did, payload.body as WebRTCAnnounceMessage)
+        await this.onPeerAnnounce(
+          did,
+          message.payload.body as WebRTCAnnounceMessage,
+        )
         break
     }
   }
@@ -414,7 +378,7 @@ export default class WebRTCManager extends Emitter {
       throw new Error('webrtc: invalid callId provided: ' + callId)
     }
 
-    const call = this.state.calls[callId] || new Call(callId, peers)
+    const call = this.state.calls[callId] || new Call(callId, this.wire, peers)
     this.state.calls = { ...this.state.calls, [callId]: call }
 
     this.setStreamMuted(iridium.id, {

@@ -20,3 +20,13 @@ export function setInObject(obj: any, path: string, value: any): boolean {
     return true
   })
 }
+
+/**
+ * @function delay
+ * @description Let's you wait for a specific amount of milliseconds
+ * @param ms number of milliseconds to wait
+ * @returns a promise that resolves when the time has passed
+ */
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

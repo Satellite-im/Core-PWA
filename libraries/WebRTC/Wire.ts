@@ -1,21 +1,32 @@
 import Peer from 'simple-peer'
-import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
+import {
+  IridiumDocument,
+  IridiumMessage,
+  encoding,
+  IridiumPayload,
+} from '@satellite-im/iridium'
+import * as json from 'multiformats/codecs/json'
 import Emitter from './Emitter'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
 import { BusOptions } from '~/libraries/WebRTC/bus/bus'
 import { IridiumBus } from '~/libraries/WebRTC/bus/IridiumBus'
+import { delay } from '~/libraries/Iridium/utils'
+import { Config } from '~/config'
 
 type WireEventListeners = {
-  'bus:message': (data: {
+  'wire:message': (data: {
     type: string
     message: IridiumMessage<IridiumDocument>
   }) => void
+  'peer:connect': (data: { did: string }) => void
+  'peer:disconnect': (data: { did: string }) => void
 }
 
 export class Wire extends Emitter<WireEventListeners> {
   private loggerTag: string = 'Wire'
-  private announceFrequency = 5000
+  private announceFrequency = 30000
+  private firstAnnounceDelay = 5000
   private _bus?: IridiumBus
   private peers: {
     [did: string]: {
@@ -30,6 +41,8 @@ export class Wire extends Emitter<WireEventListeners> {
 
     this._bus.on('message', this.onMessage.bind(this))
     this._bus.on('signal', this.onBusSignal.bind(this))
+
+    await this.setupAnnounce()
   }
 
   onMessage({
@@ -44,7 +57,7 @@ export class Wire extends Emitter<WireEventListeners> {
       return
     }
     logger.debug(this.loggerTag, type, message)
-    this.emit('bus:message', { type, message })
+    this.emit('wire:message', { type, message })
 
     const friend = iridium.friends.state.friends.find(
       (did) => did === message.from,
@@ -77,7 +90,12 @@ export class Wire extends Emitter<WireEventListeners> {
   createPeer(id: string, opts?: Peer.Options) {
     if (this.peers[id]) throw new Error('Peer already exists')
 
-    const peer = new Peer(opts)
+    const peer = new Peer({
+      ...opts,
+      config: {
+        iceServers: Config.webrtc.iceServers,
+      },
+    })
 
     this.peers[id] = {
       peer,
@@ -100,16 +118,18 @@ export class Wire extends Emitter<WireEventListeners> {
     peer.on('connect', this.onPeerConnect.bind(this, id))
     peer.on('close', this.onPeerClose.bind(this, id))
     peer.on('error', this.onPeerError.bind(this, id))
+    peer.on('data', this.onPeerData.bind(this, id))
   }
 
   private unbindPeerListeners(id: string) {
-    const peer = this.peers[id].peer
+    const peer = this.peers[id]?.peer
     if (!peer) return
 
     peer.off('signal', this.onPeerSignal.bind(this, id))
     peer.off('connect', this.onPeerConnect.bind(this, id))
     peer.off('close', this.onPeerClose.bind(this, id))
     peer.off('error', this.onPeerError.bind(this, id))
+    peer.off('data', this.onPeerData.bind(this, id))
   }
 
   onPeerSignal(id: string, data: Peer.SignalData) {
@@ -131,16 +151,44 @@ export class Wire extends Emitter<WireEventListeners> {
     if (peerDescriptor) {
       peerDescriptor.isConnecting = false
     }
+
+    this.emit('peer:connect', { did: id })
   }
 
   onPeerClose(id: string) {
     logger.debug(this.loggerTag, 'Peer disconnected', { id })
+    this.emit('peer:disconnect', { did: id })
+
     this.destroyPeer(id)
   }
 
   onPeerError(id: string, error: Error) {
     logger.debug(this.loggerTag, 'Peer error', { id, error })
+    this.emit('peer:disconnect', { did: id })
+
     this.destroyPeer(id)
+  }
+
+  onPeerData(id: string, data: Uint8Array) {
+    logger.debug(this.loggerTag, 'Peer data', { id, data })
+
+    if (!iridium.connector) return
+
+    const payload = json.decode<IridiumPayload>(data)
+    if (!payload) return
+
+    encoding
+      .decodePayload(payload, iridium.connector.did)
+      .then((decoded) => {
+        logger.debug(this.loggerTag, 'Decoded payload', { decoded })
+        this.emit('wire:message', {
+          type: 'direct_webrtc',
+          message: { from: id, payload: decoded },
+        })
+      })
+      .catch((err: Error) =>
+        logger.error(this.loggerTag, 'Decoding error', { err }),
+      )
   }
 
   destroyPeer(id: string) {
@@ -201,11 +249,36 @@ export class Wire extends Emitter<WireEventListeners> {
     this.peers[from]?.peer?.signal(signalData)
   }
 
-  sendMessage(
+  async sendMessage(
     message: IridiumDocument,
     opts: BusOptions<{ recipients: string[] }>,
   ) {
-    this._bus?.sendMessage(message, opts)
+    const online: string[] = []
+    const offline: string[] = []
+
+    opts.recipients.forEach((recipient) => {
+      if (this.isConnected(recipient)) {
+        online.push(recipient)
+      } else {
+        offline.push(recipient)
+      }
+    })
+
+    if (online.length && iridium.connector) {
+      const encodedMessage = await encoding.encodePayload(
+        message,
+        iridium.connector.did,
+        { sign: true },
+      )
+
+      // Send the message through webrtc when possible
+      online.forEach((recipient) => {
+        this.peers[recipient]?.peer?.send(encodedMessage)
+      })
+    }
+
+    // Fallback to pubsub for offline users
+    this._bus?.sendMessage(message, { recipients: offline })
   }
 
   async announce() {
@@ -244,9 +317,12 @@ export class Wire extends Emitter<WireEventListeners> {
   }
 
   async setupAnnounce() {
-    await new Promise((resolve) =>
-      setTimeout(() => this.announce().then(() => resolve(true)), 5000),
-    )
+    await delay(this.firstAnnounceDelay)
+    await this.announce()
     setInterval(this.announce.bind(this), this.announceFrequency)
+  }
+
+  isConnected(id: string) {
+    return Boolean(this.peers[id]?.peer?.connected)
   }
 }
