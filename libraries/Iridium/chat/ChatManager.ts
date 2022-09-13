@@ -748,7 +748,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       },
     }
 
-    await iridium.connector.store(partial, {
+    iridium.connector.store(partial, {
       syncPin: true,
       encrypt: conversation?.participants
         ? { recipients: conversation?.participants }
