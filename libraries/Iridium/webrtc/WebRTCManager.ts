@@ -200,13 +200,6 @@ export default class WebRTCManager extends Emitter {
 
     iridium.users.setUserStatus(requestFriend.did, payload.status || 'online')
 
-    // const peer = new Peer('', requestFriend.did, {
-    //   initiator: true,
-    //   config: { iceServers: Config.webrtc.iceServers },
-    // })
-
-    // this.rtcConnections[requestFriend.did] = peer
-
     if (payload.status === 'offline') {
       Object.values(this.state.calls).forEach((call) => {
         if (call.peers[from]) {
@@ -445,7 +438,16 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('CONNECTED', onCallConnected)
 
-    const onCallHangup = async () => {
+    const onCallHangup = ({
+      callId,
+      did,
+    }: {
+      callId?: string
+      did: string
+    }) => {
+      // It's not related the active call, so we don't reset the state
+      if (this.state.activeCall?.callId !== callId) return
+
       this.state.incomingCall = null
       this.state.activeCall = null
       this.state.callStartedAt = 0
@@ -582,10 +584,19 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('ANSWERED', onAnswered)
 
-    const onCallDestroy = async () => {
-      this.state.incomingCall = null
-      this.state.activeCall = null
-      this.state.callStartedAt = 0
+    const onCallDestroy = ({
+      callId,
+      did,
+    }: {
+      callId?: string
+      did: string
+    }) => {
+      // Reset the state only if the event is related to the active call
+      if (callId === this.state.activeCall?.callId) {
+        this.state.incomingCall = null
+        this.state.activeCall = null
+        this.state.callStartedAt = 0
+      }
 
       call.off('INCOMING_CALL', onCallIncoming)
       call.off('OUTGOING_CALL', onCallOutgoing)
@@ -609,6 +620,7 @@ export default class WebRTCManager extends Emitter {
       $Sounds.stopSounds([Sounds.CALL])
       $Sounds.playSound(Sounds.HANGUP)
     }
+
     call.on('DESTROY', onCallDestroy)
     call.on('ERROR', onCallDestroy)
 

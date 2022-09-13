@@ -220,4 +220,14 @@ export class IridiumManager extends Emitter {
 }
 
 const instance = new IridiumManager()
+
+declare global {
+  interface Window {
+    iridium?: IridiumManager
+  }
+}
+
+if (process.env.NODE_ENV === 'development') {
+  window.iridium = instance
+}
 export default instance
