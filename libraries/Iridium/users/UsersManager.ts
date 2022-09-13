@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { v4 } from 'uuid'
 import {
   IridiumPeerIdentifier,
@@ -32,7 +33,10 @@ export type IridiumUserPubsub = IridiumPubsubMessage<
 
 export default class UsersManager extends Emitter<IridiumUserPubsub> {
   public state: UserState = {}
-  public ephemeral: { status: { [key: string]: UserStatus } } = { status: {} }
+  public ephemeral: { status: { [key: string]: UserStatus | undefined } } = {
+    status: {},
+  }
+
   public ready: boolean = false
 
   private loggerTag = 'iridium/users'
@@ -117,7 +121,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   async loadUserData() {
     this.list.forEach(async (user: User) => {
       if (
-        this.ephemeral.status[user.did] === 'online' &&
+        this.ephemeral.status?.[user.did] === 'online' &&
         Number(user.seen) < Date.now() - 1000 * 30
       ) {
         logger.info(this.loggerTag, 'user timed out', user)
@@ -163,7 +167,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       logger.info(this.loggerTag, 'updating user details', {
         from,
         name: user.name,
-        status: this.ephemeral.status[user.did],
+        status: this.ephemeral.status?.[user.did],
       })
       this.setUserStatus(user.did, status)
       await this.setUser(from, {
@@ -284,7 +288,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
 
   async setUser(id: IridiumPeerIdentifier, user: User) {
     const did = didUtils.didString(id)
-    this.state = { ...this.state, [did]: { ...this.state[did], ...user } }
+    Vue.set(this.state, did, user)
 
     // rename chat conversations
     if (user.name) {
@@ -306,11 +310,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   setUserStatus(did: IridiumPeerIdentifier, status: UserStatus) {
-    this.ephemeral.status[didUtils.didString(did)] = status || 'offline'
-  }
-
-  getUserStatus(did: IridiumPeerIdentifier) {
-    return this.ephemeral.status[didUtils.didString(did)]
+    Vue.set(this.ephemeral.status, didUtils.didString(did), status || 'offline')
   }
 
   async send(event: IridiumUserEvent) {
