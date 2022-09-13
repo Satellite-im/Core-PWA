@@ -212,7 +212,6 @@ export default Vue.extend({
   cursor: -moz-grab;
   cursor: -webkit-grab;
   overflow: hidden;
-  box-shadow: @ui-shadow-large;
   &:extend(.no-select);
 }
 
