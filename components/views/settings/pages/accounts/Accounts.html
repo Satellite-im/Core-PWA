@@ -9,6 +9,7 @@
   </SettingsUnit>
 
   <SettingsUnit>
+    {{profile}}
     <TypographyLabel :text="$t('pages.settings.accounts.active')" />
     <InteractablesInput readonly :text="getId" @submit="copyAddress(getId)">
       <clipboard-icon size="1x" />
@@ -18,8 +19,8 @@
     <TypographyLabel :text="$t('pages.settings.accounts.active_did')" />
     <InteractablesInput
       readonly
-      :text="accounts.active"
-      @submit="copyAddress(accounts.active)"
+      :text="profile.did"
+      @submit="copyAddress(profile.did)"
     >
       <clipboard-icon size="1x" />
     </InteractablesInput>
