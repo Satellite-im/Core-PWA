@@ -575,7 +575,13 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
 
-    const onStream = async ({ did, kind }: { did: string; kind?: string }) => {}
+    const onStream = async ({ kind }: { kind?: string }) => {
+      if (!kind) return
+
+      this.setStreamMuted(iridium.id, {
+        [kind]: !!this.state.streamMuted[iridium.id]?.[kind],
+      })
+    }
     call.on('STREAM', onStream)
 
     const onAnswered = async ({ did }: { did: string }) => {
