@@ -30,32 +30,32 @@
         {{ conversation.name }}
       </TypographyText>
 
-      <div class="user-chat-details">
-        <TypographyText v-if="messages.length" color="dark" size="xs">
-          {{ timestamp }}
-        </TypographyText>
-        <TypographyTag
-          v-if="unreadCount"
-          class="tag"
-          :text="unreadCount"
-          small
-        />
-      </div>
+      <TypographyText
+        class="user-chat-details"
+        v-if="messages.length"
+        color="dark"
+        size="xs"
+      >
+        {{ timestamp }}
+      </TypographyText>
     </div>
 
-    <TypographyText
-      size="sm"
-      :color="unreadCount ? 'light' : 'dark'"
-      :weight="unreadCount ? 'bold' : ''"
-      data-cy="sidebar-user-name"
-    >
-      <div
-        ref="subtitle"
-        class="ellipsis"
-        :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
-        v-html="subtitle"
-      />
-    </TypographyText>
+    <div class="bottom">
+      <TypographyText
+        size="sm"
+        class="sidebar-subtitle"
+        :color="unreadCount ? 'light' : 'dark'"
+        :weight="unreadCount ? 'bold' : ''"
+      >
+        <div
+          ref="subtitle"
+          class="subtitle"
+          :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
+          v-html="subtitle"
+        />
+      </TypographyText>
+      <TypographyTag v-if="unreadCount" class="tag" :text="unreadCount" small />
+    </div>
   </div>
 
   <div class="user-loader">

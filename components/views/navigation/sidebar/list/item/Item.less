@@ -33,17 +33,34 @@
 
     .top {
       display: flex;
+      gap: 4px;
 
       .user-name {
         flex-grow: 1;
+        min-width: 0;
         &:extend(.ellipsis);
       }
 
       .user-chat-details {
-        .tag {
-          align-self: flex-end;
-          min-width: 16px;
+        flex-shrink: 0;
+      }
+    }
+
+    .bottom {
+      display: flex;
+      gap: 4px;
+
+      .sidebar-subtitle {
+        &:extend(.ellipsis);
+
+        .subtitle {
+          &:extend(.ellipsis);
         }
+      }
+
+      .tag {
+        align-self: flex-end;
+        min-width: 16px;
       }
     }
   }
