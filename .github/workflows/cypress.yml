@@ -5,21 +5,23 @@ on:
 
 jobs:
   cypress-run:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Update submodules
         run: git submodule update --init --recursive
-      - name: Linkscript
-        run: sh ./linkscript.sh
+      - name: Install pnpm
+        run: brew install pnpm
+      - name: Run corepack enable
+        run: corepack enable
       - name: Install modules
-        run: yarn install
+        run: yarn install --network-concurrency 1
       - name: Create env file
         run: |
           touch .env
           echo ENVIRONMENT="dev" >> .env
-          echo NUXT_ENV_IRIDIUM_SYNC_NODES=${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }} >> .env
+          echo NUXT_ENV_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
           cat .env
       - name: Read .env file
         id: envfile
@@ -28,8 +30,6 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
-      - name: Install Cypress
-        run: ./node_modules/.bin/cypress install --force
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
