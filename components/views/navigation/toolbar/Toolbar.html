@@ -29,7 +29,7 @@
       title="call"
       v-if="conversation"
       v-tooltip.bottom="callTooltipText"
-      :class="{disabled: !enableRTC || webrtc.activeCall}"
+      :class="{disabled: !enableRTC || webrtc.activeCall || isGroup}"
       data-cy="toolbar-enable-audio"
       @click="handleCall"
     >

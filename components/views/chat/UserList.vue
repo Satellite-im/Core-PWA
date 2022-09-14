@@ -35,6 +35,7 @@ export default Vue.extend({
 .user-list {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   gap: 16px;
   padding: 16px;
   width: 240px;
@@ -42,6 +43,7 @@ export default Vue.extend({
   background: @foreground-gradient;
   box-shadow: @ui-shadow;
   user-select: none;
+  border-radius: @corner-rounding;
 
   .user {
     display: flex;
