@@ -90,7 +90,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `requesting sync subscription to ${topic}`,
       )
       // ask the sync node to subscribe to this topic
-      iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
+      await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
         sync: {
           offline: true,
         },
@@ -391,7 +391,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversations/${id}`, conversation)
 
     // ask the sync node to subscribe to this topic
-    iridium.connector?.subscribe(`/chat/conversations/${id}`, {
+    await iridium.connector?.subscribe(`/chat/conversations/${id}`, {
       sync: { offline: true },
       handler: this.onConversationMessage.bind(this, id),
     })
