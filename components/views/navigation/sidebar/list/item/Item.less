@@ -31,36 +31,18 @@
     flex-grow: 1;
     min-width: 0;
 
-    .top {
-      display: flex;
-      gap: 4px;
-
-      .user-name {
-        flex-grow: 1;
-        min-width: 0;
-        &:extend(.ellipsis);
-      }
-
-      .user-chat-details {
-        flex-shrink: 0;
-      }
-    }
-
-    .bottom {
+    .row {
       display: flex;
       justify-content: space-between;
       gap: 4px;
 
-      .sidebar-subtitle {
-        &:extend(.ellipsis);
-
-        .subtitle {
-          &:extend(.ellipsis);
-        }
+      .timestamp {
+        flex-shrink: 0;
       }
 
       .tag {
         min-width: 16px;
+        flex-shrink: 0;
       }
     }
   }

@@ -18,9 +18,9 @@
     />
   </template>
   <div class="user-info">
-    <div class="top">
+    <div class="row">
       <TypographyText
-        class="user-name"
+        class="ellipsis"
         color="light"
         font="heading"
         weight="bold"
@@ -31,7 +31,7 @@
       </TypographyText>
 
       <TypographyText
-        class="user-chat-details"
+        class="timestamp"
         v-if="messages.length"
         color="dark"
         size="xs"
@@ -40,16 +40,16 @@
       </TypographyText>
     </div>
 
-    <div class="bottom">
+    <div class="row">
       <TypographyText
         size="sm"
-        class="sidebar-subtitle"
+        class="ellipsis"
         :color="unreadCount ? 'light' : 'dark'"
         :weight="unreadCount ? 'bold' : ''"
       >
         <div
           ref="subtitle"
-          class="subtitle"
+          class="ellipsis"
           :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
           v-html="subtitle"
         />
