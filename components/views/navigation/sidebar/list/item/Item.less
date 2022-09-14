@@ -2,6 +2,7 @@
   height: 64px;
   display: flex;
   align-items: center;
+  gap: 8px;
   cursor: pointer;
   position: relative;
   padding: @light-spacing;
@@ -27,20 +28,40 @@
   }
 
   .user-info {
-    flex: 1;
-    padding-left: @light-spacing;
-    overflow: hidden;
-  }
+    flex-grow: 1;
+    min-width: 0;
 
-  .user-chat-details {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    gap: 4px;
+    .top {
+      display: flex;
+      gap: 4px;
 
-    .tag {
-      align-self: flex-end;
-      min-width: 16px;
+      .user-name {
+        flex-grow: 1;
+        min-width: 0;
+        &:extend(.ellipsis);
+      }
+
+      .user-chat-details {
+        flex-shrink: 0;
+      }
+    }
+
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+
+      .sidebar-subtitle {
+        &:extend(.ellipsis);
+
+        .subtitle {
+          &:extend(.ellipsis);
+        }
+      }
+
+      .tag {
+        min-width: 16px;
+      }
     }
   }
 

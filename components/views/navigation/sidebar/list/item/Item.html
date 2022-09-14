@@ -11,42 +11,53 @@
       :user="user"
       :conversationId="conversationId"
     />
+
     <UiGroupIcon
       v-else-if="conversation.participants"
       :members="conversation.participants"
     />
   </template>
   <div class="user-info">
-    <TypographyText
-      class="ellipsis"
-      color="light"
-      font="heading"
-      weight="bold"
-      data-cy="sidebar-user-name"
-      :color="!!unreadCount ? 'light' : 'dark'"
-    >
-      {{ conversation.name }}
-    </TypographyText>
-    <TypographyText
-      size="sm"
-      :color="unreadCount ? 'light' : 'dark'"
-      :weight="unreadCount ? 'bold' : ''"
-      data-cy="sidebar-user-name"
-    >
-      <div
-        ref="subtitle"
-        class="ellipsis"
-        :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
-        v-html="subtitle"
-      />
-    </TypographyText>
+    <div class="top">
+      <TypographyText
+        class="user-name"
+        color="light"
+        font="heading"
+        weight="bold"
+        data-cy="sidebar-user-name"
+        :color="!!unreadCount ? 'light' : 'dark'"
+      >
+        {{ conversation.name }}
+      </TypographyText>
+
+      <TypographyText
+        class="user-chat-details"
+        v-if="messages.length"
+        color="dark"
+        size="xs"
+      >
+        {{ timestamp }}
+      </TypographyText>
+    </div>
+
+    <div class="bottom">
+      <TypographyText
+        size="sm"
+        class="sidebar-subtitle"
+        :color="unreadCount ? 'light' : 'dark'"
+        :weight="unreadCount ? 'bold' : ''"
+      >
+        <div
+          ref="subtitle"
+          class="subtitle"
+          :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
+          v-html="subtitle"
+        />
+      </TypographyText>
+      <TypographyTag v-if="unreadCount" class="tag" :text="unreadCount" small />
+    </div>
   </div>
-  <div class="user-chat-details">
-    <TypographyText v-if="messages.length" color="dark" size="xs">
-      {{ timestamp }}
-    </TypographyText>
-    <TypographyTag v-if="unreadCount" class="tag" :text="unreadCount" small />
-  </div>
+
   <div class="user-loader">
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
