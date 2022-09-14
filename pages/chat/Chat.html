@@ -5,7 +5,11 @@
     :max-viewable-users="10"
     :fullscreen-max-viewable-users="20"
   />
-  <Conversation />
-  <Chatbar />
-  <!-- <WalletMini v-if="ui.modals.walletMini" /> -->
+  <div class="outer-wrapper">
+    <div class="inner-wrapper">
+      <Conversation />
+      <Chatbar />
+    </div>
+    <UserList v-if="isGroup" />
+  </div>
 </div>
