@@ -31,12 +31,12 @@
     />
   </div>
   <TypographyText
+    v-if="activeUpload"
     class="no-select"
     size="sm"
-    :color="'danger'"
-    v-if="activeUpload"
+    color="danger"
   >
     {{ $t('global.active_upload') }}
   </TypographyText>
-  <ChatbarFooter v-else :charlimit="charlimit" />
+  <!-- <ChatbarFooter v-else :charlimit="charlimit" /> -->
 </div>

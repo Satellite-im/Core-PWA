@@ -21,7 +21,6 @@ import {
   conversationHooks,
   call,
 } from '~/components/compositions/conversations'
-import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -46,8 +45,8 @@ export default Vue.extend({
       conversationId,
       isGroup,
       otherDids,
+      otherParticipants,
       enableRTC,
-      userDetails,
     } = conversationHooks()
 
     const subtitleText: ComputedRef<string | undefined> = computed(() => {
@@ -68,7 +67,7 @@ export default Vue.extend({
     })
 
     async function handleCall() {
-      if (isGroup.value || !enableRTC.value) {
+      if (isGroup.value || !enableRTC.value || !conversationId.value) {
         return
       }
       await call({
@@ -81,12 +80,11 @@ export default Vue.extend({
     return {
       conversation,
       isGroup,
-      otherDids,
       enableRTC,
       subtitleText,
       callTooltipText,
-      userDetails,
       handleCall,
+      otherParticipants,
     }
   },
   data() {

@@ -1,4 +1,4 @@
-import { computed, ComputedRef } from 'vue'
+import { computed, ComputedRef, reactive } from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
@@ -7,12 +7,22 @@ import { TrackKind } from '~/libraries/WebRTC/types'
 export function conversationHooks() {
   // @ts-ignore
   const $nuxt = useNuxtApp()
-  const conversationId: ComputedRef<string> = computed(() => {
+
+  const managers = reactive({
+    chat: iridium.chat,
+    users: iridium.users,
+  })
+
+  // todo - refactor so a conversationId param can be passed in rather than relying on route every time
+  const conversationId: ComputedRef<string | undefined> = computed(() => {
     return $nuxt.$route.params.id
   })
 
   const conversation: ComputedRef<Conversation | undefined> = computed(() => {
-    return iridium.chat.state.conversations[conversationId.value]
+    if (!conversationId.value) {
+      return
+    }
+    return managers.chat.state.conversations[conversationId.value]
   })
 
   const isGroup: ComputedRef<boolean> = computed(() => {
@@ -27,17 +37,40 @@ export function conversationHooks() {
     )
   })
 
+  const otherParticipants: ComputedRef<(User | undefined)[]> = computed(() => {
+    return otherDids.value.map((did) => managers.users.getUser(did))
+  })
+
+  const otherTypingParticipants: ComputedRef<(User | undefined)[]> = computed(
+    () => {
+      if (!conversationId.value) {
+        return []
+      }
+      return (
+        managers.chat.ephemeral.typing[conversationId.value]?.map((did) =>
+          managers.users.getUser(did),
+        ) ?? []
+      )
+    },
+  )
+
+  const allParticipantsAlphaSorted: ComputedRef<(User | undefined)[]> =
+    computed(() => {
+      if (!conversation.value) {
+        return []
+      }
+      const arr = conversation.value.participants.map((p) =>
+        managers.users.getUser(p),
+      ) as User[]
+      return arr.sort((a, b) => a.name.localeCompare(b.name))
+    })
+
   const enableRTC: ComputedRef<boolean> = computed(() => {
     return Boolean(
       otherDids.value?.filter(
-        (did) => iridium.users.ephemeral.status[did] === 'online',
+        (did) => managers.users.ephemeral.status[did] === 'online',
       ).length,
     )
-  })
-
-  // for a DM
-  const userDetails: ComputedRef<User> = computed(() => {
-    return iridium.users.state[otherDids.value[0]]
   })
 
   return {
@@ -45,8 +78,10 @@ export function conversationHooks() {
     conversationId,
     isGroup,
     otherDids,
+    otherParticipants,
+    otherTypingParticipants,
+    allParticipantsAlphaSorted,
     enableRTC,
-    userDetails,
   }
 }
 
@@ -61,7 +96,7 @@ export async function call({
 }) {
   // @ts-ignore
   const $nuxt = useNuxtApp()
-  const { enableRTC, otherDids } = conversationHooks()
+  const { enableRTC } = conversationHooks()
 
   if (!enableRTC.value) {
     return

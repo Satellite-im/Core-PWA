@@ -1,9 +1,15 @@
 <template>
   <div class="user-list hover-scroll">
     <TypographyText>
-      {{ $t('pages.chat.members', { count: userDetails.length }) }}
+      {{
+        $t('pages.chat.members', { count: allParticipantsAlphaSorted.length })
+      }}
     </TypographyText>
-    <div v-for="user in userDetails" :key="user.did" class="user">
+    <div
+      v-for="user in allParticipantsAlphaSorted"
+      :key="user.did"
+      class="user"
+    >
       <UiUserState :user="user" :conversation-id="conversationId" />
       <TypographyText class="ellipsis">
         {{ user.name }}
@@ -13,30 +19,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { computed, ComputedRef, reactive } from 'vue'
-import iridium from '~/libraries/Iridium/IridiumManager'
+import Vue from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
-import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   setup() {
-    const { conversation, conversationId } = conversationHooks()
+    const { conversationId, allParticipantsAlphaSorted } = conversationHooks()
 
-    const state = reactive({
-      users: iridium.users,
-    })
-
-    const userDetails: ComputedRef<User[]> = computed(() => {
-      if (!conversation.value) {
-        return []
-      }
-      const arr = conversation.value.participants.map((p) =>
-        state.users.getUser(p),
-      ) as User[]
-      return arr.sort((a, b) => a.name.localeCompare(b.name))
-    })
-
-    return { conversation, conversationId, userDetails }
+    return { conversationId, allParticipantsAlphaSorted }
   },
 })
 </script>

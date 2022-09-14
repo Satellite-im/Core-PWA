@@ -20,8 +20,8 @@
   >
     <video-icon size="1.4x" />
   </button>
-  <template v-if="userDetails">
-    <UiUserState v-if="!isGroup" :user="userDetails" />
+  <template v-if="otherParticipants.length">
+    <UiUserState v-if="!isGroup" :user="otherParticipants[0]" />
     <UiGroupIcon v-else :members="conversation?.participants" />
   </template>
 </div>
