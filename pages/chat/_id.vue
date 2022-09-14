@@ -9,7 +9,7 @@ export default Vue.extend({
   name: 'Chat',
   layout: 'desktop',
   setup() {
-    const { conversationId, conversation, isGroup } = conversationHooks()
+    const { conversationId, isGroup } = conversationHooks()
 
     const state = reactive({
       webrtc: iridium.webRTC,
@@ -19,7 +19,7 @@ export default Vue.extend({
       return state.webrtc.isActiveCall(conversationId.value)
     })
 
-    return { conversation, isGroup, isActiveCall }
+    return { isGroup, isActiveCall }
   },
 })
 </script>

@@ -1,7 +1,7 @@
 <div class="toolbar">
   <InteractablesSidebarToggle v-if="!ui.showSidebar" />
   <div class="circle-container">
-    <UiUserState v-if="!isGroup" class="circle" :user="userDetails" />
+    <UiUserState v-if="!isGroup" class="circle" :user="otherParticipants[0]" />
     <UiGroupIcon v-else :members="conversation.participants" />
   </div>
   <div class="user-info">

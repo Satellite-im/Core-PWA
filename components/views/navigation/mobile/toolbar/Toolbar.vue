@@ -29,12 +29,12 @@ export default Vue.extend({
       conversationId,
       isGroup,
       otherDids,
+      otherParticipants,
       enableRTC,
-      userDetails,
     } = conversationHooks()
 
     async function handleCall() {
-      if (isGroup.value || !enableRTC.value) {
+      if (isGroup.value || !enableRTC.value || !conversationId.value) {
         return
       }
       await call({
@@ -47,9 +47,8 @@ export default Vue.extend({
     return {
       conversation,
       isGroup,
-      otherDids,
       enableRTC,
-      userDetails,
+      otherParticipants,
       handleCall,
     }
   },
