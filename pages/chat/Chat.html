@@ -8,7 +8,8 @@
   <div class="outer-wrapper">
     <div class="inner-wrapper">
       <Conversation />
-      <Chatbar />
+      <!-- dont remove ref, used in layouts/desktop.vue -->
+      <Chatbar ref="chatbar" />
     </div>
     <UserList v-if="isGroup" />
   </div>
