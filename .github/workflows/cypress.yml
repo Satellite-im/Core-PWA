@@ -28,6 +28,8 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Install Cypress
+        run: yarn cypress install --force
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
