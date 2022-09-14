@@ -84,16 +84,16 @@
         @close="isGroupInviteVisible = false"
       />
     </template>
-
     <div class="vertical-divider" />
-
-    <SearchInput
-      v-if="$device.isDesktop"
-      :placeholder="$t('search.search')"
-      :search-recommend="searchRecommend"
-      @search="handleSearch"
-      @change="handleChange"
-    />
+    <UiComingSoon style="width: auto; height: auto">
+      <SearchInput
+        v-if="$device.isDesktop"
+        :placeholder="$t('search.search')"
+        :search-recommend="searchRecommend"
+        @search="handleSearch"
+        @change="handleChange"
+      />
+    </UiComingSoon>
     <SearchResult
       v-if="$device.isDesktop && searchQuery"
       :search-query="searchQuery"
