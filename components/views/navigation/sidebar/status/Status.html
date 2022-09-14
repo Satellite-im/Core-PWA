@@ -1,10 +1,11 @@
 <div id="status" v-show="!!profile">
   <UiUserState :user="profile" />
   <div class="user-info" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
-    <TypographyTitle data-cy="user-name" :text="profile.name" :size="6" />
+    <TypographyTitle data-cy="user-name" :text="profileName" :size="6" />
     <TypographySubtitle
-      :text="profile.status || $t('pages.settings.accounts.no_status')"
+      :text="profileStatus || $t('pages.settings.accounts.no_status')"
       :size="6"
     />
+    {{profileStatus}}
   </div>
 </div>

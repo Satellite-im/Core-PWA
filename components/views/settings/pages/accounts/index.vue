@@ -17,12 +17,19 @@ export default Vue.extend({
   data() {
     return {
       showPhrase: false,
+      profile: iridium.profile.state,
     }
   },
   computed: {
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
     }),
+    getId(): string | unknown {
+      if (!iridium.connector) return
+      return this.profile
+        ? `${this.profile.name}#${iridium.id.substring(iridium.id.length - 6)}`
+        : `${iridium.id}`
+    },
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
@@ -44,14 +51,8 @@ export default Vue.extend({
     togglePhrase() {
       this.showPhrase = !this.showPhrase
     },
-    copyAddress() {
-      if (!iridium.connector) return
-      const shortID = iridium.profile.state
-        ? `${iridium.profile.state.name}#${iridium.id.substring(
-            iridium.id.length - 6,
-          )}`
-        : `${iridium.id}`
-      navigator.clipboard.writeText(shortID)
+    copyAddress(copyText: string) {
+      navigator.clipboard.writeText(copyText)
       this.$toast.show(this.$t('ui.copied') as string)
     },
     copyPhrase() {

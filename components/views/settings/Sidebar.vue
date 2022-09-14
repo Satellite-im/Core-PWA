@@ -76,10 +76,6 @@ export default Vue.extend({
               text: 'Storage',
             },
             {
-              to: SettingsRoutes.NETWORK,
-              text: 'Network',
-            },
-            {
               to: SettingsRoutes.KEY_BINDS,
               text: 'Keybinds',
             },

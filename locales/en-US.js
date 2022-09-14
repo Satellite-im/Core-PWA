@@ -319,11 +319,12 @@ export default {
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
+          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. Files will not leave Satellite infrastructure. Only the hash of files will be checked against the third party database.',
       },
       nsfw: {
         title: 'Block NSFW content',
-        subtitle: 'If selected, NSFW content will be obscured.',
+        subtitle:
+          'If selected, we will use AI to try and detect and obscure NSFW content.',
       },
       other: 'Other',
       register: {
@@ -344,7 +345,7 @@ export default {
       embeds: {
         title: 'Enable External Embeds',
         subtitle:
-          'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
+          'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more. This may allow embedded content providers to include their own tracking information.',
       },
       ownserver: 'Own server',
       serverType: {
@@ -513,6 +514,7 @@ export default {
         subtitle:
           "Select which account you'd prefer to default transactions from.",
         active: 'Active Account',
+        active_did: 'Active Account Decentralized Identifier (did)',
         gas_price: 'Transaction Fee Limit',
         devices: 'Connected Devices',
         no_devices: 'No connected devices found.',
