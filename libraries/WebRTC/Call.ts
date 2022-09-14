@@ -1068,12 +1068,16 @@ export class Call extends Emitter<CallEventListeners> {
 
     this.peerConnected[peer.id] = true
     this.peerDialingDisabled[peer.id] = true
-    this.emit('REMOTE_TRACK_RECEIVED', {
-      did: peer.id,
-      track,
-      stream,
-      kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
-    })
+
+    const emit = () => {
+      this.emit('REMOTE_TRACK_RECEIVED', {
+        did: peer.id,
+        track,
+        stream,
+        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
+      })
+    }
+    track.onunmute = emit
   }
 
   /**
