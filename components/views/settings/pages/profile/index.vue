@@ -100,8 +100,6 @@ export default Vue.extend({
       const img = new Image()
       img.src = this.croppedImage
       // TODO: Save image with iridium
-      // Note: This was used for Solana implementation
-      // this.$store.dispatch('accounts/updateProfilePhoto', image)
     },
     /**
      * @method selectProfileImage DocsTODO
