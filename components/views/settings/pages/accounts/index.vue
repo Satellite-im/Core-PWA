@@ -17,22 +17,30 @@ export default Vue.extend({
   data() {
     return {
       showPhrase: false,
+      profile: iridium.profile.state,
     }
   },
   computed: {
     ...mapState({
-      accounts: (state) => (state as RootState).accounts,
+      storePin: (state) => (state as RootState).accounts.storePin,
+      accountPhrase: (state) => (state as RootState).accounts.phrase,
     }),
+    getId(): string | undefined {
+      if (!iridium.connector) return
+      return this.profile
+        ? `${this.profile.name}#${iridium.id.substring(iridium.id.length - 6)}`
+        : `${iridium.id}`
+    },
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
       },
       get(): boolean {
-        return this.accounts.storePin
+        return !!this.storePin
       },
     },
     splitPhrase(): string[] {
-      return this.accounts.phrase.split(' ')
+      return this.accountPhrase.split(' ')
     },
   },
   methods: {
@@ -44,18 +52,12 @@ export default Vue.extend({
     togglePhrase() {
       this.showPhrase = !this.showPhrase
     },
-    copyAddress() {
-      if (!iridium.connector) return
-      const shortID = iridium.profile.state
-        ? `${iridium.profile.state.name}#${iridium.id.substring(
-            iridium.id.length - 6,
-          )}`
-        : `${iridium.id}`
-      navigator.clipboard.writeText(shortID)
+    copyAddress(copyText: string) {
+      navigator.clipboard.writeText(copyText)
       this.$toast.show(this.$t('ui.copied') as string)
     },
     copyPhrase() {
-      navigator.clipboard.writeText(this.accounts.phrase)
+      navigator.clipboard.writeText(this.accountPhrase)
       this.$toast.show(this.$t('ui.copied') as string)
     },
   },

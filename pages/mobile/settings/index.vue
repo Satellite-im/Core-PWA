@@ -32,7 +32,7 @@
         />
         <SettingsPagesProfile v-if="settingsRoute === SettingsRoutes.PROFILE" />
         <SettingsPagesStorage v-if="settingsRoute === SettingsRoutes.STORAGE" />
-        <SettingsPagesNetwork v-if="settingsRoute === SettingsRoutes.NETWORK" />
+        <!-- <SettingsPagesNetwork v-if="settingsRoute === SettingsRoutes.NETWORK" /> -->
         <SettingsPagesRealms v-if="settingsRoute === SettingsRoutes.REALMS" />
         <SettingsPagesPrivacy
           v-if="settingsRoute === SettingsRoutes.PRIVACY_AND_PERMISSIONS"

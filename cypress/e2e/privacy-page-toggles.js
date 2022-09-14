@@ -51,7 +51,7 @@ describe('Privacy Settings Page - Toggles Tests', () => {
 
     cy.contains('Enable External Embeds').should('be.visible')
     cy.contains(
-      'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
+      'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more. This may allow embedded content providers to include their own tracking information.',
     ).should('be.visible')
 
     cy.contains('Display Current Activity').should('be.visible')
@@ -61,13 +61,13 @@ describe('Privacy Settings Page - Toggles Tests', () => {
 
     cy.contains('Consent to File Scanning').should('be.visible')
     cy.contains(
-      'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
+      'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. Files will not leave Satellite infrastructure. Only the hash of files will be checked against the third party database.',
     ).should('be.visible')
 
     cy.contains('Block NSFW content').should('be.visible')
-    cy.contains('If selected, NSFW content will be obscured.').should(
-      'be.visible',
-    )
+    cy.contains(
+      'If selected, we will use AI to try and detect and obscure NSFW content.',
+    ).should('be.visible')
   })
 
   it('Privacy Page - Verify register publicly toggle is locked and disabled', () => {
