@@ -6,7 +6,6 @@ import logger from '~/plugins/local/logger'
 
 export default {
   initialize({ state, commit }: ActionsArguments<AudioState>) {
-    commit('setMute', true)
     logger.info('store/audio/actions.initialize', 'initializing audio store')
     if (iridium.id) {
       iridium.webRTC.setStreamMuted(iridium.id, {
