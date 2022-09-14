@@ -9,12 +9,14 @@ import {
   MicIcon,
   MicOffIcon,
 } from 'satellite-lucide-icons'
+import VideoComponent from './Video.vue'
 import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Call, CallPeerStreams } from '~/libraries/WebRTC/Call'
+import { WebRTCActiveCall } from '~/libraries/Iridium/webrtc/types'
 
 export default Vue.extend({
   name: 'MediaUser',
@@ -23,6 +25,7 @@ export default Vue.extend({
     VideoOffIcon,
     MicIcon,
     MicOffIcon,
+    VideoComponent,
   },
   props: {
     user: {
@@ -66,6 +69,9 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
+    activeCall(): WebRTCActiveCall | null {
+      return iridium.webRTC.state.activeCall
+    },
     call(): Call | undefined {
       if (!iridium.webRTC.state.activeCall?.callId) return
       return iridium.webRTC.state.calls[iridium.webRTC.state.activeCall.callId]

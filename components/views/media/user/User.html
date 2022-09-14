@@ -12,7 +12,13 @@
   :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
   @click="$emit('click', $event)"
 >
-  <video
+  <video-component
+    :activeCall="activeCall"
+    v-if="stream === 'video'"
+    kind="video"
+    :isLocal="isLocal"
+  />
+  <!-- <video
     v-if="stream === 'video'"
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
@@ -21,9 +27,15 @@
     :src-object.prop="videoStream"
     playsinline
     autoplay
+  /> -->
+
+  <video-component
+    v-else-if="stream === 'screen'"
+    kind="screen"
+    :isLocal="isLocal"
   />
 
-  <video
+  <!-- <video
     v-else-if="stream === 'screen'"
     :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
     class="video-stream"
@@ -31,7 +43,7 @@
     :src-object.prop="screenStream"
     playsinline
     autoplay
-  />
+  /> -->
 
   <div
     v-else
