@@ -21,6 +21,8 @@ import {
   conversationHooks,
   call,
 } from '~/components/compositions/conversations'
+import { User } from '~/libraries/Iridium/users/types'
+import { TrackKind } from '~/libraries/WebRTC/types'
 
 export default Vue.extend({
   components: {
@@ -66,25 +68,15 @@ export default Vue.extend({
       )
     })
 
-    async function handleCall() {
-      if (isGroup.value || !enableRTC.value || !conversationId.value) {
-        return
-      }
-      await call({
-        recipient: otherDids.value[0],
-        conversationId: conversationId.value,
-        kinds: ['audio'],
-      })
-    }
-
     return {
       conversation,
+      conversationId,
       isGroup,
       enableRTC,
       subtitleText,
       callTooltipText,
-      handleCall,
       otherParticipants,
+      userDetails,
     }
   },
   data() {
@@ -101,10 +93,27 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
     }),
     ModalWindows: () => ModalWindows,
   },
   methods: {
+    async handleCall() {
+      if (this.isGroup || !this.enableRTC) {
+        return
+      }
+      const kinds = [] as TrackKind[]
+      if (!this.audio.muted) {
+        kinds.push('audio')
+      }
+      console.log('kinds', kinds)
+      await call({
+        recipient: this.otherDids[0],
+        conversationId: this.conversationId,
+        kinds,
+      })
+    },
     toggleAlerts() {
       this.$store.commit('ui/clearAllNotifications')
       this.showAlerts = !this.showAlerts

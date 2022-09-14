@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import { mapState } from 'vuex'
 import {
   PhoneIcon,
   PhoneOffIcon,
@@ -14,6 +14,7 @@ import { User } from '~/libraries/Iridium/friends/types'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -30,6 +31,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+    }),
     conversationId(): Conversation['id'] | undefined {
       return this.incomingCall?.did
     },
@@ -69,11 +73,17 @@ export default Vue.extend({
      * @description
      * @example
      */
-    async acceptCall(kinds: TrackKind[]) {
+    async acceptCall() {
       const conversationId = this.webrtc.incomingCall?.callId
       if (!conversationId) {
         return
       }
+
+      const kinds = [] as TrackKind[]
+      if (!this.audio.muted) {
+        kinds.push('audio')
+      }
+      console.log('kinds', kinds)
 
       await iridium.webRTC
         .acceptCall(kinds)

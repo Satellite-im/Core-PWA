@@ -303,7 +303,6 @@ export class Call extends Emitter<CallEventListeners> {
    * @method createAudioStream
    * @description Create local audio stream and send it to remote peers
    * @param constraints Media stream constraints to apply
-   * @returns {Promise<void>}
    * @example
    * await call.createAudioStream()
    */

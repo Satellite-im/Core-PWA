@@ -31,7 +31,7 @@ export default Vue.extend({
       timestamp: '' as string | TranslateResult,
       timeoutId: undefined as NodeJS.Timeout | undefined,
       conversations: iridium.chat.state.conversations,
-      statuses: iridium.users.ephemeral.status,
+      ephemeral: iridium.users.ephemeral,
       users: iridium.users.state,
     }
   },
@@ -66,7 +66,7 @@ export default Vue.extend({
       return iridium.users.state[this.userId]
     },
     status(): UserStatus {
-      return iridium.users.ephemeral.status?.[this.userId] || 'offline'
+      return this.ephemeral.status[this.userId] || 'offline'
     },
     isTyping(): boolean {
       if (!this.user) return false

@@ -316,11 +316,10 @@ export default class WebRTCManager extends Emitter {
     } = {},
   ) {
     Vue.set(this.state.streamMuted, did, {
-      audio: audio ?? this.state.streamMuted[did]?.audio ?? false,
-      video: video ?? this.state.streamMuted[did]?.video ?? false,
-      screen: screen ?? this.state.streamMuted[did]?.screen ?? false,
-      headphones:
-        headphones ?? this.state.streamMuted[did]?.headphones ?? false,
+      audio: audio ?? this.state.streamMuted[did]?.audio ?? true,
+      video: video ?? this.state.streamMuted[did]?.video ?? true,
+      screen: screen ?? this.state.streamMuted[did]?.screen ?? true,
+      headphones: headphones ?? this.state.streamMuted[did]?.headphones ?? true,
     })
   }
 
@@ -349,11 +348,6 @@ export default class WebRTCManager extends Emitter {
     const call = this.state.calls[callId] || new Call(callId, this.wire, peers)
     this.state.calls = { ...this.state.calls, [callId]: call }
 
-    this.setStreamMuted(iridium.id, {
-      audio: true,
-      video: true,
-      screen: true,
-    })
     if (did) {
       this.setStreamMuted(did, {
         audio: true,
@@ -426,7 +420,6 @@ export default class WebRTCManager extends Emitter {
       this.state.activeCall = { callId, did }
       this.state.callStartedAt = Date.now()
 
-      // TODO: wire this up to mute
       this.emit('callConnected', { callId, did })
 
       $Sounds.stopSounds([Sounds.CALL])
