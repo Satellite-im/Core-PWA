@@ -64,7 +64,6 @@ export default class IridiumProfile extends Emitter {
       payload,
       options,
     )
-    this.state = await this.get<User>()
   }
 
   async setUser() {
@@ -76,6 +75,10 @@ export default class IridiumProfile extends Emitter {
 
   async updateUser(details: Partial<User>) {
     logger.info('iridium/profile', 'updating user', { details })
+    for (const [key, value] of Object.entries(details)) {
+      this.state[key] = value
+    }
+
     await this.set('/', { ...this.state, ...(details as User) })
     if (!this.state || !iridium.id) return
     // tell our peers via user announce

@@ -311,26 +311,6 @@ export default {
   },
 
   /**
-   * @method updateProfilePhoto
-   * @description update profile photo of the user on the Solana blockchain
-   * @param image
-   * @example
-   * ```typescript
-   * this.$store.dispatch(
-   *  'accounts/updateProfilePhoto', image
-   * );
-   * ```
-   */
-  async updateProfilePhoto(
-    { commit, state, dispatch }: ActionsArguments<AccountsState>,
-    image: string,
-  ) {
-    const imagePath = await uploadPicture(image)
-    await iridium.profile?.updateUser({ photoHash: imagePath })
-    commit('setPhotoHash', imagePath)
-  },
-
-  /**
    * @method initializeEncryptionEngine
    * @description Initializes the Crypto class with the current user keypair
    * @param userAccount keypair of the current user
