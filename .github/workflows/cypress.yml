@@ -11,17 +11,15 @@ jobs:
         uses: actions/checkout@v2
       - name: Update submodules
         run: git submodule update --init --recursive
-      - name: Install pnpm
-        run: brew install pnpm
-      - name: Run corepack enable
-        run: corepack enable
+      - name: Linkscript
+        run: sh ./linkscript.sh
       - name: Install modules
         run: yarn install --network-concurrency 1
       - name: Create env file
         run: |
           touch .env
           echo ENVIRONMENT="dev" >> .env
-          echo NUXT_ENV_TEXTILE_API_KEY=${{ secrets.NUXT_ENV_TEXTILE_API_KEY }} >> .env
+          echo NUXT_ENV_IRIDIUM_SYNC_NODES=${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }} >> .env
           cat .env
       - name: Read .env file
         id: envfile
