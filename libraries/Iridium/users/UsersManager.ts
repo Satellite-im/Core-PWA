@@ -82,7 +82,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       this.setUserStatus(peer.did, 'offline')
     })
 
-    this.loadUserData()
+    await this.loadUserData()
     setInterval(async () => {
       await this.loadUserData()
     }, 1800000)
