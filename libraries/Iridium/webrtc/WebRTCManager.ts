@@ -348,6 +348,10 @@ export default class WebRTCManager extends Emitter {
     const call = this.state.calls[callId] || new Call(callId, this.wire, peers)
     this.state.calls = { ...this.state.calls, [callId]: call }
 
+    this.setStreamMuted(iridium.id, {
+      video: true,
+      screen: true,
+    })
     if (did) {
       this.setStreamMuted(did, {
         audio: true,

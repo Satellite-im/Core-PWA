@@ -107,7 +107,7 @@ export default Vue.extend({
       if (!this.audio.muted) {
         kinds.push('audio')
       }
-      console.log('kinds', kinds)
+      this.$store.commit('video/setDisabled', true)
       await call({
         recipient: this.otherDids[0],
         conversationId: this.conversationId,

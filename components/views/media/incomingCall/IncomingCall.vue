@@ -78,13 +78,11 @@ export default Vue.extend({
       if (!conversationId) {
         return
       }
-
       const kinds = [] as TrackKind[]
       if (!this.audio.muted) {
         kinds.push('audio')
       }
-      console.log('kinds', kinds)
-
+      this.$store.commit('video/setDisabled', true)
       await iridium.webRTC
         .acceptCall(kinds)
         .catch((e) => this.$toast.error(this.$t(e.message) as string))
