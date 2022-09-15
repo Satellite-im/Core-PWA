@@ -1,35 +1,16 @@
 .quick-chat {
   &:extend(.background-semitransparent-dark);
-  &:extend(.round-corners);
-  &:extend(.first-layer);
   &:extend(.bordered);
   &:extend(.blur);
   position: absolute;
-  width: 18rem;
+  width: 288px;
   top: 100%;
   left: 13px;
-  padding: @light-spacing @light-spacing @normal-spacing;
+  padding: 8px 8px 16px;
   display: flex;
   flex-direction: column;
-  gap: @normal-spacing;
+  gap: 16px;
   max-height: 500px;
-
-  .subtitle {
-    margin-bottom: @light-spacing;
-    font-size: @text-size;
-  }
-
-  .error {
-    word-wrap: break-word;
-  }
-
-  button {
-    align-self: flex-end;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .quick-chat {
-    left: @servers-size + 2rem;
-  }
+  border-radius: @corner-rounding;
+  z-index: 1;
 }
