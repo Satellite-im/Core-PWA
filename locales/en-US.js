@@ -1,6 +1,7 @@
 export default {
   coming_soon: {
     communities: 'Communities\nComing Soon',
+    add_community: 'New Community\nComing Soon',
     send_money: 'Send Money\nComing Soon',
     alerts: 'Alerts\nComing Soon',
     marketplace: 'Marketplace\nComing Soon',
