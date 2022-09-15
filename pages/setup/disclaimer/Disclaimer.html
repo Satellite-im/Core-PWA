@@ -1,32 +1,32 @@
 <div class="container">
-   <div class="disclaimer-body">
-      <TypographyText as="h1">
-         {{ $t('pages.disclaimer.title') }}
-      </TypographyText>
-      <TypographyText as="p" color="dark">
-         {{ $t('pages.disclaimer.subtitle') }}
-      </TypographyText>
-   </div>
-   <div class="buttons">
+  <div class="disclaimer-body">
+    <TypographyText as="h1">
+      {{ $t('pages.disclaimer.title') }}
+    </TypographyText>
+    <TypographyText as="p" color="dark">
+      {{ $t('pages.disclaimer.subtitle') }}
+    </TypographyText>
+  </div>
+  <div class="buttons">
+    <InteractablesButton
+      data-cy="create-account-button"
+      :text="$t('pages.disclaimer.create')"
+      @click="generateWallet"
+      :loading="isLoading"
+    />
+    <UiComingSoon style="width: auto; height: auto">
       <InteractablesButton
-         data-cy="create-account-button"
-         :text="$t('pages.disclaimer.create')"
-         @click="generateWallet"
-         :loading="isLoading"
-         />
-      <UiComingSoon style="width: auto; height: auto">
-         <InteractablesButton
-            data-cy="connect-wallet-button"
-            @click="connectAccount"
-            :text="$t('pages.disclaimer.connect')"
-            />
-      </UiComingSoon>
-      <UiComingSoon style="width: auto; height: auto">
-         <InteractablesButton
-            data-cy="import-account-button"
-            @click="importAccount"
-            :text="$t('pages.disclaimer.import')"
-            />
-      </UiComingSoon>
-   </div>
+        data-cy="connect-wallet-button"
+        @click="connectAccount"
+        :text="$t('pages.disclaimer.connect')"
+      />
+    </UiComingSoon>
+    <UiComingSoon style="width: auto; height: auto">
+      <InteractablesButton
+        data-cy="import-account-button"
+        @click="importAccount"
+        :text="$t('pages.disclaimer.import')"
+      />
+    </UiComingSoon>
+  </div>
 </div>
