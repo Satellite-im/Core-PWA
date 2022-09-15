@@ -34,7 +34,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: npm run cy:run
+          command: npx cypress run browser --chrome --disable-gpu
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Artifacts
