@@ -8,7 +8,6 @@
 
 #### Bugs and Feature Requests: [issues.satellite.im](https://issues.satellite.im)
 
-
 # Running
 
 ## Environment
