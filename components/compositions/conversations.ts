@@ -107,7 +107,7 @@ export async function call({
       conversationId,
       kinds,
     })
-    .catch((e) => $nuxt.$toast.error($nuxt.i18n.t(e.message)))
+    .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
 }
 
 export default function useConversation() {
