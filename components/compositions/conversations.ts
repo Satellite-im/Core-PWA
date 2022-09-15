@@ -54,16 +54,15 @@ export function conversationHooks() {
     },
   )
 
-  const allParticipantsAlphaSorted: ComputedRef<(User | undefined)[]> =
-    computed(() => {
-      if (!conversation.value) {
-        return []
-      }
-      const arr = conversation.value.participants.map((p) =>
-        managers.users.getUser(p),
-      ) as User[]
-      return arr.sort((a, b) => a.name.localeCompare(b.name))
-    })
+  const allParticipantsAlphaSorted: ComputedRef<User[]> = computed(() => {
+    if (!conversation.value) {
+      return []
+    }
+    const arr = conversation.value.participants
+      .map((p) => managers.users.getUser(p))
+      .filter((item): item is User => Boolean(item))
+    return arr.sort((a, b) => a?.name?.localeCompare(b?.name))
+  })
 
   const enableRTC: ComputedRef<boolean> = computed(() => {
     return Boolean(
