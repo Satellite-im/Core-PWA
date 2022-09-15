@@ -837,6 +837,11 @@ export class Call extends Emitter<CallEventListeners> {
       return
     }
 
+    // TODO: find a way to wait for the peer to receive the remote
+    // track before sending a peer:unmute, for now, this timeout
+    // waits long enough so the peer receives the track first
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     await Promise.all(
       Object.values(this.peers).map((peer) =>
         this.wire.sendMessage(
