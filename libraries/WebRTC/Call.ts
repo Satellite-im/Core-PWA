@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import Peer from 'simple-peer'
 import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
 import Emitter from './Emitter'
@@ -314,14 +315,14 @@ export class Call extends Emitter<CallEventListeners> {
     })
 
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
     }
 
     const audioTrack = audioStream.getAudioTracks()[0]
-    this.streams[iridium.id].audio = audioStream
+    Vue.set(this.streams[iridium.id], 'audio', audioStream)
     this.tracks[iridium.id].add(audioTrack)
 
     // mute if needed
@@ -339,7 +340,7 @@ export class Call extends Emitter<CallEventListeners> {
       Object.values(this.peers).map(async (peer) => {
         try {
           peer.addTrack(audioTrack, audioStream)
-        } catch (_) {}
+        } catch (_) { }
       }),
     )
   }
@@ -384,7 +385,7 @@ export class Call extends Emitter<CallEventListeners> {
       Object.values(this.peers).map(async (peer) => {
         try {
           peer.addTrack(videoTrack, videoStream)
-        } catch (_) {}
+        } catch (_) { }
       }),
     )
   }
@@ -459,7 +460,7 @@ export class Call extends Emitter<CallEventListeners> {
 
         try {
           peer.addTrack(screenTrack, screenStream)
-        } catch (_) {}
+        } catch (_) { }
       }),
     )
   }
