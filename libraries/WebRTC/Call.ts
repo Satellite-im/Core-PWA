@@ -322,7 +322,7 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     const audioTrack = audioStream.getAudioTracks()[0]
-    Vue.set(this.streams[iridium.id], 'audio', audioStream)
+    this.streams[iridium.id].audio = audioStream
     this.tracks[iridium.id].add(audioTrack)
 
     // mute if needed
@@ -340,7 +340,7 @@ export class Call extends Emitter<CallEventListeners> {
       Object.values(this.peers).map(async (peer) => {
         try {
           peer.addTrack(audioTrack, audioStream)
-        } catch (_) { }
+        } catch (_) {}
       }),
     )
   }
@@ -359,7 +359,7 @@ export class Call extends Emitter<CallEventListeners> {
       video: constraints || true,
     })
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -385,7 +385,7 @@ export class Call extends Emitter<CallEventListeners> {
       Object.values(this.peers).map(async (peer) => {
         try {
           peer.addTrack(videoTrack, videoStream)
-        } catch (_) { }
+        } catch (_) {}
       }),
     )
   }
@@ -417,7 +417,7 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -460,7 +460,7 @@ export class Call extends Emitter<CallEventListeners> {
 
         try {
           peer.addTrack(screenTrack, screenStream)
-        } catch (_) { }
+        } catch (_) {}
       }),
     )
   }
@@ -1093,7 +1093,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onStream(peer: CallPeer, stream: MediaStream) {
     if (!this.streams[peer.id]) {
-      this.streams[peer.id] = {}
+      Vue.set(this.streams, peer.id, {})
     }
     const kind =
       this.screenStreams[peer.id] === stream.id
