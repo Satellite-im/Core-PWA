@@ -30,13 +30,14 @@ export default Vue.extend({
   flex-direction: column;
   flex-grow: 1;
   justify-content: flex-end;
-  padding: 16px 0 16px 16px;
+  padding: 16px 0 0 16px;
   min-width: 0;
 
   .outer-wrapper {
     display: flex;
     overflow: hidden;
     flex-grow: 1;
+    padding-bottom: 16px;
 
     .inner-wrapper {
       display: flex;
