@@ -7,7 +7,7 @@
   gap: 1rem;
   width: @width;
   height: 380px;
-  padding: 32px;
+  padding: 1.5rem;
   background: @foreground-gradient;
   border-radius: @corner-rounding;
 
@@ -27,8 +27,13 @@
   .buttons {
     display: flex;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: stretch;
     margin-top: auto;
+    gap: 1rem;
+
+    > .button {
+      flex-grow: 1;
+    }
   }
 
   @media only screen and (max-width: @mobile-breakpoint) {
