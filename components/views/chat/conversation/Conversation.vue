@@ -126,15 +126,20 @@ export default Vue.extend({
       container.scrollTo(0, y)
     }
     scrollToBottom()
-    this.mutationObserver = new MutationObserver(() => {
-      if (this.isLockedToBottom || this.isLastChatItemAuthor) {
-        scrollToBottom()
-      }
+    this.mutationObserver = new MutationObserver((records) => {
+      records.forEach((record) => {
+        const target = record.target as HTMLElement
+        if (
+          target.classList.contains('messages') &&
+          (this.isLockedToBottom || this.isLastChatItemAuthor)
+        ) {
+          scrollToBottom()
+        }
+      })
     })
     this.mutationObserver.observe(container, {
       childList: true,
       subtree: true,
-      attributes: true,
     })
   },
   beforeDestroy() {
