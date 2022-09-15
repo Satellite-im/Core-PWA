@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 
 defineProps<{
