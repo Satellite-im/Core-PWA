@@ -21,6 +21,7 @@
       ref="editable"
       :placeholder="$t('ui.talk')"
       :class="{'has-command' : hasCommand}"
+      enabled="Boolean(recipient) && !textile.messageLoading"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
