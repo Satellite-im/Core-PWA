@@ -1,17 +1,7 @@
-#bottom-bar-container {
+.chatbar-footer {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
-  margin-top: @light-spacing;
-  padding: 0 16px;
-
-  &.is-error {
-    border: 1px solid @red;
-
-    .control-icon {
-      &:nth-child(4) {
-        &:extend(.color-danger);
-      }
-    }
-  }
+  padding: 8px 16px 0;
 }

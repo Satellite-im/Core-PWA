@@ -1,6 +1,4 @@
-<div id="bottom-bar-container">
-  <UiChatTypingIndicator v-if="areTyping" />
-  <ChatbarFooterConnected v-else />
+<div class="chatbar-footer">
   <TypographyText
     class="no-select"
     size="sm"
@@ -8,4 +6,5 @@
   >
     {{ lengthCount }}
   </TypographyText>
+  <ChatbarFooterTypingIndicator />
 </div>

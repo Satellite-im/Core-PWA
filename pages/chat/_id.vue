@@ -37,12 +37,12 @@ export default Vue.extend({
     display: flex;
     overflow: hidden;
     flex-grow: 1;
-    gap: 8px;
 
     .inner-wrapper {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      padding-right: 16px;
     }
   }
 }
