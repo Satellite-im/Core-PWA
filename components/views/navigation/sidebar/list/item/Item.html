@@ -54,7 +54,12 @@
           v-html="subtitle"
         />
       </TypographyText>
-      <TypographyTag v-if="unreadCount" class="tag" :text="unreadCount" small />
+      <TypographyTag
+        v-if="unreadCount"
+        class="tag"
+        :text="unreadCount.toString()"
+        small
+      />
     </div>
   </div>
 
