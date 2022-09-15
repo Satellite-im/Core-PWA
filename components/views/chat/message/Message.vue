@@ -88,10 +88,24 @@ export default Vue.extend({
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarMessage },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
+
+      if (this.message.replyToId) {
+        return [
+          ...mainList,
+          { text: this.$t('context.copy_msg'), func: this.copyMessage },
+          // { text: this.$t('context.edit'), func: this.editMessage },
+          // skipped due to edit message is now coming soon and this shouldn't appear on context menu
+        ]
+      }
+
+      mainList.push({
+        text: this.$t('context.reply'),
+        func: this.setReplyChatbarMessage,
+      })
+
       if (this.message.type === 'text') {
         // if your own text message
         if (iridium.profile.state?.did === this.message.from) {
