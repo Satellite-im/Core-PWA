@@ -16,11 +16,7 @@
             <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
-        <SidebarList
-          class="mobile-list"
-          :filter="filter"
-          @slideNext="swiper.slideNext()"
-        />
+        <SidebarList :filter="filter" @slideNext="swiper.slideNext()" />
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
@@ -132,8 +128,8 @@ export default Vue.extend({
     .search-container {
       display: flex;
       align-items: center;
-      gap: @normal-spacing;
-      padding: @normal-spacing @normal-spacing 0;
+      gap: 16px;
+      padding: 16px;
 
       .search {
         flex: 1;
@@ -141,10 +137,6 @@ export default Vue.extend({
       button {
         height: fit-content;
       }
-    }
-    .mobile-list {
-      padding: @normal-spacing;
-      height: 100%;
     }
   }
 }
