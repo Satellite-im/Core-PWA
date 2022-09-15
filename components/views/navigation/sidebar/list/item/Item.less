@@ -5,9 +5,8 @@
   gap: 8px;
   cursor: pointer;
   position: relative;
-  padding: @light-spacing;
+  padding: 0 16px;
   &:extend(.no-select);
-  &:extend(.round-corners);
 
   &.is-loading {
     pointer-events: none;
@@ -17,14 +16,11 @@
   }
 
   &.selected {
-    background-color: #2e303d;
+    &:extend(.background-semitransparent-lighter);
   }
 
-  &:hover {
+  &:hover:not(.selected) {
     &:extend(.background-semitransparent-light);
-  }
-  &:last-child {
-    margin-bottom: 16px;
   }
 
   .user-info {
