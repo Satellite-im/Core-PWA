@@ -102,13 +102,14 @@
                     transparent
                   />
 
-                  <button
-                    class="edit-button"
-                    :class="[{ active: editing.has('name') }, { mobile: $device.isMobile }]"
-                    type="submit"
-                  >
-                    {{ getEditButtonText('name') }}
-                  </button>
+                  <!-- TODO: Re-enable this when user key with altered names is also updated for peersearch -->
+                  <!-- <button -->
+                  <!-- class="edit-button" -->
+                  <!-- :class="[{ active: editing.has('name') }, { mobile: $device.isMobile }]" -->
+                  <!-- type="submit" -->
+                  <!-- > -->
+                  <!-- {{ getEditButtonText('name') }} -->
+                  <!-- </button> -->
                 </form>
                 <form
                   class="status-input"
