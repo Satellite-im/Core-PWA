@@ -51,6 +51,9 @@ export default {
     offline: '{name} is not connected',
     background_call: 'Current call',
     no_results: 'No results found',
+    early_access: 'Early Access',
+    early_access_message: 'Please report any bugs or issues at ',
+    early_access_link: 'https://feedback.yourappdomain.com/',
   },
   time: {
     now: 'now',
