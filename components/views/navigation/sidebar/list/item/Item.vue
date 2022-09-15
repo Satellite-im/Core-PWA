@@ -188,12 +188,7 @@ export default Vue.extend({
       }
       this.isLoading = true
 
-      if (this.$device.isDesktop) {
-        this.$router.push(`/friends`)
-      }
-      if (this.$device.isMobile) {
-        this.$router.push(`/mobile/chat`)
-      }
+      this.$router.push(`/friends`)
 
       await iridium.friends
         .friendRemove(this.user.did)
