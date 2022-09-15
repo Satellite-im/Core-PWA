@@ -14,11 +14,11 @@ export default {
     dismiss_forever: 'Dismiss Forever',
     welcome: 'Welcome {user}!',
     ea_warning:
-      'Thank you so much for joining us in our Early Access. Things are changing rapidly so please be patient with us and check back regularly for updates and improvements.',
+      'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
     permissions:
-      'Please be sure to enable permissions which can be found in settings',
+      'Please be sure to enable permissions which you can find in settings',
     file_scanning_permissions:
-      'In order to share files/use the encrypted file storage on our network you must consent to file scanning which can be found under settings in the Privacy and Permissions tab.',
+      'To share files/use the encrypted file storage on our network, you must consent to file scanning, which you can find under settings in the Privacy and Permissions tab.',
   },
   global: {
     name: 'Satellite.im',
@@ -232,18 +232,18 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        no_empty: 'Item name must be a non empty string',
+        no_empty: 'Item name must be a non-empty string',
         leading_dot: 'Item name cannot begin with .',
         invalid: 'Item name cannot contain invalid symbols (/:"*?<>|~#%&+{}\\)',
         file_size: 'File needs to have a size of 1 byte or greater',
-        duplicate_name: 'Item with name already exists in this directory',
+        duplicate_name: 'Item with this name already exists in this directory',
         storage_limit: 'This upload would exceed your storage limit',
         dir_paradox: 'Directory cannot contain itself',
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
         in_progress: 'Upload already in progress, try again later',
         enable_consent:
           'Please consent to file scanning in your privacy settings',
-        lost: 'Cannot find file, please try again later',
+        lost: 'Cannot find a file, please try again later',
       },
     },
     unlock: {
@@ -275,7 +275,7 @@ export default {
     inputAccount: {
       title: 'Import Account',
       subtitle:
-        'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
+        'Enter your 12-word passphrase in exactly the same order your recovery seed was generated.',
       enter: 'Enter Passphrase',
       reset: 'Reset Passphrase',
       recover: 'Recover Account',
@@ -310,7 +310,7 @@ export default {
         title: 'Screen Sharing',
         subtitle:
           'Show the other users your screen during voice and video calls.',
-        note: "Screen sharing is an operating system setting labeled as 'Screen Recording', to allow access you will need to enable browser access to screen recording in your OS",
+        note: "Screen sharing is an operating system setting labeled as 'Screen Recording', to allow access, you will need to enable browser access to screen recording in your OS",
       },
       permissions: {
         title: 'Permissions',
@@ -322,7 +322,7 @@ export default {
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. Files will not leave Satellite infrastructure. Only the hash of files will be checked against the third party database.',
+          'To share files/use the encrypted file storage, I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. Files will not leave the Satellite infrastructure. Only the hash of files will be checked against the third party database.',
       },
       nsfw: {
         title: 'Block NSFW content',
@@ -333,12 +333,12 @@ export default {
       register: {
         title: 'Register Username Publicly',
         subtitle:
-          'Publicly associate your account ID with a human readable username. Anyone can see this association.',
+          'Publicly associate your account ID with a human-readable username. Anyone can see this association.',
       },
       pin: {
         title: 'Store Account Pin',
         subtitle:
-          "Store your account pin locally so you don't have to enter it manually every time. This is not recommended.",
+          "Store your account pin locally, so you don't have to enter it manually every time. This is not recommended.",
       },
       activity: {
         title: 'Display Current Activity',
@@ -359,7 +359,7 @@ export default {
       ownInfo: {
         title: 'Set my own Signaling Server',
         subtitle:
-          'Enter your http, udp, or websocket URL for your signaling server here',
+          'Enter your http, udp, or WebSocket URL for your signaling server here',
         placeholder: 'Please enter ...',
         lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
         formatErrorMsg:
@@ -388,13 +388,13 @@ export default {
       developer: {
         title: 'Developer Settings',
         subtitle:
-          'Mock data and tweak settings for testing. This page is really just for internal use.',
+          'Mock data and tweak settings for testing. This page is just for internal use.',
         identifier: 'Identifier',
       },
       notifications: {
         title: 'Notifications Settings',
         notes:
-          'Notifications work different on every platform. On Web, you need to request notifications. On Desktop and Android notifications are enabled by default.',
+          'Notifications work differently on every platform. On the Web, you need to request notifications. On Desktop and Android notifications are enabled by default.',
         enabled: 'Enable or Disable Notifications',
         labels: {
           current_platform: 'Your current platform is:',
@@ -428,7 +428,7 @@ export default {
           permissionButtonText: 'Request Permission',
           permissionRequestMessage: '',
           permissionDeniedMessage:
-            "You have denied microphone access so we can't see what devices you have. Please allow microphone access in your browser.",
+            "You have denied microphone access, so we can't see what devices you have. Please allow microphone access in your browser.",
           browserDoesNotSupportAudioOutChange:
             'Your Browser does not allow setting audio out, so the default is used here. To change this, use a chrome based browser or update your default audio out in your OS.',
           input: {
@@ -475,7 +475,7 @@ export default {
         title: 'Video',
         sources: {
           permissionDeniedMessage:
-            "You have denied camera access so we can't see what devices you have. Please allow camera access in your browser.",
+            "You have denied camera access, so we can't see what devices you have. Please allow camera access in your browser.",
           input: {
             title: 'Video Input',
             subtitle:
@@ -551,14 +551,14 @@ export default {
       storage: {
         title: 'Storage',
         subtitle:
-          'Control how your data is stored. You can export your local storage information (coming soon) as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
+          'Control how your data is stored. You can export your local storage information (coming soon) and reset Satellite here. Be careful resetting your local storage will clear out your account.',
         clear: {
           title: 'Clear Storage',
           subtitle:
             'Reset Satellite. This will clear any saved accounts. Do not do this without backing up your account first.',
           subtitle_warning1: 'Are you absolutely sure?',
           subtitle_warning2:
-            'If you do not have your recovery seed your account will be gone forever.',
+            'If you do not have your recovery seed, your account will be gone forever.',
           button: 'Clear Local Storage',
           confirm_button: 'Yes, Really, Clear Local Storage',
           message: 'Local storage cleared successfully',
@@ -572,7 +572,7 @@ export default {
       },
       profile: {
         title: 'Profile',
-        subtitle: 'Update your profile photo, status, banners and more.',
+        subtitle: 'Update your profile photo, status, banners, and more.',
         status_placeholder: 'Some super interesting status message',
         remove_image: 'Remove',
         current_status: 'Current Status',
@@ -630,9 +630,9 @@ export default {
       start_watch_party: 'Watch Party',
       new_chat: 'New Chat',
       new_chat_description:
-        'Select one or more of your friends to chat in groups, or one-on-one.',
+        'Select one or more of your friends to chat in groups or one-on-one.',
       no_friends_yet: 'No Friends Yet',
-      no_friends_yet_text: "The world doesn't have to be so lonely.",
+      no_friends_yet_text: "The world doesn't have\nto be so lonely.",
       enhancers: {
         glyphs: 'Glyphs',
         emoji: 'Emoji',
@@ -659,7 +659,7 @@ export default {
     create: {
       heading: 'Create a server',
       photo_text:
-        "Give your server a face. Choose a memorable photo to show it's members.",
+        'Give your server a face. Choose a memorable photo to show its members.',
       photo_button: 'Set photo',
       server_name: 'Enter a server name',
       server_name_placeholder: 'Server name...',
@@ -671,7 +671,7 @@ export default {
     },
   },
   conversation: {
-    encrypted: 'Messages are secured by end to end encryption.',
+    encrypted: 'Messages are secured by end-to-end encryption.',
     reply: 'reply | replies',
     reply_to: 'Reply to',
     multimedia: 'Multimedia content',
@@ -686,7 +686,7 @@ export default {
       cannot_find_group: 'Cannot find chosen group',
       user_derivation_failed:
         'We were unable to verify your passphrase. Please check it and try again.',
-      mnemonic_not_present: 'Problem with passphrase, please try again.',
+      mnemonic_not_present: 'Problem with the passphrase, please try again.',
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
       invalid_file: 'Please upload a valid image type such as JPG, PNG or SVG',
@@ -709,7 +709,7 @@ export default {
       group_name:
         'Enter a group name of at least {min} characters, up to {max}',
       conversation_exists:
-        'A conversation with that name already exists, please choose a different name',
+        'A conversation with that name already exists. Please choose a different name',
     },
     storage: {
       database_not_cleared: 'Could not clear database',
@@ -775,7 +775,7 @@ export default {
   },
   friends: {
     friends: 'Friends',
-    self_add: "You can't add yourself you silly goose.",
+    self_add: "You can't add yourself, you silly goose.",
     already_friend: "You're already friends with this user.",
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
@@ -796,7 +796,7 @@ export default {
       "Enter your friend's account ID or nickname. Account IDs are case sensitive.",
     add_via_qr: 'Add Via QR',
     add_qrcode_description:
-      'You can also add a friend by having them scan your QR code, or by scanning theirs.',
+      'You can also add a friend by having them scan your QR code or by scanning theirs.',
     scan_code: 'Scan a Friend Code',
     camera_scan: 'Allow Camera Scan',
     friend_code: 'Your Friend Code',
