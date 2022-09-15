@@ -49,7 +49,6 @@ export default Vue.extend({
       )
     },
     chatItems(): ChatItem[] {
-      let maxTime = 0
       const messages = this.messages
         .filter((message) => !message.replyToId)
         .slice(-this.numMessages)
@@ -69,7 +68,6 @@ export default Vue.extend({
         const replies = this.messages.filter(
           (replyMessage) => replyMessage.replyToId === message.id,
         )
-        maxTime = Math.max(maxTime, message.at)
         const showHeader =
           !isSameAuthor ||
           (prevMessage && conversationMessageIsNotice(prevMessage)) ||
@@ -84,6 +82,7 @@ export default Vue.extend({
           replies,
         }
       })
+      const maxTime = Math.max(...this.messages.map((message) => message.at))
       if (
         (!maxTime || maxTime > this.conversation.lastReadAt) &&
         !this.isBlurred
