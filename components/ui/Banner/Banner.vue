@@ -1,9 +1,5 @@
 <template src="./Banner.html" />
 
-<script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({})
-</script>
+<script lang="ts" setup></script>
 
 <style lang="less" src="./Banner.less"></style>

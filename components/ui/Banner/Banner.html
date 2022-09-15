@@ -2,12 +2,17 @@
   <div class="header">
     <slot name="icon"></slot>
 
-    <TypographyText class="header">
+    <TypographyText color="warning" size="sm">
       <slot name="header"></slot>
     </TypographyText>
   </div>
 
-  <TypographyText v-show="!!$slots.content" class="content">
+  <TypographyText
+    v-show="!!$slots.content"
+    font="heading"
+    color="warning"
+    class="content"
+  >
     <slot name="content"></slot>
   </TypographyText>
 </div>

@@ -9,5 +9,6 @@ export type TextColor =
   | 'danger'
   | 'white'
   | 'success'
+  | 'warning'
 
 export type Weight = 'regular' | 'bold'
