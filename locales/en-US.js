@@ -26,7 +26,7 @@ export default {
     unencrypted: 'Unencrypted',
     upload: 'Upload',
     upload_files: 'Upload Files',
-    active_upload: 'Uploading, sending momentarily disabled...',
+    uploading: 'Uploading...',
     edit: 'edit',
     save: 'save',
   },

@@ -26,17 +26,9 @@
       @paste="handlePaste"
     />
     <ChatbarControls
-      :disabled="!isSubscribed || charlimit || activeUpload"
+      :disabled="!isSubscribed || charlimit"
       @send="sendMessage"
     />
   </div>
-  <TypographyText
-    v-if="activeUpload"
-    class="no-select"
-    size="sm"
-    color="danger"
-  >
-    {{ $t('global.active_upload') }}
-  </TypographyText>
-  <ChatbarFooter v-else :charlimit="charlimit" />
+  <ChatbarFooter :charlimit="charlimit" />
 </div>

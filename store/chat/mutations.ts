@@ -11,6 +11,7 @@ import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
+import state from '~/store/files/state'
 
 const mutations = {
   chatText(state: ChatState, req: ChatText) {
@@ -44,8 +45,8 @@ const mutations = {
     },
   ) {
     state.files[id]
-      ? state.files[id].push(file)
-      : (state.files = { ...state.files, [id]: [file] })
+      ? state.files[id]?.push(file)
+      : Vue.set(state.files, id, [file])
   },
   removeFile(
     state: ChatState,
@@ -57,18 +58,18 @@ const mutations = {
       index: number
     },
   ) {
-    state.files[id].splice(index, 1)
+    state.files[id]?.splice(index, 1)
   },
-  setFileProgress(
-    state: ChatState,
-    {
-      id,
-      index,
-      progress,
-    }: { id: Conversation['id']; index: number; progress: number },
-  ) {
-    state.files[id][index].progress = progress
-  },
+  // setFileProgress(
+  //   state: ChatState,
+  //   {
+  //     id,
+  //     index,
+  //     progress,
+  //   }: { id: Conversation['id']; index: number; progress: number },
+  // ) {
+  //   state.files[id][index].progress = progress
+  // },
   deleteFiles(state: ChatState, address: string) {
     delete state.files[address]
     state.files = { ...state.files }
@@ -109,6 +110,12 @@ const mutations = {
   ) {
     delete state.replyChatbarMessages[conversationId]
     state.replyChatbarMessages = { ...state.replyChatbarMessages }
+  },
+  setActiveUploadChat(state: ChatState, id: Conversation['id']) {
+    state.activeUploadChats.push(id)
+  },
+  removeActiveUploadChat(state: ChatState, id: Conversation['id']) {
+    state.activeUploadChats.splice(state.activeUploadChats.indexOf(id), 1)
   },
 }
 

@@ -1,13 +1,15 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { ChevronDownIcon, KeyIcon } from 'satellite-lucide-icons'
+import { mapState } from 'vuex'
+import { ChevronDownIcon, KeyIcon, FileIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
 import { conversationMessageIsNotice } from '~/utilities/chat'
+import { RootState } from '~/types/store/store'
 
 interface ChatItem {
   message: ConversationMessage
@@ -24,6 +26,7 @@ export default Vue.extend({
   components: {
     ChevronDownIcon,
     KeyIcon,
+    FileIcon,
   },
   data() {
     return {
@@ -35,6 +38,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState({
+      activeUploadChats: (state) => (state as RootState).chat.activeUploadChats,
+    }),
     myDid(): string {
       return iridium.id ?? ''
     },

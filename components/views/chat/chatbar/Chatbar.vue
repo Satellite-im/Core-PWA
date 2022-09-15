@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { throttle, debounce } from 'lodash'
+import { throttle, debounce, cloneDeep } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import {
@@ -43,7 +43,6 @@ const Chatbar = Vue.extend({
         thr: ReturnType<typeof throttle>
         deb: ReturnType<typeof debounce>
       } | null,
-      activeUpload: false,
     }
   },
   computed: {
@@ -209,10 +208,17 @@ const Chatbar = Vue.extend({
       this.smartTypingStart()
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
+      if (!this.files.length) {
+        return []
+      }
       const conversationId = this.$route.params.id
-      this.activeUpload = true
+      this.$store.commit('chat/setActiveUploadChat', conversationId)
+      const files = this.files.map((a) => {
+        return { ...a }
+      })
+      this.$store.commit('chat/deleteFiles', conversationId)
       const attachments = await Promise.all(
-        this.files.map(async (upload, index) => {
+        files.map(async (upload, index) => {
           return await iridium.chat.addFile(
             { upload, conversationId },
             // {
@@ -227,7 +233,7 @@ const Chatbar = Vue.extend({
           )
         }),
       )
-      this.activeUpload = false
+      this.$store.commit('chat/removeActiveUploadChat', conversationId)
       return attachments.filter(notNull)
     },
     /**
@@ -238,11 +244,10 @@ const Chatbar = Vue.extend({
      */
     async sendMessage() {
       if (
-        (!this.files.length &&
-          (this.text.length > this.$Config.chat.maxChars ||
-            !this.text.trim().length ||
-            !this.isSubscribed)) ||
-        this.activeUpload
+        !this.files.length &&
+        (this.text.length > this.$Config.chat.maxChars ||
+          !this.text.trim().length ||
+          !this.isSubscribed)
       ) {
         return
       }
@@ -251,8 +256,6 @@ const Chatbar = Vue.extend({
 
       const conversationId = this.$route.params.id
       const attachments = await this.uploadAttachments()
-
-      this.$store.commit('chat/deleteFiles', conversationId)
 
       const payload: ConversationMessagePayload = {
         conversationId,
