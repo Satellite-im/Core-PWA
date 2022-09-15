@@ -665,6 +665,9 @@ export default class WebRTCManager extends Emitter {
     if (this.state.incomingCall) {
       this.state.calls[this.state.incomingCall.callId]?.destroy()
     }
+
+    this.state.incomingCall = null
+    this.state.activeCall = null
   }
 
   public async hangUp() {
