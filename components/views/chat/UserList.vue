@@ -1,19 +1,26 @@
 <template>
   <div class="user-list hover-scroll">
-    <TypographyText>
+    <TypographyText size="sm" color="body">
       {{
         $t('pages.chat.members', { count: allParticipantsAlphaSorted.length })
       }}
     </TypographyText>
-    <div
-      v-for="user in allParticipantsAlphaSorted"
-      :key="user.did"
-      class="user"
-    >
-      <UiUserState :user="user" :conversation-id="conversationId" />
-      <TypographyText class="ellipsis">
-        {{ user.name }}
-      </TypographyText>
+    <div class="list">
+      <div
+        v-for="user in allParticipantsAlphaSorted"
+        :key="user.did"
+        class="user"
+      >
+        <UiUserState :user="user" :conversation-id="conversationId" />
+        <TypographyText
+          class="ellipsis"
+          font="heading"
+          weight="bold"
+          color="dark"
+        >
+          {{ user.name }}
+        </TypographyText>
+      </div>
     </div>
   </div>
 </template>
@@ -36,14 +43,21 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: 16px;
+  gap: 8px;
   padding: 16px;
   width: 240px;
+  margin-right: 16px;
   overflow-y: auto;
   background: @foreground-gradient;
   box-shadow: @ui-shadow;
   user-select: none;
   border-radius: @corner-rounding;
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
   .user {
     display: flex;
