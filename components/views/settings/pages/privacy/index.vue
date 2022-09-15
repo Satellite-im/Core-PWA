@@ -19,6 +19,7 @@ export default Vue.extend({
       lengthError: false as boolean,
       privacySettings: iridium.settings.state.privacy,
       permissions: [] as PermissionObject[],
+      loading: [] as string[],
     }
   },
   computed: {
@@ -114,7 +115,9 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.checkBrowserPermissions()
+    if (!this.$device.isSafari) {
+      this.checkBrowserPermissions()
+    }
   },
   methods: {
     checkBrowserPermissions() {
