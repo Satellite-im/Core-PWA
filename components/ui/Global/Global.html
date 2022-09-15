@@ -2,6 +2,14 @@
   <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
+    <UiModal
+      v-if="ui.modals.callToAction"
+      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+    >
+      <CallToAction
+        :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+      />
+    </UiModal>
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
     <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
       <WalletPopup />
@@ -56,14 +64,6 @@
     >
       <UserProfile
         :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)"
-      />
-    </UiModal>
-    <UiModal
-      v-if="ui.modals.callToAction"
-      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <CallToAction
-        :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
       />
     </UiModal>
     <UiModal
