@@ -288,7 +288,8 @@ export default {
       title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
-      safari: 'We are currently not able to check permissions status on Safari',
+      update:
+        'We were not able to check permissions status, update your browser',
       notifications: {
         title: 'Notifications',
         subtitle:

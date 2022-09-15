@@ -115,7 +115,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    if (!this.$device.isSafari) {
+    if (navigator.permissions) {
       this.checkBrowserPermissions()
     }
   },
@@ -170,8 +170,8 @@ export default Vue.extend({
 
       try {
         let stream
-        /*  
-       // delete the comment to toggle screensharing, 
+        /*
+       // delete the comment to toggle screensharing,
        // NOTE: this permission doesn't exist on browsers
        if (permName === 'screen') {
           stream = await navigator.mediaDevices.getDisplayMedia({

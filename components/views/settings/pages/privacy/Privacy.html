@@ -11,8 +11,8 @@
     plaintext
     :value="$t('pages.privacy.permissions.title')"
   />
-  <TypographyText v-if="$device.isSafari" color="danger">
-    {{ $t('pages.privacy.safari') }}
+  <TypographyText v-if="!permissions.length" color="danger">
+    {{ $t('pages.privacy.update') }}
   </TypographyText>
   <SettingsSection>
     <SettingsUnit
