@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import {
   didUtils,
   Emitter,
@@ -123,14 +124,11 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       type: 'group',
       participants: Object.values(config.members).map((m) => m.id),
     })
-    this.state = {
-      ...this.state,
-      [id]: {
-        id,
-        origin: iridium.id,
-        ...config,
-      },
-    }
+    Vue.set(this.state, id, {
+      id,
+      origin: iridium.id,
+      ...config,
+    })
     await iridium.connector.set(`/groups/${id}`, {
       id,
       origin: iridium.id,
@@ -177,7 +175,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.NOT_A_MEMBER)
     }
 
-    delete group.members[iridium.id]
+    Vue.delete(group.members, iridium.id)
 
     Object.values(group.members).forEach(async (member: GroupMemberDetails) => {
       const payload: IridiumGroupEvent = {
@@ -212,7 +210,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       throw new Error(GroupsError.RECIPIENT_NOT_FOUND)
     }
 
-    delete members[remotePeerDID]
+    Vue.delete(members, remotePeerDID)
     await iridium.connector.set(`/groups/${groupId}`, {
       id: groupId,
       origin: iridium.id,
@@ -250,7 +248,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
       photoHash: member.photoHash?.toString() || '',
     }
 
-    members[remotePeerDID] = details
+    Vue.set(members, remotePeerDID, details)
 
     const conversation = iridium.chat.getConversation(groupId)
     conversation?.participants.push(remotePeerDID)
