@@ -6,6 +6,7 @@ import {
 } from '@satellite-im/iridium'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
+import Vue from 'vue'
 import iridium from '../IridiumManager'
 import {
   WebRTCState,
@@ -314,18 +315,13 @@ export default class WebRTCManager extends Emitter {
       headphones?: boolean
     } = {},
   ) {
-    this.state.streamMuted = {
-      ...this.state.streamMuted,
-      [did]: {
-        audio: audio ?? this.state.streamMuted[did]?.audio ?? false,
-        video: video ?? this.state.streamMuted[did]?.video ?? false,
-        screen: screen ?? this.state.streamMuted[did]?.screen ?? false,
-        headphones:
-          headphones ?? this.state.streamMuted[did]?.headphones ?? false,
-      },
-    }
-
-    this.emit('streamMuted', { did, ...this.state.streamMuted[did] })
+    Vue.set(this.state.streamMuted, did, {
+      audio: audio ?? this.state.streamMuted[did]?.audio ?? false,
+      video: video ?? this.state.streamMuted[did]?.video ?? false,
+      screen: screen ?? this.state.streamMuted[did]?.screen ?? false,
+      headphones:
+        headphones ?? this.state.streamMuted[did]?.headphones ?? false,
+    })
   }
 
   private createCall({

@@ -237,13 +237,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         { message, cid, from, conversationId },
       )
 
-      this.state.conversations[conversationId] = {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations[conversationId].message,
-          [message.id]: message,
-        },
-      }
+      Vue.set(
+        this.state.conversations[conversationId].message,
+        message.id,
+        message,
+      )
+
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
         message,
@@ -294,13 +293,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         [fromDID]: reaction.reactions,
       }
 
-      this.state.conversations[conversationId] = {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations[conversationId].message,
-          [message.id]: message,
-        },
-      }
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
         message,
@@ -383,10 +375,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       updatedAt: Date.now(),
       lastReadAt: 0,
     }
-    this.state.conversations = {
-      ...this.state.conversations,
-      [id]: conversation,
-    }
+    Vue.set(this.state.conversations, id, conversation)
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
@@ -409,10 +398,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     conversation.lastReadAt = readAt
     conversation.updatedAt = Date.now()
-    this.state.conversations = {
-      ...this.state.conversations,
-      [conversationId]: conversation,
-    }
+    Vue.set(this.state.conversations, conversationId, conversation)
     await this.set(`/conversations/${conversationId}`, conversation)
     this.emit(`conversations/${conversationId}`, conversation)
   }
@@ -566,9 +552,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async deleteConversation(id: string) {
-    delete this.state.conversations[id]
-    this.state.conversations = { ...this.state.conversations }
-
+    Vue.delete(this.state.conversations, id)
     this.set('/conversations', this.state.conversations)
     await iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
   }
@@ -725,17 +709,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           : undefined,
       },
     )
-    this.state.conversations = {
-      ...this.state.conversations,
-      [conversationId]: {
-        ...this.state.conversations[conversationId],
-        message: {
-          ...this.state.conversations?.[conversationId]?.message,
-          [message.id]: message,
-        },
-        lastReadAt: Date.now(),
-      },
-    }
+    Vue.set(
+      this.state.conversations[conversationId].message,
+      message.id,
+      message,
+    )
+    Vue.set(this.state.conversations[conversationId], 'lastReadAt', Date.now())
 
     iridium.connector.store(partial, {
       syncPin: true,
@@ -770,7 +749,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions.push(payload.reaction)
     }
 
-    message.reactions = { ...message.reactions, [did]: reactions }
+    Vue.set(message.reactions, did, reactions)
     const path = `/conversations/${conversationId}/message/${messageId}`
     this.set(path, message)
 
