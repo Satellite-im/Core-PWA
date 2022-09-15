@@ -4,19 +4,20 @@
     <template #header>{{ $t('ui.early_access') }}</template>
     <template #content>
       {{ $t('ui.early_access_message') }}
-      <a :href="$t('ui.early_access_link')" class="banner-link" target="_blank">
-        {{ $t('ui.early_access_link') }}
+      <a :href="$config.feedbackUrl" class="banner-link" target="_blank">
+        {{ $config.feedbackUrl }}
       </a>
     </template>
   </UiBanner>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { PackageIcon } from 'satellite-lucide-icons'
 import UiBanner from '~/components/ui/Banner/Banner.vue'
 
-export default Vue.extend({
+export default defineComponent({
+  name: 'EarlyAccessBanner',
   components: {
     PackageIcon,
     UiBanner,

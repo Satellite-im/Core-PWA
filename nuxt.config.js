@@ -257,6 +257,7 @@ export default defineNuxtConfig({
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
+    feedbackUrl: process.env.NUXT_ENV_FEEDBACK_URL,
   },
   webpack: {
     watchOptions: {

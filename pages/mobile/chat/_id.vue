@@ -16,7 +16,7 @@
             <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
-        <div class="banner-wrapper">
+        <div v-show="$config.feedbackUrl" class="banner-wrapper">
           <EarlyAccessBanner />
         </div>
         <SidebarList :filter="filter" @slideNext="swiper.slideNext()" />
