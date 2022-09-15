@@ -166,6 +166,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style scoped lang="less" src="./Conversation.less">
-
-</style>
+<style scoped lang="less" src="./Conversation.less"></style>
