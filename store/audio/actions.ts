@@ -6,11 +6,10 @@ import logger from '~/plugins/local/logger'
 
 export default {
   initialize({ state, commit }: ActionsArguments<AudioState>) {
-    commit('setMuted', true)
     logger.info('store/audio/actions.initialize', 'initializing audio store')
     if (iridium.id) {
       iridium.webRTC.setStreamMuted(iridium.id, {
-        video: state.muted,
+        audio: state.muted,
       })
     }
     iridium.webRTC.on('track', ({ did, kind }) => {
@@ -51,6 +50,12 @@ export default {
     dispatch('sounds/playSound', state.muted ? Sounds.MUTE : Sounds.UNMUTE, {
       root: true,
     })
+
+    if (iridium.id) {
+      iridium.webRTC.setStreamMuted(iridium.id, {
+        audio: !state.muted,
+      })
+    }
 
     if (!call) {
       commit('toggleMute')

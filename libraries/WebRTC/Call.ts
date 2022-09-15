@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import Peer from 'simple-peer'
 import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
 import Emitter from './Emitter'
@@ -303,7 +304,6 @@ export class Call extends Emitter<CallEventListeners> {
    * @method createAudioStream
    * @description Create local audio stream and send it to remote peers
    * @param constraints Media stream constraints to apply
-   * @returns {Promise<void>}
    * @example
    * await call.createAudioStream()
    */
@@ -315,7 +315,7 @@ export class Call extends Emitter<CallEventListeners> {
     })
 
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -359,7 +359,7 @@ export class Call extends Emitter<CallEventListeners> {
       video: constraints || true,
     })
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -417,7 +417,7 @@ export class Call extends Emitter<CallEventListeners> {
     }
 
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -838,6 +838,11 @@ export class Call extends Emitter<CallEventListeners> {
       return
     }
 
+    // TODO: find a way to wait for the peer to receive the remote
+    // track before sending a peer:unmute, for now, this timeout
+    // waits long enough so the peer receives the track first
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     await Promise.all(
       Object.values(this.peers).map((peer) =>
         this.wire.sendMessage(
@@ -1069,12 +1074,16 @@ export class Call extends Emitter<CallEventListeners> {
 
     this.peerConnected[peer.id] = true
     this.peerDialingDisabled[peer.id] = true
-    this.emit('REMOTE_TRACK_RECEIVED', {
-      did: peer.id,
-      track,
-      stream,
-      kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
-    })
+
+    const emit = () => {
+      this.emit('REMOTE_TRACK_RECEIVED', {
+        did: peer.id,
+        track,
+        stream,
+        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
+      })
+    }
+    track.onunmute = emit
   }
 
   /**
@@ -1084,7 +1093,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onStream(peer: CallPeer, stream: MediaStream) {
     if (!this.streams[peer.id]) {
-      this.streams[peer.id] = {}
+      Vue.set(this.streams, peer.id, {})
     }
     const kind =
       this.screenStreams[peer.id] === stream.id
