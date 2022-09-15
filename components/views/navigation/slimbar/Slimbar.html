@@ -1,9 +1,5 @@
 <div class="slimbar hidden-scroll">
-  <UiCircle
-    class="sat-icon"
-    type="icon"
-    :size="40"
-  >
+  <UiCircle class="sat-icon" type="icon" :size="40">
     <satellite-icon size="0.75x" />
   </UiCircle>
 
@@ -41,19 +37,21 @@
     </UiComingSoon>
   </template>
   <hr />
-  <div class="circle-group">
-    <button
-      v-tooltip.right="$t('servers.new_server')"
-      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <plus-icon size="1.8x" />
-    </button>
-    <button
-      data-cy="settings"
-      v-tooltip.right="$t('pages.settings.settings')"
-      @click="$store.commit('ui/setSettingsRoute')"
-    >
-      <settings-icon size="1.8x" />
-    </button>
-  </div>
+  <UiComingSoon :tooltipText="$t('coming_soon.add_community')">
+    <div class="circle-group">
+      <button
+        v-tooltip.right="$t('servers.new_server')"
+        @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
+      >
+        <plus-icon size="1.8x" />
+      </button>
+    </div>
+  </UiComingSoon>
+  <button
+    data-cy="settings"
+    v-tooltip.right="$t('pages.settings.settings')"
+    @click="$store.commit('ui/setSettingsRoute')"
+  >
+    <settings-icon size="1.8x" />
+  </button>
 </div>
