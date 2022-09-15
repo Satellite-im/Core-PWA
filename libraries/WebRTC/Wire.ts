@@ -27,6 +27,7 @@ export class Wire extends Emitter<WireEventListeners> {
   private loggerTag: string = 'Wire'
   private announceFrequency = 30000
   private firstAnnounceDelay = 5000
+  private timeout = 60000
   private _bus?: IridiumBus
   private peers: {
     [did: string]: {
@@ -34,6 +35,10 @@ export class Wire extends Emitter<WireEventListeners> {
       initiator: boolean
       isConnecting: boolean
     }
+  } = {}
+
+  private timers: {
+    [did: string]: ReturnType<typeof setTimeout>
   } = {}
 
   async init() {
@@ -103,11 +108,18 @@ export class Wire extends Emitter<WireEventListeners> {
       isConnecting: true,
     }
 
+    this.startTimeout(id)
+
     this.bindPeerListeners(id)
 
     logger.debug(this.loggerTag, 'Peer created for', { did: id })
 
     return peer
+  }
+
+  private onTimeout(id: string) {
+    logger.debug(this.loggerTag, 'Connection attempt timed out', { id })
+    this.destroyPeer(id)
   }
 
   private bindPeerListeners(id: string) {
@@ -159,11 +171,26 @@ export class Wire extends Emitter<WireEventListeners> {
     logger.debug(this.loggerTag, 'Peer connected', { id })
     const peerDescriptor = this.peers[id]
 
+    this.stopTimeout(id)
+
     if (peerDescriptor) {
       peerDescriptor.isConnecting = false
     }
 
     this.emit('peer:connect', { did: id })
+  }
+
+  private startTimeout(id: string) {
+    this.stopTimeout(id)
+    this.timers[id] = setTimeout(this.onTimeout.bind(this, id), this.timeout)
+  }
+
+  private stopTimeout(id: string) {
+    const timer = this.timers[id]
+    if (timer) {
+      clearTimeout(timer)
+      delete this.timers[id]
+    }
   }
 
   onPeerClose(id: string) {
@@ -203,8 +230,10 @@ export class Wire extends Emitter<WireEventListeners> {
   }
 
   destroyPeer(id: string) {
+    const peer = this.peers[id]?.peer
+    if (!peer) return
+
     this.unbindPeerListeners(id)
-    const { peer } = this.peers[id]
 
     peer.destroy()
 
