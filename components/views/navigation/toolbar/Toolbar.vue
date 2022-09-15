@@ -76,6 +76,7 @@ export default Vue.extend({
       subtitleText,
       callTooltipText,
       otherParticipants,
+      otherDids,
     }
   },
   data() {
