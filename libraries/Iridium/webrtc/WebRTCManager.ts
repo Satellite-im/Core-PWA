@@ -571,6 +571,7 @@ export default class WebRTCManager extends Emitter {
     const onStream = async ({ kind }: { kind?: string }) => {
       if (!kind) return
 
+      logger.log('webrtc', `stream ${kind}`)
       this.setStreamMuted(iridium.id, {
         [kind]: !!this.state.streamMuted[iridium.id]?.[kind],
       })

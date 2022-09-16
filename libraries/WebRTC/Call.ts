@@ -1099,7 +1099,8 @@ export class Call extends Emitter<CallEventListeners> {
       this.screenStreams[peer.id] === stream.id
         ? 'screen'
         : stream.getTracks()[0].kind
-    this.streams[peer.id][kind] = stream
+
+    Vue.set(this.streams[peer.id], kind, stream)
     this.emit('STREAM', { did: peer.id, stream, kind })
   }
 
