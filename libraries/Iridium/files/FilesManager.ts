@@ -231,11 +231,10 @@ export default class FilesManager extends Emitter {
       cid: item.id,
     })
 
-    // todo - investigate unpinning
-    // iridium.connector.ipfs.dag.unpin(item.id)
-    // if (item.thumbnail && item.thumbnail !== item.id) {
-    //   iridium.connector.ipfs.dag.unpin(item.thumbnail)
-    // }
+    iridium.connector?.ipfs.pin.rm(item.id)
+    if (item.thumbnail && item.thumbnail !== item.id) {
+      iridium.connector.ipfs.pin.rm(item.thumbnail)
+    }
   }
 
   /**
