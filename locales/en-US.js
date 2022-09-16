@@ -64,7 +64,7 @@ export default {
     accounts: {
       linked_accounts: 'Linked Accounts',
       link_new_account_or_device: 'Link New Account / Device',
-      require_pin_auth: 'Require Pin Auth?',
+      require_pin_auth: 'Require Password Auth?',
       security_suggestion:
         'This is suggested for all users to increase financial security',
     },
@@ -87,7 +87,7 @@ export default {
   messaging: {
     messages: 'Messages',
     groups: 'Groups',
-    pin: 'Pin',
+    pin: 'Password',
     reply: 'Reply',
     typing: '{user} is typing | {user} are typing',
     new_messages: 'New Messages',
@@ -166,7 +166,7 @@ export default {
     error_network: {
       title: 'Oops! Please Stand By',
       subtitle:
-        "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your pin to connect or try again later.",
+        "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your password to connect or try again later.",
       action: 'Try Again',
     },
   },
@@ -245,13 +245,13 @@ export default {
     },
     unlock: {
       decrypt: 'Decrypt Account',
-      create: 'Create Account Pin',
-      placeholder: 'Enter Pin...',
-      choose_pin: 'Choose Your Pin',
-      choose_pin_description_1: 'Create a pin to protect your account.',
+      create: 'Create Account Password',
+      placeholder: 'Enter Password...',
+      choose_pin: 'Choose Your Password',
+      choose_pin_description_1: 'Create a Password to protect your account.',
       choose_pin_description_2:
-        "The pin can be anything you want, just don't forget it.",
-      store_pin: 'Store Pin? (Less Secure)',
+        "The Password can be anything you want, just don't forget it.",
+      store_pin: 'Store Password? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
       browser_warning:
@@ -333,9 +333,9 @@ export default {
           'Publicly associate your account ID with a human-readable username. Anyone can see this association.',
       },
       pin: {
-        title: 'Store Account Pin',
+        title: 'Store Account Password',
         subtitle:
-          "Store your account pin locally, so you don't have to enter it manually every time. This is not recommended.",
+          "Store your account password locally, so you don't have to enter it manually every time. This is not recommended.",
       },
       activity: {
         title: 'Display Current Activity',
@@ -678,8 +678,8 @@ export default {
   },
   errors: {
     accounts: {
-      pin_too_short: 'Pin must be at least 5 characters.',
-      invalid_pin: 'Pin does not match',
+      pin_too_short: 'Password must be at least 5 characters.',
+      invalid_pin: 'Password does not match',
       invalid_group_id: 'GroupID is invalid',
       cannot_find_group: 'Cannot find chosen group',
       user_derivation_failed:
