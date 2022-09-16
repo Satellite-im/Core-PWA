@@ -1,5 +1,8 @@
 <template>
-  <div class="image-container" :class="{ nsfw: nsfw && blockNsfw }">
+  <div
+    class="image-container"
+    :class="{ nsfw: nsfw && blockNsfw, transparent: transparent }"
+  >
     <slot />
   </div>
 </template>
@@ -10,6 +13,10 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 export default {
   props: {
     nsfw: {
+      type: Boolean,
+      default: false,
+    },
+    transparent: {
       type: Boolean,
       default: false,
     },
@@ -43,6 +50,10 @@ export default {
     img {
       filter: blur(40px);
     }
+  }
+
+  &.transparent {
+    background: transparent;
   }
 }
 </style>
