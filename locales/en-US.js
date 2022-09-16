@@ -288,6 +288,8 @@ export default {
       title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
+      update:
+        'We were not able to check permissions status, please verify your notifications, microphone, and camera permissions in browser',
       notifications: {
         title: 'Notifications',
         subtitle:

@@ -11,6 +11,9 @@
     plaintext
     :value="$t('pages.privacy.permissions.title')"
   />
+  <TypographyText v-if="!permissions.length" color="danger">
+    {{ $t('pages.privacy.update') }}
+  </TypographyText>
   <SettingsSection>
     <SettingsUnit
       v-for="perm in permissions"

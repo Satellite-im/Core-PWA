@@ -19,6 +19,7 @@ export default Vue.extend({
       lengthError: false as boolean,
       privacySettings: iridium.settings.state.privacy,
       permissions: [] as PermissionObject[],
+      loading: [] as string[],
     }
   },
   computed: {
@@ -114,7 +115,9 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.checkBrowserPermissions()
+    if (navigator.permissions) {
+      this.checkBrowserPermissions()
+    }
   },
   methods: {
     checkBrowserPermissions() {
@@ -167,8 +170,8 @@ export default Vue.extend({
 
       try {
         let stream
-        /*  
-       // delete the comment to toggle screensharing, 
+        /*
+       // delete the comment to toggle screensharing,
        // NOTE: this permission doesn't exist on browsers
        if (permName === 'screen') {
           stream = await navigator.mediaDevices.getDisplayMedia({
