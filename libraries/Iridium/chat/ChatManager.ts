@@ -65,7 +65,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     typing: {},
   }
 
-  async init() {
+  async start() {
     const fetched = await this.get<State>()
     this.state.conversations = {
       ...this.state.conversations,
@@ -99,6 +99,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.ready = true
     this.emit('ready', {})
   }
+
+  async stop() {}
 
   private async onConversationAnnounce(
     message: IridiumPubsubMessage<

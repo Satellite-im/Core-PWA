@@ -79,7 +79,7 @@ export default class WebRTCManager extends Emitter {
     return this.state.streamConstraints
   }
 
-  async init() {
+  async start() {
     if (!iridium.connector || !iridium.connector.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
     }
@@ -99,13 +99,19 @@ export default class WebRTCManager extends Emitter {
     this.wire.on('wire:message', this.onMessage.bind(this))
 
     // Initialize the Wire
-    await this.wire.init()
+    await this.wire.start()
 
     setInterval(() => {
       if (this.state.activeCall) {
         this.state.callTime = Date.now() - this.state.callStartedAt
       }
     }, 1000)
+  }
+
+  async stop() {
+    await Promise.all(
+      Object.values(this.state.calls).map(async (call) => call.destroy()),
+    )
   }
 
   private async onMessage({

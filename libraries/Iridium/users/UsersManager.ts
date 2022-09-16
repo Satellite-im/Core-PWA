@@ -45,7 +45,7 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     return Object.values(this.state)
   }
 
-  async init() {
+  async start() {
     if (!iridium.connector) {
       throw new Error('cannot initialize users, no iridium connector')
     }

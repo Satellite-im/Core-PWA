@@ -47,7 +47,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
   private loggerTag = 'iridium/friends'
 
-  async init() {
+  async start() {
     if (!iridium.connector) {
       throw new Error('cannot initialize friends, no iridium connector')
     }

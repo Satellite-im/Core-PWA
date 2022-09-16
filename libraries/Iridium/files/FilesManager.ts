@@ -25,7 +25,7 @@ import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 export default class FilesManager extends Emitter {
   public state: { items: IridiumItem[] } = { items: [] }
 
-  async init() {
+  async start() {
     if (!iridium.connector) {
       throw new Error('cannot initialize files, no iridium connector')
     }
@@ -37,6 +37,8 @@ export default class FilesManager extends Emitter {
 
     this.emit('ready', {})
   }
+
+  async stop() {}
 
   async fetch() {
     const res = await iridium.connector?.get<{ items: IridiumItem[] }>('/files')
