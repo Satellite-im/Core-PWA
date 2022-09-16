@@ -14,19 +14,17 @@
       @click="generateWallet"
       :loading="isLoading"
     />
-    <UiComingSoon style="width: auto; height: auto">
-      <InteractablesButton
-        data-cy="connect-wallet-button"
-        @click="connectAccount"
-        :text="$t('pages.disclaimer.connect')"
-      />
-    </UiComingSoon>
-    <UiComingSoon style="width: auto; height: auto">
-      <InteractablesButton
-        data-cy="import-account-button"
-        @click="importAccount"
-        :text="$t('pages.disclaimer.import')"
-      />
-    </UiComingSoon>
+    <InteractablesButton
+      data-cy="connect-wallet-button"
+      @click="connectAccount"
+      :text="$t('pages.disclaimer.connect')"
+      disabled
+    />
+    <InteractablesButton
+      data-cy="import-account-button"
+      @click="importAccount"
+      :text="$t('pages.disclaimer.import')"
+      disabled
+    />
   </div>
 </div>
