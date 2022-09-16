@@ -9,18 +9,20 @@
 
     li {
       display: flex;
-      color: @flair-color;
       + li::before {
         color: @light;
         content: '\02192';
         margin-right: 0.375rem;
       }
-      &.active {
-        color: @dark;
-      }
+
       a {
         &:extend(.ellipsis);
         max-width: 200px;
+        text-decoration: none;
+        &.active {
+          color: @dark;
+          cursor: default;
+        }
 
         svg {
           color: @flair-color;
