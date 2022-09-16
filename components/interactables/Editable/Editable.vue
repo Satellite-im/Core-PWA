@@ -360,9 +360,10 @@ export default Editable
   .placeholder {
     color: @text-muted;
     position: absolute;
-    &:extend(.background-layer);
+    &:extend(.base-layer-zindex);
     &:extend(.no-select);
     &:extend(.ellipsis);
+    pointer-events: none;
   }
   .editable-input {
     width: 100%;
