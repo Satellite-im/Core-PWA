@@ -52,8 +52,9 @@
           <template v-else-if="route === 'add'">
             <div>{{ $t('friends.add_description') }}</div>
             <FriendsSearch />
-            <FriendsQrSection />
-          </template>
+            <!-- <FriendsQrSection /> -->
+            <!-- Commented out because QR section doesn't work -->
+            </template>
         </div>
       </div>
     </div>
