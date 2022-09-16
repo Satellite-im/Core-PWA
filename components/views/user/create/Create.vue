@@ -45,6 +45,11 @@ export default Vue.extend({
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
     },
   },
+  mounted() {
+    if (!this.myDid) {
+      this.$router.push('/')
+    }
+  },
   beforeDestroy() {
     URL.revokeObjectURL(this.croppedImage)
     URL.revokeObjectURL(this.imageUrl)
