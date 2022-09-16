@@ -624,9 +624,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     upload: ChatFileUpload
     conversationId: string
   }): Promise<MessageAttachment | null> {
-    if (upload.file.size === 0) {
-      throw new Error('TODO')
-    }
     const safer = await this.upload(upload.file, conversationId)
     if (!safer || !safer.valid) {
       return null

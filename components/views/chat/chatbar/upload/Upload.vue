@@ -8,6 +8,8 @@ import createThumbnail from '~/utilities/Thumbnail'
 import { blobToBase64 } from '~/utilities/BlobManip'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
+import { ItemErrors } from '~/libraries/Iridium/files/types'
+import notNull from '~/utilities/notNull'
 
 const convert = require('heic-convert')
 
@@ -65,36 +67,44 @@ const Upload = Vue.extend({
 
       const id = this.$route.params.id
 
-      const filesToAdd: { file: File; nsfw: boolean }[] = await Promise.all(
-        newFiles.map(async (file: File) => {
-          // if heic, convert to jpeg so recipient can see in browser
-          if (await isHeic(file)) {
-            const buffer = new Uint8Array(await file.arrayBuffer())
-            const outBuffer = await convert({
-              buffer,
-              format: 'PNG',
-              quality: 1,
-            })
-            const filePng = new File([outBuffer.buffer], `${file.name}.png`, {
-              type: 'image/png',
-            })
-            return { file: filePng, nsfw: await this.$Security.isNSFW(filePng) }
-          }
+      const filesToAdd: ({ file: File; nsfw: boolean } | null)[] =
+        await Promise.all(
+          newFiles.map(async (file: File) => {
+            if (file.size === 0) {
+              this.$toast.error(this.$t(ItemErrors.FILE_SIZE) as string)
+              return null
+            }
+            // if heic, convert to jpeg so recipient can see in browser
+            if (await isHeic(file)) {
+              const buffer = new Uint8Array(await file.arrayBuffer())
+              const outBuffer = await convert({
+                buffer,
+                format: 'PNG',
+                quality: 1,
+              })
+              const filePng = new File([outBuffer.buffer], `${file.name}.png`, {
+                type: 'image/png',
+              })
+              return {
+                file: filePng,
+                nsfw: await this.$Security.isNSFW(filePng),
+              }
+            }
 
-          // handle non heic
-          let nsfw
-          try {
-            nsfw = await this.$Security.isNSFW(file)
-          } catch (e: any) {
-            this.$Logger.log('Upload', e)
-            nsfw = true
-          }
-          return { file, nsfw }
-        }),
-      )
+            // handle non heic
+            let nsfw
+            try {
+              nsfw = await this.$Security.isNSFW(file)
+            } catch (e: any) {
+              this.$Logger.log('Upload', e)
+              nsfw = true
+            }
+            return { file, nsfw }
+          }),
+        )
 
       // set files to show preview, do not send
-      for (const file of filesToAdd) {
+      for (const file of filesToAdd.filter(notNull)) {
         const thumbnail = await createThumbnail(file.file, 200)
         this.$store.commit('chat/addFile', {
           file: {
