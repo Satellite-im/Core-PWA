@@ -529,6 +529,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       throw new Error('conversation not found')
     }
 
+    this.emit('routeCheck', id)
+
     // send a message in the conversation
     await this.sendMessage({
       conversationId: id,
