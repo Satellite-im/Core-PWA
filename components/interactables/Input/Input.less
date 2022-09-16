@@ -1,7 +1,9 @@
+// dont remove various min-width: 0. needed for firefox and safari
 .input-group {
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 0;
 
   .input-outer {
     display: flex;
@@ -12,6 +14,7 @@
       position: relative;
       display: flex;
       flex-grow: 1;
+      min-width: 0;
 
       .input {
         flex-grow: 1;
@@ -21,6 +24,7 @@
         border: none;
         border-radius: @corner-rounding;
         border: 1px solid transparent;
+        min-width: 0;
 
         &.is-danger {
           border-color: @red;
