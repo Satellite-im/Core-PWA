@@ -4,7 +4,6 @@ dist
 *.snap
 .prettierignore
 .eslintrc
-iridium
 linked-iridium
 plugins
 .nuxt
