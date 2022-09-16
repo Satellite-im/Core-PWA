@@ -203,6 +203,11 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: ['@solana'],
+    splitChunks: {
+      layouts: false,
+      pages: false,
+      commons: false,
+    },
     extend(config, ctx) {
       if (ctx.isDev) {
         config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
@@ -245,12 +250,12 @@ export default defineNuxtConfig({
         options.targets = isServer
           ? { node: 'current' }
           : {
-              browsers: [
-                'last 1 chrome version',
-                'last 1 firefox version',
-                'last 1 safari version',
-              ],
-            }
+            browsers: [
+              'last 1 chrome version',
+              'last 1 firefox version',
+              'last 1 safari version',
+            ],
+          }
       },
     },
   },
