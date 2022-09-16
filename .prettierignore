@@ -1,6 +1,11 @@
 node_modules/
 coverage/
-dist/_nuxt/
+dist
 *.snap
 .prettierignore
 .eslintrc
+iridium
+linked-iridium
+plugins
+.nuxt
+pnpm-lock.yaml
