@@ -207,12 +207,16 @@ export class IridiumManager extends Emitter {
 
     logger.info(
       'iridium/manager',
-      'sending sync/fetch to retrieve offline messages',
+      'sending sync/fetch to retrieve offline messages from nodes',
     )
-    this.connector.p2p.send(this.connector.p2p.primaryNodeID, {
-      type: 'sync/fetch',
-      at: Date.now(),
-    })
+    this.connector.p2p.peerList
+      .filter((peer) => peer.connected && peer.type === 'node')
+      .forEach((peer) => {
+        this.connector?.p2p.send(peer.did, {
+          type: 'sync/fetch',
+          at: Date.now(),
+        })
+      })
   }
 
   async sendSyncInit(
