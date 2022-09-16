@@ -1,7 +1,7 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { ChevronDownIcon } from 'satellite-lucide-icons'
+import { ChevronDownIcon, KeyIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import {
   Conversation,
@@ -23,6 +23,7 @@ const MESSAGE_PAGE_SIZE = 50
 export default Vue.extend({
   components: {
     ChevronDownIcon,
+    KeyIcon,
   },
   data() {
     return {

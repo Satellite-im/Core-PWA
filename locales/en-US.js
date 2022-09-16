@@ -1,6 +1,7 @@
 export default {
   coming_soon: {
     communities: 'Communities\nComing Soon',
+    add_community: 'New Community\nComing Soon',
     send_money: 'Send Money\nComing Soon',
     alerts: 'Alerts\nComing Soon',
     marketplace: 'Marketplace\nComing Soon',
@@ -51,6 +52,8 @@ export default {
     offline: '{name} is not connected',
     background_call: 'Current call',
     no_results: 'No results found',
+    early_access: 'Early Access',
+    early_access_message: 'Please report any bugs or issues at ',
   },
   time: {
     now: 'now',

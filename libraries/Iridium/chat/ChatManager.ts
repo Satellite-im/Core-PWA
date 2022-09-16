@@ -89,7 +89,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         `requesting sync subscription to ${topic}`,
       )
       // ask the sync node to subscribe to this topic
-      iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
+      await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
         sync: {
           offline: true,
         },
@@ -711,7 +711,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       ...partial,
       id: tempCid.toString() as string,
     }
-    iridium.connector.publish(
+    await iridium.connector.publish(
       `/chat/conversations/${conversationId}`,
       {
         type: 'chat/message',
@@ -794,13 +794,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const typingList = this.ephemeral.typing[conversationId]
 
     if (typing) {
-      // if reactive array exists, push. otherwise create
-      typingList
-        ? typingList.push(did)
-        : Vue.set(this.ephemeral.typing, conversationId, [did])
+      if (!typingList) {
+        Vue.set(this.ephemeral.typing, conversationId, [did])
+        return
+      }
+
+      if (typingList.includes(did)) return
+
+      typingList.push(did)
     } else if (typingList) {
       const index = typingList.indexOf(did)
-      typingList.splice(index, 1)
+      if (index >= 0) typingList.splice(index, 1)
     }
   }
 }
