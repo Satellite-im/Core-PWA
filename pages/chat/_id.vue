@@ -40,6 +40,7 @@ export default Vue.extend({
     padding-bottom: 16px;
 
     .inner-wrapper {
+      width: 100%;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
