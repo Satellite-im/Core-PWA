@@ -24,6 +24,7 @@ export default Vue.extend({
   data() {
     return {
       thumbnail: '',
+      dataURL: '',
     }
   },
   computed: {
@@ -35,6 +36,17 @@ export default Vue.extend({
       return this.file?.name
         ? this.downloadList.includes(this.file.name)
         : false
+    },
+    downloadName(): string {
+      if (!this.file) {
+        return ''
+      }
+      const fileExt = this.file.name
+        .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+        .toLowerCase()
+      return this.file.extension === fileExt
+        ? this.file.name
+        : `${this.file.name}.${this.file.extension}`
     },
   },
   async mounted() {
@@ -60,17 +72,14 @@ export default Vue.extend({
       const file = this.file
       if (file) {
         this.$store.commit('files/addDownload', file.name)
-        const fileExt = file.name
-          .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
-          .toLowerCase()
-
-        await iridium.files.download(
-          file.id,
-          file.extension === fileExt
-            ? file.name
-            : `${file.name}.${file.extension}`,
-          file.size,
+        const anchor = this.$refs.download as HTMLAnchorElement
+        const { fileBuffer } = await iridium.connector?.load(file.id)
+        this.dataURL = URL.createObjectURL(
+          new Blob([fileBuffer], { type: file.type }),
         )
+        anchor.href = this.dataURL
+        anchor.click()
+        URL.revokeObjectURL(this.dataURL)
         this.$store.commit('files/removeDownload', file.name)
       }
     },

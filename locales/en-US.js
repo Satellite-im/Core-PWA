@@ -237,6 +237,7 @@ export default {
         file_size: 'File needs to have a size of 1 byte or greater',
         duplicate_name: 'Item with this name already exists in this directory',
         storage_limit: 'This upload would exceed your storage limit',
+        blocked: '{name} cannot be uploaded',
         dir_paradox: 'Directory cannot contain itself',
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
         in_progress: 'Upload already in progress, try again later',

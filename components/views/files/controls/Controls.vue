@@ -118,24 +118,31 @@ const Controls = Vue.extend({
       }
 
       for (const file of files) {
-        this.$store.commit('files/setCurrentUpload', {
-          name: file.name,
-          size: file.size,
-        })
+        // this.$store.commit('files/setCurrentUpload', {
+        //   name: file.name,
+        //   size: file.size,
+        // })
+        this.$store.commit(
+          'files/setStatus',
+          this.$t('pages.files.status.upload', [file.name]),
+        )
         await iridium.files
           .addFile({
             file,
             parentId: this.path.at(-1)?.id ?? '',
-            options: { progress: this.setProgress },
+            // options: { progress: this.setProgress },
           })
-          .catch((e) => {
+          .catch(({ message }) => {
+            if (message === ItemErrors.BLOCKED) {
+              this.errors.push(this.$t(message, { name: file.name }))
+            }
             // todo - switch to a set - ensure there aren't any duplicate error messages
-            if (!this.errors.includes(this.$t(e?.message)))
-              this.errors.push(this.$t(e?.message ?? ''))
+            else if (!this.errors.includes(this.$t(message)))
+              this.errors.push(this.$t(message))
           })
       }
       this.$store.commit('files/setStatus', '')
-      this.$store.commit('files/setCurrentUpload', undefined)
+      // this.$store.commit('files/setCurrentUpload', undefined)
     },
     /**
      * @method setProgress
