@@ -222,8 +222,8 @@ export class IridiumManager extends Emitter {
   async sendSyncInit(
     did: string | undefined = this.connector?.p2p.primaryNodeID,
   ) {
-    if (!did) {
-      logger.error('iridium/manager', 'cannot send sync init to invalid did')
+    if (!did && !this.connector?.p2p.primaryNodeID) {
+      logger.error('iridium/manager', 'cannot send sync init without a did')
       return
     }
     const profile = this.profile.state
@@ -239,7 +239,10 @@ export class IridiumManager extends Emitter {
       status: profile?.status,
     }
 
-    return this.connector?.send(did, payload)
+    return this.connector?.send(
+      (did || this.connector.p2p.primaryNodeID) as string,
+      payload,
+    )
   }
 }
 
