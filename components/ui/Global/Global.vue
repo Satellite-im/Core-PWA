@@ -76,11 +76,18 @@ export default Vue.extend({
     const { audioInput, videoInput } = this.settings
     this.updateWebRTCState({ audioInput, videoInput })
 
-    iridium.friends.on('routeCheck', (conversationId: string) => {
+    const routeCheck = (conversationId: string) => {
       if (conversationId === this.$route.params.id) {
         this.$router.push(this.$device.isMobile ? `/mobile/chat` : `/friends`)
       }
-    })
+    }
+
+    iridium.friends.on('routeCheck', (conversationId: string) =>
+      routeCheck(conversationId),
+    )
+    iridium.chat.on('routeCheck', (conversationId: string) =>
+      routeCheck(conversationId),
+    )
   },
   methods: {
     /**
