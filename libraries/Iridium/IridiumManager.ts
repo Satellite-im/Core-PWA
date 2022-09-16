@@ -251,7 +251,7 @@ declare global {
   }
 }
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NUXT_ENV_IRIDIUM_DEBUG === 'true') {
   window.iridium = instance
 }
 export default instance

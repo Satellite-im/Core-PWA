@@ -8,11 +8,16 @@ const nodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
 const gateways = process.env.NUXT_ENV_IRIDIUM_GATEWAYS?.split(',') || [
   'https://satellite.infura-ipfs.io',
 ]
+const apis = process.env.NUXT_ENV_IRIDIUM_APIS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
+
 export const Config = {
   debug: true,
   iridium: {
     nodes,
     gateways,
+    apis,
     ipfs: {
       config: {
         Bootstrap: nodes,
