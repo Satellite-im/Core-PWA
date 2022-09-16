@@ -730,19 +730,29 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       ...partial,
       id: tempCid.toString() as string,
     }
-    await iridium.connector.publish(
-      `/chat/conversations/${conversationId}`,
-      {
-        type: 'chat/message',
-        cid: tempCid.toString() as string,
-        message,
-      },
-      {
+
+    await Promise.all([
+      iridium.connector?.store(partial, {
+        syncPin: true,
         encrypt: conversation?.participants
-          ? { recipients: conversation.participants }
+          ? { recipients: conversation?.participants }
           : undefined,
-      },
-    )
+      }),
+      iridium.connector?.publish(
+        `/chat/conversations/${conversationId}`,
+        {
+          type: 'chat/message',
+          cid: tempCid.toString() as string,
+          message,
+        },
+        {
+          encrypt: conversation?.participants
+            ? { recipients: conversation.participants }
+            : undefined,
+        },
+      ),
+    ])
+
     Vue.set(
       this.state.conversations[conversationId].message,
       message.id,
@@ -750,12 +760,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
     Vue.set(this.state.conversations[conversationId], 'lastReadAt', Date.now())
 
-    iridium.connector.store(partial, {
-      syncPin: true,
-      encrypt: conversation?.participants
-        ? { recipients: conversation?.participants }
-        : undefined,
-    })
     if (message.id === undefined) {
       throw new Error('message not sent, failed to store')
     }
