@@ -33,7 +33,7 @@ window?.addEventListener('pushstate', () => {
  * @example
  */
 export default function ({ store, route, redirect }: Arguments) {
-  const { locked, phrase } = store.state.accounts
+  const { locked, encryptedPhrase } = store.state.accounts
 
   const eventuallyRedirect = memoize(
     (path: string) => {
@@ -49,7 +49,7 @@ export default function ({ store, route, redirect }: Arguments) {
   }
 
   // If the wallet has not been created yet
-  if (!locked && phrase === '' && !route.path.includes('setup')) {
+  if (!locked && encryptedPhrase === '' && !route.path.includes('setup')) {
     return eventuallyRedirect('/setup/disclaimer')
   }
 
