@@ -296,10 +296,6 @@ const Chatbar = Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: DataTransferItem[]) {
-      if (!this.consentToScan) {
-        this.$store.dispatch('ui/displayConsentSettings')
-        return
-      }
       const files = items
         .filter((f) => {
           return f.kind !== MessagingTypesEnum.STRING
@@ -308,6 +304,10 @@ const Chatbar = Vue.extend({
         .filter(notNull)
 
       if (files.length && this.$refs.upload) {
+        if (!this.consentToScan) {
+          this.$store.dispatch('ui/displayConsentSettings')
+          return
+        }
         ;(this.$refs.upload as ChatbarUploadRef).handleFile({
           target: { files },
         })
