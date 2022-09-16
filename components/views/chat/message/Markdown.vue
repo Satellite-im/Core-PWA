@@ -27,4 +27,13 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less"></style>
+<style lang="less">
+a {
+  color: @flair-color-secondary;
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+</style>
