@@ -1,5 +1,8 @@
 <div class="conversation" ref="container">
-  <UiChatEncrypted />
+  <UiBanner>
+    <template #icon><key-icon size="1x" /></template>
+    <template #header>{{$t('conversation.encrypted')}}</template>
+  </UiBanner>
   <UiChatInfiniteScroll
     :isLoading="isLoadingMore"
     :noMore="noMore"
