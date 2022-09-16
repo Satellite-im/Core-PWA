@@ -35,63 +35,64 @@
     />
   </SettingsSection>
   <!-- Permission Granted Block -->
-  <SettingsSection v-if="userHasGivenAudioAccess">
-    <!-- Audio In -->
-    <SettingsUnit
-      :title="$t('pages.settings.audio.sources.input.title')"
-      :text="$t('pages.settings.audio.sources.input.subtitle')"
-    >
-      <InteractablesSelect
-        v-model="selectedAudioInput"
-        :options="audioInputs"
-        :label="$t('pages.settings.audio.sources.input.title')"
-      />
-    </SettingsUnit>
-    <!-- Audio Out -->
-    <SettingsUnit
-      :title="$t('pages.settings.audio.sources.output.title')"
-      :text="$t('pages.settings.audio.sources.output.subtitle')"
-    >
-      <InteractablesSelect
-        v-if="browserAllowsAudioOut"
-        v-model="selectedAudioOutput"
-        :options="audioOutputs"
-        :label="$t('pages.settings.audio.sources.output.title')"
-      />
-      <TypographyError
-        v-if="!browserAllowsAudioOut"
-        :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <div class="audio-io-container">
+    <SettingsSection v-if="userHasGivenAudioAccess">
+      <!-- Audio In -->
+      <SettingsUnit
+        :title="$t('pages.settings.audio.sources.input.title')"
+        :text="$t('pages.settings.audio.sources.input.subtitle')"
+      >
+        <InteractablesSelect
+          v-model="selectedAudioInput"
+          :options="audioInputs"
+          :label="$t('pages.settings.audio.sources.input.title')"
+        />
+      </SettingsUnit>
 
-  <!--Audio Bitrate & Sample-->
-  <SettingsSection>
-    <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
-      <br />
-      <div class="meter-container">
-        <UiMeter :value="micLevel" :height="5" solid />
-      </div>
-      <InteractablesVolume
-        :value="audio.inputVolume"
-        direction="ltr"
-        plain
-        @change="inputVolumeControlValueChange"
-      />
-    </SettingsUnit>
-    <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
-      <br />
-      <div class="meter-container">
-        <UiMeter :value="0" :height="5" solid />
-      </div>
-      <InteractablesVolume
-        :value="audio.volume"
-        direction="ltr"
-        plain
-        @change="volumeControlValueChange"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+      <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
+        <br />
+        <div class="meter-container">
+          <UiMeter :value="micLevel" :height="5" solid />
+        </div>
+        <InteractablesVolume
+          :value="audio.inputVolume"
+          direction="ltr"
+          plain
+          @change="inputVolumeControlValueChange"
+        />
+      </SettingsUnit>
+    </SettingsSection>
+    <SettingsSection>
+      <!-- Audio Out -->
+      <SettingsUnit
+        :title="$t('pages.settings.audio.sources.output.title')"
+        :text="$t('pages.settings.audio.sources.output.subtitle')"
+      >
+        <InteractablesSelect
+          v-if="browserAllowsAudioOut"
+          v-model="selectedAudioOutput"
+          :options="audioOutputs"
+          :label="$t('pages.settings.audio.sources.output.title')"
+        />
+        <TypographyError
+          v-if="!browserAllowsAudioOut"
+          :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
+        />
+      </SettingsUnit>
+      <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
+        <br />
+        <div class="meter-container">
+          <UiMeter :value="0" :height="5" solid />
+        </div>
+        <InteractablesVolume
+          :value="audio.volume"
+          direction="ltr"
+          plain
+          @change="volumeControlValueChange"
+        />
+      </SettingsUnit>
+    </SettingsSection>
+  </div>
 
   <!--Audio Bitrate & Sample-->
   <UiComingSoon :areaCover="true" :hide="true">
