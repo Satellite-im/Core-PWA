@@ -130,6 +130,7 @@ export default Vue.extend({
         display: block;
         padding: 0.5em 0.75em;
         -webkit-user-drag: none;
+        text-decoration: none;
         &:extend(.no-select);
         &:extend(.font-primary);
         &:extend(.round-corners);
