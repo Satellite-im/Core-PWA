@@ -144,6 +144,7 @@ describe('mutations', () => {
     },
   }
   const initialState = {
+    callHeight: 'auto',
     isMobileNavVisible: false,
     contextMenuStatus: false,
     showSidebar: true,
@@ -1217,5 +1218,19 @@ describe('mutations', () => {
       to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
       type: 'group',
     })
+  })
+
+  test('setCallHeight', () => {
+    const localizedState = { ...initialState }
+    const argument = '12'
+    mutations.default.setCallHeight(localizedState, argument)
+    expect(localizedState.callHeight).toEqual(argument)
+  })
+
+  test('setCallHeight with number', () => {
+    const localizedState = { ...initialState }
+    const argument = 12 // Does not have to be string
+    mutations.default.setCallHeight(localizedState, argument)
+    expect(localizedState.callHeight).toEqual(argument)
   })
 })
