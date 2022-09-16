@@ -632,7 +632,7 @@ export default {
       new_chat_description:
         'Select one or more of your friends to chat in groups or one-on-one.',
       no_friends_yet: 'No Friends Yet',
-      no_friends_yet_text: "The world doesn't have\nto be so lonely.",
+      no_friends_yet_text: "The world doesn't have to be so lonely.",
       enhancers: {
         glyphs: 'Glyphs',
         emoji: 'Emoji',
