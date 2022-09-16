@@ -293,6 +293,10 @@ const Chatbar = Vue.extend({
      * @example this.handleUpload(someEvent.itsData.items)
      */
     handleUpload(items: DataTransferItem[]) {
+      if (!this.consentToScan) {
+        this.$store.dispatch('ui/displayConsentSettings')
+        return
+      }
       const files = items
         .filter((f) => {
           return f.kind !== MessagingTypesEnum.STRING
