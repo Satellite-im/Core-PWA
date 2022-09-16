@@ -407,13 +407,7 @@ export class Call extends Emitter<CallEventListeners> {
     try {
       screenStream = await navigator.mediaDevices.getDisplayMedia()
     } catch (e) {
-      if (
-        e instanceof DOMException &&
-        e.message.includes(PERMISSION_DENIED_BY_SYSTEM)
-      ) {
-        throw new Error(WebRTCErrors.PERMISSION_DENIED)
-      }
-      return
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
     if (!this.streams[iridium.id]) {
@@ -811,7 +805,6 @@ export class Call extends Emitter<CallEventListeners> {
   }) {
     if (!did) return
 
-    iridium.webRTC.setStreamMuted(did, { [kind]: false })
     if (did === iridium.id) {
       if (kind === 'audio' && !this.streams[did]?.audio) {
         await this.createAudioStream(constraints?.audio)
@@ -821,9 +814,15 @@ export class Call extends Emitter<CallEventListeners> {
       ) {
         await this.createVideoStream(constraints?.video)
       } else if (kind === 'screen' && !this.streams[did]?.screen) {
-        await this.createDisplayStream()
+        try {
+          await this.createDisplayStream()
+        } catch (_) {
+          return
+        }
       }
     }
+
+    iridium.webRTC.setStreamMuted(did, { [kind]: false })
 
     const stream = this.streams[did]?.[kind]
     if (!stream) {
