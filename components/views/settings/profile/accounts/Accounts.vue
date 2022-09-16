@@ -81,6 +81,6 @@ export default Vue.extend({
 .list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 </style>

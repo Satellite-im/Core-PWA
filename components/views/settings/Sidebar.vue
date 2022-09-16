@@ -108,14 +108,19 @@ export default Vue.extend({
   overflow-y: auto;
   &:extend(.no-select);
   padding: 8px;
+  background: @semitransparent-dark-gradient;
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
 
   .menu-label {
     &:extend(.font-muted);
+    font-family: @heading-font;
+    font-size: @font-size-sm;
+    margin-bottom: 0.25rem;
   }
 
   .menu-list {
-    margin-bottom: @normal-spacing;
-
     li {
       &:hover {
         &:extend(.background-semitransparent-light);
@@ -126,6 +131,7 @@ export default Vue.extend({
         -webkit-user-drag: none;
         &:extend(.no-select);
         &:extend(.font-primary);
+        &:extend(.round-corners);
 
         &:hover {
           &:extend(.background-semitransparent-light);

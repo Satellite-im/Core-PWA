@@ -1,25 +1,12 @@
 .list-item {
   user-select: none;
 
-  &:hover,
-  &:focus-within {
-    .header {
-      background: @foreground;
-      .transition(background, @animation-speed, ease-in-out);
-
-      .controls {
-        opacity: 1;
-        .transition(opacity, @animation-speed, ease-in-out);
-      }
-    }
-  }
-
   .header {
     display: flex;
     align-items: center;
     gap: @normal-spacing;
-    padding: 8px 16px;
-    background: @midground-alt;
+    padding: 12px 16px;
+    background: @semitransparent-dark-gradient;
     &:extend(.round-corners);
     .transition(background, @animation-speed, ease-in-out);
 
