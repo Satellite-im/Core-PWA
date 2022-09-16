@@ -125,6 +125,7 @@ export default Vue.extend({
       &:hover {
         &:extend(.background-semitransparent-light);
       }
+
       a {
         display: block;
         padding: 0.5em 0.75em;
@@ -137,6 +138,7 @@ export default Vue.extend({
           &:extend(.background-semitransparent-light);
           &:extend(.font-primary);
         }
+
         &.active {
           &:extend(.background-flair-gradient);
           &:extend(.glow-flair);
