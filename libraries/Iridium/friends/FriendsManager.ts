@@ -477,6 +477,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @returns Promise<void>
    */
   async friendRemove(pid: IridiumPeerIdentifier): Promise<void> {
+    this.emit(
+      'routeCheck',
+      iridium.chat.directConversationIdFromDid(didUtils.didString(pid)),
+    )
     // TODO: update when group calls are implemented
     if (iridium.webRTC.state.activeCall?.did === pid) {
       await iridium.webRTC.hangUp()
