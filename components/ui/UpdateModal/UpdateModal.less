@@ -9,7 +9,19 @@
     max-width: 40rem;
     min-width: 300px;
 
+    .list-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      width: 600px;
+      height: 400px;
+    }
+
     pre {
+      overflow: auto;
+      padding-left: 10px;
+      padding-right: 10px;
       white-space: pre-wrap;
       text-align: left;
       &:extend(.bordered);
@@ -19,8 +31,13 @@
       &:extend(.font-muted);
     }
 
-    .button {
-      width: calc(@half - 0.25rem);
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+
+      .button {
+        width: calc(@half - 0.25rem);
+      }
     }
     .mascot {
       max-height: 15em;
