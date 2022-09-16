@@ -117,7 +117,6 @@ export default Vue.extend({
 
   .swiper-slide {
     display: flex;
-    padding: 0;
     overflow-y: auto;
     padding: 16px;
 

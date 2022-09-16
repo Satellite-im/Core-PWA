@@ -146,5 +146,9 @@ export default Vue.extend({
       }
     }
   }
+
+  @media (max-width: @mobile-breakpoint) {
+    background: none;
+  }
 }
 </style>
