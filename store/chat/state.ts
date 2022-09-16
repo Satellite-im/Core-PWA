@@ -18,6 +18,7 @@ const InitialChatState = (): ChatState => ({
   replies: [],
   chatTexts: [],
   files: {},
+  activeUploadChats: [],
   countError: false,
   currentChat: initialCurrentChat,
   draftMessages: {},

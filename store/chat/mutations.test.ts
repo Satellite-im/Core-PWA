@@ -1081,38 +1081,38 @@ describe('misc', () => {
     expect(localState.files).toEqual({ file1: [] })
   })
 
-  test('module.setFileProgress', () => {
-    const localState = {
-      ...InitialChatState,
-      files: {
-        file1: [
-          {
-            file: 'path2',
-            url: 'string2',
-            nsfw: {
-              checking: false,
-              status: false,
-            },
-            progress: 0,
-          },
-        ],
-      },
-    }
-    const argument = { id: 'file1', index: 0, progress: 10 }
+  // test('module.setFileProgress', () => {
+  //   const localState = {
+  //     ...InitialChatState,
+  //     files: {
+  //       file1: [
+  //         {
+  //           file: 'path2',
+  //           url: 'string2',
+  //           nsfw: {
+  //             checking: false,
+  //             status: false,
+  //           },
+  //           progress: 0,
+  //         },
+  //       ],
+  //     },
+  //   }
+  //   const argument = { id: 'file1', index: 0, progress: 10 }
 
-    module.default.setFileProgress(localState, argument)
+  //   module.default.setFileProgress(localState, argument)
 
-    expect(localState.files).toEqual({
-      file1: [
-        {
-          file: 'path2',
-          nsfw: { checking: false, status: false },
-          progress: 10,
-          url: 'string2',
-        },
-      ],
-    })
-  })
+  //   expect(localState.files).toEqual({
+  //     file1: [
+  //       {
+  //         file: 'path2',
+  //         nsfw: { checking: false, status: false },
+  //         progress: 10,
+  //         url: 'string2',
+  //       },
+  //     ],
+  //   })
+  // })
 
   test('module.default.deleteFiles', () => {
     const state = {

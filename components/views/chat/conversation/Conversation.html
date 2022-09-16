@@ -8,7 +8,6 @@
     :noMore="noMore"
     @loadMore="loadMore"
   />
-  <UiLoadersMessage :count="3" v-if="false" />
   <div class="messages">
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText
@@ -23,5 +22,15 @@
         :replies="item.replies"
       />
     </template>
+  </div>
+  <div
+    v-if="activeUploadChats.includes(conversation?.id)"
+    class="loader-container"
+  >
+    <file-icon size="24" class="icon" />
+    <div class="inner">
+      <TypographyText> {{ $t('global.uploading') }} </TypographyText>
+      <UiLoadersLoadingBar />
+    </div>
   </div>
 </div>

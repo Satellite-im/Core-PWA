@@ -2,6 +2,7 @@
 
 exports[`state.default 0 1`] = `
 Object {
+  "activeUploadChats": Array [],
   "chatTexts": Array [],
   "countError": false,
   "currentChat": Object {
