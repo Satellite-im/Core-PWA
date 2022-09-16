@@ -770,13 +770,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const typingList = this.ephemeral.typing[conversationId]
 
     if (typing) {
-      // if reactive array exists, push. otherwise create
-      typingList
-        ? typingList.push(did)
-        : Vue.set(this.ephemeral.typing, conversationId, [did])
+      if (!typingList) {
+        Vue.set(this.ephemeral.typing, conversationId, [did])
+        return
+      }
+
+      if (typingList.includes(did)) return
+
+      typingList.push(did)
     } else if (typingList) {
       const index = typingList.indexOf(did)
-      typingList.splice(index, 1)
+      if (index >= 0) typingList.splice(index, 1)
     }
   }
 }
