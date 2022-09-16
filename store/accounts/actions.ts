@@ -164,12 +164,17 @@ export default {
       $BlockchainClient.setAdapter(new PhantomAdapter())
       logger.info('accounts/actions/loadAccount', 'using phantom wallet')
     }
-    const mnemonic = state.phrase
-    if (mnemonic === '') {
-      logger.error('accounts/actions/loadAccount', 'empty mnemonic')
-      throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+
+    if (state.phrase === '') {
+      if (state.encryptedPhrase !== '' && state.pin) {
+        await dispatch('unlock', state.pin)
+      } else {
+        logger.error('accounts/actions/loadAccount', 'empty mnemonic')
+        throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+      }
     }
 
+    const mnemonic = state.phrase
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
     if (!$BlockchainClient.isPayerInitialized) {
