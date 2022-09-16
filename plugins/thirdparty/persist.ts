@@ -44,11 +44,11 @@ const commonProperties = [
   'conversation.participants',
   'files',
   'ui.callHeight',
+  'accounts.phrase',
 ]
 
 const propertiesNoStorePin = [
   'accounts.pin',
-  'accounts.mnemonic',
   'accounts.locked',
   'accounts.error',
   'accounts.loading',

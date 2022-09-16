@@ -108,7 +108,7 @@ export default {
       $BlockchainClient.account.publicKey.toBase58(),
       pinHash,
     )
-    commit('setEntropy', entropyMessage)
+    // commit('setEntropy', entropyMessage)
 
     const encryptedPhrase = await Crypto.encryptWithPassword(
       userWallet.mnemonic,
@@ -358,7 +358,7 @@ export default {
       $BlockchainClient.account.publicKey.toBase58(),
       pinHash,
     )
-    commit('setEntropy', entropyMessage)
+    // commit('setEntropy', entropyMessage)
 
     const fakeMnemonic = 'fake mnemonic to bypass checks'
     commit('setPhrase', 'fake mnemonic to bypass checks')
