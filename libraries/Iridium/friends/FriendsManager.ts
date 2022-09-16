@@ -173,6 +173,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     if (!user) {
       ;[user] = await iridium.users.searchPeer(payload.body.user.did)
     }
+    if (!user) return
     if (!request && status === 'pending') {
       await this.requestCreate(user, true)
     } else if (request && status === 'accepted') {
