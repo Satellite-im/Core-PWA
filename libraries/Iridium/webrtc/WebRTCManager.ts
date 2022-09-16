@@ -438,14 +438,25 @@ export default class WebRTCManager extends Emitter {
       callId?: string
       did: string
     }) => {
-      // It's not related the active call, so we don't reset the state
-      if (this.state.activeCall?.callId !== callId) return
+      const incomingCallId = this.state.incomingCall?.callId
+      if (incomingCallId && incomingCallId === callId) {
+        const incomingCall = this.state.calls[incomingCallId]
+        if (incomingCall) {
+          incomingCall.destroy()
+        }
+        this.state.incomingCall = null
+      }
 
-      this.state.incomingCall = null
+      // It's not related the active call, so we don't reset the state
+      const activeCallId = this.state.activeCall?.callId
+      if (!activeCallId || activeCallId !== callId) return
+      const activeCall = this.state.calls[activeCallId]
+      activeCall?.destroy()
       this.state.activeCall = null
       this.state.callStartedAt = 0
     }
     call.on('HANG_UP', onCallHangup)
+    call.on('REMOTE_HANG_UP', onCallHangup)
 
     const onCallTrack = async ({
       track,
@@ -591,9 +602,12 @@ export default class WebRTCManager extends Emitter {
       callId?: string
       did: string
     }) => {
-      // Reset the state only if the event is related to the active call
-      if (callId === this.state.activeCall?.callId) {
+      if (!callId) return
+      if (callId === this.state.incomingCall?.callId) {
         this.state.incomingCall = null
+      }
+
+      if (callId === this.state.activeCall?.callId) {
         this.state.activeCall = null
         this.state.callStartedAt = 0
       }
@@ -760,10 +774,10 @@ export default class WebRTCManager extends Emitter {
   }
 
   public async mute({
-    kind = 'audio',
+    kind = WebRTCEnum.AUDIO,
     did = iridium.id,
   }: {
-    kind: string
+    kind: WebRTCEnum
     did?: string
   }) {
     if (!this.state.activeCall) return
@@ -776,7 +790,7 @@ export default class WebRTCManager extends Emitter {
     kind,
     did = iridium.id,
   }: {
-    kind: string
+    kind: WebRTCEnum
     did?: string
   }) {
     if (!this.state.activeCall) return

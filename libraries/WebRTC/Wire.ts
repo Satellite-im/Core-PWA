@@ -304,7 +304,11 @@ export class Wire extends Emitter<WireEventListeners> {
       }
     })
 
-    logger.debug(this.loggerTag, 'Sending message to', { online, offline })
+    logger.debug(this.loggerTag, 'Sending message to', {
+      online,
+      offline,
+      message,
+    })
 
     if (online.length && iridium.connector) {
       const encodedMessage = await encoding.encodePayload(

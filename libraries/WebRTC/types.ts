@@ -63,6 +63,7 @@ export interface CallEventListeners {
   CONNECTED: (data: { did: string; callId?: string }) => void
   HANG_UP: (data: { did: string; callId?: string }) => void
   ERROR: (data: { did: string; error: Error; callId?: string }) => void
+  REMOTE_HANG_UP: (data: { did: string; callId?: string }) => void
   REMOTE_TRACK_RECEIVED: (data: {
     did: string
     callId?: string
