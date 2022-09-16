@@ -22,15 +22,15 @@
         :replies="item.replies"
       />
     </template>
-  </div>
-  <div
-    v-if="activeUploadChats.includes(conversation?.id)"
-    class="loader-container"
-  >
-    <file-icon size="24" class="icon" />
-    <div class="inner">
-      <TypographyText> {{ $t('global.uploading') }} </TypographyText>
-      <UiLoadersLoadingBar />
+    <div
+      v-if="activeUploadChats.includes(conversation?.id)"
+      class="loader-container"
+    >
+      <file-icon size="24" class="icon" />
+      <div class="inner">
+        <TypographyText> {{ $t('global.uploading') }} </TypographyText>
+        <UiLoadersLoadingBar />
+      </div>
     </div>
   </div>
 </div>
