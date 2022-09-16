@@ -22,6 +22,7 @@ export enum ModalWindows {
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
 }
 
 export interface EnhancerInfo {

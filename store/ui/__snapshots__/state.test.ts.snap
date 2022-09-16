@@ -44,6 +44,7 @@ Object {
   "modals": Object {
     "callToAction": false,
     "changelog": false,
+    "consentScanConfirmation": false,
     "createServer": false,
     "error": false,
     "errorNetwork": Object {
