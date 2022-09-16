@@ -155,7 +155,6 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
-    return null
     logger.info('accounts/actions/loadAccount', 'beginning account load')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     if (state.adapter === 'Solana') {
