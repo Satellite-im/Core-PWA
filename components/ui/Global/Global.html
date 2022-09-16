@@ -3,6 +3,14 @@
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
     <UiModal
+      v-if="ui.modals.consentScanConfirmation"
+      @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
+    >
+      <ConsentScanConfirmation
+        @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
+      />
+    </UiModal>
+    <UiModal
       v-if="ui.modals.callToAction"
       @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
     >

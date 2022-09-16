@@ -15,10 +15,6 @@ export default {
     welcome: 'Welcome {user}!',
     ea_warning:
       'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
-    permissions:
-      'Please be sure to enable permissions which you can find in settings',
-    file_scanning_permissions:
-      'To share files/use the encrypted file storage on our network, you must consent to file scanning, which you can find under settings in the Privacy and Permissions tab.',
   },
   global: {
     name: 'Satellite.im',
@@ -54,6 +50,7 @@ export default {
     no_results: 'No results found',
     early_access: 'Early Access',
     early_access_message: 'Please report any bugs or issues at ',
+    confirm: 'Confirm',
   },
   time: {
     now: 'now',

@@ -25,6 +25,7 @@ const InitialUIState = (): UIState => ({
     callToAction: false,
     renameFile: false,
     errorNetwork: { isOpen: false, action: null },
+    consentScanConfirmation: false,
   },
   glyphModalPackId: undefined,
   chatbarContent: '',

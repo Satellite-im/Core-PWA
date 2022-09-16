@@ -1,5 +1,5 @@
 import Mousetrap from 'mousetrap'
-import { Position, SettingsRoutes, UIState } from './types'
+import { Position, SettingsRoutes, UIState, ModalWindows } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
@@ -112,13 +112,14 @@ export default {
     commit('setUserProfile', user)
   },
 
-  displayConsentSettings({ commit }: ActionsArguments<UIState>) {
-    this.$toast.error(this.$i18n.t('pages.files.errors.enable_consent'), {
-      duration: 3000,
-    })
-    if (this.$device.isMobile) {
-      this.$router.push('/mobile/settings')
-    }
-    commit('setSettingsRoute', SettingsRoutes.PRIVACY_AND_PERMISSIONS)
+  displayConsentSettings({ commit, rootState }: ActionsArguments<UIState>) {
+    commit(
+      'ui/toggleModal',
+      {
+        name: ModalWindows.CONSENT_SCAN_CONFIRMATION,
+        state: !rootState.ui.modals[ModalWindows.CONSENT_SCAN_CONFIRMATION],
+      },
+      { root: true },
+    )
   },
 }
