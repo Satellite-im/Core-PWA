@@ -421,6 +421,8 @@ export default {
         },
       },
       audio: {
+        pageTitle: 'Audio & Video',
+        subtitle: 'Configure your audio and video devices.',
         title: 'Audio',
         sources: {
           title: 'Audio Sources',
@@ -495,9 +497,8 @@ export default {
         },
       },
       keybinds: {
-        title: 'Default Keybinds',
-        subtitle:
-          'A list of the default keybinds for quickly navigating and using Satellite.',
+        title: 'Keybinds',
+        subtitle: 'Configure keyboard shortcuts.',
         toggleMute: 'Toggle Mute',
         openSettings: 'Open Settings',
         toggleDeafen: 'Toggle Deafen',

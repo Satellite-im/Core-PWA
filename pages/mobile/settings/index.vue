@@ -117,15 +117,20 @@ export default Vue.extend({
 
   .swiper-slide {
     display: flex;
-    padding: 8px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    padding: 16px;
 
     .sidebar {
       flex: 1;
+      padding: 16px;
     }
 
     &.profile {
       padding: 0;
+    }
+
+    .settings-page {
+      width: 100%;
     }
   }
 }

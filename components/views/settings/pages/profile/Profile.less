@@ -13,6 +13,7 @@
     &:extend(.full-width);
     display: flex;
     flex-wrap: wrap;
+    padding: 16px;
     .profile-left {
       &:extend(.full-width);
       margin-top: -240px;
@@ -76,9 +77,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: @xlarge-spacing;
   box-sizing: border-box;
-  padding: @large-spacing;
+  padding: @xlarge-spacing;
 }
 
 .profile-left {
@@ -128,11 +129,15 @@
     flex-direction: row;
     align-items: center;
     gap: 8px;
+
+    svg {
+      color: @dark;
+    }
   }
 }
 
 .profile-main {
-  background: @midground-alt;
+  background: @semitransparent-dark-gradient;
   padding: @large-spacing;
   &:extend(.round-corners);
   &:extend(.bordered);
@@ -289,7 +294,7 @@
 .accounts-main {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 2rem;
 
   .accounts-subtitle-wrapper {
     display: flex;

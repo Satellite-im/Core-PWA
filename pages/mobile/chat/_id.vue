@@ -144,7 +144,7 @@ export default Vue.extend({
       }
     }
     .banner-wrapper {
-      padding: 0 16px;
+      padding: 0 16px 8px;
     }
   }
 }

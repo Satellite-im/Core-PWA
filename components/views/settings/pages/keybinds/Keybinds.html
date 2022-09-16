@@ -24,8 +24,11 @@
     </SettingsUnit>
   </SettingsSection>
 
-  <InteractablesButton
-    :text="$t('pages.settings.keybinds.reset_all')"
-    @click="resetKeybinds"
-  />
+  <div>
+    <InteractablesButton
+      :text="$t('pages.settings.keybinds.reset_all')"
+      color="danger"
+      @click="resetKeybinds"
+    />
+  </div>
 </SettingsPage>
