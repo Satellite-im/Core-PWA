@@ -49,22 +49,26 @@ export class IridiumManager extends Emitter {
    * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
    * @returns a promise that resolves when the initialization completes
    */
-  async init({ pass, wallet }: { pass: string; wallet: Account }) {
+  async start({ pass, wallet }: { pass: string; wallet: Account }) {
     this.connector?.on('stopping', async () => {
-      await this.friends.stop?.()
-      await this.users.stop?.()
-      // await this.profile.stop?.()
-      // await this.groups.stop?.()
-      // await this.chat.stop?.()
-      // await this.files.stop?.()
-      // await this.webRTC.stop?.()
-      // await this.settings.stop?.()
-      // await this.notifications.stop?.()
+      await this.stop()
     })
 
     logger.info('iridium/manager', 'init()')
     const seed = await IdentityManager.seedFromWallet(pass, wallet)
     return this.initFromEntropy(seed)
+  }
+
+  async stop() {
+    await this.friends.stop?.()
+    await this.users.stop?.()
+    await this.profile.stop?.()
+    await this.groups.stop?.()
+    await this.chat.stop?.()
+    await this.files.stop?.()
+    await this.webRTC.stop?.()
+    await this.settings.stop?.()
+    await this.notifications.stop?.()
   }
 
   get id(): string {
@@ -132,7 +136,7 @@ export class IridiumManager extends Emitter {
     this.profile.on('changed', this.onProfileChange.bind(this))
 
     logger.info('iridium/manager', 'initializing profile')
-    await this.profile.init()
+    await this.profile.start()
   }
 
   async onProfileChange() {
@@ -174,32 +178,32 @@ export class IridiumManager extends Emitter {
     if (this.ready) return
 
     logger.info('iridium/manager', 'initializing users')
-    await this.users.init()
+    await this.users.start()
 
     logger.info('iridium/friends', 'initializing friends')
-    this.friends.init()
+    this.friends.start()
 
     logger.info('iridium/manager', 'initializing chat')
-    this.chat.init()
+    this.chat.start()
 
     logger.info('iridium/manager', 'ready')
     this.ready = true
     this.emit('ready', {})
 
     logger.info('iridium/manager', 'initializing groups')
-    this.groups.init()
+    this.groups.start()
 
     logger.info('iridium/manager', 'initializing files')
-    this.files.init()
+    this.files.start()
 
     logger.info('iridium/manager', 'initializing settings')
-    this.settings.init()
+    this.settings.start()
 
     logger.info('iridium/manager', 'initializing webRTC')
-    this.webRTC.init()
+    this.webRTC.start()
 
     logger.info('iridium/manager', 'notification settings')
-    this.notifications.init()
+    this.notifications.start()
 
     logger.info(
       'iridium/manager',

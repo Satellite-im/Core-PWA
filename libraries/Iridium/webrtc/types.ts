@@ -3,7 +3,7 @@ import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { Call } from '~/libraries/WebRTC/Call'
 
 export type PeerMutedState = {
-  [key in WebRTCEnum]: boolean
+  [key: string]: boolean
 }
 export type StreamMutedState = {
   [key: string]: PeerMutedState

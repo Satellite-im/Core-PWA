@@ -7,7 +7,7 @@ export default class IridiumProfile extends Emitter {
   public state?: User
   public ready?: boolean = false
 
-  async init() {
+  async start() {
     if (!iridium) {
       throw new Error('cannot initialize profile, no iridium connector')
     }
@@ -21,6 +21,8 @@ export default class IridiumProfile extends Emitter {
       state: this.state,
     })
   }
+
+  async stop() {}
 
   private async fetch() {
     this.state = await this.get<User>()
@@ -75,11 +77,11 @@ export default class IridiumProfile extends Emitter {
 
   async updateUser(details: Partial<User>) {
     logger.info('iridium/profile', 'updating user', { details })
-    for (const [key, value] of Object.entries(details)) {
-      this.state[key] = value
-    }
-
-    await this.set('/', { ...this.state, ...(details as User) })
+    this.state = {
+      ...this.state,
+      ...details,
+    } as User
+    await this.set('/', this.state)
     if (!this.state || !iridium.id) return
     // tell our peers via user announce
     await iridium.users.send({

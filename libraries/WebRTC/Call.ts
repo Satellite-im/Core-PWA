@@ -1051,7 +1051,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onError(peer: CallPeer, error: Error) {
     // FOR DEBUG
-    console.error(`${error} CODE: ${error.code}`)
+    logger.error('webrtc/call', 'error', error)
     this.emit('ERROR', { did: peer.id, error })
   }
 
@@ -1200,6 +1200,12 @@ export class Call extends Emitter<CallEventListeners> {
 
     // It's related to another call
     if (callId !== this.callId) return
+
+    // reset incoming call
+    this.emit('REMOTE_HANG_UP', {
+      did,
+      callId,
+    })
 
     this.peerDialingDisabled[did] = true
     this.isCallee[did] = false

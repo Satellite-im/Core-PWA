@@ -41,7 +41,7 @@ export class Wire extends Emitter<WireEventListeners> {
     [did: string]: ReturnType<typeof setTimeout>
   } = {}
 
-  async init() {
+  async start() {
     this._bus = new IridiumBus('/webrtc/announce')
 
     this._bus.on('message', this.onMessage.bind(this))
@@ -49,6 +49,8 @@ export class Wire extends Emitter<WireEventListeners> {
 
     await this.setupAnnounce()
   }
+
+  async stop() {}
 
   onMessage({
     type,
@@ -304,7 +306,11 @@ export class Wire extends Emitter<WireEventListeners> {
       }
     })
 
-    logger.debug(this.loggerTag, 'Sending message to', { online, offline })
+    logger.debug(this.loggerTag, 'Sending message to', {
+      online,
+      offline,
+      message,
+    })
 
     if (online.length && iridium.connector) {
       const encodedMessage = await encoding.encodePayload(

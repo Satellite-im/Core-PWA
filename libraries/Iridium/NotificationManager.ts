@@ -22,11 +22,13 @@ export default class NotificationManager extends Emitter<Notification> {
     notifications: [],
   }
 
-  async init() {
+  async start() {
     await this.fetch()
     this.ready = true
     this.emit('ready', {})
   }
+
+  async stop() {}
 
   async fetch() {
     logger.info('iridium/notifications/fetch', 'fetching')

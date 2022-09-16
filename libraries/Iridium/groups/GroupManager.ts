@@ -38,7 +38,7 @@ export default class GroupManager extends Emitter<IridiumMessage> {
 
   private loggerTag = 'iridium/groups'
 
-  async init() {
+  async start() {
     if (!iridium.connector) {
       throw new Error('cannot initialize groups, no iridium connector')
     }
@@ -50,6 +50,8 @@ export default class GroupManager extends Emitter<IridiumMessage> {
 
     await this.fetch()
   }
+
+  async stop() {}
 
   private async fetch() {
     this.state = (await iridium.connector?.get('/groups')) || {}
