@@ -360,7 +360,6 @@ export default Editable
   .placeholder {
     color: @text-muted;
     position: absolute;
-    &:extend(.base-layer-zindex);
     &:extend(.no-select);
     &:extend(.ellipsis);
     pointer-events: none;
