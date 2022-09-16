@@ -11,6 +11,7 @@ export default {
     group_chat_search: 'Group Chat Search\nComing Soon',
   },
   welcome_message: {
+    issues: 'Back to the drawing board... We will have updates soon! For updates/info, please check us out at @Satellite_im on ',
     dismiss_forever: 'Dismiss Forever',
     welcome: 'Welcome {user}!',
     ea_warning:

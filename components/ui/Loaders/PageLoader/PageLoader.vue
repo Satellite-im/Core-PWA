@@ -1,6 +1,11 @@
 <template>
   <div v-if="isLoading" class="page-loader">
     <div class="page-loader-content">
+      <img v-if="issues" src="~/static/img/this-is-fine.gif" />
+      <TypographyText v-if="issues" class="issues-message">
+        {{ $t('welcome_message.issues') }}
+        <a target="_blank" href="https://twitter.com/Satellite_im">Twitter</a>
+      </TypographyText>
       <UiLoadersLoadingBar class="page-loader-bar" />
       <TypographyTitle :size="5" :text="title" class="page-loader-title" />
       <TypographySubtitle
@@ -31,11 +36,22 @@ export default Vue.extend({
       default: '',
     },
   },
+  data() {
+    return {
+      issues: false,
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.issues = true
+    }, 7000)
+  },
 })
 </script>
 
 <style scoped lang="less">
 .page-loader {
+  max-width: 600px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -51,6 +67,9 @@ export default Vue.extend({
   }
   &-content {
     align-self: center;
+  }
+  &-issues-message {
+    margin: 10px !important;
   }
 }
 </style>
