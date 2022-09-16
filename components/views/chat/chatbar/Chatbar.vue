@@ -243,14 +243,17 @@ const Chatbar = Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      if (this.text.length > this.$Config.chat.maxChars) {
+        return
+      }
+
       if (
         !this.files.length &&
-        (this.text.length > this.$Config.chat.maxChars ||
-          !this.text.trim().length ||
-          !this.isSubscribed)
+        (!this.text.trim().length || !this.isSubscribed)
       ) {
         return
       }
+
       const value = this.text
       this.text = ''
 
