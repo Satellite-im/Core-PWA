@@ -276,7 +276,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
     if (this.hasRequest(did)) {
       logger.error(this.loggerTag, 'request already exists')
-      return
+      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
     }
 
     if (!iridium.connector?.p2p.hasPeer(did)) {
