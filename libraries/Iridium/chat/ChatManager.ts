@@ -9,7 +9,6 @@ import {
   IridiumDocument,
 } from '@satellite-im/iridium'
 import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
-import type { AddOptions } from 'ipfs-core-types/root'
 import { CID } from 'multiformats'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as json from 'multiformats/codecs/json'
@@ -146,28 +145,44 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (!iridium.connector?.p2p.primaryNodeID) {
       return
     }
-    await Promise.all(
-      message.payload.body.messages.map(async (message) => {
-        const stored = await iridium.connector?.dag.get(CID.parse(message.cid))
-        if (!stored.body) {
-          return
-        }
-        const buffer = await iridium.connector?.did.decryptJWE(stored.body)
-        const payload: any = buffer && json.decode(buffer)
-        if (stored.topic) {
-          logger.info(
-            'iridium/chatmanager',
-            'sync/fetch/message - emitting synced message',
-            message,
+
+    // read msg infos in order
+    const msgs = await Promise.all(
+      message.payload.body.messages
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .map(async (message) => {
+          const stored = await iridium.connector?.dag.get(
+            CID.parse(message.cid),
           )
-          await iridium.connector?.pubsub.emit(stored.topic, {
-            from: stored.from,
-            topic: stored.topic,
-            payload: { type: 'jwe', body: payload },
-          })
-        }
-      }),
+          if (!stored?.body) {
+            return
+          }
+          const buffer = await iridium.connector?.did.decryptJWE(stored.body)
+          const payload: any = buffer && json.decode(buffer)
+
+          return { stored, payload }
+        }),
     )
+
+    // then emit the msgs
+    msgs.forEach((msg) => {
+      if (!msg) return
+
+      const { stored, payload } = msg
+      if (stored.topic) {
+        logger.info(
+          'iridium/chatmanager',
+          'sync/fetch/message - emitting synced message',
+          payload,
+        )
+        iridium.connector?.pubsub.emit(stored.topic, {
+          from: stored.from,
+          topic: stored.topic,
+          payload: { type: 'jwe', body: payload },
+        })
+      }
+    })
+
     logger.info(
       'iridium/chatmanager',
       'sync/fetch/messages - sending delivery receipt',
@@ -753,6 +768,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const path = `/conversations/${conversationId}/message/${messageId}`
     this.set(path, message)
 
+    const conversation = this.getConversation(conversationId)
     const reaction: MessageReaction = {
       conversationId,
       messageId,
@@ -760,10 +776,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       reactions,
     }
     // broadcast the message to connected peers
-    await iridium.connector.publish(`/chat/conversations/${conversationId}`, {
-      type: 'chat/reaction',
-      reaction,
-    })
+    await iridium.connector.publish(
+      `/chat/conversations/${conversationId}`,
+      {
+        type: 'chat/reaction',
+        reaction,
+      },
+      {
+        encrypt: conversation?.participants
+          ? { recipients: conversation.participants }
+          : undefined,
+      },
+    )
   }
 
   setTyping(conversationId: string, did: string, typing: boolean) {
