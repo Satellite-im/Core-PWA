@@ -127,6 +127,9 @@ export class IridiumManager extends Emitter {
     this.connector.p2p.on('node/connect', async (node: IridiumPeer) => {
       await this.sendSyncInit(node.did)
     })
+    this.connector.p2p.on('node/ready', async (node: IridiumPeer) => {
+      await this.sendSyncInit(node.did)
+    })
     this.connector.p2p.on('nodeReady', this.onP2pReady.bind(this))
     this.connector.p2p.on('ready', this.onP2pReady.bind(this))
     this.connector.on('ready', this.onP2pReady.bind(this))
