@@ -1,0 +1,29 @@
+.settings-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  user-select: none;
+
+  .header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .back-button {
+    padding: 16px;
+    margin: -16px;
+    display: flex;
+    align-items: center;
+
+    &:active {
+      opacity: 0.5;
+    }
+  }
+
+  @media only screen and (min-width: @small-breakpoint) {
+    .back-button {
+      display: none;
+    }
+  }
+}

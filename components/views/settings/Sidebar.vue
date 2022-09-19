@@ -107,7 +107,6 @@ export default Vue.extend({
 .menu {
   overflow-y: auto;
   &:extend(.no-select);
-  padding: 8px;
   background: @semitransparent-dark-gradient;
   display: flex;
   flex-direction: column;
@@ -122,33 +121,45 @@ export default Vue.extend({
 
   .menu-list {
     li {
-      &:hover {
-        &:extend(.background-semitransparent-light);
+      @media only screen and (min-width: @small-breakpoint) {
+        &:hover {
+          &:extend(.background-semitransparent-light);
+        }
       }
 
       a {
         display: block;
-        padding: 0.5em 0.75em;
         -webkit-user-drag: none;
         text-decoration: none;
+        padding: 0.5em 0;
         &:extend(.no-select);
         &:extend(.font-primary);
         &:extend(.round-corners);
 
-        &:hover {
-          &:extend(.background-semitransparent-light);
-          &:extend(.font-primary);
+        @media only screen and (min-width: @mobile-breakpoint) {
+          padding: 0.5em 0.75em;
+
+          &:hover {
+            .background-semitransparent-light();
+            .font-primary();
+          }
+
+          &.active {
+            .background-flair-gradient();
+            .glow-flair();
+          }
         }
 
-        &.active {
-          &:extend(.background-flair-gradient);
-          &:extend(.glow-flair);
+        @media only screen and (max-width: @mobile-breakpoint) {
+          &:active {
+            opacity: 0.5;
+          }
         }
       }
     }
   }
 
-  @media (max-width: @mobile-breakpoint) {
+  @media only screen and (max-width: @mobile-breakpoint) {
     background: none;
   }
 }
