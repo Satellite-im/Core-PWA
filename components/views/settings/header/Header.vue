@@ -12,7 +12,7 @@ export default Vue.extend({
   },
   methods: {
     goBack() {
-      const swiper = (this.$el.closest('.swiper-initialized') as any)
+      const swiper = (this.$el.closest('.settings') as any)
         .swiper as Swiper | null
       if (!swiper) {
         return
