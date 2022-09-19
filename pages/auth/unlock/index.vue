@@ -120,9 +120,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          redirect && this.$router.replace('/setup/disclaimer')
+          redirect && (await this.$router.replace('/setup/disclaimer'))
         } else {
-          redirect && this.$router.replace('/')
+          redirect && (await this.$router.replace('/'))
         }
       } catch (error: any) {
         this.pin = ''
