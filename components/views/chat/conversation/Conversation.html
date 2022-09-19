@@ -1,14 +1,14 @@
 <div class="conversation" ref="container">
-  <UiBanner>
-    <template #icon><key-icon size="1x" /></template>
-    <template #header>{{$t('conversation.encrypted')}}</template>
-  </UiBanner>
-  <UiChatInfiniteScroll
-    :isLoading="isLoadingMore"
-    :noMore="noMore"
-    @loadMore="loadMore"
-  />
-  <div class="messages">
+  <div class="messages" ref="messages">
+    <UiBanner>
+      <template #icon><key-icon size="1x" /></template>
+      <template #header>{{$t('conversation.encrypted')}}</template>
+    </UiBanner>
+    <UiChatInfiniteScroll
+      :isLoading="isLoadingMore"
+      :noMore="noMore"
+      @loadMore="loadMore"
+    />
     <template v-for="(item, i) of chatItems">
       <TypographyHorizontalRuleText
         v-if="item.isNextDay"
