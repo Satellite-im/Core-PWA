@@ -68,7 +68,7 @@ export default Vue.extend({
         noSwipingClass: 'disable-swipe',
         allowSlidePrev: false,
         on: {
-          activeIndexChange: ({ activeIndex }) => {
+          slideChangeTransitionEnd: ({ activeIndex }) => {
             if (!this.swiper) {
               return
             }
