@@ -354,7 +354,6 @@ export default Editable
   position: relative;
   overflow-y: scroll;
   font-family: @secondary-font;
-  font-size: @text-size;
   &:extend(.font-primary);
 
   .placeholder {

@@ -37,6 +37,7 @@ export type ConversationMessage = {
   payload: any
   replyToId?: string
   members?: string[]
+  lastEditedAt?: number
 }
 
 export type ConversationMessagePayload = Omit<
@@ -56,6 +57,16 @@ export type MessageReactionPayload = {
   messageId: string
   reaction: string
   remove?: boolean
+}
+
+export type MessageEditPayload = {
+  conversationId: string
+  messageId: string
+  body: string
+}
+
+export type MessageEdit = MessageEditPayload & {
+  lastEditedAt: number
 }
 
 export type Conversation = {

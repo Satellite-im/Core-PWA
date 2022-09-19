@@ -196,6 +196,28 @@ export default Vue.extend({
         from,
       })
     },
+    saveMessage(message: string) {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: '',
+      })
+
+      if (message !== this.message.body) {
+        iridium.chat.editMessage({
+          conversationId: this.message.conversationId,
+          messageId: this.message.id,
+          body: message,
+        })
+      }
+    },
+    cancelMessage() {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: '',
+      })
+    },
   },
 })
 </script>

@@ -22,6 +22,8 @@ import {
   ConversationMessagePayload,
   IridiumConversationEvent,
   MessageAttachment,
+  MessageEdit,
+  MessageEditPayload,
   MessageReaction,
   MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
@@ -39,7 +41,7 @@ export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
     cid?: string
-    type: 'chat/message' | 'chat/reaction'
+    type: 'chat/message' | 'chat/reaction' | 'chat/edit'
     reaction?: MessageReaction
   }>
 >
@@ -309,6 +311,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ...message.reactions,
         [fromDID]: reaction.reactions,
       }
+
+      this.set(
+        `/conversations/${conversationId}/message/${message.id}`,
+        message,
+      )
+    } else if (type === 'chat/edit') {
+      const { messageId, conversationId, body, lastEditedAt } = payload.body
+        .message as MessageEdit
+
+      logger.info('iridium/chatmanager/onConversationMessage', 'message edit', {
+        from,
+        conversationId,
+      })
+      const message = this.getConversationMessage(conversationId, messageId)
+      message.body = body
+      message.lastEditedAt = lastEditedAt
 
       this.set(
         `/conversations/${conversationId}/message/${message.id}`,
@@ -782,6 +800,41 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       {
         type: 'chat/reaction',
         reaction,
+      },
+      {
+        encrypt: conversation?.participants
+          ? { recipients: conversation.participants }
+          : undefined,
+      },
+    )
+  }
+
+  async editMessage(payload: MessageEditPayload) {
+    if (!iridium.connector) {
+      return
+    }
+
+    const { conversationId, messageId, body } = payload
+    const message = this.getConversationMessage(conversationId, messageId)
+
+    message.body = body
+    message.lastEditedAt = Date.now()
+    const path = `/conversations/${conversationId}/message/${messageId}`
+    this.set(path, message)
+
+    const conversation = this.getConversation(conversationId)
+    const finalMessage: MessageEdit = {
+      conversationId,
+      messageId,
+      body,
+      lastEditedAt: message.lastEditedAt,
+    }
+    // broadcast the message to connected peers
+    await iridium.connector.publish(
+      `/chat/conversations/${conversationId}`,
+      {
+        type: 'chat/edit',
+        message: finalMessage,
       },
       {
         encrypt: conversation?.participants
