@@ -78,6 +78,8 @@ export default Vue.extend({
         const showHeader =
           !isSameAuthor ||
           (prevMessage && conversationMessageIsNotice(prevMessage)) ||
+          this.$dayjs.duration(timeDiff).minutes() >= 5 ||
+          isNextDay ||
           false
 
         return {
