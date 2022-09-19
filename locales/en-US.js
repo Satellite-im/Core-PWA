@@ -229,7 +229,7 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        no_empty: 'Folder name cannot be empty',
+        no_empty: 'Item name cannot be empty',
         leading_dot: 'Item name cannot begin with .',
         invalid: 'Item name cannot contain invalid symbols (/:"*?<>|~#%&+{}\\)',
         file_size: 'File needs to have a size of 1 byte or greater',
