@@ -20,7 +20,11 @@ export default Vue.extend({
       this.$store.dispatch('ui/activateKeybinds')
     },
     async resetKeybinds() {
-      await iridium.settings.set('/keybinds', defaultKeybinds)
+      Object.keys(defaultKeybinds).forEach((key) => {
+        iridium.settings.set(`/keybinds/${key}`, defaultKeybinds[key])
+      })
+
+      this.$store.dispatch('ui/activateKeybinds')
     },
   },
 })
