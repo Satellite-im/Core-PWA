@@ -1,16 +1,16 @@
 import * as Timezone from './Timezone'
 
 describe('Test utilities/timezone', () => {
-  test('getTimezoneDropdowns for Singapore', () => {
+  test('getTimezoneDropdowns for Western Indonesia', () => {
     const result = Timezone.getTimezoneDropdowns()
     const nonDaylightTimezone = result.find((obj) => {
-      return obj.alternativeName === 'Singapore Time'
+      return obj.alternativeName === 'Western Indonesia Time'
     })
 
     expect(result.length).not.toBeNull()
     expect(result.length).toBeGreaterThan(0)
     expect(nonDaylightTimezone.currentTimeFormat).toEqual(
-      '+08:00 Singapore Time - Singapore, Woodlands, Geylang, Marine Parade',
+      '+07:00 Western Indonesia Time - Jakarta, Surabaya, Bandung, Medan',
     ) // Make sure that the nonDaylightTimezone exists.
   })
 
