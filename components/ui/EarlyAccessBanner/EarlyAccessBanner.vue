@@ -4,7 +4,12 @@
     <template #header>{{ $t('ui.early_access') }}</template>
     <template #content>
       {{ $t('ui.early_access_message') }}
-      <a :href="$config.feedbackUrl" class="banner-link" target="_blank">
+      <a
+        :href="$config.feedbackUrl"
+        class="banner-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {{ $config.feedbackUrl }}
       </a>
     </template>
