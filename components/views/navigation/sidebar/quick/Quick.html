@@ -1,9 +1,14 @@
 <div class="quick-chat">
   <div>
-    <TypographyText size="sm" color="dark" style="margin-bottom: 0.5rem">
+    <TypographyText
+      font="heading"
+      size="sm"
+      color="dark"
+      style="margin-bottom: 0.5rem"
+    >
       {{ $t('pages.chat.new_chat') }}
     </TypographyText>
-    <TypographyText>
+    <TypographyText size="sm" color="dark">
       {{ $t('pages.chat.new_chat_description') }}
     </TypographyText>
   </div>
@@ -21,9 +26,10 @@
     />
   </template>
   <InteractablesButton
-    :text="$t('pages.chat.chat_now')"
+    :text="friends.length > 1 ? $t('pages.chat.create_group') : $t('pages.chat.chat_now')"
     :loading="isLoading"
     :disabled="!friends.length"
     @click="confirm"
+    size="md"
   />
 </div>
