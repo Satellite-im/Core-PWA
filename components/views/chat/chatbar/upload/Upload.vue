@@ -57,6 +57,7 @@ const Upload = Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: InputEvent) {
+      document.body.style.cursor = 'progress'
       this.$store.dispatch('ui/setChatbarFocus')
       this.$store.commit('chat/setCountError', false)
       const target = event.target as HTMLInputElement
@@ -115,6 +116,7 @@ const Upload = Vue.extend({
           id,
         })
       }
+      document.body.style.cursor = 'default'
     },
   },
 })
