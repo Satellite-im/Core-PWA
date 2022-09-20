@@ -719,6 +719,10 @@ export default {
       permission_denied:
         'Permission denied, please check your browser settings.',
     },
+    opened:
+      'Satellite was opened in a new window or tab. Please close the second instance and reload',
+    already_open:
+      'Satellite is already open in another window or tab. Please close this window or tab and go to the original instance of Satellite.',
   },
   search: {
     search: 'Search... ',
