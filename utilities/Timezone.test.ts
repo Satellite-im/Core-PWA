@@ -9,9 +9,12 @@ describe('Test utilities/timezone', () => {
 
     expect(result.length).not.toBeNull()
     expect(result.length).toBeGreaterThan(0)
-    expect(nonDaylightTimezone.currentTimeFormat).toEqual(
-      '+07:00 Western Indonesia Time - Jakarta, Surabaya, Bandung, Medan',
-    ) // Make sure that the nonDaylightTimezone exists.
+    expect(nonDaylightTimezone.abbreviation).toEqual('WIB') // Make sure that the nonDaylightTimezone exists.
+
+    expect(nonDaylightTimezone.continentCode).toEqual('AS')
+    expect(nonDaylightTimezone.continentName).toEqual('Asia')
+    expect(nonDaylightTimezone.countryCode).toEqual('ID')
+    expect(nonDaylightTimezone.countryName).toEqual('Indonesia')
   })
 
   test('getUtfOffsetInMins for an existing timezone', () => {
