@@ -50,8 +50,6 @@ export default class IridiumProfile extends Emitter {
         return
       }
       logger.info('iridium/profile', 'profile state changed', state)
-      this.state = state.value?.profile
-      this.setUser()
       this.emit('changed', state)
     }
   }
