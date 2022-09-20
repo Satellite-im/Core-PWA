@@ -1,12 +1,19 @@
-<template src="./ErrorNetwork.html" />
+<template>
+  <ModalDialog :primary-button="primaryButton">
+    <template #image>
+      <img src="~/assets/svg/mascot/sad_curious.svg" />
+    </template>
+
+    <template #title>{{ $t('popups.error_network.title') }}</template>
+
+    <template #subtitle>{{ $t('popups.error_network.subtitle') }}</template>
+  </ModalDialog>
+</template>
 
 <script>
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { throttle } from 'lodash'
-
 import { RefreshCwIcon } from 'satellite-lucide-icons'
-
 import { Config } from '~/config'
 
 /**
@@ -17,9 +24,14 @@ import { Config } from '~/config'
  */
 export default Vue.extend({
   name: 'ErrorNetwork',
-  components: {
-    RefreshCwIcon,
-  },
+  data: () => ({
+    refreshCwIcon: RefreshCwIcon,
+    primaryButton: {
+      text: this.$t('popups.error_network.action'),
+      action: this.tryAgain,
+      icon: RefreshCwIcon,
+    },
+  }),
   watch: {
     $route(to, from) {
       if (to !== from) {
@@ -51,6 +63,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less" src="./ErrorNetwork.less"></style>
