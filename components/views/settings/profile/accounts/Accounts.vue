@@ -18,6 +18,7 @@ type Account = {
   isVerified: boolean
   displayOnProfile: boolean
 }
+
 export default Vue.extend({
   data() {
     return {

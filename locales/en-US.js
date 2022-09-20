@@ -834,6 +834,7 @@ export default {
   },
   modal: {
     update_modal: {
+      title: 'Update {tagName} is Here!',
       update_required:
         "This update requires a refresh of the Alpha application. Click 'Update Now' below to start fresh on the new update.",
       got_it: 'Got It!',

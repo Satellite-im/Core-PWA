@@ -1,24 +1,54 @@
-<template src="./UpdateModal.html" />
+<template>
+  <ModalDialog
+    :primary-button="primaryButton"
+    :height="'600px'"
+    class="update-modal"
+    @primary-button-click="skipVersion"
+  >
+    <template #image>
+      <img src="~/assets/svg/mascot/new_things.svg" />
+    </template>
+
+    <template v-if="releaseData && releaseData.tag_name" #title>
+      {{ $t('modal.update_modal.title', { tagName: releaseData.tag_name }) }}
+    </template>
+
+    <template #body>
+      <div
+        v-if="releaseData && releaseData.body"
+        class="body"
+        v-html="releaseData.body"
+      />
+
+      <div v-if="isLoading" class="update-modal-spinner">
+        <UiLoadersSpinner spinning />
+      </div>
+
+      <TypographyText v-if="requiresUpdate">
+        {{ $t('modal.update_modal.update_required') }}
+      </TypographyText>
+    </template>
+  </ModalDialog>
+</template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { RefreshCwIcon, XIcon } from 'satellite-lucide-icons'
-import VueMarkdown from 'vue-markdown'
+import { XIcon } from 'satellite-lucide-icons'
 import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
 
 export default Vue.extend({
-  components: {
-    RefreshCwIcon,
-    XIcon,
-    VueMarkdown,
-  },
   data() {
     return {
       hasMinorUpdate: false,
       requiresUpdate: false,
       releaseData: {},
       isLoading: false,
+      primaryButton: {
+        text: this.$t('modal.update_modal.got_it'),
+        icon: XIcon,
+        action: this.skipVersion,
+      },
     }
   },
   computed: {
