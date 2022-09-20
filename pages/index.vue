@@ -40,6 +40,18 @@ export default Vue.extend({
     await this.loadAccount()
 
     this.$store.dispatch('ui/activateKeybinds')
+
+    const bc = new BroadcastChannel('core')
+    bc.onmessage = (event) => {
+      if (event.data === 'first') {
+        bc.postMessage('second')
+        window.alert(this.$t('errors.opened'))
+      }
+      if (event.data === 'second') {
+        window.alert(this.$t('errors.already_open'))
+      }
+    }
+    bc.postMessage('first')
   },
   methods: {
     /**
