@@ -19,7 +19,7 @@
       </div>
     </template>
     <!-- todo end -->
-    <div class="timestamp">{{ timestamp }}</div>
+    <div v-if="message.type !== 'call'" class="timestamp">{{ timestamp }}</div>
     <UiContextMenu class="body" :items="contextMenuValues">
       <MessageMarkdown
         v-if="message.body && !isEditing"
@@ -43,6 +43,7 @@
       </span>
       <MessageGlyph v-else-if="message.glyph" :glyph="message.glyph" />
       <MessageActions
+        v-if="message.type !== 'call'"
         :setReplyChatbarMessage="setReplyChatbarMessage"
         :emojiReaction="emojiReaction"
         :editMessage="editMessage"
@@ -50,6 +51,16 @@
         :hideReply="hideReplyAction"
       />
     </UiContextMenu>
+    <MessageCallDirection
+      v-if="message.type === 'call'"
+      :message="message"
+      :isLastCallMessage="item.isLastCallMessage"
+    />
+    <MessageCall
+      v-if="message.type === 'call'"
+      :message="message"
+      :isLastCallMessage="item.isLastCallMessage"
+    />
     <MessageAttachments
       v-if="message.attachments.length"
       class="attachments"

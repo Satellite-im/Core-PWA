@@ -126,6 +126,8 @@ export default {
       to_group: 'to the group.',
     },
     group_leave_notice: 'left the group.',
+    call_incoming: '{name} started a call.',
+    call_outgoing: 'You started a call.',
   },
   controls: {
     copy_id: 'Copy ID',

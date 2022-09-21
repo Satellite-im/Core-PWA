@@ -14,19 +14,16 @@ import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
+import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
 
 export default Vue.extend({
   components: {
     ArchiveIcon,
   },
   props: {
-    message: {
-      type: Object as PropType<ConversationMessage>,
+    item: {
+      type: Object as PropType<ChatItem>,
       required: true,
-    },
-    replies: {
-      type: Array as PropType<ConversationMessage[]>,
-      default: () => [],
     },
     showHeader: {
       type: Boolean,
@@ -45,6 +42,12 @@ export default Vue.extend({
     ...mapGetters({
       getTimestamp: 'settings/getTimestamp',
     }),
+    message(): ConversationMessage {
+      return this.item.message
+    },
+    replies(): ConversationMessage[] {
+      return this.item.replies
+    },
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },

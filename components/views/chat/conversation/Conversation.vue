@@ -11,13 +11,14 @@ import {
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { RootState } from '~/types/store/store'
 
-interface ChatItem {
+export interface ChatItem {
   message: ConversationMessage
   showHeader: boolean
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
   replies: ConversationMessage[]
+  isLastCallMessage: boolean
 }
 
 const MESSAGE_PAGE_SIZE = 50
@@ -76,11 +77,20 @@ export default Vue.extend({
           (replyMessage) => replyMessage.replyToId === message.id,
         )
         const showHeader =
-          !isSameAuthor ||
-          (prevMessage && conversationMessageIsNotice(prevMessage)) ||
-          this.$dayjs.duration(timeDiff).minutes() >= 5 ||
-          isNextDay ||
-          false
+          message.type === 'call'
+            ? false
+            : !isSameAuthor ||
+              (prevMessage &&
+                (conversationMessageIsNotice(prevMessage) ||
+                  prevMessage.type === 'call')) ||
+              this.$dayjs.duration(timeDiff).minutes() >= 5 ||
+              isNextDay ||
+              false
+        const isLastCallMessage =
+          index ===
+          messages.reduce((prev, _, i) => {
+            return messages[i].type === 'call' ? i : prev
+          }, -1)
 
         return {
           message,
@@ -89,6 +99,7 @@ export default Vue.extend({
           isNextDay,
           isFirstUnreadMessage,
           replies,
+          isLastCallMessage,
         }
       })
       const maxTime = Math.max(...this.messages.map((message) => message.at))

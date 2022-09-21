@@ -65,7 +65,6 @@ export default Vue.extend({
       await iridium.chat?.sendMessage({
         conversationId: id,
         type: 'glyph',
-        body: '',
         glyph: {
           packId: this.pack.id,
           src: this.src,
