@@ -1,11 +1,5 @@
 <template>
-  <ModalDialog
-    :primary-button="{
-      text: $t('popups.error_network.action'),
-      action: tryAgain,
-      icon: refreshCwIcon,
-    }"
-  >
+  <ModalDialog :primary-button="primaryButton">
     <template #image>
       <img src="~/assets/svg/mascot/sad_curious.svg" />
     </template>
@@ -31,7 +25,13 @@ import { Config } from '~/config'
 export default Vue.extend({
   name: 'ErrorNetwork',
   computed: {
-    refreshCwIcon: () => RefreshCwIcon,
+    primaryButton() {
+      return {
+        text: this.$t('popups.error_network.action'),
+        action: this.tryAgain,
+        icon: RefreshCwIcon,
+      }
+    },
   },
   watch: {
     $route(to, from) {

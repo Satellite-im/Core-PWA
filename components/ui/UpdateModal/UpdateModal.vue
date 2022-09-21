@@ -44,15 +44,17 @@ export default Vue.extend({
       requiresUpdate: false,
       releaseData: {},
       isLoading: false,
-      primaryButton: {
-        text: this.$t('modal.update_modal.got_it'),
-        icon: XIcon,
-        action: this.skipVersion,
-      },
     }
   },
   computed: {
     ...mapState(['ui']),
+    primaryButton() {
+      return {
+        text: this.$t('modal.update_modal.got_it'),
+        action: this.skipVersion,
+        icon: XIcon,
+      }
+    },
   },
   async mounted() {
     await this.getReleaseBody()
