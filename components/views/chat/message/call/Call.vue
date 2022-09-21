@@ -52,7 +52,7 @@ export default Vue.extend({
     startedAtTimestamp(): string {
       return this.getTimestamp({ time: this.message.at })
     },
-    currentDuration() {
+    currentDuration(): string {
       return formatDuration(Date.now() - this.message.at)
     },
     incomingCall(): WebRTCIncomingCall | null {
