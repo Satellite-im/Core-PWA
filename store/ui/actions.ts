@@ -1,10 +1,9 @@
 import Mousetrap from 'mousetrap'
-import { Position, SettingsRoutes, UIState, ModalWindows } from './types'
+import { Position, UIState, ModalWindows } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
-import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -63,7 +62,7 @@ export default {
    * @description Unbinds all current keybindings with Mousetrap
    * @example destroyed (){ clearKeybinds() }
    */
-  async clearKeybinds({ dispatch }: ActionsArguments<UIState>) {
+  async clearKeybinds({}: ActionsArguments<UIState>) {
     Mousetrap.reset()
   },
   async setChatbarFocus({ dispatch }: ActionsArguments<UIState>) {
@@ -89,19 +88,12 @@ export default {
       )
   },
   showQuickProfile(
-    { commit, state, rootState }: ActionsArguments<UIState>,
-    payload: { textilePublicKey: string; position: Position },
+    { commit }: ActionsArguments<UIState>,
+    { did, position }: { did: string; position: Position },
   ) {
-    if (!payload?.textilePublicKey || !payload?.position) {
-      return
-    }
+    const selectedUser = iridium.users.getUser(did)
 
-    const selectedUser = getFullUserInfoFromState(
-      payload.textilePublicKey,
-      rootState,
-    )
-
-    commit('setQuickProfilePosition', payload.position)
+    commit('setQuickProfilePosition', position)
     commit('quickProfile', selectedUser)
   },
   async showProfile({ commit }: ActionsArguments<UIState>, user: Friend) {
@@ -112,12 +104,12 @@ export default {
     commit('setUserProfile', user)
   },
 
-  displayConsentSettings({ commit, rootState }: ActionsArguments<UIState>) {
+  displayConsentSettings({ commit, state }: ActionsArguments<UIState>) {
     commit(
       'ui/toggleModal',
       {
         name: ModalWindows.CONSENT_SCAN_CONFIRMATION,
-        state: !rootState.ui.modals[ModalWindows.CONSENT_SCAN_CONFIRMATION],
+        state: !state.modals[ModalWindows.CONSENT_SCAN_CONFIRMATION],
       },
       { root: true },
     )

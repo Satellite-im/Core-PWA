@@ -15,9 +15,7 @@
         />
       </div>
       <div class="header">
-        <span :click="showQuickProfile">
-          <UiUserName :username="author.name" />
-        </span>
+        <TypographyText as="h4"> {{ author.name }} </TypographyText>
       </div>
     </template>
     <!-- todo end -->
