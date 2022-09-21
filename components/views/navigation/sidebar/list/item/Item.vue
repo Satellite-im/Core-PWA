@@ -86,10 +86,10 @@ export default Vue.extend({
               func: this.status === 'online' ? this.call : () => {},
               type: this.status === 'online' ? 'primary' : 'disabled',
             },
-            // {
-            //   text: this.$t('context.profile'),
-            //   func: () => this.$store.dispatch('ui/showProfile', this.user),
-            // },
+            {
+              text: this.$t('context.profile'),
+              func: () => this.$store.dispatch('ui/showProfile', this.user),
+            },
             {
               text: this.$t('context.remove'),
               func: this.removeFriend,
