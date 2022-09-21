@@ -42,10 +42,10 @@ export default Vue.extend({
     ...mapGetters({
       getTimestamp: 'settings/getTimestamp',
     }),
-    message() {
+    message(): ConversationMessage {
       return this.item.message
     },
-    replies() {
+    replies(): ConversationMessage[] {
       return this.item.replies
     },
     conversationId(): Conversation['id'] {
