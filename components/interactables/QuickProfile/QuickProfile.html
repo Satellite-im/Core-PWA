@@ -1,5 +1,11 @@
 <div class="quick-profile" ref="quick" v-click-outside="close">
-  <button @click="openProfile">
+  <!-- todo - remove no-click after implementing regular profile for all users -->
+  <button
+    @click="openProfile"
+    class="open-profile-button"
+    :class="{'no-click' : !isMe}"
+  >
+    <!-- end todo -->
     <UiUserState :user="user" :size="40" />
   </button>
   <TypographyText as="h4"> {{ user.name }} </TypographyText>

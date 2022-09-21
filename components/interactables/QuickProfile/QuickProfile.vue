@@ -97,11 +97,11 @@ export default Vue.extend({
       }
       if (this.isMe) {
         this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
+        this.close()
       } else {
         // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
         // this.$store.dispatch('ui/showProfile', this.user)
       }
-      this.close()
     },
   },
 })
