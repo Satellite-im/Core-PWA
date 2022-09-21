@@ -49,26 +49,26 @@ export class IridiumManager extends Emitter {
    * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
    * @returns a promise that resolves when the initialization completes
    */
-  async start({ pass, wallet }: { pass: string; wallet: Account }) {
+  async start() {
     this.connector?.on('stopping', async () => {
+      logger.info('iridium/manager', 'stopping')
       await this.stop()
     })
-
     logger.info('iridium/manager', 'init()')
-    const seed = await IdentityManager.seedFromWallet(pass, wallet)
-    return this.initFromEntropy(seed)
   }
 
   async stop() {
-    await this.friends.stop?.()
-    await this.users.stop?.()
-    await this.profile.stop?.()
-    await this.groups.stop?.()
-    await this.chat.stop?.()
-    await this.files.stop?.()
-    await this.webRTC.stop?.()
-    await this.settings.stop?.()
-    await this.notifications.stop?.()
+    await Promise.all([
+      this.friends.stop?.(),
+      this.users.stop?.(),
+      this.profile.stop?.(),
+      this.groups.stop?.(),
+      this.chat.stop?.(),
+      this.files.stop?.(),
+      this.webRTC.stop?.(),
+      this.settings.stop?.(),
+      this.notifications.stop?.(),
+    ])
   }
 
   get id(): string {
