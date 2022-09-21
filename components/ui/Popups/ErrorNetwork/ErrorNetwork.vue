@@ -24,14 +24,15 @@ import { Config } from '~/config'
  */
 export default Vue.extend({
   name: 'ErrorNetwork',
-  data: () => ({
-    refreshCwIcon: RefreshCwIcon,
-    primaryButton: {
-      text: this.$t('popups.error_network.action'),
-      action: this.tryAgain,
-      icon: RefreshCwIcon,
+  computed: {
+    primaryButton() {
+      return {
+        text: this.$t('popups.error_network.action'),
+        action: this.tryAgain,
+        icon: RefreshCwIcon,
+      }
     },
-  }),
+  },
   watch: {
     $route(to, from) {
       if (to !== from) {

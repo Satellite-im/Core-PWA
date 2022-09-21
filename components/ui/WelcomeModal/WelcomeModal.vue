@@ -23,17 +23,19 @@ export default Vue.extend({
   data() {
     return {
       profile: iridium.profile.state,
-      primaryButton: {
-        text: this.$t('modal.update_modal.got_it'),
-        action: this.closeModal,
-        icon: CheckIcon,
-      },
     }
   },
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
     }),
+    primaryButton() {
+      return {
+        text: this.$t('modal.update_modal.got_it'),
+        action: this.closeModal,
+        icon: CheckIcon,
+      }
+    },
   },
   methods: {
     closeModal() {
