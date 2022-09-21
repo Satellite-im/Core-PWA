@@ -194,6 +194,7 @@ export default {
         'dispatching iridium/initializeFromEntropy',
       )
       await iridium.initFromEntropy(entropy)
+      await iridium.start()
     }
 
     const profile = await iridium.profile?.get()
@@ -285,6 +286,7 @@ export default {
         'dispatching iridium/initializeFromEntropy',
       )
       await iridium.initFromEntropy(entropy)
+      await iridium.start()
     }
 
     if (!iridium.connector) {
