@@ -1,40 +1,18 @@
-<div
-  id="quick-profile"
-  ref="quickProfile"
-  v-click-outside="close"
-  :style="$device.isDesktop ? `top: ${ui.quickProfilePosition.y}px; left: ${ui.quickProfilePosition.x}px;` : ''"
->
-  <div class="header avatar-wrapper">
-    <InteractablesClose id="closeIcon" :action="close" />
-    <!-- Remove class on UICircle when profile implemented and both are clickable -->
-    <!-- Clickable was removed temporarily -->
-    <UiCircle
-      id="userIcon"
-      :type="src ? 'image' : 'random'"
-      :seed="user.address"
-      :size="45"
-      :source="src"
-    />
-  </div>
-  <TypographyTitle :text="user.name" :size="6" />
-  <TypographyText color="dark" size="sm">
-    {{ user.publicKey ? `${user.publicKey.substr(0, 23)}...` : `` }}
-  </TypographyText>
-  <TypographyText> {{ status }} </TypographyText>
-  <template v-if="!isMe">
-    <UiHorizontalRule />
-    <InteractablesInput
-      v-model="text"
-      :placeholder="`${$t('friends.message')} ${user.name}...`"
-      @submit="sendMessage"
-      :maxLength="$Config.chat.maxChars"
-      showLimit
-    >
-      <arrow-right-icon size="1x" />
-    </InteractablesInput>
-    <TypographyError
-      v-if="isEmptyMessage"
-      :text="$t('errors.chat.empty_message_error')"
-    />
-  </template>
+<div class="quick-profile" ref="quick" v-click-outside="close">
+  <button @click="openProfile">
+    <UiUserState :user="user" :size="40" />
+  </button>
+  <TypographyText as="h4"> {{ user.name }} </TypographyText>
+  <InteractablesInput
+    v-if="!isMe"
+    v-model.trim="text"
+    size="xs"
+    :placeholder="`${$t('friends.message')} ${user.name}...`"
+    :maxLength="$Config.chat.maxChars"
+    showLimit
+    @submit="sendMessage"
+  >
+    <arrow-right-icon size="1x" />
+  </InteractablesInput>
+  <InteractablesClose :action="close" />
 </div>

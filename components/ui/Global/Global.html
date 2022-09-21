@@ -90,7 +90,7 @@
     </UiModal>
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
+    <InteractablesQuickProfile v-if="ui.quickProfile" />
   </transition>
   <UiPip
     v-if="$device.isDesktop && isBackgroundCall"

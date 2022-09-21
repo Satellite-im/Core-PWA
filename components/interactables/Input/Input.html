@@ -54,10 +54,10 @@
       <slot v-else></slot>
     </InteractablesButton>
   </div>
-  <span v-if="showLimit" class="char-limit">
+  <TypographyText v-if="showLimit" size="xs" color="dark" class="attachment">
     {{ text.length }}/{{ maxLength }}
-  </span>
-  <TypographyText v-if="error" as="small" color="danger">
+  </TypographyText>
+  <TypographyText v-if="error" as="small" color="danger" class="attachment">
     {{ error }}
   </TypographyText>
 </div>

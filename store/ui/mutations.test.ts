@@ -399,25 +399,6 @@ describe('mutations', () => {
     expect(localizedState.contextMenuPosition).toMatchObject(object)
   })
 
-  test('setQuickProfilePosition', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      x: 4,
-      y: 2,
-    }
-    mutations.default.setQuickProfilePosition(localizedState, object)
-    expect(localizedState.quickProfilePosition).toMatchObject(object)
-  })
-
-  test('quickProfile', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      name: 'John',
-    }
-    mutations.default.quickProfile(localizedState, object)
-    expect(localizedState.quickProfile).toMatchObject(object)
-  })
-
   test('setUserProfile', () => {
     const localizedState = { ...initialState }
     const object = {
