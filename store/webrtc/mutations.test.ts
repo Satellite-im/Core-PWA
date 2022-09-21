@@ -1,5 +1,11 @@
 import { expect } from '@jest/globals'
+import MockDate from 'mockdate'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import * as WebRTC from '~/store/webrtc/mutations'
+
+dayjs.extend(utc)
+MockDate.set('2000-11-22')
 
 describe('Mutate WebRTC by setting', () => {
   let inst: any
@@ -234,5 +240,13 @@ describe('Mutate WebRTC by setting', () => {
     expect(localStateForUnitTest.streamMuted).toMatchObject({
       id: { audio: true, video: true, screen: true },
     })
+  })
+
+  it.skip('should update elapsed time', () => {
+    // Skipped because returns error for now. Checking in with Joe
+    const localStateForUnitTest = { ...state }
+    inst.updateElapsedTime(localStateForUnitTest) // Returns error for now because _dayjs.default.duration is not a function
+
+    expect(localStateForUnitTest.elapsedTime).toMatchObject({}) // Unknown for now
   })
 })

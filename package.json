@@ -138,6 +138,7 @@
     "less": "^4.1.2",
     "less-loader": "^7.1.1",
     "lint-staged": ">=10",
+    "mockdate": "^3.0.5",
     "prettier": "^2.5.1",
     "simple-peer": "^9.11.1",
     "ts-jest": "^27.1.3",
