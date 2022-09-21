@@ -117,13 +117,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
 
     await Promise.all(
-      participants.map((did) => {
-        const user = iridium.users.getUser(did)
-        if (user) {
-          return user
-        }
-        return iridium.users.searchPeer(did)
-      }),
+      participants
+        .filter((did) => !iridium.users.getUser(did))
+        .map((did) => iridium.users.searchPeer(did, { andSave: true })),
     )
 
     if (payload.type === 'create') {
@@ -353,9 +349,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async hasDirectConversation(did: string) {
-    if (!iridium.connector) {
-      return
-    }
     const participants = [iridium.id, did]
     const id = await encoding.hash(participants.sort())
     return this.hasConversation(id)
@@ -558,10 +551,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       payload: {},
     })
 
+    const participants = [iridium.id]
     const event: IridiumConversationEvent = {
       id,
       type: 'remove_member',
-      participants: [iridium.id],
+      participants,
     }
 
     await iridium.connector.publish('/chat/announce', event, {
@@ -570,6 +564,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       },
     })
 
+    // remove users unless they are my friends or they are in one of my groups
+    // (check all users in the userManager because there is the case of groups with people not in participants but still in the userManager list, for example when they left the group)
+    await Promise.all(
+      iridium.users.list
+        .filter(
+          (u) =>
+            !participants.includes(u.did) &&
+            !iridium.friends.isFriend(u.did) &&
+            !this.isUserInOtherGroups(u.did, [id]),
+        )
+        .map((u) => iridium.users.userRemove(u.did, true)),
+    )
     await this.deleteConversation(id)
   }
 
@@ -864,5 +870,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const index = typingList.indexOf(did)
       if (index >= 0) typingList.splice(index, 1)
     }
+  }
+
+  // Check if user is in other groups other than `exlude` groups.
+  // `messageCond` is true when checking if a user has sent some messages in some groups (there is the case where the user left a group but we need to keep it in userManager state)
+  // `messageCond` is false when we do not want to announce events to users not in a participants array
+  isUserInOtherGroups(did: string, exclude: string[] = [], messageCond = true) {
+    return Object.values(this.state.conversations)
+      .filter((c) => c.type === 'group' && !exclude.includes(c.id))
+      .some(
+        (c) =>
+          c.participants.includes(did) ||
+          (messageCond && Object.values(c.message).some((m) => m.from === did)),
+      )
   }
 }

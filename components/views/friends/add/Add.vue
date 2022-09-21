@@ -1,7 +1,8 @@
 <template src="./Add.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
+import { FriendRequest } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   data() {
