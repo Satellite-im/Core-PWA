@@ -787,6 +787,7 @@ export default {
     friends: 'Friends',
     self_add: "You can't add yourself, you silly goose.",
     already_friend: "You're already friends with this user.",
+    already_request: 'You already have a request for this user.',
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',

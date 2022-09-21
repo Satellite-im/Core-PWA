@@ -54,6 +54,7 @@ export default Vue.extend({
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
+      if (this.isPreview || this.request) return []
       return [
         {
           text: this.$t('context.remove'),
@@ -65,8 +66,13 @@ export default Vue.extend({
     requestIncoming(): boolean | null {
       return this.request && this.request.incoming
     },
-    status(): UserStatus {
-      return iridium.users.ephemeral.status[this.user.did] || 'offline'
+    status(): UserStatus | '' {
+      return this.showStatus
+        ? iridium.users.ephemeral.status[this.user.did] || 'offline'
+        : ''
+    },
+    showStatus(): boolean {
+      return !this.isPreview
     },
   },
   beforeDestroy() {

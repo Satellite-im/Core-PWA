@@ -67,9 +67,19 @@ export class Wire extends Emitter<WireEventListeners> {
     this.emit('wire:message', { type, message })
 
     const user = iridium.users.getUser(message.from)
-
     if (!user) {
       logger.warn(this.loggerTag, `User not found: ${message.from}`)
+      return
+    }
+
+    if (
+      !iridium.friends.isFriend(user.did) &&
+      !iridium.chat.isUserInOtherGroups(user.did, [], false)
+    ) {
+      logger.error(
+        this.loggerTag,
+        `User not a friend and not in any group: ${message.from}`,
+      )
       return
     }
 
@@ -330,7 +340,12 @@ export class Wire extends Emitter<WireEventListeners> {
   async announce() {
     if (!iridium.connector) return
     const profile = iridium.profile.state
-    const users = iridium.users.list
+    const users = iridium.users.list.filter(
+      (u) =>
+        iridium.friends.isFriend(u.did) ||
+        iridium.chat.isUserInOtherGroups(u.did, [], false),
+    )
+
     if (!profile || !users) return
 
     if (!users || !users.length || !profile.name) return
