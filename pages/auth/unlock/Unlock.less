@@ -6,6 +6,7 @@
   flex-wrap: nowrap;
   flex-direction: column;
   gap: 40px;
+  user-select: none;
 
   .info-button {
     display: flex;
@@ -28,7 +29,8 @@
 
     .delete-link {
       color: #fff;
-      margin-top: @normal-spacing;
+      margin: @normal-spacing auto 0 auto;
+
       &:hover {
         opacity: 0.75;
       }

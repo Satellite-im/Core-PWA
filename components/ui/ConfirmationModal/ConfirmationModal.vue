@@ -1,7 +1,11 @@
 <template>
   <transition name="modal">
     <UiModal v-if="showModal" @close="close">
-      <Confirmation @confirm="confirm" @close="close">
+      <Confirmation
+        :show-confirm-button="showConfirmButton"
+        @confirm="confirm"
+        @close="close"
+      >
         <template #title><slot name="title" /></template>
         <template #body><slot name="body" /></template>
       </Confirmation>
