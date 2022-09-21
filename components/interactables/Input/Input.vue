@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { DeleteIcon } from 'satellite-lucide-icons'
+import { DeleteIcon, EyeIcon, EyeOffIcon } from 'satellite-lucide-icons'
 import { InputType, InputColor } from './types'
 import { Size } from '~/types/typography'
 
@@ -11,6 +11,8 @@ const MOBILE_FOCUS_DELAY = 300 // ms
 export default Vue.extend({
   components: {
     DeleteIcon,
+    EyeIcon,
+    EyeOffIcon,
   },
   model: {
     prop: 'text',
@@ -90,12 +92,20 @@ export default Vue.extend({
       default: false,
     },
   },
+  data() {
+    return {
+      showPassword: false,
+    }
+  },
   computed: {
     isEmpty(): boolean {
       return !this.text.length
     },
     showClearButton(): boolean {
       return this.showClear || this.type === 'search'
+    },
+    derivedType(): string {
+      return this.showPassword ? 'text' : this.type
     },
   },
   mounted() {
@@ -127,6 +137,9 @@ export default Vue.extend({
     },
     clearInput() {
       this.$emit('change', '')
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword
     },
   },
 })
