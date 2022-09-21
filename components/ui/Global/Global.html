@@ -81,7 +81,7 @@
       <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
     <UiModal v-if="ui.modals.changelog">
-      <UiUpdateModal @close="() => toggleModal(ModalWindows.CHANGELOG)" />
+      <UiUpdateModal />
     </UiModal>
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
     <FilesView v-if="files.preview" />

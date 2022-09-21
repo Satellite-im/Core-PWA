@@ -60,7 +60,7 @@
   <UiVersion name version @click="toggleChangelogVisibility" />
 
   <UiModal v-if="ui.modals.changelog">
-    <UiUpdateModal @close="() => toggleModal(ModalWindows.CHANGELOG)" />
+    <UiUpdateModal />
   </UiModal>
 
   <UiConfirmationModal
