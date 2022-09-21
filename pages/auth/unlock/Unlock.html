@@ -59,7 +59,9 @@
 
   <UiVersion name version @click="toggleChangelogVisibility" />
 
-  <UiUpdateModal v-if="ui.modals.changelog" />
+  <UiModal v-if="ui.modals.changelog">
+    <UiUpdateModal />
+  </UiModal>
 
   <UiConfirmationModal
     :show-modal="confirmClearAccountModalVisible"
