@@ -45,6 +45,7 @@ const commonProperties = [
   'files',
   'ui.callHeight',
   'accounts.phrase',
+  'ui.quickProfile'
 ]
 
 const propertiesNoStorePin = [

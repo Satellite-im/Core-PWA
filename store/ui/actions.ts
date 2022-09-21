@@ -87,15 +87,6 @@ export default {
         { root: true },
       )
   },
-  showQuickProfile(
-    { commit }: ActionsArguments<UIState>,
-    { did, position }: { did: string; position: Position },
-  ) {
-    const selectedUser = iridium.users.getUser(did)
-
-    commit('setQuickProfilePosition', position)
-    commit('quickProfile', selectedUser)
-  },
   async showProfile({ commit }: ActionsArguments<UIState>, user: Friend) {
     commit('toggleModal', {
       name: 'userProfile',

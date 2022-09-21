@@ -61,11 +61,6 @@ Object {
   },
   "mostEmojiUsed": Array [],
   "notifications": Array [],
-  "quickProfile": false,
-  "quickProfilePosition": Object {
-    "x": 0,
-    "y": 0,
-  },
   "recentGlyphs": Array [],
   "settingReaction": Object {
     "groupID": null,

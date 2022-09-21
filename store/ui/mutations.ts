@@ -1,7 +1,9 @@
+import Vue from 'vue'
 import { without } from 'lodash'
 import { Position, SettingsRoutes, UIState } from './types'
 import { MessageGroup } from '~/types/messaging'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default {
   togglePinned(state: UIState, visible: boolean) {
@@ -20,11 +22,11 @@ export default {
   setContextMenuPosition(state: UIState, e: any) {
     state.contextMenuPosition = { x: e.x, y: e.y }
   },
-  setQuickProfilePosition(state: UIState, position: Position) {
-    state.quickProfilePosition = position
-  },
-  quickProfile(state: UIState, profile: Object | boolean) {
-    state.quickProfile = profile
+  setQuickProfile(
+    state: UIState,
+    data: { user: User; position: Position } | undefined,
+  ) {
+    Vue.set(state, 'quickProfile', data)
   },
   setUserProfile(state: UIState, userProfile: Object) {
     state.userProfile = userProfile
