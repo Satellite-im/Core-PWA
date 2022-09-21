@@ -27,6 +27,7 @@
   &:not(.show-header) {
     grid-template-areas:
       'timestamp body'
+      'timestamp call'
       'timestamp attachments'
       'timestamp footer';
     grid-template-columns: 52px;
@@ -51,6 +52,7 @@
     grid-template-areas:
       'avatar header timestamp'
       'avatar body body'
+      'avatar call call'
       'avatar attachments attachments'
       'avatar footer footer';
     grid-template-columns: 52px auto 1fr;
