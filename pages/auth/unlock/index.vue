@@ -24,6 +24,7 @@ export default Vue.extend({
       error: '',
       step: 'signup' as 'signup' | 'login',
       isChrome: false,
+      confirmClearAccountModalVisible: false,
     }
   },
   computed: {
@@ -151,7 +152,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
     },
-    async clearAndReset() {
+    async clearAccount() {
       await this.deleteAccount()
       location.reload()
     },

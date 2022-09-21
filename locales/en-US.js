@@ -256,6 +256,9 @@ export default {
       generate_random_user: 'Generate a Random User (DEV)',
       browser_warning:
         'Satellite is optimized for Chromium browsers. You may experience UI and functional issues. We will optimize for more browsers in the future.',
+      confirm_clear_account: 'This will clear your account',
+      confirm_clear_account_description:
+        'Are you sure you want to clear your account and all data?',
     },
     loading: {
       loading: 'Linking Satellites...',

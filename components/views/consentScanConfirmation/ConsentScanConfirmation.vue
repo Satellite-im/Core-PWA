@@ -1,5 +1,5 @@
 <template>
-  <Confirmation :show-confirm-button="true" @confirm="confirm" @close="close">
+  <Confirmation show-confirm-button @confirm="confirm" @close="close">
     <template #title>{{ $t('pages.privacy.consentScan.title') }}</template>
     <template #body>{{ $t('pages.privacy.consentScan.subtitle') }}</template>
   </Confirmation>
