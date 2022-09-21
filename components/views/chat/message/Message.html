@@ -68,7 +68,7 @@
     />
     <div class="footer">
       <MessageReactions :message="message" :emojiReaction="emojiReaction" />
-      <MessageReplies :replies="replies" v-if="replies.length" />
+      <MessageReplies :replies="replies" v-if="replies?.length" />
     </div>
   </div>
 </div>
