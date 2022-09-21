@@ -3,20 +3,22 @@
     {{ label }}
   </TypographyText>
   <div class="input-outer" :class="`font-size-${size}`">
-    <div class="input-inner">
+    <div
+      class="input-inner"
+      :class="[
+        `is-${color}`,
+        {
+          'is-danger': error || invalid,
+          'has-sibling': $slots.default,
+          transparent: transparent,
+        },
+      ]"
+    >
       <input
         ref="input"
         class="input font-body font-color-light"
-        :class="[
-            `is-${color}`,
-            {
-              'show-clear-button': showClearButton,
-              'is-danger': error || invalid,
-              transparent,
-            },
-          ]"
         :value="text"
-        :type="type"
+        :type="derivedType"
         :readonly="readonly"
         :placeholder="placeholder"
         :minLength="minLength"
@@ -27,6 +29,10 @@
         @input="handleInput"
       />
       <div class="append input-options">
+        <button v-if="type === 'password'" @click="toggleShowPassword">
+          <eye-icon size="1x" v-if="!showPassword" />
+          <eye-off-icon size="1x" v-else />
+        </button>
         <button v-if="showClearButton && !isEmpty" @click="clearInput">
           <delete-icon size="1x" />
         </button>
