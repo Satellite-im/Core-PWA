@@ -1,32 +1,33 @@
 .quick-profile {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   position: fixed;
   width: 350px;
   padding: 16px;
-  background: linear-gradient(
-    to bottom,
-    @flair-color 0%,
-    @flair-color 36px,
-    #1c273a 36px,
-    @darker 100%
-  );
+  // background: linear-gradient(
+  //   to bottom,
+  //   @flair-color 0%,
+  //   @flair-color 36px,
+  //   #1c273a 36px,
+  //   @darker 100%
+  // );
+  background: @modal-gradient;
   box-shadow: @ui-shadow;
   .round-corners();
 
-  .open-profile-button {
-    width: fit-content;
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
-    &.no-click {
-      cursor: default;
+    .open-profile-button {
+      width: fit-content;
+
+      &.no-click {
+        cursor: default;
+      }
     }
-  }
-
-  .close-button {
-    position: absolute;
-    right: 16px;
-    top: 8px;
   }
 }
 

@@ -1,24 +1,33 @@
-<div class="quick-profile" ref="quick" v-click-outside="close">
-  <!-- todo - remove no-click after implementing regular profile for all users -->
-  <button
-    @click="openProfile"
-    class="open-profile-button"
-    :class="{'no-click' : !isMe}"
-  >
-    <!-- end todo -->
-    <UiUserState :user="user" :size="40" />
-  </button>
-  <TypographyText as="h4"> {{ user.name }} </TypographyText>
+<div
+  class="quick-profile"
+  ref="quick"
+  @keydown.esc="close"
+  tabindex="-1"
+  v-click-outside="close"
+>
+  <div class="top">
+    <!-- todo - remove no-click after implementing regular profile for all users -->
+    <button
+      @click="openProfile"
+      class="open-profile-button"
+      :class="{'no-click' : !isMe}"
+    >
+      <!-- end todo -->
+      <UiUserState :user="user" :size="40" />
+    </button>
+    <TypographyText as="h4"> {{ user.name }} </TypographyText>
+  </div>
   <InteractablesInput
     v-if="!isMe"
     v-model.trim="text"
+    ref="input"
     size="xs"
     :placeholder="`${$t('friends.message')} ${user.name}...`"
     :maxLength="$Config.chat.maxChars"
     showLimit
+    autofocus
     @submit="sendMessage"
   >
     <arrow-right-icon size="1x" />
   </InteractablesInput>
-  <InteractablesClose :action="close" />
 </div>

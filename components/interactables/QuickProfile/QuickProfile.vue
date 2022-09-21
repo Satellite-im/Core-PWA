@@ -33,8 +33,10 @@ export default Vue.extend({
     },
   },
   mounted() {
-    const quick = this.$refs.quick as HTMLElement | undefined
-    if (this.$device.isDesktop && quick && this.quickProfile) {
+    const quick = this.$refs.quick as HTMLElement
+    quick.focus()
+
+    if (this.$device.isDesktop && this.quickProfile) {
       quick.style.top = `${this.quickProfile.position.y}px`
       quick.style.left = `${this.quickProfile.position.x}px`
     }
@@ -48,18 +50,16 @@ export default Vue.extend({
       if (!this.quickProfile || this.$device.isMobile) {
         return
       }
-      const quick = this.$refs.quick as HTMLElement | undefined
-      if (quick) {
-        const clickX = this.quickProfile.position.x
-        const clickY = this.quickProfile.position.y
-        const widthOverflow = clickX + quick.clientWidth - window.innerWidth
-        const heightOverflow = clickY + quick.clientHeight - window.innerHeight
-        if (widthOverflow > -8) {
-          quick.style.left = `${this.quickProfile.position.x - widthOverflow}px`
-        }
-        if (heightOverflow > -8) {
-          quick.style.top = `${this.quickProfile.position.y - heightOverflow}px`
-        }
+      const quick = this.$refs.quick as HTMLElement
+      const clickX = this.quickProfile.position.x
+      const clickY = this.quickProfile.position.y
+      const widthOverflow = clickX + quick.clientWidth - window.innerWidth
+      const heightOverflow = clickY + quick.clientHeight - window.innerHeight
+      if (widthOverflow > -8) {
+        quick.style.left = `${this.quickProfile.position.x - widthOverflow}px`
+      }
+      if (heightOverflow > -8) {
+        quick.style.top = `${this.quickProfile.position.y - heightOverflow}px`
       }
     },
     sendMessage() {
