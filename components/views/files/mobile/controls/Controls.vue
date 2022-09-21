@@ -1,44 +1,51 @@
-<template src="./mobileList.html"></template>
+<template>
+  <div class="mobile-controls">
+    <FilesAsideList :items="quickAccessOptions" />
+    <div class="sort-container">
+      <InteractablesSelect
+        v-model="sort"
+        :options="sortOptions"
+        :label="$t('pages.files.browse.sort')"
+        small
+        class="sort-selection"
+      />
+      <button class="sort-button" @click="sort = sort">
+        <sort-asc-icon v-if="isSortAsc" size="1x" />
+        <sort-desc-icon v-else size="1x" />
+      </button>
+    </div>
+  </div>
+</template>
+
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 import { SortAscIcon, SortDescIcon } from 'satellite-lucide-icons'
-import { IridiumItem } from '~/libraries/Iridium/files/types'
-import {
-  FileSortEnum,
-  FileRouteEnum,
-  FileIconsEnum,
-} from '~/libraries/Enums/enums'
+import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
 import { SimpleItem } from '~/types/ui/sidebar'
+import {
+  FileRouteEnum,
+  FileIconsEnum,
+  FileSortEnum,
+} from '~/libraries/Enums/enums'
 import { SelectOption } from '~/types/ui/inputs'
 
 export default Vue.extend({
+  name: 'FilesMobileControls',
   components: {
     SortAscIcon,
     SortDescIcon,
   },
-  props: {
-    /**
-     * Directory items to be displayed
-     */
-    directory: {
-      type: Array as PropType<Array<IridiumItem>>,
-      required: true,
-    },
-  },
   data() {
     return {
-      timer: undefined as NodeJS.Timer | undefined,
-      counter: 0,
+      items: iridium.files.state.items,
     }
   },
   computed: {
     ...mapState({
       files: (state) => (state as RootState).files,
-      gridLayout: (state) => (state as RootState).files.gridLayout,
     }),
-    FileSortEnum: () => FileSortEnum,
     quickAccessOptions(): SimpleItem[] {
       return [
         {
@@ -73,9 +80,6 @@ export default Vue.extend({
         },
       ]
     },
-    isSortAsc(): boolean {
-      return this.files.sort.asc
-    },
     sort: {
       get(): String {
         return this.files.sort.category
@@ -84,17 +88,36 @@ export default Vue.extend({
         this.$store.commit('files/setSort', category)
       },
     },
-  },
-  mounted() {
-    this.timer = setInterval(() => {
-      this.counter++
-    }, this.$Config.chat.timestampUpdateInterval)
-  },
-  beforeDestroy() {
-    if (this.timer) {
-      clearInterval(this.timer)
-    }
+    isSortAsc(): boolean {
+      return this.files.sort.asc
+    },
   },
 })
 </script>
-<style scoped lang="less" src="./mobileList.less"></style>
+
+<style scoped lang="less">
+.mobile-controls {
+  grid-area: mobile-controls;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: @light-spacing;
+
+  .sort-container {
+    display: flex;
+    align-items: center;
+    gap: @light-spacing;
+
+    .sort-button {
+      display: flex;
+      align-items: center;
+    }
+
+    .sort-selection {
+      display: flex;
+      align-items: center;
+      align-self: flex-end;
+    }
+  }
+}
+</style>
