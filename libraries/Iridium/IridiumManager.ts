@@ -3,7 +3,6 @@ import type { IridiumIPFS } from '@satellite-im/iridium'
 import UsersManager from './users/UsersManager'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
-import GroupManager from '~/libraries/Iridium/groups/GroupManager'
 import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
 import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
@@ -18,7 +17,6 @@ export class IridiumManager extends Emitter {
   ready: boolean = false
   connector?: IridiumIPFS
   profile: ProfileManager
-  groups: GroupManager
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
@@ -32,7 +30,6 @@ export class IridiumManager extends Emitter {
   constructor() {
     super()
     this.profile = new ProfileManager()
-    this.groups = new GroupManager()
     this.friends = new FriendsManager()
     this.chat = new ChatManager()
     this.files = new FilesManager()
@@ -62,7 +59,6 @@ export class IridiumManager extends Emitter {
       this.friends.stop?.(),
       this.users.stop?.(),
       this.profile.stop?.(),
-      this.groups.stop?.(),
       this.chat.stop?.(),
       this.files.stop?.(),
       this.webRTC.stop?.(),
@@ -106,7 +102,6 @@ export class IridiumManager extends Emitter {
       doc = {
         id: this.connector.id,
         profile: {},
-        groups: {},
         friends: {},
         conversations: {},
         files: {},
@@ -192,9 +187,6 @@ export class IridiumManager extends Emitter {
     logger.info('iridium/manager', 'ready')
     this.ready = true
     this.emit('ready', {})
-
-    logger.info('iridium/manager', 'initializing groups')
-    this.groups.start()
 
     logger.info('iridium/manager', 'initializing files')
     this.files.start()
