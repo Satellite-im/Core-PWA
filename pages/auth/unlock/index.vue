@@ -140,7 +140,6 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
      */
     async create() {
       try {
-        console.log('creaaaaate')
         this.status = 'loading'
         await this.$store.dispatch('accounts/setPin', this.pin)
         await this.decrypt()
@@ -158,7 +157,6 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
       location.reload()
     },
     action() {
-      console.log('acgtiooon')
       if (this.step === 'login') {
         this.decrypt()
         return

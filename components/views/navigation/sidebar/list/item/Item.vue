@@ -216,7 +216,6 @@ export default Vue.extend({
           this.$emit('slideNext')
           return
         }
-        console.log('openConversation cliiick')
         this.$router.push({ params: { id: this.conversation.id } })
         return
       }

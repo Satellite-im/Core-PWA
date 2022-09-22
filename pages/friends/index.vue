@@ -62,8 +62,9 @@ export default Vue.extend({
   },
   methods: {
     setRoute(route: string): void {
-      console.log('ROUTE', route)
-      this.$router.push(route || '/')
+      this.$router.push({
+        query: route ? { route } : {},
+      })
     },
   },
 })

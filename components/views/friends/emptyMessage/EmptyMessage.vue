@@ -39,7 +39,6 @@ export default Vue.extend({
     navigateAddFriends() {
       const path = this.$device.isMobile ? '/mobile/friends' : '/friends'
 
-      console.log('navigateAddFriends cliiick')
       this.$router.push({ path, query: { route: FriendsTabs.ADD } })
       this.$emit('click')
     },
