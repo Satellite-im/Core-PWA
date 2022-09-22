@@ -1,4 +1,4 @@
-name: Cypress Pair testing using Cypress Docker Image
+name: Cypress
 
 on:
   pull_request:
@@ -42,7 +42,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: npm run cy:chat
+          command: npx cypress run --browser chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Artifacts
