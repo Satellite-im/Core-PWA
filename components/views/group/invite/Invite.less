@@ -1,35 +1,18 @@
 .group-invite {
-  display: flex;
-  flex-direction: column;
-  gap: @light-spacing;
   position: absolute;
   width: 18rem;
   top: 100%;
   left: 0;
-  padding: @light-spacing @light-spacing;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   max-height: 500px;
-  &:extend(.first-layer);
-  &:extend(.background-semitransparent-dark);
-  &:extend(.blur);
-  &:extend(.round-corners);
-  &:extend(.bordered);
+  z-index: 1;
+  box-shadow: @ui-shadow;
 
-  .subtitle {
-    margin: 0;
-    font-size: @text-size;
-  }
-
-  .button {
-    flex-shrink: 0;
-  }
-
-  &--compact {
-    right: @servers-size + 2rem;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .create-group {
-    left: @servers-size + 2rem;
-  }
+  .background-semitransparent-dark();
+  .round-corners();
+  .bordered();
+  .blur();
 }
