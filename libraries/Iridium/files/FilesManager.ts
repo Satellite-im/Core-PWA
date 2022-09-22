@@ -3,8 +3,6 @@ import type {
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium'
-import type { IPFS } from 'ipfs-core-types'
-import { createWriteStream } from 'streamsaver'
 import { v4 as uuidv4 } from 'uuid'
 import { CID } from 'multiformats'
 import iridium from '../IridiumManager'
@@ -291,26 +289,6 @@ export default class FilesManager extends Emitter {
     }
 
     this.set('/items', this.state.items)
-  }
-
-  /**
-   * @description fetch file from ipfs and download with streamsaver
-   * @param {string} path file cid
-   * @param {string} name file name
-   * @param {number} size file size to show progress in browser
-   */
-  async download(path: string, name: string, size: number) {
-    const fileStream = createWriteStream(name, { size })
-    const writer = fileStream.getWriter()
-
-    window.onunload = () => writer.abort()
-
-    for await (const bytes of (iridium.connector?.ipfs as IPFS).cat(path, {
-      length: size,
-    })) {
-      writer.write(bytes)
-    }
-    writer.close()
   }
 
   /**
