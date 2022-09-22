@@ -187,7 +187,11 @@ export default {
         'accounts/actions/loadAccount',
         'signing message for iridium',
       )
-      const { entropyMessage } = state
+      const { pinHash } = state
+      const entropyMessage = IdentityManager.generateEntropyMessage(
+        $BlockchainClient.account.publicKey.toBase58(),
+        pinHash,
+      )
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
       logger.debug(
         'accounts/actions/loadAccount',
@@ -357,10 +361,10 @@ export default {
     await $BlockchainClient.initFromMnemonic()
 
     const { pinHash } = state
-    const entropyMessage = IdentityManager.generateEntropyMessage(
-      $BlockchainClient.account.publicKey.toBase58(),
-      pinHash,
-    )
+    // const entropyMessage = IdentityManager.generateEntropyMessage(
+    //   $BlockchainClient.account.publicKey.toBase58(),
+    //   pinHash,
+    // )
     // commit('setEntropy', entropyMessage)
 
     const fakeMnemonic = 'fake mnemonic to bypass checks'

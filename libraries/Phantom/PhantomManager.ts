@@ -27,6 +27,7 @@ export default class PhantomManager {
   async initWallet() {
     if (this.provider.isPhantom) {
       await this.$PhantomWalletAdapter.connect()
+      await this.$PhantomWalletAdapter.connect()
       this.$PhantomWalletAdapter.on('error', (error) => {
         throw new Error('Phantom wallet error: ' + error)
       })
