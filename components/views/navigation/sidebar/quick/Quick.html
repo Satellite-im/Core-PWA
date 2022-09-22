@@ -1,17 +1,10 @@
 <div class="quick-chat">
-  <div>
-    <TypographyText
-      font="heading"
-      size="sm"
-      color="dark"
-      style="margin-bottom: 0.5rem"
-    >
-      {{ $t('pages.chat.new_chat') }}
-    </TypographyText>
-    <TypographyText size="sm" color="dark">
-      {{ $t('pages.chat.new_chat_description') }}
-    </TypographyText>
-  </div>
+  <TypographyText font="heading" size="sm" color="dark">
+    {{ $t('pages.chat.new_chat') }}
+  </TypographyText>
+  <TypographyText size="sm" color="dark">
+    {{ $t('pages.chat.new_chat_description') }}
+  </TypographyText>
   <InteractablesUserPicker v-model="friends" height="220px" />
   <template v-if="friends.length > 1">
     <InteractablesInput
