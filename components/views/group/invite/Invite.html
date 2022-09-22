@@ -1,19 +1,21 @@
-<div id="group-invite" class="group-invite">
-  <TypographyText as="h3"> {{ $t('pages.chat.group_invite') }} </TypographyText>
-  <TypographyText size="sm">
+<div class="group-invite">
+  <TypographyText
+    font="heading"
+    size="sm"
+    color="dark"
+    style="margin-bottom: 0.5rem"
+  >
+    {{ $t('pages.chat.group_invite') }}
+  </TypographyText>
+  <TypographyText size="sm" color="dark">
     {{ $t('pages.chat.group_invite_description') }}
   </TypographyText>
-  <InteractablesUserPicker
-    v-model="recipients"
-    :exclude="groupMembers"
-    address-lookup
-  />
-  <small v-if="error" class="error has-text-danger error">{{error}}</small>
+  <InteractablesUserPicker v-model="recipients" :exclude="groupMembers" />
+  <TypographyText size="sm" color="danger"> {{ error }} </TypographyText>
   <InteractablesButton
     :color="recipients.length ? 'primary' : 'dark'"
     :text="$t('pages.chat.add_member')"
-    @click="confirm"
     :loading="isLoading"
-    full-width
+    @click="confirm"
   />
 </div>
