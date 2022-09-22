@@ -12,11 +12,13 @@
     <!-- todo - add user options context menu -->
     <template v-if="showHeader">
       <div class="avatar">
-        <UiCircle
-          :type="avatarSrc ? 'image' : 'random'"
-          :seed="author.did"
-          :source="avatarSrc"
-        />
+        <button @click="showQuickProfile" tabindex="-1">
+          <UiCircle
+            :type="avatarSrc ? 'image' : 'random'"
+            :seed="author.did"
+            :source="avatarSrc"
+          />
+        </button>
       </div>
       <div class="header">
         <button @click="showQuickProfile">

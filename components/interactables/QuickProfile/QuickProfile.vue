@@ -51,15 +51,19 @@ export default Vue.extend({
         return
       }
       const quick = this.$refs.quick as HTMLElement
-      const clickX = this.quickProfile.position.x
-      const clickY = this.quickProfile.position.y
-      const widthOverflow = clickX + quick.clientWidth - window.innerWidth
-      const heightOverflow = clickY + quick.clientHeight - window.innerHeight
+      const widthOverflow =
+        this.quickProfile.position.x + quick.clientWidth - window.innerWidth
+      const heightOverflow =
+        this.quickProfile.position.y + quick.clientHeight - window.innerHeight
       if (widthOverflow > -8) {
-        quick.style.left = `${this.quickProfile.position.x - widthOverflow}px`
+        quick.style.left = `${
+          this.quickProfile.position.x - widthOverflow - 16
+        }px`
       }
       if (heightOverflow > -8) {
-        quick.style.top = `${this.quickProfile.position.y - heightOverflow}px`
+        quick.style.top = `${
+          this.quickProfile.position.y - heightOverflow - 16
+        }px`
       }
     },
     sendMessage() {
