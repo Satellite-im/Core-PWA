@@ -40,4 +40,5 @@ export enum ItemErrors {
   // IridiumFile
   FILE_SIZE = 'pages.files.errors.file_size',
   LIMIT = 'pages.files.errors.storage_limit',
+  BLOCKED = 'pages.files.errors.blocked',
 }

@@ -15,7 +15,9 @@
         />
       </div>
       <div class="header">
-        <TypographyText as="h4"> {{ author.name }} </TypographyText>
+        <button @click="showQuickProfile">
+          <TypographyText as="h4"> {{ author.name }} </TypographyText>
+        </button>
       </div>
     </template>
     <!-- todo end -->

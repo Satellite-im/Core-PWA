@@ -64,6 +64,14 @@
         &[type='search']::-webkit-search-cancel-button {
           display: none;
         }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:focus {
+          transition: background-color 600000s 0s, color 600000s 0s;
+        }
+        &[data-autocompleted] {
+          background-color: transparent !important;
+        }
       }
 
       .append {
@@ -99,15 +107,15 @@
     }
   }
 
-  .char-limit {
-    float: right;
-    margin-right: 0.5rem;
-    font-size: @mini-text-size;
-    &:extend(.font-muted);
-    margin-left: auto;
+  .attachment {
+    margin-top: 0.5rem;
   }
 
-  .error {
-    margin-top: 0.5rem;
+  .limit {
+    visibility: hidden;
+
+    &.display {
+      visibility: visible;
+    }
   }
 }

@@ -1,0 +1,14 @@
+<div id="mobile-list" :class="{'mobile-list-flat': !gridLayout}">
+  <div class="files-container">
+    <FilesMobileListItem
+      v-for="item in directory"
+      :item="item"
+      :key="item.id + item.modified.toString() + counter.toString()"
+      @like="(item) => $emit('like', item)"
+      @share="(item) => $emit('share', item)"
+      @rename="(item) => $emit('rename', item)"
+      @remove="(item) => $emit('remove', item)"
+      @handle="(item) => $emit('handle', item)"
+    />
+  </div>
+</div>

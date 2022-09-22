@@ -56,4 +56,11 @@
     <TypographyText>{{ $filesize(file.size) }}</TypographyText>
     <TypographyText>{{ $dayjs(file.modified).fromNow() }}</TypographyText>
   </div>
+  <a
+    v-show="false"
+    ref="download"
+    :href="dataURL"
+    :rel="$t('controls.download')"
+    :download="file.name"
+  />
 </div>

@@ -7,8 +7,6 @@ import InitialChatState from '~/store/chat/state'
 import InitialConversationState from '~/store/conversation/state'
 import InitialDataState from '~/store/dataState/state'
 import InitialFilesState from '~/store/files/state'
-import InitialFriendsState from '~/store/friends/state'
-import InitialGroupsState from '~/store/groups/state'
 import InitialMediaState from '~/store/media/state'
 import InitialMetaState from '~/store/meta/state'
 import InitialSettingsState from '~/store/settings/state'
@@ -34,12 +32,6 @@ export const initialRootState: RootState = {
   },
   files: {
     ...InitialFilesState(),
-  },
-  friends: {
-    ...InitialFriendsState(),
-  },
-  groups: {
-    ...InitialGroupsState(),
   },
   meta: {
     ...InitialMetaState(),

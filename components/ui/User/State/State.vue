@@ -15,6 +15,7 @@
         />
       </foreignObject>
       <svg
+        v-if="showStatus"
         width="28"
         height="18"
         x="12"
@@ -52,6 +53,10 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    showStatus: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -84,7 +89,9 @@ export default Vue.extend({
         : ''
     },
     outermask(): string {
-      return `url(#${this.isTyping ? 'typing' : 'circle'}-mask)`
+      return this.showStatus
+        ? `url(#${this.isTyping ? 'typing' : 'circle'}-mask)`
+        : ''
     },
     innermask(): string {
       return `url(#mask-state-${this.status})`

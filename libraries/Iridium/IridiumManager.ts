@@ -3,7 +3,6 @@ import type { IridiumIPFS } from '@satellite-im/iridium'
 import UsersManager from './users/UsersManager'
 import { Account } from '~/libraries/BlockchainClient/interfaces'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
-import GroupManager from '~/libraries/Iridium/groups/GroupManager'
 import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
 import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
@@ -18,7 +17,6 @@ export class IridiumManager extends Emitter {
   ready: boolean = false
   connector?: IridiumIPFS
   profile: ProfileManager
-  groups: GroupManager
   chat: ChatManager
   friends: FriendsManager
   files: FilesManager
@@ -32,7 +30,6 @@ export class IridiumManager extends Emitter {
   constructor() {
     super()
     this.profile = new ProfileManager()
-    this.groups = new GroupManager()
     this.friends = new FriendsManager()
     this.chat = new ChatManager()
     this.files = new FilesManager()
@@ -49,26 +46,25 @@ export class IridiumManager extends Emitter {
    * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
    * @returns a promise that resolves when the initialization completes
    */
-  async start({ pass, wallet }: { pass: string; wallet: Account }) {
+  async start() {
     this.connector?.on('stopping', async () => {
+      logger.info('iridium/manager', 'stopping')
       await this.stop()
     })
-
     logger.info('iridium/manager', 'init()')
-    const seed = await IdentityManager.seedFromWallet(pass, wallet)
-    return this.initFromEntropy(seed)
   }
 
   async stop() {
-    await this.friends.stop?.()
-    await this.users.stop?.()
-    await this.profile.stop?.()
-    await this.groups.stop?.()
-    await this.chat.stop?.()
-    await this.files.stop?.()
-    await this.webRTC.stop?.()
-    await this.settings.stop?.()
-    await this.notifications.stop?.()
+    await Promise.all([
+      this.friends.stop?.(),
+      this.users.stop?.(),
+      this.profile.stop?.(),
+      this.chat.stop?.(),
+      this.files.stop?.(),
+      this.webRTC.stop?.(),
+      this.settings.stop?.(),
+      this.notifications.stop?.(),
+    ])
   }
 
   get id(): string {
@@ -106,7 +102,6 @@ export class IridiumManager extends Emitter {
       doc = {
         id: this.connector.id,
         profile: {},
-        groups: {},
         friends: {},
         conversations: {},
         files: {},
@@ -192,9 +187,6 @@ export class IridiumManager extends Emitter {
     logger.info('iridium/manager', 'ready')
     this.ready = true
     this.emit('ready', {})
-
-    logger.info('iridium/manager', 'initializing groups')
-    this.groups.start()
 
     logger.info('iridium/manager', 'initializing files')
     this.files.start()
