@@ -5,4 +5,4 @@ export enum WebRTCEnum {
   HEADPHONES = 'headphones',
 }
 
-export type WebRTC = keyof typeof WebRTCEnum
+export type WebRTCKinds = keyof typeof WebRTCEnum

@@ -14,6 +14,11 @@ export type MessageAttachment = {
   nsfw: boolean
 }
 
+export type MessageCall = {
+  wasAnswered?: boolean
+  endedAt?: number
+}
+
 export type ConversationMessageType =
   | 'text'
   | 'file'
@@ -23,6 +28,7 @@ export type ConversationMessageType =
   | 'string'
   | 'member_join'
   | 'member_leave'
+  | 'call'
 
 export type ConversationMessage = {
   id: string
@@ -34,9 +40,11 @@ export type ConversationMessage = {
   glyph?: MessageGlyph
   attachments: MessageAttachment[]
   reactions: { [key: string]: string[] }
-  payload: any
+  payload?: any
   replyToId?: string
   members?: string[]
+  lastEditedAt?: number
+  call?: MessageCall
 }
 
 export type ConversationMessagePayload = Omit<
@@ -56,6 +64,16 @@ export type MessageReactionPayload = {
   messageId: string
   reaction: string
   remove?: boolean
+}
+
+export type MessageEditPayload = {
+  conversationId: string
+  messageId: string
+  body: string
+}
+
+export type MessageEdit = MessageEditPayload & {
+  lastEditedAt: number
 }
 
 export type Conversation = {

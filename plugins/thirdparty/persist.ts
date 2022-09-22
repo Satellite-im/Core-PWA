@@ -34,6 +34,7 @@ const commonProperties = [
   'ui.editMessage',
   'chat.files',
   'chat.countError',
+  'chat.activeUploadChats',
   'groups.inviteSubscription',
   'groups.groupSubscriptions',
   'ui.modals',
@@ -43,11 +44,12 @@ const commonProperties = [
   'conversation.participants',
   'files',
   'ui.callHeight',
+  'accounts.phrase',
+  'ui.quickProfile'
 ]
 
 const propertiesNoStorePin = [
   'accounts.pin',
-  'accounts.mnemonic',
   'accounts.locked',
   'accounts.error',
   'accounts.loading',

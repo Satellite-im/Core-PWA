@@ -3,6 +3,7 @@ import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
 import { Alert } from '~/libraries/ui/Alerts'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -22,6 +23,7 @@ export enum ModalWindows {
   USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
 }
 
 export interface EnhancerInfo {
@@ -70,14 +72,18 @@ export interface ContextMenuItem {
   type?: ContextMenuItemTypes
 }
 
+export type Position = {
+  x: number
+  y: number
+}
+
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile: object | boolean
+  quickProfile?: { user: User; position: Position }
   userProfile: object
   notifications: Alert[]
   contextMenuPosition: object
-  quickProfilePosition: object
   settingsRoute: SettingsRoutes
   showSearchResult: boolean
   showSidebar: boolean
@@ -109,9 +115,4 @@ export interface UIState {
   chatImageOverlay?: MessageAttachment & { dataURL: string }
   isMobileNavVisible: boolean
   callHeight: string
-}
-
-export type Position = {
-  x: number
-  y: number
 }

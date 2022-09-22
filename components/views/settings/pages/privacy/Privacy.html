@@ -1,16 +1,16 @@
 <SettingsPage>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyText as="h2"> {{ $t('pages.privacy.title') }} </TypographyText>
-      <TypographyText color="dark">
-        {{ $t('pages.privacy.subtitle') }}
-      </TypographyText>
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsHeader>
+    {{ $t('pages.privacy.title') }}
+    <template #subheading> {{ $t('pages.privacy.subtitle') }} </template>
+  </SettingsHeader>
+
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.privacy.permissions.title')"
   />
+  <TypographyText v-if="!permissions.length" color="danger">
+    {{ $t('pages.privacy.update') }}
+  </TypographyText>
   <SettingsSection>
     <SettingsUnit
       v-for="perm in permissions"
@@ -38,12 +38,12 @@
     :value="$t('pages.privacy.filesharing')"
   />
   <SettingsSection>
-    <SettingsUnit
+    <!-- <SettingsUnit
       :title="$t('pages.privacy.embeds.title')"
       :text="$t('pages.privacy.embeds.subtitle')"
     >
       <InteractablesSwitch v-model="embeddedLinks" />
-    </SettingsUnit>
+    </SettingsUnit> -->
     <SettingsUnit
       :title="$t('pages.privacy.consentScan.title')"
       :text="$t('pages.privacy.consentScan.subtitle')"
@@ -65,19 +65,19 @@
       :text="$t('pages.privacy.register.subtitle')"
     >
       <InteractablesSwitch isLocked v-model="registry" />
-    </SettingsUnit>
+    </SettingsUnit>-->
     <SettingsUnit
       :title="$t('pages.privacy.pin.title')"
       :text="$t('pages.privacy.pin.subtitle')"
     >
       <InteractablesSwitch v-model="storePin" />
-    </SettingsUnit> -->
-    <SettingsUnit
+    </SettingsUnit>
+    <!-- <SettingsUnit
       :title="$t('pages.privacy.activity.title')"
       :text="$t('pages.privacy.activity.subtitle')"
     >
       <InteractablesSwitch v-model="displayCurrentActivity" />
-    </SettingsUnit>
+    </SettingsUnit> -->
   </SettingsSection>
 
   <!-- <SettingsSection>

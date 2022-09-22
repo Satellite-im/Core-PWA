@@ -6,12 +6,7 @@ import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    toggleModal: (modalName: string) => void
-  }
-}
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'Global',
@@ -21,14 +16,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState([
-      'ui',
-      'media',
-      'conversation',
-      'files',
-      'settings',
-      'accounts',
-    ]),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      media: (state) => (state as RootState).media,
+      files: (state) => (state as RootState).files,
+      settings: (state) => (state as RootState).settings,
+      isNewAccount: (state) => (state as RootState).accounts.isNewAccount,
+    }),
     ModalWindows: () => ModalWindows,
     incomingCall(): WebRTCIncomingCall | null {
       return this.webrtc.incomingCall
@@ -81,6 +75,19 @@ export default Vue.extend({
 
     const { audioInput, videoInput } = this.settings
     this.updateWebRTCState({ audioInput, videoInput })
+
+    const routeCheck = (conversationId: string) => {
+      if (conversationId === this.$route.params.id) {
+        this.$router.push(this.$device.isMobile ? `/mobile/chat` : `/friends`)
+      }
+    }
+
+    iridium.friends.on('routeCheck', (conversationId: string) =>
+      routeCheck(conversationId),
+    )
+    iridium.chat.on('routeCheck', (conversationId: string) =>
+      routeCheck(conversationId),
+    )
   },
   methods: {
     /**
@@ -88,7 +95,7 @@ export default Vue.extend({
      * @description
      * @example
      */
-    toggleModal(modalName: keyof ModalWindows): void {
+    toggleModal(modalName: ModalWindows): void {
       this.$store.commit('ui/toggleModal', {
         name: modalName,
         state: !this.ui.modals[modalName],

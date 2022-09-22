@@ -12,8 +12,8 @@
     <div class="message-replies">
       <Message
         v-for="item in replyItems"
-        :message="item.message"
         :key="item.message.id"
+        :item="item"
         :showHeader="!item.isSameAuthor"
         hideReplyAction
       />

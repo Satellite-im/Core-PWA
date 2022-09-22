@@ -6,6 +6,8 @@
 
 #### Release Site: [Satellite.one](https://satellite.one)
 
+#### Bugs and Feature Requests: [issues.satellite.im](https://issues.satellite.im)
+
 # Running
 
 ## Environment
@@ -55,6 +57,8 @@ if you want to run a specific test you can also use
 
 Please lint your code before submitting. `yarn lint`. Lints must pass before submitting a PR.
 Please document all new methods and files.
+
+If you want to report any issues or suggest any feature requests please submit those [here](https://issues.satellite.im)
 
 # Contributors
 

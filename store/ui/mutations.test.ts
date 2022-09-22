@@ -144,6 +144,7 @@ describe('mutations', () => {
     },
   }
   const initialState = {
+    callHeight: 'auto',
     isMobileNavVisible: false,
     contextMenuStatus: false,
     showSidebar: true,
@@ -396,25 +397,6 @@ describe('mutations', () => {
     }
     mutations.default.setContextMenuPosition(localizedState, object)
     expect(localizedState.contextMenuPosition).toMatchObject(object)
-  })
-
-  test('setQuickProfilePosition', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      x: 4,
-      y: 2,
-    }
-    mutations.default.setQuickProfilePosition(localizedState, object)
-    expect(localizedState.quickProfilePosition).toMatchObject(object)
-  })
-
-  test('quickProfile', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      name: 'John',
-    }
-    mutations.default.quickProfile(localizedState, object)
-    expect(localizedState.quickProfile).toMatchObject(object)
   })
 
   test('setUserProfile', () => {
@@ -1217,5 +1199,19 @@ describe('mutations', () => {
       to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
       type: 'group',
     })
+  })
+
+  test('setCallHeight', () => {
+    const localizedState = { ...initialState }
+    const argument = '12'
+    mutations.default.setCallHeight(localizedState, argument)
+    expect(localizedState.callHeight).toEqual(argument)
+  })
+
+  test('setCallHeight with number', () => {
+    const localizedState = { ...initialState }
+    const argument = 12 // Does not have to be string
+    mutations.default.setCallHeight(localizedState, argument)
+    expect(localizedState.callHeight).toEqual(argument)
   })
 })

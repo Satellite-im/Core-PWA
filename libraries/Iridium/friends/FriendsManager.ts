@@ -47,7 +47,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
   private loggerTag = 'iridium/friends'
 
-  async init() {
+  async start() {
     if (!iridium.connector) {
       throw new Error('cannot initialize friends, no iridium connector')
     }
@@ -159,6 +159,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   private async onFriendsAnnounce(message: IridiumFriendPubsub) {
     const { from, payload } = message
     const { to, status } = payload.body
+    logger.info(this.loggerTag, 'friends announce', {
+      to,
+      from,
+      status,
+      payload,
+    })
     if (from === iridium.id) {
       return
     }
@@ -170,17 +176,18 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     const request = await this.getRequest(from).catch(() => undefined)
     let user = iridium.users.getUser(payload.body.user.did) || payload.body.user
-    if (!user) {
+    if (!user?.did) {
       ;[user] = await iridium.users.searchPeer(payload.body.user.did)
     }
+    if (!user?.did) return
     if (!request && status === 'pending') {
       await this.requestCreate(user, true)
     } else if (request && status === 'accepted') {
-      await this.requestAccept(from)
+      await this.requestAccept(from, true)
     } else if (request && status === 'rejected') {
-      await this.requestReject(from)
+      await this.requestReject(from, true)
     } else if (status === 'removed') {
-      await this.friendRemove(from)
+      await this.friendRemove(from, true)
     }
   }
 
@@ -268,7 +275,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @param incoming boolean (required)
    * @returns Promise<void>
    */
-  async requestCreate(user: User, incoming: boolean): Promise<void> {
+  async requestCreate(user: User, incoming: boolean = false): Promise<void> {
     const did = didUtils.didString(user.did)
     if (this.isFriend(did)) {
       logger.error(this.loggerTag, 'already a friend', { did })
@@ -276,7 +283,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
     if (this.hasRequest(did)) {
       logger.error(this.loggerTag, 'request already exists')
-      return
+      throw new Error(FriendsError.REQUEST_ALREADY_SENT)
     }
 
     if (!iridium.connector?.p2p.hasPeer(did)) {
@@ -297,13 +304,12 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       at: Date.now(),
     }
 
-    this.state.requests = {
-      ...this.state.requests,
-      [did]: request,
-    }
+    Vue.set(this.state.requests, did, request)
     await this.set(`/requests/${did}`, request)
+    iridium.users.setUser(did, user)
     logger.info(this.loggerTag, 'friend request created', {
       did,
+      incoming,
       request,
     })
     logger.info('iridium/friends', 'saving friend request', {
@@ -312,7 +318,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     })
 
     // Announce to the remote user
-    if (did !== iridium.id) {
+    if (!incoming) {
       const profile = iridium.profile.state
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
@@ -331,8 +337,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         did,
         payload,
       })
-
-      iridium.users.setUser(did, user)
 
       const buildNotification: Exclude<Notification, 'id'> = {
         fromName: user.name,
@@ -354,28 +358,30 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @param did - IridiumPeerIdentifier (required)
    * @returns Promise<void>
    */
-  async requestReject(did: IridiumPeerIdentifier): Promise<void> {
+  async requestReject(
+    did: IridiumPeerIdentifier,
+    incoming: boolean = false,
+  ): Promise<void> {
     const request = await this.getRequest(did)
     if (!request) {
       logger.error(this.loggerTag, 'request not found')
       throw new Error(FriendsError.REQUEST_NOT_FOUND)
     }
 
-    const id = didUtils.didString(did)
-    this.state.requests = Object.keys(this.state.requests)
-      .filter((key) => key !== id)
-      .reduce((acc, key: string) => {
-        acc[key] = this.state.requests[key]
-        return acc
-      }, {} as { [key: string]: FriendRequest })
+    Vue.delete(this.state.requests, didUtils.didString(did))
     await this.set(`/requests`, this.state.requests)
+    if (!iridium.chat.isUserInOtherGroups(didUtils.didString(did))) {
+      // do not set incoming to 'incoming' since the user will be removed on the other side by the requestReject event
+      iridium.users.userRemove(did, true)
+    }
     logger.info(this.loggerTag, 'request rejected', {
       did,
       request,
+      incoming,
     })
 
     // Announce to the remote user
-    if (didUtils.didString(did) !== iridium.id) {
+    if (!incoming) {
       const profile = await iridium.profile?.get()
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
@@ -403,7 +409,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @param did - IridiumPeerIdentifier (required)
    * @returns Promise<void>
    */
-  async requestAccept(id: IridiumPeerIdentifier): Promise<void> {
+  async requestAccept(
+    id: IridiumPeerIdentifier,
+    incoming: boolean = false,
+  ): Promise<void> {
     const did = didUtils.didString(id)
     if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
@@ -447,21 +456,16 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     request.status = 'accepted'
-    delete this.state.requests[did]
     this.state.friends = [...this.state.friends, did]
-    this.state.requests = Object.keys(this.state.requests)
-      .filter((key) => key !== did)
-      .reduce((acc, key: string) => {
-        acc[key] = this.state.requests[key]
-        return acc
-      }, {} as { [key: string]: FriendRequest })
+    Vue.delete(this.state.requests, did)
+
     await this.set(`/friends`, this.state.friends)
     await this.set(`/requests`, this.state.requests)
 
-    logger.info(this.loggerTag, 'request accepted', { did, request })
+    logger.info(this.loggerTag, 'request accepted', { did, request, incoming })
 
     // Announce to the remote user
-    if (didUtils.didString(did) !== iridium.id) {
+    if (!incoming) {
       const profile = iridium.profile.state
       if (!profile) {
         logger.error(this.loggerTag, 'network error')
@@ -490,7 +494,19 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @param did - IridiumPeerIdentifier (required)
    * @returns Promise<void>
    */
-  async friendRemove(pid: IridiumPeerIdentifier): Promise<void> {
+  async friendRemove(
+    pid: IridiumPeerIdentifier,
+    incoming: boolean = false,
+  ): Promise<void> {
+    this.emit(
+      'routeCheck',
+      iridium.chat.directConversationIdFromDid(didUtils.didString(pid)),
+    )
+    // TODO: update when group calls are implemented
+    if (iridium.webRTC.state.activeCall?.did === pid) {
+      await iridium.webRTC.hangUp()
+    }
+
     const did = didUtils.didString(pid)
     if (!iridium.connector) {
       logger.error(this.loggerTag, 'network error')
@@ -512,14 +528,18 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
     this.state.friends = this.state.friends.filter((id) => id !== did)
     await this.set(`/friends`, this.state.friends)
+    if (!iridium.chat.isUserInOtherGroups(did)) {
+      // do not set incoming to 'incoming' since the user will be removed on the other side by the friendRemove event
+      iridium.users.userRemove(did, true)
+    }
     const id = iridium.chat.directConversationIdFromDid(did)
     if (id) {
       iridium.chat.deleteConversation(id)
     }
-    logger.info(this.loggerTag, 'friend removed', { did })
+    logger.info(this.loggerTag, 'friend removed', { did, incoming })
 
     // Announce to the remote user
-    if (did !== iridium.id) {
+    if (!incoming) {
       const payload: IridiumFriendEvent = {
         to: did,
         status: 'removed',

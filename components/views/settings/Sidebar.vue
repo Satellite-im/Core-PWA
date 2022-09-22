@@ -107,36 +107,60 @@ export default Vue.extend({
 .menu {
   overflow-y: auto;
   &:extend(.no-select);
-  padding: 8px;
+  background: @semitransparent-dark-gradient;
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
 
   .menu-label {
     &:extend(.font-muted);
+    font-family: @heading-font;
+    font-size: @font-size-sm;
+    margin-bottom: 0.25rem;
   }
 
   .menu-list {
-    margin-bottom: @normal-spacing;
-
     li {
-      &:hover {
-        &:extend(.background-semitransparent-light);
-      }
-      a {
-        display: block;
-        padding: 0.5em 0.75em;
-        -webkit-user-drag: none;
-        &:extend(.no-select);
-        &:extend(.font-primary);
-
+      @media only screen and (min-width: @small-breakpoint) {
         &:hover {
           &:extend(.background-semitransparent-light);
-          &:extend(.font-primary);
         }
-        &.active {
-          &:extend(.background-flair-gradient);
-          &:extend(.glow-flair);
+      }
+
+      a {
+        display: block;
+        -webkit-user-drag: none;
+        text-decoration: none;
+        padding: 0.5em 0;
+        &:extend(.no-select);
+        &:extend(.font-primary);
+        &:extend(.round-corners);
+
+        @media only screen and (min-width: @mobile-breakpoint) {
+          padding: 0.5em 0.75em;
+
+          &:hover {
+            .background-semitransparent-light();
+            .font-primary();
+          }
+
+          &.active {
+            .background-flair-gradient();
+            .glow-flair();
+          }
+        }
+
+        @media only screen and (max-width: @mobile-breakpoint) {
+          &:active {
+            opacity: 0.5;
+          }
         }
       }
     }
+  }
+
+  @media only screen and (max-width: @mobile-breakpoint) {
+    background: none;
   }
 }
 </style>

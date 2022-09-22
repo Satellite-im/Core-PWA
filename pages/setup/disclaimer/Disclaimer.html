@@ -15,14 +15,16 @@
       :loading="isLoading"
     />
     <InteractablesButton
-      data-cy="create-account-button"
+      data-cy="connect-wallet-button"
       @click="connectAccount"
       :text="$t('pages.disclaimer.connect')"
+      disabled
     />
     <InteractablesButton
       data-cy="import-account-button"
       @click="importAccount"
       :text="$t('pages.disclaimer.import')"
+      disabled
     />
   </div>
 </div>

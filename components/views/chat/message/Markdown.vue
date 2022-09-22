@@ -1,5 +1,5 @@
 <template>
-  <div ref="message-row" v-html="text" />
+  <span ref="message-row" v-html="text" />
 </template>
 
 <script lang="ts">

@@ -16,11 +16,10 @@
             <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
-        <SidebarList
-          class="mobile-list"
-          :filter="filter"
-          @slideNext="swiper.slideNext()"
-        />
+        <div v-show="$config.feedbackUrl" class="banner-wrapper">
+          <EarlyAccessBanner />
+        </div>
+        <SidebarList :filter="filter" @slideNext="swiper.slideNext()" />
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
@@ -44,11 +43,13 @@ import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
 import 'swiper/css'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import EarlyAccessBanner from '~/components/ui/EarlyAccessBanner/EarlyAccessBanner.vue'
 
 export default Vue.extend({
   name: 'MobileChat',
   components: {
     MenuIcon,
+    EarlyAccessBanner,
   },
   layout: 'mobile',
   data: () => ({
@@ -132,8 +133,8 @@ export default Vue.extend({
     .search-container {
       display: flex;
       align-items: center;
-      gap: @normal-spacing;
-      padding: @normal-spacing @normal-spacing 0;
+      gap: 16px;
+      padding: 16px;
 
       .search {
         flex: 1;
@@ -142,9 +143,8 @@ export default Vue.extend({
         height: fit-content;
       }
     }
-    .mobile-list {
-      padding: @normal-spacing;
-      height: 100%;
+    .banner-wrapper {
+      padding: 0 16px 8px;
     }
   }
 }

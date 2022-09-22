@@ -1,6 +1,6 @@
 {
   "name": "Core-PWA",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "yarn install --check-files && nuxi dev",
@@ -77,7 +77,6 @@
     "simple-markdown": "^0.7.3",
     "simple-peer": "^9.11.1",
     "skaler": "^1.0.7",
-    "streamsaver": "^2.0.6",
     "swiper": "^8.0.7",
     "uuid": "^8.3.2",
     "v-click-outside": "^3.1.2",
@@ -105,7 +104,6 @@
     "@types/mousetrap": "^1.6.9",
     "@types/node": "^16.11.26",
     "@types/simple-peer": "^9.11.4",
-    "@types/streamsaver": "^2.0.1",
     "@types/uuid": "^8.3.4",
     "@types/vue-markdown": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^5.13.0",

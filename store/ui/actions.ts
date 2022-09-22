@@ -1,10 +1,9 @@
 import Mousetrap from 'mousetrap'
-import { Position, SettingsRoutes, UIState } from './types'
+import { Position, UIState, ModalWindows } from './types'
 import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
-import { getFullUserInfoFromState } from '~/utilities/Messaging'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -63,7 +62,7 @@ export default {
    * @description Unbinds all current keybindings with Mousetrap
    * @example destroyed (){ clearKeybinds() }
    */
-  async clearKeybinds({ dispatch }: ActionsArguments<UIState>) {
+  async clearKeybinds({}: ActionsArguments<UIState>) {
     Mousetrap.reset()
   },
   async setChatbarFocus({ dispatch }: ActionsArguments<UIState>) {
@@ -88,22 +87,6 @@ export default {
         { root: true },
       )
   },
-  showQuickProfile(
-    { commit, state, rootState }: ActionsArguments<UIState>,
-    payload: { textilePublicKey: string; position: Position },
-  ) {
-    if (!payload?.textilePublicKey || !payload?.position) {
-      return
-    }
-
-    const selectedUser = getFullUserInfoFromState(
-      payload.textilePublicKey,
-      rootState,
-    )
-
-    commit('setQuickProfilePosition', payload.position)
-    commit('quickProfile', selectedUser)
-  },
   async showProfile({ commit }: ActionsArguments<UIState>, user: Friend) {
     commit('toggleModal', {
       name: 'userProfile',
@@ -112,13 +95,14 @@ export default {
     commit('setUserProfile', user)
   },
 
-  displayConsentSettings({ commit }: ActionsArguments<UIState>) {
-    this.$toast.error(this.$i18n.t('pages.files.errors.enable_consent'), {
-      duration: 3000,
-    })
-    if (this.$device.isMobile) {
-      this.$router.push('/mobile/settings')
-    }
-    commit('setSettingsRoute', SettingsRoutes.PRIVACY_AND_PERMISSIONS)
+  displayConsentSettings({ commit, state }: ActionsArguments<UIState>) {
+    commit(
+      'ui/toggleModal',
+      {
+        name: ModalWindows.CONSENT_SCAN_CONFIRMATION,
+        state: !state.modals[ModalWindows.CONSENT_SCAN_CONFIRMATION],
+      },
+      { root: true },
+    )
   },
 }

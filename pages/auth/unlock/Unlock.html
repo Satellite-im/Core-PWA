@@ -3,7 +3,7 @@
     <template v-if="step === 'signup'">
       <UiInfoButton class="info-button">
         <template #title> {{ $t('pages.unlock.create') }} </template>
-        <template #subtitle> {{ pinDescription }} </template>
+        <template #body> {{ pinDescription }} </template>
       </UiInfoButton>
     </template>
 
@@ -25,22 +25,28 @@
         <chevron-right-icon size="1x" v-else />
       </InteractablesInput>
     </div>
+
     <InteractablesSwitch
       v-model="storePin"
       :label="$t('pages.unlock.store_pin')"
     />
+
     <br />
+
     <button
       v-if="step === 'login'"
       class="delete-link font-size-sm"
-      @click="clearAndReset"
+      @click="confirmClearAccountModalVisible = true"
     >
       {{ $t('pages.unlock.delete_account_label') }}
     </button>
+
     <!-- <InteractablesRealm /> -->
+
     <TypographyText v-if="!isChrome" color="danger" style="max-width: 600px">
       {{ $t('pages.unlock.browser_warning') }}
     </TypographyText>
+
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
         class="random-user-btn"
@@ -50,6 +56,22 @@
       /></InteractablesButton>
     </div>
   </div>
+
   <UiVersion name version @click="toggleChangelogVisibility" />
-  <UiUpdateModal v-if="ui.modals.changelog" />
+
+  <UiModal v-if="ui.modals.changelog">
+    <UiUpdateModal />
+  </UiModal>
+
+  <UiConfirmationModal
+    :show-modal="confirmClearAccountModalVisible"
+    @close="() => confirmClearAccountModalVisible = false"
+    @confirm="clearAccount"
+    show-confirm-button
+  >
+    <template #title>{{ $t('pages.unlock.confirm_clear_account') }}</template>
+    <template #body
+      >{{ $t('pages.unlock.confirm_clear_account_description') }}</template
+    >
+  </UiConfirmationModal>
 </div>

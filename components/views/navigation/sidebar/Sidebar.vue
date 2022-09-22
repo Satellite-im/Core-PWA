@@ -2,7 +2,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { UsersIcon, PlusIcon, FolderIcon } from 'satellite-lucide-icons'
+import {
+  UsersIcon,
+  PlusIcon,
+  FolderIcon,
+  PackageIcon,
+} from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
@@ -10,6 +15,7 @@ export default Vue.extend({
     UsersIcon,
     PlusIcon,
     FolderIcon,
+    PackageIcon,
   },
   data() {
     return {

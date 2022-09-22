@@ -44,6 +44,7 @@ Object {
   "modals": Object {
     "callToAction": false,
     "changelog": false,
+    "consentScanConfirmation": false,
     "createServer": false,
     "error": false,
     "errorNetwork": Object {
@@ -60,11 +61,6 @@ Object {
   },
   "mostEmojiUsed": Array [],
   "notifications": Array [],
-  "quickProfile": false,
-  "quickProfilePosition": Object {
-    "x": 0,
-    "y": 0,
-  },
   "recentGlyphs": Array [],
   "settingReaction": Object {
     "groupID": null,

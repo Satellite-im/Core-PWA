@@ -54,16 +54,15 @@ export function conversationHooks() {
     },
   )
 
-  const allParticipantsAlphaSorted: ComputedRef<(User | undefined)[]> =
-    computed(() => {
-      if (!conversation.value) {
-        return []
-      }
-      const arr = conversation.value.participants.map((p) =>
-        managers.users.getUser(p),
-      ) as User[]
-      return arr.sort((a, b) => a.name.localeCompare(b.name))
-    })
+  const allParticipantsAlphaSorted: ComputedRef<User[]> = computed(() => {
+    if (!conversation.value) {
+      return []
+    }
+    const arr = conversation.value.participants
+      .map((p) => managers.users.getUser(p))
+      .filter((item): item is User => Boolean(item))
+    return arr.sort((a, b) => a?.name?.localeCompare(b?.name))
+  })
 
   const enableRTC: ComputedRef<boolean> = computed(() => {
     return Boolean(
@@ -101,6 +100,15 @@ export async function call({
   if (!enableRTC.value) {
     return
   }
+
+  await iridium.chat?.sendMessage({
+    conversationId,
+    type: 'call',
+    at: Date.now(),
+    attachments: [],
+    call: {},
+  })
+
   // todo - refactor to accept multiple recipients for group calls
   await iridium.webRTC
     .call({
@@ -108,7 +116,7 @@ export async function call({
       conversationId,
       kinds,
     })
-    .catch((e) => $nuxt.$toast.error($nuxt.i18n.t(e.message)))
+    .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
 }
 
 export default function useConversation() {

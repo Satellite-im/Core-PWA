@@ -34,6 +34,12 @@
       padding: 0 16px 8px;
     }
 
+    .banner-wrapper {
+      background: @background-hover;
+      margin: 0 16px;
+      &:extend(.round-corners);
+    }
+
     .quick-toggle {
       align-self: flex-end;
       position: relative;
@@ -46,10 +52,6 @@
         border-radius: 50%;
         background-color: @foreground-alt;
       }
-    }
-
-    .conversation-list {
-      padding: 0 16px;
     }
 
     .users {

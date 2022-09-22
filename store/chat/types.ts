@@ -24,7 +24,8 @@ export interface ChatFileUpload {
 export interface ChatState {
   replies: ChatReply[]
   chatTexts: ChatText[]
-  files: { [key: Conversation['id']]: ChatFileUpload[] }
+  files: { [key: Conversation['id']]: ChatFileUpload[] | undefined }
+  activeUploadChats: Conversation['id'][]
   countError: boolean
   currentChat: ICurrentChat
   draftMessages: { [key: Conversation['id']]: string }

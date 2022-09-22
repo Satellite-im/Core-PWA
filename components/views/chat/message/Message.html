@@ -3,7 +3,7 @@
   <div
     v-else
     class="chat-message"
-    :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo }"
+    :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo, 'is-editing': isEditing }"
   >
     <!-- todo - add user options context menu -->
     <template v-if="showHeader">
@@ -15,33 +15,37 @@
         />
       </div>
       <div class="header">
-        <span :click="showQuickProfile">
-          <UiUserName :username="author.name" />
-        </span>
+        <button @click="showQuickProfile">
+          <TypographyText as="h4"> {{ author.name }} </TypographyText>
+        </button>
       </div>
     </template>
     <!-- todo end -->
-    <div class="timestamp">{{ timestamp }}</div>
+    <div v-if="message.type !== 'call'" class="timestamp">{{ timestamp }}</div>
     <UiContextMenu class="body" :items="contextMenuValues">
       <MessageMarkdown
-        v-if="message.body"
+        v-if="message.body && !isEditing"
         :text="markdownToHtml"
         class="markdown"
         :class="{ bigmoji: containsOnlyEmoji }"
         data-cy="chat-message"
       />
-      <MessageGlyph v-else-if="message.glyph" :glyph="message.glyph" />
-      <!-- <span class="status editing" v-if="message.editingAt">
-        <UiLoadersSpinner spinning />
-      </span>
+      <MessageEdit
+        v-if="isEditing"
+        :message="message"
+        @commitMessage="saveMessage"
+        @cancelMessage="cancelMessage"
+      />
       <span
+        v-else-if="message.lastEditedAt"
         class="status edited"
         data-cy="message-edited"
-        v-else-if="message.editedAt"
       >
         ({{$t('ui.edited')}})
-      </span> -->
+      </span>
+      <MessageGlyph v-else-if="message.glyph" :glyph="message.glyph" />
       <MessageActions
+        v-if="message.type !== 'call'"
         :setReplyChatbarMessage="setReplyChatbarMessage"
         :emojiReaction="emojiReaction"
         :editMessage="editMessage"
@@ -49,6 +53,16 @@
         :hideReply="hideReplyAction"
       />
     </UiContextMenu>
+    <MessageCallDirection
+      v-if="message.type === 'call'"
+      :message="message"
+      :isLastCallMessage="item.isLastCallMessage"
+    />
+    <MessageCall
+      v-if="message.type === 'call'"
+      :message="message"
+      :isLastCallMessage="item.isLastCallMessage"
+    />
     <MessageAttachments
       v-if="message.attachments.length"
       class="attachments"
@@ -56,7 +70,7 @@
     />
     <div class="footer">
       <MessageReactions :message="message" :emojiReaction="emojiReaction" />
-      <MessageReplies :replies="replies" v-if="replies.length" />
+      <MessageReplies :replies="replies" v-if="replies?.length" />
     </div>
   </div>
 </div>

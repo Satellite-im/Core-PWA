@@ -39,9 +39,11 @@ export default class SettingsManager extends Emitter {
     this.state = initialState
   }
 
-  async init() {
+  async start() {
     await this.fetch()
   }
+
+  async stop() {}
 
   private async fetch() {
     const fetched = await this.get()

@@ -2,6 +2,22 @@
   <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
+    <UiModal
+      v-if="ui.modals.consentScanConfirmation"
+      @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
+    >
+      <ConsentScanConfirmation
+        @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
+      />
+    </UiModal>
+    <UiModal
+      v-if="ui.modals.callToAction"
+      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+    >
+      <CallToAction
+        :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+      />
+    </UiModal>
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
     <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
       <WalletPopup />
@@ -59,29 +75,22 @@
       />
     </UiModal>
     <UiModal
-      v-if="ui.modals.callToAction"
-      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <CallToAction
-        :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      />
-    </UiModal>
-    <UiModal
       v-if="ui.modals.renameFile"
       @close="toggleModal(ModalWindows.RENAME_FILE)"
     >
       <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
-    <UiUpdateModal
-      v-if="ui.modals.changelog"
-      @close="() => toggleModal(ModalWindows.CHANGELOG)"
-    />
+    <UiModal v-if="ui.modals.changelog">
+      <UiUpdateModal />
+    </UiModal>
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
     <FilesView v-if="files.preview" />
-    <UiWelcomeModal v-if="accounts.isNewAccount" />
+    <UiModal v-if="isNewAccount">
+      <UiWelcomeModal />
+    </UiModal>
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
+    <InteractablesQuickProfile v-if="ui.quickProfile" />
   </transition>
   <UiPip
     v-if="$device.isDesktop && isBackgroundCall"

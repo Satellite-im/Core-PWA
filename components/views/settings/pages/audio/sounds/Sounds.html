@@ -2,34 +2,36 @@
   <TypographyText as="h3">
     {{ $t('pages.settings.notifications.sounds.title') }}
   </TypographyText>
-  <SettingsPagesAudioSoundsItem
-    :value="sounds[Sounds.NEW_MESSAGE]"
-    @toggle="toggleSound(Sounds.NEW_MESSAGE, $event)"
-    :title="$t('pages.settings.notifications.sounds.message')"
-  />
-  <SettingsPagesAudioSoundsItem
-    :value="sounds[Sounds.CALL]"
-    @toggle="toggleSound(Sounds.CALL, $event)"
-    :title="$t('pages.settings.notifications.sounds.call')"
-  />
-  <SettingsPagesAudioSoundsItem
-    :value="sounds[Sounds.MUTE]"
-    @toggle="toggleSounds([Sounds.MUTE, Sounds.UNMUTE], $event)"
-    :title="$t('pages.settings.notifications.sounds.mute')"
-  />
-  <SettingsPagesAudioSoundsItem
-    :value="sounds[Sounds.DEAFEN]"
-    @toggle="toggleSounds([Sounds.DEAFEN, Sounds.UNDEAFEN], $event)"
-    :title="$t('pages.settings.notifications.sounds.deafen')"
-  />
-  <SettingsPagesAudioSoundsItem
-    :value="sounds[Sounds.UPLOAD]"
-    @toggle="toggleSound(Sounds.UPLOAD, $event)"
-    :title="$t('pages.settings.notifications.sounds.upload')"
-  />
-  <SettingsPagesAudioSoundsItem
-    :value="sounds[Sounds.CONNECTED]"
-    @toggle="toggleSound(Sounds.CONNECTED, $event)"
-    :title="$t('pages.settings.notifications.sounds.connected')"
-  />
+  <div class="sounds-list">
+    <SettingsPagesAudioSoundsItem
+      :value="sounds[Sounds.NEW_MESSAGE]"
+      @toggle="toggleSound(Sounds.NEW_MESSAGE, $event)"
+      :title="$t('pages.settings.notifications.sounds.message')"
+    />
+    <SettingsPagesAudioSoundsItem
+      :value="sounds[Sounds.CALL]"
+      @toggle="toggleSound(Sounds.CALL, $event)"
+      :title="$t('pages.settings.notifications.sounds.call')"
+    />
+    <SettingsPagesAudioSoundsItem
+      :value="sounds[Sounds.MUTE]"
+      @toggle="toggleSounds([Sounds.MUTE, Sounds.UNMUTE], $event)"
+      :title="$t('pages.settings.notifications.sounds.mute')"
+    />
+    <SettingsPagesAudioSoundsItem
+      :value="sounds[Sounds.DEAFEN]"
+      @toggle="toggleSounds([Sounds.DEAFEN, Sounds.UNDEAFEN], $event)"
+      :title="$t('pages.settings.notifications.sounds.deafen')"
+    />
+    <SettingsPagesAudioSoundsItem
+      :value="sounds[Sounds.UPLOAD]"
+      @toggle="toggleSound(Sounds.UPLOAD, $event)"
+      :title="$t('pages.settings.notifications.sounds.upload')"
+    />
+    <SettingsPagesAudioSoundsItem
+      :value="sounds[Sounds.CONNECTED]"
+      @toggle="toggleSound(Sounds.CONNECTED, $event)"
+      :title="$t('pages.settings.notifications.sounds.connected')"
+    />
+  </div>
 </div>

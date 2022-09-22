@@ -38,9 +38,6 @@ body {
   overscroll-behavior: contain;
   caret-color: @flair-color;
   color: @body;
-}
-
-body {
   background: @background;
 }
 
@@ -106,6 +103,12 @@ hr {
 
 a {
   cursor: pointer;
+  color: @flair-color-secondary;
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
 }
 
 code {

@@ -1,4 +1,9 @@
 <SettingsPage>
+  <SettingsHeader>
+    {{$t('pages.settings.audio.pageTitle')}}
+    <template #subheading> {{$t('pages.settings.audio.subtitle')}} </template>
+  </SettingsHeader>
+
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.audio.title')"
@@ -25,6 +30,7 @@
     />
   </SettingsSection>
   <!-- Permission Granted Block -->
+
   <SettingsSection v-if="userHasGivenAudioAccess">
     <!-- Audio In -->
     <SettingsUnit
@@ -35,6 +41,15 @@
         v-model="selectedAudioInput"
         :options="audioInputs"
         :label="$t('pages.settings.audio.sources.input.title')"
+      />
+      <div class="meter-container">
+        <UiMeter :value="micLevel" :height="5" solid />
+      </div>
+      <InteractablesVolume
+        :value="audio.inputVolume"
+        direction="ltr"
+        plain
+        @change="inputVolumeControlValueChange"
       />
     </SettingsUnit>
     <!-- Audio Out -->
@@ -52,25 +67,6 @@
         v-if="!browserAllowsAudioOut"
         :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
       />
-    </SettingsUnit>
-  </SettingsSection>
-
-  <!--Audio Bitrate & Sample-->
-  <SettingsSection>
-    <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
-      <br />
-      <div class="meter-container">
-        <UiMeter :value="micLevel" :height="5" solid />
-      </div>
-      <InteractablesVolume
-        :value="audio.inputVolume"
-        direction="ltr"
-        plain
-        @change="inputVolumeControlValueChange"
-      />
-    </SettingsUnit>
-    <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
-      <br />
       <div class="meter-container">
         <UiMeter :value="0" :height="5" solid />
       </div>

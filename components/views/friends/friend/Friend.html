@@ -1,5 +1,5 @@
-<div class="friend" data-cy="friend">
-  <UiUserState :user="user" :src="src" />
+<UiContextMenu :items="contextMenuValues" class="friend" data-cy="friend">
+  <UiUserState :user="user" :src="src" :showStatus="showStatus" />
   <div class="description">
     <TypographyText
       color="light"
@@ -94,11 +94,12 @@
     >
       <message-square-icon size="1x" />
     </InteractablesButton>
-    <InteractablesButton
-      v-if="!loading"
-      v-tooltip.bottom="$t('friends.options')"
-    >
-      <more-vertical-icon size="1x" />
-    </InteractablesButton>
+    <!-- TODO: Re-enable after context-menu elements refactor -->
+    <!-- <InteractablesButton -->
+    <!-- v-if="!loading" -->
+    <!-- v-tooltip.bottom="$t('friends.options')" -->
+    <!-- > -->
+    <!-- <more-vertical-icon size="1x" /> -->
+    <!-- </InteractablesButton> -->
   </div>
-</div>
+</UiContextMenu>

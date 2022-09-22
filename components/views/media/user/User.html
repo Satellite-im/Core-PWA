@@ -56,7 +56,7 @@
     </TypographyTag>
 
     <div class="indicators" v-if="!isPending || isLocal">
-      <div class="indicator" data-cy="muted-indicator" v-if="!audioStream">
+      <div class="indicator" data-cy="muted-indicator" v-if="audioMuted">
         <mic-off-icon />
       </div>
     </div>

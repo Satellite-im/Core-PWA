@@ -29,10 +29,6 @@ export default Vue.extend({
       type: Object as PropType<User>,
       required: true,
     },
-    audioMuted: {
-      type: Boolean,
-      default: false,
-    },
     stream: {
       type: String,
       required: true,
@@ -59,6 +55,7 @@ export default Vue.extend({
       isTalking: false,
       audioStreamUtils: null as AudioStreamUtils | null,
       settings: iridium.settings.state,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
@@ -67,8 +64,8 @@ export default Vue.extend({
       video: (state) => (state as RootState).video,
     }),
     call(): Call | undefined {
-      if (!iridium.webRTC.state.activeCall?.callId) return
-      return iridium.webRTC.state.calls[iridium.webRTC.state.activeCall.callId]
+      if (!this.webrtc.activeCall?.callId) return
+      return this.webrtc.calls[this.webrtc.activeCall.callId]
     },
     streams(): CallPeerStreams | undefined {
       if (!this.user.did || !this.call) return
@@ -95,16 +92,25 @@ export default Vue.extend({
           !iridium.webRTC.state.callStartedAt,
       )
     },
+    audioMuted(): boolean {
+      return this.webrtc.streamMuted[this.user.did].audio
+    },
+    videoMuted(): boolean {
+      return this.webrtc.streamMuted[this.user.did].video
+    },
+    screenMuted(): boolean {
+      return this.webrtc.streamMuted[this.user.did].screen
+    },
     audioStream(): MediaStream | undefined {
-      if (this.isMuted(WebRTCEnum.AUDIO) || !this.call) return
+      if (this.audioMuted) return
       return this.streams?.audio
     },
     videoStream(): MediaStream | undefined {
-      if (this.isMuted(WebRTCEnum.VIDEO) || !this.call) return
+      if (this.videoMuted) return
       return this.streams?.video
     },
     screenStream(): MediaStream | undefined {
-      if (this.isMuted(WebRTCEnum.SCREEN) || !this.call) return undefined
+      if (this.screenMuted) return
       return this.streams?.screen
     },
     hasVideoOrScreen(): boolean {

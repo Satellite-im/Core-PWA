@@ -43,7 +43,6 @@ const Chatbar = Vue.extend({
         thr: ReturnType<typeof throttle>
         deb: ReturnType<typeof debounce>
       } | null,
-      activeUpload: false,
     }
   },
   computed: {
@@ -209,10 +208,17 @@ const Chatbar = Vue.extend({
       this.smartTypingStart()
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
+      if (!this.files.length) {
+        return []
+      }
       const conversationId = this.$route.params.id
-      this.activeUpload = true
+      this.$store.commit('chat/setActiveUploadChat', conversationId)
+      const files = this.files.map((a) => {
+        return { ...a }
+      })
+      this.$store.commit('chat/deleteFiles', conversationId)
       const attachments = await Promise.all(
-        this.files.map(async (upload, index) => {
+        files.map(async (upload, index) => {
           return await iridium.chat.addFile(
             { upload, conversationId },
             // {
@@ -227,7 +233,7 @@ const Chatbar = Vue.extend({
           )
         }),
       )
-      this.activeUpload = false
+      this.$store.commit('chat/removeActiveUploadChat', conversationId)
       return attachments.filter(notNull)
     },
     /**
@@ -237,22 +243,22 @@ const Chatbar = Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      if (this.text.length > this.$Config.chat.maxChars) {
+        return
+      }
+
       if (
-        (!this.files.length &&
-          (this.text.length > this.$Config.chat.maxChars ||
-            !this.text.trim().length ||
-            !this.isSubscribed)) ||
-        this.activeUpload
+        !this.files.length &&
+        (!this.text.trim().length || !this.isSubscribed)
       ) {
         return
       }
+
       const value = this.text
       this.text = ''
 
       const conversationId = this.$route.params.id
       const attachments = await this.uploadAttachments()
-
-      this.$store.commit('chat/deleteFiles', conversationId)
 
       const payload: ConversationMessagePayload = {
         conversationId,
@@ -301,6 +307,10 @@ const Chatbar = Vue.extend({
         .filter(notNull)
 
       if (files.length && this.$refs.upload) {
+        if (!this.consentToScan) {
+          this.$store.dispatch('ui/displayConsentSettings')
+          return
+        }
         ;(this.$refs.upload as ChatbarUploadRef).handleFile({
           target: { files },
         })

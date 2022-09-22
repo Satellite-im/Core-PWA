@@ -6,6 +6,7 @@ import {
 } from '@satellite-im/iridium'
 import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
+import Vue from 'vue'
 import iridium from '../IridiumManager'
 import {
   WebRTCState,
@@ -78,7 +79,7 @@ export default class WebRTCManager extends Emitter {
     return this.state.streamConstraints
   }
 
-  async init() {
+  async start() {
     if (!iridium.connector || !iridium.connector.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
     }
@@ -98,13 +99,19 @@ export default class WebRTCManager extends Emitter {
     this.wire.on('wire:message', this.onMessage.bind(this))
 
     // Initialize the Wire
-    await this.wire.init()
+    await this.wire.start()
 
     setInterval(() => {
       if (this.state.activeCall) {
         this.state.callTime = Date.now() - this.state.callStartedAt
       }
     }, 1000)
+  }
+
+  async stop() {
+    await Promise.all(
+      Object.values(this.state.calls).map(async (call) => call.destroy()),
+    )
   }
 
   private async onMessage({
@@ -314,18 +321,12 @@ export default class WebRTCManager extends Emitter {
       headphones?: boolean
     } = {},
   ) {
-    this.state.streamMuted = {
-      ...this.state.streamMuted,
-      [did]: {
-        audio: audio ?? this.state.streamMuted[did]?.audio ?? false,
-        video: video ?? this.state.streamMuted[did]?.video ?? false,
-        screen: screen ?? this.state.streamMuted[did]?.screen ?? false,
-        headphones:
-          headphones ?? this.state.streamMuted[did]?.headphones ?? false,
-      },
-    }
-
-    this.emit('streamMuted', { did, ...this.state.streamMuted[did] })
+    Vue.set(this.state.streamMuted, did, {
+      audio: audio ?? this.state.streamMuted[did]?.audio ?? true,
+      video: video ?? this.state.streamMuted[did]?.video ?? true,
+      screen: screen ?? this.state.streamMuted[did]?.screen ?? true,
+      headphones: headphones ?? this.state.streamMuted[did]?.headphones ?? true,
+    })
   }
 
   private createCall({
@@ -354,7 +355,6 @@ export default class WebRTCManager extends Emitter {
     this.state.calls = { ...this.state.calls, [callId]: call }
 
     this.setStreamMuted(iridium.id, {
-      audio: true,
       video: true,
       screen: true,
     })
@@ -430,7 +430,6 @@ export default class WebRTCManager extends Emitter {
       this.state.activeCall = { callId, did }
       this.state.callStartedAt = Date.now()
 
-      // TODO: wire this up to mute
       this.emit('callConnected', { callId, did })
 
       $Sounds.stopSounds([Sounds.CALL])
@@ -445,14 +444,25 @@ export default class WebRTCManager extends Emitter {
       callId?: string
       did: string
     }) => {
-      // It's not related the active call, so we don't reset the state
-      if (this.state.activeCall?.callId !== callId) return
+      const incomingCallId = this.state.incomingCall?.callId
+      if (incomingCallId && incomingCallId === callId) {
+        const incomingCall = this.state.calls[incomingCallId]
+        if (incomingCall) {
+          incomingCall.destroy()
+        }
+        this.state.incomingCall = null
+      }
 
-      this.state.incomingCall = null
+      // It's not related the active call, so we don't reset the state
+      const activeCallId = this.state.activeCall?.callId
+      if (!activeCallId || activeCallId !== callId) return
+      const activeCall = this.state.calls[activeCallId]
+      activeCall?.destroy()
       this.state.activeCall = null
       this.state.callStartedAt = 0
     }
     call.on('HANG_UP', onCallHangup)
+    call.on('REMOTE_HANG_UP', onCallHangup)
 
     const onCallTrack = async ({
       track,
@@ -575,7 +585,14 @@ export default class WebRTCManager extends Emitter {
     }
     call.on('LOCAL_TRACK_REMOVED', onLocalTrackRemoved)
 
-    const onStream = async ({ did, kind }: { did: string; kind?: string }) => {}
+    const onStream = async ({ kind }: { kind?: string }) => {
+      if (!kind) return
+
+      logger.log('webrtc', `stream ${kind}`)
+      this.setStreamMuted(iridium.id, {
+        [kind]: !!this.state.streamMuted[iridium.id]?.[kind],
+      })
+    }
     call.on('STREAM', onStream)
 
     const onAnswered = async ({ did }: { did: string }) => {
@@ -591,9 +608,12 @@ export default class WebRTCManager extends Emitter {
       callId?: string
       did: string
     }) => {
-      // Reset the state only if the event is related to the active call
-      if (callId === this.state.activeCall?.callId) {
+      if (!callId) return
+      if (callId === this.state.incomingCall?.callId) {
         this.state.incomingCall = null
+      }
+
+      if (callId === this.state.activeCall?.callId) {
         this.state.activeCall = null
         this.state.callStartedAt = 0
       }
@@ -659,6 +679,9 @@ export default class WebRTCManager extends Emitter {
     if (this.state.incomingCall) {
       this.state.calls[this.state.incomingCall.callId]?.destroy()
     }
+
+    this.state.incomingCall = null
+    this.state.activeCall = null
   }
 
   public async hangUp() {
@@ -757,10 +780,10 @@ export default class WebRTCManager extends Emitter {
   }
 
   public async mute({
-    kind = 'audio',
+    kind = WebRTCEnum.AUDIO,
     did = iridium.id,
   }: {
-    kind: string
+    kind: WebRTCEnum
     did?: string
   }) {
     if (!this.state.activeCall) return
@@ -773,7 +796,7 @@ export default class WebRTCManager extends Emitter {
     kind,
     did = iridium.id,
   }: {
-    kind: string
+    kind: WebRTCEnum
     did?: string
   }) {
     if (!this.state.activeCall) return

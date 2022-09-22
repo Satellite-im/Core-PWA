@@ -19,7 +19,7 @@ export default Vue.extend({
 .scale-loader {
   display: flex;
   span {
-    background-color: @white;
+    background-color: @body;
     width: 4px;
     height: 20px;
     margin: 2px;

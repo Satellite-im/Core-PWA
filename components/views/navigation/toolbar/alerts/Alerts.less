@@ -8,16 +8,20 @@
   top: 45px;
   left: 0;
   max-height: 50vh;
-  width: 25rem;
-  padding: @light-spacing @xlight-spacing;
+  width: 100%;
+  padding: @light-spacing;
   cursor: default;
-  overflow-y: scroll;
+  overflow-y: auto;
+  box-shadow: @ui-shadow;
   &:extend(.background-semitransparent-light);
   &:extend(.round-corners);
   &:extend(.bordered);
   &:extend(.blur);
 
   .header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     .subtitle {
       font-size: @micro-text-size !important;
       font-family: @primary-font;

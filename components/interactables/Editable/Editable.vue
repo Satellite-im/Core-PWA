@@ -354,15 +354,14 @@ export default Editable
   position: relative;
   overflow-y: scroll;
   font-family: @secondary-font;
-  font-size: @text-size;
   &:extend(.font-primary);
 
   .placeholder {
     color: @text-muted;
     position: absolute;
-    &:extend(.background-layer);
     &:extend(.no-select);
     &:extend(.ellipsis);
+    pointer-events: none;
   }
   .editable-input {
     width: 100%;

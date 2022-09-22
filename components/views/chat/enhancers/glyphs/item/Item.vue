@@ -1,7 +1,6 @@
 <template src="./Item.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapGetters } from 'vuex'
 import { Glyph } from '~/types/ui/glyph'
 import loadImg from '~/assets/img/glyphLoader.webp'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -35,7 +34,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('friends', ['findFriendByAddress']),
     getSrc(): string {
       return this.isLoaded ? this.src.replace('$1', 'small') : loadImg
     },
@@ -65,7 +63,6 @@ export default Vue.extend({
       await iridium.chat?.sendMessage({
         conversationId: id,
         type: 'glyph',
-        body: '',
         glyph: {
           packId: this.pack.id,
           src: this.src,

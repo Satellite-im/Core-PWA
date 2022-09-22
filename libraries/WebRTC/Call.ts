@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import Peer from 'simple-peer'
 import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
 import Emitter from './Emitter'
@@ -303,7 +304,6 @@ export class Call extends Emitter<CallEventListeners> {
    * @method createAudioStream
    * @description Create local audio stream and send it to remote peers
    * @param constraints Media stream constraints to apply
-   * @returns {Promise<void>}
    * @example
    * await call.createAudioStream()
    */
@@ -315,7 +315,7 @@ export class Call extends Emitter<CallEventListeners> {
     })
 
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -359,7 +359,7 @@ export class Call extends Emitter<CallEventListeners> {
       video: constraints || true,
     })
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -407,17 +407,11 @@ export class Call extends Emitter<CallEventListeners> {
     try {
       screenStream = await navigator.mediaDevices.getDisplayMedia()
     } catch (e) {
-      if (
-        e instanceof DOMException &&
-        e.message.includes(PERMISSION_DENIED_BY_SYSTEM)
-      ) {
-        throw new Error(WebRTCErrors.PERMISSION_DENIED)
-      }
-      return
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
     }
 
     if (!this.streams[iridium.id]) {
-      this.streams[iridium.id] = {}
+      Vue.set(this.streams, iridium.id, {})
     }
     if (!this.tracks[iridium.id]) {
       this.tracks[iridium.id] = new Set()
@@ -811,7 +805,6 @@ export class Call extends Emitter<CallEventListeners> {
   }) {
     if (!did) return
 
-    iridium.webRTC.setStreamMuted(did, { [kind]: false })
     if (did === iridium.id) {
       if (kind === 'audio' && !this.streams[did]?.audio) {
         await this.createAudioStream(constraints?.audio)
@@ -821,9 +814,15 @@ export class Call extends Emitter<CallEventListeners> {
       ) {
         await this.createVideoStream(constraints?.video)
       } else if (kind === 'screen' && !this.streams[did]?.screen) {
-        await this.createDisplayStream()
+        try {
+          await this.createDisplayStream()
+        } catch (_) {
+          return
+        }
       }
     }
+
+    iridium.webRTC.setStreamMuted(did, { [kind]: false })
 
     const stream = this.streams[did]?.[kind]
     if (!stream) {
@@ -837,6 +836,11 @@ export class Call extends Emitter<CallEventListeners> {
     if (did !== iridium.id) {
       return
     }
+
+    // TODO: find a way to wait for the peer to receive the remote
+    // track before sending a peer:unmute, for now, this timeout
+    // waits long enough so the peer receives the track first
+    await new Promise((resolve) => setTimeout(resolve, 500))
 
     await Promise.all(
       Object.values(this.peers).map((peer) =>
@@ -1047,7 +1051,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onError(peer: CallPeer, error: Error) {
     // FOR DEBUG
-    console.error(`${error} CODE: ${error.code}`)
+    logger.error('webrtc/call', 'error', error)
     this.emit('ERROR', { did: peer.id, error })
   }
 
@@ -1069,12 +1073,16 @@ export class Call extends Emitter<CallEventListeners> {
 
     this.peerConnected[peer.id] = true
     this.peerDialingDisabled[peer.id] = true
-    this.emit('REMOTE_TRACK_RECEIVED', {
-      did: peer.id,
-      track,
-      stream,
-      kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
-    })
+
+    const emit = () => {
+      this.emit('REMOTE_TRACK_RECEIVED', {
+        did: peer.id,
+        track,
+        stream,
+        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
+      })
+    }
+    track.onunmute = emit
   }
 
   /**
@@ -1084,13 +1092,14 @@ export class Call extends Emitter<CallEventListeners> {
    */
   protected _onStream(peer: CallPeer, stream: MediaStream) {
     if (!this.streams[peer.id]) {
-      this.streams[peer.id] = {}
+      Vue.set(this.streams, peer.id, {})
     }
     const kind =
       this.screenStreams[peer.id] === stream.id
         ? 'screen'
         : stream.getTracks()[0].kind
-    this.streams[peer.id][kind] = stream
+
+    Vue.set(this.streams[peer.id], kind, stream)
     this.emit('STREAM', { did: peer.id, stream, kind })
   }
 
@@ -1191,6 +1200,12 @@ export class Call extends Emitter<CallEventListeners> {
 
     // It's related to another call
     if (callId !== this.callId) return
+
+    // reset incoming call
+    this.emit('REMOTE_HANG_UP', {
+      did,
+      callId,
+    })
 
     this.peerDialingDisabled[did] = true
     this.isCallee[did] = false

@@ -4,6 +4,7 @@
   flex: 1;
   overflow-y: auto;
   justify-content: space-between;
+  padding-bottom: 16px;
 
   .separator {
     margin: @normal-spacing 3rem;
@@ -11,13 +12,34 @@
 
   .messages {
     margin: 0 @normal-spacing;
-    padding-bottom: @normal-spacing;
     margin-top: auto;
     display: flex;
     flex-direction: column;
 
     .caret_divider + .chat-message-container.show-header {
       margin-top: 0;
+    }
+  }
+
+  .loader-container {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    gap: 16px;
+    padding: 8px 16px;
+    margin: 8px 0 8px 52px;
+    background: linear-gradient(
+      0deg,
+      rgba(42, 54, 75, 0.5) 0%,
+      rgba(48, 52, 71, 0.5) 100%
+    );
+    box-shadow: 0 10px 20px 0 #080b0f3b;
+    border-radius: @corner-rounding;
+    height: 61px;
+
+    .icon {
+      color: @flair-color;
+      flex-shrink: 0;
     }
   }
 
