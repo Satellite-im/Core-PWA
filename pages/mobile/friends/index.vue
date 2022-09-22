@@ -54,7 +54,7 @@
             <FriendsSearch />
             <!-- <FriendsQrSection /> -->
             <!-- Commented out because QR section doesn't work -->
-            </template>
+          </template>
         </div>
       </div>
     </div>
