@@ -13,7 +13,7 @@ let urlToValidate = 'https://www.google.com'
 let urlToValidateTwo = 'http://www.google.com'
 let urlToValidateThree = 'www.google.com'
 
-describe('Chat Text and Sending Links Validations', () => {
+describe.skip('Chat Text and Sending Links Validations', () => {
   it('Load account for validation', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

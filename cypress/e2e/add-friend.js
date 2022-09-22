@@ -1,7 +1,7 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe('Create Account and add friend', () => {
+describe.skip('Create Account and add friend', () => {
   //skipped due to solana issues
   it.skip('Create Account and add friend', { retries: 2 }, () => {
     cy.createAccount(randomPIN)

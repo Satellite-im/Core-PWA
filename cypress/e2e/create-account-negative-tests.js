@@ -4,7 +4,7 @@ const randomName = faker.internet.userName(name) // generate random name
 const randomStatus = faker.lorem.word() // generate random status
 const filepathNsfw = 'images/negative-create-account-test.png'
 
-describe('Create Account - Negative Tests', () => {
+describe.skip('Create Account - Negative Tests', () => {
   it('Try to create account with PIN less than 5 digits', () => {
     //Enter PIN screen and add an invalid pin
     cy.createAccountPINscreen('1')

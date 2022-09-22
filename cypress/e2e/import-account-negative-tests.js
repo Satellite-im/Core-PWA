@@ -1,7 +1,7 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe('Import Account - Negative Tests', () => {
+describe.skip('Import Account - Negative Tests', () => {
   it('Verify error when adding a wrong order passphrase', () => {
     cy.importAccountPINscreen(randomPIN)
     cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
