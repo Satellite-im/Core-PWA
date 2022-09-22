@@ -1,4 +1,8 @@
-<div class="chat-message-container" :class="{ 'show-header': showHeader }">
+<div
+  class="chat-message-container"
+  :class="{ 'show-header': showHeader }"
+  :data-message-id="message.id"
+>
   <MessageNotice v-if="isNotice" :message="message" />
   <div
     v-else

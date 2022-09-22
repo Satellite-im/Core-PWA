@@ -188,7 +188,7 @@ export default Vue.extend({
         from,
       })
     },
-    saveMessage(message: string) {
+    async saveMessage(message: string) {
       this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: '',
@@ -196,11 +196,15 @@ export default Vue.extend({
       })
 
       if (message !== this.message.body) {
-        iridium.chat.editMessage({
+        await iridium.chat.editMessage({
           conversationId: this.message.conversationId,
           messageId: this.message.id,
           body: message,
         })
+      }
+
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
       }
     },
     cancelMessage() {
@@ -209,6 +213,9 @@ export default Vue.extend({
         payload: '',
         from: '',
       })
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }
     },
   },
 })
