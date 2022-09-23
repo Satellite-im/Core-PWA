@@ -27,7 +27,6 @@ const initialRootState: RootState = {
       badge: 'community',
       userAccount: '',
       mailboxId: '',
-      textilePubkey: '',
     },
     registrationStatus: RegistrationStatus.IN_PROGRESS,
     lastVisited: '',
@@ -80,7 +79,6 @@ const initialRootState: RootState = {
         typingState: 'NOT_TYPING',
         item: {},
         pending: true,
-        encryptedTextilePubkey: '',
         name: 'Taurus Nix',
         address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
         account: {
@@ -91,7 +89,6 @@ const initialRootState: RootState = {
           toMailboxId: 'v4.0.0-rc.4',
           to: './path/to/file',
         },
-        textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
         status: '',
         state: 'idle',
         unreadCount: 123,
@@ -101,19 +98,6 @@ const initialRootState: RootState = {
         mailboxId: '',
       },
     ],
-  },
-  textile: {
-    initialized: true,
-    conversations: {},
-    conversationLoading: true,
-    messageLoading: true,
-    uploadProgress: {
-      abc: {
-        progress: 42,
-        finished: false,
-        name: 'file.pdf',
-      },
-    },
   },
   webrtc: {
     initialized: true,

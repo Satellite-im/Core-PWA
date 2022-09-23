@@ -1,20 +1,6 @@
-import {
-  RpcResponseAndContext,
-  SignatureResult,
-  Keypair,
-  PublicKey,
-} from '@solana/web3.js'
+import { RpcResponseAndContext, SignatureResult } from '@solana/web3.js'
 
-import {
-  Account,
-  Adapter,
-  CreateUserParams,
-  FriendAccount,
-  FriendsEvents,
-  FriendStatus,
-  Group,
-  User,
-} from '../../interfaces'
+import { Account, Adapter } from '../../interfaces'
 
 import PhantomManager from '~/libraries/Phantom/PhantomManager'
 

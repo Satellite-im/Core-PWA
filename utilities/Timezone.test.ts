@@ -16,16 +16,4 @@ describe('Test utilities/timezone', () => {
     expect(nonDaylightTimezone.countryCode).toEqual('ID')
     expect(nonDaylightTimezone.countryName).toEqual('Indonesia')
   })
-
-  test('getUtfOffsetInMins for an existing timezone', () => {
-    const result = Timezone.getUtfOffsetInMins('Asia/Singapore')
-
-    expect(result).toBe(480)
-  })
-
-  test('getUtfOffsetInMins for a non existing timezone', () => {
-    const result = Timezone.getUtfOffsetInMins('Asia/Singapura')
-
-    expect(result).toBeNull()
-  })
 })

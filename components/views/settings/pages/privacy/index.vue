@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import { validURL } from '~/libraries/ui/Common'
 import { RootState } from '~/types/store/store'
@@ -28,7 +28,6 @@ export default Vue.extend({
       accounts: (state) => (state as RootState).accounts,
       settings: (state) => (state as RootState).settings,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     embeddedLinks: {
       set(state: boolean) {
         iridium.settings.set('/privacy/embeddedLinks', state)

@@ -1,6 +1,4 @@
-import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
 import { RegistrationStatus } from '~/store/accounts/types'
-import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import * as mutations from '~/store/ui/mutations'
 
@@ -32,15 +30,9 @@ describe('mutations', () => {
         badge: 'community',
         userAccount: '',
         mailboxId: '',
-        textilePubkey: '',
       },
       registrationStatus: RegistrationStatus.IN_PROGRESS,
       lastVisited: '',
-    },
-    dataState: {
-      files: DataStateType.Empty,
-      friends: DataStateType.Loading,
-      search: DataStateType.Ready,
     },
     friends: {
       incomingRequests: [
@@ -86,7 +78,6 @@ describe('mutations', () => {
           item: {},
           pending: true,
           activeChat: true,
-          encryptedTextilePubkey: '',
           name: 'Taurus Nix',
           address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
           account: {
@@ -97,7 +88,6 @@ describe('mutations', () => {
             toMailboxId: 'v4.0.0-rc.4',
             to: './path/to/file',
           },
-          textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
           status: '',
           state: 'idle',
           unreadCount: 123,
@@ -107,19 +97,6 @@ describe('mutations', () => {
           mailboxId: '',
         },
       ],
-    },
-    textile: {
-      initialized: true,
-      conversations: {},
-      conversationLoading: true,
-      messageLoading: true,
-      uploadProgress: {
-        abc: {
-          progress: 42,
-          finished: false,
-          name: 'file.pdf',
-        },
-      },
     },
     settings: {
       audioInput: '',
@@ -457,420 +434,6 @@ describe('mutations', () => {
      */
   })
 
-  test('sendMessage with the same lastMessageSender', () => {
-    const localizedState = { ...initialState }
-    const object: any = [
-      [
-        'Counterparty sent error: %s',
-        'Grader id does not match submission id that was passed in',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'Sorry, This video cannot be accessed via this website',
-      ],
-      [
-        'Bad Authentication data',
-        'TypeError exception should be raised',
-        '<error_message>%s</error_message>',
-        'ValueError exception should be raised',
-      ],
-      [
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'Counterparty sent error: %s',
-        'Unknown Error',
-        'Error getting key from: %s',
-      ],
-      [
-        'An error occurred processing your request.',
-        'There is a mismatch',
-        'Sorry, This video cannot be accessed via this website',
-        'Empty name specified',
-      ],
-    ]
-    const object2: any = [
-      [
-        'Connection is closed',
-        'Connection is closed',
-        '',
-        'The line-by-line profiler can only be used in dev.',
-      ],
-      [
-        'missing encoding',
-        'There is a mismatch',
-        'Error:',
-        'Message recipient is the same as originator',
-      ],
-      [
-        'This is an exception, voilà',
-        '',
-        'The app does not exist',
-        'invalid option',
-      ],
-      ['Unknown Error', 'There is a mismatch', 'Internal Server Error\n', ''],
-    ]
-    const object3: any = [
-      [
-        'No updates are to be performed.',
-        'Error in retrieving email.',
-        'Error selecting from database',
-        'Uploaded file was not added to the resource. ',
-      ],
-      [
-        'Internal Server Error\n',
-        'No os dependencies found. ',
-        'Error:',
-        'Sorry, This video cannot be accessed via this website',
-      ],
-      [
-        'Message recipient is the same as originator',
-        'Error:',
-        'cannot be found.',
-        'Internal Server Error\n',
-      ],
-      [
-        'Sorry, This video cannot be accessed via this website',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'No updates are to be performed.',
-        'Internal Server Error\n',
-      ],
-    ]
-    const object4: any = [
-      [
-        'Error getting key from: %s',
-        'invalid option',
-        'Empty name specified',
-        'ValueError exception should be raised',
-      ],
-      [
-        '',
-        '<error_message>%s</error_message>',
-        'cannot be found.',
-        'Could not find an existing submission in location.  rubric is original.',
-      ],
-      [
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Unknown error',
-        'unexpected error',
-        'The line-by-line profiler can only be used in dev.',
-      ],
-      [
-        'Warning: ',
-        'This is an exception, voilà',
-        'Error getting key from: %s',
-        'Message recipient is the same as originator',
-      ],
-    ]
-    const object5: any = [object, object2, object3, object4]
-    const object6: any = [
-      [
-        'Could not find an existing submission in location.  rubric is original.',
-        'No updates are to be performed.',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'Error in retrieving email.',
-      ],
-      [
-        'Grader id does not match submission id that was passed in',
-        'Invalid Invitation Token.',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'No error',
-      ],
-      [
-        'Error:',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'Error selecting from database',
-      ],
-      [
-        'No os dependencies found. ',
-        'ValueError exception should be raised',
-        'Message originator is not the grader, or the person being graded',
-        'Message recipient is not the grader, the person being graded, or the controller',
-      ],
-    ]
-    const object7: any = [
-      [
-        'Unknown error',
-        'Unknown error',
-        'the specified credentials were rejected by the server',
-        'No error',
-      ],
-      [
-        'To force deletion of the LAG use delete_force: True',
-        'cannot be found.',
-        'An error occurred processing your request.',
-        'Error:',
-      ],
-      ['cannot be found.', '', '\n\nThe first error message:\n', 'No response'],
-      [
-        'Exception not raised: %s',
-        'Invalid [%s] value. %s',
-        'Error:',
-        'Message recipient is the same as originator',
-      ],
-    ]
-    const object8: any = [
-      ['There is a mismatch', 'Mock Error Message', 'Error:', 'No error'],
-      [
-        'unexpected error',
-        'Invalid [%s] value. %s',
-        'invalid option',
-        'Missing FileUri configuration',
-      ],
-      [
-        'New Error ',
-        'No response',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Wait time out reached, while waiting for results',
-      ],
-      [
-        'Bad Authentication data',
-        '\n\nThe first error message:\n',
-        'unexpected error',
-        'Missing FileUri configuration',
-      ],
-    ]
-    const object9: any = [
-      [
-        'Connection is closed',
-        'Unknown Error',
-        'There is a mismatch',
-        '\n\nThe first error message:\n',
-      ],
-      [
-        'Could not find an existing submission in location.  rubric is original.',
-        'Connection is closed',
-        'To force deletion of the LAG use delete_force: True',
-        'Connection is closed',
-      ],
-      [
-        'unexpected error',
-        'No os dependencies found. ',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'To force deletion of the LAG use delete_force: True',
-      ],
-      [
-        'unexpected error',
-        'Invalid Invitation Token.',
-        'Could not find a submission object for message from xqueue',
-        'missing encoding',
-      ],
-    ]
-    const object10: any = [object6, object7, object8, object9]
-    const object11: any = [
-      [
-        'Could not find an existing submission in location.  rubric is original.',
-        'Error:',
-        'Message originator is not the grader, or the person being graded',
-        'Warning: ',
-      ],
-      [
-        '\n\nThe first error message:\n',
-        'Ran out of iterations',
-        'Uploaded file was not added to the resource. ',
-        'Invalid data: No data found in any of the field(s)!!!',
-      ],
-      [
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Wait time out reached, while waiting for results',
-        'Could not find an existing submission in location.  rubric is original.',
-        'Invalid Invitation Token.',
-      ],
-      [
-        'Message recipient is the same as originator',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'Could not find a submission object for message from xqueue',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-      ],
-    ]
-    const object12: any = [
-      [
-        'the specified credentials were rejected by the server',
-        'No error',
-        'There is a mismatch',
-        "Top level object in 'override.yml' needs to be an object",
-      ],
-      [
-        '',
-        'New Error ',
-        'Wait time out reached, while waiting for results',
-        'No updates are to be performed.',
-      ],
-      [
-        'Sorry, This video cannot be accessed via this website',
-        'Error getting key from: %s',
-        'Message originator is not the grader, or the person being graded',
-        'Empty name specified',
-      ],
-      [
-        'the specified credentials were rejected by the server',
-        'Exception not raised: %s',
-        'Unable to allocate address',
-        'TypeError exception should be raised',
-      ],
-    ]
-    const object13: any = [
-      [
-        'Could not find a grader object for message from xqueue',
-        'Counterparty sent error: %s',
-        'Sorry, This video cannot be accessed via this website',
-        'Unable to allocate address',
-      ],
-      [
-        'Unable to allocate address',
-        'Warning: ',
-        'Invalid [%s] value. %s',
-        'Empty name specified',
-      ],
-      [
-        'To force deletion of the LAG use delete_force: True',
-        'TypeError exception should be raised',
-        'unexpected error',
-        'Invalid [%s] value. %s',
-      ],
-      ['Error:', 'No error', 'TypeError exception should be raised', 'Error:'],
-    ]
-    const object14: any = [
-      [
-        'Message recipient is the same as originator',
-        'No updates are to be performed.',
-        'No error',
-        'cannot be found.',
-      ],
-      [
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Sorry, The video you are looking for does not exist.',
-        '',
-        'Uploaded file was not added to the resource. ',
-      ],
-      [
-        'Error:',
-        "Top level object in 'override.yml' needs to be an object",
-        '\n\nThe first error message:\n',
-        'New Error ',
-      ],
-      ['Unknown error', 'invalid option', 'invalid option', 'does not exist'],
-    ]
-    const object15: any = [object11, object12, object13, object14]
-    const object16: any = [
-      [
-        '\n\nThe first error message:\n',
-        '',
-        'the specified credentials were rejected by the server',
-        'Mock Error Message',
-      ],
-      [
-        'Internal Server Error\n',
-        '',
-        'Uploaded file was not added to the resource. ',
-        'Sorry, The video you are looking for does not exist.',
-      ],
-      [
-        'Mock Error Message',
-        '<error_message>%s</error_message>',
-        '<error_message>%s</error_message>',
-        'unexpected error',
-      ],
-      [
-        'Connection is closed',
-        'Internal Server Error\n',
-        'Unable to allocate address',
-        'Sorry, The video you are looking for does not exist.',
-      ],
-    ]
-    const object17: any = [
-      [
-        '<error_message>%s</error_message>',
-        'No response',
-        'Warning: ',
-        'An error occurred processing your request.',
-      ],
-      [
-        'No updates are to be performed.',
-        'Could not find a submission object for message from xqueue',
-        'Grader id does not match submission id that was passed in',
-        'Invalid Invitation Token.',
-      ],
-      [
-        'The line-by-line profiler can only be used in dev.',
-        "Top level object in 'override.yml' needs to be an object",
-        '<error_message>%s</error_message>',
-        'To force deletion of the LAG use delete_force: True',
-      ],
-      [
-        'Connection is closed',
-        'does not exist',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'Internal Server Error\n',
-      ],
-    ]
-    const object18: any = [
-      [
-        '\n\nThe first error message:\n',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'No error',
-        '<error_message>%s</error_message>',
-      ],
-      [
-        'Bad Authentication data',
-        'missing encoding',
-        "Top level object in 'override.yml' needs to be an object",
-        'Unable to allocate address',
-      ],
-      [
-        'Grader id does not match submission id that was passed in',
-        'Error:',
-        'Invalid data: No data found in any of the field(s)!!!',
-        'Ran out of iterations',
-      ],
-      [
-        'Could not find a grader object for message from xqueue',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'TrainerCourseDetailError: Either not an ajax call or not a GET request!!!',
-        'Exception not raised: %s',
-      ],
-    ]
-    const object19: any = [
-      [
-        'Could not find a submission object for message from xqueue',
-        'Empty name specified',
-        'Message originator is not the grader, or the person being graded',
-        'the specified credentials were rejected by the server',
-      ],
-      [
-        'No error',
-        'Unknown error',
-        'Wait time out reached, while waiting for results',
-        'There is a mismatch',
-      ],
-      [
-        'Error in retrieving email.',
-        'Message recipient is not the grader, the person being graded, or the controller',
-        'Warning: ',
-        'ValueError exception should be raised',
-      ],
-      [
-        'Connection is closed',
-        'does not exist',
-        'Unable to find your git executable - Shutdown SickBeard and EITHER <a href="http://code.google.com/p/sickbeard/wiki/AdvancedSettings" onclick="window.open(this.href); return false;">set git_path in your config.ini</a> OR delete your .git folder and run from source to enable updates.',
-        'Unable to allocate address',
-      ],
-    ]
-    const object20: any = [object16, object17, object18, object19]
-    const object21: any = [object5, object10, object15, object20]
-    mutations.default.sendMessage(
-      localizedState,
-      {
-        value: 'elio@example.com',
-        user: {
-          from: 'C:\\\\path\\to\\folder\\',
-          address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-        },
-      },
-      false,
-    )
-    expect(
-      localizedState.messages[localizedState.messages.length - 1],
-    ).toMatchSnapshot()
-  })
-
   test('setChatbarFocus', () => {
     const localizedState = { ...initialState }
     mutations.default.setChatbarFocus(localizedState, true)
@@ -887,12 +450,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setSettingsRoute(localizedState, 'profile')
     expect(localizedState.settingsRoute).toBe('profile')
-  })
-
-  test('showSearchResult', () => {
-    const localizedState = { ...initialState }
-    mutations.default.showSearchResult(localizedState, true)
-    expect(localizedState.showSearchResult).toBeTruthy()
   })
 
   test('setGlyphModalPackId', () => {
@@ -960,25 +517,6 @@ describe('mutations', () => {
     })
   })
 
-  test('setMessages', () => {
-    const localizedState = { ...initialState }
-    const array = ['message']
-    mutations.default.setMessages(localizedState, array)
-    expect(localizedState.messages).toBe(array)
-  })
-
-  test('setIsReacted', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setIsReacted(localizedState, true)
-    expect(localizedState.isReacted).toBeTruthy()
-  })
-
-  test('setIsScrollOver true status', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setIsScrollOver(localizedState, true)
-    expect(localizedState.isScrollOver).toBeTruthy()
-  })
-
   test('setShowOlderMessagesInfo false status', () => {
     const localizedState = { ...initialState }
     mutations.default.setShowOlderMessagesInfo(localizedState, false)
@@ -989,13 +527,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.setShowOlderMessagesInfo(localizedState, true)
     expect(localizedState.showOlderMessagesInfo).toBeTruthy()
-  })
-
-  test('setIsScrollOver false status', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setIsScrollOver(localizedState, false)
-    expect(localizedState.isScrollOver).toBeFalsy()
-    expect(localizedState.unreadMessage).toBe(0)
   })
 
   test('setGlyphMarketplaceView', () => {
@@ -1084,12 +615,6 @@ describe('mutations', () => {
     })
   })
 
-  test('setTypingUser', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setTypingUser(localizedState, true)
-    expect(localizedState.isTyping).toBeTruthy()
-  })
-
   test('settingReaction', () => {
     const localizedState = { ...initialState }
     mutations.default.settingReaction(localizedState, true)
@@ -1116,89 +641,6 @@ describe('mutations', () => {
     }
     mutations.default.setEditMessage(localizedState, object)
     expect(localizedState.editMessage).toMatchObject(object)
-  })
-
-  test('saveEditMessage with existing message', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      payload: 'payload',
-      id: dateNow,
-      from: dateNow,
-    }
-    mutations.default.saveEditMessage(localizedState, object)
-    expect(localizedState.messages).toContainEqual({
-      at: dateNow,
-      from: dateNow,
-      id: dateNow,
-      messages: [
-        {
-          at: dateNow,
-          id: dateNow,
-          payload: object.payload,
-          reactions: [],
-          replies: [],
-          type: 'text',
-        },
-      ],
-      to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
-      type: 'group',
-    })
-  })
-
-  test('saveEditMessage with existing message but mistmatching id', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      payload: 'payload',
-      id: 1645622021469,
-      from: dateNow,
-    }
-    mutations.default.saveEditMessage(localizedState, object)
-    expect(localizedState.messages).toContainEqual({
-      at: dateNow,
-      from: dateNow,
-      id: dateNow,
-      messages: [
-        {
-          at: dateNow,
-          id: dateNow,
-          payload: object.payload,
-          reactions: [],
-          replies: [],
-          type: 'text',
-        },
-      ],
-      to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
-      type: 'group',
-    })
-  })
-
-  test('saveEditMessage with non-existing message', () => {
-    const localizedState = { ...initialState }
-    const newDateNow = 1645622021469
-    const object = {
-      payload: 'not payload',
-      id: newDateNow,
-      from: newDateNow,
-    }
-    mutations.default.saveEditMessage(localizedState, object)
-    // Because our Date.now() is different, the messages will not be updated with our new payload. Hence the .not matcher
-    expect(localizedState.messages).not.toContainEqual({
-      at: newDateNow,
-      from: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
-      id: newDateNow,
-      messages: [
-        {
-          at: newDateNow,
-          id: newDateNow,
-          payload: object.payload,
-          reactions: [],
-          replies: [],
-          type: 'text',
-        },
-      ],
-      to: '0x07ee55aa48bb72dcc6e9d78256648910de513eca',
-      type: 'group',
-    })
   })
 
   test('setCallHeight', () => {

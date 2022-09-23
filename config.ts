@@ -41,22 +41,6 @@ export const Config = {
     upload: `sounds/Success.m4a`,
     connected: `sounds/Success.m4a`,
   },
-  cacher: {
-    user_lifespan: 90000,
-  },
-  webtorrent: {
-    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
-      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
-      : [
-          'wss://tracker.openwebtorrent.com',
-          'wss://tracker.sloppyta.co:443/announce',
-          'wss://tracker.novage.com.ua:443/announce',
-          'udp://opentracker.i2p.rocks:6969/announce',
-          'http://opentracker.i2p.rocks:6969/announce',
-          'udp://tracker.opentrackr.org:1337/announce',
-          'http://tracker.opentrackr.org:1337/announce',
-        ],
-  },
   solana: {
     customFaucet: 'https://dev-faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',

@@ -6,7 +6,6 @@ import { mapState } from 'vuex'
 import { SettingsIcon, PlusIcon, SatelliteIcon } from 'satellite-lucide-icons'
 import { ModalWindows } from '~/store/ui/types'
 import Unread from '~/components/ui/Unread/Unread.vue'
-import { DataStateType } from '~/store/dataState/types'
 
 export default Vue.extend({
   components: {
@@ -30,7 +29,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    DataStateType: () => DataStateType,
     ModalWindows: () => ModalWindows,
   },
   methods: {

@@ -10,9 +10,3 @@ export const getTimezoneDropdowns = () => {
     }
   })
 }
-
-export const getUtfOffsetInMins = (name: string) => {
-  const timezones = getTimeZones()
-  const timezone = timezones.find((elm) => elm.name === name)
-  return timezone ? timezone.currentTimeOffsetInMinutes : null
-}

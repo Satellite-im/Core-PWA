@@ -3,7 +3,6 @@ import { AccountsState } from '~/store/accounts/types'
 import { DataState } from '~/store/dataState/types'
 import { UIState } from '~/store/ui/types'
 import { SettingsState } from '~/store/settings/types'
-import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
@@ -16,7 +15,6 @@ export interface RootState {
   accounts: AccountsState
   audio: AudioState
   chat: ChatState
-  conversation: ConversationState
   dataState: DataState
   files: FilesState
   media: MediaState
