@@ -699,14 +699,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           },
         )
         .then((cid) => {
-          iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
+          const onSyncPin = (msg: any) => {
             const { payload } = msg
             const { body } = payload
-            if (body.originalCID === cid.toString()) {
-              resolve({ cid: body.cid, valid: body.valid })
+            const { result } = body
+            if (result.originalCID === cid.toString()) {
+              resolve({ cid: result.cid, valid: result.valid })
             }
-          })
-          setTimeout(() => resolve(undefined), 30000)
+            iridium.connector.p2p?.off('node/message/sync/pin', onSyncPin)
+          }
+
+          iridium.connector?.p2p.on('node/message/sync/pin', onSyncPin)
+          setTimeout(() => {
+            iridium.connector.p2p?.off('node/message/sync/pin', onSyncPin)
+            resolve(undefined)
+          }, 30000)
         })
     })
   }
