@@ -58,6 +58,19 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     await this.fetch()
     logger.log(this.loggerTag, 'friends state loaded', this.state)
 
+    if (iridium.connector.p2p.hasNode) {
+      await this.startP2P()
+    }
+
+    iridium.connector.p2p.on('nodeReady', async () => {
+      await this.startP2P()
+    })
+
+    logger.info(this.loggerTag, 'initialized', this)
+    this.emit('ready', {})
+  }
+
+  async startP2P() {
     // connect to all friends
     await Promise.all(
       [
@@ -126,9 +139,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         },
       ].map((fn) => fn()),
     )
-
-    logger.info(this.loggerTag, 'initialized', this)
-    this.emit('ready', {})
   }
 
   async stop() {
