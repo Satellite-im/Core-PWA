@@ -23,6 +23,7 @@
       :class="{'has-command' : hasCommand}"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
+      @keyup="handleInputKeyup"
       @paste="handlePaste"
     />
     <ChatbarControls
