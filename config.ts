@@ -3,7 +3,7 @@ import { Commitment } from '@solana/web3.js'
 import type { IridiumConfig } from '@satellite-im/iridium'
 
 const nodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
-  '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
+  '/dns4/sync-ny.satellite.im/tcp/443/wss/p2p/12D3KooWRnsCHcpEWE6vPcrFc8sjGusu9xhy6s2PCevMMB24bsQm',
 ]
 const gateways = process.env.NUXT_ENV_IRIDIUM_GATEWAYS?.split(',') || [
   'https://satellite.infura-ipfs.io',

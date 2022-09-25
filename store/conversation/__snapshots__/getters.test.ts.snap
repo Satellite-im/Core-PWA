@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`misc onlineParticipants 1`] = `
+exports[`Test conversation/getters onlineParticipants 1`] = `
 Array [
   Object {
     "activity": "ACTIVE",
@@ -14,7 +14,7 @@ Array [
 ]
 `;
 
-exports[`misc otherParticipants 1`] = `
+exports[`Test conversation/getters otherParticipants 1`] = `
 Array [
   Object {
     "activity": "ACTIVE",
@@ -28,7 +28,7 @@ Array [
 ]
 `;
 
-exports[`misc typingParticipants 1`] = `
+exports[`Test conversation/getters typingParticipants 1`] = `
 Array [
   Object {
     "activity": "TYPING",

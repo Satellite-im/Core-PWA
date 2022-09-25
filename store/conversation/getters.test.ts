@@ -4,15 +4,15 @@ import {
   ConversationParticipant,
   ConversationState,
 } from './types'
+import InitialConversationState from '~/store/conversation/state'
 import * as module from '~/store/conversation/getters'
 
-describe('misc', () => {
-  const InitialConversationState: ConversationState = {
-    id: '',
-    type: 'friend',
-    calling: false,
-    participants: [],
-  }
+let localState: ConversationState
+
+describe('Test conversation/getters', () => {
+  beforeEach(() => {
+    localState = InitialConversationState()
+  })
 
   test('otherParticipants', () => {
     const argument: ConversationParticipant[] = [
@@ -35,7 +35,7 @@ describe('misc', () => {
         updatedAt: 123,
       },
     ]
-    const localState = { ...InitialConversationState }
+
     localState.participants = argument
 
     const result: ConversationParticipant[] =
