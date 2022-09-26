@@ -70,7 +70,7 @@ jobs:
         with:
           working-directory: ./
           install: false
-          start: yarn dev 
+          start: rm -fr node_modules && yarn cache clean && yarn dev
           run: sh ./build-script.sh
           command: npx cypress run --browser chrome
           wait-on: http://localhost:3000
