@@ -39,8 +39,6 @@ jobs:
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: Ninja version
         run: ninja --version
-      - name: Install corepack
-        run: brew install corepack
       - name: Linkscript
         run: sh ./linkscript.sh
       - name: Create env file - iridium
