@@ -23,7 +23,6 @@ describe('Create Account Validations', () => {
       'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
     ).should('be.visible')
     cy.createAccountRecoverySeed()
-    cy.contains('Linking Satellites...').should('be.visible')
 
     //Username and Status Input
     cy.validateUserInputIsDisplayed()
@@ -47,7 +46,6 @@ describe('Create Account Validations', () => {
     */
     //Finishing Account Creation
     cy.createAccountSubmit()
-    cy.contains('Linking Satellites...').should('be.visible')
     cy.welcomeModal(randomName)
   })
 

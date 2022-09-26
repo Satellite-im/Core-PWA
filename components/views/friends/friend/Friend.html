@@ -10,7 +10,9 @@
     >
       {{ user.name || user.did }}
     </TypographyText>
-    <TypographyText v-if="isPreview" size="sm"> {{ user.did }} </TypographyText>
+    <TypographyText v-if="isPreview" data-cy="friend-did" size="sm">
+      {{ user.did }}
+    </TypographyText>
     <TypographyText v-if="status" size="sm"> {{ status }} </TypographyText>
   </div>
   <div class="spacer"></div>
@@ -21,6 +23,7 @@
     <InteractablesButton
       v-else
       color="success"
+      data-cy="friend-send-request"
       v-tooltip.bottom="$t('friends.send')"
       :disabled="loadCheck"
       @click="createFriendRequest"
@@ -75,6 +78,7 @@
     <InteractablesButton
       v-else
       color="danger"
+      data-cy="friend-cancel-request-sent"
       v-tooltip.bottom="$t('friends.cancel')"
       :loading="loading"
       @click="cancelRequest"
