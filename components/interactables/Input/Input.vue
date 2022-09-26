@@ -107,6 +107,10 @@ export default Vue.extend({
     derivedType(): string {
       return this.showPassword ? 'text' : this.type
     },
+    // mobile devices need at least 1rem font size on inputs or it zooms the user in on focus
+    derivedSize(): string {
+      return this.$device.isMobile ? 'md' : this.size
+    },
   },
   mounted() {
     if (this.autofocus) {
