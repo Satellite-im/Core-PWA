@@ -1,12 +1,5 @@
 <div class="listbox" :class="`font-size-${size}`" :value="value" ref="listbox">
-  <TypographyText
-    :id="`${label}-label`"
-    :class="{ hidden : !showLabel }"
-    class="listbox-label"
-    color="light"
-    size="sm"
-    uppercase
-  >
+  <TypographyText :class="{ hidden : !showLabel }" as="label">
     {{ label }}
   </TypographyText>
   <select
