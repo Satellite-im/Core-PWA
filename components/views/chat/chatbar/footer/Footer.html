@@ -1,10 +1,9 @@
 <div class="chatbar-footer">
-  <TypographyText
-    class="no-select"
-    size="sm"
-    :color="charlimit ? 'danger' : 'dark'"
-  >
+  <TypographyText size="sm" :color="charlimit ? 'danger' : 'dark'">
     {{ lengthCount }}
+  </TypographyText>
+  <TypographyText v-if="!isSubscribed" size="sm" color="dark">
+    {{ 'still connecting' }}
   </TypographyText>
   <ChatbarFooterTypingIndicator />
 </div>

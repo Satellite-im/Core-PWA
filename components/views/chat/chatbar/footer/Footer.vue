@@ -15,12 +15,16 @@ export default Vue.extend({
       type: Boolean,
       required: true,
     },
+    isSubscribed: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     ...mapState({
       chatbarContent: (state) => (state as RootState).ui.chatbarContent,
     }),
-    lengthCount() {
+    lengthCount(): string {
       return `${this.chatbarContent.length}/${this.$Config.chat.maxChars}`
     },
   },

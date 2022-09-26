@@ -130,7 +130,7 @@ const Chatbar = Vue.extend({
       )
     },
     isSubscribed(): boolean {
-      return iridium.chat.ready
+      return iridium.chat.ephemeral.subscriptions.includes(this.conversationId)
     },
     text: {
       /**
