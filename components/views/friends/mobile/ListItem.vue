@@ -16,6 +16,10 @@
         </button> -->
       </template>
       <template v-else>
+        <button :disabled="loading" class="reject" @click="cancelRequest">
+          <x-icon />
+        </button>
+
         <button
           v-if="type === 'incoming'"
           :disabled="loading"
@@ -23,9 +27,6 @@
           @click="acceptFriendRequest"
         >
           <check-icon />
-        </button>
-        <button :disabled="loading" class="reject" @click="cancelRequest">
-          <x-icon />
         </button>
       </template>
     </div>
