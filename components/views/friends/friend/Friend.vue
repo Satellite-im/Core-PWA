@@ -8,6 +8,7 @@ import {
   MessageSquareIcon,
   CircleIcon,
   SmartphoneIcon,
+  UserPlusIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
 import { FriendRequest } from '~/libraries/Iridium/friends/types'
@@ -22,6 +23,7 @@ export default Vue.extend({
     MessageSquareIcon,
     CircleIcon,
     SmartphoneIcon,
+    UserPlusIcon,
   },
   props: {
     user: {
@@ -73,6 +75,9 @@ export default Vue.extend({
     },
     showStatus(): boolean {
       return !this.isPreview
+    },
+    isFriend(): boolean {
+      return iridium.friends.isFriend(this.user.did)
     },
   },
   beforeDestroy() {
