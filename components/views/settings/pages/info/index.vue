@@ -40,12 +40,19 @@ export default Vue.extend({
 })
 </script>
 <style scoped lang="less">
-#developer-settings {
-  pre {
-    white-space: pre-wrap;
-    text-align: left;
-    &:extend(.bordered);
-    &:extend(.round-corners);
-  }
+pre {
+  white-space: pre-wrap;
+  text-align: left;
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  font-size: @font-size-xs;
+  padding: 12px 16px;
+  background: @semitransparent-dark-gradient;
+}
+
+.release-data {
+  font-family: @heading-font;
+  font-size: @font-size-xs;
+  white-space: pre-line;
 }
 </style>

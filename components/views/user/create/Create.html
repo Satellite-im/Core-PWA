@@ -38,7 +38,6 @@
         <InteractablesInput
           v-model="name"
           :placeholder="$t('user.registration.username_placeholder')"
-          size="small"
           input-kind="text"
           type="primary"
           :min-length="$Config.account.minLength"
@@ -52,7 +51,6 @@
         <InteractablesInput
           v-model="status"
           :placeholder="$t('user.registration.status_placeholder')"
-          size="small"
           input-kind="text"
           type="primary"
           :max-length="$Config.account.statusMaxLength"

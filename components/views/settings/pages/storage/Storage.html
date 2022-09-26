@@ -13,7 +13,6 @@
     <TypographyText color="dark">
       {{ $t('pages.settings.storage.export.subtitle') }}
     </TypographyText>
-    <br />
     <InteractablesButton :text="$t('pages.settings.storage.export.button')" />
   </SettingsUnit>
 
@@ -24,7 +23,6 @@
     <TypographyText color="dark">
       {{ $t('pages.settings.storage.clear.subtitle') }}
     </TypographyText>
-    <br />
     <InteractablesButton
       v-if="!deleteVerify"
       color="danger"
@@ -39,7 +37,6 @@
       <TypographyText class="detail color-danger">
         {{ $t('pages.settings.storage.clear.subtitle_warning2') }}
       </TypographyText>
-      <br />
       <InteractablesButton
         color="danger"
         :loading="isLoading"
