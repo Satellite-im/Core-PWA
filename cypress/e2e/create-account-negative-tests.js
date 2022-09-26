@@ -10,7 +10,7 @@ describe('Create Account - Negative Tests', () => {
     cy.createAccountPINscreen('1')
 
     //Error message will be displayed
-    cy.contains('Pin must be at least 5 characters.')
+    cy.contains('Password must be at least 5 characters.').should('be.visible')
   })
 
   it('Try to create account without username', () => {
@@ -29,7 +29,8 @@ describe('Create Account - Negative Tests', () => {
     cy.contains('Enter a username of at least 5 characters, up to 32')
   })
 
-  it('Try to create account with NSFW image', () => {
+  it.skip('Try to create account with NSFW image', () => {
+    //Skipped since loading profile picture is disabled now
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
@@ -52,9 +53,9 @@ describe('Create Account - Negative Tests', () => {
   })
 
   it.skip('Logout user on /unlock page', { retries: 2 }, () => {
-    //Skipped due to solana issues
+    //Skipped since I need to ask how to validate this with Iridium
     cy.visit('/')
-    cy.get('[data-cy=add-input]').type('22,A9ZJ[F\t5g', { log: false })
+    cy.get('[data-cy=input-group]').type('22,A9ZJ[F\t5g', { log: false })
     cy.get('[data-cy=submit-input]').click()
     cy.get('[data-cy=create-account-button]').click()
     cy.contains('I Saved It').click()

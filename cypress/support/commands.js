@@ -54,7 +54,7 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
   }
   cy.wait(1000)
   cy.get('body').then(($body) => {
-    if (!($body.find('.create_pin_section').length > 0)) {
+    if (!($body.find('[data-cy=input-group]').length > 0)) {
       cy.visitRootPage(isMobile)
     }
   })
@@ -85,13 +85,13 @@ Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
   cy.clearDatabase()
   cy.visitRootPage(isMobile)
   cy.url().should('contain', '#/auth/unlock')
-  cy.get('[data-cy=add-input]')
+  cy.get('[data-cy=input-group]')
     .should('be.visible')
     .trigger('input')
     .type(pin, { log: false }, { force: true })
   cy.get('[data-cy=submit-input]').click()
   cy.get('[data-cy=create-account-button]').click()
-  cy.get('.title').should('contain', 'Recovery Seed')
+  cy.get('.font-heading').should('contain', 'Recovery Seed')
   cy.contains('I Saved It').click()
   cy.validateUserInputIsDisplayed()
   cy.get('[data-cy=username-input]')
@@ -103,6 +103,7 @@ Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
     .trigger('input')
     .type(randomStatus)
   cy.get('[data-cy=sign-in-button]').click()
+  cy.welcomeModal(randomName)
 })
 
 Cypress.Commands.add(
@@ -112,27 +113,23 @@ Cypress.Commands.add(
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
-      cy.snapshotTestGet('.subtitle', 'Create Account Pin')
+      cy.snapshotTestGet(
+        '[data-cy="pin-label"] > .font-weight-normal',
+        'Choose Your Password',
+      )
     }
-    cy.get('[data-cy=add-input]')
+    cy.contains('Store Password? (Less Secure)').should('be.visible')
+    cy.contains('Choose Your Password').should('be.visible')
+    cy.get('[data-cy=input-group]')
       .should('be.visible')
       .trigger('input')
       .type(pin, { log: false }, { force: true })
-    cy.contains('Store Pin? (Less Secure)').should('be.visible')
     if (savePin === true) {
       cy.get('.switch-button').click().should('have.class', 'enabled')
     } else {
       cy.get('.switch-button').should('not.have.class', 'enabled')
     }
-    cy.contains('Create Account Pin').should('be.visible')
-    cy.contains(
-      "The pin can be anything you want, just don't forget it.",
-    ).should('be.visible')
-    cy.contains('Choose Your Pin').should('be.visible')
-    cy.get('[data-cy=add-input]').should('be.visible')
-    cy.contains('Store Pin? (Less Secure)').should('be.visible')
-    cy.get('[data-cy=submit-input]').should('be.visible')
-    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=submit-input]').should('be.visible').click()
   },
 )
 
@@ -154,21 +151,20 @@ Cypress.Commands.add('createAccountUserInput', (username, status) => {
   cy.get('[data-cy=username-input]')
     .should('be.visible')
     .trigger('input')
-    .type(randomName)
+    .type(username)
   cy.get('[data-cy=status-input]', { timeout: 30000 })
     .should('be.visible')
     .trigger('input')
-    .type(randomStatus)
+    .type(status)
 })
 
 Cypress.Commands.add('createAccountAddImage', (filepath) => {
-  cy.get('.is-outlined > #custom-cursor-area').should('be.visible').click()
+  cy.get('.header-content > .button').should('be.visible').click()
   cy.get('.input-file').attachFile(filepath)
 })
 
 Cypress.Commands.add('createAccountSubmit', () => {
   cy.get('[data-cy=sign-in-button]').should('be.visible').click()
-  cy.contains('Linking Satellites...').should('be.visible')
 })
 
 Cypress.Commands.add(
@@ -214,6 +210,16 @@ Cypress.Commands.add(
       })
   },
 )
+
+Cypress.Commands.add('welcomeModal', (username) => {
+  cy.get('.modal-dialog', { timeout: 30000 }).should('exist')
+  cy.contains('Welcome ' + username + '!').should('exist')
+  cy.contains(
+    'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
+  ).should('exist')
+  cy.contains('Got It!').should('exist')
+  cy.get('.action').click()
+})
 
 //Import Account Commands
 

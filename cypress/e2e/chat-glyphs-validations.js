@@ -7,7 +7,8 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe('Chat - Sending Glyphs Tests', () => {
+describe.skip('Chat - Sending Glyphs Tests', () => {
+  // Skipping since import account is not working
   it('Send a glyph on chat', { retries: 2 }, () => {
     //Import account
     cy.importAccount(randomPIN, recoverySeed)

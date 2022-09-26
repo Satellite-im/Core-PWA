@@ -7,7 +7,7 @@ const recoverySeed =
     .filter((item) => item.description === 'Only Text')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe('Verify passphrase does not get stored in localstorage', () => {
+describe.skip('Verify passphrase does not get stored in localstorage', () => {
   it('Passphrase in localstorage does not exist before creating account', () => {
     cy.visitRootPage().then(() => {
       cy.contains('Create Account Pin', { timeout: 30000 }).then(() => {

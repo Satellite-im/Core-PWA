@@ -7,7 +7,7 @@ const userPassphrase = dataRecovery.accounts
   .toString()
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
-describe('Unlock pin should be persisted when store pin is enabled', () => {
+describe.skip('Unlock pin should be persisted when store pin is enabled', () => {
   it.skip('Create Account with store pin disabled', { retries: 2 }, () => {
     //Skipped due to solana issues
     //Go to URL, add a PIN and make sure that toggle for save pin is disabled
