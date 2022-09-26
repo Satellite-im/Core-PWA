@@ -65,12 +65,15 @@ jobs:
       - name: Run iridium build
         run: pnpm build
         working-directory: ./linked-iridium
+      - name: yarn
+        run: rm -fr node_modules && yarn cache clean && yarn install
+        working-directory: ./
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
           working-directory: ./
           install: false
-          start: rm -fr node_modules && yarn cache clean && yarn dev
+          start: yarn dev
           run: sh ./build-script.sh
           command: npx cypress run --browser chrome
           wait-on: http://localhost:3000
