@@ -12,7 +12,7 @@ export default {
   },
   welcome_message: {
     dismiss_forever: 'Dismiss Forever',
-    welcome: 'Welcome {user}!',
+    welcome: 'Welcome, {user}!',
     ea_warning:
       'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   },
@@ -42,7 +42,7 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    live: 'Live for {time}',
+    live: 'Live {time}',
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
