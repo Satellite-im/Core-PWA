@@ -7,6 +7,7 @@ import { User } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
+import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   components: {
@@ -21,15 +22,18 @@ export default Vue.extend({
     ...mapState({
       quickProfile: (state) => (state as RootState).ui.quickProfile,
     }),
-    isMe(): boolean {
-      return iridium.id === this.user?.did
-    },
     user(): User | undefined {
       return this.quickProfile?.user
     },
     src(): string {
       const hash = this.user?.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    },
+    conversationId(): Conversation['id'] | undefined {
+      if (!this.user) {
+        return
+      }
+      return iridium.chat.directConversationIdFromDid(this.user.did)
     },
   },
   mounted() {
@@ -51,33 +55,31 @@ export default Vue.extend({
         return
       }
       const quick = this.$refs.quick as HTMLElement
-      const clickX = this.quickProfile.position.x
-      const clickY = this.quickProfile.position.y
-      const widthOverflow = clickX + quick.clientWidth - window.innerWidth
-      const heightOverflow = clickY + quick.clientHeight - window.innerHeight
+      const widthOverflow =
+        this.quickProfile.position.x + quick.clientWidth - window.innerWidth
+      const heightOverflow =
+        this.quickProfile.position.y + quick.clientHeight - window.innerHeight
       if (widthOverflow > -8) {
-        quick.style.left = `${this.quickProfile.position.x - widthOverflow}px`
+        quick.style.left = `${
+          this.quickProfile.position.x - widthOverflow - 16
+        }px`
       }
       if (heightOverflow > -8) {
-        quick.style.top = `${this.quickProfile.position.y - heightOverflow}px`
+        quick.style.top = `${
+          this.quickProfile.position.y - heightOverflow - 16
+        }px`
       }
     },
     sendMessage() {
-      if (!this.user || !this.text.length) {
-        return
-      }
-      const conversationId = iridium.chat.directConversationIdFromDid(
-        this.user.did,
-      )
-      if (!conversationId) {
+      if (!this.user || !this.text.length || !this.conversationId) {
         return
       }
 
-      if (conversationId !== this.$route.params.id) {
+      if (this.conversationId !== this.$route.params.id) {
         this.$router.push(
           this.$device.isMobile
-            ? `/mobile/chat/${conversationId}`
-            : `/chat/${conversationId}`,
+            ? `/mobile/chat/${this.conversationId}`
+            : `/chat/${this.conversationId}`,
         )
       }
 
@@ -85,17 +87,14 @@ export default Vue.extend({
         at: Date.now(),
         type: 'text',
         body: this.text,
-        conversationId,
+        conversationId: this.conversationId,
         attachments: [],
         payload: {},
       })
       this.close()
     },
     openProfile() {
-      if (!this.user) {
-        return
-      }
-      if (this.isMe) {
+      if (iridium.id === this.user?.did) {
         this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
         this.close()
       } else {

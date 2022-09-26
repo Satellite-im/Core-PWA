@@ -6,19 +6,13 @@
   v-click-outside="close"
 >
   <div class="top">
-    <!-- todo - remove no-click after implementing regular profile for all users -->
-    <button
-      @click="openProfile"
-      class="open-profile-button"
-      :class="{'no-click' : !isMe}"
-    >
-      <!-- end todo -->
+    <button @click="openProfile" class="open-profile-button">
       <UiUserState :user="user" :size="40" />
     </button>
-    <TypographyText as="h4"> {{ user.name }} </TypographyText>
+    <TypographyText as="h4" class="ellipsis"> {{ user.name }} </TypographyText>
   </div>
   <InteractablesInput
-    v-if="!isMe"
+    v-if="conversationId"
     v-model.trim="text"
     ref="input"
     size="xs"
