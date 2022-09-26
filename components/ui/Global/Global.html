@@ -85,7 +85,10 @@
     </UiModal>
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
     <FilesView v-if="files.preview" />
-    <UiModal v-if="isNewAccount">
+    <UiModal
+      v-if="isNewAccount"
+      @close="$store.commit('accounts/setNewAccount', false)"
+    >
       <UiWelcomeModal />
     </UiModal>
   </transition>
