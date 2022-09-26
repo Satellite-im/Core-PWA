@@ -35,7 +35,9 @@ jobs:
             - recursive: true
               args: [--frozen-lockfile, --strict-peer-dependencies]
             - args: [--global, gulp, prettier, typescript]
+      - name: Setup ninja
       - run: sudo apt-get install ninja-build
+      - name: Ninja version
       - run: ninja --version
       - name: Install corepack
         run: brew install corepack
