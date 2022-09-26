@@ -3,27 +3,3 @@
 exports[`misc module.default.addFile with empty files array 1`] = `Array []`;
 
 exports[`misc module.default.addFile with existing files array 1`] = `Array []`;
-
-exports[`module.default.addFile 0 1`] = `undefined`;
-
-exports[`module.default.addFile 1 1`] = `undefined`;
-
-exports[`module.default.addFile 2 1`] = `undefined`;
-
-exports[`module.default.addFile 3 1`] = `undefined`;
-
-exports[`module.default.addFile 4 1`] = `undefined`;
-
-exports[`module.default.addFile 5 1`] = `undefined`;
-
-exports[`module.default.deleteFiles 0 1`] = `undefined`;
-
-exports[`module.default.deleteFiles 1 1`] = `undefined`;
-
-exports[`module.default.deleteFiles 2 1`] = `undefined`;
-
-exports[`module.default.deleteFiles 3 1`] = `undefined`;
-
-exports[`module.default.deleteFiles 4 1`] = `undefined`;
-
-exports[`module.default.deleteFiles 5 1`] = `undefined`;
