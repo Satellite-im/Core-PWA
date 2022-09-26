@@ -2,7 +2,7 @@
   <div class="confirmation">
     <div class="confirmation-main">
       <TypographyText color="flair" class="icon-container">
-        <info-icon size="1.5x" />
+        <info-icon size="2x" />
       </TypographyText>
       <div class="body">
         <div class="heading">
@@ -22,10 +22,12 @@
     </div>
 
     <div class="buttons">
-      <InteractablesButton color="light" class="close-button" @click="close">
-        <TypographyText color="light" font="heading">
-          {{ $t('ui.close') }}
-        </TypographyText>
+      <InteractablesButton
+        :color="showConfirmButton ? 'light' : 'primary'"
+        class="close-button"
+        @click="close"
+      >
+        {{ $t('ui.close') }}
       </InteractablesButton>
 
       <InteractablesButton
@@ -34,9 +36,7 @@
         class="confirm-button"
         @click="confirm"
       >
-        <TypographyText color="light" font="heading">
-          {{ $t('ui.confirm') }}
-        </TypographyText>
+        {{ $t('ui.confirm') }}
       </InteractablesButton>
     </div>
   </div>
@@ -71,12 +71,12 @@ export default Vue.extend({
 .confirmation {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  gap: 16px;
+  gap: 32px;
   height: 100%;
   max-width: 500px;
-  padding: 16px 32px 16px 16px;
+  padding: 24px;
   user-select: none;
   background: @modal-gradient;
   &:extend(.round-corners);
@@ -84,10 +84,10 @@ export default Vue.extend({
   .confirmation-main {
     display: flex;
     gap: 16px;
+    margin-right: 24px;
 
     .icon-container {
-      color: 'blue';
-      padding: 3px 0;
+      color: @dark;
     }
 
     .body {
@@ -113,7 +113,7 @@ export default Vue.extend({
 
   .buttons {
     display: flex;
-    gap: 16px;
+    gap: 8px;
     width: 100%;
     justify-content: flex-end;
   }
