@@ -184,10 +184,30 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           await this.$store.dispatch('accounts/loadAccount')
         } catch (error: any) {
           if (error.message === AccountsError.USER_NOT_REGISTERED) {
-            await this.$store.dispatch('accounts/registerUser', {
-              name: (Math.random() + 1).toString(36).substring(2),
-              image: '',
-              status: 'user-status',
+            try {
+              await this.$store.dispatch('accounts/registerUser', {
+                name: (Math.random() + 1).toString(36).substring(2),
+                image: '',
+                status: 'user-status',
+              })
+            } catch {
+              if (error.message === AccountsError.TIMED_OUT) {
+                this.$toast.error(
+                  this.$t('errors.accounts.timed_out') as string,
+                )
+                this.$store.commit('ui/toggleErrorNetworkModal', {
+                  state: true,
+                  action: () => this.$router.replace('/auth/unlock'),
+                })
+              }
+            }
+          }
+
+          if (error.message === AccountsError.TIMED_OUT) {
+            this.$toast.error(this.$t('errors.accounts.timed_out') as string)
+            this.$store.commit('ui/toggleErrorNetworkModal', {
+              state: true,
+              action: () => this.$router.replace('/auth/unlock'),
             })
           }
         }

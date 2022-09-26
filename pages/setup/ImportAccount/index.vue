@@ -46,6 +46,14 @@ export default Vue.extend({
         await this.$store.dispatch('accounts/loadAccount')
       } catch (error: any) {
         this.error = error.message
+
+        if (error.message === AccountsError.TIMED_OUT) {
+          this.$toast.error(this.$t('errors.accounts.timed_out') as string)
+          this.$store.commit('ui/toggleErrorNetworkModal', {
+            state: true,
+            action: () => this.$router.replace('/auth/unlock'),
+          })
+        }
         return
       }
 
