@@ -41,7 +41,7 @@ jobs:
         run: sh ./linkscript.sh
       - name: Create env file - iridium
         run: |
-          cd iridium
+          ls
           touch .env
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
           echo CERTBOT_EMAIL="support@satellite.im" >> .env
