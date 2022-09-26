@@ -41,35 +41,13 @@ export const Config = {
     upload: `sounds/Success.m4a`,
     connected: `sounds/Success.m4a`,
   },
-  cacher: {
-    user_lifespan: 90000,
-  },
-  webtorrent: {
-    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
-      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
-      : [
-          'wss://tracker.openwebtorrent.com',
-          'wss://tracker.sloppyta.co:443/announce',
-          'wss://tracker.novage.com.ua:443/announce',
-          'udp://opentracker.i2p.rocks:6969/announce',
-          'http://opentracker.i2p.rocks:6969/announce',
-          'udp://tracker.opentrackr.org:1337/announce',
-          'http://tracker.opentrackr.org:1337/announce',
-        ],
-  },
   solana: {
     customFaucet: 'https://dev-faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
       : undefined,
-    serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
-    friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
-    friendsProgramExId: 'GjS6t1gK9nktqDJBTjobm9Fdepxg2FGb4vifRDEQ8hXL',
-    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
-    defaultPreflightCommitment: 'confirmed' as Commitment,
-    usersProgramId: '8n2ct4HBadJdtr8T31JvYPTvmYeZyCuLUjkt3CwcSsh9',
   },
   // Realms are just different chains we support
   realms: [

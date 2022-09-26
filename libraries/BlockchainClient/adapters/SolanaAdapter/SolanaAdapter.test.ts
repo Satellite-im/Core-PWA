@@ -1,7 +1,7 @@
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter/SolanaAdapter'
 import { AccountsError } from '~/store/accounts/types'
 
-describe('Test Solana Adapter', () => {
+describe.skip('Test Solana Adapter', () => {
   it('should initialize the constructor', () => {
     try {
       const instance = new SolanaAdapter()

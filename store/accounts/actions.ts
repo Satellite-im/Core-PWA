@@ -376,7 +376,7 @@ export default {
 
 /**
  * @method uploadPicture
- * @description helper function to upload image to textile if needed
+ * @description helper function to upload image to iridium if needed
  * @param image data string of uploaded image
  * @returns IPFS CID of image, or '' if no image is present
  */

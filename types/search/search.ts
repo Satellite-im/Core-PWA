@@ -1,5 +1,4 @@
 import { MatchInfo } from 'minisearch'
-import { MessageTypes } from '../textile/mailbox'
 import { Friend } from '../ui/friends'
 import { User } from '../ui/user'
 
@@ -144,7 +143,7 @@ export interface UISearchResultData {
   score: number
   terms: string[]
   to: string
-  type: MessageTypes
+  type: any
   user?: User
 }
 

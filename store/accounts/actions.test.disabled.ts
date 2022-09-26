@@ -88,8 +88,6 @@ describe('init', () => {
         profilePicture: '',
         state: 'online',
         status: 'dasdad',
-        textilePubkey:
-          'bbaareifiszb2kb2mejsgng4d52g2y2fxxuhhgnblixjqsvdatptpn7t6dy',
       },
       pin: '?{fD', // length is 3, rather than the minimum that is 5
     }
@@ -105,7 +103,6 @@ describe('init', () => {
   })
 
   test('unlock with set phrase', async () => {
-    const CPrototype = Vue.prototype.$Crypto
     const state = {
       storePin: false,
       locked: false,
@@ -128,8 +125,6 @@ describe('init', () => {
         profilePicture: '',
         state: 'online',
         status: 'dasdad',
-        textilePubkey:
-          'bbaareifiszb2kb2mejsgng4d52g2y2fxxuhhgnblixjqsvdatptpn7t6dy',
       },
       pin: '?{fDn4s8I5~sb@*F858{]CZ@A',
     }
@@ -171,8 +166,6 @@ describe('init', () => {
         profilePicture: '',
         state: 'online',
         status: 'dasdad',
-        textilePubkey:
-          'bbaareifiszb2kb2mejsgng4d52g2y2fxxuhhgnblixjqsvdatptpn7t6dy',
       },
       pin: '?{fDn4s8I5~sb@*F858{]CZ@A',
     }
@@ -212,8 +205,6 @@ describe('init', () => {
         profilePicture: '',
         state: 'online',
         status: 'dasdad',
-        textilePubkey:
-          'bbaareifiszb2kb2mejsgng4d52g2y2fxxuhhgnblixjqsvdatptpn7t6dy',
       },
       pin: false, // invalid for it is not true
     }
@@ -253,8 +244,6 @@ describe('init', () => {
         profilePicture: '',
         state: 'online',
         status: 'dasdad',
-        textilePubkey:
-          'bbaareifiszb2kb2mejsgng4d52g2y2fxxuhhgnblixjqsvdatptpn7t6dy',
       },
       pin: '?{fDn4s8I5~sb@*F858{]CZ@A',
     }
@@ -363,7 +352,6 @@ describe('init', () => {
           badge: 'community',
           userAccount: '',
           mailboxId: '',
-          textilePubkey: '',
         },
         registrationStatus: RegistrationStatus.IN_PROGRESS,
         lastVisited: '',
@@ -416,7 +404,6 @@ describe('init', () => {
             typingState: 'NOT_TYPING',
             item: {},
             pending: true,
-            encryptedTextilePubkey: '',
             name: 'Taurus Nix',
             address: '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f',
             account: {
@@ -427,8 +414,6 @@ describe('init', () => {
               toMailboxId: 'v4.0.0-rc.4',
               to: './path/to/file',
             },
-            textilePubkey:
-              'https://accounts.google.com/o/oauth2/revoke?token=%s',
             status: '',
             state: 'idle',
             unreadCount: 123,
@@ -439,22 +424,8 @@ describe('init', () => {
           },
         ],
       },
-      textile: {
-        initialized: true,
-        conversations: {},
-        conversationLoading: true,
-        messageLoading: true,
-        uploadProgress: {
-          abc: {
-            progress: 42,
-            finished: false,
-            name: 'file.pdf',
-          },
-        },
-      },
       prerequisites: {
         accountsReady: true,
-        textileReady: true,
         p2pReady: true,
       },
     }

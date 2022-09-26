@@ -48,12 +48,6 @@ export default Vue.extend({
       if (this.friends.length === 1) {
         const friend = this.friends[0]
         this.$store.commit('ui/showSidebar', false)
-        this.$store.dispatch('conversation/setConversation', {
-          id: friend.address,
-          type: 'friend',
-          participants: [friend],
-          calling: false,
-        })
         this.$router.push(`/chat/direct/${friend.address}`)
         return
       }
@@ -81,10 +75,6 @@ export default Vue.extend({
           ),
         )
         this.$store.commit('ui/showSidebar', false)
-        this.$store.dispatch('conversation/setConversation', {
-          id: groupId,
-          type: 'group',
-        })
         this.$router.push(`/chat/groups/${groupId}`)
       } catch (e: any) {
         this.error = `Failed to create group: ${e.message}`

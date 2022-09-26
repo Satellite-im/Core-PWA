@@ -1,7 +1,6 @@
 import { TranslateResult } from 'vue-i18n'
 import { Glyph } from '~/types/ui/glyph'
 import { Channel } from '~/types/ui/server'
-import { Alert } from '~/libraries/ui/Alerts'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 
@@ -82,10 +81,8 @@ export interface UIState {
   contextMenuValues: ContextMenuItem[]
   quickProfile?: { user: User; position: Position }
   userProfile: object
-  notifications: Alert[]
   contextMenuPosition: object
   settingsRoute: SettingsRoutes
-  showSearchResult: boolean
   showSidebar: boolean
   modals: {
     [key in ModalWindows]: boolean | object
@@ -97,10 +94,7 @@ export interface UIState {
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  isScrollOver: boolean
   showOlderMessagesInfo: boolean
-  isTyping: object | boolean
-  isReacted: boolean
   activeChannel: Channel | undefined
   settingReaction: object
   hoveredGlyphInfo: object | undefined
