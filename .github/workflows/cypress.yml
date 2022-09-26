@@ -26,9 +26,9 @@ jobs:
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
       - name: Setup ninja
-      - run: sudo apt-get install ninja-build
+        run: sudo apt-get install ninja-build
       - name: Ninja version
-      - run: ninja --version
+        run: ninja --version
       - name: Install corepack
         run: brew install corepack
       - name: Linkscript
