@@ -36,6 +36,10 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: install pnpm
+        run: brew install pnpm
+      - name: brew install corepack
+        run: brew install corepack
       - name: Linkscript
         run: sh ./linkscript.sh
       - name: Create env file - iridium
