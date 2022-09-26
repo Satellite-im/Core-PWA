@@ -65,7 +65,7 @@ jobs:
         run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
       - name: Cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           working-directory: ./
           install: false
