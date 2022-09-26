@@ -19,12 +19,13 @@
         <button
           v-if="type === 'incoming'"
           :disabled="loading"
+          class="accept"
           @click="acceptFriendRequest"
         >
-          <user-plus-icon />
+          <check-icon />
         </button>
-        <button :disabled="loading" @click="cancelRequest">
-          <trash-icon />
+        <button :disabled="loading" class="reject" @click="cancelRequest">
+          <x-icon />
         </button>
       </template>
     </div>
@@ -33,19 +34,15 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import {
-  MessageCircleIcon,
-  TrashIcon,
-  UserPlusIcon,
-} from 'satellite-lucide-icons'
+import { MessageCircleIcon, XIcon, CheckIcon } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
     MessageCircleIcon,
-    TrashIcon,
-    UserPlusIcon,
+    XIcon,
+    CheckIcon,
   },
   props: {
     user: {
@@ -112,6 +109,14 @@ export default Vue.extend({
     display: flex;
     flex-shrink: 0;
     gap: 1rem;
+
+    .accept {
+      color: @green;
+    }
+
+    .reject {
+      color: @red;
+    }
   }
 
   button:disabled {
