@@ -68,6 +68,7 @@ jobs:
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
+          working-directory: ./
           install: false
           start: yarn dev 
           run: sh ./build-script.sh
