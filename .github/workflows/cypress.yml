@@ -41,7 +41,7 @@ jobs:
         run: sh ./linkscript.sh
       - name: Create env file - iridium
         run: |
-          ls
+          cd linked-iridium
           touch .env
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
           echo CERTBOT_EMAIL="support@satellite.im" >> .env
@@ -55,19 +55,19 @@ jobs:
         id: envfileiridium
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./iridium/.env
+          path: ./linked-iridium/.env
       - name: Echo .env
         run: echo "${{ steps.envfileiridium.outputs.content }}"
-        working-directory: iridium
+        working-directory: linked-iridium
       - name: Run iridium install
         run: pnpm i
-        working-directory: ./iridium
+        working-directory: ./linked-iridium
       - name: Run iridium build
         run: pnpm build
-        working-directory: ./iridium
+        working-directory: ./linked-iridium
       - name: Run iridium node-sync
         run: pnpm node-sync
-        working-directory: ./iridium
+        working-directory: ./linked-iridium
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
