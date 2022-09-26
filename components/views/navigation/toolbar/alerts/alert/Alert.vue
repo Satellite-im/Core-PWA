@@ -40,10 +40,6 @@ export default Vue.extend({
       }
       return this.$t('user_sent_something.user')
     },
-    // alertImage(): string {
-    //   const hash = this.alert?.image
-    //   return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    // },
   },
   methods: {
     removeNotification() {

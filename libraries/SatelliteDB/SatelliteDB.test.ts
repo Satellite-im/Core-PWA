@@ -41,7 +41,7 @@ describe('SatelliteDB', () => {
 
   test('restoring search indexes', async () => {
     const where = { address: 'foo' }
-    const data = { name: 'bar', textilePubkey: 'baz' }
+    const data = { name: 'bar' }
     await db.initializeSearchIndexes()
     await db.upsert('friends', where, data)
     await db.saveSearchIndexes()
@@ -56,7 +56,7 @@ describe('SatelliteDB', () => {
 
   test('reinitializing search indexes', async () => {
     const where = { address: 'foo' }
-    const data = { name: 'bar', textilePubkey: 'baz' }
+    const data = { name: 'bar' }
     await db.initializeSearchIndexes()
     await db.upsert('friends', where, data)
     await db.saveSearchIndexes()
@@ -75,7 +75,6 @@ describe('SatelliteDB', () => {
   test('upserting records', async () => {
     const where = { address: '1' }
     const original = {
-      textilePubkey: 'foobarbaz',
       name: 'foo',
       photoHash: 'bar',
       lastUpdate: 1,

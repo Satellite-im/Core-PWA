@@ -51,7 +51,6 @@ describe('actions.default.toggleMute', () => {
         badge: 'community',
         userAccount: '',
         mailboxId: '',
-        textilePubkey: '',
       },
       registrationStatus: RegistrationStatus.IN_PROGRESS,
       lastVisited: '',
@@ -104,7 +103,6 @@ describe('actions.default.toggleMute', () => {
           typingState: 'NOT_TYPING',
           item: {},
           pending: true,
-          encryptedTextilePubkey: '',
           name: 'Taurus Nix',
           address: 'QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi', // ADDRESS FOR PEER ID
           account: {
@@ -115,7 +113,6 @@ describe('actions.default.toggleMute', () => {
             toMailboxId: 'v4.0.0-rc.4',
             to: './path/to/file',
           },
-          textilePubkey: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
           status: '',
           state: 'idle',
           unreadCount: 123,
@@ -125,19 +122,6 @@ describe('actions.default.toggleMute', () => {
           mailboxId: '',
         },
       ],
-    },
-    textile: {
-      initialized: true,
-      conversations: {},
-      conversationLoading: true,
-      messageLoading: true,
-      uploadProgress: {
-        abc: {
-          progress: 42,
-          finished: false,
-          name: 'file.pdf',
-        },
-      },
     },
     webrtc: {
       initialized: true,

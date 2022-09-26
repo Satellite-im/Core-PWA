@@ -9,7 +9,6 @@ import {
   VideoIcon,
 } from 'satellite-lucide-icons'
 
-import { mapGetters } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import {
   conversationHooks,
@@ -58,9 +57,6 @@ export default Vue.extend({
       webrtc: iridium.webRTC.state,
       chat: iridium.chat.state,
     }
-  },
-  computed: {
-    ...mapGetters('ui', ['allUnseenNotifications']),
   },
 })
 </script>

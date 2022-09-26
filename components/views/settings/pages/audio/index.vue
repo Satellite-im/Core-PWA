@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import {
   Bitrates,
   SampleSizes,
@@ -63,7 +63,6 @@ export default Vue.extend({
       settings: (state) => (state as RootState).settings,
       audio: (state) => (state as RootState).audio,
     }),
-    ...mapGetters('textile', ['getInitialized']),
     // React to v-model changes to echoCancellation and update
     // the state accordingly with the mutation
     isEchoCancellation: {

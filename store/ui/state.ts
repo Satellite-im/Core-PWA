@@ -2,9 +2,7 @@ import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
-  notifications: [],
   showSidebar: true,
-  showSearchResult: false,
   showSettings: false,
   settingsRoute: SettingsRoutes.EMPTY,
   userProfile: {},
@@ -40,10 +38,7 @@ const InitialUIState = (): UIState => ({
   },
   messages: [],
   unreadMessage: 0,
-  isScrollOver: false,
   showOlderMessagesInfo: false,
-  isTyping: false,
-  isReacted: false,
   activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
