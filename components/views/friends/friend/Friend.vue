@@ -114,9 +114,11 @@ export default Vue.extend({
       this.loading = false
     },
     async sendMessageRequest() {
-      this.$router.push(
-        `/chat/${iridium.chat?.directConversationIdFromDid(this.user.did)}`,
+      const isMobile = this.$device.isMobile
+      const conversationId = iridium.chat?.directConversationIdFromDid(
+        this.user.did,
       )
+      this.$router.push(`${isMobile ? '/mobile' : ''}/chat/${conversationId}`)
     },
   },
 })
