@@ -66,8 +66,10 @@ jobs:
         run: pnpm build
         working-directory: ./linked-iridium
       - name: Run iridium node-sync
-        run: pnpm sync-node
-        working-directory: ./linked-iridium
+        with:
+          command: pnpm sync-node
+          wait-on-timeout: 30
+          working-directory: ./linked-iridium
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
