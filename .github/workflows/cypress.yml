@@ -21,11 +21,13 @@ jobs:
           unset ELECTRON_RUN_AS_NODE
           /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
           export DISPLAY=:99
-      - name: Create env file
+      - name: Create env file - core
         run: |
           touch .env
           echo ENVIRONMENT="dev" >> .env
           echo NUXT_ENV_IRIDIUM_SYNC_NODES=${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }} >> .env
+          echo NUXT_ENV_IRIDIUM_APIS=${{ secrets.NUXT_ENV_IRIDIUM_APIS }} >> .env
+          echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
           cat .env
       - name: Read .env file
         id: envfile
@@ -34,14 +36,43 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Create env file - iridium
+        working-directory: ./iridium
+        run: |
+          touch .env
+          echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
+          echo CERTBOT_EMAIL="support@satellite.im" >> .env
+          echo SYNC_NODE_SEED="sync node a seed" >> .env
+          echo SYNC_NODE_ADDR=${{ secrets.SYNC_NODE_ADDR }} >> .env
+          echo SERVERDATAVOLUME=${{ secrets.SERVERDATAVOLUME }} >> .env
+          echo NODE_ENV="development" >> .env
+          echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
+          cat .env
+      - name: Read .env file
+        id: envfileiridium
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./iridium/.env
+      - name: Echo .env
+        run: echo "${{ steps.envfileiridium.outputs.content }}"
+        working-directory: ./iridium
       - name: Linkscript
         run: sh ./linkscript.sh
+      - name: Run iridium install
+        run: pnpm i
+        working-directory: ./iridium
+      - name: Run iridium build
+        run: pnpm build
+        working-directory: ./iridium
+      - name: Run iridium node-sync
+        run: pnpm node-sync
+        working-directory: ./iridium
       - name: Cypress run pair chat testing
         uses: cypress-io/github-action@v2
         with:
           working-directory: ./
           install: false
-          start: yarn dev
+          start: yarn && yarn dev
           command: npx cypress run --browser chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
