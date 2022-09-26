@@ -192,7 +192,6 @@ export default {
         placeholder: 'Search...',
         enable_global: 'Enable Global Search',
         disable_global: 'Disable Global Search',
-        empty: 'No results found',
       },
       status: {
         prepare: 'Preparing files for upload',
