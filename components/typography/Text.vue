@@ -3,7 +3,7 @@
     :is="as"
     :class="[
       `font-${getFont} font-color-${getColor} font-size-${getSize} font-weight-${getWeight}`,
-      { uppercase: uppercase },
+      { uppercase: getUppercase },
     ]"
   >
     <slot />
@@ -71,7 +71,7 @@ export default Vue.extend({
         ['h4', 'md'],
         ['h5', 'sm'],
         ['h6', 'xs'],
-        ['label', 'sm'],
+        ['label', 'xs'],
         ['small', 'sm'],
       ])
       return map.get(this.as) || 'md'
@@ -84,6 +84,9 @@ export default Vue.extend({
         return 'bold'
       }
       return 'normal'
+    },
+    getUppercase(): boolean {
+      return this.uppercase || this.as === 'label'
     },
   },
 })

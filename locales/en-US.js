@@ -12,7 +12,7 @@ export default {
   },
   welcome_message: {
     dismiss_forever: 'Dismiss Forever',
-    welcome: 'Welcome {user}!',
+    welcome: 'Welcome, {user}!',
     ea_warning:
       'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   },
@@ -42,7 +42,7 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    live: 'Live for {time}',
+    live: 'Live {time}',
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
@@ -257,8 +257,9 @@ export default {
       store_pin: 'Store Password? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
-      browser_warning:
-        'Satellite is optimized for Chromium browsers. You may experience UI and functional issues. We will optimize for more browsers in the future.',
+      browser_warning_header: 'Satellite is optimized for Chromium browsers',
+      browser_warning_content:
+        'You may experience UI and functional issues. We will optimize for more browsers in the future.',
       confirm_clear_account: 'This will clear your account',
       confirm_clear_account_description:
         'Are you sure you want to clear your account and all data?',

@@ -14,6 +14,10 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    showCloseButton: {
+      type: Boolean,
+      default: true,
+    },
   },
   created() {
     this.addEventListener()

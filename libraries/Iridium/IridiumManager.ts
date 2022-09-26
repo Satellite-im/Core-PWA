@@ -39,13 +39,6 @@ export class IridiumManager extends Emitter {
     this.users = new UsersManager()
   }
 
-  /**
-   * @method
-   * Initialization function that creates a Textile identity
-   * and initializes the Mailbox
-   * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
-   * @returns a promise that resolves when the initialization completes
-   */
   async start() {
     this.connector?.on('stopping', async () => {
       logger.info('iridium/manager', 'stopping')
@@ -74,13 +67,6 @@ export class IridiumManager extends Emitter {
     return this.connector.id
   }
 
-  /**
-   * @method
-   * Initialization function that creates a Textile identity
-   * and initializes the Mailbox
-   * @param param0 Textile Configuration that includes id, password and SolanaWallet instance
-   * @returns a promise that resolves when the initialization completes
-   */
   async initFromEntropy(entropy: Uint8Array) {
     logger.info('iridium/manager', 'initFromEntropy()')
     this.connector = await createIridiumIPFS(entropy, {

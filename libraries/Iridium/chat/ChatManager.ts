@@ -360,6 +360,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
    * significantly faster than Iridium.hash until about 5,000,000 conversation records
    */
   directConversationIdFromDid(friendDid: Friend['did']): string | undefined {
+    if (friendDid === iridium.id) {
+      return
+    }
     return Object.values(this.state.conversations).find(
       (c) => c.type === 'direct' && c.participants.includes(friendDid),
     )?.id

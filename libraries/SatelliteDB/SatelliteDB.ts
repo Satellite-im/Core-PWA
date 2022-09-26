@@ -1,6 +1,5 @@
-import { Dexie, IndexableType } from 'dexie'
+import { Dexie } from 'dexie'
 import SearchIndex from './SearchIndex'
-import { Message } from '~/types/textile/mailbox'
 import { Config } from '~/config'
 
 export type DexieConversation = {
@@ -15,7 +14,6 @@ export type DexieFriend = {
   address: string
   name: string
   photoHash: string | undefined
-  textilePubkey: string
   lastUpdate: number
 }
 
@@ -60,7 +58,7 @@ export class SatelliteDB extends Dexie {
     })
 
     this.version(2).stores({
-      friends: '&address, textilePubkey, name, photoHash, lastUpdate',
+      friends: '&address, name, photoHash, lastUpdate',
     })
 
     this.version(3).stores({
@@ -91,7 +89,7 @@ export class SatelliteDB extends Dexie {
     if (!this.search.friends) {
       this.search.friends = new SearchIndex({
         schema: {
-          fields: ['address', 'name', 'photoHash', 'textilePubkey'],
+          fields: ['address', 'name', 'photoHash'],
           storeFields: ['address'],
           idField: 'address',
         },

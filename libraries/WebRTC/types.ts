@@ -1,13 +1,4 @@
-import { TypeOf } from 'io-ts'
 import { SignalData } from 'simple-peer'
-import {
-  wireDataMessage,
-  wireIdentificationMessage,
-  wireRefuseConnectionMessage,
-  wireSignalMessage,
-  wireKeyboardState,
-  KeyboardStates,
-} from './Encoders'
 
 export interface WireEventListeners {
   ERROR: (data: { did: string; error: Error }) => void
@@ -19,31 +10,7 @@ export interface WireEventListeners {
   IDENTIFICATION: (data: { did: string }) => void
   SIGNAL: (data: { did: string; data: SignalData }) => void
   REFUSE: (data: { did: string }) => void
-  TYPING_STATE: (data: {
-    state: TypeOf<typeof KeyboardStates>
-    did: string
-  }) => void
 }
-
-export type WireEvents = keyof WireEventListeners
-
-export type WireIdentificationMessage = TypeOf<typeof wireIdentificationMessage>
-export type WireDataMessage = TypeOf<typeof wireDataMessage>
-export type WireSignalMessage = TypeOf<typeof wireSignalMessage>
-export type WireKeyboardState = TypeOf<typeof wireKeyboardState>
-export type WireRefuseConnectionMessage = TypeOf<
-  typeof wireRefuseConnectionMessage
->
-export interface WireMessages {
-  IDENTIFICATION: WireIdentificationMessage
-  DATA: WireDataMessage
-  SIGNAL: WireSignalMessage
-  REFUSE: WireRefuseConnectionMessage
-  TYPING_STATE: WireKeyboardState
-}
-
-export type WireMessageType = keyof WireMessages
-export type WireMessage = WireMessages[WireMessageType]
 
 export type Tracks = {
   audio: MediaStreamTrack

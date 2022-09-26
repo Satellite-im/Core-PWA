@@ -5,7 +5,6 @@ import { mapState } from 'vuex'
 import { PlusSquareIcon, MinusSquareIcon } from 'satellite-lucide-icons'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import { RootState } from '~/types/store/store'
-import { ChatReply } from '~/store/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 interface ReplyItem {
@@ -44,14 +43,6 @@ export default Vue.extend({
           isSameAuthor,
         }
       })
-    },
-    setChatReply: {
-      set(state) {
-        this.$store.commit('chat/setChatReply', state)
-      },
-      get(): ChatReply[] {
-        return this.chat.replies
-      },
     },
     accordionText(): string {
       const uniqueRepliers = [

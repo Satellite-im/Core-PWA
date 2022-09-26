@@ -23,7 +23,7 @@
   <div class="files-view">
     <div v-if="!directory.length">
       <UiResultsMessage
-        :title="$t(`pages.files.${searchValue ? 'search.' : ''}empty`)"
+        :title="$t(`${searchValue ? 'ui.no_results' : 'pages.files.empty'}`)"
       />
     </div>
 

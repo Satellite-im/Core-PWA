@@ -1,30 +1,12 @@
 import Mousetrap from 'mousetrap'
-import { Position, UIState, ModalWindows } from './types'
-import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { UIState, ModalWindows } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import { Friend } from '~/types/ui/friends'
 import { Channel } from '~/types/ui/server'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
-const $Sounds = new SoundManager()
-
 export default {
-  setMessages({ commit }: ActionsArguments<UIState>, messages: any[]) {
-    commit('setMessages', messages)
-  },
-  sendMessage({ commit, rootState }: ActionsArguments<UIState>, message: any) {
-    if (message.user.address !== rootState.accounts.active) {
-      $Sounds.playSound(Sounds.NEW_MESSAGE)
-    }
-    commit('sendMessage', message)
-  },
-  setIsScrollOver({ commit }: ActionsArguments<UIState>, status: boolean) {
-    commit('setIsScrollOver', status)
-  },
-  setIsReacted({ commit }: ActionsArguments<UIState>, status: boolean) {
-    commit('setIsReacted', status)
-  },
   setActiveChannel({ commit }: ActionsArguments<UIState>, channel: Channel) {
     commit('setActiveChannel', channel)
   },
@@ -73,19 +55,13 @@ export default {
     commit('setChatbarFocus', flag)
   },
   setChatbarContent(
-    { commit, dispatch }: ActionsArguments<UIState>,
+    { commit }: ActionsArguments<UIState>,
     val: {
       content: string
       userId?: string
     },
   ) {
     commit('chatbarContent', val.content)
-    if (val.userId)
-      dispatch(
-        'chat/setChatText',
-        { value: val.content, userId: val.userId },
-        { root: true },
-      )
   },
   async showProfile({ commit }: ActionsArguments<UIState>, user: Friend) {
     commit('toggleModal', {
@@ -94,7 +70,6 @@ export default {
     })
     commit('setUserProfile', user)
   },
-
   displayConsentSettings({ commit, state }: ActionsArguments<UIState>) {
     commit(
       'ui/toggleModal',

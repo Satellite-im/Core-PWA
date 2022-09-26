@@ -7,15 +7,19 @@
   </SettingsHeader>
 
   <SettingsUnit>
-    <TypographyLabel :text="$t('pages.settings.accounts.active')" />
-    <InteractablesInput readonly :text="getId" @submit="copyAddress(getId)">
+    <InteractablesInput
+      readonly
+      :label="$t('pages.settings.accounts.active')"
+      :text="getId"
+      @submit="copyAddress(getId)"
+    >
       <clipboard-icon size="1x" />
     </InteractablesInput>
   </SettingsUnit>
   <SettingsUnit>
-    <TypographyLabel :text="$t('pages.settings.accounts.active_did')" />
     <InteractablesInput
       readonly
+      :label="$t('pages.settings.accounts.active_did')"
       :text="profile.did"
       @submit="copyAddress(profile.did)"
     >
