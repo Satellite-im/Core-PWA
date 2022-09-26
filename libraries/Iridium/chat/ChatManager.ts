@@ -84,20 +84,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       handler: this.onConversationAnnounce.bind(this),
     })
 
-    for (const conversation of conversations) {
-      const topic = `/chat/conversations/${conversation.id}`
-      logger.info(
-        'iridium/chatmanager/init',
-        `requesting sync subscription to ${topic}`,
-      )
-      // ask the sync node to subscribe to this topic
-      await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
-        sync: {
-          offline: true,
-        },
-        handler: this.onConversationMessage.bind(this, conversation.id),
-      })
-    }
+    await Promise.all(
+      conversations.map(async (conversation) => {
+        const topic = `/chat/conversations/${conversation.id}`
+        logger.info(
+          'iridium/chatmanager/init',
+          `requesting sync subscription to ${topic}`,
+        )
+        // ask the sync node to subscribe to this topic
+        return iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
+          sync: {
+            offline: true,
+          },
+          handler: this.onConversationMessage.bind(this, conversation.id),
+        })
+      }),
+    )
     this.ready = true
     this.emit('ready', {})
   }
