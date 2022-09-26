@@ -1,7 +1,8 @@
 <template>
   <ModalDialog :primary-button="primaryButton">
     <template #image>
-      <img src="~/assets/svg/mascot/new_things.svg" />
+      <img class="mascot-glow" src="~/assets/svg/mascot/new_things.svg" />
+      <img class="mascot-overlay" src="~/assets/svg/mascot/new_things.svg" />
     </template>
 
     <template #title>
@@ -15,7 +16,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { CheckIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -33,7 +33,6 @@ export default Vue.extend({
       return {
         text: this.$t('modal.update_modal.got_it'),
         action: this.closeModal,
-        icon: CheckIcon,
       }
     },
   },
@@ -44,3 +43,15 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="less">
+.mascot-glow {
+  position: absolute;
+  filter: blur(10px);
+  mix-blend-mode: color-dodge;
+}
+
+.mascot-overlay {
+  position: relative;
+}
+</style>

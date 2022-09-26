@@ -4,7 +4,7 @@
   ref="container"
   tabindex="-1"
 >
-  <TypographyLabel :text="name" />
+  <TypographyText as="label">{{ name }}</TypographyText>
   <div class="control">
     <TypographyText v-if="!isListening && value === ''" class="info-label">
       {{$t('pages.settings.keybinds.no_mapping')}}

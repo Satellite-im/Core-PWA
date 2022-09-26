@@ -20,7 +20,9 @@ export default Vue.extend({
   watch: {
     webrtc: {
       handler() {
-        this.callTimeString = this.$dayjs(this.webrtc.callStartedAt).toNow(true)
+        this.callTimeString = formatDuration(
+          (Date.now() - this.webrtc.callStartedAt) / 1000,
+        )
       },
       deep: true,
     },

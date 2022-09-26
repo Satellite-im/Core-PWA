@@ -7,7 +7,7 @@
       </div>
 
       <!-- title -->
-      <TypographyText v-if="$slots.title" color="body" size="xl" class="title">
+      <TypographyText v-if="$slots.title" as="h1" color="body" class="title">
         <slot name="title"></slot>
       </TypographyText>
 
@@ -27,6 +27,7 @@
       <InteractablesButton
         v-if="primaryButton"
         class="action"
+        size="lg"
         @click="primaryButton.action"
       >
         <component
@@ -35,7 +36,7 @@
           size="1x"
         />
 
-        <TypographyText class="text">{{ primaryButton.text }}</TypographyText>
+        {{ primaryButton.text }}
       </InteractablesButton>
     </div>
   </div>
