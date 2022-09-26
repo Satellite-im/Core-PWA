@@ -36,6 +36,8 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Linkscript
+        run: sh ./linkscript.sh
       - name: Create env file - iridium
         working-directory: iridium
         run: |
@@ -56,8 +58,6 @@ jobs:
       - name: Echo .env
         run: echo "${{ steps.envfileiridium.outputs.content }}"
         working-directory: ./iridium
-      - name: Linkscript
-        run: sh ./linkscript.sh
       - name: Run iridium install
         run: pnpm i
         working-directory: ./iridium
