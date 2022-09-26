@@ -36,9 +36,11 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
-      - name: install pnpm
+      - name: Install brew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: Install pnpm
         run: brew install pnpm
-      - name: brew install corepack
+      - name: Install corepack
         run: brew install corepack
       - name: Linkscript
         run: sh ./linkscript.sh
