@@ -15,7 +15,6 @@
         :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
         :placeholder="$t('pages.unlock.placeholder')"
         :loading="status === 'loading'"
-        size="sm"
         autofocus
         @submit="action"
         data-cy="pin-label"
