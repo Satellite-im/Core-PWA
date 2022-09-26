@@ -68,9 +68,9 @@ jobs:
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ./
           install: false
-          start: yarn && yarn dev && cd .. && cd linked-iridium pnpm sync-node
+          start: yarn && yarn dev 
+          run: cd .. && cd linked-iridium pnpm sync-node
           command: npx cypress run --browser chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
