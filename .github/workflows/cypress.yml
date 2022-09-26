@@ -25,6 +25,16 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
+      - name: Install brew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.12.2
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+            - args: [--global, gulp, prettier, typescript]
       - name: Setup ninja
         run: sudo apt-get install ninja-build
       - name: Ninja version
