@@ -1,4 +1,17 @@
 <div class="container">
+  <div class="header">
+    <div v-if="!isChrome" class="banner-wrapper">
+      <UiBanner>
+        <template #header>
+          {{ $t('pages.unlock.browser_warning_header') }}
+        </template>
+        <template #content>
+          {{ $t('pages.unlock.browser_warning_content') }}
+        </template>
+      </UiBanner>
+    </div>
+  </div>
+
   <div class="decryption-body">
     <template v-if="step === 'signup'">
       <UiInfoButton class="info-button">
@@ -41,10 +54,6 @@
     </button>
 
     <!-- <InteractablesRealm /> -->
-
-    <TypographyText v-if="!isChrome" color="danger" style="max-width: 600px">
-      {{ $t('pages.unlock.browser_warning') }}
-    </TypographyText>
 
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
