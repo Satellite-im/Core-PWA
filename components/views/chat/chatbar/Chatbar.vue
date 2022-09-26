@@ -226,21 +226,16 @@ const Chatbar = Vue.extend({
             event.preventDefault()
           }
           break
-        default:
-          break
-      }
-      this.smartTypingStart()
-    },
-    handleInputKeyup(event: KeyboardEvent) {
-      switch (event.key) {
         case KeybindingEnum.ARROW_UP:
-          if (!event.shiftKey) {
+          if (!event.shiftKey && !this.text.length) {
+            event.preventDefault()
             this.editMessage()
           }
           break
         default:
           break
       }
+      this.smartTypingStart()
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
       if (!this.files.length) {
