@@ -9,7 +9,7 @@
     class="chatbar-wrap"
     :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners}"
   >
-    <ChatbarUpload ref="upload" />
+    <ChatbarUpload ref="upload" :disabled="!isSubscribed" />
     <!-- <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
       v-if="hasCommand"

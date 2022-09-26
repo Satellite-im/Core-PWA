@@ -3,7 +3,7 @@
     {{ lengthCount }}
   </TypographyText>
   <TypographyText v-if="!isSubscribed" size="sm" color="dark">
-    {{ 'still connecting' }}
+    {{ $t('ui.chat_not_ready') }}
   </TypographyText>
-  <ChatbarFooterTypingIndicator />
+  <ChatbarFooterTypingIndicator v-if="isSubscribed" />
 </div>

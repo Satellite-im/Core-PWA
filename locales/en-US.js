@@ -34,6 +34,7 @@ export default {
     search: 'Search',
     home: 'Home',
     peer_not_active: 'Please wait while peer connects...',
+    chat_not_ready: 'Please wait while connecting...',
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
     emoji: 'Emoji',
