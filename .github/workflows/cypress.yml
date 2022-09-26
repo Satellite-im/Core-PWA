@@ -37,7 +37,7 @@ jobs:
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
       - name: Create env file - iridium
-        working-directory: ./iridium
+        working-directory: iridium
         run: |
           touch .env
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
