@@ -69,7 +69,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
-          start: yarn && yarn dev 
+          start: yarn dev 
           run: sh ./build-script.sh
           command: npx cypress run --browser chrome
           wait-on: http://localhost:3000
