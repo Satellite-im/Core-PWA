@@ -21,6 +21,14 @@
       <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
+      v-else-if="isFriend"
+      data-cy="friend-send-message"
+      v-tooltip.bottom="$t('friends.message')"
+      @click="sendMessageRequest"
+    >
+      <message-square-icon size="1x" />
+    </InteractablesButton>
+    <InteractablesButton
       v-else
       color="success"
       data-cy="friend-send-request"
@@ -28,7 +36,7 @@
       :disabled="loadCheck"
       @click="createFriendRequest"
     >
-      <check-icon size="1x" />
+      <user-plus-icon size="1x" />
     </InteractablesButton>
   </div>
   <div
