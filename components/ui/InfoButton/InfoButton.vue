@@ -1,4 +1,3 @@
-<!--
 <template>
   <div>
     <button class="info-icon-button" @click="toggleShowModal">
@@ -11,7 +10,6 @@
     </UiConfirmationModal>
   </div>
 </template>
--->
 
 <script lang="ts">
 import Vue from 'vue'
