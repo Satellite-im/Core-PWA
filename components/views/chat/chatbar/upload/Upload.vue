@@ -17,6 +17,12 @@ const Upload = Vue.extend({
   components: {
     PlusIcon,
   },
+  props: {
+    disabled: {
+      type: Boolean,
+      required: true,
+    },
+  },
   computed: {
     ...mapState({
       files(state: RootState) {

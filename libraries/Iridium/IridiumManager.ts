@@ -1,8 +1,6 @@
 import { Emitter, createIridiumIPFS, IridiumPeer } from '@satellite-im/iridium'
 import type { IridiumIPFS } from '@satellite-im/iridium'
 import UsersManager from './users/UsersManager'
-import { Account } from '~/libraries/BlockchainClient/interfaces'
-import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
 import ChatManager from '~/libraries/Iridium/chat/ChatManager'
 import FriendsManager from '~/libraries/Iridium/friends/FriendsManager'
@@ -186,11 +184,16 @@ export class IridiumManager extends Emitter {
     logger.info('iridium/manager', 'notification settings')
     this.notifications.start()
 
+    this.sendSyncFetch()
+  }
+
+  sendSyncFetch() {
     logger.info(
       'iridium/manager',
       'sending sync/fetch to retrieve offline messages from nodes',
     )
-    this.connector.p2p.peerList
+
+    this.connector?.p2p.peerList
       .filter((peer) => peer.connected && peer.type === 'node')
       .forEach((peer) => {
         this.connector?.p2p.send(peer.did, {
