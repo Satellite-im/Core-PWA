@@ -8,6 +8,7 @@ import {
   MessageSquareIcon,
   CircleIcon,
   SmartphoneIcon,
+  UserPlusIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
 import { FriendRequest } from '~/libraries/Iridium/friends/types'
@@ -22,6 +23,7 @@ export default Vue.extend({
     MessageSquareIcon,
     CircleIcon,
     SmartphoneIcon,
+    UserPlusIcon,
   },
   props: {
     user: {
@@ -74,6 +76,9 @@ export default Vue.extend({
     showStatus(): boolean {
       return !this.isPreview
     },
+    isFriend(): boolean {
+      return iridium.friends.isFriend(this.user.did)
+    },
   },
   beforeDestroy() {
     this.$store.commit('ui/toggleContextMenu', false)
@@ -109,9 +114,11 @@ export default Vue.extend({
       this.loading = false
     },
     async sendMessageRequest() {
-      this.$router.push(
-        `/chat/${iridium.chat?.directConversationIdFromDid(this.user.did)}`,
+      const isMobile = this.$device.isMobile
+      const conversationId = iridium.chat?.directConversationIdFromDid(
+        this.user.did,
       )
+      this.$router.push(`${isMobile ? '/mobile' : ''}/chat/${conversationId}`)
     },
   },
 })
