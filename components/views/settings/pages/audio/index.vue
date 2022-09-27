@@ -153,10 +153,9 @@ export default Vue.extend({
             })
         }
         // Open new MediaStream
-        const stream = await this.requestUserPermissions({
+        this.stream = await this.requestUserPermissions({
           audio: { deviceId: newValue },
         })
-        this.updateStream(stream)
       }
     },
     stream(stream) {
@@ -185,15 +184,6 @@ export default Vue.extend({
   },
   methods: {
     ...UserPermissions.methods,
-    /**
-     * @method setupMicMeter DocsTODO
-     * @description
-     * @param stream
-     * @example
-     */
-    updateStream(stream: MediaStream) {
-      this.stream = stream
-    },
     /**
      * @method setupDefaults DocsTODO
      * @description
