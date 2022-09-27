@@ -161,7 +161,6 @@ describe('mutations', () => {
     },
     chatbarFocus: false,
     fullscreen: false,
-    showPinned: false,
     enhancers: {
       containerWidth: 0,
       defaultHeight: '30rem',
@@ -341,12 +340,6 @@ describe('mutations', () => {
     fileDownloadList: ['string'],
     renameItem: {},
   }
-
-  test('togglePinned', () => {
-    const localizedState = { ...initialState }
-    mutations.default.togglePinned(localizedState, true)
-    expect(localizedState.showPinned).toBeTruthy()
-  })
 
   test('toggleContextMenu', () => {
     const localizedState = { ...initialState }
@@ -619,17 +612,6 @@ describe('mutations', () => {
     const localizedState = { ...initialState }
     mutations.default.settingReaction(localizedState, true)
     expect(localizedState.settingReaction).toBeTruthy()
-  })
-
-  test('setActiveChannel', () => {
-    const localizedState = { ...initialState }
-    const object = {
-      type: 'payload',
-      id: '5d802d44-23c3-49d8-a725-407bd17eb56b',
-      name: 'Retha Larkin',
-    }
-    mutations.default.setActiveChannel(localizedState, object)
-    expect(localizedState.activeChannel).toMatchObject(object)
   })
 
   test('setEditMessage', () => {

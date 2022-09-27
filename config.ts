@@ -27,7 +27,6 @@ export const Config = {
   ipfs: {
     gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
-  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],

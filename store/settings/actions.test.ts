@@ -1,7 +1,5 @@
-import { Dexie } from 'dexie'
 import * as actions from './actions'
 import { SettingsError } from './types'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 
 describe('actions.default', () => {
   const original = window.location

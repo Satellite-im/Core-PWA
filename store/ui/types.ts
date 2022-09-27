@@ -1,6 +1,5 @@
 import { TranslateResult } from 'vue-i18n'
 import { Glyph } from '~/types/ui/glyph'
-import { Channel } from '~/types/ui/server'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 
@@ -81,7 +80,7 @@ export interface UIState {
   contextMenuValues: ContextMenuItem[]
   quickProfile?: { user: User; position: Position }
   userProfile: object
-  contextMenuPosition: object
+  contextMenuPosition: Position
   settingsRoute: SettingsRoutes
   showSidebar: boolean
   modals: {
@@ -90,12 +89,10 @@ export interface UIState {
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
-  showPinned: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
   showOlderMessagesInfo: boolean
-  activeChannel: Channel | undefined
   settingReaction: object
   hoveredGlyphInfo: object | undefined
   glyphMarketplaceView: object

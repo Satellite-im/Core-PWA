@@ -5,6 +5,7 @@
       v-model.trim="query"
       :placeholder="$t('friends.search_placeholder')"
       :autofocus="$device.isDesktop"
+      type="search"
       @change="
         matches = []
         _searchFriend()
@@ -109,7 +110,6 @@ export default Vue.extend({
       if (existRequest) {
         this.error = this.$t('friends.already_request') as string
       }
-
       if (matches.length === 0) {
         this.error = this.$t('friends.not_found') as string
       }

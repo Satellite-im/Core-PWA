@@ -103,12 +103,6 @@ export default {
     user_sent_group_message: {
       message: '{user} posted in {group}',
     },
-    pinned: {
-      archived_messages: 'Archived Messages',
-      new: 'New',
-      old: 'Old',
-      files: 'Files',
-    },
     edit: {
       escape_to: 'escape to',
       cancel: 'cancel',
@@ -328,7 +322,7 @@ export default {
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'To share files/use the encrypted file storage, I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. Files will not leave the Satellite infrastructure. Only the hash of files will be checked against the third party database.',
+          'To share files/use the encrypted file storage, I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. \n\nFiles will not leave the Satellite infrastructure. Only the hash of files will be checked against the third party database.',
       },
       nsfw: {
         title: 'Block NSFW content',
@@ -795,6 +789,7 @@ export default {
     request_sent: 'Friend request successfully sent!',
     friend_requests: 'Friend requests',
     new_friend_request: 'New friend request from {user}',
+    cancel_friend_request: 'Cancel friend request',
     requests: 'Requests',
     received: 'Received',
     sent: 'Sent',
