@@ -71,7 +71,7 @@ jobs:
           install: false
           start: yarn dev
           run: sh ./build-script.sh
-          command: npx cypress run
+          command: npm run cy:run
           browser: chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
