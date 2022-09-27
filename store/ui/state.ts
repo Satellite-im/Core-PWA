@@ -26,7 +26,6 @@ const InitialUIState = (): UIState => ({
   glyphModalPackId: undefined,
   chatbarContent: '',
   chatbarFocus: false,
-  showPinned: false,
   enhancers: {
     show: false,
     floating: false,
@@ -39,7 +38,6 @@ const InitialUIState = (): UIState => ({
   messages: [],
   unreadMessage: 0,
   showOlderMessagesInfo: false,
-  activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   glyphMarketplaceView: {
