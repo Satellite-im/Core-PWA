@@ -66,23 +66,31 @@ export class Wire extends Emitter<WireEventListeners> {
     logger.debug(this.loggerTag, type, message)
     this.emit('wire:message', { type, message })
 
-    const friend = iridium.friends.state.friends.find(
-      (did) => did === message.from,
-    )
-
-    if (!friend) {
-      logger.debug(this.loggerTag, `Friend not found: ${friend}`)
+    const user = iridium.users.getUser(message.from)
+    if (!user) {
+      logger.warn(this.loggerTag, `User not found: ${message.from}`)
       return
     }
 
-    this.onFriendAnnounce(message.from.toString())
+    if (
+      !iridium.friends.isFriend(user.did) &&
+      !iridium.chat.isUserInOtherGroups(user.did, [], false)
+    ) {
+      logger.error(
+        this.loggerTag,
+        `User not a friend and not in any group: ${message.from}`,
+      )
+      return
+    }
+
+    this.onUserAnnounce(message.from.toString())
   }
 
-  onFriendAnnounce(did: string) {
-    logger.debug(this.loggerTag, `Announce from friend ${did}`)
+  onUserAnnounce(did: string) {
+    logger.debug(this.loggerTag, `Announce from user ${did}`)
 
     if (this.peers[did]?.peer?.connected) {
-      logger.debug(this.loggerTag, `Friend already connected: ${did}`)
+      logger.debug(this.loggerTag, `User already connected: ${did}`)
       return
     }
 
@@ -332,16 +340,22 @@ export class Wire extends Emitter<WireEventListeners> {
   async announce() {
     if (!iridium.connector) return
     const profile = iridium.profile.state
-    const friends = iridium.friends.state.friends
-    if (!profile || !friends) return
-
-    if (!friends || !friends.length || !profile.name) return
-
-    const recipients = friends.filter(
-      (friend) =>
-        !this.peers[friend]?.peer?.connected &&
-        !this.peers[friend]?.isConnecting,
+    const users = iridium.users.list.filter(
+      (u) =>
+        iridium.friends.isFriend(u.did) ||
+        iridium.chat.isUserInOtherGroups(u.did, [], false),
     )
+
+    if (!profile || !users) return
+
+    if (!users || !users.length || !profile.name) return
+
+    const recipients = users
+      .map((u) => u.did)
+      .filter(
+        (did) =>
+          !this.peers[did]?.peer?.connected && !this.peers[did]?.isConnecting,
+      )
 
     if (recipients.length) {
       logger.debug(this.loggerTag, 'announce', {

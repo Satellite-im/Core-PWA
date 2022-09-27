@@ -8,6 +8,7 @@ import {
   MessageSquareIcon,
   CircleIcon,
   SmartphoneIcon,
+  UserPlusIcon,
 } from 'satellite-lucide-icons'
 import { ContextMenuItem } from '~/store/ui/types'
 import { FriendRequest } from '~/libraries/Iridium/friends/types'
@@ -22,6 +23,7 @@ export default Vue.extend({
     MessageSquareIcon,
     CircleIcon,
     SmartphoneIcon,
+    UserPlusIcon,
   },
   props: {
     user: {
@@ -54,6 +56,7 @@ export default Vue.extend({
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
+      if (this.isPreview) return []
       return [
         {
           text: this.$t('context.remove'),
@@ -62,11 +65,27 @@ export default Vue.extend({
         },
       ]
     },
-    requestIncoming(): boolean | null {
-      return this.request && this.request.incoming
+    friendRequest(): FriendRequest | null {
+      if (!this.hasFriendRequest) return null
+      const userDid = this.user.did
+      return iridium.friends.state.requests?.[userDid] || null
     },
-    status(): UserStatus {
-      return iridium.users.ephemeral.status[this.user.did] || 'offline'
+    status(): UserStatus | '' {
+      return this.showStatus
+        ? iridium.users.ephemeral.status[this.user.did] || 'offline'
+        : ''
+    },
+    showStatus(): boolean {
+      return !this.isPreview
+    },
+    isFriend(): boolean {
+      return iridium.friends.isFriend(this.user.did)
+    },
+    hasFriendRequest(): boolean {
+      return iridium.friends.hasRequest(this.user.did)
+    },
+    cancelFriendRequestText(): string {
+      return this.$t('friends.cancel_friend_request') as string
     },
   },
   beforeDestroy() {
@@ -103,9 +122,11 @@ export default Vue.extend({
       this.loading = false
     },
     async sendMessageRequest() {
-      this.$router.push(
-        `/chat/${iridium.chat?.directConversationIdFromDid(this.user.did)}`,
+      const isMobile = this.$device.isMobile
+      const conversationId = iridium.chat?.directConversationIdFromDid(
+        this.user.did,
       )
+      this.$router.push(`${isMobile ? '/mobile' : ''}/chat/${conversationId}`)
     },
   },
 })

@@ -10,7 +10,6 @@ import {
   marketProducts,
 } from '~/mock/marketplace'
 import { RecentTransactions, LinkedAccounts, Details } from '~/mock/wallet'
-import { Messages, PinnedMessages } from '~/mock/messages'
 import { ServerInfo, Servers, Unreads } from '~/mock/servers'
 import { CallUsers, Users } from '~/mock/users'
 
@@ -30,8 +29,6 @@ const mock = {
     info: ServerInfo,
   },
   unreads: Unreads,
-  messages: Messages,
-  pinnedMessages: PinnedMessages,
   marketplace: {
     marketCategories,
     marketFilters,

@@ -44,16 +44,4 @@ describe('Test BlockchainClient', () => {
     expect(result).toBeFalsy()
     expect(mockedFunction).toHaveBeenCalled()
   })
-
-  test.skip('get account but it has been initialized', async () => {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-    $BlockchainClient.initRandom()
-    // try {
-    const result = $BlockchainClient.account
-    expect(result).toBe(true)
-    // } catch (error) {
-    //   expect(error).toBeInstanceOf(Error)
-    //   expect(error).toHaveProperty('message', `Account is not initialized`)
-    // }
-  })
 })

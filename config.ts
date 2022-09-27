@@ -3,16 +3,21 @@ import { Commitment } from '@solana/web3.js'
 import type { IridiumConfig } from '@satellite-im/iridium'
 
 const nodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
-  '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
+  '/dns4/sync-ny.satellite.im/tcp/443/wss/p2p/12D3KooWRnsCHcpEWE6vPcrFc8sjGusu9xhy6s2PCevMMB24bsQm',
 ]
 const gateways = process.env.NUXT_ENV_IRIDIUM_GATEWAYS?.split(',') || [
   'https://satellite.infura-ipfs.io',
 ]
+const apis = process.env.NUXT_ENV_IRIDIUM_APIS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
+
 export const Config = {
   debug: true,
   iridium: {
     nodes,
     gateways,
+    apis,
     ipfs: {
       config: {
         Bootstrap: nodes,
@@ -22,7 +27,6 @@ export const Config = {
   ipfs: {
     gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
-  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
@@ -36,35 +40,13 @@ export const Config = {
     upload: `sounds/Success.m4a`,
     connected: `sounds/Success.m4a`,
   },
-  cacher: {
-    user_lifespan: 90000,
-  },
-  webtorrent: {
-    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
-      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
-      : [
-          'wss://tracker.openwebtorrent.com',
-          'wss://tracker.sloppyta.co:443/announce',
-          'wss://tracker.novage.com.ua:443/announce',
-          'udp://opentracker.i2p.rocks:6969/announce',
-          'http://opentracker.i2p.rocks:6969/announce',
-          'udp://tracker.opentrackr.org:1337/announce',
-          'http://tracker.opentrackr.org:1337/announce',
-        ],
-  },
   solana: {
     customFaucet: 'https://dev-faucet.satellite.one',
     network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
       : undefined,
-    serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
-    friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
-    friendsProgramExId: 'GjS6t1gK9nktqDJBTjobm9Fdepxg2FGb4vifRDEQ8hXL',
-    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
-    defaultPreflightCommitment: 'confirmed' as Commitment,
-    usersProgramId: '8n2ct4HBadJdtr8T31JvYPTvmYeZyCuLUjkt3CwcSsh9',
   },
   // Realms are just different chains we support
   realms: [

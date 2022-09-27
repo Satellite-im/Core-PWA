@@ -1,16 +1,19 @@
 .quick-chat {
-  &:extend(.background-semitransparent-dark);
-  &:extend(.bordered);
-  &:extend(.blur);
   position: absolute;
   width: 288px;
-  top: 100%;
-  left: 13px;
-  padding: 8px 8px 16px;
+  top: 0;
+  left: calc(100% + 12px);
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   max-height: 500px;
   border-radius: @corner-rounding;
   z-index: 1;
+  box-shadow: @ui-shadow;
+
+  .background-semitransparent-dark();
+  .round-corners();
+  .bordered();
+  .blur();
 }

@@ -1,15 +1,16 @@
 <template>
   <div class="user-list hover-scroll">
-    <TypographyText size="sm" color="body">
+    <TypographyText size="sm" color="body" class="heading">
       {{
         $t('pages.chat.members', { count: allParticipantsAlphaSorted.length })
       }}
     </TypographyText>
     <div class="list">
-      <div
+      <button
         v-for="user in allParticipantsAlphaSorted"
         :key="user.did"
         class="user"
+        @click="showQuickProfile($event, user)"
       >
         <UiUserState :user="user" :conversation-id="conversationId" />
         <TypographyText
@@ -20,7 +21,7 @@
         >
           {{ user.name }}
         </TypographyText>
-      </div>
+      </button>
     </div>
   </div>
 </template>
@@ -28,12 +29,23 @@
 <script lang="ts">
 import Vue from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   setup() {
     const { conversationId, allParticipantsAlphaSorted } = conversationHooks()
 
     return { conversationId, allParticipantsAlphaSorted }
+  },
+  methods: {
+    showQuickProfile(e: MouseEvent, user: User) {
+      setTimeout(() => {
+        this.$store.commit('ui/setQuickProfile', {
+          user,
+          position: { x: e.x, y: e.y },
+        })
+      }, 0)
+    },
   },
 })
 </script>
@@ -44,7 +56,6 @@ export default Vue.extend({
   flex-direction: column;
   flex-shrink: 0;
   gap: 8px;
-  padding: 16px;
   width: 240px;
   margin-right: 16px;
   overflow-y: auto;
@@ -53,16 +64,24 @@ export default Vue.extend({
   user-select: none;
   border-radius: @corner-rounding;
 
+  .heading {
+    padding: 16px 16px 0;
+  }
+
   .list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
   }
 
   .user {
     display: flex;
     gap: 8px;
     align-items: center;
+    padding: 8px 16px;
+
+    &:hover {
+      .background-semitransparent-lighter();
+    }
   }
 }
 </style>

@@ -1,11 +1,8 @@
 import { Store, Commit, Dispatch } from 'vuex'
 import { AccountsState } from '~/store/accounts/types'
 import { DataState } from '~/store/dataState/types'
-import { FriendsState } from '~/store/friends/types'
 import { UIState } from '~/store/ui/types'
-import { GroupsState } from '~/store/groups/types'
 import { SettingsState } from '~/store/settings/types'
-import { ConversationState } from '~/store/conversation/types'
 import { AudioState } from '~/store/audio/types'
 import { VideoState } from '~/store/video/types'
 import { ChatState } from '~/store/chat/types'
@@ -18,11 +15,8 @@ export interface RootState {
   accounts: AccountsState
   audio: AudioState
   chat: ChatState
-  conversation: ConversationState
   dataState: DataState
   files: FilesState
-  friends: FriendsState
-  groups: GroupsState
   media: MediaState
   meta: MetaState
   settings: SettingsState

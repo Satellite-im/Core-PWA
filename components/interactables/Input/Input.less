@@ -15,59 +15,77 @@
       display: flex;
       flex-grow: 1;
       min-width: 0;
+      box-shadow: none;
+      background: @input-gradient 100% center;
+      border-radius: @corner-rounding;
+      border: 1px solid transparent;
+
+      &:focus-within {
+        background-image: @semitransparent-lightest-gradient;
+      }
+
+      &.has-sibling {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      &.transparent {
+        background: #fff0;
+        border: 0;
+
+        .input {
+          padding: 0;
+        }
+
+        &:focus-within {
+          background: #fff0;
+
+          .input {
+            outline: none;
+          }
+        }
+      }
 
       .input {
         flex-grow: 1;
         padding: 0.5rem;
-        box-shadow: none;
-        background: @input-gradient 100% center;
-        border: none;
-        border-radius: @corner-rounding;
-        border: 1px solid transparent;
         min-width: 0;
+        background: none;
+        border: 0;
+        .ellipsis();
 
         &.is-danger {
           border-color: @red;
         }
 
-        &.show-clear-button {
-          padding-right: 2rem;
-        }
-
-        &.transparent {
-          padding: 0;
-          border: none;
-          background: #fff0;
-          flex-grow: 1;
-
-          &:focus {
-            outline: none;
-            background: #fff0;
-          }
-        }
-
-        &:focus {
-          background-image: @semitransparent-lightest-gradient;
-        }
-
-        ::placeholder {
-          color: @body;
+        &::placeholder {
+          color: @dark;
+          opacity: 0.5;
         }
 
         &[type='search']::-webkit-search-cancel-button {
           display: none;
         }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:focus {
+          transition: background-color 600000s 0s, color 600000s 0s;
+        }
+        &[data-autocompleted] {
+          background-color: transparent !important;
+        }
       }
 
       .append {
-        position: absolute;
         inset: 0 0 0 auto;
         font-size: @tiny-icon-size;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem;
+        padding-right: 0.75rem;
+        padding-left: 0.25rem;
         color: @text-muted;
+        gap: 0.75rem;
 
         .slot {
           display: flex;
@@ -91,15 +109,15 @@
     }
   }
 
-  .char-limit {
-    float: right;
-    margin-right: 0.5rem;
-    font-size: @mini-text-size;
-    &:extend(.font-muted);
-    margin-left: auto;
+  .attachment {
+    margin-top: 0.5rem;
   }
 
-  .error {
-    margin-top: 0.5rem;
+  .limit {
+    visibility: hidden;
+
+    &.display {
+      visibility: visible;
+    }
   }
 }

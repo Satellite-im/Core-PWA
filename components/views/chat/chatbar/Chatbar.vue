@@ -5,17 +5,14 @@ import { mapState } from 'vuex'
 import { throttle, debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
-import {
-  KeybindingEnum,
-  MessagingTypesEnum,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
+import { KeybindingEnum, MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
 import {
   Conversation,
+  ConversationMessage,
   ConversationMessagePayload,
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
@@ -31,6 +28,23 @@ function typingFunction(conversationId: string) {
     thr: throttle(deb, Config.chat.typingInputThrottle, { trailing: false }),
     deb,
   }
+}
+
+function isVisible(ele: HTMLElement, container: HTMLElement, partial = false) {
+  const cTop = container.scrollTop
+  const cBottom = cTop + container.clientHeight
+
+  const eTop = ele.offsetTop
+  const eBottom = eTop + ele.clientHeight
+
+  const scrolledBefore = eTop >= cTop
+  const scrolledAfter = eBottom <= cBottom
+  const isTotal = scrolledBefore && scrolledAfter
+  const isPartial =
+    partial &&
+    ((eTop < cTop && eBottom > cTop) || (eBottom > cBottom && eTop < cBottom))
+
+  return { isElVisible: isTotal || isPartial, scrolledAfter, scrolledBefore }
 }
 
 const Chatbar = Vue.extend({
@@ -153,6 +167,16 @@ const Chatbar = Vue.extend({
         ? (this.$t('ui.talk') as string)
         : ''
     },
+    userLastTextMessage(): ConversationMessage | undefined {
+      if (!this.conversationId) return
+
+      return Object.values(
+        iridium.chat.state.conversations[this.conversationId].message,
+      )
+        .filter((m) => m.from === iridium.id && m.type === 'text')
+        .sort((a, b) => a.at - b.at)
+        .at(-1)
+    },
   },
   mounted() {
     const message = this.chat.draftMessages[this.conversationId] ?? ''
@@ -200,6 +224,12 @@ const Chatbar = Vue.extend({
           // If there is a command disable shift + enter
           if (this.hasCommand) {
             event.preventDefault()
+          }
+          break
+        case KeybindingEnum.ARROW_UP:
+          if (!event.shiftKey && !this.text.length) {
+            event.preventDefault()
+            this.editMessage()
           }
           break
         default:
@@ -321,6 +351,29 @@ const Chatbar = Vue.extend({
         return
       }
       ;(this.$refs.editable as EditableRef).handleTextFromOutside(text)
+    },
+    editMessage() {
+      if (!this.userLastTextMessage) return
+      const { id, payload, from } = this.userLastTextMessage
+      this.$store.commit('ui/setEditMessage', {
+        id,
+        payload,
+        from,
+      })
+
+      this.$nextTick(() => {
+        const el = document.querySelector(
+          `[data-message-id="${id}"]`,
+        ) as HTMLElement
+
+        const container = document.getElementById('conversation-container')
+        if (!el || !container) return
+        const { isElVisible, scrolledAfter } = isVisible(el, container)
+
+        if (!isElVisible) {
+          el.scrollIntoView(scrolledAfter)
+        }
+      })
     },
   },
 })

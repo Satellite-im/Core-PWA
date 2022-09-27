@@ -5,7 +5,11 @@
       v-model.trim="query"
       :placeholder="$t('friends.search_placeholder')"
       :autofocus="$device.isDesktop"
-      @change="_searchFriend"
+      type="search"
+      @change="
+        matches = []
+        _searchFriend()
+      "
     />
     <TypographyText v-if="error" color="danger">
       {{ $t(error) }}
@@ -37,7 +41,7 @@ import Vue from 'vue'
 import { debounce } from 'lodash'
 import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { FriendRequest, User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
@@ -46,7 +50,6 @@ export default Vue.extend({
       error: '',
       query: '',
       searching: false,
-      request: null as FriendRequest | null,
       user: null as User | null,
       matches: [] as User[],
     }
@@ -55,6 +58,13 @@ export default Vue.extend({
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
     }),
+    shortID() {
+      return iridium.profile.state
+        ? `${iridium.profile.state.name}#${iridium.id.substring(
+            iridium.id.length - 6,
+          )}`
+        : `${iridium.id}`
+    },
   },
   async mounted() {
     if (this.$route.params && this.$route.params.id) {
@@ -83,9 +93,12 @@ export default Vue.extend({
       const matches = await iridium.users.searchPeer(this.query)
       const hasFriend =
         matches.length === 1 && iridium.friends.isFriend(matches[0].did)
+      const existRequest =
+        matches.length === 1 && iridium.friends.hasRequest(matches[0].did)
 
       if (
         this.query === iridium.id ||
+        this.query === this.shortID ||
         (matches.length === 1 && matches[0].did === iridium.id)
       ) {
         this.error = this.$t('friends.self_add') as string
@@ -94,25 +107,24 @@ export default Vue.extend({
       if (hasFriend) {
         this.error = this.$t('friends.already_friend') as string
       }
+      if (existRequest) {
+        this.error = this.$t('friends.already_request') as string
+      }
+      if (matches.length === 0) {
+        this.error = this.$t('friends.not_found') as string
+      }
 
       this.matches = matches
       this.searching = false
     },
     onFriendRequestSent() {
-      this.request = null
       this.user = null
       this.query = ''
-      // @ts-ignore
       this.$toast.show(this.$t('friends.request_sent') as string)
     },
     copyId() {
       if (!iridium.connector) return
-      const shortID = iridium.profile.state
-        ? `${iridium.profile.state.name}#${iridium.id.substring(
-            iridium.id.length - 6,
-          )}`
-        : `${iridium.id}`
-      navigator.clipboard.writeText(shortID)
+      navigator.clipboard.writeText(this.shortID)
       this.$toast.show(this.$t('ui.copied') as string)
     },
   },

@@ -75,16 +75,8 @@ export default Vue.extend({
       return ['', '#F6CC6B', '#61CEA4', '#DA716F']
     },
     isFriend(): boolean {
-      // also return if self
-      if (
-        this.accounts.details.textilePubkey ===
-        this.ui.userProfile.textilePubkey
-      ) {
-        return true
-      }
-      return this.friends.all.some(
-        (e: Friend) => e.textilePubkey === this.ui.userProfile.textilePubkey,
-      )
+      // TODO: fix
+      return false
     },
     status() {
       return (

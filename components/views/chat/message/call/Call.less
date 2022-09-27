@@ -1,0 +1,54 @@
+.message-call {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  grid-area: call;
+  margin-top: 16px;
+
+  .icon {
+    svg {
+      color: @dark;
+    }
+  }
+
+  &.active-call {
+    max-width: 420px;
+    margin-top: 8px;
+    padding: 12px;
+    box-shadow: @ui-shadow;
+    .round-corners();
+    .bordered();
+    .background-semitransparent-light();
+  }
+
+  .icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    color: @body;
+
+    > div {
+      .ellipsis();
+    }
+
+    div {
+      display: inline;
+    }
+  }
+
+  .end-call {
+    svg {
+      color: @white;
+    }
+  }
+}

@@ -24,6 +24,7 @@ export default Vue.extend({
       error: '',
       step: 'signup' as 'signup' | 'login',
       isChrome: false,
+      confirmClearAccountModalVisible: false,
     }
   },
   computed: {
@@ -120,9 +121,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          redirect && this.$router.replace('/setup/disclaimer')
+          redirect && (await this.$router.replace('/setup/disclaimer'))
         } else {
-          redirect && this.$router.replace('/')
+          redirect && (await this.$router.replace('/'))
         }
       } catch (error: any) {
         this.pin = ''
@@ -151,7 +152,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
     },
-    async clearAndReset() {
+    async clearAccount() {
       await this.deleteAccount()
       location.reload()
     },

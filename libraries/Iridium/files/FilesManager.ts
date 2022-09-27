@@ -3,10 +3,8 @@ import type {
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium'
-import type { IPFS } from 'ipfs-core-types'
-import type { AddOptions, AddResult } from 'ipfs-core-types/root'
-import { createWriteStream } from 'streamsaver'
 import { v4 as uuidv4 } from 'uuid'
+import { CID } from 'multiformats'
 import iridium from '../IridiumManager'
 import logger from '~/plugins/local/logger'
 import {
@@ -17,7 +15,6 @@ import {
 } from '~/libraries/Iridium/files/types'
 import isNSFW from '~/utilities/NSFW'
 import createThumbnail from '~/utilities/Thumbnail'
-import { blobToStream } from '~/utilities/BlobManip'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { Config } from '~/config'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
@@ -95,27 +92,30 @@ export default class FilesManager extends Emitter {
    * @param {File} file file to be uploaded
    * @param {string} parentId attach id to each item so the parent can be found later in case of rename operation
    */
-  async addFile({
-    file,
-    parentId,
-    options,
-  }: {
-    file: File
-    parentId: string
-    options?: AddOptions
-  }) {
+  async addFile({ file, parentId }: { file: File; parentId: string }) {
     if (file.size === 0) {
       throw new Error(ItemErrors.FILE_SIZE)
     }
+
     const parent = this.flat.find((e) => e.id === parentId) as
       | IridiumDirectory
       | undefined
     this.validateName(file.name, parent)
+
+    const safer = await this.upload(file)
+    if (!safer || !safer.valid) {
+      throw new Error(ItemErrors.BLOCKED)
+    }
+    const syncPinResult = await iridium.connector?.load(safer.cid)
+
     const thumbnailBlob = await createThumbnail(file, 400)
+    const thumbnail = thumbnailBlob
+      ? (await this.uploadThumbnail(thumbnailBlob))?.toString() ?? ''
+      : ''
 
     const target = parent?.children ?? this.state.items
     target.push({
-      id: (await this.upload(file, options)).path,
+      id: syncPinResult.cid,
       name: file.name,
       size: file.size,
       nsfw: await isNSFW(file),
@@ -126,9 +126,7 @@ export default class FilesManager extends Emitter {
       type: Object.values(FILE_TYPE).includes(file.type as FILE_TYPE)
         ? (file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
-      thumbnail: thumbnailBlob
-        ? (await this.upload(thumbnailBlob, options)).path
-        : '',
+      thumbnail,
       extension: file.name
         .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
         .toLowerCase(),
@@ -136,15 +134,53 @@ export default class FilesManager extends Emitter {
     this.set('/items', this.state.items)
   }
 
-  /**
-   * @description push file to ipfs
-   * @param {Blob} file
-   * @param {AddOptions} options
-   */
-  async upload(file: Blob, options?: AddOptions): Promise<AddResult> {
-    return await (iridium.connector?.ipfs as IPFS).add(
-      blobToStream(file),
-      options,
+  async upload(
+    file: File,
+  ): Promise<{ cid: string; valid: boolean } | undefined> {
+    const fileBuffer = await file.arrayBuffer()
+
+    return new Promise((resolve) => {
+      if (!iridium.connector?.p2p.primaryNodeID) {
+        throw new Error('not connected to primary node')
+      }
+
+      iridium.connector
+        ?.store(
+          { fileBuffer, name: file.name, size: file.size, type: file.type },
+          {
+            syncPin: true,
+            encrypt: {
+              recipients: [
+                iridium.connector.id,
+                iridium.connector.p2p.primaryNodeID,
+              ],
+            },
+          },
+        )
+        .then((cid) => {
+          iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
+            const { payload } = msg
+            const { body } = payload
+            if (body.originalCID === cid.toString()) {
+              resolve({ cid: body.cid, valid: body.valid })
+            }
+          })
+          setTimeout(() => resolve(undefined), 30000)
+        })
+    })
+  }
+
+  async uploadThumbnail(file: File): Promise<CID | undefined> {
+    const fileBuffer = await file.arrayBuffer()
+
+    return await iridium.connector?.store(
+      { fileBuffer, name: file.name, size: file.size, type: file.type },
+      {
+        syncPin: true,
+        encrypt: {
+          recipients: [iridium.connector.id],
+        },
+      },
     )
   }
 
@@ -181,14 +217,21 @@ export default class FilesManager extends Emitter {
   }
 
   /**
-   * @description Unpins the item file from IPFS.
+   * @description Unpins the item file from iridium.
    * @param {IridiumItem} item
    */
   private unpinItem(item: IridiumFile) {
-    // TODO - confirm this actually works when we can connect to ipfs
+    if (!iridium.connector?.p2p.primaryNodeID) {
+      return
+    }
+    iridium.connector.p2p.send(iridium.connector.p2p.primaryNodeID, {
+      type: 'sync/unpin',
+      cid: item.id,
+    })
+
     iridium.connector?.ipfs.pin.rm(item.id)
     if (item.thumbnail && item.thumbnail !== item.id) {
-      iridium.connector?.ipfs.pin.rm(item.thumbnail)
+      iridium.connector.ipfs.pin.rm(item.thumbnail)
     }
   }
 
@@ -249,36 +292,13 @@ export default class FilesManager extends Emitter {
   }
 
   /**
-   * @description fetch file from ipfs and download with streamsaver
-   * @param {string} path file cid
-   * @param {string} name file name
-   * @param {number} size file size to show progress in browser
-   */
-  async download(path: string, name: string, size: number) {
-    const fileStream = createWriteStream(name, { size })
-    const writer = fileStream.getWriter()
-
-    window.onunload = () => writer.abort()
-
-    for await (const bytes of (iridium.connector?.ipfs as IPFS).cat(path, {
-      length: size,
-    })) {
-      writer.write(bytes)
-    }
-    writer.close()
-  }
-
-  /**
    * @description fetch thumbnail from ipfs and return as blob
-   * @param {string} path thumbnail cid
+   * @param {string} cid thumbnail cid
    * @returns {Promise<Blob>}
    */
-  async fetchThumbnail(path: string, type?: FILE_TYPE): Promise<Blob> {
-    const data = []
-    for await (const bytes of (iridium.connector?.ipfs as IPFS).cat(path)) {
-      data.push(bytes)
-    }
-    return new Blob(data, { type })
+  async fetchThumbnail(cid: string, type?: FILE_TYPE): Promise<Blob> {
+    const { fileBuffer } = await iridium.connector?.load(cid)
+    return new Blob([fileBuffer], { type })
   }
 
   /**

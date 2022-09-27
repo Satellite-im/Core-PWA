@@ -147,6 +147,11 @@ export default Vue.extend({
           }) as string
         case 'member_leave':
           return this.$t('messaging.group_leave', { name }) as string
+        case 'call':
+          if (message.from === iridium.id) {
+            return this.$t('messaging.call_outgoing') as string
+          }
+          return this.$t('messaging.call_incoming', { name }) as string
       }
 
       return message.body || ''

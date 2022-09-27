@@ -164,12 +164,17 @@ export default {
       $BlockchainClient.setAdapter(new PhantomAdapter())
       logger.info('accounts/actions/loadAccount', 'using phantom wallet')
     }
-    const mnemonic = state.phrase
-    if (mnemonic === '') {
-      logger.error('accounts/actions/loadAccount', 'empty mnemonic')
-      throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+
+    if (state.phrase === '') {
+      if (state.encryptedPhrase !== '' && state.pin) {
+        await dispatch('unlock', state.pin)
+      } else {
+        logger.error('accounts/actions/loadAccount', 'empty mnemonic')
+        throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+      }
     }
 
+    const mnemonic = state.phrase
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
     if (!$BlockchainClient.isPayerInitialized) {
@@ -189,6 +194,7 @@ export default {
         'dispatching iridium/initializeFromEntropy',
       )
       await iridium.initFromEntropy(entropy)
+      await iridium.start()
     }
 
     const profile = await iridium.profile?.get()
@@ -280,6 +286,7 @@ export default {
         'dispatching iridium/initializeFromEntropy',
       )
       await iridium.initFromEntropy(entropy)
+      await iridium.start()
     }
 
     if (!iridium.connector) {
@@ -306,7 +313,6 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
-    await iridium.sendSyncInit()
     return dispatch('startup', walletAccount)
   },
 
@@ -370,7 +376,7 @@ export default {
 
 /**
  * @method uploadPicture
- * @description helper function to upload image to textile if needed
+ * @description helper function to upload image to iridium if needed
  * @param image data string of uploaded image
  * @returns IPFS CID of image, or '' if no image is present
  */

@@ -3,7 +3,7 @@ import InitialAccountsState from './state'
 import mutations from './mutations'
 import { User } from 'libraries/Iridium/users/types'
 
-describe('init', () => {
+describe('Test accounts/mutations', () => {
   let instance: any
   let localStateForUnitTest: AccountsState
 
@@ -248,5 +248,21 @@ describe('init', () => {
       status: argument.status,
       photoHash: newPhotoHash,
     })
+  })
+
+  it('should setNewAccount to true', () => {
+    const argument = true
+
+    instance.setNewAccount(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.isNewAccount).toBeTruthy()
+  })
+
+  it('should setNewAccount to false', () => {
+    const argument = false
+
+    instance.setNewAccount(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.isNewAccount).toBeFalsy()
   })
 })

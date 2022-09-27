@@ -1,39 +1,11 @@
 import Vue from 'vue'
-import { ICurrentChat } from '~/types/chat/chat'
-import { initialCurrentChat } from '~/store/chat/state'
-import {
-  ChatState,
-  ChatReply,
-  ChatText,
-  ChatFileUpload,
-} from '~/store/chat/types'
+import { ChatState, ChatFileUpload } from '~/store/chat/types'
 import {
   Conversation,
   ConversationMessage,
 } from '~/libraries/Iridium/chat/types'
-import state from '~/store/files/state'
 
 const mutations = {
-  chatText(state: ChatState, req: ChatText) {
-    state.chatTexts = state.chatTexts.some((item) => item.userId === req.userId)
-      ? state.chatTexts.map((item) => {
-          if (item.userId === req.userId) {
-            return { ...item, value: req.value }
-          }
-          return item
-        })
-      : state.chatTexts.concat(req)
-  },
-  setChatReply(state: ChatState, req: ChatReply) {
-    state.replies = state.replies.some((item) => item.replyId === req.replyId)
-      ? state.replies.map((item) => {
-          if (item.replyId === req.replyId) {
-            return { ...item, value: req.value }
-          }
-          return item
-        })
-      : state.replies.concat(req)
-  },
   addFile(
     state: ChatState,
     {
@@ -76,12 +48,6 @@ const mutations = {
   },
   setCountError(state: ChatState, countError: boolean) {
     state.countError = countError
-  },
-  setCurrentChat(state: ChatState, currentChat: ICurrentChat) {
-    state.currentChat = { ...state.currentChat, ...currentChat }
-  },
-  resetCurrentChat(state: ChatState) {
-    state.currentChat = initialCurrentChat
   },
   setDraftMessage(
     state: ChatState,

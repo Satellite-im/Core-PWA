@@ -1,8 +1,7 @@
 import { TranslateResult } from 'vue-i18n'
 import { Glyph } from '~/types/ui/glyph'
-import { Channel } from '~/types/ui/server'
-import { Alert } from '~/libraries/ui/Alerts'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -71,16 +70,18 @@ export interface ContextMenuItem {
   type?: ContextMenuItemTypes
 }
 
+export type Position = {
+  x: number
+  y: number
+}
+
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile: object | boolean
+  quickProfile?: { user: User; position: Position }
   userProfile: object
-  notifications: Alert[]
-  contextMenuPosition: object
-  quickProfilePosition: object
+  contextMenuPosition: Position
   settingsRoute: SettingsRoutes
-  showSearchResult: boolean
   showSidebar: boolean
   modals: {
     [key in ModalWindows]: boolean | object
@@ -88,15 +89,10 @@ export interface UIState {
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
-  showPinned: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  isScrollOver: boolean
   showOlderMessagesInfo: boolean
-  isTyping: object | boolean
-  isReacted: boolean
-  activeChannel: Channel | undefined
   settingReaction: object
   hoveredGlyphInfo: object | undefined
   glyphMarketplaceView: object
@@ -110,9 +106,4 @@ export interface UIState {
   chatImageOverlay?: MessageAttachment & { dataURL: string }
   isMobileNavVisible: boolean
   callHeight: string
-}
-
-export type Position = {
-  x: number
-  y: number
 }

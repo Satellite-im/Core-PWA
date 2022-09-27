@@ -14,19 +14,16 @@ import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
+import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
 
 export default Vue.extend({
   components: {
     ArchiveIcon,
   },
   props: {
-    message: {
-      type: Object as PropType<ConversationMessage>,
+    item: {
+      type: Object as PropType<ChatItem>,
       required: true,
-    },
-    replies: {
-      type: Array as PropType<ConversationMessage[]>,
-      default: () => [],
     },
     showHeader: {
       type: Boolean,
@@ -45,6 +42,12 @@ export default Vue.extend({
     ...mapGetters({
       getTimestamp: 'settings/getTimestamp',
     }),
+    message(): ConversationMessage {
+      return this.item.message
+    },
+    replies(): ConversationMessage[] {
+      return this.item.replies
+    },
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
@@ -126,26 +129,15 @@ export default Vue.extend({
   methods: {
     /**
      * @method showQuickProfile
-     * @description Shows quickprofile component for user by setting quickProfile to true in state and setQuickProfilePosition
-     * to the current group components click event data
      * @param e Event object from group component click
      * @example v-on:click="showQuickProfile"
      */
     showQuickProfile(e: MouseEvent) {
-      const openQuickProfile = () => {
-        this.$store.dispatch('ui/showQuickProfile', {
-          did: this.message.from,
+      setTimeout(() => {
+        this.$store.commit('ui/setQuickProfile', {
+          user: this.author,
           position: { x: e.x, y: e.y },
         })
-      }
-      if (!this.ui.quickProfile) {
-        openQuickProfile()
-        return
-      }
-      setTimeout(() => {
-        if (!this.ui.quickProfile) {
-          openQuickProfile()
-        }
       }, 0)
     },
     /**
@@ -195,6 +187,35 @@ export default Vue.extend({
         payload,
         from,
       })
+    },
+    async saveMessage(message: string) {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: '',
+      })
+
+      if (message !== this.message.body) {
+        await iridium.chat.editMessage({
+          conversationId: this.message.conversationId,
+          messageId: this.message.id,
+          body: message,
+        })
+      }
+
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }
+    },
+    cancelMessage() {
+      this.$store.commit('ui/setEditMessage', {
+        id: '',
+        payload: '',
+        from: '',
+      })
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }
     },
   },
 })

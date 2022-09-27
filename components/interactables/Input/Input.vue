@@ -2,15 +2,23 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { DeleteIcon } from 'satellite-lucide-icons'
+import { DeleteIcon, EyeIcon, EyeOffIcon } from 'satellite-lucide-icons'
 import { InputType, InputColor } from './types'
 import { Size } from '~/types/typography'
 
 const MOBILE_FOCUS_DELAY = 300 // ms
 
+enum Appends {
+  Password = 'password',
+  Erase = 'erase',
+  Custom = 'custom',
+}
+
 export default Vue.extend({
   components: {
     DeleteIcon,
+    EyeIcon,
+    EyeOffIcon,
   },
   model: {
     prop: 'text',
@@ -90,12 +98,38 @@ export default Vue.extend({
       default: false,
     },
   },
+  data() {
+    return {
+      Appends,
+      showPassword: false,
+    }
+  },
   computed: {
     isEmpty(): boolean {
       return !this.text.length
     },
     showClearButton(): boolean {
       return this.showClear || this.type === 'search'
+    },
+    derivedType(): string {
+      return this.showPassword ? 'text' : this.type
+    },
+    // mobile devices need at least 1rem font size on inputs or it zooms the user in on focus
+    derivedSize(): string {
+      return this.$device.isMobile ? 'md' : this.size
+    },
+    enabledAppends(): string[] {
+      const types: string[] = []
+      if (this.type === 'password') {
+        types.push(Appends.Password)
+      }
+      if (this.showClearButton && !this.isEmpty) {
+        types.push(Appends.Erase)
+      }
+      if (this.$slots.append) {
+        types.push(Appends.Custom)
+      }
+      return types
     },
   },
   mounted() {
@@ -127,6 +161,9 @@ export default Vue.extend({
     },
     clearInput() {
       this.$emit('change', '')
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword
     },
   },
 })

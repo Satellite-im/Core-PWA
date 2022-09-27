@@ -80,16 +80,20 @@
     >
       <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
-    <UiUpdateModal
-      v-if="ui.modals.changelog"
-      @close="() => toggleModal(ModalWindows.CHANGELOG)"
-    />
+    <UiModal v-if="ui.modals.changelog">
+      <UiUpdateModal />
+    </UiModal>
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
     <FilesView v-if="files.preview" />
-    <UiWelcomeModal v-if="isNewAccount" />
+    <UiModal
+      v-if="isNewAccount"
+      @close="$store.commit('accounts/setNewAccount', false)"
+    >
+      <UiWelcomeModal />
+    </UiModal>
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
+    <InteractablesQuickProfile v-if="ui.quickProfile" />
   </transition>
   <UiPip
     v-if="$device.isDesktop && isBackgroundCall"

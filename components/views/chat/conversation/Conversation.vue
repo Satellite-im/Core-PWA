@@ -11,13 +11,14 @@ import {
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { RootState } from '~/types/store/store'
 
-interface ChatItem {
+export interface ChatItem {
   message: ConversationMessage
   showHeader: boolean
   timeDiff: number
   isNextDay: boolean
   isFirstUnreadMessage: boolean
   replies: ConversationMessage[]
+  isLastCallMessage: boolean
 }
 
 const MESSAGE_PAGE_SIZE = 50
@@ -33,7 +34,7 @@ export default Vue.extend({
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
       isBlurred: false,
-      mutationObserver: null as MutationObserver | null,
+      resizeObserver: null as ResizeObserver | null,
       isLockedToBottom: true,
     }
   },
@@ -76,9 +77,20 @@ export default Vue.extend({
           (replyMessage) => replyMessage.replyToId === message.id,
         )
         const showHeader =
-          !isSameAuthor ||
-          (prevMessage && conversationMessageIsNotice(prevMessage)) ||
-          false
+          message.type === 'call'
+            ? false
+            : !isSameAuthor ||
+              (prevMessage &&
+                (conversationMessageIsNotice(prevMessage) ||
+                  prevMessage.type === 'call')) ||
+              this.$dayjs.duration(timeDiff).minutes() >= 5 ||
+              isNextDay ||
+              false
+        const isLastCallMessage =
+          index ===
+          messages.reduce((prev, _, i) => {
+            return messages[i].type === 'call' ? i : prev
+          }, -1)
 
         return {
           message,
@@ -87,6 +99,7 @@ export default Vue.extend({
           isNextDay,
           isFirstUnreadMessage,
           replies,
+          isLastCallMessage,
         }
       })
       const maxTime = Math.max(...this.messages.map((message) => message.at))
@@ -116,44 +129,48 @@ export default Vue.extend({
       )
     },
   },
+  watch: {
+    chatItems(newValue, oldValue) {
+      if (
+        this.isLastChatItemAuthor &&
+        newValue.at(-1)?.message.id !== oldValue.at(-1)?.message.id
+      ) {
+        this.scrollToBottom()
+      }
+    },
+  },
   mounted() {
     window.addEventListener('blur', this.handleBlur)
     window.addEventListener('focus', this.handleFocus)
     const container = this.$refs.container as HTMLElement
-    if (!container) {
+    const messages = this.$refs.messages as HTMLElement
+    if (!container || !messages) {
       return
     }
     container.addEventListener('scroll', () => {
       this.isLockedToBottom =
         container.scrollTop === container.scrollHeight - container.clientHeight
     })
-    const scrollToBottom = () => {
-      const y = container.scrollHeight - container.clientHeight
-      container.scrollTo(0, y)
-    }
-    scrollToBottom()
-    this.mutationObserver = new MutationObserver((records) => {
-      records.forEach((record) => {
-        const target = record.target as HTMLElement
-        if (
-          target.classList.contains('messages') &&
-          (this.isLockedToBottom || this.isLastChatItemAuthor)
-        ) {
-          scrollToBottom()
-        }
-      })
+    this.resizeObserver = new ResizeObserver(() => {
+      if (this.isLockedToBottom) {
+        this.scrollToBottom()
+      }
     })
-    this.mutationObserver.observe(container, {
-      childList: true,
-      subtree: true,
-    })
+    this.resizeObserver.observe(messages)
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
     window.removeEventListener('focus', this.handleFocus)
-    this.mutationObserver?.disconnect()
+    this.resizeObserver?.disconnect()
   },
   methods: {
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const container = this.$refs.container as HTMLElement
+        const y = container.scrollHeight - container.clientHeight
+        container.scrollTo(0, y)
+      })
+    },
     handleBlur() {
       this.isBlurred = true
     },

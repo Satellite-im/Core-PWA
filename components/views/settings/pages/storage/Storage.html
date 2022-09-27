@@ -1,12 +1,10 @@
 <SettingsPage>
-  <SettingsUnit>
-    <TypographyText as="h2">
-      {{ $t('pages.settings.storage.title') }}
-    </TypographyText>
-    <TypographyText color="dark">
+  <SettingsHeader>
+    {{ $t('pages.settings.storage.title') }}
+    <template #subheading>
       {{ $t('pages.settings.storage.subtitle') }}
-    </TypographyText>
-  </SettingsUnit>
+    </template>
+  </SettingsHeader>
 
   <SettingsUnit v-if="false">
     <TypographyText as="h3">
@@ -15,7 +13,6 @@
     <TypographyText color="dark">
       {{ $t('pages.settings.storage.export.subtitle') }}
     </TypographyText>
-    <br />
     <InteractablesButton :text="$t('pages.settings.storage.export.button')" />
   </SettingsUnit>
 
@@ -26,7 +23,6 @@
     <TypographyText color="dark">
       {{ $t('pages.settings.storage.clear.subtitle') }}
     </TypographyText>
-    <br />
     <InteractablesButton
       v-if="!deleteVerify"
       color="danger"
@@ -41,7 +37,6 @@
       <TypographyText class="detail color-danger">
         {{ $t('pages.settings.storage.clear.subtitle_warning2') }}
       </TypographyText>
-      <br />
       <InteractablesButton
         color="danger"
         :loading="isLoading"

@@ -18,7 +18,6 @@
         v-for="request in incomingRequests"
         :key="request.from"
         :user="request.user"
-        :request="request"
       />
     </template>
 
@@ -34,7 +33,6 @@
         v-for="request in outgoingRequests"
         :key="request.from"
         :user="request.user"
-        :request="request"
       />
     </template>
   </div>

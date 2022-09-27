@@ -100,6 +100,15 @@ export async function call({
   if (!enableRTC.value) {
     return
   }
+
+  await iridium.chat?.sendMessage({
+    conversationId,
+    type: 'call',
+    at: Date.now(),
+    attachments: [],
+    call: {},
+  })
+
   // todo - refactor to accept multiple recipients for group calls
   await iridium.webRTC
     .call({

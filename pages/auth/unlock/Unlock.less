@@ -1,11 +1,20 @@
 .container {
-  margin: 0 auto;
+  margin: 16px auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
   gap: 40px;
+  user-select: none;
+
+  .header {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: center;
+    align-items: center;
+  }
 
   .info-button {
     display: flex;
@@ -28,7 +37,8 @@
 
     .delete-link {
       color: #fff;
-      margin-top: @normal-spacing;
+      margin: @normal-spacing auto 0 auto;
+
       &:hover {
         opacity: 0.75;
       }
@@ -36,7 +46,10 @@
   }
 
   .version {
+    flex-grow: 1;
+    flex-basis: 0;
     justify-content: center;
+    align-items: flex-end;
   }
 
   .random-user-container {
@@ -48,7 +61,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0 2rem;
+    margin: 16px;
 
     .decryption-body {
       &:extend(.full-width);

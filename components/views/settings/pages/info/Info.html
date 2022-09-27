@@ -1,30 +1,27 @@
 <SettingsPage>
-  <SettingsUnit>
-    <TypographyText as="h2">
-      {{ $t('pages.settings.info.title') }}
-    </TypographyText>
-    <TypographyText color="dark">
-      {{ $t('pages.settings.info.subtitle') }}
-    </TypographyText>
-  </SettingsUnit>
+  <SettingsHeader>
+    {{ $t('pages.settings.info.title') }}
+    <template #subheading> {{ $t('pages.settings.info.subtitle') }} </template>
+  </SettingsHeader>
 
   <SettingsUnit>
-    <TypographyLabel :text="$t('pages.settings.app_info')" />
-    <br />
+    <TypographyText as="h3">
+      {{ $t('pages.settings.app_info') }}
+    </TypographyText>
     <pre>
-        App Version: {{ this.$config.clientVersion }}
-        Browser:     {{ this.$envinfo.navigator.vendor }}, {{ this.$envinfo.navigator.product }}
-        Language:    {{ this.$envinfo.navigator.product }}
-        <span v-if="cpu">Platform:    {{cpu}}</span>
-        <span v-if="renderer">Processor:   {{renderer}}</span>
-        Online:      {{ this.$envinfo.navigator.onLine }}
-      </pre>
+App Version: {{ this.$config.clientVersion }}
+Browser:     {{ this.$envinfo.navigator.vendor }}, {{ this.$envinfo.navigator.product }}
+Language:    {{ this.$envinfo.navigator.product }}
+<span v-if="cpu">Platform:    {{cpu}}</span>
+<span v-if="renderer">Processor:   {{renderer}}</span>
+Online:      {{ this.$envinfo.navigator.onLine }}</pre>
   </SettingsUnit>
   <SettingsUnit>
-    <TypographyLabel :text="$t('pages.settings.changelog')" />
-    <br />
-    <pre>
-        <vue-markdown :source="releaseData && releaseData.body" :breaks="false"/>
-      </pre>
+    <TypographyText as="h3">
+      {{ $t('pages.settings.changelog') }}
+    </TypographyText>
+    <pre class="release-data">
+      <vue-markdown :source="releaseData && releaseData.body" :breaks="false" />
+    </pre>
   </SettingsUnit>
 </SettingsPage>

@@ -92,7 +92,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
+      showSidebar: (state) => (state as RootState).ui.showSidebar,
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
@@ -115,7 +115,6 @@ export default Vue.extend({
       })
     },
     toggleAlerts() {
-      this.$store.commit('ui/clearAllNotifications')
       this.showAlerts = !this.showAlerts
     },
     /**

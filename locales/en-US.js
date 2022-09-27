@@ -12,7 +12,7 @@ export default {
   },
   welcome_message: {
     dismiss_forever: 'Dismiss Forever',
-    welcome: 'Welcome {user}!',
+    welcome: 'Welcome, {user}!',
     ea_warning:
       'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   },
@@ -42,7 +42,7 @@ export default {
     fullscreen: 'Fullscreen',
     exit_fullscreen: 'Exit fullscreen',
     more: 'More',
-    live: 'Live for {time}',
+    live: 'Live {time}',
     edited: 'edited',
     online: 'All users are offline | {name} is online | {name} are online',
     offline: '{name} is not connected',
@@ -103,12 +103,6 @@ export default {
     user_sent_group_message: {
       message: '{user} posted in {group}',
     },
-    pinned: {
-      archived_messages: 'Archived Messages',
-      new: 'New',
-      old: 'Old',
-      files: 'Files',
-    },
     edit: {
       escape_to: 'escape to',
       cancel: 'cancel',
@@ -126,6 +120,8 @@ export default {
       to_group: 'to the group.',
     },
     group_leave_notice: 'left the group.',
+    call_incoming: '{name} started a call.',
+    call_outgoing: 'You started a call.',
   },
   controls: {
     copy_id: 'Copy ID',
@@ -146,7 +142,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Coming Soon',
+    edit: 'Edit',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -229,12 +225,13 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        no_empty: 'Item name must be a non-empty string',
+        no_empty: 'Item name cannot be empty',
         leading_dot: 'Item name cannot begin with .',
         invalid: 'Item name cannot contain invalid symbols (/:"*?<>|~#%&+{}\\)',
         file_size: 'File needs to have a size of 1 byte or greater',
         duplicate_name: 'Item with this name already exists in this directory',
         storage_limit: 'This upload would exceed your storage limit',
+        blocked: '{name} cannot be uploaded',
         dir_paradox: 'Directory cannot contain itself',
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
         in_progress: 'Upload already in progress, try again later',
@@ -254,8 +251,12 @@ export default {
       store_pin: 'Store Password? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
-      browser_warning:
-        'Satellite is optimized for Chromium browsers. You may experience UI and functional issues. We will optimize for more browsers in the future.',
+      browser_warning_header: 'Satellite is optimized for Chromium browsers',
+      browser_warning_content:
+        'You may experience UI and functional issues. We will optimize for more browsers in the future.',
+      confirm_clear_account: 'This will clear your account',
+      confirm_clear_account_description:
+        'Are you sure you want to clear your account and all data?',
     },
     loading: {
       loading: 'Linking Satellites...',
@@ -321,7 +322,7 @@ export default {
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'To share files/use the encrypted file storage, I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. Files will not leave the Satellite infrastructure. Only the hash of files will be checked against the third party database.',
+          'To share files/use the encrypted file storage, I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. \n\nFiles will not leave the Satellite infrastructure. Only the hash of files will be checked against the third party database.',
       },
       nsfw: {
         title: 'Block NSFW content',
@@ -624,7 +625,8 @@ export default {
         'Select one of your friends to add them to the group',
       new_message: 'messages',
       jump_to_current: 'View New Messages',
-      chat_now: 'chat now',
+      chat_now: 'Chat now',
+      create_group: 'Create group',
       add_member: 'Add Member +',
       switch_chat: 'Switch Chat',
       start_watch_party: 'Watch Party',
@@ -718,6 +720,10 @@ export default {
       permission_denied:
         'Permission denied, please check your browser settings.',
     },
+    opened:
+      'Satellite was opened in a new window or tab. Please close the second instance and reload',
+    already_open:
+      'Satellite is already open in another window or tab. Please close this window or tab and go to the original instance of Satellite.',
   },
   search: {
     search: 'Search... ',
@@ -777,11 +783,13 @@ export default {
     friends: 'Friends',
     self_add: "You can't add yourself, you silly goose.",
     already_friend: "You're already friends with this user.",
+    already_request: 'You already have a request for this user.',
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
     friend_requests: 'Friend requests',
     new_friend_request: 'New friend request from {user}',
+    cancel_friend_request: 'Cancel friend request',
     requests: 'Requests',
     received: 'Received',
     sent: 'Sent',
@@ -833,6 +841,7 @@ export default {
   },
   modal: {
     update_modal: {
+      title: 'Update {tagName} is Here!',
       update_required:
         "This update requires a refresh of the Alpha application. Click 'Update Now' below to start fresh on the new update.",
       got_it: 'Got It!',

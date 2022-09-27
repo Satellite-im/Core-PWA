@@ -43,8 +43,12 @@
       <UiEarlyAccessBanner />
     </div>
 
-    <div class="quick-toggle" v-tooltip.top="$t('pages.chat.new_chat')">
-      <button title="$t('pages.chat.new_chat')" @click="toggleModal">
+    <div class="quick-toggle">
+      <button
+        title="$t('pages.chat.new_chat')"
+        @click="toggleModal"
+        v-tooltip.left="$t('pages.chat.new_chat')"
+      >
         <plus-icon size="1.4x" />
       </button>
       <SidebarQuick
@@ -56,7 +60,6 @@
     <SidebarList class="conversation-list" :filter="filter" />
   </div>
   <div class="controls">
-    <SidebarLive />
     <SidebarControls />
     <SidebarStatus />
   </div>
