@@ -2,6 +2,7 @@ import { dataRecovery } from '../fixtures/test-data-accounts.json'
 
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
+const randomName = faker.internet.userName(name) // generate random name
 const recoverySeed =
   dataRecovery.accounts
     .filter((item) => item.description === 'Only Text')
@@ -19,7 +20,7 @@ describe.skip('Verify passphrase does not get stored in localstorage', () => {
   it.skip('Create Account and validate localstorage values are as expected', () => {
     //Skipped because we are going to ask if it is needed to store the passphrase or not in localstorage
     // Create Account process executed
-    cy.createAccount(randomPIN)
+    cy.createAccount(randomPIN, randomName)
 
     //Wait until main page is loaded after creating account
     cy.validateChatPageIsLoaded()

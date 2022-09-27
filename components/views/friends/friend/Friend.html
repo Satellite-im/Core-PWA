@@ -16,7 +16,7 @@
     <TypographyText v-if="status" size="sm"> {{ status }} </TypographyText>
   </div>
   <div class="spacer"></div>
-  <div class="controls" v-if="user && !friendRequest && isPreview">
+  <div class="controls" v-if="user && !request && isPreview">
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
     </div>
@@ -27,14 +27,6 @@
       @click="sendMessageRequest"
     >
       <message-square-icon size="1x" />
-    </InteractablesButton>
-    <InteractablesButton
-      v-else-if="hasFriendRequest"
-      color="danger"
-      v-tooltip.bottom="cancelFriendRequestText"
-      @click="rejectFriendRequest"
-    >
-      <x-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       v-else
@@ -49,7 +41,7 @@
   </div>
   <div
     class="controls"
-    v-if="friendRequest?.incoming && friendRequest?.status === 'pending'"
+    v-if="request && request.incoming && request.status === 'pending'"
   >
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
@@ -58,6 +50,7 @@
       v-if="!loading"
       color="danger"
       v-tooltip.bottom="$t('friends.decline')"
+      data-cy="reject-friend-request"
       @click="rejectFriendRequest"
     >
       <x-icon size="1x" />
@@ -67,6 +60,7 @@
       color="success"
       v-tooltip.bottom="$t('friends.accept')"
       :disabled="loadCheck"
+      data-cy="accept-friend-request"
       @click="acceptFriendRequest"
     >
       <check-icon size="1x" />
@@ -86,7 +80,7 @@
   </div>
   <div
     class="controls"
-    v-else-if="!friendRequest?.incoming && friendRequest?.status === 'pending'"
+    v-else-if="request && !request.incoming && request.status === 'pending'"
   >
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
@@ -102,7 +96,7 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
-  <div class="controls" v-else-if="user && !friendRequest && !isPreview">
+  <div class="controls" v-else-if="user && !request && !isPreview">
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
     </div>

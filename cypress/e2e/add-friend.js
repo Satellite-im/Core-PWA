@@ -1,23 +1,45 @@
+import 'cypress-localstorage-commands'
 const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-let friendUsername = ''
-let friendUserID = ''
+const firstRandomName = faker.internet.userName(name) // generate random name
+const secondRandomName = faker.internet.userName(name) // generate random name
+let friendUsername,
+  friendUserID,
+  myUserID = ''
 
-describe('Create Account and add friend', () => {
-  it('Create First Account and grab friend ID', { retries: 2 }, () => {
-    cy.createAccount(randomPIN)
-    cy.validateChatPageIsLoaded().then(() => {
-      let myLocalStorage = localStorage.getItem('Satellite-Store')
-      myLocalStorage = JSON.parse(myLocalStorage)
-      friendUserID = myLocalStorage.accounts.details.did
-      friendUsername = myLocalStorage.accounts.details.name
-    })
+describe('Create Two Reusable Accounts', () => {
+  before(() => {
+    // Delete Localstorage Snapshots before starting tests
+    cy.clearLocalStorageSnapshot()
   })
 
-  it('Create Second Account and add friend', () => {
-    cy.createAccount(randomPIN)
-    cy.validateChatPageIsLoaded()
-    // Pending to be fixed until we find how to add a friend on localhost
+  it('Create First Account and grab friend ID', { retries: 2 }, () => {
+    // Create one account
+    cy.createAccount('12345', firstRandomName)
+
+    // Save userId and userName from LocalStorage
+    cy.validateChatPageIsLoaded().then(() => {
+      let firstLocalStorage = localStorage.getItem('Satellite-Store')
+      firstLocalStorage = JSON.parse(firstLocalStorage)
+      friendUserID = firstLocalStorage.accounts.details.did
+      friendUsername = firstLocalStorage.accounts.details.name
+    })
+
+    // Save Localstorage Snapshot for Chat User A
+    cy.saveLocalStorage('Chat User A')
+  })
+
+  it('Create Second Account and add first user as friend', () => {
+    // Create Second User Account
+    cy.createAccount('12345', secondRandomName)
+
+    // Save User ID from LocalStorage
+    cy.validateChatPageIsLoaded().then(() => {
+      let secondLocalStorage = localStorage.getItem('Satellite-Store')
+      secondLocalStorage = JSON.parse(secondLocalStorage)
+      myUserID = secondLocalStorage.accounts.details.did
+    })
+
+    // Go to Friends and send a friend request to First User
     cy.get('[data-cy=sidebar-friends]').click()
     cy.get('[data-cy=tab-element]').contains('Add Friend').click()
     cy.get('[data-cy=add-friend-page]')
@@ -34,15 +56,63 @@ describe('Create Account and add friend', () => {
     cy.contains('Friend request successfully sent!').should('be.visible')
   })
 
-  it('Requests tab should display the new pending friend request listed', () => {
+  it('Friend request sent is displayed and user cancels it', () => {
+    // Type friend ID to add it and validate that friend request is sent. Then cancel it
     cy.get('[data-cy=tab-element]').contains('Requests').click()
     cy.contains('Outgoing requests').should('be.visible')
     cy.get('[data-cy=friend-name]').should('contain', friendUsername)
-  })
-
-  it('User should be able to withdraw friend request', () => {
     cy.get('[data-cy="friend-cancel-request-sent"]').click()
     cy.contains('No requests found').should('be.visible')
     cy.contains('You have no pending friend requests').should('be.visible')
+  })
+
+  it('Try to add yourself as friend', () => {
+    // Type your userID to attempt to add yourself as friend
+    cy.get('[data-cy=tab-element]').contains('Add Friend').click()
+    cy.get('[data-cy=add-friend-page]')
+      .find('[data-cy=input-group]')
+      .as('friend-request-input')
+    cy.get('@friend-request-input').click().type(myUserID)
+    cy.contains("You can't add yourself, you silly goose.").should('be.visible')
+    cy.get('@friend-request-input').click().clear()
+  })
+
+  it('Send again friend request to User A', () => {
+    // Type friend ID to add it and validate that friend request is sent
+    cy.get('[data-cy=add-friend-page]')
+      .find('[data-cy=input-group]')
+      .type(friendUserID)
+    cy.get('[data-cy=friend]')
+      .should('be.visible')
+      .then(() => {
+        cy.get('[data-cy=friend-name]').should('contain', friendUsername)
+        cy.get('[data-cy=friend-did]').should('contain', friendUserID)
+        cy.get('[data-cy=friend-send-request]').click()
+      })
+    cy.contains('Friend request successfully sent!').should('be.visible')
+
+    // Save Localstorage Snapshot for Chat User B
+    cy.saveLocalStorage('Chat User B')
+  })
+
+  it('Chat User A has a friend request displayed and accepts it', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.loginWithLocalStorage('Chat User A', '12345')
+
+    // Go to Friends tab and validate that a friend request was received
+    cy.get('[data-cy=sidebar-friends]').click()
+    cy.get('[data-cy=tab-element]')
+      .contains('Requests')
+      .should('have.attr', 'data-badge', '1')
+      .click()
+    cy.get('[data-cy=friend]')
+      .find('[data-cy=friend-name]')
+      .should('contain', secondRandomName)
+      .parents('[data-cy=friend]')
+      .find('[data-cy=accept-friend-request]')
+      .click()
+    cy.contains('No requests found').should('be.visible')
+    cy.contains('You have no pending friend requests').should('be.visible')
+    cy.saveLocalStorage('Chat User A')
   })
 })

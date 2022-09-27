@@ -1,15 +1,10 @@
 import 'cypress-file-upload'
 import 'cypress-localstorage-commands'
 import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
-import { date } from 'fp-ts'
 
 addMatchImageSnapshotCommand({
   customSnapshotsDir: '/cypress/snapshots',
 })
-
-const faker = require('faker')
-const randomName = faker.internet.userName(name) // generate random name
-const randomStatus = faker.lorem.word() // generate random status
 
 const COMMAND_DELAY = 2000 // to run tests slower
 
@@ -87,7 +82,7 @@ Cypress.Commands.add(
 
 //Create Account Commands
 
-Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
+Cypress.Commands.add('createAccount', (pin, username, isMobile = false) => {
   cy.clearDatabase()
   cy.visitRootPage(isMobile)
   cy.url().should('contain', '#/auth/unlock')
@@ -103,13 +98,13 @@ Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
   cy.get('[data-cy=username-input]')
     .should('be.visible')
     .trigger('input')
-    .type(randomName)
+    .type(username)
   cy.get('[data-cy=status-input]')
     .should('be.visible')
     .trigger('input')
-    .type(randomStatus)
+    .type('testing')
   cy.get('[data-cy=sign-in-button]').click()
-  cy.welcomeModal(randomName)
+  cy.welcomeModal(username)
 })
 
 Cypress.Commands.add(
@@ -228,6 +223,14 @@ Cypress.Commands.add('welcomeModal', (username) => {
 })
 
 //Import Account Commands
+
+Cypress.Commands.add('loginWithLocalStorage', (snapshot, pin) => {
+  cy.restoreLocalStorage(snapshot)
+  cy.visit('/')
+  cy.get('[data-cy=input-group]').trigger('input').type(pin)
+  cy.get('[data-cy="submit-input"]').click()
+  cy.validateChatPageIsLoaded()
+})
 
 Cypress.Commands.add(
   'importAccount',
