@@ -1,5 +1,5 @@
 <div class="toolbar">
-  <InteractablesSidebarToggle v-if="!ui.showSidebar" />
+  <InteractablesSidebarToggle v-if="!showSidebar" />
   <div class="circle-container">
     <UiUserState v-if="!isGroup" class="circle" :user="otherParticipants[0]" />
     <UiGroupIcon v-else :members="conversation.participants" />
@@ -99,6 +99,5 @@
       :search-query="searchQuery"
       @toggle="toggleSearchResult"
     />
-    <ToolbarPinned v-if="ui.showPinned" />
   </div>
 </div>
