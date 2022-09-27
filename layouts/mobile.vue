@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="loaded"
     id="app"
     :class="[`theme-${settings.theme}`, { 'hidden-nav': !isMobileNavVisible }]"
   >
@@ -29,6 +30,7 @@ export default Vue.extend({
     return {
       settings: iridium.settings.state,
       webrtc: iridium.webRTC.state,
+      loaded: false,
     }
   },
   computed: {
@@ -44,6 +46,13 @@ export default Vue.extend({
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
+  },
+  mounted() {
+    if (iridium.profile.ready) {
+      this.loaded = true
+      return
+    }
+    this.$router.push('auth/unlock')
   },
 })
 </script>

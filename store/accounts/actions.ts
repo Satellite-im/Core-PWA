@@ -155,6 +155,10 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
+    const timeoutId = setTimeout(() => {
+      throw new Error(AccountsError.USER_DERIVATION_FAILED)
+    }, 60000)
+
     logger.info('accounts/actions/loadAccount', 'beginning account load')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     if (state.adapter === 'Solana') {
@@ -170,6 +174,7 @@ export default {
         await dispatch('unlock', state.pin)
       } else {
         logger.error('accounts/actions/loadAccount', 'empty mnemonic')
+        clearTimeout(timeoutId)
         throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
       }
     }
@@ -179,6 +184,7 @@ export default {
 
     if (!$BlockchainClient.isPayerInitialized) {
       logger.error('accounts/actions/loadAccount', 'user derivation failed')
+      clearTimeout(timeoutId)
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
@@ -209,6 +215,7 @@ export default {
         'accounts/actions/loadAccount',
         'user not registered, redirecting',
       )
+      clearTimeout(timeoutId)
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
     iridium.on('ready', () => {
@@ -223,6 +230,7 @@ export default {
       commit('setUserDetails', profile)
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       logger.info('accounts/actions/loadAccount', 'finished')
+      clearTimeout(timeoutId)
       return dispatch('startup')
     })
   },

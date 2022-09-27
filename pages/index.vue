@@ -89,7 +89,9 @@ export default Vue.extend({
         })
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,
-          action: this.loadAccount,
+          action: this.accounts.phrase
+            ? () => this.loadAccount()
+            : () => this.$router.push('auth/unlock'),
         })
         this.$router.replace('/')
       }

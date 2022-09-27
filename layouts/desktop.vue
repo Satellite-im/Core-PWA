@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="loaded"
     id="app"
     :class="[
       `theme-${settings.theme}`,
@@ -38,13 +39,13 @@ import notNull from '~/utilities/notNull'
 
 export default Vue.extend({
   name: 'Desktop',
-  middleware: 'authenticated',
   setup() {
     useMeta()
   },
   data() {
     return {
       settings: iridium.settings.state,
+      loaded: false,
     }
   },
   computed: {
@@ -67,6 +68,13 @@ export default Vue.extend({
     ready(): boolean {
       return iridium.ready && !!iridium.profile.state?.did
     },
+  },
+  mounted() {
+    if (iridium.profile.ready) {
+      this.loaded = true
+      return
+    }
+    this.$router.push('auth/unlock')
   },
   methods: {
     /**
