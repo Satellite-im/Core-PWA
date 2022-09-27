@@ -26,6 +26,8 @@ export default Vue.extend({
       audioOutputs: [],
       hasWebcam: false,
       videoInputs: [],
+      isListening: false,
+      isLoadingTrack: false,
       userHasGivenAudioAccess: false,
       userDeniedAudioAccess: false,
       userHasGivenVideoAccess: false,
@@ -150,7 +152,6 @@ export default Vue.extend({
               track.stop()
             })
         }
-
         // Open new MediaStream
         const stream = await this.requestUserPermissions({
           audio: { deviceId: newValue },
@@ -160,12 +161,10 @@ export default Vue.extend({
     },
     stream(stream) {
       this.audioStreamUtils?.destroy()
-
       if (!stream) {
         this.micLevel = 0
         return
       }
-
       this.audioStreamUtils = new AudioStreamUtils(stream, this.audio)
       this.audioStreamUtils.start()
     },
@@ -179,16 +178,10 @@ export default Vue.extend({
     this.updateInterval = setInterval(this.setupDefaults, 1000)
   },
   beforeDestroy() {
-    if (this.stream) {
-      this.stream.getAudioTracks().forEach((track: MediaStreamTrack) => {
-        track.stop()
-      })
-    }
     if (this.updateInterval) {
       clearInterval(this.updateInterval)
     }
-
-    this.audioStreamUtils?.destroy()
+    this.stopListening()
   },
   methods: {
     ...UserPermissions.methods,
@@ -234,13 +227,6 @@ export default Vue.extend({
           this.selectedAudioOutput =
             permissionsObject.devices.audioOut[0]?.value
         }
-
-        if (!this.stream) {
-          const stream = await this.requestUserPermissions({
-            audio: { deviceId: this.settings.audioInput },
-          })
-          this.updateStream(stream)
-        }
       }
 
       if (permissionsObject.permissions.webcam) {
@@ -258,6 +244,20 @@ export default Vue.extend({
           permissionsObject.devices.audioOut[0]?.value || ''
       }
     },
+    async startListening() {
+      this.isLoadingTrack = true
+      this.stream = await this.requestUserPermissions({
+        audio: { deviceId: this.settings.audioInput },
+      })
+      this.isLoadingTrack = false
+      this.isListening = true
+    },
+    async stopListening() {
+      this.stream?.getAudioTracks().forEach((track: MediaStreamTrack) => {
+        track.stop()
+      })
+      this.isListening = false
+    },
     /**
      * @method enableAudio DocsTODO
      * @description
@@ -266,8 +266,7 @@ export default Vue.extend({
     async enableAudio() {
       // Check to see if the user has permission
       try {
-        const stream = await this.requestUserPermissions({ audio: true })
-        this.updateStream(stream)
+        this.stream = await this.requestUserPermissions({ audio: true })
         this.userHasGivenAudioAccess = true
         this.setupDefaults()
       } catch (_: any) {
