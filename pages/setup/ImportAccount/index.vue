@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { PlusCircleIcon, TrashIcon } from 'satellite-lucide-icons'
 import * as bip39 from 'bip39'
+import { AccountsError } from '~/store/accounts/types'
 
 declare module 'vue/types/vue' {
   interface Vue {

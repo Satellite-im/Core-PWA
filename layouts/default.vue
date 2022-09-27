@@ -57,7 +57,7 @@ export default Vue.extend({
         return
       }
 
-      if (redirectObj[error.message] === AccountsError.TIMED_OUT) {
+      if (error.message === AccountsError.TIMED_OUT) {
         this.$toast.error(this.$t('errors.accounts.timed_out') as string)
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,
