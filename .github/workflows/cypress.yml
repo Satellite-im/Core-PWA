@@ -64,16 +64,15 @@ jobs:
       - name: yarn
         run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
-      - name: Cypress tests with debug logs
-        uses: cypress-io/github-action@v4
-        env:
-          DEBUG: '@cypress/github-action'
+      - name: Cypress
+        uses: cypress-io/github-action@v2
         with:
           working-directory: ./
           install: false
           start: yarn dev
           run: sh ./build-script.sh
-          command: npx cypress run --browser chrome
+          command: npx cypress run
+          browser: chrome
           wait-on: http://localhost:3000
           wait-on-timeout: 300
       - name: Artifacts
