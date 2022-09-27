@@ -56,7 +56,7 @@ export default Vue.extend({
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     contextMenuValues(): ContextMenuItem[] {
-      if (this.isPreview || this.request) return []
+      if (this.isPreview) return []
       return [
         {
           text: this.$t('context.remove'),
@@ -65,8 +65,10 @@ export default Vue.extend({
         },
       ]
     },
-    requestIncoming(): boolean | null {
-      return this.request && this.request.incoming
+    friendRequest(): FriendRequest | null {
+      if (!this.hasFriendRequest) return null
+      const userDid = this.user.did
+      return iridium.friends.state.requests?.[userDid] || null
     },
     status(): UserStatus | '' {
       return this.showStatus
@@ -78,6 +80,12 @@ export default Vue.extend({
     },
     isFriend(): boolean {
       return iridium.friends.isFriend(this.user.did)
+    },
+    hasFriendRequest(): boolean {
+      return iridium.friends.hasRequest(this.user.did)
+    },
+    cancelFriendRequestText(): string {
+      return this.$t('friends.cancel_friend_request') as string
     },
   },
   beforeDestroy() {

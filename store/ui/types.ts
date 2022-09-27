@@ -89,7 +89,6 @@ export interface UIState {
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
-  showPinned: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
