@@ -5,6 +5,7 @@
       v-model.trim="query"
       :placeholder="$t('friends.search_placeholder')"
       :autofocus="$device.isDesktop"
+      type="search"
       @change="
         matches = []
         _searchFriend()
