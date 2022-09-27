@@ -6,8 +6,10 @@ const randomStatus = faker.lorem.word() // generate random status
 describe('Create Account - Negative Tests', () => {
   it('Try to create account with PIN less than 5 digits', () => {
     //Enter PIN screen and add an invalid pin
-    cy.createAccountPINscreen('1')
-    //Error message will be displayed
-    cy.contains('Password must be at least 5 characters.').should('be.visible')
+    cy.get('[data-cy=add-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(pin, { log: false }, { force: true })
+    cy.contains('Store Pin? (Less Secure)').should('be.visible')
   })
 })
