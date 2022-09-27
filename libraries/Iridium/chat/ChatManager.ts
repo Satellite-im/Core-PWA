@@ -711,12 +711,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
             if (result.originalCID === cid.toString()) {
               resolve({ cid: result.cid, valid: result.valid })
             }
-            iridium.connector.p2p?.off('node/message/sync/pin', onSyncPin)
+            iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
           }
 
           iridium.connector?.p2p.on('node/message/sync/pin', onSyncPin)
           setTimeout(() => {
-            iridium.connector.p2p?.off('node/message/sync/pin', onSyncPin)
+            iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
             resolve(undefined)
           }, 30000)
         })

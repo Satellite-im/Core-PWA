@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { without } from 'lodash'
 import {
   Position,
   SettingsRoutes,
@@ -9,12 +8,8 @@ import {
 } from './types'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
-import { Channel } from '~/types/ui/server'
 
 export default {
-  togglePinned(state: UIState, visible: boolean) {
-    state.showPinned = visible
-  },
   toggleContextMenu(state: UIState, enabled: boolean) {
     state.contextMenuStatus = enabled
   },
@@ -24,7 +19,7 @@ export default {
   setContextMenuValues(state: UIState, values: any) {
     state.contextMenuValues = values
   },
-  setContextMenuPosition(state: UIState, e: any) {
+  setContextMenuPosition(state: UIState, e: MouseEvent) {
     state.contextMenuPosition = { x: e.x, y: e.y }
   },
   setQuickProfile(
@@ -93,9 +88,6 @@ export default {
   },
   setShowOlderMessagesInfo(state: UIState, flag: boolean) {
     state.showOlderMessagesInfo = flag
-  },
-  setActiveChannel(state: UIState, channel: Channel) {
-    state.activeChannel = channel
   },
   settingReaction(state: UIState, status: object) {
     state.settingReaction = status // TODO: check this mutation, probably a bug

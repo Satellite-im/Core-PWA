@@ -1,15 +1,10 @@
 import Mousetrap from 'mousetrap'
 import { UIState, ModalWindows } from './types'
 import { ActionsArguments } from '~/types/store/store'
-import { Friend } from '~/types/ui/friends'
-import { Channel } from '~/types/ui/server'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default {
-  setActiveChannel({ commit }: ActionsArguments<UIState>, channel: Channel) {
-    commit('setActiveChannel', channel)
-  },
   /**
    * @method activateKeybinds
    * @description Activates all keybindings with Mousetrap

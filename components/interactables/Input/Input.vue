@@ -8,6 +8,12 @@ import { Size } from '~/types/typography'
 
 const MOBILE_FOCUS_DELAY = 300 // ms
 
+enum Appends {
+  Password = 'password',
+  Erase = 'erase',
+  Custom = 'custom',
+}
+
 export default Vue.extend({
   components: {
     DeleteIcon,
@@ -94,6 +100,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      Appends,
       showPassword: false,
     }
   },
@@ -110,6 +117,19 @@ export default Vue.extend({
     // mobile devices need at least 1rem font size on inputs or it zooms the user in on focus
     derivedSize(): string {
       return this.$device.isMobile ? 'md' : this.size
+    },
+    enabledAppends(): string[] {
+      const types: string[] = []
+      if (this.type === 'password') {
+        types.push(Appends.Password)
+      }
+      if (this.showClearButton && !this.isEmpty) {
+        types.push(Appends.Erase)
+      }
+      if (this.$slots.append) {
+        types.push(Appends.Custom)
+      }
+      return types
     },
   },
   mounted() {

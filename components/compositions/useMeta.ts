@@ -1,6 +1,7 @@
+import { computed } from 'vue'
+
 const useMeta = () => {
-  const { $store } = useNuxtApp()
-  const title = computed(() => $store.state.meta.title)
+  const title = computed(() => 'Satellite.im')
 
   useHead({
     title,
