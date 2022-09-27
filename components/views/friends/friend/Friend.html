@@ -16,17 +16,25 @@
     <TypographyText v-if="status" size="sm"> {{ status }} </TypographyText>
   </div>
   <div class="spacer"></div>
-  <div class="controls" v-if="user && !request && isPreview">
+  <div class="controls" v-if="user && !friendRequest && isPreview">
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-else-if="isFriend"
-      data-cy="friend-send-message"
+      data-cy="friend-send-message-1"
       v-tooltip.bottom="$t('friends.message')"
       @click="sendMessageRequest"
     >
       <message-square-icon size="1x" />
+    </InteractablesButton>
+    <InteractablesButton
+      v-else-if="hasFriendRequest"
+      color="danger"
+      v-tooltip.bottom="cancelFriendRequestText"
+      @click="rejectFriendRequest"
+    >
+      <x-icon size="1x" />
     </InteractablesButton>
     <InteractablesButton
       v-else
@@ -41,7 +49,7 @@
   </div>
   <div
     class="controls"
-    v-if="request && request.incoming && request.status === 'pending'"
+    v-if="friendRequest?.incoming && friendRequest?.status === 'pending'"
   >
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
@@ -59,8 +67,8 @@
       v-if="!loading"
       color="success"
       v-tooltip.bottom="$t('friends.accept')"
-      :disabled="loadCheck"
       data-cy="accept-friend-request"
+      :disabled="loadCheck"
       @click="acceptFriendRequest"
     >
       <check-icon size="1x" />
@@ -80,7 +88,7 @@
   </div>
   <div
     class="controls"
-    v-else-if="request && !request.incoming && request.status === 'pending'"
+    v-else-if="!friendRequest?.incoming && friendRequest?.status === 'pending'"
   >
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
@@ -96,13 +104,13 @@
       <x-icon size="1x" />
     </InteractablesButton>
   </div>
-  <div class="controls" v-else-if="user && !request && !isPreview">
+  <div class="controls" v-else-if="user && !friendRequest && !isPreview">
     <div class="loader-container" v-if="loading">
       <UiLoadersLoadingBar short />
     </div>
     <InteractablesButton
       v-if="!loading"
-      data-cy="friend-send-message"
+      data-cy="friend-send-message-2"
       v-tooltip.bottom="$t('friends.message')"
       @click="sendMessageRequest"
     >
