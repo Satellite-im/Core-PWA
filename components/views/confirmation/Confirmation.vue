@@ -94,6 +94,7 @@ export default Vue.extend({
       display: flex;
       flex-direction: column;
       gap: 8px;
+      white-space: pre-wrap;
 
       .heading {
         display: flex;

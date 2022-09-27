@@ -161,7 +161,6 @@ describe('mutations', () => {
     },
     chatbarFocus: false,
     fullscreen: false,
-    showPinned: false,
     enhancers: {
       containerWidth: 0,
       defaultHeight: '30rem',
