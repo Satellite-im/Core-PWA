@@ -3,19 +3,7 @@ import SoundManager, { Sounds } from './SoundManager'
 
 describe('init', () => {
   it('should pass', () => {
-    expect(Sounds).toMatchSnapshot(`
-    Object {
-    "CALL": "call",
-    "CONNECTED": "connected",
-    "DEAFEN": "deafen",
-    "HANGUP": "hangup",
-    "MUTE": "mute",
-    "NEW_MESSAGE": "newMessage",
-    "UNDEAFEN": "undeafen",
-    "UNMUTE": "unmute",
-    "UPLOAD": "upload",
-    }
-        `)
+    expect(Sounds).toMatchSnapshot()
   })
 })
 
@@ -59,8 +47,25 @@ describe('Manage sounds', () => {
   })
 
   test('sound stops', () => {
-    const result: any = inst.stopSounds([Sounds.CALL])
+    const instance = new SoundManager(1.0)
 
+    window.HTMLMediaElement.prototype.load = () => {
+      return Promise.resolve()
+    }
+    window.HTMLMediaElement.prototype.play = () => {
+      return Promise.resolve()
+    }
+    window.HTMLMediaElement.prototype.pause = () => {
+      return Promise.resolve()
+    }
+
+    const spy = jest.spyOn(instance.sounds[Sounds.NEW_MESSAGE], 'stop')
+    instance.playSound(Sounds.NEW_MESSAGE)
+    instance.playSound(Sounds.CALL)
+    instance.playSound(Sounds.DEAFEN)
+
+    const result = instance.stopSounds([Sounds.NEW_MESSAGE, Sounds.CALL])
+    // expect(spy).toHaveBeenCalled()
     expect(result).toMatchSnapshot()
   })
 
