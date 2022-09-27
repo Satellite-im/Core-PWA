@@ -35,30 +35,36 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add('visitRootPage', (isMobile = false) => {
-  cy.deleteStorage()
-  cy.wait(1000)
-  // Pass arguments depending if the test is on mobile or desktop browser
-  if (isMobile === false) {
-    cy.visit('/')
-  } else if (isMobile === true) {
-    // Pass user agent with data for a mobile device
-    cy.on('window:before:load', (win) => {
-      Object.defineProperty(win.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+Cypress.Commands.add(
+  'visitRootPage',
+  (isMobile = false, remainingAttempts = 3) => {
+    cy.deleteStorage()
+    cy.wait(1000)
+    // Pass arguments depending if the test is on mobile or desktop browser
+    if (isMobile === false) {
+      cy.visit('/')
+    } else if (isMobile === true) {
+      // Pass user agent with data for a mobile device
+      cy.on('window:before:load', (win) => {
+        Object.defineProperty(win.navigator, 'userAgent', {
+          value:
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+        })
       })
-    })
-    // Use visit Mobile command instead of visit for mobile devices
-    cy.visit('/')
-  }
-  cy.wait(1000)
-  cy.get('body').then(($body) => {
-    if (!($body.find('[data-cy=input-group]').length > 0)) {
-      cy.visitRootPage(isMobile)
+      // Use visit Mobile command instead of visit for mobile devices
+      cy.visit('/')
     }
-  })
-})
+    cy.get('body').then(($body) => {
+      if (
+        !($body.find('[data-cy=input-group]').length > 0) &&
+        remainingAttempts > 1
+      ) {
+        remainingAttempts -= 1
+        cy.visitRootPage(isMobile, remainingAttempts)
+      }
+    })
+  },
+)
 
 Cypress.Commands.add('deleteStorage', () => {
   cy.removeLocalStorage('Satellite-Store')
@@ -213,7 +219,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('welcomeModal', (username) => {
   cy.get('.modal-dialog', { timeout: 30000 }).should('exist')
-  cy.contains('Welcome ' + username + '!').should('exist')
+  cy.contains('Welcome, ' + username + '!').should('exist')
   cy.contains(
     'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   ).should('exist')
