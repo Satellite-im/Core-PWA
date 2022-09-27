@@ -12,9 +12,9 @@
   <!-- Requires user permissions to see in most browsers -->
   <SettingsSection v-if="!userHasGivenAudioAccess">
     <SettingsUnit
+      v-if="!userDeniedAudioAccess"
       :title="$t('pages.settings.audio.sources.title')"
       :text="$t('pages.settings.audio.sources.subtitle')"
-      v-if="!userDeniedAudioAccess"
     >
       <!-- Ask for permissions block -->
       <InteractablesButton
@@ -29,8 +29,8 @@
       :text="$t('pages.settings.audio.sources.permissionDeniedMessage')"
     />
   </SettingsSection>
-  <!-- Permission Granted Block -->
 
+  <!-- Permission Granted Block -->
   <SettingsSection v-if="userHasGivenAudioAccess">
     <!-- Audio In -->
     <SettingsUnit
