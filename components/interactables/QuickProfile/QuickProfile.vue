@@ -21,10 +21,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
+      quickProfile: (state) => (state as RootState).ui.quickProfile,
     }),
     user(): User | undefined {
-      return this.ui?.quickProfile?.user
+      return this.quickProfile?.user
     },
     src(): string {
       const hash = this.user?.photoHash
@@ -51,9 +51,9 @@ export default Vue.extend({
     const quick = this.$refs.quick as HTMLElement
     quick.focus()
 
-    if (this.$device.isDesktop && this.ui.quickProfile) {
-      quick.style.top = `${this.ui.quickProfile.position.y}px`
-      quick.style.left = `${this.ui.quickProfile.position.x}px`
+    if (this.$device.isDesktop && this.quickProfile) {
+      quick.style.top = `${this.quickProfile.position.y}px`
+      quick.style.left = `${this.quickProfile.position.x}px`
     }
     this.handleOverflow()
   },
@@ -62,24 +62,22 @@ export default Vue.extend({
       this.$store.commit('ui/setQuickProfile', undefined)
     },
     handleOverflow() {
-      if (!this.ui.quickProfile || this.$device.isMobile) {
+      if (!this.quickProfile || this.$device.isMobile) {
         return
       }
       const quick = this.$refs.quick as HTMLElement
       const widthOverflow =
-        this.ui.quickProfile.position.x + quick.clientWidth - window.innerWidth
+        this.quickProfile.position.x + quick.clientWidth - window.innerWidth
       const heightOverflow =
-        this.ui.quickProfile.position.y +
-        quick.clientHeight -
-        window.innerHeight
+        this.quickProfile.position.y + quick.clientHeight - window.innerHeight
       if (widthOverflow > -8) {
         quick.style.left = `${
-          this.ui.quickProfile.position.x - widthOverflow - 16
+          this.quickProfile.position.x - widthOverflow - 16
         }px`
       }
       if (heightOverflow > -8) {
         quick.style.top = `${
-          this.ui.quickProfile.position.y - heightOverflow - 16
+          this.quickProfile.position.y - heightOverflow - 16
         }px`
       }
     },
