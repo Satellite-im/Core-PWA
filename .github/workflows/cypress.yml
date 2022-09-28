@@ -34,7 +34,7 @@ jobs:
           run_install: |
             - recursive: true
       - name: Linkscript
-        run: sh ./linkscript.sh
+        run: sh ./linkscript2.sh
       - name: Create env file - iridium
         run: |
           cd linked-iridium
