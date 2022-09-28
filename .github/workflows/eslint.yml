@@ -1,0 +1,14 @@
+name: eslint
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: yarn
+        run: yarn
+      - name: eslint
+        uses: tj-actions/eslint-changed-files@v14
