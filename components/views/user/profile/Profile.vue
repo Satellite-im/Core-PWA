@@ -26,7 +26,6 @@ declare module 'vue/types/vue' {
 }
 
 export default Vue.extend({
-  name: 'Profile',
   components: {
     UserPlusIcon,
     MoreVerticalIcon,
