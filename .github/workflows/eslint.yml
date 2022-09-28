@@ -13,7 +13,7 @@ jobs:
       - name: eslint
         uses: tj-actions/eslint-changed-files@v14
       - name: prettier
-      - uses: EPMatt/reviewdog-action-prettier@v1
+        uses: EPMatt/reviewdog-action-prettier@v1
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
