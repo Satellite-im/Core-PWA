@@ -438,6 +438,8 @@ export default {
             title: 'Audio Input',
             subtitle:
               "Select which input device you'd like people to hear your silky smooth voice from.",
+            on: 'Enable Testing',
+            off: 'Disable Testing',
           },
           output: {
             title: 'Audio Output',
