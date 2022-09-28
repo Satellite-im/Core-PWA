@@ -14,10 +14,11 @@
           :value="$t('friends.friend_requests')"
         />
       </div>
-      <FriendsFriend
+      <FriendsItem
         v-for="request in incomingRequests"
         :key="request.from"
         :user="request.user"
+        type="incoming"
       />
     </template>
 
@@ -29,10 +30,11 @@
           :value="$t('friends.outgoing')"
         />
       </div>
-      <FriendsFriend
+      <FriendsItem
         v-for="request in outgoingRequests"
         :key="request.from"
         :user="request.user"
+        type="outgoing"
       />
     </template>
   </div>

@@ -30,7 +30,7 @@ export type IridiumFriendEvent = {
 }
 export type FriendState = {
   friends: string[]
-  requests: { [key: string]: FriendRequest }
+  requests: { [key: string]: FriendRequest | undefined }
   blocked: string[]
 }
 
@@ -115,9 +115,10 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
           logger.info(this.loggerTag, 'connecting to friends', {
             friends: this.state.friends,
           })
+          // todo add type guard #4809
           await Promise.all(
             Object.values(this.state.requests)
-              .filter((request) => request.incoming)
+              .filter((request) => request?.incoming)
               .map(async (request) => {
                 if (!iridium.connector) return
                 if (!iridium.connector.p2p.hasPeer(request.user.did)) {
@@ -255,7 +256,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const str = didUtils.didString(did)
     return (
       this.state.requests?.[str] &&
-      this.state.requests?.[str].status !== 'rejected'
+      this.state.requests?.[str]?.status !== 'rejected'
     )
   }
 
