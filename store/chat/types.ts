@@ -13,7 +13,6 @@ export interface ChatFileUpload {
 export interface ChatState {
   files: { [key: Conversation['id']]: ChatFileUpload[] | undefined }
   activeUploadChats: Conversation['id'][]
-  countError: boolean
   draftMessages: { [key: Conversation['id']]: string }
   replyChatbarMessages: { [key: Conversation['id']]: ConversationMessage }
 }

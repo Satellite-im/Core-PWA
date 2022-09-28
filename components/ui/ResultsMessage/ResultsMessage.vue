@@ -43,7 +43,7 @@ export default Vue.extend({
   justify-content: center;
   user-select: none;
   height: 100%;
-  gap: 16px;
+  gap: 8px;
   padding: 16px 0;
 
   .no-results-icon {
