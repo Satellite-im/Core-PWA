@@ -1,5 +1,5 @@
-import InitialSettingsState from '~/store/settings/state'
 import getters from '~/store/settings/getters'
+import InitialSettingsState from '~/store/settings/state'
 
 const state = {
   ...InitialSettingsState(),

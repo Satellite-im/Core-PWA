@@ -1,5 +1,5 @@
-import * as chat from '~/utilities/chat'
 import * as file from '~/libraries/Files/types/file'
+import * as chat from '~/utilities/chat'
 
 describe('chat.conversationMessageIsNotice', () => {
   test('test case 1', () => {
