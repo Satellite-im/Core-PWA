@@ -8,7 +8,7 @@
       },
     ]"
   >
-    <Slimbar :servers="$mock.servers" />
+    <Slimbar />
     <Sidebar />
     <UiDroppableWrapper
       :disabled="!displayDroppable"
