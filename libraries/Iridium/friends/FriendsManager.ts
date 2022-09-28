@@ -348,6 +348,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         payload,
       })
 
+      await this.send(payload)
+    } else {
+      // Notify the recipient
       const buildNotification: Exclude<Notification, 'id'> = {
         fromName: user.name,
         at: request.at,
@@ -358,7 +361,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         seen: false,
       }
       iridium.notifications.sendNotification(buildNotification)
-      await this.send(payload)
     }
   }
 
