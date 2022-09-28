@@ -37,19 +37,17 @@
       :title="$t('pages.settings.audio.sources.input.title')"
       :text="$t('pages.settings.audio.sources.input.subtitle')"
     >
-      <div class="audio-input-container">
-        <InteractablesSelect
-          v-model="selectedAudioInput"
-          :options="audioInputs"
-          :label="$t('pages.settings.audio.sources.input.title')"
-        />
-        <InteractablesButton
-          :text="isListening ? $t('pages.settings.audio.sources.input.off') : $t('pages.settings.audio.sources.input.on')"
-          :color="isListening ? 'danger' : 'dark'"
-          :loading="isLoadingTrack"
-          @click="isListening ? stopListening() : startListening()"
-        />
-      </div>
+      <InteractablesButton
+        :text="isListening ? $t('pages.settings.audio.sources.input.off') : $t('pages.settings.audio.sources.input.on')"
+        :color="isListening ? 'danger' : 'dark'"
+        :loading="isLoadingTrack"
+        @click="isListening ? stopListening() : startListening()"
+      />
+      <InteractablesSelect
+        v-model="selectedAudioInput"
+        :options="audioInputs"
+        :label="$t('pages.settings.audio.sources.input.title')"
+      />
       <div class="meter-container">
         <UiMeter :value="micLevel" :height="5" solid />
       </div>

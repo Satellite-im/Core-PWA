@@ -59,6 +59,7 @@ export default Vue.extend({
     ...mapState({
       settings: (state) => (state as RootState).settings,
       audio: (state) => (state as RootState).audio,
+      settingsRoute: (state) => (state as RootState).ui.settingsRoute,
     }),
     // React to v-model changes to echoCancellation and update
     // the state accordingly with the mutation
@@ -141,22 +142,11 @@ export default Vue.extend({
     },
   },
   watch: {
-    async '$store.state.settings.audioInput'(newValue, oldValue) {
-      // If there is an oldValue in the persisted state
-      if (oldValue !== '') {
-        // Close old MediaStream
-        if (this.stream) {
-          this.stream
-            .getAudioTracks()
-            .forEach(function (track: MediaStreamTrack) {
-              track.stop()
-            })
-        }
-        // Open new MediaStream
-        this.stream = await this.requestUserPermissions({
-          audio: { deviceId: newValue },
-        })
-      }
+    selectedAudioInput() {
+      this.stopListening()
+    },
+    settingsRoute() {
+      this.stopListening()
     },
     stream(stream) {
       this.audioStreamUtils?.destroy()
