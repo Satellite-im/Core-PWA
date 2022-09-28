@@ -1,9 +1,11 @@
 .friends {
+  display: flex;
+  flex-direction: column;
   padding: @normal-spacing;
   width: 100%;
-  overflow-y: scroll;
 
   .main-content {
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     max-width: 1250px;

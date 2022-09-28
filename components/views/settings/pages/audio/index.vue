@@ -14,11 +14,6 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { AudioStreamUtils } from '~/utilities/AudioStreamUtils'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    setConstraint: (prop: string, value: any) => void
-  }
-}
 export default Vue.extend({
   name: 'AudioSettings',
   layout: 'settings',
@@ -31,15 +26,17 @@ export default Vue.extend({
       audioOutputs: [],
       hasWebcam: false,
       videoInputs: [],
+      isListening: false,
+      isLoadingTrack: false,
       userHasGivenAudioAccess: false,
       userDeniedAudioAccess: false,
       userHasGivenVideoAccess: false,
       userDeniedVideoAccess: false,
       browserAllowsAudioOut: true,
       micLevel: 0,
-      stream: null,
+      stream: null as MediaStream | null,
       featureReadyToShow: false,
-      updateInterval: null,
+      updateInterval: null as NodeJS.Timer | null,
       captureMouses: [
         {
           value: CaptureMouseTypes.always,
@@ -62,11 +59,12 @@ export default Vue.extend({
     ...mapState({
       settings: (state) => (state as RootState).settings,
       audio: (state) => (state as RootState).audio,
+      settingsRoute: (state) => (state as RootState).ui.settingsRoute,
     }),
     // React to v-model changes to echoCancellation and update
     // the state accordingly with the mutation
     isEchoCancellation: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('settings/echoCancellation', state)
         this.setConstraint('echoCancellation', state)
       },
@@ -75,7 +73,7 @@ export default Vue.extend({
       },
     },
     isNoiseSuppression: {
-      set(state) {
+      set(state: boolean) {
         this.$store.commit('settings/noiseSuppression', state)
         this.setConstraint('noiseSuppression', state)
       },
@@ -84,7 +82,7 @@ export default Vue.extend({
       },
     },
     isBitrate: {
-      set(state) {
+      set(state: number) {
         this.$store.commit('settings/bitrate', state)
         this.setConstraint('sampleRate', state)
       },
@@ -93,7 +91,7 @@ export default Vue.extend({
       },
     },
     isSampleSize: {
-      set(state) {
+      set(state: number) {
         this.$store.commit('settings/sampleSize', state)
         this.setConstraint('sampleSize', state)
       },
@@ -102,7 +100,7 @@ export default Vue.extend({
       },
     },
     selectedAudioInput: {
-      set(state) {
+      set(state: string) {
         this.$store.commit('settings/audioInput', state)
       },
       get(): string {
@@ -110,7 +108,7 @@ export default Vue.extend({
       },
     },
     selectedAudioOutput: {
-      set(state) {
+      set(state: string) {
         this.$store.commit('settings/audioOutput', state)
         this.setConstraint('volume', state)
       },
@@ -127,7 +125,7 @@ export default Vue.extend({
       },
     },
     isCaptureMouse: {
-      set(state) {
+      set(state: string) {
         this.$store.commit('settings/captureMouse', state)
       },
       get(): string {
@@ -144,93 +142,62 @@ export default Vue.extend({
     },
   },
   watch: {
-    async '$store.state.settings.audioInput'(newValue, oldValue) {
-      // If there is an oldValue in the persisted state
-      if (oldValue !== '') {
-        // Close old MediaStream
-        if (this.$data.stream) {
-          this.$data.stream
-            .getAudioTracks()
-            .forEach(function (track: MediaStreamTrack) {
-              track.stop()
-            })
-        }
-
-        // Open new MediaStream
-        const stream = await this.requestUserPermissions({
-          audio: { deviceId: newValue },
-        })
-        this.updateStream(stream)
-      }
+    selectedAudioInput() {
+      this.stopListening()
     },
-    '$data.stream'(stream) {
+    settingsRoute() {
+      this.stopListening()
+    },
+    stream(stream) {
       this.audioStreamUtils?.destroy()
-
       if (!stream) {
-        this.$data.micLevel = 0
+        this.micLevel = 0
         return
       }
-
       this.audioStreamUtils = new AudioStreamUtils(stream, this.audio)
       this.audioStreamUtils.start()
     },
     'audioStreamUtils.level'(level) {
-      this.$data.micLevel = Math.round(level)
+      this.micLevel = Math.round(level)
     },
   },
   mounted() {
     // Check for new input sources
     this.setupDefaults()
-    this.$data.updateInterval = setInterval(this.setupDefaults, 1000)
+    this.updateInterval = setInterval(this.setupDefaults, 1000)
   },
   beforeDestroy() {
-    if (this.$data.stream) {
-      this.$data.stream
-        .getAudioTracks()
-        .forEach(function (track: MediaStreamTrack) {
-          track.stop()
-        })
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval)
     }
-    clearInterval(this.$data.updateInterval)
-
-    this.audioStreamUtils?.destroy()
+    this.stopListening()
   },
   methods: {
     ...UserPermissions.methods,
-    /**
-     * @method setupMicMeter DocsTODO
-     * @description
-     * @param stream
-     * @example
-     */
-    updateStream(stream: MediaStream) {
-      this.$data.stream = stream
-    },
     /**
      * @method setupDefaults DocsTODO
      * @description
      * @example
      */
     async setupDefaults() {
-      const permissionsObject: any = await this.getUserPermissions()
+      const permissionsObject = await this.getUserPermissions()
 
       // Toggles the show/hide on the button to request permissions
-      this.$data.userHasGivenAudioAccess =
-        permissionsObject.permissions.microphone
+      this.userHasGivenAudioAccess = permissionsObject.permissions.microphone
       if (permissionsObject.permissions.microphone) {
-        this.$data.userDeniedAudioAccess = false
+        this.userDeniedAudioAccess = false
       }
-      this.$data.userHasGivenVideoAccess = permissionsObject.permissions.webcam
+      this.userHasGivenVideoAccess = permissionsObject.permissions.webcam
       if (permissionsObject.permissions.webcam) {
-        this.$data.userDeniedVideoAccess = false
+        this.userDeniedVideoAccess = false
       }
-      this.$data.hasMicrophone = permissionsObject.hasMicrophone
-      this.$data.hasWebcam = permissionsObject.hasWebcam
+      this.hasMicrophone = permissionsObject.hasMicrophone
+      this.hasWebcam = permissionsObject.hasWebcam
 
       if (permissionsObject.permissions.microphone) {
         // Get the arrays of devices formtted in the name/value format the select tool wants
-        this.$data.audioInputs = permissionsObject.devices.audioIn
-        this.$data.audioOutputs = permissionsObject.devices.audioOut
+        this.audioInputs = permissionsObject.devices.audioIn
+        this.audioOutputs = permissionsObject.devices.audioOut
 
         // Setting defaults on mount if one isn't already present in local storage
         if (!this.settings.audioInput) {
@@ -240,30 +207,36 @@ export default Vue.extend({
           this.selectedAudioOutput =
             permissionsObject.devices.audioOut[0]?.value
         }
-
-        if (!this.$data.stream) {
-          const stream = await this.requestUserPermissions({
-            audio: { deviceId: this.settings.audioInput },
-          })
-          this.updateStream(stream)
-        }
       }
 
       if (permissionsObject.permissions.webcam) {
-        this.$data.videoInputs = permissionsObject.devices.videoIn
-        this.$data.userHasGivenVideoAccess =
-          permissionsObject.permissions.webcam
+        this.videoInputs = permissionsObject.devices.videoIn
+        this.userHasGivenVideoAccess = permissionsObject.permissions.webcam
         if (!this.settings.videoInput) {
           this.isVideoInput = permissionsObject.devices.videoIn[0]?.value
         }
       }
 
       if (permissionsObject.browser !== 'Chrome') {
-        this.$data.browserAllowsAudioOut = false
+        this.browserAllowsAudioOut = false
       } else if (!this.settings.audioOutput) {
         this.selectedAudioOutput =
           permissionsObject.devices.audioOut[0]?.value || ''
       }
+    },
+    async startListening() {
+      this.isLoadingTrack = true
+      this.stream = await this.requestUserPermissions({
+        audio: { deviceId: this.settings.audioInput },
+      })
+      this.isLoadingTrack = false
+      this.isListening = true
+    },
+    async stopListening() {
+      this.stream?.getAudioTracks().forEach((track: MediaStreamTrack) => {
+        track.stop()
+      })
+      this.isListening = false
     },
     /**
      * @method enableAudio DocsTODO
@@ -273,13 +246,12 @@ export default Vue.extend({
     async enableAudio() {
       // Check to see if the user has permission
       try {
-        const stream = await this.requestUserPermissions({ audio: true })
-        this.updateStream(stream)
-        this.$data.userHasGivenAudioAccess = true
+        this.stream = await this.requestUserPermissions({ audio: true })
+        this.userHasGivenAudioAccess = true
         this.setupDefaults()
       } catch (_: any) {
         // Error is returned if user selects Block/Deny
-        this.$data.userDeniedAudioAccess = true
+        this.userDeniedAudioAccess = true
       }
     },
     /**
@@ -291,11 +263,11 @@ export default Vue.extend({
       // Check to see if the user has permission
       try {
         await this.requestUserPermissions({ video: true })
-        this.$data.userHasGivenVideoAccess = true
+        this.userHasGivenVideoAccess = true
         this.setupDefaults()
       } catch (_: any) {
         // Error is returned if user selects Block/Deny
-        this.$data.userDeniedVideoAccess = true
+        this.userDeniedVideoAccess = true
       }
     },
     /**
@@ -335,10 +307,9 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    hasConstraint(prop: keyof MediaTrackConstraintSet): Boolean {
-      const supports =
-        this.$envinfo.navigator.mediaDevices.getSupportedConstraints()
-      return Boolean(supports[prop])
+    hasConstraint(prop: keyof MediaTrackConstraintSet): boolean {
+      const supports = navigator.mediaDevices.getSupportedConstraints()
+      return prop in supports
     },
     /**
      * @method setContraint DocsTODO
@@ -348,19 +319,20 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    setConstraint(prop: keyof MediaTrackConstraintSet, value: any) {
+    setConstraint(
+      prop: keyof MediaTrackConstraintSet,
+      value: string | number | boolean,
+    ) {
       // hasConstraint is true only if the prop is supported by the browser
       if (!this.hasConstraint(prop)) {
         return
       }
-      if (this.$data.userHasGivenAudioAccess && this.$data.stream) {
-        this.$data.stream
-          .getAudioTracks()
-          .forEach(function (track: MediaStreamTrack) {
-            const constraints = track.getConstraints()
-            constraints[prop] = value
-            track.applyConstraints(constraints)
-          })
+      if (this.userHasGivenAudioAccess && this.stream) {
+        this.stream.getAudioTracks().forEach((track: MediaStreamTrack) => {
+          const constraints = track.getConstraints()
+          constraints[prop] = value
+          track.applyConstraints(constraints)
+        })
       }
     },
   },

@@ -19,6 +19,7 @@
       >
         <folder-icon size="1.2x" />
       </InteractablesButton>
+
       <InteractablesButton
         class="sidebar-full-btn"
         data-cy="sidebar-friends"
@@ -27,6 +28,7 @@
         :text="$t('friends.friends')"
       >
         <users-icon size="1.2x" />
+
         <span v-if="incomingRequestsLength" class="label-container">
           <TypographyText
             size="xs"

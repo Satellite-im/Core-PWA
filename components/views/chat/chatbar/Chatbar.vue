@@ -125,12 +125,11 @@ const Chatbar = Vue.extend({
       return (
         Boolean(this.files.length) ||
         Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
-        this.commandPreview ||
-        this.chat.countError
+        this.commandPreview
       )
     },
     isSubscribed(): boolean {
-      return iridium.chat.ready
+      return iridium.chat.ephemeral.subscriptions.includes(this.conversationId)
     },
     text: {
       /**
@@ -177,13 +176,20 @@ const Chatbar = Vue.extend({
         .sort((a, b) => a.at - b.at)
         .at(-1)
     },
+    draftMessage(): string {
+      return this.chat.draftMessages[this.conversationId] ?? ''
+    },
+  },
+  watch: {
+    draftMessage(val) {
+      if (val) this.smartTypingStart()
+    },
   },
   mounted() {
-    const message = this.chat.draftMessages[this.conversationId] ?? ''
     this.$store.commit('chat/clearReplyChatbarMessage', {
       conversationId: this.conversationId,
     })
-    this.$store.dispatch('ui/setChatbarContent', { content: message })
+    this.$store.dispatch('ui/setChatbarContent', { content: this.draftMessage })
     if (this.$device.isDesktop) {
       this.$store.dispatch('ui/setChatbarFocus')
     }
@@ -235,7 +241,6 @@ const Chatbar = Vue.extend({
         default:
           break
       }
-      this.smartTypingStart()
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
       if (!this.files.length) {
