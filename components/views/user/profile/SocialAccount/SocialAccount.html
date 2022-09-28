@@ -1,0 +1,18 @@
+<div class="social-account">
+  <div class="account-info">
+    <span :class="{[accountType]: true, 'logo': true}">
+      <component :is="socialIcons[accountType]" size="1.3x" />
+    </span>
+    <span class="username">{{username}}</span>
+    <verified-icon v-if="verified" size="1.5x" class="badge-verified" />
+  </div>
+  <a
+    v-if="profileUrl"
+    class="account-link"
+    :href="profileUrl"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <external-link-icon size="1.5x" class="badge-verified" />
+  </a>
+</div>
