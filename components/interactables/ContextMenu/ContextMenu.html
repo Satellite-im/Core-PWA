@@ -2,7 +2,7 @@
   class="context-menu"
   data-cy="context-menu"
   ref="contextMenu"
-  v-bind:style="{ left: ui.contextMenuPosition.x + 'px', 
+  :style="{ left: ui.contextMenuPosition.x + 'px', 
   top: ui.contextMenuPosition.y + 'px' }"
   v-click-outside="close"
 >
@@ -10,7 +10,8 @@
   <template v-for="item of ui.contextMenuValues">
     <p
       v-if="item.text !== 'quickReaction'"
-      :class="{'red' : isRedText(item)}"
+      data-cy="context-menu-option"
+      :class="item?.type"
       @click="handle(item.func)"
     >
       {{ item.text }}
@@ -18,6 +19,7 @@
     <div v-else-if="getSortedMostUsedEmojis.length" class="quickReactions">
       <p
         v-for="reaction of mostUsedEmojis"
+        data-cy="quick-reaction"
         @click="handle(() => {item.func(reaction)})"
       >
         {{ reaction.content }}

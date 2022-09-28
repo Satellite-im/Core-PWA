@@ -1,30 +1,30 @@
 <div class="files-aside">
   <div class="upper">
     <div class="flex">
-      <TypographyText :size="6" :text="$t('pages.files.aside.free_tier')" />
+      <TypographyText color="light">
+        {{ $t('pages.files.aside.free_tier') }}
+      </TypographyText>
       <InteractablesButton
         :text="$t('pages.files.aside.upgrade')"
-        size="small"
-        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch disabled"
-        :data-tooltip="$t('pages.files.aside.coming_soon')"
+        size="sm"
+        disabled
       />
     </div>
-    <UiProgress :progress="progress" />
-    <div class="usage-text">
-      <span :class="sizeColor">{{totalSize}}</span> of {{sizeLimit}}
-    </div>
+    <UiProgress :progress="percentageUsed" />
+    <TypographyText color="light" size="sm">
+      <span :class="sizeColor">{{totalSize}}</span>
+      of {{sizeLimit}}
+    </TypographyText>
   </div>
 
-  <div>
-    <TypographyText :size="6" :text="$t('pages.files.aside.quick_access')" />
-    <UiSimpleList
-      :menuContent="[{ text: 'Recent', icon: 'clock', active: true }, { text: 'Deleted', icon: 'trash' }, { text: 'Favorited', icon: 'heart' }]"
-    />
+  <div v-if="!$device.isMobile">
+    <TypographyText color="light">
+      {{ $t('pages.files.aside.quick_access') }}
+    </TypographyText>
+    <FilesAsideList :items="quickAccessOptions" />
   </div>
-  <div>
+  <!-- <div>
     <TypographyText :size="6" :text="$t('pages.files.aside.shared_items')" />
-    <UiSimpleList
-      :menuContent="[{ text: 'Shared Folders', icon: 'folder' }, { text: 'Links', icon: 'link' }]"
-    />
-  </div>
+    <FilesAsideList :items="sharedItemsOptions" />
+  </div> -->
 </div>

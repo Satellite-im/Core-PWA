@@ -1,6 +1,7 @@
-import { Capacitor } from '@capacitor/core'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
+import { PlatformTypeEnum } from '~/libraries/Enums/enums'
+import { Config } from '~/config'
 
 const isSupported = (): boolean =>
   'Notification' in window &&
@@ -8,23 +9,15 @@ const isSupported = (): boolean =>
   'PushManager' in window
 
 export const Notifications = class Notifications {
-  currentPlatform: string = 'android' // 'iOS', 'android', 'web'
+  currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
-  sendNotification: any = this.sendNotifications
+  $Config: typeof Config = Config
 
   constructor() {
     const envinfo = new EnvInfo()
-    this.currentPlatform = envinfo.currentPlatform // ios, web, android
-    if (this.currentPlatform === 'web') {
-      // all mount needs for web/pwa
-      if (this.notificationPermission !== 'granted' && isSupported()) {
-        Notification.requestPermission().then((result: any) => {
-          this.notificationPermission = result
-        })
-      }
-    }
+    this.currentPlatform = envinfo.currentPlatform
 
-    if (this.currentPlatform === 'android') {
+    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // These are shown in the notification as options the user can interact with outside of the app
       LocalNotifications.registerActionTypes({
         types: [
@@ -82,14 +75,15 @@ export const Notifications = class Notifications {
    * @returns
    * @example
    */
-  requestNotificationPermission(): any {
+  async requestNotificationPermission(): any {
     if (
-      (this.currentPlatform === 'web' || this.currentPlatform === 'electron') &&
+      (this.currentPlatform === PlatformTypeEnum.WEB ||
+        this.currentPlatform === PlatformTypeEnum.ELECTRON) &&
       isSupported()
     ) {
-      Notification.requestPermission()
+      await Notification.requestPermission()
     }
-    if (this.currentPlatform === 'android') {
+    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // and maybe iOS?
       LocalNotifications.requestPermissions().then((result: any) => {
         return result
@@ -116,23 +110,58 @@ export const Notifications = class Notifications {
    * @description
    * @param type
    * @param titleText
+   * @param image
    * @param message
    * @example
    */
   async sendNotifications(
     type: string,
     titleText: string,
+    image: string,
     message: string,
   ): Promise<void> {
-    if (this.currentPlatform === 'web' || this.currentPlatform === 'electron') {
+    if (
+      this.currentPlatform === PlatformTypeEnum.WEB ||
+      this.currentPlatform === PlatformTypeEnum.ELECTRON
+    ) {
+      if (this.notificationPermission !== 'granted' && isSupported()) {
+        Notification.requestPermission().then((result: any) => {
+          this.notificationPermission = result
+        })
+      }
       // browser notification api
-      await new Notification(type, {
-        tag: titleText,
+      await new Notification(`${titleText}`, {
+        tag: String(new Date().getTime()),
         body: message,
+        icon: `${this.$Config.ipfs.gateway}${image}`,
+        badge: `${this.$Config.ipfs.gateway}${image}`,
       })
     }
+    // if (this.currentPlatform === PlatformTypeEnum.WEB) {
+    //   await LocalNotifications.schedule({
+    //     notifications: [
+    //       {
+    //         title: `${type} ${titleText}`,
+    //         body: message,
+    //         id: new Date().getTime(),
+    //         schedule: {
+    //           at: new Date(new Date().getTime() + 1000),
+    //           allowWhileIdle: true,
+    //         },
+    //         actionTypeId: 'CHAT_MESSAGE',
+    //         extra: null,
+    //         attachments: [
+    //           {
+    //             id: 'face',
+    //             url: `${this.$Config.ipfs.gateway}${image}`,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   })
+    // }
 
-    if (this.currentPlatform === 'android') {
+    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       await LocalNotifications.schedule({
         notifications: [
           {

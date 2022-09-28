@@ -1,0 +1,69 @@
+.file {
+  display: flex;
+  flex-direction: column;
+  min-height: 234px;
+  border-radius: @corner-rounding-smaller;
+  cursor: pointer;
+  position: relative;
+  background: @foreground-gradient;
+
+  &:hover,
+  &:focus,
+  &.is-liked {
+    .quick-actions {
+      .like {
+        opacity: 1;
+      }
+    }
+  }
+
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    height: 162px;
+    padding-top: 36px; // half of the text area height, centers icon
+  }
+
+  .image-container {
+    height: 162px;
+    filter: brightness(0.75);
+
+    img {
+      height: 162px;
+      width: @full;
+      object-fit: cover;
+    }
+  }
+
+  .quick-actions {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    width: 100%;
+    padding: @normal-spacing;
+    position: absolute;
+    top: 0;
+
+    svg {
+      color: @dark;
+    }
+    .like {
+      opacity: 0;
+      transition: opacity @animation-speed ease;
+      &.liked {
+        color: @pink;
+        opacity: 1;
+      }
+      &:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+
+  .text-container {
+    overflow: hidden;
+    padding: 1rem;
+  }
+}

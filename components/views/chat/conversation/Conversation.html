@@ -1,17 +1,36 @@
-<div id="conversation">
-  <UiLoadersMessage :count="3" v-if="loading" />
-  <div class="group" v-for="group in messages" v-else>
-    <div v-if="group.type === 'group'">
-      <Group :group="group" :key="group.id" :groupId="groupId" />
+<!-- dont change the 'conversation-container' id -->
+<div id="conversation-container" class="conversation" ref="container">
+  <div class="messages" ref="messages">
+    <UiBanner>
+      <template #icon><key-icon size="1x" /></template>
+      <template #header>{{$t('conversation.encrypted')}}</template>
+    </UiBanner>
+    <UiChatInfiniteScroll
+      :isLoading="isLoadingMore"
+      :noMore="noMore"
+      @loadMore="loadMore"
+    />
+    <template v-for="(item, i) of chatItems">
+      <TypographyHorizontalRuleText
+        v-if="item.isNextDay"
+        :value="item.message.at.toString()"
+      />
+      <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
+      <Message
+        :key="item.message.id"
+        :item="item"
+        :showHeader="item.showHeader"
+      />
+    </template>
+    <div
+      v-if="activeUploadChats.includes(conversation?.id)"
+      class="loader-container"
+    >
+      <file-icon size="24" class="icon" />
+      <div class="inner">
+        <TypographyText> {{ $t('global.uploading') }} </TypographyText>
+        <UiLoadersLoadingBar />
+      </div>
     </div>
-    <div v-if="group.type === 'caret_divider'">
-      <UiCaretDivider text="New Messages" />
-    </div>
-    <div v-else-if="group.type === 'divider'">
-      <TypographyHorizontalRuleText :value="group.at.toString()" />
-    </div>
-  </div>
-  <div v-if="textile.messageLoading" class="zoop">
-    <UiLoadersLoadingBar />
   </div>
 </div>

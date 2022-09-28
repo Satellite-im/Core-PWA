@@ -1,0 +1,26 @@
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: @light-spacing;
+  cursor: pointer;
+  padding: @light-spacing;
+  padding-right: @normal-spacing;
+
+  .circle,
+  .checkbox {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: @semitransparent-light-gradient;
+  }
+
+  .name {
+    font-family: @primary-font;
+    font-size: @mini-text-size;
+    font-weight: bold;
+    flex-grow: 1;
+    &:extend(.ellipsis);
+  }
+}

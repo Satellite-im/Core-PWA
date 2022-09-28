@@ -1,0 +1,18 @@
+#switcher {
+  display: flex;
+  align-items: center;
+  gap: 9.5px;
+  align-self: flex-start;
+
+  .control-icon {
+    &:extend(.font-muted);
+    opacity: 0.75;
+    font-size: @icon-size;
+    cursor: pointer;
+
+    &.active {
+      &:extend(.font-secondary);
+      opacity: 1;
+    }
+  }
+}

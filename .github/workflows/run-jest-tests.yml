@@ -1,14 +1,16 @@
 name: Run Jest tests
-on: 
-   pull_request:
-      types: [ opened, synchronize, reopened, edited ]
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Run corepack enable
+        run: corepack enable
       - name: Install modules
-        run: yarn
+        run: yarn install
       - name: Run tests
         run: yarn test

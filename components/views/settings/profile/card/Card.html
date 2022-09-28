@@ -1,5 +1,5 @@
 <div class="profile-card">
-  <SettingsProfilePicture :image="info.imageUrl" />
+  <SettingsProfilePicture />
   <div class="profile-card-body">
     <div class="profile-badges" v-if="info.badges && info.badges.length">
       <TypographyTitle
@@ -16,25 +16,20 @@
         :text="$t('pages.settings.profile.info.preferences')"
       />
       <div class="profile-preferences-timezone">
-        <TypographySubtitle
-          :size="6"
-          :text="$t('pages.settings.profile.info.timezone')"
+        <InteractablesSelect
+          v-model="timezone"
+          :options="timezones"
+          :label="$t('pages.settings.profile.info.timezone')"
+          :placeholder="$t('pages.settings.profile.info.selectTimezone')"
+          show-label
+          small
         />
-        <div class="timezone-list">
-          <InteractablesSelect
-            :options="timezones"
-            v-model="timezone"
-            size="small"
-            class="form-control"
-          />
-        </div>
       </div>
       <div class="profile-preferences-language" v-if="featureReadyToShow">
-        <TypographySubtitle
-          :size="6"
-          :text="$t('pages.settings.profile.info.language')"
-        />
-        <multiselect
+        <TypographyText>
+          {{ $t('pages.settings.profile.info.language')}}
+        </TypographyText>
+        <!-- <multiselect
           :options="[]"
           :multiple="true"
           :close-on-select="false"
@@ -51,7 +46,7 @@
           <span slot="noResult"
             >{{ $t('pages.settings.profile.info.noResult') }}</span
           >
-        </multiselect>
+        </multiselect> -->
         <div class="mg-half">
           <InteractablesChip
             v-for="(lng, i) in info.languages"

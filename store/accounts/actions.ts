@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
 import {
@@ -7,12 +8,13 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
-import UsersProgram from '~/libraries/Solana/UsersProgram/UsersProgram'
-
-import { ActionsArguments, RootState } from '~/types/store/store'
-import TextileManager from '~/libraries/Textile/TextileManager'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { ActionsArguments } from '~/types/store/store'
+import BlockchainClient from '~/libraries/BlockchainClient'
+import logger from '~/plugins/local/logger'
+import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
+import IdentityManager from '~/libraries/Iridium/IdentityManager'
+import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 
 export default {
   /**
@@ -30,9 +32,7 @@ export default {
       throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
-    const pinHash = await $Crypto.hash(pin)
+    const pinHash = await Crypto.hash(pin)
 
     // The cleartext version of the pin will not be persisted
     commit('setPin', pin)
@@ -58,21 +58,19 @@ export default {
       throw new Error(AccountsError.PIN_TOO_SHORT)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-
-    const computedPinHash = await $Crypto.hash(pin)
+    const computedPinHash = await Crypto.hash(pin)
 
     if (computedPinHash !== pinHash) {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
     if (encryptedPhrase !== '') {
-      const decryptedPhrase = await $Crypto.decryptWithPassword(
+      const decryptedPhrase = await Crypto.decryptWithPassword(
         encryptedPhrase,
         pin,
       )
 
-      await commit('setPhrase', decryptedPhrase)
+      commit('setPhrase', decryptedPhrase)
     }
 
     commit('unlock', pin)
@@ -92,19 +90,28 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-    const $Crypto: Crypto = Vue.prototype.$Crypto
+    commit('setAdapter', 'Solana')
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    $BlockchainClient.setAdapter(new SolanaAdapter())
 
-    const solanaWallet = await $SolanaManager.createRandomKeypair()
+    await $BlockchainClient.initRandom()
+    const userWallet = $BlockchainClient.account
 
-    if (!solanaWallet.mnemonic) {
+    if (!userWallet.mnemonic) {
       throw new Error(AccountsError.UNABLE_TO_CREATE_MNEMONIC)
     }
 
-    await commit('setPhrase', solanaWallet.mnemonic)
+    commit('setPhrase', userWallet.mnemonic)
 
-    const encryptedPhrase = await $Crypto.encryptWithPassword(
-      solanaWallet.mnemonic,
+    const { pinHash } = state
+    const entropyMessage = IdentityManager.generateEntropyMessage(
+      $BlockchainClient.account.publicKey.toBase58(),
+      pinHash,
+    )
+    // commit('setEntropy', entropyMessage)
+
+    const encryptedPhrase = await Crypto.encryptWithPassword(
+      userWallet.mnemonic,
       pin,
     )
 
@@ -130,10 +137,9 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    const $Crypto: Crypto = Vue.prototype.$Crypto
-    const encryptedPhrase = await $Crypto.encryptWithPassword(mnemonic, pin)
+    const encryptedPhrase = await Crypto.encryptWithPassword(mnemonic, pin)
 
-    await commit('setEncryptedPhrase', encryptedPhrase)
+    commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
    * @method loadAccount
@@ -149,40 +155,76 @@ export default {
     state,
     dispatch,
   }: ActionsArguments<AccountsState>) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
-
-    const mnemonic = state.phrase
-
-    if (mnemonic === '') {
-      throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+    logger.info('accounts/actions/loadAccount', 'beginning account load')
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    if (state.adapter === 'Solana') {
+      $BlockchainClient.setAdapter(new SolanaAdapter())
+      logger.info('accounts/actions/loadAccount', 'using solana adapter')
+    } else {
+      $BlockchainClient.setAdapter(new PhantomAdapter())
+      logger.info('accounts/actions/loadAccount', 'using phantom wallet')
     }
 
-    await $SolanaManager.initializeFromMnemonic(mnemonic)
+    if (state.phrase === '') {
+      if (state.encryptedPhrase !== '' && state.pin) {
+        await dispatch('unlock', state.pin)
+      } else {
+        logger.error('accounts/actions/loadAccount', 'empty mnemonic')
+        throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+      }
+    }
 
-    const payerAccount = $SolanaManager.getActiveAccount()
+    const mnemonic = state.phrase
+    await $BlockchainClient.initFromMnemonic(mnemonic)
 
-    if (!payerAccount) {
+    if (!$BlockchainClient.isPayerInitialized) {
+      logger.error('accounts/actions/loadAccount', 'user derivation failed')
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    commit('setActiveAccount', payerAccount?.publicKey.toBase58())
-
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
-    const userInfo = await usersProgram.getCurrentUserInfo()
-
-    if (userInfo === null) {
-      throw new Error(AccountsError.USER_NOT_REGISTERED)
+    if (!iridium.connector) {
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'signing message for iridium',
+      )
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'dispatching iridium/initializeFromEntropy',
+      )
+      await iridium.initFromEntropy(entropy)
+      await iridium.start()
     }
 
-    dispatch('initializeEncryptionEngine', payerAccount)
-
-    commit('setUserDetails', {
-      username: userInfo.name,
-      ...userInfo,
+    const profile = await iridium.profile?.get()
+    logger.debug('accounts/actions/loadAccount', 'fetched iridium profile', {
+      profile,
     })
+    if (!profile?.did) {
+      try {
+        this.$router.replace('/auth/register')
+      } catch (_) {}
+      logger.error(
+        'accounts/actions/loadAccount',
+        'user not registered, redirecting',
+      )
+      throw new Error(AccountsError.USER_NOT_REGISTERED)
+    }
+    iridium.on('ready', () => {
+      logger.info('accounts/actions/loadAccount', 'iridium ready')
+      commit('setActiveAccount', iridium.id)
 
-    dispatch('startup', payerAccount)
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'user loaded, dispatching setUserDetails & setRegistrationStatus',
+        profile,
+      )
+      commit('setUserDetails', profile)
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      logger.info('accounts/actions/loadAccount', 'finished')
+      return dispatch('startup')
+    })
   },
   /**
    * @method registerUser
@@ -204,7 +246,7 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload,
   ) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     if (!state.initialized) {
       const mnemonic = state.phrase
@@ -213,69 +255,67 @@ export default {
         throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
       }
 
-      await $SolanaManager.initializeFromMnemonic(mnemonic)
+      await $BlockchainClient.initFromMnemonic(mnemonic)
     }
 
     commit('setRegistrationStatus', RegistrationStatus.IN_PROGRESS)
 
-    const balance = await $SolanaManager.getCurrentAccountBalance()
-
-    if (balance === 0) {
-      commit('setRegistrationStatus', RegistrationStatus.FUNDING_ACCOUNT)
-      await $SolanaManager.requestAirdrop()
-    }
-
-    const payerAccount = await $SolanaManager.getActiveAccount()
-
-    if (!payerAccount) {
+    const walletAccount = await $BlockchainClient.payerAccount
+    if (!walletAccount) {
       commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
-    const usersProgram: UsersProgram = new UsersProgram($SolanaManager)
-
-    const userInfo = await usersProgram.getCurrentUserInfo()
-
-    if (userInfo) {
+    const userInfo = await iridium.profile?.get()
+    if (userInfo?.id) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       throw new Error(AccountsError.USER_ALREADY_REGISTERED)
     }
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
-    // only init textile if we need to push an image to bucket
-    if (userData.image) {
-      const { pin } = state
-      await dispatch(
-        'textile/initialize',
-        {
-          id: payerAccount?.publicKey.toBase58(),
-          pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
-        },
-        { root: true },
+    if (!iridium.connector) {
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'signing message for iridium',
       )
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'dispatching iridium/initializeFromEntropy',
+      )
+      await iridium.initFromEntropy(entropy)
+      await iridium.start()
+    }
+
+    if (!iridium.connector) {
+      throw new Error('iridium not initialized')
     }
 
     const imagePath = await uploadPicture(userData.image)
 
-    await usersProgram.create(userData.name, imagePath, userData.status)
+    if (!iridium.connector) {
+      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
+    }
 
-    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-
-    commit('setActiveAccount', payerAccount.publicKey.toBase58())
-
-    dispatch('initializeEncryptionEngine', payerAccount)
-
-    commit('setUserDetails', {
-      username: userData.name,
+    const profile = {
+      did: iridium.id,
+      peerId: iridium.connector?.peerId.toString(),
+      name: userData.name,
       status: userData.status,
       photoHash: imagePath,
-      address: payerAccount.publicKey.toBase58(),
-    })
+    }
 
-    dispatch('startup', payerAccount)
+    commit('setNewAccount', true)
+
+    await iridium.profile?.set('/', profile)
+    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+    commit('setActiveAccount', iridium.id)
+    commit('setUserDetails', profile)
+    return dispatch('startup', walletAccount)
   },
+
   /**
    * @method initializeEncryptionEngine
    * @description Initializes the Crypto class with the current user keypair
@@ -291,69 +331,67 @@ export default {
   ) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto
-    await $Crypto.init(userAccount)
+    $Crypto.init(userAccount)
   },
-  async startup(
-    { dispatch, rootState, state }: ActionsArguments<AccountsState>,
-    payerAccount: Keypair,
-  ) {
-    const $SolanaManager: SolanaManager = Vue.prototype.$SolanaManager
 
-    const { initialized: textileInitialized } = rootState.textile
-    const { initialized: webrtcInitialized } = rootState.webrtc
-
-    await db.initializeSearchIndexes()
-
-    const { pin } = state
-    if (!textileInitialized && pin) {
-      dispatch(
-        'textile/initialize',
-        {
-          id: payerAccount?.publicKey.toBase58(),
-          pass: pin,
-          wallet: $SolanaManager.getMainSolanaWalletInstance(),
-        },
-        { root: true },
-      )
-    }
-
-    if (!webrtcInitialized) {
-      dispatch('webrtc/initialize', payerAccount.publicKey.toBase58(), {
-        root: true,
-      })
-    }
-
+  async startup({
+    dispatch,
+    rootState,
+    state,
+  }: ActionsArguments<AccountsState>) {
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
-    dispatch('friends/initialize', {}, { root: true })
+    dispatch('audio/initialize', null, { root: true })
+    dispatch('video/initialize', null, { root: true })
+  },
+  async connectWallet({
+    commit,
+    dispatch,
+    state,
+  }: ActionsArguments<AccountsState>) {
+    const { pin } = state
+
+    if (!pin) {
+      throw new Error(AccountsError.INVALID_PIN)
+    }
+
+    commit('setAdapter', 'Phantom')
+    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+    $BlockchainClient.setAdapter(new PhantomAdapter())
+    await $BlockchainClient.initFromMnemonic()
+
+    const { pinHash } = state
+    const entropyMessage = IdentityManager.generateEntropyMessage(
+      $BlockchainClient.account.publicKey.toBase58(),
+      pinHash,
+    )
+    // commit('setEntropy', entropyMessage)
+
+    const fakeMnemonic = 'fake mnemonic to bypass checks'
+    commit('setPhrase', 'fake mnemonic to bypass checks')
+    const encryptedPhrase = await Crypto.encryptWithPassword(fakeMnemonic, pin)
+
+    commit('setEncryptedPhrase', encryptedPhrase)
   },
 }
 
 /**
  * @method uploadPicture
- * @description helper function to upload image to textile if needed
+ * @description helper function to upload image to iridium if needed
  * @param image data string of uploaded image
- * @returns textile hash of image, or '' if no image is present
+ * @returns IPFS CID of image, or '' if no image is present
  */
 async function uploadPicture(image: string) {
   if (!image) {
     return ''
   }
-
   // convert data string image to File
   const imageFile: File = await fetch(image)
     .then((res) => res.blob())
     .then((blob) => {
       return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
     })
-
-  const $TextileManager: TextileManager = Vue.prototype.$TextileManager
-  $TextileManager.bucketManager?.getBucket()
-  const result = await $TextileManager.bucketManager?.pushFile(
-    imageFile,
-    imageFile.name,
-  )
-
-  return result?.path.root.toString() ?? ''
+  // store image in IPFS
+  return iridium.connector?.store(imageFile)
 }
 
 export const exportForTesting = {

@@ -1,3 +1,46 @@
 #alerts {
-  transition: all @animation-speed ease;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: @light-spacing;
+  z-index: 10;
+
+  top: 45px;
+  left: 0;
+  max-height: 50vh;
+  width: 100%;
+  padding: @light-spacing;
+  cursor: default;
+  overflow-y: auto;
+  box-shadow: @ui-shadow;
+  &:extend(.background-semitransparent-light);
+  &:extend(.round-corners);
+  &:extend(.bordered);
+  &:extend(.blur);
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .subtitle {
+      font-size: @micro-text-size !important;
+      font-family: @primary-font;
+    }
+    font-size: @micro-text-size !important;
+    font-family: @primary-font;
+  }
+
+  button {
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+  }
+}
+
+@media only screen and (max-width: @mobile-breakpoint) {
+  #alerts {
+    top: 68px;
+    width: 100%;
+  }
 }

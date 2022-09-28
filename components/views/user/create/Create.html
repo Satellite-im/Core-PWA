@@ -1,77 +1,80 @@
-<div class="create-server-container">
+<div class="create-user-container">
   <InteractablesImageCropper
     v-if="showCropper"
-    :setCroppedImage="setCroppedImage"
-    :toggleCropper="toggleCropper"
-    :imageUrl="imageUrl"
+    :set-cropped-image="setCroppedImage"
+    :image-url="imageUrl"
+    @toggle-cropper="toggleCropper"
   />
   <div v-if="showCropper" class="cropper-mask" />
-  <div class="modal-body">
-    <form v-on:submit="confirm">
-      <div class="custom-modal-content">
-        <div class="columns">
-          <div class="column image">
-            <UiCircle type="image" :source="croppedImage" :size="120" />
-          </div>
-          <div class="column align">
-            <TypographyText
-              class="set-photo-title"
-              :text="$t('user.registration.photo_text')"
-            />
-            <input
-              ref="file"
-              class="input-file"
-              type="file"
-              @change="selectImage"
-              accept="image/*"
-            />
-            <InteractablesButton
-              :action="() => $refs.file.click()"
-              type="primary"
-              size="small"
-              :text="$t('servers.create.photo_button')"
-              outlined
-            />
-          </div>
-        </div>
-        <div style="clear: both"></div>
-
-        <div class="input-container" data-cy="username-input">
-          <span class="label">{{$t('user.registration.username')}}</span>
-          <InteractablesInput
-            :placeholder="$t('user.registration.username_placeholder')"
-            size="small"
-            v-model="name"
-            input-kind="text"
-            type="primary"
-          />
-        </div>
-
-        <div class="input-container" data-cy="status-input">
-          <span class="label">{{$t('user.registration.status')}}</span>
-          <InteractablesInput
-            :placeholder="$t('user.registration.status_placeholder')"
-            size="small"
-            v-model="status"
-            input-kind="text"
-            type="primary"
-          />
-        </div>
-
-        <p class="red" data-cy="error-message" v-if="error">{{error}}</p>
-      </div>
-
-      <!-- <hr class="divider"> -->
-      <div class="submit-container">
-        <InteractablesButton
-          type="primary"
-          size="small"
-          :text="$t('user.registration.sign_in')"
-          class="create-server-btn"
-          data-cy="sign-in-button"
-          htmlType="submit"
+  <form novalidate class="create-user-form" @submit="confirm">
+    <div class="header">
+      <div class="image-container">
+        <UiCircle
+          :type="croppedImage ? 'image' : 'random'"
+          :seed="myDid"
+          :source="croppedImage"
+          :size="120"
         />
       </div>
-    </form>
-  </div>
+      <div class="header-content">
+        <TypographyText as="p" color="dark" style="margin-bottom: 1.5rem">
+          {{ $t('user.registration.photo_text') }}
+        </TypographyText>
+        <InteractablesImageInput ref="imageInput" @change="selectImage" />
+        <!-- TODO: Enable after safer is implemented -->
+        <!-- <InteractablesButton -->
+        <!-- :text="$t('servers.create.photo_button')" -->
+        <!-- @click="imageInputRef.click()" -->
+        <!-- /> -->
+
+        <!-- TODO: Remove after safer is implemented -->
+        <InteractablesButton :text="$t('ui.coming_soon')" :disabled="true" />
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="input-container" data-cy="username-input">
+        <span class="label">{{ $t('user.registration.username') }}</span>
+        <InteractablesInput
+          v-model="name"
+          :placeholder="$t('user.registration.username_placeholder')"
+          input-kind="text"
+          type="primary"
+          :min-length="$Config.account.minLength"
+          :max-length="$Config.account.maxLength"
+          :invalid="isInvalidName && Boolean(error.length)"
+        />
+      </div>
+
+      <div class="input-container" data-cy="status-input">
+        <span class="label">{{ $t('user.registration.status') }}</span>
+        <InteractablesInput
+          v-model="status"
+          :placeholder="$t('user.registration.status_placeholder')"
+          input-kind="text"
+          type="primary"
+          :max-length="$Config.account.statusMaxLength"
+          :invalid="isInvalidStatus && Boolean(error.length)"
+        />
+      </div>
+
+      <TypographyText
+        v-for="e in error"
+        :key="e"
+        color="danger"
+        data-cy="error-message"
+      >
+        {{ e }}
+      </TypographyText>
+
+      <div class="submit-button-container">
+        <InteractablesButton
+          :text="$t('user.registration.sign_in')"
+          :loading="isLoading"
+          data-cy="sign-in-button"
+          type="submit"
+        />
+      </div>
+    </div>
+  </form>
 </div>

@@ -1,32 +1,34 @@
 <div class="container">
   <div class="phrase-body">
-    <TypographyTitle :size="4" :text="$t('pages.phrase.title')" />
-    <TypographySubtitle :size="6" :text="$t('pages.phrase.write_down')" />
+    <TypographyText as="h1"> {{ $t('pages.phrase.title') }} </TypographyText>
+    <TypographyText as="p" color="dark" style="margin-bottom: 1.5rem">
+      {{ $t('pages.phrase.write_down') }}
+    </TypographyText>
     <div class="columns is-mobile">
       <div class="column">
-        <div v-for="word, i in splitPhrase" class="tag-container">
-          <TypographyNumberedWord
-            :word="word"
-            v-if="isOdd(i + 1)"
-            :number="i + 1"
-          />
-        </div>
+        <template v-if="isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
+        </template>
       </div>
       <div class="column">
-        <div v-for="word, i in splitPhrase" class="tag-container">
-          <TypographyNumberedWord
-            :word="word"
-            v-if="!isOdd(i + 1)"
-            :number="i + 1"
-          />
-        </div>
+        <template v-if="!isOdd(i + 1)" v-for="(word, i) in splitPhrase">
+          <TypographyNumberedWord :key="word" :word="word" :number="i + 1" />
+        </template>
       </div>
     </div>
-    <UiSpacer :size="45" />
-    <InteractablesButton
-      full-width
-      :text="$t('pages.phrase.done')"
-      :action="confirm"
-    />
+    <UiSpacer :height="45" />
+    <div class="columns is-mobile">
+      <div class="column">
+        <InteractablesButton
+          :text="$t('pages.settings.accounts.copy_phrase')"
+          @click="copyPhrase"
+        >
+          <clipboard-icon size="1x" />
+        </InteractablesButton>
+      </div>
+      <div class="column">
+        <InteractablesButton :text="$t('pages.phrase.done')" @click="confirm" />
+      </div>
+    </div>
   </div>
 </div>

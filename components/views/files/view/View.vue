@@ -1,6 +1,6 @@
 <template src="./View.html"></template>
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { mapState } from 'vuex'
 import {
   FileIcon,
@@ -10,9 +10,8 @@ import {
   XIcon,
   LinkIcon,
 } from 'satellite-lucide-icons'
-import { filetypeextension } from 'magic-bytes.js'
-import { Fil } from '~/libraries/Files/Fil'
-
+import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 export default Vue.extend({
   components: {
     FileIcon,
@@ -22,76 +21,73 @@ export default Vue.extend({
     XIcon,
     LinkIcon,
   },
-  props: {
-    file: {
-      type: Object as PropType<Fil>,
-      required: true,
-    },
-  },
   data() {
     return {
-      load: false as boolean,
-      name: this.file.name as string,
+      thumbnail: '',
+      dataURL: '',
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      file: (state) => (state as RootState).files.preview,
+      downloadList: (state) => (state as RootState).files.downloadList,
+    }),
+    isDownloading(): boolean {
+      return this.file?.name
+        ? this.downloadList.includes(this.file.name)
+        : false
+    },
+    downloadName(): string {
+      if (!this.file) {
+        return ''
+      }
+      const fileExt = this.file.name
+        .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+        .toLowerCase()
+      return this.file.extension === fileExt
+        ? this.file.name
+        : `${this.file.name}.${this.file.extension}`
+    },
   },
-  /**
-   */
   async mounted() {
-    this.load = true
-    // if no file data available, pull encrypted file from textile bucket
-    if (!this.file.file) {
-      const fsFil: Fil = this.$FileSystem.getChild(this.file.name) as Fil
-      fsFil.file = await this.$TextileManager.bucket?.pullFile(
-        this.file.id,
-        this.file.name,
-        this.file.type,
+    if (this.$refs.modal) (this.$refs.modal as HTMLElement).focus()
+
+    if (this.file?.thumbnail) {
+      this.thumbnail = URL.createObjectURL(
+        await iridium.files.fetchThumbnail(this.file.thumbnail, this.file.type),
       )
     }
-    // file extension according to file name
-    const fileExt = this.file.name
-      .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
-      .toLowerCase()
-    // you only need the first 256 bytes or so to confirm file type
-    const buffer = new Uint8Array(
-      await this.file.file.slice(0, 256).arrayBuffer(),
-    )
-    // file extension according to byte data
-    const dataExt = filetypeextension(buffer)[0]
-
-    // magicbytes declares svg as xml, so we need to manually check
-    const decodedFile = new TextDecoder().decode(buffer)
-    if (decodedFile.includes('xmlns="http://www.w3.org/2000/svg"')) {
-      // if corrupted, set .svg extension
-      if (fileExt !== 'svg') {
-        this.name += '.svg'
-      }
-      this.load = false
-      return
-    }
-
-    // if corrupted txt file
-    if (!dataExt && fileExt !== 'txt') {
-      this.name += '.txt'
-      this.load = false
-      return
-    }
-
-    // if corrupted file with wrong extension, force the correct one
-    if (fileExt !== dataExt && dataExt) {
-      this.name += `.${dataExt}`
-    }
-    this.load = false
+  },
+  beforeDestroy() {
+    if (this.thumbnail) URL.revokeObjectURL(this.thumbnail)
   },
   methods: {
     /**
-     * @method share
-     * @description Emit to share item - pages/files/browse/index.vue
+     * @method download
+     * @description download file using stream saver, apply original extension if it was removed
+     * add name to store so the user doesn't start another download of the same file
      */
+    async download() {
+      // assign variable in case the user closes modal and removes store value before download is finished
+      const file = this.file
+      if (file) {
+        this.$store.commit('files/addDownload', file.name)
+        const anchor = this.$refs.download as HTMLAnchorElement
+        const { fileBuffer } = await iridium.connector?.load(file.id)
+        this.dataURL = URL.createObjectURL(
+          new Blob([fileBuffer], { type: file.type }),
+        )
+        anchor.href = this.dataURL
+        anchor.click()
+        URL.revokeObjectURL(this.dataURL)
+        this.$store.commit('files/removeDownload', file.name)
+      }
+    },
     share() {
-      this.$emit('share', this.file)
+      this.$toast.show(this.$t('todo - share') as string)
+    },
+    close() {
+      this.$store.commit('files/setPreview', undefined)
     },
   },
 })

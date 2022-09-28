@@ -1,0 +1,24 @@
+<div class="file-item" data-cy="file-item">
+  <button class="close" @click="$emit('removeUploadItem')">
+    <x-icon size="1x" />
+  </button>
+  <ui-image-container
+    v-if="item.thumbnail"
+    class="image-container"
+    :nsfw="item.nsfw"
+  >
+    <img :src="item.thumbnail" draggable="false" />
+  </ui-image-container>
+  <div v-else class="icon-container">
+    <file-icon size="3x" class="control-icon" />
+  </div>
+  <div>
+    <TypographyText data-cy="file-item-filename" class="ellipsis">
+      {{ item.file.name }}
+    </TypographyText>
+    <div v-if="item.progress > 0 && item.progress <= 100">
+      <UiProgress :progress="item.progress" />
+      <TypographyText> {{ `${item.progress}% Uploaded...` }} </TypographyText>
+    </div>
+  </div>
+</div>

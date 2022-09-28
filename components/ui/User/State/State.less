@@ -2,66 +2,40 @@
   position: relative;
   display: flex;
   align-items: center;
-  .status {
-    position: absolute;
-    bottom: -1.5px;
-    right: -2.5px;
-    font-size: @text-size;
-    text-shadow: 0 0 3px #000;
-    display: inline-flex;
-    align-content: center;
 
-    circle {
-      stroke: @midground;
-      stroke-width: 5;
-      paint-order: stroke;
-    }
-    &.is-online {
-      &:extend(.color-success);
+  .mask {
+    height: 100%;
+    width: auto;
+  }
+
+  .is-rounded {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .status {
+    &.is-online,
+    &.is-mobile {
       fill: @green;
     }
     &.is-offline {
-      &:extend(.font-gray);
       fill: @gray;
     }
-    &.is-idle {
-      &:extend(.color-warning);
+    &.is-away {
       fill: @yellow;
     }
-  }
-
-  .mobile-status {
-    position: absolute;
-    bottom: -1.5px;
-    right: -2.5px;
-    font-size: @small-icon-size;
-    text-shadow: 0 0 3px #000;
-
-    rect {
-      stroke: @midground;
-      stroke-width: 4;
-      paint-order: stroke;
-      fill: @green;
+    &.is-busy {
+      fill: @red;
     }
-    line {
-      fill: #000;
-      stroke: @midground;
-      stroke-width: 4;
-    }
-    &.is-mobile {
-      &:extend(.color-success);
+    &.is-typing {
+      fill: @flair-color;
     }
   }
 
-  #typing-badge-container {
-    &:extend(.background-primary);
-    width: 40px;
-    height: 18px;
-    position: absolute;
-    bottom: -1.5px;
-    left: 18px;
-    padding: 5px;
-    border-radius: 10px;
-    border: 3px solid @midground;
+  .typing-loader {
+    width: 6px;
+    height: 6px;
+    border-radius: @half;
+    &:extend(.typing-state-animation);
   }
 }

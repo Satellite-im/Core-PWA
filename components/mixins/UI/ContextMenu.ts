@@ -19,6 +19,7 @@ export default Vue.extend({
      */
     contextMenu(e: Event) {
       e.preventDefault()
+      if (!this.contextMenuValues.length) return
       const contextMenuStatus = this.ui.contextMenuStatus
       if (!contextMenuStatus) {
         this.$store.commit('ui/toggleContextMenu', true)

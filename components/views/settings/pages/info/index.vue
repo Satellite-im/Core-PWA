@@ -1,4 +1,4 @@
-<template src="./Developer.html" />
+<template src="./Info.html" />
 
 <script lang="ts">
 import Vue from 'vue'
@@ -39,3 +39,20 @@ export default Vue.extend({
   },
 })
 </script>
+<style scoped lang="less">
+pre {
+  white-space: pre-wrap;
+  text-align: left;
+  &:extend(.bordered);
+  &:extend(.round-corners);
+  font-size: @font-size-xs;
+  padding: 12px 16px;
+  background: @semitransparent-dark-gradient;
+}
+
+.release-data {
+  font-family: @heading-font;
+  font-size: @font-size-xs;
+  white-space: pre-line;
+}
+</style>

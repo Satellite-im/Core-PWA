@@ -1,0 +1,13 @@
+<div class="settings-header">
+  <div class="header">
+    <div class="back-button swiper-button-prev" @click="goBack">
+      <ChevronLeftIcon />
+    </div>
+    <TypographyText as="h2">
+      <slot />
+    </TypographyText>
+  </div>
+  <TypographyText v-if="$slots.subheading" color="dark">
+    <slot name="subheading" />
+  </TypographyText>
+</div>

@@ -1,0 +1,49 @@
+.preview-call {
+  height: 100%;
+  position: relative;
+  text-align: center;
+  &-user {
+    height: 100%;
+  }
+  &-actions {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: bottom @animation-speed-long ease;
+    transition-delay: 300ms;
+    bottom: -50%;
+  }
+  &-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: @indicator-size;
+    height: @indicator-size;
+    opacity: 0;
+    border-radius: 100%;
+    background: fade(@foreground-alt, 20%);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 4px fade(@foreground, 100%);
+    transition: opacity @animation-speed-long ease;
+
+    svg {
+      color: @white;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &:hover:not(.dragging) {
+    .preview-call-button {
+      opacity: 1;
+    }
+    .preview-call-actions {
+      bottom: 8px;
+      transition-delay: 0ms;
+    }
+  }
+}

@@ -1,48 +1,89 @@
 .button {
-  &:extend(.inline-flex-centered);
-  min-width: 35px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  line-height: 15px;
   overflow: hidden;
-  line-height: unset;
-
-  #custom-cursor-area {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: unset;
-
-    .spinner {
-      display: inline-flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .spin {
-        margin-right: @xlight-spacing;
-      }
-    }
-  }
+  border-radius: @corner-rounding;
+  background: @semitransparent-lightest-gradient;
+  box-shadow: 0px 1px 2px rgba(18, 18, 22, 0.65),
+    0px 0px 20px rgba(43, 43, 59, 0.35), -2px 5px 14px rgba(43, 43, 59, 0.4);
+  color: @light;
 
   .button-icon-padded {
     margin-right: 0.25rem;
   }
 
+  > * {
+    flex-shrink: 0;
+  }
+
   .content {
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
+  }
 
-    .feather {
-      height: 100%;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      margin-right: 0.5rem;
+  .spinner {
+    height: 15px;
+    width: 15px;
+  }
+
+  &.size {
+    &-sm {
+      padding: 0.275rem 0.75rem;
+      font-size: @font-size-sm;
     }
-
-    .no-text-feather {
-      margin-right: 0;
+    &-md {
+      padding: 0.5rem 1rem;
+      font-size: @font-size-sm;
+    }
+    &-lg {
+      padding: 0.75rem 1.25rem;
+      font-size: @font-size-lg;
     }
   }
+
+  &.color-primary {
+    background: @flair-gradient;
+    color: @white;
+    box-shadow: 0px 1px 2px rgba(@flair-color-rgb, 0.65),
+      -2px 0px 20px rgba(@flair-color-rgb, 0.35),
+      -2px 5px 14px rgba(@flair-color-rgb, 0.4);
+  }
+
+  &.color-success {
+    background: @green;
+    color: @white;
+    box-shadow: 0px 0px 30px rgba(0, 184, 148, 0.35),
+      0px 0px 20px rgba(0, 184, 148, 0.4);
+  }
+
+  &.color-danger {
+    background: @danger-gradient;
+    color: @white;
+    box-shadow: 0px 1px 2px rgba(43, 43, 59, 0.65),
+      -2px 5px 14px rgba(231, 60, 89, 0.4), 0px 0px 20px rgba(231, 60, 89, 0.35);
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    box-shadow: none;
+    background: @semitransparent-grey-gradient;
+    color: #90939d;
+  }
 }
-.is-full-width {
-  width: 100%;
+
+.cursor-glow {
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  background: radial-gradient(#fff5, #fff0 50%);
+  background-size: 300px 300px;
+  background-repeat: no-repeat;
+  mix-blend-mode: overlay;
+  transition: opacity 500ms ease;
 }

@@ -1,15 +1,13 @@
 <div class="glyphs-modal" data-cy="glyphs-modal">
   <InteractablesClose class="close" :action="closeModal" />
   <div class="heading">
-    <TypographyTitle :size="5" :text="selectedPack.name" />
+    <TypographyTitle data-cy="glyphs-modal-title" :size="5" :text="pack.name" />
   </div>
   <GlyphsSample :glyphUrls="samplePackUrls" />
-  <TypographyText :text="selectedPack.description" />
   <InteractablesButton
     class="button"
-    size="small"
     :text="$t('glyphs.view_pack')"
-    :action="openMarketplace"
+    @click="openMarketplace"
   >
     <shopping-bag-icon size="1.2x" />
   </InteractablesButton>

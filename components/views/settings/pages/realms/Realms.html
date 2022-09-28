@@ -1,23 +1,22 @@
-<div id="network-settings">
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.realms.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.realms.subtitle')"
-      />
-    </div>
-  </div>
+<SettingsPage>
+  <SettingsUnit>
+    <TypographyText as="h2">
+      {{ $t('pages.settings.realms.title') }}
+    </TypographyText>
+    <TypographyText color="dark">
+      {{ $t('pages.settings.realms.subtitle') }}
+    </TypographyText>
+  </SettingsUnit>
 
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyLabel :text="$t('pages.settings.realms.chain')" />
-      <br />
-      <SettingsPagesRealmsRealm
-        v-for="realm in realms"
-        :realm="realm"
-        :key="realm.id"
-      />
-    </div>
-  </div>
-</div>
+  <SettingsUnit>
+    <TypographyText as="label" uppercase>
+      {{ $t('pages.settings.realms.chain') }}
+    </TypographyText>
+    <br />
+    <SettingsPagesRealmsRealm
+      v-for="realm in realms"
+      :realm="realm"
+      :key="realm.id"
+    />
+  </SettingsUnit>
+</SettingsPage>

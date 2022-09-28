@@ -1,143 +1,77 @@
-#toolbar {
-  flex: 1;
+.toolbar {
   display: flex;
-  height: @toolbar-height;
-  padding: 0 @normal-spacing;
-  min-width: 500px;
+  align-items: center;
+  transition: @transition-all;
+  gap: @normal-spacing;
+  margin-bottom: @normal-spacing;
+  flex-shrink: 0;
 
-  .vertical-divider {
-    height: 30px;
-    width: 1px;
-    display: inline-block;
-    background: @splash-radial;
-    margin: 0 @light-spacing;
-  }
-
-  .controls {
-    &:extend(.background-semitransparent-light);
-    &:extend(.round-corners);
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    justify-self: center;
-    align-self: center;
-    font-size: @icon-size;
-    &:extend(.light-padding);
-    box-shadow: @ui-shadow;
-    pointer-events: all;
-    margin-left: auto;
-
-    .input-wrap {
-      margin-left: @normal-spacing !important;
-    }
-    .control-icon {
-      margin: 0 @light-spacing;
-      cursor: pointer;
-      font-size: @small-icon-size;
-      &:extend(.filter-glow);
-
-      &:nth-child(2) {
-        margin-right: @normal-spacing;
-      }
-    }
-    .disabled {
-      &:extend(.font-muted);
-      &,
-      svg {
-        cursor: not-allowed !important;
-      }
-    }
-  }
-  .toolbar-spacer {
-    height: 45px;
-    flex: auto;
-  }
-  .circle {
-    align-self: center;
-    justify-self: center;
-    cursor: pointer;
+  .header {
+    &:extend(.ellipsis);
   }
 
   .circle-container {
-    height: @toolbar-height;
-    display: inline-flex;
-    position: relative;
-    align-items: center;
+    display: flex;
+    flex-shrink: 0;
   }
 
   .user-info {
+    flex-grow: 1;
+    &:extend(.ellipsis);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 16px;
+    flex-shrink: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(42, 54, 75, 0) 0%,
+        rgba(48, 52, 71, 0.4) 100%
+      ),
+      rgba(58, 58, 80, 0.4);
+    border-radius: @corner-rounding;
     position: relative;
-    align-self: center;
-    margin-left: 0.75rem;
-    max-width: 250px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    user-select: none;
-    pointer-events: none;
+    margin-right: 16px;
 
-    .title {
-      margin: 0;
-      font-size: @title-text;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      line-height: 2 !important;
+    // temp for uicomingsoon
+    > span {
+      height: 18px;
+      width: 18px;
     }
-    .subtitle {
-      margin: 0;
-      padding: 0;
-      font-size: @mini-text-size;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      display: block;
-      white-space: nowrap;
-    }
-  }
+    // endtemp
 
-  .alerts-floating-container {
-    &.side-open {
-      margin-right: 1.2rem;
-    }
-  }
-}
+    .toggle-alerts {
+      position: relative;
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #toolbar {
-    min-width: @viewport-width;
-    padding-right: @normal-spacing;
-    min-height: @toolbar-height;
-    padding-top: @light-spacing;
-
-    .circle-container {
-      order: 1;
-      margin-left: 24px;
-      height: auto;
-    }
-
-    .controls {
-      background: none;
-      box-shadow: unset;
-      .control-button {
-        padding: 2px;
-        width: 24px;
-        min-width: 24px;
-        height: 24px;
-        margin-left: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .control-icon {
-        display: block;
-        margin: 0;
-        width: 18px;
-        height: 18px;
+      &.with-count {
+        &[data-count] {
+          &::after {
+            position: absolute;
+            content: attr(data-count);
+            font-size: @font-size-xs;
+            background-color: @red;
+            border-radius: 50%;
+            pointer-events: none;
+            min-width: 18px;
+            left: -8px;
+            top: -8px;
+          }
+        }
       }
     }
-  }
-  .alerts-floating-container {
-    top: calc(@toolbar-height - @light-spacing);
-    right: @light-spacing !important;
-    left: @light-spacing !important;
+
+    .disabled {
+      color: @dark;
+      opacity: 0.75;
+    }
+
+    .vertical-divider {
+      background: #57657433;
+      width: 1px;
+      height: 30px;
+    }
   }
 }

@@ -1,573 +1,110 @@
-import * as mutations from '~/store/files/mutations'
+import * as module from './mutations'
+import { FilesState } from '~/store/files/types'
 
-describe('mutations.default.fetchFiles', () => {
-  test('0', () => {
-    const object: any = [
-      {
-        name: 'George',
-        modified: 200,
-        children: [null, null, null, null, null],
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 404,
-        children: [null, null, null, null, null],
-      },
-    ]
-    const object2: any = [
-      {
-        name: 'Michael',
-        modified: 500,
-        type: 'array',
-        size: 256,
-        location: 'http://base.com',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Michael',
-        modified: 404,
-        type: 'object',
-        size: 32,
-        location: 'http://base.com',
-        meta: { liked: true, shared: true },
-      },
-    ]
-    const object3: any = [
-      {
-        name: 'Anas',
-        modified: 400,
-        type: 'string',
-        size: 32,
-        location: 'google.com',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Edmond',
-        modified: 500,
-        type: 'number',
-        size: 32,
-        location: 'google.com',
-        meta: { liked: true, shared: false },
-      },
-    ]
-    const object4: any = [
-      {
-        name: 'Pierre Edouard',
-        modified: 404,
-        type: 'object',
-        size: 256,
-        location: 'www.google.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Anas',
-        modified: 500,
-        type: 'string',
-        size: 64,
-        location: 'http://www.croplands.org/account/confirm?t=',
-        meta: { liked: false, shared: false },
-      },
-    ]
-    const object5: any = [
-      {
-        name: 'Anas',
-        modified: 429,
-        type: 'string',
-        size: 16,
-        location: 'Www.GooGle.com',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 200,
-        type: 'array',
-        size: 256,
-        location: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
-        meta: { liked: true, shared: false },
-      },
-    ]
-    const object6: any = [
-      {
-        name: 'Michael',
-        modified: 500,
-        type: 'object',
-        size: 0,
-        location: 'https://croplands.org/app/a/confirm?t=',
-        meta: { liked: true, shared: true },
-      },
-      {
-        name: 'Michael',
-        modified: 404,
-        type: 'array',
-        size: 256,
-        location: 'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
-        meta: { liked: false, shared: false },
-      },
-    ]
-    const param2: any = [
-      { name: 'Anas', modified: 404, children: object2 },
-      { name: 'George', modified: 404, children: object3 },
-      { name: 'Michael', modified: 404, children: object4 },
-      { name: 'Pierre Edouard', modified: 400, children: object5 },
-      { name: 'Jean-Philippe', modified: 404, children: object6 },
-    ]
-    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
-    expect(result).toMatchSnapshot()
+const initialState = {
+  downloadList: ['item1', 'item2', 'item3'],
+  gridLayout: false,
+  path: [
+    { id: 'id1', name: 'name1' },
+    { id: 'id2', name: 'name2' },
+  ],
+  preview: {},
+  search: {
+    value:
+      'Nam maxime quidem libero nisi quidem facere modi ut. Sunt tenetur numquam maiores minus eos. Voluptatem nesciunt cupiditate quis necessitatibus deleniti magnam beatae. Recusandae et qui. Eius ex est libero qui voluptatem perspiciatis. Dolores id consequatur ipsam.\n \rSapiente sed perferendis animi dolor. Unde modi vero voluptatem pariatur et ad. Sunt et placeat odit aut eum saepe rerum minima. Voluptas rerum expedita aut et accusamus iure sed a architecto. Magnam et maiores corrupti voluptas ut quas.\n \rModi libero rerum qui accusamus est dolorem deserunt mollitia. Dolor est voluptatem repellat voluptas suscipit quia est rerum. Corrupti consequatur suscipit perspiciatis. Quia commodi exercitationem. In esse voluptate. Qui similique tempore.',
+    searchAll: true,
+  },
+  sort: { category: {}, asc: false },
+  status: 'tempora',
+  rename: '',
+}
+
+let localizedInitialState: FilesState
+
+describe('Test files/mutations', () => {
+  beforeEach(() => {
+    localizedInitialState = { ...initialState }
   })
 
-  test('1', () => {
-    const object: any = [
-      {
-        name: 'Jean-Philippe',
-        modified: 400,
-        type: 'array',
-        size: 10,
-        location: 'https://croplands.org/app/a/confirm?t=',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Pierre Edouard',
-        modified: 500,
-        type: 'string',
-        size: 256,
-        location: 'google.com',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Pierre Edouard',
-        modified: 404,
-        type: 'number',
-        size: 64,
-        location: 'http://base.com',
-        meta: { liked: true, shared: true },
-      },
-    ]
-    const object2: any = [
-      {
-        name: 'Anas',
-        modified: 404,
-        type: 'object',
-        size: 64,
-        location: 'Www.GooGle.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 404,
-        type: 'string',
-        size: 256,
-        location: 'www.google.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Anas',
-        modified: 429,
-        type: 'string',
-        size: 10,
-        location: 'http://base.com',
-        meta: { liked: false, shared: false },
-      },
-    ]
-    const object3: any = [
-      {
-        name: 'Edmond',
-        modified: 404,
-        type: 'number',
-        size: 10,
-        location: 'http://example.com/showcalendar.html?token=CKF50YzIHxCTKMAg',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Michael',
-        modified: 429,
-        type: 'string',
-        size: 0,
-        location: 'www.google.com',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Edmond',
-        modified: 400,
-        type: 'number',
-        size: 10,
-        location: 'Www.GooGle.com',
-        meta: { liked: false, shared: true },
-      },
-    ]
-    const object4: any = [
-      {
-        name: 'George',
-        modified: 500,
-        type: 'number',
-        size: 0,
-        location: 'https://twitter.com/path?abc',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Michael',
-        modified: 200,
-        type: 'string',
-        size: 10,
-        location: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'George',
-        modified: 400,
-        type: 'number',
-        size: 64,
-        location: 'http://www.example.com/route/123?foo=bar',
-        meta: { liked: false, shared: true },
-      },
-    ]
-    const object5: any = [
-      { name: 'Michael', modified: 200, children: object },
-      { name: 'Anas', modified: 429, children: object2 },
-      { name: 'George', modified: 200, children: object3 },
-      { name: 'Pierre Edouard', modified: 500, children: object4 },
-    ]
-    const object6: any = [
-      {
-        name: 'George',
-        modified: 500,
-        type: 'object',
-        size: 16,
-        location: 'https://',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Pierre Edouard',
-        modified: 500,
-        type: 'object',
-        size: 16,
-        location: 'http://www.example.com/route/123?foo=bar',
-        meta: { liked: true, shared: true },
-      },
-      {
-        name: 'Anas',
-        modified: 429,
-        type: 'array',
-        size: 16,
-        location: 'http://www.croplands.org/account/confirm?t=',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Michael',
-        modified: 400,
-        type: 'number',
-        size: 16,
-        location: 'https://',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Michael',
-        modified: 400,
-        type: 'object',
-        size: 32,
-        location: 'www.google.com',
-        meta: { liked: false, shared: true },
-      },
-    ]
-    const object7: any = [
-      {
-        name: 'Pierre Edouard',
-        modified: 500,
-        type: 'number',
-        size: 256,
-        location: 'google.com',
-        meta: { liked: true, shared: true },
-      },
-      {
-        name: 'Pierre Edouard',
-        modified: 429,
-        type: 'string',
-        size: 256,
-        location: 'www.google.com',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Edmond',
-        modified: 404,
-        type: 'array',
-        size: 32,
-        location: 'google.com',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Michael',
-        modified: 200,
-        type: 'array',
-        size: 32,
-        location: 'google.com',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Michael',
-        modified: 400,
-        type: 'number',
-        size: 256,
-        location: 'http://www.example.com/route/123?foo=bar',
-        meta: { liked: true, shared: true },
-      },
-    ]
-    const param2: any = [
-      { name: 'Jean-Philippe', modified: 400, children: object6 },
-      { name: 'George', modified: 404, children: object7 },
-    ]
-    const result: any = mutations.default.fetchFiles({ tree: object5 }, param2)
-    expect(result).toMatchSnapshot()
+  it('should set status', () => {
+    module.default.toggleSearchAll(localizedInitialState)
+    expect(localizedInitialState.search.searchAll).toBeFalsy()
   })
 
-  test('2', () => {
-    const object: any = [{ name: 'George', modified: 500, children: [null] }]
-    const object2: any = [
-      {
-        name: 'George',
-        modified: 404,
-        type: 'string',
-        size: 16,
-        location: 'https://api.telegram.org/bot',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 200,
-        type: 'array',
-        size: 16,
-        location: 'Www.GooGle.com',
-        meta: { liked: true, shared: true },
-      },
-    ]
-    const object3: any = [
-      {
-        name: 'George',
-        modified: 400,
-        type: 'number',
-        size: 0,
-        location: 'http://www.example.com/route/123?foo=bar',
-        meta: { liked: true, shared: true },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 200,
-        type: 'object',
-        size: 256,
-        location: 'http://www.croplands.org/account/confirm?t=',
-        meta: { liked: true, shared: true },
-      },
-    ]
-    const object4: any = [
-      {
-        name: 'George',
-        modified: 404,
-        type: 'number',
-        size: 32,
-        location: 'Www.GooGle.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Anas',
-        modified: 400,
-        type: 'array',
-        size: 16,
-        location: 'http://www.example.com/route/123?foo=bar',
-        meta: { liked: false, shared: false },
-      },
-    ]
-    const object5: any = [
-      {
-        name: 'Michael',
-        modified: 500,
-        type: 'string',
-        size: 32,
-        location: 'https://',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 429,
-        type: 'object',
-        size: 256,
-        location: 'http://base.com',
-        meta: { liked: false, shared: true },
-      },
-    ]
-    const object6: any = [
-      {
-        name: 'Edmond',
-        modified: 404,
-        type: 'string',
-        size: 0,
-        location: 'https://api.telegram.org/bot',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Michael',
-        modified: 200,
-        type: 'object',
-        size: 64,
-        location: 'Www.GooGle.com',
-        meta: { liked: true, shared: false },
-      },
-    ]
-    const param2: any = [
-      { name: 'Michael', modified: 500, children: object2 },
-      { name: 'George', modified: 429, children: object3 },
-      { name: 'Michael', modified: 200, children: object4 },
-      { name: 'Anas', modified: 404, children: object5 },
-      { name: 'Michael', modified: 429, children: object6 },
-    ]
-    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
-    expect(result).toMatchSnapshot()
+  it('should push new downloaded file into the addDownload array', () => {
+    module.default.addDownload(localizedInitialState, 'item4')
+    expect(localizedInitialState.downloadList).toEqual([
+      'item1',
+      'item2',
+      'item3',
+      'item4',
+    ])
   })
 
-  test('3', () => {
-    const object: any = [
-      {
-        name: 'Pierre Edouard',
-        modified: 200,
-        children: [null, null, null, null],
-      },
-      { name: 'Edmond', modified: 200, children: [null, null, null, null] },
-      {
-        name: 'Jean-Philippe',
-        modified: 500,
-        children: [null, null, null, null],
-      },
-    ]
-    const param2: any = [
-      {
-        name: 'Edmond',
-        modified: 500,
-        type: 'string',
-        size: 10,
-        location: 'http://www.croplands.org/account/confirm?t=',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Pierre Edouard',
-        modified: 429,
-        type: 'string',
-        size: 256,
-        location: 'https://api.telegram.org/bot',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 400,
-        type: 'number',
-        size: 64,
-        location: 'https://accounts.google.com/o/oauth2/revoke?token=%s',
-        meta: { liked: true, shared: true },
-      },
-    ]
-    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
-    expect(result).toMatchSnapshot()
+  it('should rename file', () => {
+    module.default.setRename(localizedInitialState, 'file2')
+    expect(localizedInitialState.rename).toBe('file2')
   })
 
-  test('4', () => {
-    const object: any = [
-      {
-        name: 'Pierre Edouard',
-        modified: 404,
-        children: [null, null, null, null, null],
-      },
-      { name: 'Anas', modified: 500, children: [null, null, null, null, null] },
-    ]
-    const object2: any = [
-      {
-        name: 'Michael',
-        modified: 200,
-        type: 'string',
-        size: 32,
-        location: 'www.google.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Anas',
-        modified: 404,
-        type: 'object',
-        size: 32,
-        location: 'https://croplands.org/app/a/confirm?t=',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Michael',
-        modified: 400,
-        type: 'string',
-        size: 0,
-        location: 'https://api.telegram.org/',
-        meta: { liked: false, shared: true },
-      },
-      {
-        name: 'Anas',
-        modified: 429,
-        type: 'object',
-        size: 256,
-        location: 'http://base.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 400,
-        type: 'string',
-        size: 64,
-        location: 'Www.GooGle.com',
-        meta: { liked: false, shared: false },
-      },
-    ]
-    const object3: any = [
-      {
-        name: 'Jean-Philippe',
-        modified: 500,
-        type: 'string',
-        size: 16,
-        location: 'http://base.com',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Anas',
-        modified: 429,
-        type: 'string',
-        size: 0,
-        location: 'http://www.croplands.org/account/confirm?t=',
-        meta: { liked: false, shared: false },
-      },
-      {
-        name: 'Edmond',
-        modified: 500,
-        type: 'array',
-        size: 256,
-        location: 'https://',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Jean-Philippe',
-        modified: 500,
-        type: 'number',
-        size: 256,
-        location: 'https://api.telegram.org/',
-        meta: { liked: true, shared: false },
-      },
-      {
-        name: 'Pierre Edouard',
-        modified: 500,
-        type: 'array',
-        size: 64,
-        location: 'google.com',
-        meta: { liked: true, shared: false },
-      },
-    ]
-    const param2: any = [
-      { name: 'George', modified: 404, children: object2 },
-      { name: 'George', modified: 404, children: object3 },
-    ]
-    const result: any = mutations.default.fetchFiles({ tree: object }, param2)
-    expect(result).toMatchSnapshot()
+  it('should set search value', () => {
+    module.default.setSearchValue(localizedInitialState, 'new search value')
+    expect(localizedInitialState.search.value).toBe('new search value')
   })
 
-  test('5', () => {
-    const result: any = mutations.default.fetchFiles({ tree: [] }, [])
-    expect(result).toMatchSnapshot()
+  it('should negate grid layout', () => {
+    module.default.toggleLayout(localizedInitialState)
+    expect(localizedInitialState.gridLayout).toBeTruthy()
+  })
+
+  it('should negate grid layout from true to false', () => {
+    module.default.toggleLayout({ ...localizedInitialState, gridLayout: false })
+    expect(localizedInitialState.gridLayout).toBeFalsy()
+  })
+
+  it('should negate search all toggle', () => {
+    module.default.toggleSearchAll(localizedInitialState)
+    expect(localizedInitialState.search.searchAll).toBeTruthy()
+  })
+
+  it('should set status', () => {
+    module.default.setStatus(localizedInitialState, 'status')
+    expect(localizedInitialState.status).toEqual('status')
+  })
+
+  it('should set preview', () => {
+    module.default.setPreview(localizedInitialState, 'example file hash')
+    expect(localizedInitialState.preview).toEqual('example file hash')
+  })
+
+  it('should set path', () => {
+    const argument = [
+      {
+        id: 'id',
+        name: 'name',
+      },
+    ]
+    module.default.setPath(localizedInitialState, argument)
+    expect(localizedInitialState.path).toEqual(argument)
+  })
+
+  it('should set path with two arrays', () => {
+    const argument = [
+      {
+        id: 'id',
+        name: 'name',
+      },
+      {
+        id: 'id2',
+        name: 'name2',
+      },
+    ]
+    module.default.setPath(localizedInitialState, argument)
+    expect(localizedInitialState.path).toEqual(argument)
+  })
+
+  it('should set path with an empty array', () => {
+    const argument = []
+    module.default.setPath(localizedInitialState, argument)
+    expect(localizedInitialState.path).toEqual(argument)
   })
 })

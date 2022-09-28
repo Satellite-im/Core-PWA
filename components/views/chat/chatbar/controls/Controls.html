@@ -1,25 +1,20 @@
 <div class="chatbar-controls">
   <UiComingSoon
+    v-if="!$device.isMobile"
     :tooltipText="$t('coming_soon.send_money')"
     :tooltipPosition="'top'"
-    :marginTopOverride="'4px'"
   >
-    <!-- to add disable color to icon, had to add color="grey" to the icon -->
     <button
-      id="send-money-toggle"
-      :data-tooltip="$t('wallet.send_money')"
+      v-tooltip.top="$t('wallet.send_money')"
       @click="toggleMiniWallet"
-      class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
-      :disabled="disabled"
+      disabled
     >
-      <banknote-icon size="1x" :class="`control-icon `" color="grey" />
+      <banknote-icon size="1x" class="control-icon" color="grey" />
     </button>
   </UiComingSoon>
   <button
-    id="glyph-toggle"
-    :data-tooltip="$t('ui.glyphs')"
+    v-tooltip.top="$t('ui.glyphs')"
     @click="toggleEnhancers('glyphs')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
     :disabled="disabled"
   >
     <box-select-icon
@@ -28,22 +23,21 @@
     />
   </button>
   <button
-    id="emoji-toggle"
-    :data-tooltip="$t('ui.emotes')"
-    @click="toggleEnhancers('emotes')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch"
+    v-tooltip.top="$t('ui.emoji')"
+    @click="toggleEnhancers('emoji')"
     :disabled="disabled"
   >
     <smile-icon
       size="1x"
-      :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emotes'  ? 'primary' : ''}`"
+      :class="`control-icon ${ui.enhancers.show && ui.enhancers.route === 'emoji'  ? 'primary' : ''}`"
     />
   </button>
   <button
-    :data-tooltip="$t('ui.send')"
-    class="control-tooltip-wrap has-tooltip has-tooltip-top has-tooltip-primary has-tooltip-hidden-touch send-message-btn"
+    v-tooltip.top="$t('ui.send')"
+    class="send"
     :disabled="disabled"
-    @click="sendMessage"
+    @click="$emit('send')"
+    data-cy="send-message"
   >
     <arrow-right-icon size="1x" class="control-icon" />
   </button>

@@ -1,20 +1,12 @@
-<nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+<nav class="breadcrumb" aria-label="breadcrumbs">
   <ul>
     <li>
-      <a
-        @click="!ui.isLoadingFileIndex && goBackToDirectory('root')"
-        :class="{'disabled' : ui.isLoadingFileIndex }"
-        style="display: flex"
-      >
-        <home-icon size="1.5x" />
-      </a>
+      <button @click="$store.commit('files/setPath', [])">
+        <home-icon class="font-color-flair" size="1.5x" />
+      </button>
     </li>
-    <li
-      v-for="name,i in path"
-      @click="!ui.isLoadingFileIndex && goBackToDirectory(name)"
-      :class="{'is-active' : i === path.length - 1, 'disabled' : ui.isLoadingFileIndex}"
-    >
-      <a> {{ name }} </a>
+    <li v-for="el, i in path" @click="setPath(el.id)">
+      <a :class="{'active' : i === path.length - 1}"> {{ el.name }} </a>
     </li>
   </ul>
 </nav>

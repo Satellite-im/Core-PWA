@@ -1,86 +1,7 @@
+import { TranslateResult } from 'vue-i18n'
 import { Glyph } from '~/types/ui/glyph'
-import { Channel } from '~/types/ui/server'
-
-export enum ThemeNames {
-  DEFAULT = 'default',
-  MOONLESS = 'moonless_night',
-}
-
-export type Theme = {
-  name: ThemeNames
-  class: string
-}
-
-export enum FlairColors {
-  SATELLITE = '#2761fd',
-  PEACH = '#ED4C67',
-  PINK = '#FDA7DF',
-  LIME = '#A3CB38',
-  PURPLE = '#6F1E51',
-  LAVENDER = '#9980FA',
-  SUNFLOWER = '#FFC312',
-  DEEP_BLUE = '#30336b',
-  VOID = '#2C3A47',
-}
-
-export type Flair = {
-  text: string
-  value: FlairColors
-}
-
-export const Flairs = [
-  {
-    text: 'Satellite',
-    value: FlairColors.SATELLITE,
-  },
-  {
-    text: 'Peach',
-    value: FlairColors.PEACH,
-  },
-  {
-    text: 'Pink',
-    value: FlairColors.PINK,
-  },
-  {
-    text: 'Lime',
-    value: FlairColors.LIME,
-  },
-  {
-    text: 'Purple',
-    value: FlairColors.PURPLE,
-  },
-  {
-    text: 'Lavender',
-    value: FlairColors.LAVENDER,
-  },
-  {
-    text: 'Sunflower',
-    value: FlairColors.SUNFLOWER,
-  },
-  {
-    text: 'Deep',
-    value: FlairColors.DEEP_BLUE,
-  },
-  {
-    text: 'Void',
-    value: FlairColors.VOID,
-  },
-]
-
-export const Themes = [
-  {
-    text: 'Default',
-    name: ThemeNames.DEFAULT,
-    value: ThemeNames.DEFAULT,
-    class: '',
-  },
-  {
-    text: 'Moonless Night',
-    name: ThemeNames.MOONLESS,
-    value: ThemeNames.MOONLESS,
-    class: 'moonless_night',
-  },
-]
+import { MessageAttachment } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -93,14 +14,14 @@ export enum ModalWindows {
   CREATE_SERVER = 'createServer',
   MARKETPLACE = 'marketplace',
   WALLET = 'wallet',
-  QUICK_CHAT = 'quickchat',
   WALLET_MINI = 'walletMini',
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USERPROFILE = 'userProfile',
-  CALLTOACTION = 'callToAction',
+  USER_PROFILE = 'userProfile',
+  CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
 }
 
 export interface EnhancerInfo {
@@ -126,12 +47,13 @@ export interface RecentGlyph {
 }
 
 export enum SettingsRoutes {
+  EMPTY = '',
   PERSONALIZE = 'personalize',
   PROFILE = 'profile',
   AUDIO_AND_VIDEO = 'audio & Video',
   KEY_BINDS = 'keybinds',
-  ACCOUNTS_AND_DEVICES = 'accounts',
-  PRIVACY = 'privacy',
+  ACCOUNTS_AND_DEVICES = 'accounts & Devices',
+  PRIVACY_AND_PERMISSIONS = 'privacy & Permissions',
   DEVELOPER = 'developer',
   INFO = 'info',
   NOTIFICATIONS = 'notifications',
@@ -139,56 +61,38 @@ export enum SettingsRoutes {
   NETWORK = 'network',
   REALMS = 'realms',
 }
-// | 'personalize'
-// | 'profile'
-// | 'audio'
-// | 'keybinds'
-// | 'accounts'
-// | 'privacy'
-// | 'developer'
-// | 'info'
-// | 'notifications'
-// | 'storage'
-// | 'network'
-// | 'realms'
+
+export type ContextMenuItemTypes = 'primary' | 'danger' | 'disabled'
 
 export interface ContextMenuItem {
-  text: string
+  text: string | TranslateResult
   func: Function
+  type?: ContextMenuItemTypes
+}
+
+export type Position = {
+  x: number
+  y: number
 }
 
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile: object | boolean
+  quickProfile?: { user: User; position: Position }
   userProfile: object
-  contextMenuPosition: object
-  quickProfilePosition: object
-  showSettings: boolean
-  showMedia: boolean
-  settingsSideBar: boolean
+  contextMenuPosition: Position
   settingsRoute: SettingsRoutes
-  showSidebarUsers: boolean
-  showSearchResult: boolean
   showSidebar: boolean
-  modals: object
-  glyphModalPack: string
+  modals: {
+    [key in ModalWindows]: boolean | object
+  }
+  glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
-  replyChatbarContent: {
-    id: string
-    from: string
-    payload: string
-  }
-  showPinned: boolean
-  fullscreen: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  isScrollOver: boolean
-  isTyping: object | boolean
-  isReacted: boolean
-  activeChannel: Channel | undefined
+  showOlderMessagesInfo: boolean
   settingReaction: object
   hoveredGlyphInfo: object | undefined
   glyphMarketplaceView: object
@@ -197,18 +101,9 @@ export interface UIState {
     from: string
     payload: string
   }
-  recentReactions: string[]
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
-  theme: {
-    base: Theme
-    flair: Flair
-  }
-  isLoadingFileIndex: boolean
-  renameCurrentName?: string
-}
-
-export type Position = {
-  x: number
-  y: number
+  chatImageOverlay?: MessageAttachment & { dataURL: string }
+  isMobileNavVisible: boolean
+  callHeight: string
 }

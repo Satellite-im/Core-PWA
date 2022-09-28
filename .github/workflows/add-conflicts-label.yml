@@ -1,3 +1,4 @@
+name: Add Conflicts Label
 on:
   push:
     branches:

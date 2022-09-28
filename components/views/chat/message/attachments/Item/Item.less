@@ -1,0 +1,29 @@
+.message-attachments-item {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  justify-content: stretch;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .details {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: stretch;
+    width: 300px;
+    padding: 8px 16px;
+    overflow: hidden;
+    background: @semitransparent-lighter-gradient;
+    box-shadow: @ui-shadow;
+
+    > * {
+      flex-shrink: 0;
+    }
+
+    .file-info {
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+}

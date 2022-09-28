@@ -1,6 +1,8 @@
-<template src="./Unit.html" />
+<template src="./Unit.html"></template>
+
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
   props: {
     text: {
@@ -14,3 +16,5 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped lang="less" src="./Unit.less"></style>

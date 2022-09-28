@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test constants of Iridium/notifications/types should return correct value for EmptyNotification 1`] = `
+Object {
+  "at": 0,
+  "description": "",
+  "fromAddress": "",
+  "fromName": "",
+  "id": "",
+  "image": "",
+  "seen": false,
+  "title": "",
+  "type": "Seen",
+}
+`;

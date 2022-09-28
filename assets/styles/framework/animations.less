@@ -1,6 +1,6 @@
 // Animations
 @animation-speed: 0.05s;
-@animation-speed-micro: 0.05s;
+@animation-speed-long: 0.2s;
 @transition-all: all @animation-speed ease; // DEPRICATED don't use this
 
 .fade-enter-active,
@@ -56,6 +56,18 @@
   50% {
     transform: translate(80px, 0);
     width: 25px;
+  }
+}
+
+@keyframes shorterloading {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(40px, 0);
+    width: 20px;
   }
 }
 
@@ -139,56 +151,81 @@
   }
 }
 
-@-webkit-keyframes typing {
-  0% {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  25% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  75% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 1);
-  }
-}
-
-@-moz-keyframes typing {
-  0% {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  25% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 2),
-      20px 0px 0px 0px rgba(255, 255, 255, 0.2);
-  }
-  75% {
-    background: rgba(255, 255, 255, 0.4);
-    box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
-      20px 0px 0px 0px rgba(255, 255, 255, 1);
-  }
-}
-
 @keyframes typing {
   0% {
     background: rgba(255, 255, 255, 1);
     box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
       20px 0px 0px 0px rgba(255, 255, 255, 0.2);
   }
-  25% {
+  50% {
     background: rgba(255, 255, 255, 0.4);
     box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 2),
       20px 0px 0px 0px rgba(255, 255, 255, 0.2);
   }
-  75% {
+  100% {
     background: rgba(255, 255, 255, 0.4);
     box-shadow: 10px 0px 0px 0px rgba(255, 255, 255, 0.2),
       20px 0px 0px 0px rgba(255, 255, 255, 1);
   }
+}
+
+@keyframes typingState {
+  0% {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 8px 0px 0px 0px rgba(255, 255, 255, 0.2),
+      16px 0px 0px 0px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 8px 0px 0px 0px rgba(255, 255, 255, 2),
+      16px 0px 0px 0px rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 8px 0px 0px 0px rgba(255, 255, 255, 0.2),
+      16px 0px 0px 0px rgba(255, 255, 255, 1);
+  }
+}
+
+.typing-state-animation {
+  .animation(typingState 1s linear infinite alternate);
+}
+
+@-webkit-keyframes fadeinout {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeinout {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.transition(@property, @duration, @function) {
+  transition: @property @duration @function;
+  -o-transition: @property @duration @function;
+  -moz-transition: @property @duration @function;
+  -webkit-transition: @property @duration @function;
+}
+
+.typing-animation {
+  .animation(typing 1s linear infinite alternate);
+}
+
+.animation(@value) {
+  -webkit-animation: @value;
+  -moz-animation: @value;
+  -o-animation: @value;
+  -ms-transition: @value;
+  animation: @value;
 }

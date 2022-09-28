@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test generateEntropyMessage should return an uin8array 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+address
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+secret
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;
+
+exports[`Test seedFromWallet should return an error: Non-base58 character 1`] = `
+"******************************************************************************** 
+READ THIS MESSAGE CAREFULLY. 
+DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND WRITE 
+ACCESS TO THIS APPLICATION. 
+DO NOT SIGN THIS MESSAGE IF THE FOLLOWING IS NOT TRUE OR YOU DO NOT CONSENT 
+TO THE CURRENT APPLICATION HAVING ACCESS TO THE FOLLOWING APPLICATION. 
+******************************************************************************** 
+The Solana address used by this application is: 
+
+string
+
+
+By signing this message, you authorize the current application to use the 
+following app associated with the above address: 
+
+Satellite
+
+
+The hash of your non-recoverable, private, non-persisted password or secret 
+phrase is: 
+
+publickey
+
+
+******************************************************************************** 
+ONLY SIGN THIS MESSAGE IF YOU CONSENT TO THE CURRENT PAGE ACCESSING THE KEYS 
+ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. 
+AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND 
+WRITE ACCESS TO THIS APPLICATION. 
+******************************************************************************** 
+"
+`;

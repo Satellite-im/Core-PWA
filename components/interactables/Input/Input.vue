@@ -1,108 +1,172 @@
 <template src="./Input.html"></template>
+
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { DeleteIcon, EyeIcon, EyeOffIcon } from 'satellite-lucide-icons'
+import { InputType, InputColor } from './types'
+import { Size } from '~/types/typography'
 
-import { DeleteIcon } from 'satellite-lucide-icons'
+const MOBILE_FOCUS_DELAY = 300 // ms
 
-import { InputTypes, InputStyle, InputSize } from './types.d'
+enum Appends {
+  Password = 'password',
+  Erase = 'erase',
+  Custom = 'custom',
+}
 
 export default Vue.extend({
   components: {
     DeleteIcon,
+    EyeIcon,
+    EyeOffIcon,
   },
   model: {
     prop: 'text',
-    event: 'update',
+    event: 'change',
   },
   props: {
-    /**
-     * If enabled, the button will take up 100% of the parent container
-     */
-    fullWidth: Boolean,
-    /**
-     * If enabled, delete text icon will appear
-     */
-    deleteIcon: Boolean,
-    /**
-     * Default text can be included here
-     */
     text: {
-      type: [String, Number],
+      type: String,
       default: '',
     },
-    /**
-     * Used for display only inputs
-     */
     readonly: {
       type: Boolean,
       default: false,
     },
-    /**
-     * Used for set disabled status
-     */
-    disabled: {
+    autofocus: {
       type: Boolean,
-      required: false,
       default: false,
     },
-    /**
-     * Abstraction of native "type"
-     */
-    inputKind: {
-      type: String as PropType<InputTypes>,
+    type: {
+      type: String as PropType<InputType>,
       default: 'text',
     },
-    /**
-     * Placeholder text for blank inputs
-     */
+    size: {
+      type: String as PropType<Size>,
+      default: 'md',
+    },
+    color: {
+      type: String as PropType<InputColor>,
+      default: 'primary',
+    },
     placeholder: {
       type: String,
-      default: 'Placeholder...',
-    },
-    /**
-     * Size of the input, reference InputSize types or Bulma.io
-     */
-    size: {
-      type: String as PropType<InputSize>,
-      default: 'normal',
-    },
-    /**
-     * Style of the input, reference InputStyle types or Bulma.io
-     */
-    type: {
-      type: String as PropType<InputStyle>,
-      default: 'normal',
-    },
-    /**
-     * Add a label to the top of the input
-     */
-    labelText: {
-      type: String,
-      required: false,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
+    showLimit: {
+      type: Boolean,
+      default: false,
+    },
+    minLength: {
+      type: Number,
+      default: 0,
+    },
+    maxLength: {
+      type: Number,
+      default: 256,
+    },
+    showClear: {
+      type: Boolean,
+      default: false,
+    },
+    invalid: {
+      type: Boolean,
+      default: false,
+    },
+    error: {
+      type: String,
+      default: '',
+    },
+    buttonType: {
+      type: String as PropType<InputType>,
+      default: 'button',
+    },
+    transparent: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
-      internalText: this.text ? this.text : '',
+      Appends,
+      showPassword: false,
+    }
+  },
+  computed: {
+    isEmpty(): boolean {
+      return !this.text.length
+    },
+    showClearButton(): boolean {
+      return this.showClear || this.type === 'search'
+    },
+    derivedType(): string {
+      return this.showPassword ? 'text' : this.type
+    },
+    // mobile devices need at least 1rem font size on inputs or it zooms the user in on focus
+    derivedSize(): string {
+      return this.$device.isMobile ? 'md' : this.size
+    },
+    enabledAppends(): string[] {
+      const types: string[] = []
+      if (this.type === 'password') {
+        types.push(Appends.Password)
+      }
+      if (this.showClearButton && !this.isEmpty) {
+        types.push(Appends.Erase)
+      }
+      if (this.$slots.append) {
+        types.push(Appends.Custom)
+      }
+      return types
+    },
+  },
+  mounted() {
+    if (this.autofocus) {
+      const inputRef = this.$refs.input as HTMLInputElement
+      if (this.$device.isMobile) {
+        // delay focus to avoid clash with swiper animation
+        setTimeout(() => {
+          inputRef.focus()
+        }, MOBILE_FOCUS_DELAY)
+      } else {
+        this.$nextTick(() => inputRef.focus())
+      }
     }
   },
   methods: {
-    /**
-     * @method update
-     * @description Emits the update event with updated internalText string
-     */
-    update() {
-      this.$emit('update', this.internalText)
+    handleSubmit(event: InputEvent) {
+      if (this.disabled || this.loading || this.invalid) {
+        return
+      }
+      this.$emit('submit', event)
     },
-    /**
-     * @method clearSearch
-     * @description Sets internalText in data to an empty string
-     */
-    clearSearch() {
-      this.internalText = ''
+    handleInput(event: InputEvent) {
+      if (!event.target) {
+        return
+      }
+      const target = event.target as HTMLInputElement
+      this.$emit('change', target.value)
+    },
+    clearInput() {
+      this.$emit('change', '')
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword
     },
   },
 })
 </script>
+
 <style scoped lang="less" src="./Input.less"></style>

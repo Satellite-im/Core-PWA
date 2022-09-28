@@ -1,5 +1,6 @@
-import MiniSearch, { Options } from 'minisearch'
+import MiniSearch, { Options, Suggestion } from 'minisearch'
 import type { SearchOptions } from 'minisearch'
+import { UISearchResultData } from '~/types/search/search'
 
 export type SearchIndexOptions = {
   schema: Options<any>
@@ -10,6 +11,7 @@ export type SearchIndexOptions = {
 export default class SearchIndex {
   index: MiniSearch
   schema: Options<any>
+  documents: Map<string, any> = new Map()
 
   constructor(
     {
@@ -27,32 +29,65 @@ export default class SearchIndex {
     if (records) this.index.addAll(records)
   }
 
+  get idField() {
+    return this.schema.idField || 'id'
+  }
+
   add(record: any) {
+    this.documents.set(record[this.idField], record)
     this.index.add(record)
   }
 
   addAll(records: any[]) {
-    this.index.addAll(records)
+    records.map((record) => this.add(record))
   }
 
-  removeAll() {
-    this.index.removeAll()
+  getById(id: string) {
+    return this.documents.get(id)
+  }
+
+  upsert(record: any) {
+    this.remove(record)
+    this.add(record)
+  }
+
+  upsertAll(records: any[]) {
+    return records.map((record) => this.upsert(record))
+  }
+
+  removeAll(records?: any[]) {
+    return (records || Array.from(this.documents.values())).map((record) =>
+      this.remove(record),
+    )
   }
 
   remove(record: any) {
-    this.index.remove(record)
+    if (this.documents.has(record[this.idField])) {
+      const doc = this.documents.get(record[this.idField])
+      this.index.remove(doc)
+      this.documents.delete(record[this.idField])
+    }
   }
 
   update(records: any[]) {
+    this.documents = new Map()
     this.index.removeAll()
-    this.index.addAll(records)
+    this.addAll(records)
   }
 
-  search(query: string, options?: SearchOptions | undefined) {
-    return this.index.search(query, options)
+  search(
+    query: string,
+    options?: SearchOptions | undefined,
+  ): UISearchResultData[] {
+    return this.index
+      .search(query, options)
+      .map((doc) => ({ ...doc, ...this.getById(doc[this.idField]) }))
   }
 
-  autoSuggest(query: string, options?: SearchOptions | undefined) {
+  autoSuggest(
+    query: string,
+    options?: SearchOptions | undefined,
+  ): Suggestion[] {
     return this.index.autoSuggest(query, options)
   }
 

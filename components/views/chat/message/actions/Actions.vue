@@ -10,7 +10,12 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
-import { UIMessage } from '~/types/messaging'
+import { RootState } from '~/types/store/store'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -20,14 +25,8 @@ export default Vue.extend({
     EditIcon,
     MoreVerticalIcon,
   },
-  data() {
-    return {
-      hasMoreSettings: false,
-      featureReadyToShow: false,
-    }
-  },
   props: {
-    setReplyChatbarContent: {
+    setReplyChatbarMessage: {
       type: Function,
       default: () => () => {},
     },
@@ -45,23 +44,37 @@ export default Vue.extend({
       default: () => () => {},
     },
     message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        from: 'group',
-        payload: 'Invalid Message',
-      }),
+      type: Object as PropType<ConversationMessage>,
+      default: null,
     },
   },
+  data() {
+    return {
+      hasMoreSettings: false,
+      featureReadyToShow: false,
+      chat: iridium.chat.state,
+    }
+  },
   computed: {
-    ...mapState(['ui', 'accounts']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      accounts: (state) => (state as RootState).accounts,
+    }),
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return this.chat.conversations[this.conversationId]
+    },
+    isGroup(): boolean {
+      return this.conversation?.type === 'group'
+    },
     isEditable(): boolean {
-      return (
-        this.message.from === this.accounts.details.textilePubkey &&
-        !(this.message.type === 'glyph' || this.message.type === 'file')
-      )
+      // Only text messages atm
+      return this.message.from === iridium.id && this.message.type === 'text'
     },
   },
 })

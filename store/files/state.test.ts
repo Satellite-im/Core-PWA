@@ -1,8 +1,7 @@
-import * as state from '~/store/files/state'
+import InitialFilesState from './state'
 
-describe('state.default', () => {
-  test('0', () => {
-    const result: any = state.default()
-    expect(result).toMatchSnapshot()
+describe('Test files/state', () => {
+  test('the function should match the initial state snapshot', () => {
+    expect(InitialFilesState()).toMatchSnapshot()
   })
 })

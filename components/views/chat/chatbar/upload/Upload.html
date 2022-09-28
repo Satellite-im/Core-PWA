@@ -1,0 +1,15 @@
+<button
+  @click="clickFileInput"
+  v-tooltip.top="$t('global.upload')"
+  :disabled="disabled"
+>
+  <plus-icon />
+  <input
+    type="file"
+    ref="upload"
+    style="display: none"
+    @click="resetFileInput"
+    @change="handleFile"
+    multiple
+  />
+</button>

@@ -2,7 +2,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Glyph } from '~/types/ui/glyph'
-import loadImg from '~/assets/img/glyphLoader.png'
+import loadImg from '~/assets/img/glyphLoader.webp'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
@@ -18,7 +19,7 @@ export default Vue.extend({
     },
     src: {
       type: String,
-      default: '',
+      required: true,
     },
     pack: {
       type: Object as PropType<Glyph>,
@@ -34,7 +35,7 @@ export default Vue.extend({
   },
   computed: {
     getSrc(): string {
-      return this.isLoaded ? this.src : loadImg
+      return this.isLoaded ? this.src.replace('$1', 'small') : loadImg
     },
   },
   methods: {
@@ -52,44 +53,32 @@ export default Vue.extend({
         this.$store.commit('ui/setHoveredGlyphInfo', undefined)
       }
     },
-    sendGlyph() {
-      const activeFriend = this.$Hounddog.getActiveFriend(
-        this.$store.state.friends,
-      )
+    async sendGlyph() {
       const { id } = this.$route.params
 
-      if (!this.src) return
-      if (!activeFriend && !id) return
-
-      if (id) {
-        this.$store.dispatch('textile/sendGroupGlyphMessage', {
-          groupID: id,
-          src: this.src,
-          pack: this.pack.name,
-        })
-        this.$store.commit('ui/updateRecentGlyphs', {
-          pack: this.pack,
-          url: this.src,
-        })
-        this.$store.commit('ui/toggleEnhancers', {
-          show: false,
-          floating: !!this.$device.isMobile,
-        })
-      } else {
-        this.$store.dispatch('textile/sendGlyphMessage', {
-          to: activeFriend?.textilePubkey,
-          src: this.src,
-          pack: this.pack.name,
-        })
-        this.$store.commit('ui/updateRecentGlyphs', {
-          pack: this.pack,
-          url: this.src,
-        })
-        this.$store.commit('ui/toggleEnhancers', {
-          show: false,
-          floating: !!this.$device.isMobile,
-        })
+      if (!id) {
+        return
       }
+
+      await iridium.chat?.sendMessage({
+        conversationId: id,
+        type: 'glyph',
+        glyph: {
+          packId: this.pack.id,
+          src: this.src,
+        },
+        at: Date.now(),
+        attachments: [],
+      })
+
+      this.$store.commit('ui/updateRecentGlyphs', {
+        pack: this.pack,
+        url: this.src,
+      })
+      this.$store.commit('ui/toggleEnhancers', {
+        show: false,
+        floating: this.$device.isMobile,
+      })
     },
     setLoaded() {
       this.isLoaded = true

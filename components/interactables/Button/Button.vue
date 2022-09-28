@@ -1,88 +1,84 @@
 <template src="./Button.html"></template>
+
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
 import { ButtonType, ButtonSize } from './types.d'
-import { Icon } from '@/types/ui/icons'
 
 export default Vue.extend({
   props: {
-    /**
-     * Determines the size of the button
-     *
-     * @remarks
-     * Determines the size of the button. See Bumla.io for available sizes
-     */
     size: {
       type: String as PropType<ButtonSize>,
-      default: 'normal',
+      default: 'md',
     },
-    /**
-     * Determines the type of the button
-     *
-     * @remarks
-     * Determines the type of the button. See Bumla.io for available sizes
-     */
-    type: {
+    color: {
       type: String as PropType<ButtonType>,
       default: 'primary',
     },
-    /**
-     * Callable function when button is clicked
-     *
-     * @remarks
-     * This should usually be a store mutation or UI change.
-     */
-    action: {
-      type: Function,
-      required: false,
-      default: () => {},
-    },
-    /**
-     * Supported fontawesome icon
-     * @deprecated provide icons as slot
-     * @remarks
-     * You must make sure we have imported the icon before using it. See /plugins/fontawesome.ts
-     */
-    // eslint-disable-next-line vue/require-default-prop
-    icon: {
-      type: Object as PropType<Icon>,
-      required: false,
-    },
-    /**
-     * Button body text
-     *
-     * @remarks
-     * This is the text that will be displayed inside the button.
-     */
     text: {
       type: String,
       default: '',
     },
-    /**
-     * Should this button be outlined
-     */
-    outlined: Boolean,
-    /**
-     * Add a loading state to the button
-     * Useful for buttons that kick off async tasks
-     */
-    loading: Boolean,
-    /**
-     * This text will be displayed if the button is in the loading state (loading prop provided)
-     */
-    loadingText: {
-      type: String,
-      default: 'Loading...',
+    outlined: {
+      type: Boolean,
+      default: false,
     },
-    /**
-     * This will make the button take up 100% of the parent container
-     */
-    fullWidth: Boolean,
-    inactive: Boolean,
-    htmlType: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    type: {
       type: String,
       default: 'button',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    // aria label for accessibility
+    label: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
+    return {
+      cursorX: 0,
+      cursorY: 0,
+      showCursorGlow: false,
+    }
+  },
+  computed: {
+    cursorGlowStyle(): {
+      backgroundPosition: string
+      opacity: number
+    } {
+      return {
+        backgroundPosition: `left ${this.cursorX - 150}px top ${
+          this.cursorY - 150
+        }px`,
+        opacity: !this.disabled && this.showCursorGlow ? 1 : 0,
+      }
+    },
+  },
+  methods: {
+    handleClick(event: MouseEvent) {
+      this.$emit('click', event)
+    },
+    handleMouseEnter() {
+      this.showCursorGlow = true
+    },
+    handleMouseLeave() {
+      this.showCursorGlow = false
+    },
+    handleMouseMove(e: MouseEvent) {
+      const button = this.$refs.button as HTMLElement
+      if (!button) {
+        return
+      }
+      const bounds = button.getBoundingClientRect()
+      this.cursorX = e.clientX - bounds.left
+      this.cursorY = e.clientY - bounds.top
     },
   },
 })

@@ -1,4 +1,5 @@
 <div class="cropper-container" data-cy="cropper-container">
+  <InteractablesClose class="close" :action="close" />
   <vue-croppie
     ref="croppieRef"
     :enableExif="true"
@@ -8,9 +9,7 @@
     :viewport="{ width: 200, height: 200, type: 'circle' }"
   />
   <InteractablesButton
-    :action="crop"
-    type="primary"
-    size="normal"
+    @click="crop"
     :text="$t('controls.crop')"
     class="button is-primary create-server-btn"
   />

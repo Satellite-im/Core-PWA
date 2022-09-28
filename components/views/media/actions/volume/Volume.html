@@ -1,39 +1,37 @@
 <div
-  :class="`volume-control ${isPopup? 'absolute': 'normal'} ${direction}`"
+  :class="`volume-control ${direction}`"
   ref="volumegroup"
-  @mousedown="hideSlider"
+  v-click-outside="hideSlider"
   tabindex="0"
+  @mouseover="showSlider"
+  @mouseleave="hideSlider"
 >
-  <InteractablesVolume
-    v-if="!isPopup || showSlider"
-    :volume="volume"
-    v-bind:direction="direction"
-    @returned-value="receivedValue"
-  />
-  <div class="volume-icon" v-if="!plain">
-    <volume-2-icon
-      v-if="volume >= 70"
-      @click="toggleSlider"
-      size="1.2x"
-      class="fa-fw"
-    />
+  <div class="wrapper" v-if="!isPopup || sliderVisible">
+    <div class="inner">
+      <InteractablesVolume
+        :value="volume"
+        :direction="direction"
+        @change="receivedValue"
+      />
+    </div>
+  </div>
+  <button
+    v-if="!plain"
+    class="volume-icon"
+    data-cy="volume-icon"
+    @click="toggleMute"
+  >
+    <volume-2-icon v-if="volume >= 70" data-cy="volume-at-max" size="1.2x" />
     <volume-1-icon
       v-if="volume > 30 && volume < 70"
-      @click="toggleSlider"
+      data-cy="volume-less-than-70"
       size="1.2x"
-      class="fa-fw"
     />
     <volume-icon
       v-if="volume > 0 && volume <= 30"
-      @click="toggleSlider"
+      data-cy="volume-less-than-30"
       size="1.2x"
-      class="fa-fw"
     />
-    <volume-x-icon
-      v-if="volume == 0"
-      @click="toggleSlider"
-      size="1.2x"
-      class="fa-fw"
-    />
-  </div>
+    <volume-x-icon v-if="volume == 0" data-cy="volume-at-min" size="1.2x" />
+  </button>
 </div>

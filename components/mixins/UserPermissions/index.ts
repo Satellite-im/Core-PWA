@@ -3,13 +3,13 @@ import DetectRTC from 'detectrtc'
 export type PermissionRequestOptions = MediaStreamConstraints | undefined
 
 interface permissionObject {
-  hasWebcam: Boolean
-  hasMicrophone: Boolean
-  hasSpeakers: Boolean
-  browser: String
+  hasWebcam: boolean
+  hasMicrophone: boolean
+  hasSpeakers: boolean
+  browser: string
   permissions: {
-    webcam: Boolean
-    microphone: Boolean
+    webcam: boolean
+    microphone: boolean
   }
   devices: {
     audioIn: any[]
@@ -17,8 +17,8 @@ interface permissionObject {
     videoIn: any[]
   }
   blocked: {
-    audio: Boolean
-    video: Boolean
+    audio: boolean
+    video: boolean
   }
 }
 
@@ -127,7 +127,7 @@ export const UserPermissions = {
     /**
      * @method requestUserPermissions DocsTODO
      * @description Requests user permission to access their media devices such as webcams and microphones
-     * @param permission Object with contraints for which permissions to request
+     * @param permission Object with constraints for which permissions to request
      * @returns Promise that resolves to a MediaStream object
      * @example
      */

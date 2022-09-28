@@ -1,0 +1,16 @@
+.file-preview {
+  padding: @normal-spacing 0 @light-spacing;
+  &:extend(.background-semitransparent-light);
+  border-bottom-color: rgba(87, 101, 116, 0.3);
+  border-radius: @corner-rounding @corner-rounding 0 0;
+
+  &.no-round {
+    border-radius: 0;
+  }
+  .file-list {
+    display: flex;
+    gap: @normal-spacing;
+    overflow-x: scroll;
+    padding-bottom: @light-spacing;
+  }
+}

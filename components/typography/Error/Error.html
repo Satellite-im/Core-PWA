@@ -1,1 +1,3 @@
-<p class="error has-text-danger">{{ text }}</p>
+<Component :is="small ? 'small' : 'p'" class="error has-text-danger">
+  {{ text }}
+</Component>

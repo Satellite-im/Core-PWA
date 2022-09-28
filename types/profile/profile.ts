@@ -15,6 +15,7 @@ export type ProfileBadge = {
 
 export type ProfileInfo = {
   imageUrl: string
+  bannerUrl: string
   badges: ProfileBadge[]
   locations: string[]
   languages: string[]

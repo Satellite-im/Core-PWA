@@ -1,0 +1,10 @@
+<ul :class="{'menu-list-mobile': $device.isMobile}">
+  <li
+    v-for="item in items"
+    :class="{'selected' : isActiveRoute(item.route)}"
+    @click="setActive(item.route)"
+  >
+    <component v-if="item.icon" :is="icons[item.icon]" size="1x" />
+    <p v-if="!$device.isMobile">{{item.text}}</p>
+  </li>
+</ul>

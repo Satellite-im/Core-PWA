@@ -1,15 +1,18 @@
 // Navigation
-@sidebar-size: 18.5rem;
+@slimbar-width: 4.5rem;
+@sidebar-width: 19.5rem;
+@sidebar-controls-height: 7.5rem;
 @sidebar-size-mobile: 100vw;
 @servers-size: 60px;
 @toolbar-height: 75px;
-@chatbar-size: 88px;
-@mobile-nav-size: 4.5rem;
-@slimbar-size: 60px;
+@chatbar-size: 78px;
+@mobile-nav-height: 60px;
+@chatbar-input-height: 48px;
+@indicator-size: 32px;
 
 // Popups
 @enhancers-height: 30rem;
-@enhancers-width: 34rem;
+@enhancers-width: 529px;
 
 // Modals
 @normal-modal-size: 500px;
@@ -48,6 +51,7 @@
 // Scrollbars
 @scrollbar-width: 5px;
 @scrollbar-width-mobile: 3px;
+@scroll-bar-size: 5px;
 
 // Form Elements
 @select-height: 2.5em;
@@ -60,3 +64,22 @@
 }
 
 @mini-light-border: 1px solid rgba(199, 206, 246, 0.25);
+
+.no-select {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// hide from view, but not from screenreaders https://www.a11yproject.com/posts/how-to-hide-content/
+.hidden {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}

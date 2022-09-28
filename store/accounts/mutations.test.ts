@@ -1,44 +1,19 @@
 import { AccountsState, RegistrationStatus } from './types'
-import mutations from '~/store/accounts/mutations'
+import InitialAccountsState from './state'
+import mutations from './mutations'
+import { User } from 'libraries/Iridium/users/types'
 
-describe('init', () => {
-  let inst: any
-  const state: AccountsState = {
-    storePin: true,
-    loading: true,
-    locked: true,
-    pin: 'pin',
-    pinHash: 'pinHash',
-    active: 'active',
-    gasPrice: 'gasPrice',
-    phrase: 'phrase',
-    error: 'error',
-    encryptedPhrase: 'encryptedPhrase',
-    registered: true,
-    details: {
-      name: '',
-      address: '',
-      status: '',
-      state: 'idle',
-      unreadCount: 123,
-      profilePicture: '',
-      badge: 'community',
-      userAccount: '',
-      mailboxId: '',
-      textilePubkey: '',
-      lastUpdate: 1643889423133,
-    },
-    registrationStatus: RegistrationStatus.UNKNOWN,
-    lastVisited: 'lastVisited',
-  }
+describe('Test accounts/mutations', () => {
+  let instance: any
+  let localStateForUnitTest: AccountsState
 
   beforeEach(() => {
-    inst = mutations
+    instance = mutations
+    localStateForUnitTest = InitialAccountsState()
   })
 
   it('should setPin', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setPin(localStateForUnitTest, '123456')
+    instance.setPin(localStateForUnitTest, '123456')
 
     expect(localStateForUnitTest).toMatchObject({
       pin: '123456',
@@ -46,8 +21,7 @@ describe('init', () => {
   })
 
   it('should setStorePin', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setStorePin(localStateForUnitTest, false)
+    instance.setStorePin(localStateForUnitTest, false)
 
     expect(localStateForUnitTest).toMatchObject({
       storePin: false,
@@ -55,9 +29,8 @@ describe('init', () => {
   })
 
   it('should setRegistry', () => {
-    const localStateForUnitTest = { ...state }
     localStateForUnitTest.registry = true
-    inst.setRegistry(localStateForUnitTest, false)
+    instance.setRegistry(localStateForUnitTest, false)
 
     expect(localStateForUnitTest).toMatchObject({
       registry: false,
@@ -65,8 +38,7 @@ describe('init', () => {
   })
 
   it('should setPinHash', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setPinHash(localStateForUnitTest, '123456')
+    instance.setPinHash(localStateForUnitTest, '123456')
 
     expect(localStateForUnitTest).toMatchObject({
       pinHash: '123456',
@@ -74,8 +46,7 @@ describe('init', () => {
   })
 
   it('should lock', () => {
-    const localStateForUnitTest = { ...state }
-    inst.lock(localStateForUnitTest)
+    instance.lock(localStateForUnitTest)
 
     expect(localStateForUnitTest).toMatchObject({
       locked: true,
@@ -83,8 +54,7 @@ describe('init', () => {
   })
 
   it('should unlock', () => {
-    const localStateForUnitTest = { ...state }
-    inst.unlock(localStateForUnitTest, '123456')
+    instance.unlock(localStateForUnitTest, '123456')
 
     expect(localStateForUnitTest).toMatchObject({
       locked: false,
@@ -93,8 +63,7 @@ describe('init', () => {
   })
 
   it('should setEncryptedPhrase', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setEncryptedPhrase(localStateForUnitTest, 'baa baa black sheep')
+    instance.setEncryptedPhrase(localStateForUnitTest, 'baa baa black sheep')
 
     expect(localStateForUnitTest).toMatchObject({
       encryptedPhrase: 'baa baa black sheep',
@@ -102,8 +71,7 @@ describe('init', () => {
   })
 
   it('should setPhrase', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setPhrase(localStateForUnitTest, 'moo moo white cow')
+    instance.setPhrase(localStateForUnitTest, 'moo moo white cow')
 
     expect(localStateForUnitTest).toMatchObject({
       phrase: 'moo moo white cow',
@@ -111,37 +79,60 @@ describe('init', () => {
   })
 
   it('should setActiveAccount', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setActiveAccount(localStateForUnitTest, 'aktif')
+    instance.setActiveAccount(localStateForUnitTest, 'aktif')
 
     expect(localStateForUnitTest).toMatchObject({
       active: 'aktif',
     })
   })
 
-  it('should setUserDetails', () => {
-    const localStateForUnitTest = { ...state }
-    const newDetails = {
-      username: 'username',
-      status: 'status',
-      photoHash: 'link',
-      address: localStateForUnitTest.active,
-    }
-    inst.setUserDetails(localStateForUnitTest, newDetails)
+  it.skip('should setProfilePicture', () => {
+    instance.setProfilePicture(
+      localStateForUnitTest,
+      'https://satellite.im/images/logo.webp',
+    )
 
     expect(localStateForUnitTest).toMatchObject({
       details: {
-        name: newDetails.username,
-        status: newDetails.status,
-        profilePicture: newDetails.photoHash,
-        address: localStateForUnitTest.active,
+        profilePicture: 'https://satellite.im/images/logo.webp',
       },
     })
   })
 
-  it('should updateMailboxId', () => {
-    const localStateForUnitTest = { ...state }
-    inst.updateMailboxId(localStateForUnitTest, 'mailbox')
+  it('should setProfilePicture without state.details', () => {
+    localStateForUnitTest.details = undefined
+    instance.setProfilePicture(
+      localStateForUnitTest,
+      'https://satellite.im/images/logo.webp',
+    )
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: undefined,
+    })
+  })
+
+  it('should setUserPeerId without state.details', () => {
+    localStateForUnitTest.details = undefined
+    instance.setUserPeerId(localStateForUnitTest, 'peerId')
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: undefined,
+    })
+  })
+
+  it('should setUserPeerId', () => {
+    localStateForUnitTest.details = { did: 'did', name: 'name' }
+    instance.setUserPeerId(localStateForUnitTest, 'peerId')
+
+    expect(localStateForUnitTest).toMatchObject({
+      details: {
+        peerId: 'peerId',
+      },
+    })
+  })
+
+  it.skip('should updateMailboxId', () => {
+    instance.updateMailboxId(localStateForUnitTest, 'mailbox')
 
     expect(localStateForUnitTest).toMatchObject({
       details: {
@@ -150,20 +141,8 @@ describe('init', () => {
     })
   })
 
-  it('should updateTextilePubkey', () => {
-    const localStateForUnitTest = { ...state }
-    inst.updateTextilePubkey(localStateForUnitTest, 'textile pubkey')
-
-    expect(localStateForUnitTest).toMatchObject({
-      details: {
-        textilePubkey: 'textile pubkey',
-      },
-    })
-  })
-
   it('should setRegistrationStatus', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setRegistrationStatus(
+    instance.setRegistrationStatus(
       localStateForUnitTest,
       RegistrationStatus.IN_PROGRESS,
     )
@@ -174,8 +153,7 @@ describe('init', () => {
   })
 
   it('should setLastVisited', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setLastVisited(localStateForUnitTest, 'yesterday')
+    instance.setLastVisited(localStateForUnitTest, 'yesterday')
 
     expect(localStateForUnitTest).toMatchObject({
       lastVisited: 'yesterday',
@@ -183,11 +161,108 @@ describe('init', () => {
   })
 
   it('should setLastVisited', () => {
-    const localStateForUnitTest = { ...state }
-    inst.setLastVisited(localStateForUnitTest, 'yesterday')
+    instance.setLastVisited(localStateForUnitTest, 'yesterday')
 
     expect(localStateForUnitTest).toMatchObject({
       lastVisited: 'yesterday',
     })
+  })
+
+  it('should setAdapter', () => {
+    const argument = 'adapter'
+    instance.setAdapter(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest).toMatchObject({
+      adapter: argument,
+    })
+  })
+
+  it('should setEntropy', () => {
+    const argument = 'message'
+    instance.setEntropy(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest).toMatchObject({
+      entropyMessage: argument,
+    })
+  })
+
+  it('should setUserDetails', () => {
+    const argument: User = {
+      did: 'Sed libero possimus.',
+      name: 'Nicole Brown',
+      peerId:
+        'Ut doloribus autem. Aut repellat maiores et perspiciatis illum dolorem ducimus quibusdam. Et omnis at excepturi. Vitae eum nulla. A in est nihil animi quae sint sit totam nostrum.\n \rHarum consequatur doloremque. Ullam molestiae voluptas. Odio qui ducimus consequatur nulla dolorem aspernatur nemo iusto. Saepe est veritatis ut ut pariatur numquam at placeat. Maxime quae odit corporis adipisci quas exercitationem.\n \rRem impedit voluptate culpa maxime. Ducimus dolore quasi ea vel beatae. Repellendus quod vel natus sint qui rerum qui reprehenderit. Quae omnis suscipit blanditiis minus dolorem architecto ex eius tempore. Sit quidem nemo quaerat.',
+      seen: 90045,
+      accountUrl:
+        'Consequatur tempora doloremque consequatur cum corporis quia.\nAb velit sit aut adipisci.',
+      about: 'At tenetur explicabo molestiae alias.',
+    }
+    instance.setUserDetails(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.details).toMatchObject({
+      did: argument.did,
+      name: argument.name,
+      status: argument.status,
+      photoHash: argument.photoHash,
+    })
+  })
+
+  it('should setProfilePicture without user details', () => {
+    localStateForUnitTest.details = undefined
+    const newPhotoHash = 'hash'
+
+    instance.setProfilePicture(localStateForUnitTest, newPhotoHash)
+
+    expect(localStateForUnitTest.details).toBe(undefined) // Unchanged, as expected
+  })
+
+  it('should setProfilePicture', () => {
+    const argument: User = {
+      did: 'Sed libero possimus.',
+      name: 'Nicole Brown',
+      peerId:
+        'Ut doloribus autem. Aut repellat maiores et perspiciatis illum dolorem ducimus quibusdam. Et omnis at excepturi. Vitae eum nulla. A in est nihil animi quae sint sit totam nostrum.\n \rHarum consequatur doloremque. Ullam molestiae voluptas. Odio qui ducimus consequatur nulla dolorem aspernatur nemo iusto. Saepe est veritatis ut ut pariatur numquam at placeat. Maxime quae odit corporis adipisci quas exercitationem.\n \rRem impedit voluptate culpa maxime. Ducimus dolore quasi ea vel beatae. Repellendus quod vel natus sint qui rerum qui reprehenderit. Quae omnis suscipit blanditiis minus dolorem architecto ex eius tempore. Sit quidem nemo quaerat.',
+      seen: 90045,
+      accountUrl:
+        'Consequatur tempora doloremque consequatur cum corporis quia.\nAb velit sit aut adipisci.',
+      about: 'At tenetur explicabo molestiae alias.',
+    }
+
+    // Set user details
+    instance.setUserDetails(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.details).toMatchObject({
+      did: argument.did,
+      name: argument.name,
+      status: argument.status,
+      photoHash: argument.photoHash,
+    })
+
+    const newPhotoHash = 'hash'
+
+    instance.setProfilePicture(localStateForUnitTest, newPhotoHash)
+
+    expect(localStateForUnitTest.details).toMatchObject({
+      did: argument.did,
+      name: argument.name,
+      status: argument.status,
+      photoHash: newPhotoHash,
+    })
+  })
+
+  it('should setNewAccount to true', () => {
+    const argument = true
+
+    instance.setNewAccount(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.isNewAccount).toBeTruthy()
+  })
+
+  it('should setNewAccount to false', () => {
+    const argument = false
+
+    instance.setNewAccount(localStateForUnitTest, argument)
+
+    expect(localStateForUnitTest.isNewAccount).toBeFalsy()
   })
 })

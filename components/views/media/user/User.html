@@ -1,27 +1,74 @@
-<div class="user">
-  <div class="indicators">
-    <mic-off-icon class="indicator" v-if="audioMuted" size="1.2x" />
-  </div>
+<div
+  v-if="call"
+  class="user"
+  :class="[
+    {
+      'talking': isTalking,
+      'is-presenter': isPresenter,
+      'is-presenter-thumbnail': isPresenterThumbnail
+    },
+    `stream-${stream}`
+  ]"
+  :style="{ width: size[0] + 'px', height: size[1] + 'px' }"
+  @click="$emit('click', $event)"
+>
+  <video
+    v-if="stream === 'video'"
+    :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
+    class="video-stream"
+    :class="{ flip: flipVideo }"
+    data-cy="video-stream"
+    :src-object.prop="videoStream"
+    playsinline
+    autoplay
+  />
 
-  <div v-if="videoStream" class="video-stream-container">
-    <video
-      class="video-stream"
-      :src-object.prop="videoStream"
-      playsinline
-      :id="`${isLocal ? 'local' : 'remote'}-video`"
-    ></video>
-  </div>
+  <video
+    v-else-if="stream === 'screen'"
+    :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
+    class="video-stream"
+    data-cy="screen-stream"
+    :src-object.prop="screenStream"
+    playsinline
+    autoplay
+  />
 
-  <div class="media-user" v-else-if="user">
+  <div
+    v-else
+    class="voice-user"
+    :class="{calling: audioStream, loading: isPending && !isLocal}"
+  >
+    <UiLoadersScaleLoader v-if="isPending && !isLocal" class="loader" />
     <UiCircle
-      type="random"
-      :seed="user.address"
-      :size="$device.isMobile ? 35 : 65"
-      :class="`${calling ? 'calling' : ''}`"
-      :source="user.profilePicture"
+      v-else
+      :type="src ? 'image' : 'random'"
+      :seed="user.did"
+      :size="circleSize"
+      data-cy="media-user-circle"
+      :source="src"
+      color="transparent"
     />
-    <TypographyTag :text="user.name" inverted />
   </div>
 
-  <audio :src-object.prop="audioStream" v-if="audioStream" autoplay />
+  <div class="info-overlay">
+    <TypographyTag :title="user.name" class="username" inverted>
+      {{user.name}}
+    </TypographyTag>
+
+    <div class="indicators" v-if="!isPending || isLocal">
+      <div class="indicator" data-cy="muted-indicator" v-if="audioMuted">
+        <mic-off-icon />
+      </div>
+    </div>
+  </div>
+
+  <audio
+    v-if="!isLocal && !audio.deafened && audioStream"
+    :id="`audio-stream-${audioStream.id}`"
+    :class="`${isLocal ? 'local' : 'remote'}-audio-stream`"
+    :src-object.prop="audioStream"
+    autoplay
+  />
+
+  <div v-if="!hideTalkingIndicator" class="talking-outline"></div>
 </div>

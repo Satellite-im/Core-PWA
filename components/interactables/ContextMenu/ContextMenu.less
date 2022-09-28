@@ -3,13 +3,15 @@
   &:extend(.blur);
   &:extend(.font-secondary);
   &:extend(.round-corners);
+  &:extend(.third-layer);
   position: fixed;
-  z-index: 999;
   outline: none;
   cursor: pointer;
   padding: 8px;
   max-width: 200px;
   min-width: 150px;
+  box-shadow: @ui-shadow;
+
   .subtitle {
     margin: 0 0 @light-spacing @light-spacing;
     font-size: @mini-text-size;
@@ -18,12 +20,21 @@
     padding: 4px 8px;
     border-radius: 2px;
     font-size: 14px;
-
+    font-family: @secondary-font;
     &:hover {
-      &:extend(.background-primary);
-      &.red {
-        &:extend(.font-secondary);
-        background: @red !important;
+      background: @flair-color;
+    }
+    &.danger {
+      color: @red;
+      &:hover {
+        color: @light;
+        background: @red;
+      }
+    }
+    &.disabled {
+      opacity: 0.5;
+      &:hover {
+        background: none;
       }
     }
   }
@@ -44,8 +55,8 @@
 
       &:hover {
         &:extend(.background-semitransparent-lighter);
-        text-shadow: -1px 0 1px @primary-color, 0 1px 1px @primary-color,
-          1px 0 1px @primary-color, 0 -1px 1px @primary-color, 0 0 12px @gray;
+        text-shadow: -1px 0 1px @flair-color, 0 1px 1px @flair-color,
+          1px 0 1px @flair-color, 0 -1px 1px @flair-color, 0 0 12px @gray;
       }
 
       &:first-of-type {

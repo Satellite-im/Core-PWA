@@ -1,27 +1,67 @@
-<div
-  :class="{'select': true, [`is-${type}`]: true, [`is-${size}`]: true, 'is-full-width': fullWidth, 'disabled': disabled}"
-  v-click-outside="() => open = false"
->
-  <div :class="{'custom-select': true, open, up, down: !up}">
-    <div class="selected" @click="toggleOpen()">{{ getSelectLabel() }}</div>
-    <div class="items">
-      <UiScroll verticalScroll scrollbarVisibility="scroll" enableWrap>
-        <div
-          v-for="(option, i) of options"
-          :key="i"
-          :disabled="option.disabled"
-          @click="change(option)"
-        >
-          <div
-            class="color"
-            v-if="colorSupport"
-            :style="{ background: option.value }"
-          >
-            {{ option.text }}
-          </div>
-          <span v-else>{{ option.text }}</span>
+<div class="listbox" :class="`font-size-${size}`" :value="value" ref="listbox">
+  <TypographyText :class="{ hidden : !showLabel }" as="label">
+    {{ label }}
+  </TypographyText>
+  <select
+    v-if="$device.isMobile"
+    class="mobile-select"
+    :value="value"
+    :disabled="disabled"
+    @change="$emit('input', $event.target.value)"
+  >
+    <option
+      v-for="(option, index) in options"
+      :key="`${label}-option-${index}`"
+      :aria-selected="option.value === value"
+      :value="option.value"
+    >
+      {{ option.text }}
+    </option>
+  </select>
+  <div v-else class="list-container" v-click-outside="hideListbox">
+    <button
+      :id="`${label}-button-label`"
+      :disabled="disabled"
+      :aria-labelledby="`${label}-label ${label}-button-label`"
+      type="button"
+      :title="value ? selectedOptionLabel : placeholder"
+      aria-haspopup="listbox"
+      @click="toggleListbox"
+      @keydown="checkShow"
+      ref="button"
+    >
+      <div class="label">
+        {{ value ? selectedOptionLabel : placeholder }}
+        <div class="width-buffer" aria-hidden="true">
+          <div v-for="(option, index) in options">{{ option.text }}</div>
         </div>
-      </UiScroll>
-    </div>
+      </div>
+      <chevron-down-icon size="1.25x" />
+    </button>
+    <transition name="listbox">
+      <ul
+        v-show="!listboxHidden"
+        :aria-labelledby="`${label}-label`"
+        :aria-activedescendant="value"
+        tabindex="-1"
+        role="listbox"
+        @keydown="checkKeyDown"
+        @click="checkClickItem"
+        ref="list"
+      >
+        <li
+          v-for="(option, index) in options"
+          :key="`${label}-option-${index}`"
+          :aria-selected="option.value === value"
+          :data-value="option.value"
+          :style="option.color ? 'background:' + option.color : ''"
+          role="option"
+          ref="options"
+        >
+          {{ option.text }}
+          <check-icon v-if="option.value === value" size="1.25x" />
+        </li>
+      </ul>
+    </transition>
   </div>
 </div>

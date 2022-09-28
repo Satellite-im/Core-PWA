@@ -1,7 +1,7 @@
 <template src="./Sample.html" />
 <script lang="ts">
 import Vue from 'vue'
-import * as loadImg from '~/assets/img/glyphLoader.png'
+import * as loadImg from '~/assets/img/glyphLoader.webp'
 
 export default Vue.extend({
   props: {
@@ -17,7 +17,11 @@ export default Vue.extend({
       this.isLoaded = true
     },
     getSrc(src) {
-      return this.isLoaded ? src : loadImg
+      let imgSrc = src
+      if (src.includes('/$1/')) {
+        imgSrc = src.replace('$1', 'small')
+      }
+      return this.isLoaded ? imgSrc : loadImg
     },
   },
 })

@@ -1,5 +1,5 @@
-import * as ConsoleWarning from '~/utilities/ConsoleWarning'
 import 'jest-canvas-mock'
+import * as ConsoleWarning from '~/utilities/ConsoleWarning'
 
 describe('ConsoleWarning.ConsoleWarning', () => {
   test('0', () => {

@@ -1,4 +1,4 @@
-<template src="./Nav.html" />
+<template src="./Nav.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -11,7 +11,11 @@ import {
   SettingsIcon,
   ShoppingBagIcon,
 } from 'satellite-lucide-icons'
-import { ModalWindows } from '~/store/ui/types'
+import { ModalWindows, SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { UserStatus } from '~/libraries/Iridium/users/types'
+import { FriendRequest } from '~/libraries/Iridium/friends/types'
 
 export default Vue.extend({
   components: {
@@ -22,15 +26,49 @@ export default Vue.extend({
     SettingsIcon,
     ShoppingBagIcon,
   },
+  data() {
+    return {
+      userStatus: iridium.users.ephemeral.status,
+      friends: iridium.friends.state,
+    }
+  },
   computed: {
-    ...mapState(['accounts', 'ui']),
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+      ui: (state) => (state as RootState).ui,
+    }),
+    status(): UserStatus {
+      return 'online'
+    },
+    isMobileNavVisible: {
+      get(): boolean {
+        return this.ui.isMobileNavVisible
+      },
+      set(value: boolean) {
+        this.$store.commit('ui/setIsMobileNavVisible', value)
+      },
+    },
+    incomingRequests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
+      )
+    },
+    hasFriendRequests(): boolean {
+      return this.incomingRequests.length > 0
+    },
   },
   methods: {
     toggleModal() {
       this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CALLTOACTION,
-        state: !this.ui.modals[ModalWindows.CALLTOACTION],
+        name: ModalWindows.CALL_TO_ACTION,
+        state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
       })
+    },
+    isActiveRoute(route: string): boolean {
+      return this.$route.path.includes(route)
+    },
+    emptySettingsRoute() {
+      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
     },
   },
 })

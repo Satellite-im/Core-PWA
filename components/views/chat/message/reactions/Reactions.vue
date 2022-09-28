@@ -1,102 +1,68 @@
 <template src="./Reactions.html"></template>
 <script lang="ts">
-// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
+import { mapState } from 'vuex'
 import { SmileIcon } from 'satellite-lucide-icons'
-import { Group, Reply, UIMessage } from '~/types/messaging'
-import { getUsernameFromState } from '~/utilities/Messaging'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { RootState } from '~/types/store/store'
+
+type Reaction = {
+  emoji: string
+  names: string[]
+  dids: string[]
+}
 
 export default Vue.extend({
   components: {
     SmileIcon,
   },
   props: {
-    reply: {
-      type: Object as PropType<Reply>,
-      default: () => ({
-        id: '',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Reply',
-      }),
-    },
     message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Message',
-      }),
+      type: Object as PropType<ConversationMessage>,
+      required: true,
     },
-    group: {
-      type: Object as PropType<Group>,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      hovering: false,
-    }
   },
   computed: {
-    reactions() {
-      return this.reply.id
-        ? this.$props.reply?.reactions
-        : this.$props.message?.reactions
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+      ui: (state) => (state as RootState).ui,
+    }),
+    reactions(): Reaction[] {
+      if (!this.message.reactions) {
+        return []
+      }
+      const didsForEmoji: { [key: string]: string[] } = {}
+      Object.entries(this.message.reactions).forEach(([did, emojis]) => {
+        emojis.forEach((emoji) => {
+          if (!didsForEmoji[emoji]) {
+            didsForEmoji[emoji] = [did]
+            return
+          }
+          didsForEmoji[emoji].push(did)
+        })
+      })
+      const reactions = Object.entries(didsForEmoji).map(([emoji, dids]) => ({
+        emoji,
+        names: dids.map((did) => iridium.users.getUser(did)?.name),
+        dids,
+      }))
+      return reactions
     },
   },
   methods: {
-    /**
-     * @method emojiReaction DocsTODO
-     * @description
-     * @example
-     */
-    emojiReaction(e: MouseEvent) {
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      this.$store.commit('ui/settingReaction', {
-        status: true,
-        groupID: this.$props.group.id,
-        messageID: this.$props.reply.id
-          ? this.$props.reply.id
-          : this.$props.message.id,
-        to:
-          this.$props.message.to === myTextilePublicKey
-            ? this.$props.message.from
-            : this.$props.message.to,
-      })
-      const clickX = e.clientX
-      const clickY = e.clientY
-      this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: !!this.$device.isMobile,
-        position: [clickX, clickY],
-        containerWidth: this.$el.clientWidth,
-      })
-    },
     /**
      * @method quickReaction DocsTODO
      * @description
      * @param emoji
      * @example
      */
-    quickReaction(emoji: String) {
-      this.$store.dispatch('ui/addReaction', {
-        emoji,
-        reactor: this.$mock.user.name,
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
-        replyID: this.$props.reply.id,
+    quickReaction(emoji: string) {
+      iridium.chat.toggleMessageReaction({
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
+        reaction: emoji,
       })
-    },
-    /**
-     * @method toggleReactors DocsTODO
-     * @description
-     * @param emoji
-     * @example
-     */
-    toggleReactors(emoji: any) {
-      this.$data.hovering = emoji
     },
     /**
      * @method didIReact DocsTODO
@@ -105,28 +71,22 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    didIReact(reaction: any) {
-      return reaction.reactors.includes(
-        this.$store.state.accounts.details.textilePubkey,
-      )
+    didReact(reaction: Reaction) {
+      if (!iridium.connector) {
+        return false
+      }
+      return reaction.dids.includes(iridium.id)
     },
-    getReactorsList(reactors: string[], limit = 3) {
-      const numberOfReactors = reactors.length
-      const list = reactors
-        .slice(0, limit)
-        .reduce(
-          (reactorsList, reactorPublickey, i) =>
-            (i === 0 ? '' : ',') +
-            reactorsList +
-            getUsernameFromState(reactorPublickey, this.$store.state),
-          '',
-        )
-
-      return `${list}${
-        numberOfReactors > limit
-          ? `and ${numberOfReactors - limit} more ...`
-          : ''
-      }`
+    emojiReaction() {
+      this.$store.commit('ui/settingReaction', {
+        status: true,
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
+      })
+      this.$store.commit('ui/toggleEnhancers', {
+        show: !this.ui.enhancers.show,
+        floating: true,
+      })
     },
   },
 })

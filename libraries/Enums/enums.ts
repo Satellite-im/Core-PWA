@@ -1,3 +1,4 @@
+import { FriendsTabs } from '~/libraries/Enums/types/friendsTabs'
 import { KeybindingEnum } from '~/libraries/Enums/types/keybindings'
 import { PropCommonEnum } from '~/libraries/Enums/types/prop-common-events'
 import { MessageRouteEnum } from '~/libraries/Enums/types/message-routes'
@@ -9,8 +10,16 @@ import { BlockKeysEnum } from '~/libraries/Enums/types/blockKeys'
 import { WebRTCEnum } from '~/libraries/Enums/types/webrtc'
 import { SocialAccountTypesEnum } from '~/libraries/Enums/types/social'
 import { AddFriendEnum } from '~/libraries/Enums/types/addFriend'
+import { PlatformTypeEnum } from '~/libraries/Enums/types/platformType'
+import {
+  FileSortEnum,
+  FileIconsEnum,
+  FileRouteEnum,
+} from '~/libraries/Enums/types/files'
+import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 
 export {
+  FriendsTabs,
   KeybindingEnum,
   PropCommonEnum,
   MessageRouteEnum,
@@ -22,4 +31,9 @@ export {
   WebRTCEnum,
   AddFriendEnum,
   SocialAccountTypesEnum,
+  PlatformTypeEnum,
+  NotificationTypes,
+  FileSortEnum,
+  FileIconsEnum,
+  FileRouteEnum,
 }

@@ -1,6 +1,6 @@
 <template src="./Create.html" />
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -21,6 +21,10 @@ export default Vue.extend({
       this.$Logger.log('Friends Watcher', 'New Friends', newFriends)
     },
   },
+  beforeDestroy() {
+    URL.revokeObjectURL(this.croppedImage)
+    URL.revokeObjectURL(this.imageUrl)
+  },
   methods: {
     /**
      * @method toggleCropper DocsTODO
@@ -36,20 +40,13 @@ export default Vue.extend({
      * @param e
      * @example
      */
-    selectImage(e) {
-      if (e.target.value !== null) {
-        const files = e.target.files || e.dataTransfer.files
-        if (!files.length) return
+    selectImage(e: Event) {
+      const target = e.target as HTMLInputElement
+      const file = target.files?.[0]
 
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.imageUrl = e.target.result
-          e.target.value = ''
-
-          this.toggleCropper()
-        }
-
-        reader.readAsDataURL(files[0])
+      if (file) {
+        this.imageUrl = URL.createObjectURL(file)
+        this.toggleCropper()
       }
     },
     /**
@@ -58,9 +55,12 @@ export default Vue.extend({
      * @param image
      * @example
      */
-    setCroppedImage(image) {
-      this.croppedImage = image
-      this.$refs.file.value = null
+    setCroppedImage(image: Blob) {
+      this.croppedImage = URL.createObjectURL(image)
+      ;(this.$refs.file as HTMLInputElement).value = ''
+      const img = new Image()
+      img.src = this.croppedImage
+      // TODO: Save image with iridium
     },
     /**
      * @method confirm DocsTODO

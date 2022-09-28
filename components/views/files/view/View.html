@@ -1,57 +1,66 @@
-<div id="view-file">
+<div id="view-file" @keydown.esc="close" tabindex="1" ref="modal">
   <div class="file-nav">
-    <div class="file-info">
-      <TypographyTitle :text="file.name" :size="6" />
-      <TypographyText :text="file.type" :size="6" />
-      <TypographyText :text="$filesize(file.size)" :size="6" />
-      <TypographyText :text="$dayjs(file.modified).fromNow()" :size="6" />
+    <div class="file-info ellipsis">
+      <TypographyText as="h2" class="ellipsis">
+        {{ file.name }}
+      </TypographyText>
+      <TypographyText> {{ file.type }} </TypographyText>
+      <TypographyText> {{ $filesize(file.size) }} </TypographyText>
+      <TypographyText> {{ $dayjs(file.modified).fromNow() }} </TypographyText>
     </div>
     <div class="controls">
-      <UiLoadersSpinner v-if="load" class="control disabled" spinning />
-      <a
+      <UiLoadersSpinner
+        v-if="isDownloading"
+        class="control disabled"
+        spinning
+      />
+      <button
         v-else
-        :data-tooltip="$t('controls.download')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :href="file.url"
-        target="_blank"
-        :download="name"
+        @click="download"
+        v-tooltip.bottom="$t('controls.download')"
+        class="control"
       >
         <download-icon size="1x" />
-      </a>
+      </button>
+      <!-- 
       <a
-        :data-tooltip="$t('controls.share_link')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
-        :class="{'disabled' : ui.isLoadingFileIndex}"
-        v-on="ui.isLoadingFileIndex ? {} : {click: share}"
+        v-tooltip.bottom="$t('controls.share_link')"
+        class="control"
+        @click="share"
       >
         <link-icon size="1x" />
-      </a>
-      <div
-        :data-tooltip="$t('ui.close')"
-        @click="$emit('close')"
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom control"
+      </a> -->
+      <button
+        class="control control--close"
+        v-tooltip.bottom="$t('ui.close')"
+        @click="close"
       >
         <x-icon size="1x" />
-      </div>
+      </button>
     </div>
   </div>
-  <img v-if="file.thumbnail" class="file-image" :src="file.thumbnail" />
+  <ui-image-container
+    v-if="thumbnail"
+    class="image-container"
+    :nsfw="file.nsfw"
+  >
+    <img :src="thumbnail" />
+  </ui-image-container>
   <div v-else class="no-preview">
-    <UiLoadersSpinner v-if="load" class="file-icon" spinning />
-    <a
-      v-else
-      :data-tooltip="$t('controls.download')"
-      class="has-tooltip has-tooltip-primary has-tooltip-top"
-      :class="{'disabled' : load}"
-      :href="file.url"
-      target="_blank"
-      :download="name"
-    >
+    <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
+    <button v-else @click="download" v-tooltip.top="$t('controls.download')">
       <download-icon size="1x" class="file-icon" />
-    </a>
-    <TypographyTitle :size="4" :text="file.name" />
-    <TypographySubtitle :size="6" :text="file.type" />
-    <TypographySubtitle :text="$filesize(file.size)" :size="6" />
-    <TypographySubtitle :text="$dayjs(file.modified).fromNow()" :size="6" />
+    </button>
+    <TypographyText as="h1"> {{ file.name }} </TypographyText>
+    <TypographyText>{{ file.type }}</TypographyText>
+    <TypographyText>{{ $filesize(file.size) }}</TypographyText>
+    <TypographyText>{{ $dayjs(file.modified).fromNow() }}</TypographyText>
   </div>
+  <a
+    v-show="false"
+    ref="download"
+    :href="dataURL"
+    :rel="$t('controls.download')"
+    :download="file.name"
+  />
 </div>

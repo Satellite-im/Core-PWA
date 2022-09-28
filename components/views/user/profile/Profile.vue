@@ -3,7 +3,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { PublicKey } from '@solana/web3.js'
 
 import {
   UserPlusIcon,
@@ -17,6 +16,7 @@ import { ProfileInfo } from '~/types/profile/profile'
 import { Tab } from '~/types/ui/tab'
 
 import { AddFriendEnum } from '~/libraries/Enums/enums'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -68,22 +68,21 @@ export default Vue.extend({
     },
     profilePictureSrc(): string {
       const hash = this.ui.userProfile.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     // temp until we get real badges
     badgeColors(): string[] {
       return ['', '#F6CC6B', '#61CEA4', '#DA716F']
     },
     isFriend(): boolean {
-      // also return if self
-      if (
-        this.accounts.details.textilePubkey ===
-        this.ui.userProfile.textilePubkey
-      ) {
-        return true
-      }
-      return this.friends.all.some(
-        (e: Friend) => e.textilePubkey === this.ui.userProfile.textilePubkey,
+      // TODO: fix
+      return false
+    },
+    status() {
+      return (
+        (this.ui.userProfile &&
+          iridium.users.ephemeral.status[this.ui.userProfile.did]) ||
+        'offline'
       )
     },
   },
@@ -95,19 +94,20 @@ export default Vue.extend({
     setRoute(route: string) {
       this.route = route
     },
-    // todo: confirm that this works once you can view profiles of non-friends
+    // TODO: confirm that this works once you can view profiles of non-friends
+    // TODO: update for Iridium
     async createFriendRequest() {
-      this.loading = AddFriendEnum.SENDING
-      try {
-        await this.$store.dispatch('friends/createFriendRequest', {
-          friendToKey: new PublicKey(this.ui.userProfile.address),
-        })
-        this.$toast.show(this.$t('friends.request_sent') as string)
-      } catch (e: any) {
-        this.$toast.show(this.$t(e.message) as string)
-      } finally {
-        this.loading = AddFriendEnum.EMPTY
-      }
+      // this.loading = AddFriendEnum.SENDING
+      // try {
+      //   await this.$store.dispatch('friends/createFriendRequest', {
+      //     friendToKey: new PublicKey(this.ui.userProfile.address),
+      //   })
+      //   this.$toast.show(this.$t('friends.request_sent') as string)
+      // } catch (e: any) {
+      //   this.$toast.show(this.$t(e.message) as string)
+      // } finally {
+      //   this.loading = AddFriendEnum.EMPTY
+      // }
     },
   },
 })

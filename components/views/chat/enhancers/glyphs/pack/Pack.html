@@ -1,4 +1,4 @@
-<div class="pack-group">
+<div class="pack-group" data-cy="glyph-pack">
   <div class="pack-title" @click="togglePack">
     <image-icon size="1x" />
     <span>{{ pack.name }}</span>
@@ -10,6 +10,7 @@
       v-for="glyph in pack.stickerURLs"
       :key="glyph"
       :src="glyph"
+      data-cy="pack-glyph-item"
       :pack="pack"
       :sendOnClick="true"
     />

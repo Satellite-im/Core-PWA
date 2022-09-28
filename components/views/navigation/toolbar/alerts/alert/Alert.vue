@@ -1,37 +1,63 @@
-<template src="./Alert.html" />
+<template src="./Alert.html"></template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-import { Alert, AlertState } from '~/libraries/ui/Alerts'
+import { TranslateResult } from 'vue-i18n'
+import {
+  Notification,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
     alert: {
-      type: Object as PropType<Alert>,
+      type: Object as PropType<Notification>,
       required: true,
-      default: {},
     },
   },
-  data() {
-    return {
-      localAlert: this.$props.alert,
-      hidden: false,
-    }
-  },
-  mounted() {
-    if (this.$props.alert.state !== AlertState.READ) {
-      const updated = this.$Alerts.mark(AlertState.READ, this.$props.alert.id)
-      this.$data.localAlert = updated
-    }
+  computed: {
+    setTranslateText(): TranslateResult | undefined {
+      switch (this.alert?.type) {
+        case NotificationType.DIRECT_MESSAGE: {
+          return this.$t('messaging.user_sent.user', {
+            user: this.alert.fromName,
+            msgType: this.alert.type,
+          })
+        }
+        case NotificationType.GROUP_MESSAGE: {
+          return this.$t('messaging.user_sent_group_message.message', {
+            user: this.alert.fromName,
+            group: this.alert.chatName,
+          })
+        }
+        case NotificationType.FRIEND_REQUEST: {
+          return this.$t('friends.new_friend_request', {
+            user: this.alert.fromName,
+          })
+        }
+      }
+      return this.$t('user_sent_something.user')
+    },
   },
   methods: {
-    dismiss() {
-      this.$Alerts.delete(this.$props.alert.id)
-      this.$data.hidden = true
-      setTimeout(() => {
-        this.$emit('sync', this.$Alerts.all)
-      }, 250)
+    removeNotification() {
+      iridium.notifications.deleteNotification(this.alert.id as string)
+    },
+    notificationLink(alertType: NotificationType) {
+      switch (alertType) {
+        case NotificationType.FRIEND_REQUEST: {
+          this.$router.push({ path: '/friends' })
+          break
+        }
+        case NotificationType.DIRECT_MESSAGE: {
+          this.$router.push(
+            this.alert.fromAddress ? `/chat/${this.alert.fromAddress}` : `/`,
+          )
+          break
+        }
+      }
     },
   },
 })

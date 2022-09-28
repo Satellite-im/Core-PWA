@@ -1,7 +1,9 @@
 <div class="accounts">
   <div class="accounts-heading">
     <link-2-icon size="1.2x" />
-    <TypographyText :text="$t('wallet.accounts.linked_accounts')" />
+    <TypographyText>
+      {{ $t('wallet.accounts.linked_accounts') }}
+    </TypographyText>
   </div>
   <div class="account-list">
     <WalletAccountsAccount
@@ -12,17 +14,18 @@
     <UiHorizontalRule />
     <div class="accounts-footer">
       <plus-circle-icon size="1x" class="green" />
-      <TypographyText
-        :text="$t('wallet.accounts.link_new_account_or_device')"
-      />
+      <TypographyText>
+        {{ $t('wallet.accounts.link_new_account_or_device') }}
+      </TypographyText>
     </div>
   </div>
   <div class="accounts-subtext">
     <InteractablesSwitch size="small" />
-    <TypographyText :text="$t('wallet.accounts.require_pin_auth')" />
+    <TypographyText>
+      {{ $t('wallet.accounts.require_pin_auth') }}
+    </TypographyText>
   </div>
-  <TypographyText
-    :text="$t('wallet.accounts.security_suggestion')"
-    class="yellow"
-  />
+  <TypographyText class="yellow">
+    {{ $t('wallet.accounts.security_suggestion') }}
+  </TypographyText>
 </div>

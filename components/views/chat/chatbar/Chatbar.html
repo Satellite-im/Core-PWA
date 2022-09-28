@@ -1,53 +1,33 @@
-<div
-  id="chatbar"
-  ref="chatbar"
-  :class="ui.replyChatbarContent.id ? 'has-reply' : ''"
->
-  <Enhancers @click="handleChatTextFromOutside" :recipient="recipient" />
-  <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" />
-  <ChatbarReply v-if="recipient" />
+<div id="chatbar" ref="chatbar">
+  <Enhancers @click="handleChatTextFromOutside" />
+  <!-- Hide commands for early access -->
+  <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
+  <ChatbarReply />
+  <ChatbarUploadPreview v-if="files.length" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'inactive': !recipient, 'top-corners-sharp': showFilePreview || ui.replyChatbarContent.id || commandPreview}"
-    ref="wrap"
+    :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners}"
   >
-    <div class="control-wrap file-upload-wrap">
-      <FilesUpload
-        v-if="recipient"
-        :editable="recipient ? true : false"
-        :recipient="recipient"
-        type="quick"
-        ref="file-upload"
-      />
-    </div>
-    <div
+    <ChatbarUpload ref="upload" :disabled="!isSubscribed" />
+    <!-- <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
       v-if="hasCommand"
-      ref="chatbar"
     >
       <terminal-icon size="1x" />
-    </div>
-    <ChatbarEditable
-      ref="editable"
+    </div> -->
+    <InteractablesEditable
       v-model="text"
+      ref="editable"
       :placeholder="$t('ui.talk')"
-      :enabled="Boolean(recipient) && !textile.messageLoading"
-      :class="`messageuser ${hasCommand ? 'has-command' : ''}`"
+      :class="{'has-command' : hasCommand}"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
     />
-
     <ChatbarControls
-      :disabled="!recipient"
-      :sendMessage="sendMessage"
-      id="chatbar-controls"
+      :disabled="!isSubscribed || charlimit"
+      @send="sendMessage"
     />
   </div>
-  <ChatbarFooter
-    :text="text"
-    :charlimit="charlimit"
-    :typing="recipientTyping"
-    :usersTyping="activeFriend ? [ activeFriend ] : []"
-  />
+  <ChatbarFooter :charlimit="charlimit" :isSubscribed="isSubscribed" />
 </div>

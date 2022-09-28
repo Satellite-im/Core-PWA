@@ -1,39 +1,31 @@
 <template>
-  <div id="app" :class="$store.state.ui.theme.base.class">
+  <div id="app" :class="`theme-${iridium.settings.state.theme}`">
+    <UiModal v-if="$store.state.ui.modals.errorNetwork.isOpen">
+      <UiPopupsErrorNetwork />
+    </UiModal>
     <Nuxt />
-    <!-- Sets the global css variable for the theme flair color -->
     <v-style>
-      :root { --flair-color: {{ $store.state.ui.theme.flair.value }}; }
+      :root { --flair-color: {{ flair.primary }}; --flair-color-secondary:
+      {{ flair.secondary }}; --flair-color-rgb: {{ flair.primaryRGB }}; }
     </v-style>
   </div>
 </template>
-<style lang="less">
-@import 'bulma/css/bulma.css';
 
-@font-face {
-  font-family: 'SpaceMono';
-  font-style: normal;
-  font-weight: 400;
-  src: url('~assets/fonts/SpaceMono-Regular.ttf');
-}
-@font-face {
-  font-family: @secondary-font;
-  font-style: normal;
-  font-weight: 400;
-  src: url('~assets/fonts/Poppins-Regular.ttf');
-}
-p {
-  font-family: @secondary-font;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: @full;
-  -webkit-text-size-adjust: @full;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
+<script setup lang="ts">
+import useMeta from '~/components/compositions/useMeta'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { flairs } from '~/libraries/Iridium/settings/types'
 
-@import url('~/assets/styles/base.less');
-@import url('~/assets/styles/thirdparty/multiselect.less');
-@import url('~/assets/styles/thirdparty/v-calendar.less');
+const flair = flairs[iridium.settings.state.flair]
+
+useMeta()
+</script>
+
+<style lang="less" scoped>
+#app {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  overflow-y: auto;
+}
 </style>

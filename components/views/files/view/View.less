@@ -1,22 +1,59 @@
 #view-file {
   display: flex;
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
-  z-index: @base-z-index + 35;
+  &:extend(.first-layer);
+  padding: 16px;
 
-  .file-image {
+  .file-nav {
+    width: calc(100% - 32px); //to account for padding
+    display: flex;
+    position: absolute;
+    gap: 16px;
+
+    .file-info {
+      flex: 1;
+    }
+
+    .controls {
+      display: flex;
+      height: fit-content;
+      margin-left: auto;
+      gap: @normal-spacing;
+      flex-shrink: 0;
+
+      .control {
+        display: flex;
+        font-size: @icon-size;
+        &:extend(.font-secondary);
+        &.disabled {
+          cursor: not-allowed;
+        }
+        &--close {
+          &:before {
+            left: auto;
+            right: 0;
+            transform: translate(0, 100%);
+          }
+        }
+      }
+    }
+  }
+
+  .image-container {
     display: flex;
     margin: auto;
     max-width: 80vw;
     max-height: 60vh;
     &:extend(.round-corners);
+
+    img {
+      height: 100%;
+      width: 100%;
+    }
   }
-  .file-icon {
-    font-size: 50pt;
-    margin: auto;
-    margin-bottom: @normal-spacing;
-  }
+
   .no-preview {
     display: flex;
     flex-direction: column;
@@ -27,47 +64,10 @@
       text-align: center;
       margin-bottom: 0;
     }
-  }
-
-  .file-nav {
-    width: @full;
-    display: flex;
-    position: absolute;
-    margin: @normal-spacing;
-
-    .file-info {
-      max-width: 50vw;
-      .title {
-        &:extend(.font-secondary);
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    }
-
-    .controls {
-      display: flex;
-      height: fit-content;
-      margin-left: auto;
-      margin-right: @large-spacing;
-      gap: @normal-spacing;
-
-      .control {
-        display: flex;
-        font-size: @icon-size;
-        &:extend(.font-secondary);
-        &.disabled {
-          cursor: not-allowed;
-        }
-      }
-    }
-  }
-}
-
-@media only screen and (min-width: calc(@mobile-breakpoint + 1px)) {
-  .swiper-slide-active {
-    #view-file {
-      transform: translate3d(calc(@sidebar-size + @servers-size), 0px, 0px);
+    .file-icon {
+      font-size: 50pt;
+      margin: auto;
+      margin-bottom: @normal-spacing;
     }
   }
 }

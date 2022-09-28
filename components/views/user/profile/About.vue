@@ -2,17 +2,21 @@
   <div class="about">
     <div>
       <TypographyTitle :text="$t('modal.profile.about.me')" :size="6" />
-      <TypographyText text="Lorem ipsum dolor" />
+      <TypographyText>Lorem ipsum dolor</TypographyText>
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.location')" :size="6" />
-      <TypographyText text="Lorem ipsum dolor" />
+      <TypographyText>Lorem ipsum dolor</TypographyText>
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
+      <TypographyText class="loading">
+        {{ note }}
+      </TypographyText>
       <InteractablesClickToEdit
         ref="noteRef"
         v-model="note"
+        data-cy="profile-add-note"
         :placeholder="$t('modal.profile.about.click_note')"
       />
     </div>
@@ -33,7 +37,10 @@ export default Vue.extend({
     ...mapState(['friends', 'ui']),
     note: {
       get(): string {
-        return this.ui?.userProfile?.metadata?.note ?? ''
+        return (
+          this.ui?.userProfile?.metadata?.note ??
+          this.$t('modal.profile.about.click_note')
+        )
       },
       set(note: string) {
         const { userProfile } = this.ui
@@ -88,5 +95,9 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
   gap: @normal-spacing;
+}
+
+.loading {
+  cursor: progress;
 }
 </style>

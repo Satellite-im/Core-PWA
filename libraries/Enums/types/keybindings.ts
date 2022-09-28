@@ -18,6 +18,8 @@ export enum KeybindingEnum {
   SPACEBAR = 'Spacebar',
   SPACE = ' ',
   UP = 'Up',
+  PAGE_UP = 'PageUp',
+  PAGE_DOWN = 'PageDown',
 
   // alphabet
   A = 'A',

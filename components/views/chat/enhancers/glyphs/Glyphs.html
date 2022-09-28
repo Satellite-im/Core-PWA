@@ -1,17 +1,16 @@
-<div id="glyphs">
+<div class="glyphs">
   <div class="search-glyph-box">
     <InteractablesInput
       :placeholder="$t('ui.search')"
-      size="small"
+      size="xs"
       v-model="searchText"
       input-kind="text"
       type="primary"
     />
+    <EnhancersGlyphsNav />
   </div>
-  <EnhancersGlyphsNav />
   <div class="glyph-content">
     <virtual-list
-      v-scroll-lock="true"
       class="virtual-list"
       :data-key="'id'"
       :data-sources="filteredGlyphs"

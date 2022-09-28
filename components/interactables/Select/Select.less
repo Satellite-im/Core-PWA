@@ -1,98 +1,117 @@
-.is-full-width {
-  &:extend(.full-width);
-  select {
-    &:extend(.full-width);
+.listbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .mobile-select {
+    width: 100%;
   }
 }
 
-.is-primary {
-  .custom-select {
-    .selected {
-      &::after,
-      &::before {
-        border-color: @secondary-text;
-      }
-      border: none;
-      outline: none;
-    }
-  }
-}
-
-.custom-select {
-  .selected {
-    height: @select-height;
-    line-height: @select-height;
-    border-radius: 4rem;
-    background: @midground;
-    padding-left: @normal-spacing;
-    padding-right: @normal-spacing * 2;
-    cursor: pointer;
-    user-select: none;
-    max-width: @full;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  .items {
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
-    &:extend(.blur);
-    min-width: 8rem;
-    position: absolute;
-    display: none;
-    color: #fff;
-    overflow: hidden;
-    max-width: @full;
-    left: 0;
-    right: 0;
-    z-index: @base-z-index + 100;
-    margin-top: @light-spacing;
-    div {
-      height: @normal-spacing * 2;
-      line-height: @normal-spacing * 2;
-      padding-left: @normal-spacing;
-      padding-right: @normal-spacing;
-      cursor: pointer;
-      max-width: @full;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      user-select: none;
-      &[disabled] {
-        opacity: 0.5;
-      }
-      &:hover {
-        &:extend(.background-semitransparent-lighter);
-      }
-    }
-  }
-  &.open {
-    .items {
-      display: block;
-    }
-  }
-  &.up {
-    .items {
-      bottom: 30px;
-    }
-  }
-  &.down {
-    .items {
-      top: 30px;
-    }
-  }
+.list-container {
   position: relative;
-  height: @select-height;
-  text-align: left;
-  outline: none;
+  max-width: 100%;
+  .width-buffer {
+    height: 0;
+    visibility: hidden;
+  }
 }
 
-.disabled {
-  .custom-select {
-    .selected {
-      box-shadow: 0 5px 14px -5px @gray !important;
-      background: @gray !important;
+button,
+select {
+  min-width: 150px;
+  text-align: left;
+  position: relative;
+  border-radius: 4rem;
+  padding: 0.5rem 1rem;
+  color: @white;
+  background: @flair-color;
+  box-shadow: 0 5px 14px -5px @flair-color;
+  border: none;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  &:extend(.ellipsis);
+  max-width: 100%;
+
+  > * {
+    flex-shrink: 0;
+  }
+
+  .label {
+    flex-shrink: 1;
+    &:extend(.ellipsis);
+  }
+
+  &:disabled {
+    box-shadow: 0 5px 14px -5px @gray;
+    background-color: @gray;
+    cursor: not-allowed;
+  }
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>')
+    no-repeat right 13px center @flair-color;
+  padding-right: 2.5rem;
+}
+
+ul {
+  min-width: 150px;
+  max-height: 350px;
+  overflow-y: auto;
+  position: absolute;
+  left: 0;
+  box-shadow: @ui-shadow;
+  margin-top: 0.25rem;
+  transform-origin: 50% 0%;
+  z-index: 10000;
+  min-width: 100%;
+  &:extend(.background-dark-gradient);
+  &:extend(.round-corners);
+}
+
+li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  position: relative;
+  user-select: none;
+  color: @white;
+  cursor: pointer;
+  &:extend(.ellipsis);
+
+  &:not([aria-selected]) {
+    &:focus,
+    &:hover {
+      &:extend(.background-dark-gradient);
+      filter: brightness(110%);
     }
   }
+
+  &[aria-selected='true'] {
+    &:extend(.background-semitransparent-lighter);
+  }
+}
+
+.listbox-enter-active {
+  transition: all @animation-speed-long ease, opacity 150ms 50ms ease;
+}
+.listbox-leave-active {
+  transition: all @animation-speed-long ease, opacity 150ms ease;
+}
+
+.listbox-enter,
+.listbox-leave-to {
+  opacity: 0;
+  transform: perspective(880px) rotateX(-45deg);
+  filter: @light-blur;
 }

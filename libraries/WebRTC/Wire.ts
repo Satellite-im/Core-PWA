@@ -1,254 +1,390 @@
-import Vue from 'vue'
-import { isRight } from 'fp-ts/lib/Either'
-import Peer, { SignalData } from 'simple-peer'
+import Peer from 'simple-peer'
 import {
-  wireDataMessage,
-  wireIdentificationMessage,
-  wireKeyboardState,
-  wireRefuseConnectionMessage,
-  wireSignalMessage,
-} from './encoders'
-import P2PT from 'p2pt'
-import Emitter from '~/libraries/WebRTC/Emitter'
-import {
-  WireEventListeners,
-  WireIdentificationMessage,
-  WireMessage,
-} from '~/libraries/WebRTC/types'
+  IridiumDocument,
+  IridiumMessage,
+  encoding,
+  IridiumPayload,
+} from '@satellite-im/iridium'
+import * as json from 'multiformats/codecs/json'
+import Emitter from './Emitter'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import logger from '~/plugins/local/logger'
+import { BusOptions } from '~/libraries/WebRTC/bus/bus'
+import { IridiumBus } from '~/libraries/WebRTC/bus/IridiumBus'
+import { delay } from '~/libraries/Iridium/utils'
+import { Config } from '~/config'
 
-/**
- * @description A wire is a connection between peers on a specific channel.
- * In the 1 to 1 connection we will use a deterministic generated secret between
- * 2 parties as channel id.
- */
+type WireEventListeners = {
+  'wire:message': (data: {
+    type: string
+    message: IridiumMessage<IridiumDocument>
+  }) => void
+  'peer:connect': (data: { did: string }) => void
+  'peer:disconnect': (data: { did: string }) => void
+}
+
 export class Wire extends Emitter<WireEventListeners> {
-  originator: string
-  identifier: string
-  channel: string
-  sendIdentification: boolean
-
-  instance: P2PT // P2PT Instance used for connecting peers through Web Torrent signaling servers
-  peer?: Peer.Instance // Simple Peer object instantiated right after the connection occurred through p2pt library
-
-  /**
-   * @constructor
-   * @param originator Identifier of the originator
-   * @param identifier Identifier of the recipient
-   * @param channel Secret communication channel you want to connect (shared secret between parties)
-   * @param announceURLs Array of Web Torrent trackers for the signaling
-   * @param sendIdentification Setting for enabling/disabling the identification mechanism
-   * @example
-   * const wire = new Wire('originator', 'identifier', 'secret_channel', ['announce_url_1', 'announce_url_1'], false);
-   */
-  constructor(
-    originator: string,
-    identifier: string,
-    channel: string,
-    announceURLs: string[] = [],
-    sendIdentification: boolean = false,
-  ) {
-    super()
-
-    this.originator = originator
-    this.identifier = identifier
-    this.channel = channel
-    this.sendIdentification = sendIdentification
-
-    // Create a new P2PT instance using the channel as identifier
-    // This way any other peer with the same identifier will be announced
-    // by webtorrent trackers. We are going to use an ECDH shared secret between 2
-    // parties to connect them
-    this.instance = new P2PT(announceURLs, channel)
-
-    this._bindListeners()
-  }
-
-  /**
-   * @method _bindListeners
-   * @description Binds listeners for p2pt library
-   * @example
-   * this._bindListeners()
-   */
-  protected _bindListeners() {
-    this.instance.on('trackerconnect', this._onTrackerConnect.bind(this))
-
-    this.instance.on('peerconnect', this._onPeerConnect.bind(this))
-
-    this.instance.start()
-  }
-
-  /**
-   * @method _onTrackerConnect
-   * @description Callback for the trackerconnect event provided by p2pt library
-   * @param tracker Tracker information
-   */
-  protected _onTrackerConnect(tracker: any) {
-    this.emit('TRACKER_CONNECT', { tracker })
-  }
-
-  /**
-   * @method _onPeerConnect
-   * @description Callback for the peerconnect event provided by p2pt library
-   * @param peer Simple Peer instance
-   */
-  protected _onPeerConnect(peer: Peer.Instance) {
-    peer.on('connect', this._onPeerConnect.bind(this))
-    peer.on('error', this._onError.bind(this))
-    peer.on('data', this._onData.bind(this))
-    peer.on('close', this._onClose.bind(this))
-
-    this.peer = peer
-    this._onConnectionHappened(peer)
-  }
-
-  /**
-   * @method _onConnectionHappened
-   * @description Callback for the connect event provided by Simple Peer
-   * @param peer Simple Peer instance
-   */
-  protected _onConnectionHappened(peer: Peer.Instance) {
-    if (this.sendIdentification) {
-      const identificationMessage: WireIdentificationMessage = {
-        type: 'IDENTIFICATION',
-        payload: { peerId: this.originator },
-        sentAt: Date.now(),
-      }
-
-      // Immediately send an identification message to let
-      // the peer know what is the identifier
-      // TODO: use a signed message for the future - AP-404
-      peer.send(JSON.stringify(identificationMessage))
+  private loggerTag: string = 'Wire'
+  private announceFrequency = 30000
+  private firstAnnounceDelay = 5000
+  private timeout = 60000
+  private _bus?: IridiumBus
+  private peers: {
+    [did: string]: {
+      peer: Peer.Instance
+      initiator: boolean
+      isConnecting: boolean
     }
+  } = {}
 
-    this.emit('CONNECT', { peerId: this.identifier })
+  private timers: {
+    [did: string]: ReturnType<typeof setTimeout>
+  } = {}
+
+  async start() {
+    this._bus = new IridiumBus('/webrtc/announce')
+
+    this._bus.on('message', this.onMessage.bind(this))
+    this._bus.on('signal', this.onBusSignal.bind(this))
+
+    await this.setupAnnounce()
   }
 
-  /**
-   * @method _onError
-   * @description Callback for the error event provided by Simple Peer
-   * @param error Error received
-   */
-  protected _onError(error: Error) {
-    this.emit('ERROR', { peerId: this.identifier, error })
-  }
+  async stop() {}
 
-  /**
-   * @method _onData
-   * @description Callback for the data event provided by Simple Peer
-   * @param data Data buffer received
-   */
-  protected _onData(data: Buffer) {
-    const decoder = new TextDecoder()
-    const decodedString = decoder.decode(data)
-    const parsedData = JSON.parse(decodedString)
+  onMessage({
+    type,
+    message,
+  }: {
+    type: string
+    message: IridiumMessage<IridiumDocument>
+  }) {
+    if (message.from === iridium.id) {
+      logger.debug(this.loggerTag, "it's you")
+      return
+    }
+    logger.debug(this.loggerTag, type, message)
+    this.emit('wire:message', { type, message })
 
-    const identificationMessage = wireIdentificationMessage.decode(parsedData)
-
-    if (isRight(identificationMessage)) {
-      const { peerId } = identificationMessage.right.payload
-
-      if (peerId !== this.identifier) {
-        Vue.prototype.$Logger.log('WebRTC', 'Not recognized, drop connection.')
-      } else {
-        Vue.prototype.$Logger.log('WebRTC', 'Identified')
-      }
-
-      this.emit('IDENTIFICATION', {
-        peerId,
-      })
-
+    const user = iridium.users.getUser(message.from)
+    if (!user) {
+      logger.warn(this.loggerTag, `User not found: ${message.from}`)
       return
     }
 
-    const signalMessage = wireSignalMessage.decode(parsedData)
-
-    if (isRight(signalMessage)) {
-      const { peerId, data } = signalMessage.right.payload
-
-      this.emit('SIGNAL', {
-        peerId,
-        data: data as SignalData,
-      })
-
+    if (
+      !iridium.friends.isFriend(user.did) &&
+      !iridium.chat.isUserInOtherGroups(user.did, [], false)
+    ) {
+      logger.error(
+        this.loggerTag,
+        `User not a friend and not in any group: ${message.from}`,
+      )
       return
     }
 
-    const dataMessage = wireDataMessage.decode(parsedData)
+    this.onUserAnnounce(message.from.toString())
+  }
 
-    if (isRight(dataMessage)) {
-      const data = dataMessage.right.payload
+  onUserAnnounce(did: string) {
+    logger.debug(this.loggerTag, `Announce from user ${did}`)
 
-      this.emit('DATA', {
-        peerId: this.identifier,
-        data,
-      })
-
+    if (this.peers[did]?.peer?.connected) {
+      logger.debug(this.loggerTag, `User already connected: ${did}`)
       return
     }
 
-    const refuseMessage = wireRefuseConnectionMessage.decode(parsedData)
-
-    if (isRight(refuseMessage)) {
-      const data = refuseMessage.right.payload
-
-      this.emit('REFUSE', {
-        peerId: this.identifier,
-      })
-
+    if (this.peers[did]?.isConnecting) {
+      logger.debug(this.loggerTag, `Already trying to connect with: ${did}`)
       return
     }
 
-    const keyboardState = wireKeyboardState.decode(parsedData)
+    this.createPeer(did, { initiator: true })
+  }
 
-    if (isRight(keyboardState)) {
-      this.emit('TYPING_STATE', {
-        state: keyboardState.right.payload.state,
-        peerId: this.identifier,
-      })
+  createPeer(id: string, opts?: Peer.Options) {
+    if (this.peers[id]) throw new Error('Peer already exists')
 
-      return
+    const peer = new Peer({
+      ...opts,
+      config: {
+        iceServers: Config.webrtc.iceServers,
+      },
+    })
+
+    this.peers[id] = {
+      peer,
+      initiator: Boolean(opts?.initiator),
+      isConnecting: true,
     }
 
-    this.emit('RAW_DATA', {
-      peerId: this.identifier,
-      data: parsedData.payload,
+    this.startTimeout(id)
+
+    this.bindPeerListeners(id)
+
+    logger.debug(this.loggerTag, 'Peer created for', { did: id })
+
+    return peer
+  }
+
+  private onTimeout(id: string) {
+    logger.debug(this.loggerTag, 'Connection attempt timed out', { id })
+    this.destroyPeer(id)
+  }
+
+  private bindPeerListeners(id: string) {
+    const peer = this.peers[id].peer
+    if (!peer) return
+
+    peer.on('signal', this.onPeerSignal.bind(this, id))
+    peer.on('connect', this.onPeerConnect.bind(this, id))
+    peer.on('close', this.onPeerClose.bind(this, id))
+    peer.on('error', this.onPeerError.bind(this, id))
+    peer.on('data', this.onPeerData.bind(this, id))
+  }
+
+  private unbindPeerListeners(id: string) {
+    const peer = this.peers[id]?.peer
+    if (!peer) return
+
+    peer.off('signal', this.onPeerSignal.bind(this, id))
+    peer.off('connect', this.onPeerConnect.bind(this, id))
+    peer.off('close', this.onPeerClose.bind(this, id))
+    peer.off('error', this.onPeerError.bind(this, id))
+    peer.off('data', this.onPeerData.bind(this, id))
+  }
+
+  async onPeerSignal(id: string, data: Peer.SignalData) {
+    const peer = this.peers[id].peer
+    if (!peer) return
+
+    if (peer.connected && iridium.connector?.did) {
+      const encodedMessage = await encoding.encodePayload(
+        { type: 'signal', data },
+        iridium.connector.did,
+        { sign: true },
+      )
+
+      peer.send(encodedMessage)
+    } else {
+      this._bus?.sendMessage({ type: 'signal', data }, { recipients: [id] })
+    }
+
+    logger.debug(this.loggerTag, 'SIGNAL SENT', {
+      data,
+      id,
+      timestamp: Date.now(),
     })
   }
 
-  /**
-   * @method _onClose
-   * @description Callback for the close event provided by Simple Peer
-   */
-  protected _onClose() {
-    this.emit('CLOSE', { peerId: this.identifier })
+  onPeerConnect(id: string) {
+    logger.debug(this.loggerTag, 'Peer connected', { id })
+    const peerDescriptor = this.peers[id]
+
+    this.stopTimeout(id)
+
+    if (peerDescriptor) {
+      peerDescriptor.isConnecting = false
+    }
+
+    this.emit('peer:connect', { did: id })
   }
 
-  /**
-   * @method destroy
-   * @description Removes all the listeners and destroys all the peer
-   * instances
-   * @example
-   * const wire = new Wire('originator', 'identifier', 'secret_channel', ['announce_url_1', 'announce_url_1'], false);
-   * wire.destroy()
-   */
-  destroy() {
-    this.peer?.removeAllListeners()
-    this.peer?.destroy()
-    this.instance.removeAllListeners()
-    this.instance.destroy()
-
-    this.emit('CLOSE', { peerId: this.identifier })
+  private startTimeout(id: string) {
+    this.stopTimeout(id)
+    this.timers[id] = setTimeout(this.onTimeout.bind(this, id), this.timeout)
   }
 
-  /**
-   * @method send
-   * @description Sends a message to the connected peer
-   * @param message Wire Message to send
-   * @example
-   * const wire = new Wire('originator', 'identifier', 'secret_channel', ['announce_url_1', 'announce_url_1'], false);
-   * wire.send({ type: 'SIGNAL', payload: { peerId: 'id', data }, sentAt: Date.now() })
-   */
-  send(message: WireMessage) {
-    this.peer?.send(JSON.stringify(message))
+  private stopTimeout(id: string) {
+    const timer = this.timers[id]
+    if (timer) {
+      clearTimeout(timer)
+      delete this.timers[id]
+    }
+  }
+
+  onPeerClose(id: string) {
+    logger.debug(this.loggerTag, 'Peer disconnected', { id })
+    this.emit('peer:disconnect', { did: id })
+
+    this.destroyPeer(id)
+  }
+
+  onPeerError(id: string, error: Error) {
+    logger.debug(this.loggerTag, 'Peer error', { id, error })
+    this.emit('peer:disconnect', { did: id })
+
+    this.destroyPeer(id)
+  }
+
+  onPeerData(id: string, data: Uint8Array) {
+    logger.debug(this.loggerTag, 'Peer data', { id, data })
+
+    if (!iridium.connector) return
+
+    const payload = json.decode<IridiumPayload>(data)
+    if (!payload) return
+
+    encoding
+      .decodePayload(payload, iridium.connector.did)
+      .then((decoded) => {
+        logger.debug(this.loggerTag, 'Decoded payload', { decoded })
+        this.emit('wire:message', {
+          type: 'direct_webrtc',
+          message: { from: id, payload: decoded },
+        })
+      })
+      .catch((err: Error) =>
+        logger.error(this.loggerTag, 'Decoding error', { err }),
+      )
+  }
+
+  destroyPeer(id: string) {
+    const peer = this.peers[id]?.peer
+    if (!peer) return
+
+    this.unbindPeerListeners(id)
+
+    peer.destroy()
+
+    delete this.peers[id]
+
+    logger.debug(this.loggerTag, 'DESTROYED PEER', { id })
+  }
+
+  onBusSignal({
+    type,
+    from,
+    signalData,
+  }: {
+    type: string
+    from: string
+    signalData: Peer.SignalData
+  }) {
+    logger.debug(this.loggerTag, 'Signal data receive from', {
+      type,
+      from,
+      data: JSON.stringify(signalData),
+      timestamp: Date.now(),
+    })
+
+    const peerDescriptor = this.peers[from]
+
+    const isOffer = signalData.type === 'offer'
+
+    // In case we receive an offer, but we were already trying to connect
+    // we check the alphabetical order of the DIDs to determine which one of
+    // the peers must try to reconnect without the initiator flag
+    if (peerDescriptor?.initiator && isOffer && from > iridium.id) {
+      logger.debug(
+        this.loggerTag,
+        'Received signal from a peer we are already trying to connect with, but we have to reconnect without the initiator flag',
+      )
+
+      this.destroyPeer(from)
+    }
+
+    if (!this.peers[from]) {
+      this.createPeer(from, { initiator: false })
+    }
+
+    logger.debug(this.loggerTag, 'Sending signal to local peer', {
+      from,
+      peerExist: Boolean(this.peers[from]?.peer),
+      isInitiator: this.peers[from]?.initiator,
+      isOffer,
+      shouldBeSlave: from > iridium.id,
+    })
+
+    this.peers[from]?.peer?.signal(signalData)
+  }
+
+  async sendMessage(
+    message: IridiumDocument,
+    opts: BusOptions<{ recipients: string[] }>,
+  ) {
+    const online: string[] = []
+    const offline: string[] = []
+
+    opts.recipients.forEach((recipient) => {
+      if (this.isConnected(recipient)) {
+        online.push(recipient)
+      } else {
+        offline.push(recipient)
+      }
+    })
+
+    logger.debug(this.loggerTag, 'Sending message to', {
+      online,
+      offline,
+      message,
+    })
+
+    if (online.length && iridium.connector) {
+      const encodedMessage = await encoding.encodePayload(
+        message,
+        iridium.connector.did,
+        { sign: true },
+      )
+
+      // Send the message through webrtc when possible
+      online.forEach((recipient) => {
+        this.peers[recipient]?.peer?.send(encodedMessage)
+      })
+    }
+
+    // Fallback to pubsub for offline users
+    // this._bus?.sendMessage(message, { recipients: offline })
+  }
+
+  async announce() {
+    if (!iridium.connector) return
+    const profile = iridium.profile.state
+    const users = iridium.users.list.filter(
+      (u) =>
+        iridium.friends.isFriend(u.did) ||
+        iridium.chat.isUserInOtherGroups(u.did, [], false),
+    )
+
+    if (!profile || !users) return
+
+    if (!users || !users.length || !profile.name) return
+
+    const recipients = users
+      .map((u) => u.did)
+      .filter(
+        (did) =>
+          !this.peers[did]?.peer?.connected && !this.peers[did]?.isConnecting,
+      )
+
+    if (recipients.length) {
+      logger.debug(this.loggerTag, 'announce', {
+        recipients,
+      })
+    }
+
+    try {
+      this._bus?.sendMessage(
+        {
+          type: 'announce',
+        },
+        {
+          recipients,
+        },
+      )
+    } catch (e) {
+      const error = e as Error
+      logger.error(this.loggerTag, 'announce failed to publish', error)
+    }
+  }
+
+  async setupAnnounce() {
+    await delay(this.firstAnnounceDelay)
+    await this.announce()
+    setInterval(this.announce.bind(this), this.announceFrequency)
+  }
+
+  isConnected(id: string) {
+    return Boolean(this.peers[id]?.peer?.connected)
   }
 }

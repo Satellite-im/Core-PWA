@@ -1,0 +1,21 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: @large-spacing;
+  margin: @normal-spacing;
+
+  .title {
+    margin: 0;
+    font-size: @title-text;
+    &:extend(.ellipsis);
+  }
+
+  .phone {
+    margin-left: auto;
+
+    &.disabled {
+      color: @dark;
+      opacity: 0.75;
+    }
+  }
+}

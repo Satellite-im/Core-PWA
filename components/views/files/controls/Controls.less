@@ -1,65 +1,56 @@
-#file-controls {
-  &:extend(.full-width);
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
-  .search-container {
-    display: flex;
-    margin-bottom: @normal-spacing;
-    .search {
-      flex-grow: 1;
-      margin-right: @normal-spacing;
-    }
-  }
-  .add-container {
-    display: flex;
-    gap: @light-spacing;
-    margin-bottom: @large-spacing;
-    height: 32px; // todo: temp ensure there's no page jumping while input is rendered
-    .button {
-      min-width: 140px;
-    }
-    .name {
-      flex-grow: 1;
-    }
-  }
+  .search {
+    flex-grow: 1;
 
-  .error-container {
-    &:extend(.round-corners);
-    display: flex;
-    gap: @light-spacing;
-    padding: @light-spacing;
-    border: 1px solid @red;
-    margin-bottom: @normal-spacing;
-    div {
-      display: flex;
-      gap: @xlight-spacing;
-      flex-direction: column;
-    }
-    svg {
-      color: @red;
-      flex-shrink: 0;
-      &.close {
-        margin-left: auto;
-        cursor: pointer;
+    .input-button {
+      &.active {
+        color: @flair-color;
+        filter: drop-shadow(0px 0px 3px @flair-color);
+      }
+
+      &:focus {
+        svg {
+          filter: drop-shadow(0px 0px 3px @flair-color);
+        }
       }
     }
-  }
-
-  .switcher-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: @normal-spacing;
   }
 }
 
-@media only screen and (max-width: @mobile-small-breakpoint) {
-  #file-controls {
-    .add-container {
-      height: auto; // todo: temp remove after global button/input height adjustments
-      flex-wrap: wrap;
-      .button {
-        flex-grow: 1;
-      }
+.add-container {
+  display: flex;
+  gap: @light-spacing;
+  .name {
+    flex-grow: 1;
+  }
+}
+
+.status {
+  margin-bottom: @normal-spacing;
+}
+
+.error-container {
+  &:extend(.round-corners);
+  display: flex;
+  gap: @light-spacing;
+  padding: @light-spacing;
+  border: 1px solid @red;
+  margin-bottom: @normal-spacing;
+  div {
+    display: flex;
+    gap: @xlight-spacing;
+    flex-direction: column;
+  }
+  svg {
+    color: @red;
+    flex-shrink: 0;
+    &.close {
+      margin-left: auto;
+      cursor: pointer;
     }
   }
 }

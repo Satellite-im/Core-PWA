@@ -1,54 +1,104 @@
-<div id="privacy-settings">
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.privacy.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
-    </div>
-  </div>
-  <div class="columns is-desktop">
+<SettingsPage>
+  <SettingsHeader>
+    {{ $t('pages.privacy.title') }}
+    <template #subheading> {{ $t('pages.privacy.subtitle') }} </template>
+  </SettingsHeader>
+
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.privacy.permissions.title')"
+  />
+  <TypographyText v-if="!permissions.length" color="danger">
+    {{ $t('pages.privacy.update') }}
+  </TypographyText>
+  <SettingsSection>
     <SettingsUnit
+      v-for="perm in permissions"
+      :key="perm.name"
+      :title="$t(`pages.privacy.${perm.name}.title`)"
+      :text="$t(`pages.privacy.${perm.name}.subtitle`)"
+    >
+      <InteractablesPermissions
+        :state="perm.state"
+        @click="handlePermission(perm.name)"
+      />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.screenshare.title')"
+      :text="$t('pages.privacy.screenshare.subtitle')"
+    >
+      <TypographyText color="danger">
+        {{ $t('pages.privacy.screenshare.note') }}
+      </TypographyText>
+    </SettingsUnit>
+  </SettingsSection>
+
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.privacy.filesharing')"
+  />
+  <SettingsSection>
+    <!-- <SettingsUnit
+      :title="$t('pages.privacy.embeds.title')"
+      :text="$t('pages.privacy.embeds.subtitle')"
+    >
+      <InteractablesSwitch v-model="embeddedLinks" />
+    </SettingsUnit> -->
+    <SettingsUnit
+      :title="$t('pages.privacy.consentScan.title')"
+      :text="$t('pages.privacy.consentScan.subtitle')"
+    >
+      <InteractablesSwitch v-model="consentScan" />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.nsfw.title')"
+      :text="$t('pages.privacy.nsfw.subtitle')"
+    >
+      <InteractablesSwitch v-model="blockNsfw" />
+    </SettingsUnit>
+  </SettingsSection>
+
+  <TypographyHorizontalRuleText plaintext :value="$t('pages.privacy.other')" />
+  <SettingsSection>
+    <!-- <SettingsUnit
       :title="$t('pages.privacy.register.title')"
       :text="$t('pages.privacy.register.subtitle')"
     >
       <InteractablesSwitch isLocked v-model="registry" />
-    </SettingsUnit>
+    </SettingsUnit>-->
     <SettingsUnit
       :title="$t('pages.privacy.pin.title')"
       :text="$t('pages.privacy.pin.subtitle')"
     >
       <InteractablesSwitch v-model="storePin" />
     </SettingsUnit>
-  </div>
-  <div class="columns is-desktop">
-    <SettingsUnit
-      :title="$t('pages.privacy.embeds.title')"
-      :text="$t('pages.privacy.embeds.subtitle')"
-    >
-      <InteractablesSwitch v-model="embeddedLinks" />
-    </SettingsUnit>
-    <SettingsUnit
+    <!-- <SettingsUnit
       :title="$t('pages.privacy.activity.title')"
       :text="$t('pages.privacy.activity.subtitle')"
     >
       <InteractablesSwitch v-model="displayCurrentActivity" />
-    </SettingsUnit>
-  </div>
+    </SettingsUnit> -->
+  </SettingsSection>
 
-  <div class="columns is-desktop">
+  <!-- <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
       :text="$t('pages.privacy.serverType.subtitle')"
     >
-      <InteractablesSelect
-        :options="serverTypes"
-        v-model="serverType"
-        size="small"
-        class="form-control"
-      />
+    <InteractablesSelect
+      v-model="serverType"
+      :options="serverTypes"
+      class="form-control"
+    />
     </SettingsUnit>
-  </div>
+  </SettingsSection> -->
 
-  <div
+  <TypographyHorizontalRuleText
+    v-if="serverType === 'own'"
+    plaintext
+    :value="$t('pages.privacy.ownserver')"
+  />
+  <SettingsSection
     v-if="serverType === 'own'"
     class="columns is-desktop ownInfo-input-part"
   >
@@ -59,37 +109,24 @@
       <InteractablesInput
         v-model="ownInfo"
         type="dark"
-        size="small"
+        size="xs"
         :placeholder="$t('pages.privacy.ownInfo.placeholder')"
         class="ownInfo-input"
       />
-      <TypographyText
-        class="color-danger"
-        type="danger"
-        :size="6"
-        :text="$t('pages.privacy.ownInfo.lengthErrorMsg')"
-        v-if="lengthError"
-      />
+      <TypographyText v-if="lengthError" class="color-danger">
+        {{ $t('pages.privacy.ownInfo.lengthErrorMsg') }}
+      </TypographyText>
       <span v-if="formatError">
-        <TypographyText
-          class="color-danger"
-          type="danger"
-          :size="6"
-          :text="$t('pages.privacy.ownInfo.formatErrorMsg')"
-        />
-        <TypographyText
-          class="color-danger ml-3"
-          type="danger"
-          :size="6"
-          :text="$t('pages.privacy.ownInfo.errorSampleUrl1')"
-        />
-        <TypographyText
-          class="color-danger ml-3"
-          type="danger"
-          :size="6"
-          :text="$t('pages.privacy.ownInfo.errorSampleUrl2')"
-        />
+        <TypographyText class="color-danger">
+          {{ $t('pages.privacy.ownInfo.formatErrorMsg') }}
+        </TypographyText>
+        <TypographyText class="color-danger ml-3">
+          {{ $t('pages.privacy.ownInfo.errorSampleUrl1') }}
+        </TypographyText>
+        <TypographyText class="color-danger ml-3">
+          {{ $t('pages.privacy.ownInfo.errorSampleUrl2') }}
+        </TypographyText>
       </span>
     </SettingsUnit>
-  </div>
-</div>
+  </SettingsSection>
+</SettingsPage>

@@ -9,6 +9,14 @@
       "labels": ["fix", "fixes"]
     },
     {
+      "title": "## 🦧 Refactor",
+      "labels": ["refactor"]
+    },
+    {
+      "title": "## 📜 Test",
+      "labels": ["test"]
+    },
+    {
       "title": "## 💬 Other",
       "labels": ["chore", "update", "doc"]
     },

@@ -1,282 +1,221 @@
 <template src="./Message.html"></template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
-
+import { mapState, mapGetters } from 'vuex'
 import { ArchiveIcon } from 'satellite-lucide-icons'
-import ContextMenu from '~/components/mixins/UI/ContextMenu'
-import { Config } from '~/config'
-import { UIMessage, Group } from '~/types/messaging'
-import { refreshTimestampInterval } from '~/utilities/Messaging'
 import { toHTML } from '~/libraries/ui/Markdown'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    setReplyChatbarContent: () => void
-    quickReaction: (emoji: String) => void
-    editMessage: () => void
-    emojiReaction: (e: MouseEvent) => void
-    copyMessage: () => void
-  }
-}
+import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { conversationMessageIsNotice } from '~/utilities/chat'
+import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
+import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
 
 export default Vue.extend({
   components: {
     ArchiveIcon,
   },
-  mixins: [ContextMenu],
   props: {
-    message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        payload: 'Invalid Message',
-      }),
+    item: {
+      type: Object as PropType<ChatItem>,
+      required: true,
     },
-    group: {
-      type: Object as PropType<Group>,
-      default: () => {},
+    showHeader: {
+      type: Boolean,
+      default: false,
     },
-    from: {
-      type: String,
-      default: '',
-    },
-    index: {
-      type: Number,
-      default: -1,
-    },
-    hideActions: {
+    hideReplyAction: {
       type: Boolean,
       default: false,
     },
   },
-  data() {
-    return {
-      disData: 'DataFromTheProperty',
-      timestampRefreshInterval: null,
-      timestamp: this.$dayjs(this.$props.message.at).fromNow(),
-    }
-  },
   computed: {
-    ...mapState(['ui', 'textile', 'accounts']),
-    hasReactions() {
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      chat: (state) => (state as RootState).chat,
+    }),
+    ...mapGetters({
+      getTimestamp: 'settings/getTimestamp',
+    }),
+    message(): ConversationMessage {
+      return this.item.message
+    },
+    replies(): ConversationMessage[] {
+      return this.item.replies
+    },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
+    author(): User | undefined {
+      return this.message.from === iridium.id
+        ? (iridium.profile.state as User)
+        : iridium.users.state[this.message.from]
+    },
+    avatarSrc(): string | undefined {
       return (
-        this.$props.message.reactions && this.$props.message.reactions.length
+        this.author?.photoHash &&
+        this.$Config.ipfs.gateway + this.author.photoHash
       )
     },
-    messageEdit() {
-      return this.ui.editMessage.id === this.$props.message.id
+    isReplyingTo(): boolean {
+      return (
+        this.chat.replyChatbarMessages[this.conversationId]?.id ===
+        this.message.id
+      )
     },
-    contextMenuValues() {
+    timestamp(): string {
+      return this.getTimestamp({ time: this.message.at })
+    },
+    isNotice(): boolean {
+      return conversationMessageIsNotice(this.message)
+    },
+    isEditing(): boolean {
+      return this.ui.editMessage.id === this.message.id
+    },
+    containsOnlyEmoji(): boolean {
+      return onlyHasEmoji(this.message?.body ?? '')
+    },
+    markdownToHtml(): string {
+      const html = toHTML(this.message?.body ?? '', { liveTyping: false })
+      return html.replace(
+        this.$Config.regex.emojiWrapper,
+        (emoji) => `<span class="emoji">${emoji}</span>`,
+      )
+    },
+    contextMenuValues(): ContextMenuItem[] {
       const mainList = [
         { text: 'quickReaction', func: this.quickReaction },
         { text: this.$t('context.reaction'), func: this.emojiReaction },
-        { text: this.$t('context.reply'), func: this.setReplyChatbarContent },
         // AP-1120 copy link functionality
         // { text: this.$t('context.copy_link'), func: (this as any).testFunc },
       ]
+
+      if (this.message.replyToId) {
+        return [
+          ...mainList,
+          { text: this.$t('context.copy_msg'), func: this.copyMessage },
+        ]
+      }
+
+      mainList.push({
+        text: this.$t('context.reply'),
+        func: this.setReplyChatbarMessage,
+      })
+
       if (this.message.type === 'text') {
         // if your own text message
-        if (this.accounts.details.textilePubkey === this.$props.message.from) {
+        if (iridium.profile.state?.did === this.message.from) {
           return [
             ...mainList,
-            {
-              text: this.$t('context.copy_msg'),
-              func: this.copyMessage,
-            },
-            { text: this.$t('context.edit'), func: this.editMessage },
+            { text: this.$t('context.copy_msg'), func: this.copyMessage },
+            // { text: this.$t('context.edit'), func: this.editMessage },
+            // skipped due to edit message is now coming soon and this shouldn't appear on context menu
           ]
         }
         // another persons text message
         return [
           ...mainList,
-          {
-            text: this.$t('context.copy_msg'),
-            func: this.copyMessage,
-          },
-        ]
-      }
-      // if image message
-      if (
-        this.message.type === 'file' &&
-        this.$props.message.payload.type.includes('image')
-      ) {
-        return [
-          ...mainList,
-          { text: this.$t('context.copy_img'), func: (this as any).testFunc },
-          { text: this.$t('context.save_img'), func: (this as any).testFunc },
+          { text: this.$t('context.copy_msg'), func: this.copyMessage },
         ]
       }
       return mainList
     },
   },
-  created() {
-    const setTimestamp = (timePassed: string) => {
-      this.$data.timestamp = timePassed
-    }
-
-    this.$data.timestampRefreshInterval = refreshTimestampInterval(
-      this.$props.message.at,
-      setTimestamp,
-      Config.chat.timestampUpdateInterval,
-    )
-  },
-  beforeDestroy() {
-    clearInterval(this.$data.refreshTimestampEveryMinute)
-  },
   methods: {
     /**
-     * @method markdownToHtml
-     * @description convert text markdown to html
-     * @param str String to convert
+     * @method showQuickProfile
+     * @param e Event object from group component click
+     * @example v-on:click="showQuickProfile"
      */
-    markdownToHtml(text: string) {
-      return toHTML(text, { liveTyping: false })
-    },
-    /**
-     * @method wrapEmoji
-     * @description Wraps emojis in spans with the emoji class
-     * @param str String to wrap emojis within
-     */
-    wrapEmoji(str: string): string {
-      return str.replace(
-        this.$Config.regex.emojiWrapper,
-        (emoji) => `<span class="emoji">${emoji}</span>`,
-      )
-    },
-    /**
-     * @method containsOnlyEmoji
-     * @description Check wether or not a string only contains an emoji
-     * @param str String to check against
-     */
-    containsOnlyEmoji(str: string): boolean {
-      return str.match(this.$Config.regex.isEmoji) !== null
-    },
-    testFunc() {
-      this.$Logger.log('Message Context', 'Test func')
+    showQuickProfile(e: MouseEvent) {
+      setTimeout(() => {
+        this.$store.commit('ui/setQuickProfile', {
+          user: this.author,
+          position: { x: e.x, y: e.y },
+        })
+      }, 0)
     },
     /**
      * @method copyMessage
      * @description copy contents of message. Will only be called if text message
      */
     copyMessage() {
-      this.$envinfo.navigator.clipboard.writeText(this.message.payload)
-    },
-    /**
-     * @method setReplyChatbarContent DocsTODO
-     * @description
-     * @example
-     */
-    setReplyChatbarContent() {
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
-      const { id, type, payload, to, from } = this.$props.message
-      let finalPayload = payload
-      if (['image', 'video', 'audio', 'file'].includes(type)) {
-        finalPayload = `*${this.$t('conversation.multimedia')}*`
-      } else if (type === 'glyph') {
-        finalPayload = `<img src=${payload} width='16px' height='16px' />`
+      if (!this.message.body) {
+        return
       }
-      this.$store.commit('ui/setReplyChatbarContent', {
-        id,
-        payload: finalPayload,
-        from: this.$props.from,
-        messageID: this.$props.message.id,
-        to: to === myTextilePublicKey ? from : to,
+      navigator.clipboard.writeText(this.message.body)
+    },
+    setReplyChatbarMessage() {
+      this.$store.commit('chat/setReplyChatbarMessage', {
+        conversationId: this.message.conversationId,
+        message: this.message,
       })
-      this.$store.dispatch('ui/setChatbarFocus')
+      this.$nextTick(() => this.$store.dispatch('ui/setChatbarFocus'))
     },
     /**
      * @method emojiReaction DocsTODO
      * @description
      * @example
      */
-    emojiReaction(e: MouseEvent) {
-      const myTextilePublicKey = this.$TextileManager.getIdentityPublicKey()
+    emojiReaction() {
       this.$store.commit('ui/settingReaction', {
         status: true,
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
-        to:
-          this.$props.message.to === myTextilePublicKey
-            ? this.$props.message.from
-            : this.$props.message.to,
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
       })
-      let xVal = this.$el.getBoundingClientRect().x
-      let yVal = this.$el.getBoundingClientRect().y
-      if (e) {
-        xVal = e.clientX
-        yVal = e.clientY
-      }
       this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: !!this.$device.isMobile,
-        position: [xVal, yVal],
-        containerWidth: this.$el.clientWidth,
+        show: !this.ui.enhancers.show,
+        floating: true,
       })
     },
-    quickReaction(emoji: String) {
-      this.$store.dispatch('ui/addReaction', {
-        emoji,
-        reactor: this.$mock.user.name,
-        groupID: this.$props.group.id,
-        messageID: this.$props.message.id,
+    quickReaction(emoji: EmojiUsage) {
+      iridium.chat.toggleMessageReaction({
+        conversationId: this.message.conversationId,
+        messageId: this.message.id,
+        reaction: emoji.content,
       })
     },
-    /**
-     * Called when click the "Edit Message" on context menu
-     * Commit store mutation in order to notify the edit status
-     */
     editMessage() {
-      const { id, payload, type, from } = this.$props.message
-      if (type === 'text' && from === this.accounts.details.textilePubkey) {
-        this.$store.commit('ui/setEditMessage', {
-          id,
-          payload,
-          from: this.$props.group.id,
-        })
-      }
+      const { id, payload, from } = this.message
+      this.$store.commit('ui/setEditMessage', {
+        id,
+        payload,
+        from,
+      })
     },
-    /**
-     * Called from MessageEdit component when complete to edit message
-     * Called from MessageEdit component with changed message When save or cancel / Enter or Escape is pressed
-     */
-    saveMessage(message: string) {
+    async saveMessage(message: string) {
       this.$store.commit('ui/setEditMessage', {
         id: '',
-        payload: message,
-        from: this.$props.group.id,
-      })
-      this.$store.commit('ui/saveEditMessage', {
-        id: this.$props.message.id,
-        payload: message,
-        from: this.$props.group.id,
+        payload: '',
+        from: '',
       })
 
-      if (message !== this.$props.message.payload) {
-        const recipient = this.$Hounddog.getActiveFriend(
-          this.$store.state.friends,
-        )
-        this.$store.dispatch('textile/editTextMessage', {
-          to: recipient?.textilePubkey,
-          original: this.$props.message,
-          text: message,
+      if (message !== this.message.body) {
+        await iridium.chat.editMessage({
+          conversationId: this.message.conversationId,
+          messageId: this.message.id,
+          body: message,
         })
+      }
+
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
       }
     },
     cancelMessage() {
       this.$store.commit('ui/setEditMessage', {
         id: '',
         payload: '',
-        from: this.$props.group.id,
+        from: '',
       })
-
-      this.$store.commit('ui/saveEditMessage', {
-        id: this.$props.message.id,
-        payload: 'message',
-        from: this.$props.group.id,
-      })
+      if (this.$device.isDesktop) {
+        this.$store.dispatch('ui/setChatbarFocus')
+      }
     },
   },
 })

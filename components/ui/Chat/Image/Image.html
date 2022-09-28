@@ -1,21 +1,35 @@
-<div class="image">
-  <div class="image-mask" v-if="showfull">
-    <div class="image-container">
-      <img
-        class="is-image-in-mask"
-        :src="image.url"
-        v-click-outside="clickHandler"
-      />
-      <a class="link" :href="image.url" target="_blank">
-        {{ $t('files.view_original') }}
-      </a>
-    </div>
-  </div>
-  <img
-    class="is-image"
-    data-cy="chat-image"
-    :class="full ? 'is-full-image' : 'is-normal-image'"
-    :src="image.url"
-    @click="clickHandler"
+<UiContextMenu class="image" :items="contextMenuValues">
+  <figure class="image-placeholder" v-if="usePlaceholder">
+    <img
+      class="image-placeholder-img"
+      data-cy="chat-image-placeholder"
+      :src="placeholderImage"
+      alt=""
+    />
+    <figcaption data-cy="image-placeholder-caption">
+      <TypographyText font="heading" size="xs">
+        {{ $t('errors.chat.failed_load') }}
+      </TypographyText>
+    </figcaption>
+  </figure>
+  <ui-image-container
+    v-else-if="dataURL"
+    class="image-container"
+    :nsfw="attachment.nsfw"
+    transparent
+  >
+    <img
+      :src="dataURL"
+      @click="imageClick"
+      @error="() => usePlaceholder = true"
+      data-cy="chat-image"
+    />
+  </ui-image-container>
+  <a
+    v-show="false"
+    ref="download"
+    :href="dataURL"
+    :rel="$t('controls.download')"
+    :download="attachment.name"
   />
-</div>
+</UiContextMenu>

@@ -1,4 +1,10 @@
 node_modules/
 coverage/
+dist
 *.snap
 .prettierignore
+.eslintrc
+linked-iridium
+plugins
+.nuxt
+pnpm-lock.yaml

@@ -4,7 +4,7 @@
     "target": "es2019",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
+    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM", "dom.iterable"],
     "esModuleInterop": true,
     "allowJs": true,
     "sourceMap": true,
@@ -24,8 +24,20 @@
       "@nuxtjs/device",
       "@nuxtjs/toast",
       "types/modules",
+      "jest-extended",
       "jest"
     ]
   },
-  "exclude": ["node_modules", ".nuxt", "dist", "cypress"]
+  "exclude": [
+    "node_modules",
+    ".vscode",
+    ".nuxt",
+    "dist",
+    "cypress/**/*",
+    ".husky",
+    ".github",
+    "electron",
+    "android"
+  ],
+  "include": ["**/*.ts", "**/*.js", "**/*.vue"]
 }

@@ -1,52 +1,65 @@
-<template src="./Personalize.html" />
+<template src="./Personalize.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Themes, Flairs, FlairColors, ThemeNames } from '~/store/ui/types.ts'
+import {
+  themes,
+  flairs,
+  ThemeKeys,
+  FlairKeys,
+  LanguageKeys,
+} from '~/libraries/Iridium/settings/types'
+import { SelectOption } from '~/types/ui/inputs'
+import iridium from '~/libraries/Iridium/IridiumManager'
+
 export default Vue.extend({
   name: 'PersonalizeSettings',
   layout: 'settings',
   data() {
     return {
-      ThemeNames,
-      themes: Themes,
-      flairs: Flairs,
+      settings: iridium.settings.state,
     }
   },
   computed: {
     ...mapState(['ui']),
-    // React to v-model changes to echoCancellation and update
-    // the state accordingly with the mutation
+    ThemeKeys: () => ThemeKeys,
     theme: {
-      set(state) {
-        const activeTheme = Themes.find((th) => {
-          return th.value === state
-        })
-        if (activeTheme?.name === ThemeNames.DEFAULT) {
-          const flairValue = Flairs.find(
-            (flair) => flair.value === FlairColors.SATELLITE,
-          )
-          if (flairValue) {
-            this.$store.commit('ui/updateFlair', flairValue)
-          }
+      set(value: ThemeKeys) {
+        if (value === ThemeKeys.DEFAULT) {
+          this.flair = FlairKeys.SATELLITE
         }
-        this.$store.commit('ui/updateTheme', activeTheme)
+        iridium.settings.set('/theme', value)
       },
-      get() {
-        return this.ui.theme.base.value
+      get(): ThemeKeys {
+        return this.settings.theme
       },
     },
     flair: {
-      set(state) {
-        const activeFlair = Flairs.find((fl) => {
-          return fl.value === state
-        })
-        this.$store.commit('ui/updateFlair', activeFlair)
+      set(value: FlairKeys) {
+        iridium.settings.set('/flair', value)
       },
-      get() {
-        return this.ui.theme.flair.value
+      get(): FlairKeys {
+        return this.settings.flair
       },
+    },
+    language: {
+      set(value: LanguageKeys) {
+        iridium.settings.set('/language', value)
+      },
+      get(): string {
+        return this.settings.language
+      },
+    },
+    themeOptions(): SelectOption[] {
+      return Object.entries(themes).map(([key, themeName]) => {
+        return { value: key, text: themeName }
+      })
+    },
+    flairOptions(): SelectOption[] {
+      return Object.entries(flairs).map(([key, flair]) => {
+        return { text: flair.name, value: key, color: flair.primary }
+      })
     },
   },
 })

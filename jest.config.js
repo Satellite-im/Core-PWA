@@ -1,8 +1,13 @@
 module.exports = {
   preset: 'ts-jest',
-  setupFiles: ['jest-canvas-mock', 'dotenv/config', './jest-setup.js'],
+  setupFiles: [
+    'jest-canvas-mock',
+    'dotenv/config',
+    './jest-setup.js',
+    'jsdom-worker',
+  ],
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
+    '**/*.{ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/*.config.js',
@@ -10,6 +15,9 @@ module.exports = {
     '!**/config.ts',
     '!**/startup.js',
     '!**/*.eslintrc.js',
+    '!**/iridium/**',
+    '!**/*.disabled.ts',
+    '!**/linked-iridium/**',
   ],
   moduleDirectories: ['node_modules', 'src'],
   moduleNameMapper: {
@@ -17,9 +25,14 @@ module.exports = {
     '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
     '^[@|~]/(.*)$': '<rootDir>/$1',
-    skaler: '<rootDir>/store/textile/__mocks__/skaler.js',
+    skaler: '<rootDir>/store/__mocks__/skaler.js',
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules',
+    '<rootDir>/linked-iridium',
+    '<rootDir>/iridium',
+    '<rootDir>/cypress',
+  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/.nuxt',
     '<rootDir>/cypress',
@@ -30,6 +43,7 @@ module.exports = {
     '<rootDir>/libraries/Files/errors',
     '<rootDir>/libraries/Files/types',
     '<rootDir>/types',
+    '<rootDir>/iridium',
   ],
   testEnvironment: 'jsdom',
   transform: {

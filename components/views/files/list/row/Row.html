@@ -1,0 +1,37 @@
+<UiContextMenu
+  ref="row"
+  :items="contextMenuValues"
+  @click="handle"
+  class="table-row"
+>
+  <div class="filename table-cell">
+    <template v-if="!$device.isMobile">
+      <folder-icon
+        v-if="item.children"
+        class="file-type-icon"
+        data-cy="folder-icon"
+      />
+      <archive-icon v-else-if="isArchive" class="file-type-icon" />
+      <image-icon v-else-if="isImage" class="file-type-icon" />
+      <film-icon v-else-if="isVideo" class="file-type-icon" />
+      <file-icon data-cy="file-icon" v-else class="file-type-icon" />
+    </template>
+    <span data-cy="file-item-name"> {{ item.name }} </span>
+  </div>
+  <div class="table-cell">{{ $dayjs(item.modified).fromNow() }}</div>
+  <div v-if="!$device.isMobile" class="table-cell open-sidebar-hide">
+    {{ item.type }}
+  </div>
+  <div class="open-sidebar-hide table-cell">
+    {{ item.size ? $filesize(item.size) : '-' }}
+  </div>
+  <div
+    @mouseover="menuHover=true"
+    @mouseleave="menuHover=false"
+    data-cy="file-item-options"
+    @click="openContextMenu"
+    class="table-cell"
+  >
+    <more-vertical-icon size="1x" />
+  </div>
+</UiContextMenu>

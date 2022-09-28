@@ -1,12 +1,13 @@
 <span v-if="!hide">
   <div
     v-if="!areaCover"
-    class="has-tooltip-primary tooltip-container coming-soon-container"
-    :class="`has-tooltip-${tooltipPosition} ${disabled ? 'disabled' : ''}`"
-    :data-tooltip="tooltipText"
+    class="coming-soon-container"
+    :class="`${disabled ? 'disabled' : 'grayscaled'}`"
+    v-tooltip="{content:tooltipText, placement:tooltipPosition}"
+    @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
   >
     <div
-      :class="`coming-soon ${disabled ? '' : 'grayscaled'}`"
+      :class="`coming-soon ${horizontal ? 'horizontal' : ''}`"
       :style="{'margin-top': marginTopOverride}"
       @click="preventClickthrough"
     >

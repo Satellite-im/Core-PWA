@@ -1,9 +1,10 @@
 import { ChatState } from './types'
 
 const InitialChatState = (): ChatState => ({
-  replies: [],
-  chatTexts: [],
   files: {},
+  activeUploadChats: [],
+  draftMessages: {},
+  replyChatbarMessages: {},
 })
 
 export default InitialChatState

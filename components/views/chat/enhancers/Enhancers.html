@@ -1,5 +1,6 @@
 <div
-  id="enhancers"
+  class="enhancers"
+  :class="{'enhancers-mobile': $device.isMobile}"
   v-if="ui.enhancers.show"
   v-click-outside="toggleEnhancers"
   v-bind:style="!ui.enhancers.floating ? {
@@ -7,87 +8,34 @@
     bottom: ui.enhancers.position[1] + 'px'
   } : {}"
 >
-  <div class="navbar" @click="navbarClickHandler">
+  <div class="navbar">
     <InteractablesButtonGroup
       v-model="route"
-      :fullWidth="true"
-      :values="['glyphs','emotes','gif']"
+      :values="['glyphs','emoji','gif']"
     >
-      <InteractablesButton type="dark" size="small" text="Glyphs">
+      <InteractablesButton
+        text="Glyphs"
+        :color="ui.enhancers.route === 'glyphs' ? 'primary' : ''"
+      >
         <grid-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton type="dark" size="small" text="Emoji">
+      <InteractablesButton
+        text="Emoji"
+        :color="ui.enhancers.route === 'emoji' ? 'primary' : ''"
+      >
         <smile-icon size="1x" />
       </InteractablesButton>
       <InteractablesButton
-        type="dark"
-        size="small"
         text="Gifs"
+        :color="ui.enhancers.route === 'gifs' ? 'primary' : ''"
         v-if="featureReadyToShow"
       >
         <image-icon size="1x" />
       </InteractablesButton>
     </InteractablesButtonGroup>
   </div>
-  <div id="container">
-    <UiScroll
-      verticalScroll
-      scrollbarVisibility="scroll"
-      v-if="ui.enhancers.route === 'emotes'"
-    >
-      <emoji-picker @emoji="addEmoji" :search="search.toLowerCase()">
-        <div
-          ref="emojiInvoker"
-          slot="emoji-invoker"
-          slot-scope="{ events: { click: clickEvent }, display, emojis }"
-          v-bind:events.click="clickEvent"
-          @click.stop="clickEvent"
-        ></div>
-        <div
-          slot="emoji-picker"
-          ref="emojiPicker"
-          slot-scope="{ emojis, insert, display }"
-        >
-          <div class="emoji-picker">
-            <div class="emoji-picker__search">
-              <InteractablesInput
-                v-model="search"
-                type="dark"
-                size="small"
-                placeholder="Search..."
-              />
-            </div>
-            <div>
-              <div v-for="(emojiGroup, category) in emojis" :key="category">
-                <TypographyText :text="category" />
-                <div class="emojis">
-                  <div
-                    v-if="category === 'Frequently used' && mostUsedEmojis.length"
-                  >
-                    <span
-                      v-for="(emoji, index) in mostUsedEmojis"
-                      :key="index"
-                      @click="addEmoji(emoji.content, emoji.code)"
-                      :title="index"
-                      >{{ emoji.content }}</span
-                    >
-                  </div>
-                  <div v-else>
-                    <span
-                      v-for="(emoji, emojiName) in emojiGroup"
-                      :key="emojiName"
-                      @click="addEmoji(emoji, emojiName)"
-                      :title="emojiName"
-                      >{{ emoji }}</span
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </emoji-picker>
-    </UiScroll>
+  <div class="container">
     <EnhancersGlyphs v-if="ui.enhancers.route === 'glyphs'" />
+    <EnhancersEmoji v-if="ui.enhancers.route === 'emoji'" />
   </div>
 </div>

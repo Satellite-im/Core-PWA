@@ -1,10 +1,11 @@
-<template src="./Heading.html" />
+<template src="./Heading.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { formatDuration } from '~/utilities/duration'
 
-import { mapState } from 'vuex'
 export default Vue.extend({
   components: {
     MaximizeIcon,
@@ -12,60 +13,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      elapsedTimeLabel: '',
+      webrtc: iridium.webRTC.state,
+      callTimeString: '',
     }
   },
-  computed: {
-    ...mapState(['ui', 'webrtc']),
-  },
-  mounted() {
-    this.$store.commit('ui/fullscreen', false)
-    this.timer = false
-    this.setTimer()
-  },
-  beforeDestroy() {
-    this.clearTimer()
-  },
-  methods: {
-    /**
-     * @method toggleFullscreen
-     * @description Toggles fullscreen by committing the opposite of it's current value (this.ui.fullscreen) to fullscreen in state
-     * @example @click="toggleFullscreen"
-     */
-    toggleFullscreen() {
-      this.$store.commit('ui/fullscreen', !this.ui.fullscreen)
-      const elements = document.querySelectorAll('.full-video')
-      if (elements && elements.length > 0 && !this.ui.fullscreen) {
-        for (let i = 0; i < elements.length; i++) {
-          const element = elements[i]
-          element?.classList.remove('full-video')
-        }
-      }
-    },
-    elapsedTime(start: number): void {
-      if (!start) return
-      const duration = this.$dayjs.duration(Date.now() - start)
-      const hours = duration.hours()
-      this.elapsedTimeLabel = `${this.$t('ui.live')} ${
-        hours > 0 ? `${hours}:` : ''
-      }${duration.format('mm:ss')}`
-    },
-    setTimer() {
-      this.$store.commit('webrtc/updateCreatedAt', Date.now())
-      if (this.webrtc?.activeCall) {
-        if (!this.timer) {
-          this.elapsedTime(this.webrtc.activeStream.createdAt)
-          this.timer = setInterval(() => {
-            this.elapsedTime(this.webrtc.activeStream.createdAt)
-          }, 1000)
-        }
-      }
-    },
-    clearTimer() {
-      if (this.timer) {
-        clearInterval(this.timerId)
-        this.timer = false
-      }
+  watch: {
+    webrtc: {
+      handler() {
+        this.callTimeString = formatDuration(
+          (Date.now() - this.webrtc.callStartedAt) / 1000,
+        )
+      },
+      deep: true,
     },
   },
 })

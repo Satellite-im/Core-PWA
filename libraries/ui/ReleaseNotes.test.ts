@@ -6,6 +6,7 @@ describe('ReleaseNotes.ReleaseNotes', () => {
   beforeEach(() => {
     fetchMock.resetMocks()
   })
+
   test('0', async () => {
     fetchMock.mockResponseOnce(JSON.stringify({ mockedField: 'mockedData' }))
 

@@ -1,0 +1,29 @@
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 @normal-spacing;
+  padding: @light-spacing @normal-spacing;
+  font-size: @micro-text-size;
+  line-height: 1;
+  border-radius: 4px;
+  cursor: pointer;
+  &-main {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 8px;
+    }
+  }
+  &--danger {
+    &:extend(.font-secondary);
+    &:extend(.background-danger);
+    &:extend(.glow-danger);
+  }
+  &--warning {
+    &:extend(.background-warning);
+  }
+  &--success {
+    &:extend(.background-success);
+  }
+}

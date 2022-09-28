@@ -1,0 +1,36 @@
+.result-item {
+  &:extend(.round-corners);
+  &:extend(.background-semitransparent-light);
+  &:extend(.full-width);
+  padding: 10px;
+  border: @light-border !important;
+  display: flex;
+  .avatar {
+    margin-right: 10px;
+  }
+  .content {
+    max-width: calc(@full - 48px);
+    .name-container {
+      display: flex;
+      gap: @light-spacing;
+      .username {
+        font-size: @title-text;
+        font-family: @primary-font;
+        font-weight: bold;
+      }
+      .timestamp {
+        font-size: @micro-text-size;
+        font-family: @secondary-font;
+        &:extend(.font-muted);
+        display: flex;
+        align-items: flex-end;
+        height: 1.2rem;
+      }
+    }
+
+    .msg {
+      &:extend(.ellipsis);
+      font-family: @secondary-font;
+    }
+  }
+}

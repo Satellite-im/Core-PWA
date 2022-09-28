@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { ContextMenuItem } from '~/store/ui/types'
+import { EmojiUsage } from '~/store/ui/types'
 
 export default Vue.extend({
   props: {
@@ -14,7 +14,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters('ui', ['getSortedMostUsedEmojis']),
     ...mapState(['settings', 'ui']),
-    mostUsedEmojis() {
+    mostUsedEmojis(): EmojiUsage[] {
       return this.getSortedMostUsedEmojis.slice(0, 4)
     },
   },
@@ -48,15 +48,6 @@ export default Vue.extend({
     handle(func: Function) {
       func()
       this.close()
-    },
-    /**
-     * @method isRedText
-     * @description sets red text class based on text value
-     * @param {ContextMenuItem} item context item
-     */
-    isRedText(item: ContextMenuItem): boolean {
-      const redTextList = [this.$t('context.delete'), this.$t('context.remove')]
-      return redTextList.includes(item.text)
     },
     /**
      * @method handleOverflow

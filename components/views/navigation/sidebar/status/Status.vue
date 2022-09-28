@@ -1,15 +1,22 @@
-<template src="./Status.html" />
+<template src="./Status.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
-  computed: {
-    ...mapState(['accounts']),
-    src(): string {
-      const hash = this.accounts.details.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+  data() {
+    return { status: 'online', profile: iridium.profile.state }
+  },
+  methods: {
+    copyId() {
+      if (!iridium.connector) return
+      const shortID = this.profile
+        ? `${this.profile.name}#${iridium.id.substring(iridium.id.length - 6)}`
+        : `${iridium.id}`
+      navigator.clipboard.writeText(shortID)
+      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

@@ -1,6 +1,6 @@
 <template src="./ImageCropper.html" />
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import VueCroppie from 'vue-croppie'
 import 'croppie/croppie.css'
@@ -12,18 +12,12 @@ export default Vue.extend({
   props: {
     setCroppedImage: {
       type: Function,
-      default: () => {},
-      required: true,
-    },
-    toggleCropper: {
-      type: Function,
-      default: () => {},
       required: true,
     },
     imageUrl: {
       type: String,
       default: '',
-      requierd: true,
+      required: true,
     },
   },
   data() {
@@ -43,13 +37,17 @@ export default Vue.extend({
      * @example
      */
     crop() {
-      // Options can be updated.
-      // Current option will return a base64 version of the uploaded image with a size of 600px X 450px.
-      this.$refs.croppieRef.result(this.$Config.cropperOptions, (output) => {
-        this.setCroppedImage(output)
-      })
+      this.$refs?.croppieRef?.result(
+        this.$Config.cropperOptions,
+        (output: Blob) => {
+          this.setCroppedImage(output)
+        },
+      )
 
-      this.toggleCropper()
+      this.$emit('toggle-cropper')
+    },
+    close() {
+      this.$emit('toggle-cropper')
     },
   },
 })

@@ -1,0 +1,19 @@
+.quick-chat {
+  position: absolute;
+  width: 288px;
+  top: 0;
+  left: calc(100% + 12px);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;
+  border-radius: @corner-rounding;
+  z-index: 1;
+  box-shadow: @ui-shadow;
+
+  .background-semitransparent-dark();
+  .round-corners();
+  .bordered();
+  .blur();
+}

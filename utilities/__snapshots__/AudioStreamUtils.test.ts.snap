@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AudioStreamUtils.AudioStreamUtils.destroy test case 1 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.listenToMicLevel test case 1 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.stopListeningToMicLevel test case 1 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.updateIsTalking test case 1 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.updateIsTalking test case 2 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.updateIsTalking test case 3 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.updateIsTalking test case 4 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.updateIsTalking test case 5 1`] = `undefined`;
+
+exports[`AudioStreamUtils.AudioStreamUtils.updateIsTalking test case 6 1`] = `undefined`;

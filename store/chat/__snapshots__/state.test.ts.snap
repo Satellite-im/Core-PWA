@@ -2,8 +2,9 @@
 
 exports[`state.default 0 1`] = `
 Object {
-  "chatTexts": Array [],
+  "activeUploadChats": Array [],
+  "draftMessages": Object {},
   "files": Object {},
-  "replies": Array [],
+  "replyChatbarMessages": Object {},
 }
 `;

@@ -1,9 +1,29 @@
-export type InputTypes = 'text' | 'number' | 'password'
-export type InputStyle =
+export type InputType =
+  | 'text'
+  | 'number'
+  | 'password'
+  | 'search'
+  | 'button'
+  | 'time'
+  | 'image'
+  | 'text'
+  | 'checkbox'
+  | 'color'
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'file'
+  | 'hidden'
+  | 'month'
+  | 'password'
+  | 'radio'
+  | 'range'
+
+export type InputColor =
   | 'primary'
   | 'link'
   | 'info'
   | 'success'
   | 'warning'
   | 'danger'
-export type InputSize = 'small' | 'normal' | 'medium' | 'large'
+  | null

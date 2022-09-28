@@ -1,158 +1,103 @@
-<div id="toolbar">
+<div class="toolbar">
+  <InteractablesSidebarToggle v-if="!showSidebar" />
   <div class="circle-container">
-    <UiUserState
-      :user="user"
-      v-if="!server || $device.isMobile"
-      :clickHandler="openProfile"
-    />
-    <UiCircle
-      :type="src ? 'image' : 'random'"
-      :seed="`${server ? server.address : '0xdf9eb223bafbe5c5271415c75aecd68c21fe3d7f'}`"
-      :size="35"
-      :source="src"
-      @click="openProfile"
-      v-if="!$device.isMobile && !isGroup(recipient)"
-    />
-    <GroupIcon v-else-if="isGroup(recipient)" :group="getGroup()" />
+    <UiUserState v-if="!isGroup" class="circle" :user="otherParticipants[0]" />
+    <UiGroupIcon v-else :members="conversation.participants" />
   </div>
   <div class="user-info">
-    <TypographyTitle
-      :size="6"
-      :text="isGroup(recipient) ? getGroup().name : user.name"
-    />
-    <TypographySubtitle
-      v-if="!$device.isMobile"
-      :size="6"
-      :text="isGroup(recipient) ? `Members: ${getGroup().members}` : user.status"
-    />
+    <TypographyText class="header" as="h4" v-if="conversation">
+      {{ conversation.name }}
+    </TypographyText>
+    <TypographyText class="header" color="dark">
+      {{ subtitleText }}
+    </TypographyText>
   </div>
   <div class="controls">
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.alerts')"
-      :tooltipPosition="'bottom'"
+    <button
+      title="notifications"
+      class="toggle-alerts"
+      :class="{'with-count': notifications.notifications.length}"
       data-cy="toolbar-alerts"
+      :data-count="Object.values(notifications).length"
+      v-tooltip.bottom="$t('pages.chat.alerts')"
+      @click="toggleAlerts"
     >
-      <div
-        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-        @click="$data.showAlerts = !$data.showAlerts"
-      >
-        <bell-icon
-          size="1x"
-          :class="`control-icon ${showAlerts ? 'primary' : ''}`"
-          color="grey"
-        />
-      </div>
-    </UiComingSoon>
-
-    <UiFloatingContainer
-      v-if="showAlerts"
-      :offsets="showSidebar ? [4.2] : [4.2, 2.3]"
-      heading="Alerts"
-      :width="25"
-      :height="25"
-      :class="`has-tooltip-hidden-touch alerts-floating-container ${showSidebar ? 'side-open' : ''}`"
-      :customStyles="$device.isMobile"
-      :toggleMethod="() => $data.showAlerts = false"
-    >
-      <ToolbarAlerts />
-    </UiFloatingContainer>
-    <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-      ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      <bell-icon size="18" />
+    </button>
+    <ToolbarAlerts v-if="showAlerts" v-click-outside="toggleAlerts" />
+    <button
+      title="call"
+      v-if="conversation"
+      v-tooltip.bottom="callTooltipText"
+      :class="{disabled: !enableRTC || webrtc.activeCall || isGroup}"
       data-cy="toolbar-enable-audio"
-      :data-tooltip="enableRTC ? $t('controls.call') : $t('controls.not_connected')"
-      v-if="server"
-      @click="() => call(['audio'])"
+      @click="handleCall"
     >
-      <phone-call-icon size="1x" class="control-icon" />
-    </div>
-    <div
-      :class="`has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch control-button
-      ${!enableRTC || webrtc.activeCall ? 'disabled' : ''}`"
+      <phone-call-icon size="18" />
+    </button>
+    <!-- <div
+      :class="`control-button ${!enableRTC || webrtc.BackgroundCall ? 'disabled' : ''}`"
       data-cy="toolbar-enable-video"
-      :data-tooltip="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
-      v-if="server"
+      v-tooltip.bottom="enableRTC ? $t('controls.video') : $t('controls.not_connected')"
+      v-if="recipient"
       @click="() => call(['audio', 'video'])"
     >
-      <video-icon size="1x" class="control-icon" />
-    </div>
-    <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.archived')"
-      :tooltipPosition="'bottom'"
-      data-cy="toolbar-archived-messages"
-    >
-      <div
-        class="has-tooltip has-tooltip-bottom has-tooltip-primary has-tooltip-hidden-touch"
-        :class="ui.showPinned ? 'primary' : ''"
-        data-tooltip="Archived Messages"
-        @click="() => {
-        $store.commit('ui/togglePinned', !ui.showPinned)
-      }"
-      >
-        <archive-icon size="1x" class="control-icon" color="grey" />
-      </div>
-    </UiComingSoon>
-    <div
-      v-if="!isGroup(recipient)"
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
-      :data-tooltip="$t('pages.chat.new_group')"
-      @click="toggleModal('creategroup')"
-    >
-      <users-icon size="1x" class="control-icon" />
-    </div>
-    <div
-      v-else
-      class="has-tooltip has-tooltip-bottom has-tooltip-primary control-button"
-      :data-tooltip="$t('pages.chat.add_member')"
-      @click="groupInvite(getGroup())"
-    >
-      <user-plus-icon size="1x" class="control-icon" />
-    </div>
-    <GroupCreate v-click-outside="()=>toggleModal('creategroup')" />
-    <GroupInvite v-click-outside="()=>toggleModal('groupInvite')" />
+      <video-icon size="1x"  />
+    </div> -->
 
-    <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <div
-      v-if="!$device.isMobile"
-      class="market-place has-tooltip has-tooltip-primary has-tooltip-bottom control-button"
-      @click="() => toggleModal(ModalWindows.CALLTOACTION)"
-      data-tooltip="Marketplace"
+    <div class="vertical-divider" />
+
+    <UiComingSoon
+      :tooltip-text="$t('market_place.title')"
+      :tooltip-position="'bottom'"
       data-cy="toolbar-marketplace"
+      @click="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+      class="disabled"
     >
-      <shopping-bag-icon class="control-icon" size="1x" />
-    </div>
+      <shopping-bag-icon size="18" />
+    </UiComingSoon>
     <UiComingSoon
-      v-if="!$device.isMobile"
-      :tooltipText="$t('coming_soon.wallet')"
-      :tooltipPosition="'bottom'"
+      :tooltip-text="$t('coming_soon.wallet')"
+      :tooltip-position="'bottom'"
       data-cy="toolbar-wallet"
+      class="disabled"
     >
-      <div
-        class="has-tooltip has-tooltip-primary has-tooltip-bottom"
+      <button
+        title="wallet"
+        v-tooltip.bottom="$t('wallet.wallet')"
         @click="() => toggleModal(ModalWindows.WALLET)"
-        data-tooltip="Wallet"
       >
-        <wallet-icon class="control-icon" size="1x" color="grey" />
-      </div>
+        <wallet-icon size="18" />
+      </button>
     </UiComingSoon>
 
-    <div class="vertical-divider" v-if="!$device.isMobile"></div>
-    <InteractablesSearchInput
-      v-if="!$device.isMobile"
-      @search="handleSearch"
-      @change="handleChange"
-      :placeholder="$t('search.search')"
-      :searchRecommend="searchRecommend"
-    />
-    <InteractablesSearchResult
-      v-if="!$device.isMobile"
-      :searchQuery="searchQuery"
-      :show="showSearchResult"
-      :user="user"
+    <template v-if="isGroup">
+      <button
+        v-tooltip.bottom="isGroupInviteVisible ? '' : $t('pages.chat.add_member')"
+        @click="isGroupInviteVisible = !isGroupInviteVisible"
+      >
+        <user-plus-icon size="18" />
+      </button>
+      <GroupInvite
+        v-if="isGroupInviteVisible"
+        v-click-outside="() => isGroupInviteVisible = false"
+        @close="isGroupInviteVisible = false"
+      />
+    </template>
+    <div class="vertical-divider" />
+    <UiComingSoon style="width: auto; height: auto">
+      <SearchInput
+        v-if="$device.isDesktop"
+        :placeholder="$t('search.search')"
+        :search-recommend="searchRecommend"
+        @search="handleSearch"
+        @change="handleChange"
+      />
+    </UiComingSoon>
+    <SearchResult
+      v-if="$device.isDesktop && searchQuery"
+      :search-query="searchQuery"
       @toggle="toggleSearchResult"
     />
-    <ToolbarPinned v-if="ui.showPinned" />
   </div>
 </div>

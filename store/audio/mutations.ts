@@ -4,8 +4,11 @@ const mutations = {
   mute(state: AudioState) {
     state.muted = !state.muted
   },
-  setMuted(state: AudioState, muted: boolean) {
-    state.muted = muted
+  toggleMute(state: AudioState) {
+    state.muted = !state.muted
+  },
+  setMute(state: AudioState, flag: boolean) {
+    state.muted = flag
   },
   deafen(state: AudioState) {
     const isDeafened = state.deafened
@@ -13,22 +16,22 @@ const mutations = {
     state.volume = isDeafened ? state.previousVolume : 0
     state.deafened = !isDeafened
   },
-  setVolume(state: AudioState, volume: Number) {
+  setVolume(state: AudioState, volume: number) {
     state.previousVolume = volume
     state.volume = volume
   },
-  setSystemVolume(state: AudioState, systemVolume: Number) {
+  setSystemVolume(state: AudioState, systemVolume: number) {
     state.sounds.system = systemVolume
   },
-  setInputVolume(state: AudioState, inputVolume: Number) {
+  setInputVolume(state: AudioState, inputVolume: number) {
     state.inputVolume = inputVolume
   },
   setSoundLevel(
     state: AudioState,
     sound: {
-      inboundMedia: Number
-      outboundMedia: Number
-      system: Number
+      inboundMedia: number
+      outboundMedia: number
+      system: number
     },
   ) {
     state.sounds = sound

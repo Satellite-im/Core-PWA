@@ -1,4 +1,4 @@
-<template src="./Actions.html" />
+<template src="./Actions.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
@@ -9,12 +9,15 @@ import {
   MicIcon,
   MicOffIcon,
   ScreenShareIcon,
+  ScreenShareOffIcon,
   PhoneOffIcon,
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
+import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { PeerMutedState, StreamMutedState } from '~/store/webrtc/types'
 
 export default Vue.extend({
   components: {
@@ -23,20 +26,34 @@ export default Vue.extend({
     MicIcon,
     MicOffIcon,
     ScreenShareIcon,
+    ScreenShareOffIcon,
     PhoneOffIcon,
   },
   data() {
     return {
-      isLoading: false,
+      buttonsLoading: [] as WebRTCEnum[],
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
-    ...mapState(['audio', 'video', 'webrtc']),
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+      video: (state) => (state as RootState).video,
+    }),
+    mutedState(): PeerMutedState | undefined {
+      if (!iridium.connector) {
+        return
+      }
+      return this.webrtc.streamMuted[iridium.connector.id]
+    },
     audioMuted(): boolean {
-      return this.webrtc.localTracks.audio.muted
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.audio)
     },
     videoMuted(): boolean {
-      return this.webrtc.localTracks.video.muted
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.video)
+    },
+    screenMuted(): boolean {
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.screen)
     },
   },
   methods: {
@@ -45,46 +62,25 @@ export default Vue.extend({
      * @description Toggles mute for outgoing audio
      * @example
      */
-    toggleMute() {
-      this.isLoading = true
-      const muted = this.audioMuted
+    async toggleMute(kind: WebRTCEnum) {
+      if (!iridium.id) return
 
-      const { activeCall } = this.webrtc
-
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      if (muted) {
-        peer?.call.unmute(WebRTCEnum.AUDIO)
-        this.$store.dispatch('sounds/playSound', Sounds.UNMUTE)
-      } else {
-        peer?.call.mute(WebRTCEnum.AUDIO)
-        this.$store.dispatch('sounds/playSound', Sounds.MUTE)
+      this.buttonsLoading.push(kind)
+      try {
+        if (kind === WebRTCEnum.AUDIO) {
+          await this.$store.dispatch('audio/toggleMute')
+        } else if (kind === WebRTCEnum.VIDEO) {
+          await this.$store.dispatch('video/toggleMute')
+        } else {
+          await iridium.webRTC.toggleMute({
+            kind,
+            did: iridium.id,
+          })
+        }
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
       }
-
-      this.isLoading = false
-    },
-    /**
-     * @method toggleVideo
-     * @description Toggles outgoing video
-     * @example
-     */
-    async toggleVideo() {
-      this.isLoading = true
-      const muted = this.videoMuted
-
-      const { activeCall } = this.webrtc
-
-      const peer = this.$WebRTC.getPeer(activeCall)
-
-      if (muted) {
-        await peer?.call.unmute(WebRTCEnum.VIDEO)
-        this.$store.dispatch('sounds/playSound', Sounds.UNDEAFEN)
-      } else {
-        await peer?.call.mute(WebRTCEnum.VIDEO)
-        this.$store.dispatch('sounds/playSound', Sounds.DEAFEN)
-      }
-
-      this.isLoading = false
+      this.buttonsLoading.splice(this.buttonsLoading.indexOf(kind), 1)
     },
     /**
      * @method hangUp
@@ -92,11 +88,7 @@ export default Vue.extend({
      * @example
      */
     hangUp() {
-      if (!this.webrtc.activeCall) return
-      const peer = this.$WebRTC.getPeer(this.webrtc.activeCall)
-      peer?.call.hangUp()
-      this.$store.dispatch('webrtc/hangUp')
-      this.$store.commit('ui/fullscreen', false)
+      iridium.webRTC.hangUp()
     },
   },
 })

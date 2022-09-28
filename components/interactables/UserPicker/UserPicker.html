@@ -1,0 +1,35 @@
+<div class="user-picker">
+  <div class="chips">
+    <InteractablesChip
+      v-for="(friend, i) in selected"
+      :key="friend.address"
+      :text="friend.name"
+      :friend="friend"
+      size="small"
+      @delete="toggle(friend)"
+    />
+  </div>
+  <InteractablesInput
+    v-model="filter"
+    size="xs"
+    :placeholder="$t('servers.create.select_friends_placeholder')"
+  />
+  <div class="users" :style="{ height: height }">
+    <TypographyText
+      v-if="!filteredFriends.length"
+      class="empty-results-text"
+      color="dark"
+      size="sm"
+    >
+      {{ $t('servers.create.user_picker_empty') }}
+    </TypographyText>
+    <InteractablesUserPickerListItem
+      v-else
+      v-for="friend in filteredFriends"
+      :key="friend.address"
+      :friend="friend"
+      :selected="isSelected(friend)"
+      @click="toggle(friend)"
+    />
+  </div>
+</div>

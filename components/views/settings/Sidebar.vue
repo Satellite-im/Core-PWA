@@ -1,41 +1,37 @@
 <template>
-  <InteractablesAsideMenu
-    :menu-content="sidebarLayout"
-    :title="title"
-    :toggleable="toggleable"
-    :toggle="toggle"
-    :active="ui.settingsRoute"
-    custom
-    :custom-action="customAction"
-  />
+  <aside class="menu">
+    <div v-for="group in menuOptions" :key="group.title">
+      <p class="menu-label">{{ group.title }}</p>
+      <ul class="menu-list">
+        <li v-for="link in group.links" :key="link.to">
+          <a
+            :class="{ active: settingsRoute === link.to }"
+            @click="navigateTo(link.to)"
+          >
+            {{ link.text }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
 </template>
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SidebarGrouping, SidebarLink } from '~/types/ui/sidebar'
+import { SidebarGrouping } from '~/types/ui/sidebar'
 import { SettingsRoutes } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  props: {
-    toggleable: Boolean,
-    toggle: {
-      type: Function,
-      default: () => {},
-    },
-    title: {
-      type: String,
-      default: 'Title',
-    },
-    handleRouteChange: {
-      type: Function,
-      default: () => () => {},
-    },
-  },
-  data() {
-    return {
-      sidebarLayout: [
+  computed: {
+    ...mapState({
+      settingsRoute: (state) => (state as RootState).ui.settingsRoute,
+    }),
+    menuOptions(): SidebarGrouping[] {
+      // TODO: Replace all text entries with i18n
+      return [
         {
-          title: 'General',
+          title: 'User Settings',
           links: [
             {
               to: SettingsRoutes.PERSONALIZE,
@@ -49,37 +45,8 @@ export default Vue.extend({
               to: SettingsRoutes.AUDIO_AND_VIDEO,
               text: 'Audio & Video',
             },
-            {
-              to: SettingsRoutes.KEY_BINDS,
-              text: 'Keybinds',
-            },
-            {
-              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
-              text: 'Accounts & Devices',
-            },
-            {
-              to: SettingsRoutes.PRIVACY,
-              text: 'Privacy',
-            },
-          ] as Array<SidebarLink>,
-        } as SidebarGrouping,
-        {
-          title: 'Realms & Security',
-          links: [
-            {
-              to: SettingsRoutes.REALMS,
-              text: 'Realms',
-            },
-            {
-              to: SettingsRoutes.STORAGE,
-              text: 'Storage',
-            },
-            {
-              to: SettingsRoutes.NETWORK,
-              text: 'Network',
-            },
-          ] as Array<SidebarLink>,
-        } as SidebarGrouping,
+          ],
+        },
         {
           title: 'Developer',
           links: [
@@ -95,25 +62,105 @@ export default Vue.extend({
               to: SettingsRoutes.INFO,
               text: 'App Info',
             },
-          ] as Array<SidebarLink>,
-        } as SidebarGrouping,
-      ],
-    }
-  },
-  computed: {
-    ...mapState(['ui']),
+          ],
+        },
+        {
+          title: 'App Settings',
+          links: [
+            /* {
+              to: SettingsRoutes.REALMS,
+              text: 'Realms',
+            }, */ // hidden due to AP-2243
+            {
+              to: SettingsRoutes.STORAGE,
+              text: 'Storage',
+            },
+            /* {
+               to: SettingsRoutes.NETWORK,
+               text: 'Network',
+            }, */
+            {
+              to: SettingsRoutes.KEY_BINDS,
+              text: 'Keybinds',
+            },
+            {
+              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
+              text: 'Accounts & Devices',
+            },
+            {
+              to: SettingsRoutes.PRIVACY_AND_PERMISSIONS,
+              text: 'Privacy & Permissions',
+            },
+          ],
+        },
+      ]
+    },
   },
   methods: {
-    /**
-     * @method customAction DocsTODO
-     * @description
-     * @param link
-     * @example
-     */
-    customAction(link: string) {
-      this.$props.handleRouteChange(link)
+    navigateTo(link: string) {
+      this.$store.commit('ui/setSettingsRoute', link)
     },
   },
 })
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.menu {
+  overflow-y: auto;
+  &:extend(.no-select);
+  background: @semitransparent-dark-gradient;
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  .menu-label {
+    &:extend(.font-muted);
+    font-family: @heading-font;
+    font-size: @font-size-sm;
+    margin-bottom: 0.25rem;
+  }
+
+  .menu-list {
+    li {
+      @media only screen and (min-width: @small-breakpoint) {
+        &:hover {
+          &:extend(.background-semitransparent-light);
+        }
+      }
+
+      a {
+        display: block;
+        -webkit-user-drag: none;
+        text-decoration: none;
+        padding: 0.5em 0;
+        &:extend(.no-select);
+        &:extend(.font-primary);
+        &:extend(.round-corners);
+
+        @media only screen and (min-width: @mobile-breakpoint) {
+          padding: 0.5em 0.75em;
+
+          &:hover {
+            .background-semitransparent-light();
+            .font-primary();
+          }
+
+          &.active {
+            .background-flair-gradient();
+            .glow-flair();
+          }
+        }
+
+        @media only screen and (max-width: @mobile-breakpoint) {
+          &:active {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: @mobile-breakpoint) {
+    background: none;
+  }
+}
+</style>

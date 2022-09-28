@@ -1,4 +1,4 @@
-import { KeybindTypes, CaptureMouseTypes } from './types'
+import { CaptureMouseTypes, KeybindTypes } from './types'
 import InitialSettingsState from '~/store/settings/state'
 
 describe('init', () => {

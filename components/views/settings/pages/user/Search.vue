@@ -1,23 +1,11 @@
 <template src="./Search.html"></template>
 
 <script lang="ts">
-// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import { PlusIcon, XIcon } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
 import { User } from '~/types/ui/user'
 import { InputStyle, InputSize } from '~/components/interactables/Input/types'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    selected: Array<User>
-    dropDown: boolean
-    showDropDown: () => void
-    selection: number
-    selectUser: (user: User, event: Event) => void
-    filteredResult: Array<User>
-  }
-}
 
 export default Vue.extend({
   components: {
@@ -59,10 +47,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['friends']),
-    filteredResult() {
+    filteredResult(): any {
       return this.result.filter((user: User) => {
         const isAlreadyExist = this.selected.find(
-          (selectedUser) => selectedUser.name === user.name,
+          (selectedUser) => selectedUser.address === user.address,
         )
         if (isAlreadyExist) return false
         return true

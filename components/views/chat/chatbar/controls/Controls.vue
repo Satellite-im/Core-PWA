@@ -19,11 +19,9 @@ export default Vue.extend({
     ArrowRightIcon,
   },
   props: {
-    sendMessage: {
-      type: Function,
-    },
     disabled: {
       type: Boolean,
+      required: true,
     },
   },
   computed: {
@@ -36,29 +34,22 @@ export default Vue.extend({
      * @example v-on:click="toggleEnhancers"
      */
     toggleEnhancers(route: string) {
-      if (!this.disabled) {
-        if (this.ui.enhancers.show && this.ui.enhancers.route !== route) {
-          this.$store.commit('ui/toggleEnhancers', {
-            show: true,
-            floating: true,
-            route,
-          })
-          return
-        }
-        this.$store.commit('ui/toggleEnhancers', {
-          show: !this.ui.enhancers.show,
-          floating: true,
-          route,
-        })
-      }
+      this.$store.commit('ui/toggleEnhancers', {
+        show:
+          (this.ui.enhancers.show && this.ui.enhancers.route !== route) ||
+          !this.ui.enhancers.show,
+        floating: true,
+        route,
+      })
     },
     toggleMiniWallet() {
-      if (!this.disabled) {
-        this.$store.commit('ui/toggleModal', {
-          name: 'walletMini',
-          state: !this.ui.modals.walletMini,
-        })
+      if (this.disabled) {
+        return
       }
+      this.$store.commit('ui/toggleModal', {
+        name: 'walletMini',
+        state: !this.ui.modals.walletMini,
+      })
     },
   },
 })

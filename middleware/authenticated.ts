@@ -1,15 +1,29 @@
 import { NuxtRouteConfig } from '@nuxt/types/config/router'
+import memoize from 'lodash/memoize'
 // TODO: verify why we got the import/named error for RawLocation import AP-394
 // eslint-disable-next-line import/named
 import { RawLocation } from 'vue-router'
-import memoize from 'lodash/memoize'
 import { Config } from '~/config'
 import { RootStore } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 interface Arguments {
   store: RootStore
   redirect: (location: RawLocation) => void
   route: NuxtRouteConfig
 }
+
+let redirectDebounce: NodeJS.Timer
+window?.addEventListener('beforeunload', () => {
+  clearTimeout(redirectDebounce)
+})
+
+window?.addEventListener('popstate', () => {
+  clearTimeout(redirectDebounce)
+})
+
+window?.addEventListener('pushstate', () => {
+  clearTimeout(redirectDebounce)
+})
 
 /**
  * @method
@@ -19,8 +33,7 @@ interface Arguments {
  * @example
  */
 export default function ({ store, route, redirect }: Arguments) {
-  const { locked, phrase } = store.state.accounts
-  const { allPrerequisitesReady } = store.getters
+  const { locked, encryptedPhrase } = store.state.accounts
 
   const eventuallyRedirect = memoize(
     (path: string) => {
@@ -30,13 +43,13 @@ export default function ({ store, route, redirect }: Arguments) {
     () => redirect,
   )
 
-  // If the user is not authenticated
-  if (locked) {
+  const isAuth = route.path.startsWith('/auth')
+  if (locked && !isAuth) {
     return eventuallyRedirect('/auth/unlock')
   }
 
   // If the wallet has not been created yet
-  if (!locked && phrase === '' && !route.path.includes('setup')) {
+  if (!locked && encryptedPhrase === '' && !route.path.includes('setup')) {
     return eventuallyRedirect('/setup/disclaimer')
   }
 
@@ -46,7 +59,13 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  if (!allPrerequisitesReady) return eventuallyRedirect('/')
+  if (!iridium.ready && route.path !== '/' && !isAuth) {
+    return eventuallyRedirect('/')
+  }
+
+  if (route && (route.path === '/' || isAuth) && iridium.ready) {
+    return eventuallyRedirect('/friends')
+  }
 
   store.commit('accounts/setLastVisited', route.path)
 }

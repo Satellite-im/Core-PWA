@@ -1,11 +1,12 @@
 .circle {
   &:extend(.font-secondary);
-  .image {
+  &:extend(.no-select);
+  display: inline-block;
+  vertical-align: top;
+  &-image {
     &:extend(.full-width);
     height: @full;
   }
-  display: inline-block;
-  vertical-align: top;
 }
 
 .circle-flex {
@@ -16,4 +17,21 @@
 
 .is-rounded {
   border-radius: @half;
+}
+
+.satellite-circle {
+  height: @full;
+  width: @full;
+  &:extend(.full-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: @secondary-text;
+  border-radius: @half;
+  font-weight: 500;
+  color: #fff;
+
+  svg {
+    overflow: visible;
+  }
 }

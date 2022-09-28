@@ -1,0 +1,15 @@
+<div
+  class="file-preview bordered"
+  @touchmove="handleTouchPreview"
+  @touchstart="handleTouchPreview"
+  @touchend="handleTouchPreview"
+>
+  <div class="file-list">
+    <ChatbarUploadPreviewItem
+      v-for="(item, index) in files"
+      :item="item"
+      :key="index"
+      @removeUploadItem="removeUploadItem(index)"
+    />
+  </div>
+</div>

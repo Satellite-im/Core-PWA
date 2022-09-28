@@ -1,10 +1,12 @@
-<template src="./Accounts.html" />
+<template src="./Accounts.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
+import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'AccountsSettings',
@@ -15,21 +17,30 @@ export default Vue.extend({
   data() {
     return {
       showPhrase: false,
-      featureReadyToShow: false,
+      profile: iridium.profile.state,
     }
   },
   computed: {
-    ...mapState(['accounts']),
+    ...mapState({
+      storePin: (state) => (state as RootState).accounts.storePin,
+      accountPhrase: (state) => (state as RootState).accounts.phrase,
+    }),
+    getId(): string | undefined {
+      if (!iridium.connector) return
+      return this.profile
+        ? `${this.profile.name}#${iridium.id.substring(iridium.id.length - 6)}`
+        : `${iridium.id}`
+    },
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
       },
-      get() {
-        return this.accounts.storePin
+      get(): boolean {
+        return !!this.storePin
       },
     },
-    splitPhrase(): Array<String> {
-      return this.accounts.phrase.split(' ')
+    splitPhrase(): string[] {
+      return this.accountPhrase.split(' ')
     },
   },
   methods: {
@@ -39,7 +50,15 @@ export default Vue.extend({
      * @example
      */
     togglePhrase() {
-      this.$data.showPhrase = !this.$data.showPhrase
+      this.showPhrase = !this.showPhrase
+    },
+    copyAddress(copyText: string) {
+      navigator.clipboard.writeText(copyText)
+      this.$toast.show(this.$t('ui.copied') as string)
+    },
+    copyPhrase() {
+      navigator.clipboard.writeText(this.accountPhrase)
+      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

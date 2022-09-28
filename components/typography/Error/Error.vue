@@ -1,4 +1,4 @@
-<template src="./Error.html" />
+<template src="./Error.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 
@@ -12,6 +12,10 @@ export default Vue.extend({
       default() {
         return this.$t('internal.missing_text')
       },
+    },
+    small: {
+      type: Boolean,
+      default: false,
     },
   },
 })

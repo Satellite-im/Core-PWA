@@ -1,5 +1,5 @@
 import { AccountsState, RegistrationStatus } from './types'
-import { UserRegistrationData } from '~/types/ui/user'
+import { User } from '~/libraries/Iridium/users/types'
 
 const mutations = {
   setPin(state: AccountsState, pin: string) {
@@ -31,29 +31,24 @@ const mutations = {
     state.active = activeAccountPubkey
     state.initialized = true
   },
-  setUserDetails(state: AccountsState, details: UserRegistrationData) {
+  setProfilePicture(state: AccountsState, image: string) {
+    if (state.details) {
+      state.details.photoHash = image
+    }
+  },
+  setUserDetails(state: AccountsState, details: User) {
     state.details = {
-      name: details.username,
+      did: details.did,
+      name: details.name,
       status: details.status,
-      profilePicture: details.photoHash,
-      address: state.active,
-      state: 'online',
-      lastUpdate: Date.now(),
+      photoHash: details.photoHash,
     }
   },
-  updateMailboxId(state: AccountsState, mailboxId: string) {
+  setUserPeerId(state: AccountsState, peerId: string) {
     if (state.details) {
       state.details = {
         ...state.details,
-        mailboxId,
-      }
-    }
-  },
-  updateTextilePubkey(state: AccountsState, textilePubkey: string) {
-    if (state.details) {
-      state.details = {
-        ...state.details,
-        textilePubkey,
+        peerId,
       }
     }
   },
@@ -65,6 +60,15 @@ const mutations = {
   },
   setLastVisited(state: AccountsState, lastVisited: string) {
     state.lastVisited = lastVisited
+  },
+  setAdapter(state: AccountsState, adapter: string) {
+    state.adapter = adapter
+  },
+  setEntropy(state: AccountsState, entropyMessage: string) {
+    state.entropyMessage = entropyMessage
+  },
+  setNewAccount(state: AccountsState, val: boolean) {
+    state.isNewAccount = val
   },
 }
 

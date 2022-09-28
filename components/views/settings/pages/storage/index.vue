@@ -21,6 +21,8 @@ export default Vue.extend({
         this.$toast.success(
           this.$t('pages.settings.storage.clear.message') as string,
         )
+        this.$store.commit('settings/removeAppState')
+        location.reload()
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       } finally {

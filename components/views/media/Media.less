@@ -1,169 +1,58 @@
-#mediastream {
-  position: absolute;
-  z-index: @base-z-index + 12; // Keep +1 wrt .new-message-alert z-index in ChatScroll.less
-  top: @toolbar-height;
-  height: auto;
-  max-height: 25.5rem;
-  &:extend(.full-width);
-  &:extend(.background-semitransparent-dark);
-  &:extend(.blur);
-  padding: 0.75rem;
+.mediastream {
   display: flex;
+  background-color: @midground;
   flex-direction: column;
-  &:extend(.round-corners);
+  position: relative;
+  border-radius: @corner-rounding;
+  min-height: 240px;
+  max-height: calc(100vh - 300px);
+  gap: 12px;
+  padding-top: 12px;
+  flex-shrink: 0;
 
-  #media {
+  &.is-fullscreen {
+    padding-bottom: 12px;
+  }
+
+  &.has-presenter {
+    min-height: 400px;
+  }
+
+  .media {
     position: relative;
     display: flex;
     flex: 1;
-    &:extend(.full-width);
-    overflow: hidden;
     justify-content: center;
-    align-items: center;
+    align-content: center;
     flex-wrap: wrap;
-    .user {
-      width: 16rem;
-      height: 9rem;
-      margin: @xlight-spacing;
-      &.full-video {
-        position: absolute;
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 100;
-      }
-      .video-stream-container {
-        height: 100%;
-        width: 100%;
-        background: @semitransparent-light-gradient;
-        border: 1px solid @foreground;
-        border-radius: @corner-rounding;
-        position: relative;
-        .video-stream {
-          width: 100%;
-          height: 100%;
-          border-radius: @corner-rounding;
-        }
-        .indicators {
-          display: flex;
-          flex-flow: row nowrap;
-          justify-content: flex-end;
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 1rem;
-          z-index: @base-z-index + 2;
-          .indicator {
-            margin-left: @light-spacing;
-          }
-        }
-      }
+    flex-direction: row;
+    overflow: hidden;
+    gap: 8px;
+    min-height: 120px;
+    margin: 0 12px;
 
-      &:nth-child(1) {
-        order: 1;
-      }
-      &:nth-child(2) {
-        order: 2;
-      }
-      &:nth-child(3) {
-        order: 3;
-      }
-      &:nth-child(4) {
-        order: 4;
-      }
-      &:nth-child(5) {
-        order: 5;
-      }
-      &:nth-child(6) {
-        order: 6;
-      }
-      &:nth-child(7) {
-        order: 7;
-      }
-      &:nth-child(8) {
-        order: 8;
-      }
-      &:nth-child(9) {
-        order: 9;
-      }
-      &:nth-child(10) {
-        order: 10;
-      }
+    &.has-presenter {
+      height: 120px;
+      flex-grow: 0;
     }
+  }
+
+  .controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 18px;
   }
 }
 
-.fullscreen-media {
-  #mediastream {
-    max-height: unset;
-    height: calc(@full - @toolbar-height - @light-spacing);
-    margin-bottom: 1rem;
-    #media {
-      justify-content: center;
-      flex-direction: row;
-      .user {
-        .video-stream-container {
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
-  }
-}
-
-.more-user {
-  &:extend(.background-primary);
-  min-width: 16rem;
-  height: 9rem;
-  &:extend(.round-corners);
+.presenter {
   display: flex;
-  align-self: flex-end;
-  justify-content: center;
   align-items: center;
-  order: 11;
-  font-size: 30px;
-  line-height: 28px;
-  margin: @xlight-spacing;
-  padding: @light-spacing;
-  position: relative;
-  &.full {
-    line-height: 13px;
-    text-align: center;
-  }
-  &.full-mobile {
-    min-width: 12rem !important;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  #mediastream {
-    min-width: @viewport-width;
-    top: @toolbar-height - @normal-spacing;
-    margin: 0;
-    border-radius: 0;
-  }
-}
-
-@media only screen and (max-width: 1917px) {
-  .more-user:not(.full) {
-    order: 9;
-  }
-}
-
-@media only screen and (max-width: 1653px) {
-  .more-user:not(.full) {
-    order: 7;
-  }
-}
-
-@media only screen and (max-width: 1389px) {
-  .more-user:not(.full) {
-    order: 5;
-  }
-}
-
-@media only screen and (max-width: 1125px) {
-  .more-user:not(.full) {
-    order: 3;
-  }
+  justify-content: center;
+  flex-grow: 1;
+  overflow: hidden;
+  margin: 0 12px;
 }

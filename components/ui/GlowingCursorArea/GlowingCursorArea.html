@@ -1,14 +1,11 @@
 <div
-  id="custom-cursor-area"
+  class="custom-cursor-area"
   @mousemove="moveCursor"
   @mouseover="hideCursor = false"
   @mouseleave="hideCursor = true"
 >
-  <div
-    v-if="!hideCursor && !hide"
-    id="custom-cursor"
-    ref="point"
-    :style="cursorPoint"
-  ></div>
+  <div class="inner">
+    <div class="custom-cursor" :style="cursorPoint"></div>
+  </div>
   <slot />
 </div>

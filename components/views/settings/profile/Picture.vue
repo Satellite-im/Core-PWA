@@ -1,33 +1,32 @@
 <template>
-  <div>
-    <div class="profile-image" :style="`background-image: url(${image})`" />
+  <div class="img-container">
+    <img v-if="url" :src="url" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { sampleProfileInfo } from '~/mock/profile'
 
 export default Vue.extend({
-  props: {
-    image: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {}
+  computed: {
+    url: () => sampleProfileInfo.imageUrl,
+    sampleProfileInfo: () => sampleProfileInfo,
   },
 })
 </script>
 
-<style scopped lang="less">
-.profile-image {
-  &:extend(.full-width);
-  height: 330px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  border-top-left-radius: @corner-rounding;
-  border-top-right-radius: @corner-rounding;
+<style scoped lang="less">
+.img-container {
+  background-color: @gray;
+  border-radius: @corner-rounding @corner-rounding 0 0;
+  overflow: hidden;
+  height: 300px;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
 }
 </style>

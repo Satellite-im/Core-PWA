@@ -1,8 +1,4 @@
-:root {
-  --flair-color: #b53471;
-}
-
-.moonless_night {
+.theme-moonlessNight {
   //------------- Colors -------------
   @white: #fff;
 
@@ -22,7 +18,6 @@
 
   //------------- Ui Colors -------------
   @border-color: @gray;
-  @flair-glow: 0 5px 14px -5px var(--flair-color);
 
   //------------- Ui Flair -------------
   @border: 1px solid @border-color;
@@ -34,17 +29,9 @@
     background: @graydient !important;
   }
 
-  ::selection {
-    &:extend(.font-secondary);
-    background: var(--flair-color) !important;
-  }
-
   &body,
-  #app,
-  .horizontal-rule,
-  .vertical-divider {
+  #app {
     background: @midground !important;
-    caret-color: var(--flair-color) !important;
   }
 
   .control-icon.active,
@@ -53,21 +40,8 @@
   }
 
   #mobile-nav {
-    div {
-      svg {
-        color: @white !important;
-      }
-      &.active {
-        border-radius: @half;
-        color: var(--flair-color) !important;
-        svg {
-          color: var(--flair-color) !important;
-        }
-      }
-      &:extend(.inline-flex-centered);
-      margin: auto;
-      width: 40px !important;
-      height: 40px;
+    &.active {
+      border-radius: @half;
     }
 
     background: @graydient !important;
@@ -86,39 +60,4 @@
     backdrop-filter: unset !important;
     box-shadow: none !important;
   }
-
-  // Media
-  #mediastream {
-    .user,
-    .tag {
-      background: var(--flair-color) !important;
-    }
-    .tag {
-      box-shadow: @flair-glow !important;
-    }
-  }
-}
-
-.tag {
-  .tag-number {
-    background: var(--flair-color) !important;
-  }
-}
-
-.context-menu {
-  p:hover {
-    background: var(--flair-color) !important;
-  }
-}
-
-.filterbox {
-  .filter-options {
-    input[type='checkbox'] {
-      accent-color: var(--flair-color);
-    }
-  }
-}
-
-.edit-message {
-  border-color: var(--flair-color) !important;
 }

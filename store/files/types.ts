@@ -1,5 +1,33 @@
-import { FileType, Folder } from '~/types/files/file'
+import { FileSortEnum } from '~/libraries/Enums/enums'
+import {
+  IridiumDirectory,
+  IridiumFile,
+  IridiumItem,
+} from '~/libraries/Iridium/files/types'
+
+export interface FileSort {
+  category: FileSortEnum
+  asc: boolean
+}
+
+interface CurrentUploadState {
+  name: string
+  size: number
+}
+
+interface SearchState {
+  value: string
+  searchAll: boolean
+}
 
 export interface FilesState {
-  tree: Array<FileType | Folder>
+  currentUpload?: CurrentUploadState
+  downloadList: string[]
+  gridLayout: boolean // false for table
+  path: { id: IridiumDirectory['id']; name: IridiumDirectory['name'] }[]
+  preview?: IridiumFile
+  rename?: IridiumItem
+  search: SearchState
+  sort: FileSort
+  status: string
 }

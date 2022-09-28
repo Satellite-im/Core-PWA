@@ -1,160 +1,494 @@
-import Peer, { SignalData } from 'simple-peer'
+import Vue from 'vue'
+import Peer from 'simple-peer'
+import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
 import Emitter from './Emitter'
-import { TracksManager } from './TracksManager'
-import { CallEventListeners, TrackKind } from './types'
-import { Wire } from './Wire'
+import { WebRTCErrors } from './errors/Errors'
+import { CallEventListeners } from './types'
 import { Config } from '~/config'
-import Logger from '~/utilities/Logger'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { Wire } from '~/libraries/WebRTC/Wire'
+import logger from '~/plugins/local/logger'
+
+const PERMISSION_DENIED_BY_SYSTEM = 'Permission denied by system'
+
+export class CallPeer extends Peer {
+  id: string
+  name: string
+  callId: string | undefined
+
+  constructor(
+    {
+      id,
+      name,
+      callId,
+    }: {
+      id: string
+      name: string
+      callId: string | undefined
+    },
+    opts?: Peer.Options,
+  ) {
+    super(opts)
+    this.callId = callId
+    this.id = id
+    this.name = name
+  }
+}
+
+export type CallPeerStreams = { [kind: string]: MediaStream }
+export type CallPeerDescriptor = {
+  id: string
+  name: string
+}
 
 /**
  * @class Call
  * @description The Call class manages a p2p connection for audio/video calls
- * It makes use of a Wire as a communication bus for signaling.
+ * It makes use of iridium as a communication bus for signaling.
  */
 export class Call extends Emitter<CallEventListeners> {
-  communicationBus: Wire
-
-  peer?: Peer.Instance // The Simple Peer instance for the active call
-  signalingBuffer?: Peer.SignalData // A variable to store the signaling data before the answer
-
-  stream?: MediaStream // MediaStream for the active call
-  remoteStream?: MediaStream // Remote stream received via WebRTC
-
+  callId: string
+  wire: Wire
+  peerDetails: CallPeerDescriptor[] = []
+  peers: { [did: string]: CallPeer } = {} // The Simple Peer instance for the active call
+  peerConnected: { [key: string]: boolean } = {}
+  peerDialingDisabled: { [key: string]: boolean } = {}
+  screenStreams: { [did: string]: string } = {}
+  streams: { [did: string]: CallPeerStreams } = {} // Remote stream received via WebRTC
+  tracks: { [did: string]: Set<MediaStreamTrack> } = {} // Remote stream received via WebRTC
+  peerPollingInterval: any
+  peerPollingFrequency = 15000
   constraints: MediaStreamConstraints
-
-  tracksManager: TracksManager // Keep tracks of all media stream tracks
+  isCaller: { [did: string]: boolean } = {}
+  isCallee: { [did: string]: boolean } = {}
+  active: boolean = false
+  _listener: any
 
   /**
    * @constructor
-   * @param communicationBus The Wire instance used for signaling (it happens through p2p connection)
+   * @param did The PeerID used for signaling (via iridium)
    */
-  constructor(communicationBus: Wire) {
+  constructor(callId: string, wire: Wire, peers?: CallPeerDescriptor[]) {
     super()
 
-    this.communicationBus = communicationBus
+    this.callId = callId
+
+    this.wire = wire
+
+    if (!iridium.id) {
+      throw new Error('local peerId not found')
+    }
+
+    if (this.callId === iridium.id) {
+      throw new Error('callId cannot be the same as localId')
+    }
 
     this.constraints = Config.webrtc.constraints
-
-    this.tracksManager = new TracksManager()
-
+    this.peerDetails = peers || []
     this._bindBusListeners()
   }
 
   /**
-   * @method createLocalTracks
-   * @description Generate local tracks for audio/video
-   * @param kinds Array of track kind you want to create
-   * @param constraints Media stream constraints to apply
-   * @returns The created local tracks
+   * @method isDirectCall
+   * @description Returns true if the call is direct, false otherwise
+   * @returns {boolean}
    * @example
-   * const call = new Call(wireInstance)
-   * call.createLocalTracks({audio: true, video: true})
+   * const isDirectCall = call.isDirectCall()
+   */
+  isDirectCall() {
+    return this.callId?.indexOf('|') === -1
+  }
+
+  /**
+   * @method requestPeerCalls
+   * @description Send an iridium message requesting for the given dids to initiate a call
+   */
+  async requestPeerCalls(force = false) {
+    await Promise.all(
+      this.peerDetails.map(async ({ id: did }) => {
+        if (did === iridium.id) {
+          return
+        }
+        if (this.isCallee[did]) {
+          return
+        }
+
+        this.isCaller[did] = true
+        await this.sendPeerCallRequest(did, force)
+        if (!this.peers[did]) {
+          await this.initiateCall(did, this.isCaller[did])
+        }
+      }),
+    )
+  }
+
+  /**
+   * @method start
+   * @description It's used for initiate a call
+   * @param stream MediaStream object containing the audio/video tracks
+   */
+  async start() {
+    if (!this.active) {
+      clearInterval(this.peerPollingInterval)
+      this.peerPollingInterval = setInterval(async () => {
+        if (!this.active) return
+        await this.requestPeerCalls()
+      }, this.peerPollingFrequency)
+      this.active = true
+    }
+
+    await this.requestPeerCalls(true)
+  }
+
+  /**
+   * @method answer
+   * @description It's used for answering a call. A call request must be active before
+   * to call this method
+   * @param stream MediaStream object containing the audio/video stream
+   */
+  async answer(did: string, data: Peer.SignalData) {
+    this.isCallee[did] = true
+
+    await this.initiateCall(did, false, data)
+    await this.start()
+  }
+
+  /**
+   * @method createPeer
+   * @description Creates a new Simple Peer instance
+   * @param id The PeerID of the peer
+   * @param asCaller Initiate the call as a caller
+   */
+  createPeer(did: string, asCaller: boolean = false) {
+    if (this.peers[did] || !iridium.id) {
+      return
+    }
+    const pd = this.peerDetails.find((pd) => pd.id === did)
+    if (!pd) {
+      return
+    }
+    const peer = new CallPeer(
+      { ...pd, callId: this.callId },
+      {
+        initiator: asCaller,
+        streams: [
+          this.streams[iridium.id]?.audio,
+          this.streams[iridium.id]?.video,
+        ].filter(Boolean),
+        offerOptions: {
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true,
+        },
+        config: {
+          iceServers: Config.webrtc.iceServers,
+        },
+      },
+    )
+    this.peers[did] = peer
+    this.peerDialingDisabled[did] = false
+    this._bindPeerListeners(peer)
+    peer.addTransceiver('audio')
+    peer.addTransceiver('video')
+    return peer
+  }
+
+  /**
+   * @method initiateCall
+   * @description locally initiates a call to the given peer
+   * @param did
+   * @param asCaller boolean indicating if the local peer is the caller or not
+   * @returns {Promise<void>}
+   * @example
+   * await call.initiateCall(did, true)
+   */
+  async initiateCall(
+    did: string,
+    asCaller: boolean = false,
+    data?: Peer.SignalData,
+  ) {
+    if (!this.peers[did]) {
+      this.createPeer(did, asCaller)
+    }
+
+    this.peerDialingDisabled[did] = !asCaller
+
+    const peer = this.peers[did]
+    if (!peer) {
+      return
+    }
+
+    if (data) {
+      await peer.signal(data)
+      this.emit('ANSWERED', { did, callId: this.callId })
+      return
+    }
+
+    this.emit('OUTGOING_CALL', { did, callId: this.callId })
+  }
+
+  /**
+   * @method sendPeerCallRequest
+   * @description Send a call request to the given peer
+   * @param did
+   * @returns {Promise<void>}
+   * @example
+   * await call.sendPeerCallRequest(did)
+   */
+  async sendPeerCallRequest(did: string, force = false) {
+    if (!did) {
+      return
+    }
+    if (!force && (this.peerConnected[did] || this.peerDialingDisabled[did])) {
+      return
+    }
+
+    return this.wire.sendMessage(
+      {
+        type: 'call',
+        callId: this.callId === did ? iridium.id : this.callId,
+        peers: this.peerDetails,
+        did,
+        at: Date.now().valueOf(),
+      },
+      { recipients: [did] },
+    )
+  }
+
+  /**
+   * @method setCallId
+   * @description Sets the callId of the current call
+   * @param callId
+   * @returns {void}
+   * @example
+   * call.setCallId(callId)
+   */
+  setCallId(callId: string) {
+    this.callId = callId
+  }
+
+  /**
+   * @method createLocalTracks
+   * @description Generate local streams for audio/video/screen
+   * @param kinds Array of track kinds you want to create
+   * @param constraints Media stream constraints to apply
+   * @returns The created streams
+   * @example
    */
   async createLocalTracks(
-    kinds: TrackKind[],
+    kinds: string[],
     constraints?: MediaStreamConstraints,
   ) {
     if (!navigator.mediaDevices.getUserMedia) {
-      throw new Error('WebRTC not supported')
-    }
-
-    if (constraints) {
-      const constraintsUpdates = kinds.reduce(
-        (updates, kind) => ({ ...updates, [kind]: constraints[kind] }),
-        {},
+      alert(
+        "Your browser doesn't support or have permission to access your media devices. Please update your browser or review your security settings.",
       )
-      this.updateConstraints(constraintsUpdates)
+      throw new Error('WebRTC media not supported')
     }
 
-    const constraintsToApply = kinds.reduce(
-      (updates, kind) => ({ ...updates, [kind]: this.constraints[kind] }),
-      {},
+    if (kinds.includes('screen')) {
+      await this.createDisplayStream()
+    }
+
+    if (kinds.includes('audio')) {
+      await this.createAudioStream(constraints?.audio)
+    }
+
+    if (kinds.includes('video')) {
+      await this.createVideoStream(constraints?.video)
+    }
+
+    return this.streams
+  }
+
+  /**
+   * @method createAudioStream
+   * @description Create local audio stream and send it to remote peers
+   * @param constraints Media stream constraints to apply
+   * @example
+   * await call.createAudioStream()
+   */
+  async createAudioStream(constraints?: MediaStreamConstraints['audio']) {
+    if (!iridium.id) return
+
+    const audioStream = await navigator.mediaDevices.getUserMedia({
+      audio: constraints || true,
+    })
+
+    if (!this.streams[iridium.id]) {
+      Vue.set(this.streams, iridium.id, {})
+    }
+    if (!this.tracks[iridium.id]) {
+      this.tracks[iridium.id] = new Set()
+    }
+
+    const audioTrack = audioStream.getAudioTracks()[0]
+    this.streams[iridium.id].audio = audioStream
+    this.tracks[iridium.id].add(audioTrack)
+
+    // mute if needed
+    if (iridium.webRTC.state.streamMuted[iridium.id]?.audio) {
+      audioTrack.enabled = false
+    }
+
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: audioTrack,
+      kind: 'audio',
+      stream: audioStream,
+    })
+
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        try {
+          peer.addTrack(audioTrack, audioStream)
+        } catch (_) {}
+      }),
     )
+  }
 
-    await navigator.mediaDevices
-      .getUserMedia(constraintsToApply)
-      .then((stream) => (this.stream = stream))
-      .catch((err) => {
-        let message = err.message
-        if (
-          err.name === 'NotAllowedError' ||
-          err.name === 'PermissionDeniedError'
-        ) {
-          // permission denied in browser
-          message = 'errors.webRTC.permission_denied'
-        }
-        throw new Error(message)
-      })
-
-    const { audio, video } = this.getLocalTracks()
-
-    if (audio) this.tracksManager.addTrack(audio)
-    if (video) this.tracksManager.addTrack(video)
-
-    if (audio) {
-      this.emit('LOCAL_TRACK_CREATED', {
-        peerId: this.communicationBus.identifier,
-        track: audio,
-      })
+  /**
+   * @method createVideoStream
+   * @description Create local video stream and send it to remote peers
+   * @param constraints Media stream constraints to apply
+   * @returns {Promise<void>}
+   * @example
+   * await call.createVideoStream()
+   */
+  async createVideoStream(constraints?: MediaStreamConstraints['video']) {
+    if (!iridium.id) return
+    const videoStream = await navigator.mediaDevices.getUserMedia({
+      video: constraints || true,
+    })
+    if (!this.streams[iridium.id]) {
+      Vue.set(this.streams, iridium.id, {})
+    }
+    if (!this.tracks[iridium.id]) {
+      this.tracks[iridium.id] = new Set()
     }
 
-    if (video) {
-      this.emit('LOCAL_TRACK_CREATED', {
-        peerId: this.communicationBus.identifier,
-        track: video,
-      })
-    } else {
-      this.emit('LOCAL_TRACK_REMOVED', {
-        peerId: this.communicationBus.identifier,
-        track: { kind: 'video' },
-      })
+    const videoTrack = videoStream.getVideoTracks()[0]
+
+    this.streams[iridium.id].video = videoStream
+    this.tracks[iridium.id].add(videoTrack)
+
+    // mute if needed
+    if (iridium.webRTC.state.streamMuted[iridium.id]?.audio) {
+      videoTrack.enabled = false
     }
 
-    return { audio, video }
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: videoTrack,
+      kind: 'video',
+      stream: videoStream,
+    })
+
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        try {
+          peer.addTrack(videoTrack, videoStream)
+        } catch (_) {}
+      }),
+    )
+  }
+
+  /**
+   * @method createDisplayStream
+   * @description Create local screen stream and send it to remote peers
+   * @returns {Promise<void>}
+   * @example
+   * await call.createDisplayStream()
+   */
+  async createDisplayStream() {
+    if (!navigator.mediaDevices.getDisplayMedia) {
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
+    }
+    if (!iridium.id) return
+    let screenStream: MediaStream
+
+    try {
+      screenStream = await navigator.mediaDevices.getDisplayMedia()
+    } catch (e) {
+      throw new Error(WebRTCErrors.PERMISSION_DENIED)
+    }
+
+    if (!this.streams[iridium.id]) {
+      Vue.set(this.streams, iridium.id, {})
+    }
+    if (!this.tracks[iridium.id]) {
+      this.tracks[iridium.id] = new Set()
+    }
+
+    const screenTrack = screenStream.getVideoTracks()[0]
+    screenTrack.enabled = true
+
+    screenTrack.addEventListener('ended', (event) => {
+      this.mute({ kind: 'screen', did: iridium.id })
+    })
+
+    this.screenStreams[iridium.id] = screenStream.id
+    this.streams[iridium.id].screen = screenStream
+    this.tracks[iridium.id].add(screenTrack)
+
+    // mute if needed
+    if (iridium.webRTC.state.streamMuted.video) {
+      screenTrack.enabled = false
+    }
+
+    this.emit('LOCAL_TRACK_CREATED', {
+      track: screenTrack,
+      kind: 'screen',
+      stream: screenStream,
+    })
+
+    await Promise.all(
+      Object.values(this.peers).map(async (peer) => {
+        this.wire.sendMessage(
+          {
+            type: 'peer:screenshare',
+            did: iridium.id,
+            streamId: screenStream.id,
+            trackId: screenTrack.id,
+            at: Date.now().valueOf(),
+          },
+          { recipients: [peer.id] },
+        )
+
+        try {
+          peer.addTrack(screenTrack, screenStream)
+        } catch (_) {}
+      }),
+    )
   }
 
   /**
    * @method createNewTracks
    * @description Creates new media stream and returns tracks
-   * @param constraints Media stream contraints to apply
+   * @param constraints Media stream constraints to apply
    */
   async createNewTracks(constraints: MediaStreamConstraints) {
     if (!navigator.mediaDevices.getUserMedia) {
+      alert(
+        "Your browser doesn't support or have permission to access your media devices. Please update your browser or review your security settings.",
+      )
       throw new Error('WebRTC not supported')
     }
-    return await navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream: MediaStream) => {
-        const [audio] = stream.getAudioTracks()
-        const [video] = stream.getVideoTracks()
-        if (audio) this.tracksManager.addTrack(audio)
-        if (video) this.tracksManager.addTrack(video)
 
-        if (audio) {
-          this.emit('LOCAL_TRACK_CREATED', {
-            peerId: this.communicationBus.identifier,
-            track: audio,
-          })
-        }
+    if (constraints.audio) {
+      await this.createAudioStream(constraints.audio)
+    }
 
-        if (video) {
-          this.emit('LOCAL_TRACK_CREATED', {
-            peerId: this.communicationBus.identifier,
-            track: video,
-          })
-        }
-        return { audio, video }
-      })
-      .catch((err) => {
-        // @ts-ignore
-        Logger.log('Call.ts Error:', err)
-      })
+    if (constraints.video) {
+      await this.createVideoStream(constraints.video)
+    }
+
+    if (this.streams[iridium.id].screen) {
+      await this.createDisplayStream()
+    }
   }
 
   /**
    * @method updateConstraints
    * @description Updates the constraints property
-   * @param constraints Media stream contraints to apply from now on
+   * @param constraints Media stream constraints to apply from now on
    */
   updateConstraints(constraints: MediaStreamConstraints) {
     this.constraints = { ...this.constraints, ...constraints }
@@ -166,14 +500,7 @@ export class Call extends Emitter<CallEventListeners> {
    * @returns the local tracks from the media stream
    */
   getLocalTracks() {
-    if (!this.stream) {
-      throw new Error('Stream not initialized')
-    }
-
-    const [audio] = this.stream.getAudioTracks()
-    const [video] = this.stream.getVideoTracks()
-
-    return { audio, video }
+    return this.tracks[iridium.id]
   }
 
   /**
@@ -182,81 +509,138 @@ export class Call extends Emitter<CallEventListeners> {
    * @returns the remote tracks from the media stream
    */
   getRemoteTracks() {
-    if (!this.remoteStream) {
-      throw new Error('Remote stream not initialized')
-    }
-
-    const [audio] = this.remoteStream.getAudioTracks()
-    const [video] = this.remoteStream.getVideoTracks()
-
-    return { audio, video }
+    return Object.keys(this.tracks)
+      .filter((did) => did !== iridium.id)
+      .map((did) => this.tracks[did])
+      .reduce(
+        (acc: MediaStreamTrack[], tracks) => acc.concat(Object.values(tracks)),
+        [],
+      )
   }
 
   /**
-   * @method getTrackById
-   * @description Returns a mediastreamtrack from the given id
-   * @returns a mediastream track or undefined if not found
+   * @method getTrack
+   * @description Get the given track from the local or remote stream
+   * @param trackId
+   * @returns {MediaStreamTrack} the track
    */
-  getTrackById(id: string): MediaStreamTrack | undefined {
-    return this.tracksManager.getTrack(id)
-  }
-
-  /**
-   * @method start
-   * @description It's used for initiate a call
-   * @param stream MediaStream object containing the audio/video tracks
-   * @example
-   * const call = new Call(wireInstance)
-   * await call.createLocalTracks({audio: true, video: true})
-   * call.start()
-   */
-  start() {
-    if (!this.stream) {
-      throw new Error('Local tracks not initialized. Create local tracks first')
-    }
-
-    // A new Simple Peer instance is created with the initiator flag set to true
-    this.peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: this.stream,
+  getTrack(trackId: string) {
+    Object.values(this.tracks).forEach((tracks) => {
+      tracks.forEach((track) => {
+        if (track.id === trackId) {
+          return track
+        }
+      })
     })
-    this._bindPeerListeners()
-
-    this.addTransceiver('audio')
-    this.addTransceiver('video')
-
-    this.emit('OUTGOING_CALL', { peerId: this.communicationBus.identifier })
+    return null
   }
 
   /**
-   * @method answer
-   * @description It's used for answering a call. A call request must be active before
-   * to call this method
-   * @param stream MediaStream object containing the audio/video stream
+   * @method allRemoteStreams
+   * @description get all remote streams
+   * @returns {{ [did: string]: { [kind: string]: MediaStream } }}
    * @example
-   * const call = new Call(wireInstance)
-   * call.answer(mediaStream)
+   * const remoteStreams = call.allRemoteStreams()
    */
-  answer() {
-    if (!this.signalingBuffer) {
-      throw new Error('No call to answer')
-    }
+  allRemoteStreams() {
+    return Object.keys(this.streams)
+      .filter((did) => did !== iridium.id)
+      .map((did) => this.streams[did])
+  }
 
-    if (!this.stream) {
-      throw new Error('Local tracks not initialized. Create local tracks first')
-    }
+  /**
+   * @method getRemoteStreams
+   * @description get remote streams of a given type
+   * @param kind
+   * @returns {{ [did: string]: MediaStream }}
+   * @example
+   * const remoteStreams = call.getRemoteStreams('video')
+   */
+  getRemoteStreams(kind: string) {
+    return Object.keys(this.streams)
+      .filter((did) => did !== iridium.id)
+      .map((did) => this.streams[did]?.[kind])
+  }
 
-    // A new Simple Peer instance is created with the initiator flag set to false
-    this.peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: this.stream,
-    })
-    this._bindPeerListeners()
+  /**
+   * @method getLocalStreams
+   * @description get all local streams
+   * @returns {{ [kind: string]: MediaStream }}
+   * @example
+   * const localStreams = call.getLocalStreams()
+   */
+  getLocalStreams() {
+    return this.streams[iridium.id]
+  }
 
-    // Signal to the peer with previously received Signaling Data
-    this.peer.signal(this.signalingBuffer)
+  /**
+   * @method getLocalStream
+   * @description get local stream of a given type
+   * @param kind
+   * @returns {MediaStream}
+   * @example
+   * const localStream = call.getLocalStream('video')
+   */
+  getLocalStream(kind: string) {
+    return this.streams[iridium.id]?.[kind]
+  }
+
+  /**
+   * @method getPeerStreams
+   * @description get all streams of a given peer
+   * @param did
+   * @returns {{ [kind: string]: MediaStream }}
+   * @example
+   * const peerStreams = call.getPeerStreams(did)
+   */
+  getPeerStreams(did: string) {
+    return this.streams[did]
+  }
+
+  /**
+   * @method getPeerStream
+   * @description get stream of a given peer and type
+   * @param did
+   * @param kind
+   * @returns {MediaStream}
+   * @example
+   * const peerStream = call.getPeerStream(did, 'video')
+   */
+  getPeerStream(did: string, kind: string) {
+    return this.streams[did]?.[kind]
+  }
+
+  /**
+   * @method hasLocalStream
+   * @description check if any local stream is available
+   * @returns {boolean}
+   * @example
+   * const hasLocalStream = call.hasLocalStream()
+   */
+  hasLocalStream() {
+    return Object.entries(this.streams[iridium.id] || {}).length > 0
+  }
+
+  /**
+   * @method hasRemoteStream
+   * @description check if any remote stream is available
+   * @returns {boolean}
+   * @example
+   * const hasRemoteStream = call.hasRemoteStream()
+   */
+  hasRemoteStream() {
+    return this.allRemoteStreams().length > 0
+  }
+
+  /**
+   * @method hasRemoteTracks
+   * @description check if any remote track is available
+   * @returns {boolean}
+   * @example
+   * const hasRemoteTracks = call.hasRemoteTracks()
+   */
+  hasRemoteTracks() {
+    return this.getRemoteTracks().length > 0
   }
 
   /**
@@ -264,13 +648,23 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Signals to peer that we are denying their incoming call
    * @example call.deny()
    */
-  deny() {
-    this.communicationBus.send({
-      type: 'REFUSE',
-      payload: { peerId: this.communicationBus.identifier },
-      sentAt: Date.now(),
-    })
-    this._onClose()
+  async deny() {
+    await Promise.all(
+      this.peerDetails
+        .filter((p) => p.id !== iridium.id)
+        .map(async (peer) => {
+          this.wire.sendMessage(
+            {
+              type: 'peer:hangup',
+              did: iridium.id,
+              callId: this.callId,
+              at: Date.now().valueOf(),
+            },
+            { recipients: [peer.id] },
+          )
+        }),
+    )
+    this.closeStreams()
   }
 
   /**
@@ -278,12 +672,31 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Hangs up active webrtc call
    * @example call.hangUp()
    */
-  hangUp() {
-    if (!this.signalingBuffer) {
-      this.deny()
-      return
-    }
-    this._onClose()
+  async hangUp() {
+    this.deny()
+    this.emit('HANG_UP', {
+      callId: this.callId,
+      did: iridium.id,
+    })
+
+    this.destroy()
+  }
+
+  closeStreams() {
+    Object.values(this.tracks).forEach((peerTracks) => {
+      peerTracks.forEach((track) => {
+        track.stop()
+      })
+    })
+    Object.values(this.streams).forEach((peerStreams) => {
+      Object.values(peerStreams).forEach((stream) => {
+        stream.getTracks().forEach((track) => {
+          track.stop()
+        })
+      })
+    })
+    this.streams = {}
+    this.tracks = {}
   }
 
   /**
@@ -291,15 +704,26 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Destroys peer instance and all related streams and tracks
    * @example call.destroy()
    */
-  destroy() {
-    this.peer?.destroy()
-    this.stream?.getTracks().forEach((track) => track.stop())
-    this.remoteStream?.getTracks().forEach((track) => track.stop())
-
-    this.tracksManager.removeAllTracks()
-
-    delete this.peer
-    delete this.stream
+  async destroy(andDeny = true, andEmit = true) {
+    if (andDeny) {
+      this.deny()
+    }
+    this.active = false
+    this.isCallee = {}
+    this.isCaller = {}
+    clearInterval(this.peerPollingInterval)
+    this.peerDialingDisabled = {}
+    Object.values(this.peers).forEach((peer) => {
+      this.destroyPeer(peer.id)
+    })
+    this._unbindBusListeners()
+    this.peers = {}
+    if (andEmit) {
+      this.emit('DESTROY', {
+        callId: this.callId,
+        did: iridium.id,
+      })
+    }
   }
 
   /**
@@ -307,19 +731,60 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Mute audio or video by removing the track of the given kind
    * @param kind Kind of the track to mute
    */
-  async mute(kind: TrackKind) {
-    if (!this.stream) {
-      throw new Error('Stream not initialized. Create local tracks first')
+  async mute({
+    kind = 'audio',
+    did = iridium.id,
+  }: {
+    kind: string
+    did?: string
+  }) {
+    if (!did) return
+    const stream = this.streams[did]?.[kind]
+    if (!stream) {
+      throw new Error(
+        `webrtc/call: mute - ${kind} stream not initialized for peer: ${did}`,
+      )
     }
 
-    const localTracks = this.getLocalTracks()
+    iridium.webRTC.setStreamMuted(did, { [kind]: true })
+    let track: MediaStreamTrack
+    if (kind === 'audio') {
+      track = stream.getAudioTracks()[0]
+      track.enabled = false
+    } else if (kind === 'screen') {
+      track = stream.getVideoTracks()[0]
+      track.enabled = false
+      track.stop()
+      delete this.streams[did].screen
+    } else {
+      track = stream.getVideoTracks()[0]
+      track.enabled = false
+      track.stop()
+      stream.removeTrack(track)
+      delete this.streams[did]?.[kind]
+    }
 
-    if (localTracks[kind]) {
-      this.removeTrack(localTracks[kind], this.stream)
-
+    // tell all of the peers that we muted the track
+    if (did === iridium.id) {
+      await Promise.all(
+        Object.values(this.peers).map((peer) =>
+          this.wire.sendMessage(
+            {
+              type: 'peer:mute',
+              did: iridium.id,
+              callId: this.callId === peer.id ? iridium.id : this.callId,
+              trackId: track.id,
+              kind,
+              at: Date.now().valueOf(),
+            },
+            { recipients: [peer.id] },
+          ),
+        ),
+      )
       this.emit('LOCAL_TRACK_REMOVED', {
-        peerId: this.communicationBus.identifier,
-        track: localTracks[kind],
+        track,
+        kind,
+        stream,
       })
     }
   }
@@ -329,114 +794,76 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Unmute audio or video by adding a new track of the given kind
    * @param kind Kind of the track to unmute
    */
-  async unmute(kind: TrackKind) {
-    if (!this.stream) {
-      throw new Error('Stream not initialized. Create local tracks first')
+  async unmute({
+    kind,
+    did = iridium.id,
+    constraints,
+  }: {
+    kind: string
+    did?: string
+    constraints: MediaStreamConstraints
+  }) {
+    if (!did) return
+
+    if (did === iridium.id) {
+      if (kind === 'audio' && !this.streams[did]?.audio) {
+        await this.createAudioStream(constraints?.audio)
+      } else if (
+        kind === 'video' &&
+        !this.streams[did]?.video?.getVideoTracks()?.length
+      ) {
+        await this.createVideoStream(constraints?.video)
+      } else if (kind === 'screen' && !this.streams[did]?.screen) {
+        try {
+          await this.createDisplayStream()
+        } catch (_) {
+          return
+        }
+      }
     }
 
-    const localTracks = this.getLocalTracks()
+    iridium.webRTC.setStreamMuted(did, { [kind]: false })
 
-    if (localTracks[kind]) {
-      throw new Error('Track already present')
+    const stream = this.streams[did]?.[kind]
+    if (!stream) {
+      return
     }
 
-    const constraints = { [kind]: this.constraints[kind] }
+    const track: MediaStreamTrack =
+      kind === 'audio' ? stream.getAudioTracks()[0] : stream.getVideoTracks()[0]
+    track.enabled = true
 
-    const newTracks: any = await this.createNewTracks(constraints)
-    if (newTracks[kind]) {
-      this.addTrack(newTracks[kind], this.stream)
+    if (did !== iridium.id) {
+      return
     }
-  }
 
-  /**
-   * @method addStream
-   * @description Adds a stream to the call
-   * @param stream MediaStream to add
-   * @example
-   * const call = new Call(wireInstance)
-   * call.addStream(mediaStream)
-   */
-  addStream(stream: MediaStream) {
-    this.peer?.addStream(stream)
-  }
+    // TODO: find a way to wait for the peer to receive the remote
+    // track before sending a peer:unmute, for now, this timeout
+    // waits long enough so the peer receives the track first
+    await new Promise((resolve) => setTimeout(resolve, 500))
 
-  /**
-   * @method removeStream
-   * @description Removes a stream from the call
-   * @param stream MediaStream to remove
-   * @example
-   * const call = new Call(wireInstance)
-   * call.removeStream(mediaStream)
-   */
-  removeStream(stream: MediaStream) {
-    this.peer?.removeStream(stream)
-  }
+    await Promise.all(
+      Object.values(this.peers).map((peer) =>
+        this.wire.sendMessage(
+          {
+            type: 'peer:unmute',
+            did: iridium.id,
+            callId: this.callId === peer.id ? iridium.id : this.callId,
+            trackId: track.id,
+            kind,
+            at: Date.now().valueOf(),
+          },
+          { recipients: [peer.id] },
+        ),
+      ),
+    )
 
-  /**
-   * @method addTrack
-   * @description Adds a track to the call
-   * @param track MediaStreamTrack to add
-   * @param stream Related stream
-   * @example
-   * const call = new Call(wireInstance)
-   * call.addTrack(newTrack, mediaStream)
-   */
-  addTrack(track: MediaStreamTrack, stream: MediaStream) {
-    this.peer?.addTrack(track, stream)
-    this.tracksManager.addTrack(track)
-    stream.addTrack(track)
-  }
-
-  /**
-   * @method removeTrack
-   * @description Removes a track from the call
-   * @param track MediaStreamTrack to remove
-   * @param stream Related stream
-   * @example
-   * const call = new Call(wireInstance)
-   * call.removeTrack(trackToRemove, mediaStream)
-   */
-  removeTrack(track: MediaStreamTrack, stream: MediaStream) {
-    track.stop()
-    this.peer?.removeTrack(track, stream)
-    stream.removeTrack(track)
-    this.tracksManager.removeTrack(track.id)
-  }
-
-  /**
-   * @method replaceTrack
-   * @description Replaces a track with a new one
-   * @param oldTrack old MediaStreamTrack to remove
-   * @param newTrack new MediaStreamTrack to add
-   * @param stream Related stream
-   * @example
-   * const call = new Call(wireInstance)
-   * call.replaceTrack(trackToRemove, trackToAdd, mediaStream)
-   */
-  replaceTrack(
-    oldTrack: MediaStreamTrack,
-    newTrack: MediaStreamTrack,
-    stream: MediaStream,
-  ) {
-    this.peer?.replaceTrack(oldTrack, newTrack, stream)
-    this.tracksManager.removeTrack(oldTrack.id)
-    this.tracksManager.addTrack(newTrack)
-  }
-
-  /**
-   * @method toggleTracks
-   * @description Enable and disable tracks
-   * @param kind Kinds of tracks (video or audio) to disable
-   * @example this.toggleTracks('audio')
-   */
-  toggleTracks(kind: string, enabled: boolean) {
-    const localTracks = this.getLocalTracks()
-    type trackType = typeof localTracks
-
-    for (const key in localTracks) {
-      const track = localTracks[key as keyof trackType]
-      if (track.kind === kind) track.enabled = enabled
-    }
+    // tell all of the peers that we unmuted the track
+    this.emit('LOCAL_TRACK_UNMUTED', {
+      track,
+      kind,
+      stream,
+    })
   }
 
   /**
@@ -447,7 +874,9 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    */
   addTransceiver(kind: string) {
-    this.peer?.addTransceiver(kind, undefined)
+    Object.values(this.peers).forEach((peer) => {
+      peer.addTransceiver(kind, undefined)
+    })
   }
 
   /**
@@ -457,8 +886,58 @@ export class Call extends Emitter<CallEventListeners> {
    * this._bindBusListeners()
    */
   protected _bindBusListeners() {
-    this.communicationBus?.on('SIGNAL', this._onBusSignal.bind(this))
-    this.communicationBus?.on('REFUSE', this._onBusRefuse.bind(this))
+    this._listener = this._bindEventListeners.bind(this)
+    this.wire.on('wire:message', this._bindEventListeners.bind(this))
+  }
+
+  /**
+   * @method _bindEventListeners
+   * @description Internal function to bind listeners to the corresponding events
+   * @example
+   * this._bindEventListeners();
+   */
+  protected _bindEventListeners({
+    type,
+    message,
+  }: {
+    type: string
+    message: IridiumMessage<IridiumDocument>
+  }) {
+    logger.debug('Call', `Message received from ${type}`, { message })
+    switch (message.payload.body.type) {
+      case 'peer:signal':
+        this._onBusSignal(message)
+        break
+      case 'peer:refuse':
+        this._onBusRefuse()
+        break
+      case 'peer:hangup':
+        this._onBusHangup(message)
+        break
+      case 'peer:screenshare':
+        this._onBusScreenshare(message)
+        break
+      case 'peer:mute':
+        this._onBusMute(message)
+        break
+      case 'peer:unmute':
+        this._onBusUnmute(message)
+        break
+
+      default:
+        break
+    }
+  }
+
+  /**
+   * @method _unbindBusListeners
+   * @description Internal function to unbind listeners to the communiciationBus events
+   * @example
+   * this._unbindBusListeners();
+   */
+  protected async _unbindBusListeners() {
+    // iridium.connector?.pubsub.off('/webrtc/announce', this._listener)
+    this.wire.off('wire:message', this._listener)
   }
 
   /**
@@ -467,13 +946,28 @@ export class Call extends Emitter<CallEventListeners> {
    * @example
    * this._bindPeerListeners()
    */
-  protected _bindPeerListeners() {
-    this.peer?.on('signal', this._onSignal.bind(this))
-    this.peer?.on('connect', this._onConnect.bind(this))
-    this.peer?.on('error', this._onError.bind(this))
-    this.peer?.on('track', this._onTrack.bind(this))
-    this.peer?.on('stream', this._onStream.bind(this))
-    this.peer?.on('close', this._onClose.bind(this))
+  protected _bindPeerListeners(peer: CallPeer) {
+    peer.on('signal', this._onSignal.bind(this, peer))
+    peer.on('connect', this._onConnect.bind(this, peer))
+    peer.on('error', this._onError.bind(this, peer))
+    peer.on('track', this._onTrack.bind(this, peer))
+    peer.on('stream', this._onStream.bind(this, peer))
+    peer.on('close', this._onClose.bind(this, peer))
+  }
+
+  /**
+   * @method _unbindPeerListeners
+   * @description Internal function to unbind listeners to the main peer events
+   * @example
+   * this._unbindPeerListeners()
+   */
+  protected _unbindPeerListeners(peer: CallPeer) {
+    peer.off('signal', this._onSignal)
+    peer.off('connect', this._onConnect)
+    peer.off('error', this._onError)
+    peer.off('track', this._onTrack)
+    peer.off('stream', this._onStream)
+    peer.off('close', this._onClose)
   }
 
   /**
@@ -481,8 +975,8 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer signal event
    * @param data Simple Peer signaling data
    */
-  protected _onSignal(data: Peer.SignalData) {
-    this._sendSignal(data)
+  protected async _onSignal(peer: CallPeer, data: Peer.SignalData) {
+    this._sendSignal(peer, data)
   }
 
   /**
@@ -490,35 +984,75 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Sends the signaling data through the communication bus
    * @param data Signaling data to send
    */
-  protected _sendSignal(data: Peer.SignalData) {
-    if (!this.communicationBus) {
+  protected async _sendSignal(peer: CallPeer, data: Peer.SignalData) {
+    if (!iridium.connector) {
       throw new Error('Communication bus not found')
     }
 
-    this.communicationBus.send({
-      type: 'SIGNAL',
-      payload: {
-        peerId: this.communicationBus.identifier,
+    this.wire.sendMessage(
+      {
+        type: 'peer:signal',
+        did: iridium.id,
+        callId: this.callId === peer.id ? iridium.id : this.callId,
         data,
+        at: Date.now().valueOf(),
       },
-      sentAt: Date.now(),
-    })
+      { recipients: [peer.id] },
+    )
   }
 
   /**
+  //  * @method send
+  //  * @description send some data to connected peers
+  //  * @param type
+  //  * @param data
+  //  * @returns {void}
+  //  * @example
+  //  * await call.send('foo', 'test')
+  //  */
+  // async send(type: string, data: any) {
+  //   await Object.values(this.peers).map(async (peer) => {
+  //     await peer.send({ did: iridium.id, type, ...data })
+  //   })
+  // }
+
+  /**
    * @method _onConnect
-   * @description Callback for the Simple Peer signal event
+   * @description Callback for the Simple Peer connect event
    */
-  protected _onConnect() {
-    this.emit('CONNECTED', { peerId: this.communicationBus.identifier })
+  protected async _onConnect(peer: CallPeer) {
+    this.emit('CONNECTED', {
+      callId: this.callId,
+      did: peer.id,
+    })
+    if (!this.screenStreams[iridium.id]) {
+      return
+    }
+
+    // tell the peer to start screen sharing
+    const screenStream = this.streams[iridium.id]?.screen
+    const screenTrack = screenStream?.getVideoTracks()[0]
+
+    this.wire.sendMessage(
+      {
+        type: 'peer:screenshare',
+        did: iridium.id,
+        streamId: screenStream.id,
+        trackId: screenTrack.id,
+        at: Date.now().valueOf(),
+      },
+      { recipients: [peer.id] },
+    )
   }
 
   /**
    * @method _onError
    * @description Callback for the Simple Peer error event
    */
-  protected _onError(error: Error) {
-    this.emit('ERROR', { peerId: this.communicationBus.identifier, error })
+  protected _onError(peer: CallPeer, error: Error) {
+    // FOR DEBUG
+    logger.error('webrtc/call', 'error', error)
+    this.emit('ERROR', { did: peer.id, error })
   }
 
   /**
@@ -527,27 +1061,28 @@ export class Call extends Emitter<CallEventListeners> {
    * @param track MediaStreamTrack object for the audio/video tracks
    * @param stream MediaStream object for the audio/video stream
    */
-  protected _onTrack(track: MediaStreamTrack, stream: MediaStream) {
-    const trackMuteListener = () => {
-      this.tracksManager.removeTrack(track.id)
+  protected _onTrack(
+    peer: CallPeer,
+    track: MediaStreamTrack,
+    stream: MediaStream,
+  ) {
+    if (!this.tracks[peer.id]) {
+      this.tracks[peer.id] = new Set()
+    }
+    this.tracks[peer.id].add(track)
 
-      track.removeEventListener('mute', trackMuteListener)
+    this.peerConnected[peer.id] = true
+    this.peerDialingDisabled[peer.id] = true
 
-      this.emit('REMOTE_TRACK_REMOVED', {
-        peerId: this.communicationBus.identifier,
+    const emit = () => {
+      this.emit('REMOTE_TRACK_RECEIVED', {
+        did: peer.id,
         track,
         stream,
+        kind: this.screenStreams[peer.id] === stream.id ? 'screen' : track.kind,
       })
     }
-
-    track.addEventListener('mute', trackMuteListener)
-
-    this.tracksManager.addTrack(track)
-    this.emit('REMOTE_TRACK_RECEIVED', {
-      peerId: this.communicationBus.identifier,
-      track,
-      stream,
-    })
+    track.onunmute = emit
   }
 
   /**
@@ -555,41 +1090,191 @@ export class Call extends Emitter<CallEventListeners> {
    * @description Callback for the Simple Peer stream event
    * @param stream MediaStream object for the audio/video stream
    */
-  protected _onStream(stream: MediaStream) {
-    this.remoteStream = stream
-    this.emit('STREAM', { peerId: this.communicationBus.identifier, stream })
+  protected _onStream(peer: CallPeer, stream: MediaStream) {
+    if (!this.streams[peer.id]) {
+      Vue.set(this.streams, peer.id, {})
+    }
+    const kind =
+      this.screenStreams[peer.id] === stream.id
+        ? 'screen'
+        : stream.getTracks()[0].kind
+
+    Vue.set(this.streams[peer.id], kind, stream)
+    this.emit('STREAM', { did: peer.id, stream, kind })
   }
 
   /**
    * @method _onClose
    * @description Callback for the Simple Peer close event
    */
-  protected _onClose() {
-    this.destroy()
-    delete this.signalingBuffer
-    this.emit('HANG_UP', { peerId: this.communicationBus.identifier })
+  protected _onClose(peer: CallPeer) {
+    this.peerConnected[peer.id] = false
+    this._unbindPeerListeners(peer)
+    this.destroyPeer(peer.id)
+    delete this.peers[peer.id]
   }
 
   /**
    * @method _onBusSignal
-   * @description Callback for the Wire on signal event
-   * @param message Wire Message containing the signal data
+   * @description Callback for the on signal event
+   * @param message Message containing the signal data
    */
-  protected _onBusSignal(message: { peerId: string; data: SignalData }) {
-    if (message.data.type === 'offer' && !this.signalingBuffer) {
-      this.signalingBuffer = message.data
-      this.emit('INCOMING_CALL', { peerId: this.communicationBus.identifier })
-    } else {
-      this.peer?.signal(message.data)
+  protected async _onBusSignal({ payload }: { payload: any }) {
+    const { did, data }: { did: string; data: Peer.SignalData } = payload.body
+    if (
+      data?.type === 'offer' &&
+      !this.isCallee[did] &&
+      !this.isCaller[did] &&
+      !this.active
+    ) {
+      this.emit('INCOMING_CALL', {
+        did,
+        callId: this.callId,
+        data,
+      })
+    }
+
+    const peer = this.peers[did]
+    if (!peer) {
+      return
+    }
+
+    this.peerConnected[did] = true
+    await peer.signal(data)
+  }
+
+  /**
+   * @method destroyPeer
+   * @description Destroy a peer
+   * @param did
+   * @returns {void}
+   * @example
+   * call.destroyPeer('did')
+   */
+  destroyPeer(did: string) {
+    const peer = this.peers[did]
+    if (peer) {
+      peer.destroy()
+    }
+
+    if (this.streams[did]) {
+      Object.values(this.streams[did]).forEach((stream) => {
+        stream.getTracks().forEach((track) => {
+          track.stop()
+        })
+      })
+      delete this.streams[did]
+    }
+
+    delete this.peers[did]
+    delete this.peerConnected[did]
+    delete this.isCaller[did]
+    delete this.isCallee[did]
+
+    this.peerDetails = this.peerDetails.filter((peer) => peer.id !== did)
+
+    if (
+      Object.values(this.peers).filter((p) => p.id !== iridium.id).length === 0
+    ) {
+      this.active = false
+      this.destroy()
     }
   }
 
   /**
    * @method _onBusRefuse
-   * @description Callback for the Wire on refuse event. Used for the hang up
+   * @description Callback for the on refuse event. Used for the hang up
    * before the call started
    */
   protected _onBusRefuse() {
-    this._onClose()
+    this.deny()
+  }
+
+  /**
+   * @method _onBusHangup
+   * @description Callback for the on hangup event. Used for the hang up
+   * after the call started
+   */
+  protected _onBusHangup({ payload }: IridiumMessage<IridiumDocument>) {
+    const { did, callId } = payload.body
+
+    // It's related to another call
+    if (callId !== this.callId) return
+
+    // reset incoming call
+    this.emit('REMOTE_HANG_UP', {
+      did,
+      callId,
+    })
+
+    this.peerDialingDisabled[did] = true
+    this.isCallee[did] = false
+    this.isCaller[did] = false
+    this.destroyPeer(did)
+  }
+
+  /**
+   * @method _onBusScreenshare
+   * @description Callback for the on screenshare event
+   * @param did
+   * @param payload
+   */
+
+  protected _onBusScreenshare({ payload }: { payload: any }) {
+    const { did, streamId, trackId } = payload.body
+    const peer = this.peers[did]
+    if (!peer) {
+      return
+    }
+    // if the stream has already been stored as video, move it to screen
+    if (this.streams[peer.id]?.video?.id === streamId) {
+      this.streams[peer.id].screen = this.streams[peer.id].video
+      delete this.streams[peer.id].video
+    }
+    this.screenStreams[peer.id] = streamId
+  }
+
+  /**
+   * @method _onBusMute
+   * @description Callback for the on mute event
+   */
+  protected _onBusMute({ payload }: { payload: any }) {
+    const { did, trackId, kind } = payload.body
+
+    Object.values(this.streams[did] || {}).forEach((stream) => {
+      const track = stream.getTrackById(trackId)
+      if (!track) return
+      track.enabled = false
+    })
+
+    if (kind === 'video' || kind === 'screen') {
+      delete this.streams[did]?.[kind]
+    }
+
+    this.emit('REMOTE_TRACK_MUTED', {
+      did,
+      kind,
+      trackId,
+    })
+  }
+
+  /**
+   * @method _onBusMute
+   * @description Callback for the on unmute event
+   */
+  protected _onBusUnmute({ payload }: { payload: any }) {
+    const { did, trackId, kind } = payload.body
+
+    Object.values(this.streams[did] || {}).forEach((stream) => {
+      const track = stream.getTrackById(trackId)
+      if (!track) return
+      track.enabled = true
+    })
+
+    this.emit('REMOTE_TRACK_UNMUTED', {
+      did,
+      kind,
+      trackId,
+    })
   }
 }

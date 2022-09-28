@@ -5,6 +5,12 @@
   flex-direction: column;
   padding: @normal-spacing;
   gap: @normal-spacing;
+  position: sticky;
+  top: 0;
+
+  @media only screen and (max-width: @small-breakpoint) {
+    position: relative;
+  }
 
   .upper {
     display: flex;
@@ -13,17 +19,6 @@
     .flex {
       display: flex;
       justify-content: space-between;
-      .button {
-        height: 1.4rem;
-        min-width: 4rem;
-        padding: @xlight-spacing @light-spacing;
-        line-height: 1 !important;
-        background-color: @gray!important;
-        box-shadow: none !important;
-      }
-    }
-    .usage-text {
-      font-size: @text-size;
     }
   }
 }

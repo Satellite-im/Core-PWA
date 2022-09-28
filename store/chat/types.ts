@@ -1,8 +1,18 @@
-import { ReplyObj, ChatTextObj } from '~/types/chat/chat'
-import { UploadDropItemType } from '~/types/files/file'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
+
+export interface ChatFileUpload {
+  file: File
+  nsfw: boolean
+  progress: number
+  thumbnail?: string // scaled down base64
+}
 
 export interface ChatState {
-  replies: ReplyObj[]
-  chatTexts: ChatTextObj[]
-  files: { [key: string]: UploadDropItemType[] }
+  files: { [key: Conversation['id']]: ChatFileUpload[] | undefined }
+  activeUploadChats: Conversation['id'][]
+  draftMessages: { [key: Conversation['id']]: string }
+  replyChatbarMessages: { [key: Conversation['id']]: ConversationMessage }
 }

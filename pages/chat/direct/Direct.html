@@ -1,7 +1,0 @@
-<div id="direct">
-  <UiChatEncrypted v-if="$route.params.address" />
-  <Conversation
-    :messages="groupedMessages"
-    :loading="$store.state.textile.conversationLoading"
-  />
-</div>

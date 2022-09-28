@@ -1,42 +1,18 @@
 .group-invite {
-  .subtitle {
-    margin: 0;
-    margin-bottom: @light-spacing;
-    font-size: @text-size;
-  }
-
-  .search,
-  .user-search {
-    margin-top: @normal-spacing;
-  }
-
-  .submit-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1em;
-    &:extend(.full-width);
-  }
-  &:extend(.background-semitransparent-dark);
-  &:extend(.blur);
-  &:extend(.round-corners);
-  &:extend(.bordered);
-  position: fixed;
+  position: absolute;
   width: 18rem;
-  top: @toolbar-height;
-  padding: @light-spacing @light-spacing @normal-spacing @light-spacing;
-  right: calc(18rem + 7rem);
-  z-index: @base-z-index + 10;
+  top: 100%;
+  left: 0;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  max-height: 24rem;
+  gap: 12px;
+  max-height: 500px;
+  z-index: 1;
+  box-shadow: @ui-shadow;
 
-  &--compact {
-    right: @servers-size + 2rem;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .create-group {
-    left: @servers-size + 2rem;
-  }
+  .background-semitransparent-dark();
+  .round-corners();
+  .bordered();
+  .blur();
 }

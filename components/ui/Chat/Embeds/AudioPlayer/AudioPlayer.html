@@ -4,7 +4,7 @@
       <source size="1080" :src="data.src" :type="data.type" />
     </audio>
   </vue-plyr>
-  <TypographyText :size="6" :text="`${data.title} - ${data.filename}`" />
+  <TypographyText> {{ `${data.title} - ${data.filename}` }} </TypographyText>
   <span class="download">
     <download-icon size="1x" />
     Download

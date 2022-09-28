@@ -4,7 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { findKey, shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
-import { marketGlyphs } from '~/mock/marketplace'
+import { Glyphs, Pack } from '~/mock/glyphs'
 import { GlyphMarketViewStatus, ModalWindows } from '~/store/ui/types'
 
 export default Vue.extend({
@@ -13,14 +13,16 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['ui']),
-    selectedPack() {
-      const key = findKey(this.$mock.glyphs, ({ name }) => {
-        return name === this.ui.glyphModalPack
-      })
-      return this.$mock.glyphs[key]
+    pack(): Pack | undefined {
+      return Object.values(Glyphs).find(
+        (pack) => pack.id === this.ui.glyphModalPackId,
+      )
     },
-    samplePackUrls() {
-      return shuffle(this.selectedPack.stickerURLs).slice(1, 4)
+    samplePackUrls(): string[] {
+      if (!this.pack) {
+        return []
+      }
+      return shuffle(this.pack.stickerURLs).slice(1, 4)
     },
   },
   methods: {
@@ -33,17 +35,9 @@ export default Vue.extend({
     openMarketplace() {
       this.closeModal()
       this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CALLTOACTION,
-        state: !this.ui.modals[ModalWindows.CALLTOACTION],
+        name: ModalWindows.CALL_TO_ACTION,
+        state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
       })
-      // refactor - AP-1104
-      // const marketInfo = find(marketGlyphs, ({ glyph }) => {
-      //   return glyph.name === this.selectedPack.name
-      // })
-      // this.$store.commit('ui/setGlyphMarketplaceView', {
-      //   view: GlyphMarketViewStatus.SHOP_DETAIL,
-      //   shopId: marketInfo?.id,
-      // })
     },
   },
 })

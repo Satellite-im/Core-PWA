@@ -1,4 +1,4 @@
-<template src="./Switch.html" />
+<template src="./Switch.html"></template>
 <script lang="ts">
 import Vue from 'vue'
 
@@ -20,12 +20,6 @@ export default Vue.extend({
       required: false,
       default: 'null',
     },
-    /**
-     * Size of the switch
-     *
-     * @remarks - currently supports 'normal' and 'small'
-     */
-    small: Boolean,
     /**
      * If provided, a label will be attached to the right of the switch
      */

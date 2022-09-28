@@ -1,28 +1,22 @@
-.droppableWrapper {
-  width: 100%;
-  height: 100%;
+.droppable {
   display: flex;
-  flex-direction: column;
+  flex-grow: 1;
   position: relative;
+  min-width: 0;
   &:after {
     content: '';
-    display: block;
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    user-select: none;
+    inset: 0;
     pointer-events: none;
-    background-color: transparent;
-    border: 5px solid transparent;
-    transition: 0.2s ease-in-out;
-    z-index: 100;
+    transition: border @animation-speed ease;
+    border-color: @flair-color;
+    &:extend(.no-select);
+    &:extend(.third-layer);
   }
-  &.droppableWrapper--active {
+  &.active {
     &:after {
-      border-color: @primary-color;
-      background-color: rgba(@primary-color, 0.25);
+      border: 2px solid @flair-color;
+      background-color: rgba(var(--flair-color), 0.25);
     }
   }
 }

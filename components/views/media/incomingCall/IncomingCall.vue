@@ -1,17 +1,20 @@
 <template src="./IncomingCall.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-
+import Vue from 'vue'
+import { mapState } from 'vuex'
 import {
   PhoneIcon,
   PhoneOffIcon,
   VideoIcon,
   VideoOffIcon,
 } from 'satellite-lucide-icons'
-
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { User } from '~/types/ui/user'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/friends/types'
+import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
+import { Conversation } from '~/libraries/Iridium/chat/types'
+import { TrackKind } from '~/libraries/WebRTC/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -21,31 +24,85 @@ export default Vue.extend({
     VideoIcon,
     VideoOffIcon,
   },
-  props: {
-    user: {
-      type: Object as PropType<User>,
-      default: () => {},
-      required: true,
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+      chat: iridium.chat.state,
+    }
+  },
+  computed: {
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+    }),
+    conversationId(): Conversation['id'] | undefined {
+      return this.incomingCall?.did
     },
-    acceptCall: {
-      type: Function,
-      default: () => {},
-      required: false,
+    conversation(): Conversation | undefined {
+      if (!this.conversationId) {
+        return undefined
+      }
+      return this.chat.conversations[this.conversationId]
     },
-    denyCall: {
-      type: Function,
-      default: () => {},
-      required: false,
+    isGroup(): boolean {
+      return this.conversation?.type === 'group'
+    },
+    incomingCall(): WebRTCState['incomingCall'] {
+      return this.webrtc.incomingCall
+    },
+    caller(): User | undefined {
+      if (!this.conversationId) {
+        return
+      }
+      // TODO : fix this later
+      if (this.isGroup) {
+        return
+      }
+      return iridium.users.getUser(this.conversationId)
+    },
+    callerAvatar(): string {
+      if (!this.caller) {
+        return ''
+      }
+      const hash = this.caller.photoHash
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
   },
-  mounted() {
-    this.$store.dispatch('sounds/playSound', Sounds.CALL)
-  },
-  beforeDestroy() {
-    this.$store.dispatch('sounds/stopSound', Sounds.CALL)
+  methods: {
+    /**
+     * @method acceptCall DocsTODO
+     * @description
+     * @example
+     */
+    async acceptCall() {
+      const conversationId = this.webrtc.incomingCall?.callId
+      if (!conversationId) {
+        return
+      }
+      const kinds = [] as TrackKind[]
+      if (!this.audio.muted) {
+        kinds.push('audio')
+      }
+      this.$store.commit('video/setDisabled', true)
+      await iridium.webRTC
+        .acceptCall(kinds)
+        .catch((e) => this.$toast.error(this.$t(e.message) as string))
+
+      this.$router.push(
+        this.$device.isMobile
+          ? `/mobile/chat/${conversationId}`
+          : `/chat/${conversationId}`,
+      )
+    },
+    /**
+     * @method denyCall DocsTODO
+     * @description
+     * @example
+     */
+    denyCall() {
+      iridium.webRTC.denyCall()
+    },
   },
 })
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less" src="./IncomingCall.less"></style>

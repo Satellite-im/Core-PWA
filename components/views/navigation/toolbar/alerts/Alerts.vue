@@ -1,17 +1,27 @@
-<template src="./Alerts.html" />
+<template src="./Alerts.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-
+import Vue from 'vue'
+import { FlaskConicalIcon } from 'satellite-lucide-icons'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { Notification } from '~/libraries/Iridium/notifications/types'
 export default Vue.extend({
+  components: {
+    FlaskConicalIcon,
+  },
   data() {
     return {
-      alerts: this.$Alerts.all,
+      notifications: iridium.notifications.state,
     }
   },
+  computed: {
+    alerts(): Notification[] {
+      return this.notifications.notifications
+    },
+  },
   methods: {
-    syncAlerts(alerts) {
-      this.$data.alerts = alerts
+    clearNotifications() {
+      return iridium.notifications.deleteAll()
     },
   },
 })

@@ -1,0 +1,69 @@
+<UiContextMenu
+  class="item"
+  :class="{ 'is-loading': isLoading, selected: isSelected }"
+  :items="contextMenuValues"
+  data-cy="sidebar-user"
+  @click="openConversation"
+>
+  <template>
+    <UiUserState
+      v-if="conversation.type === 'direct' && user && status"
+      :user="user"
+      :conversationId="conversationId"
+    />
+
+    <UiGroupIcon
+      v-else-if="conversation.participants"
+      :members="conversation.participants"
+    />
+  </template>
+  <div class="user-info">
+    <div class="row">
+      <TypographyText
+        class="ellipsis"
+        color="light"
+        font="heading"
+        weight="bold"
+        data-cy="sidebar-user-name"
+        :color="!!unreadCount ? 'light' : 'dark'"
+      >
+        {{ conversation.name }}
+      </TypographyText>
+
+      <TypographyText
+        class="timestamp"
+        v-if="messages.length"
+        color="dark"
+        size="xs"
+      >
+        {{ timestamp }}
+      </TypographyText>
+    </div>
+
+    <div class="row">
+      <TypographyText
+        size="sm"
+        class="subtitle"
+        :color="unreadCount ? 'light' : 'dark'"
+        :weight="unreadCount ? 'bold' : ''"
+      >
+        <div
+          ref="subtitle"
+          class="ellipsis"
+          :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
+          v-html="subtitle"
+        />
+      </TypographyText>
+      <TypographyTag
+        v-if="unreadCount"
+        class="tag"
+        :text="unreadCount.toString()"
+        small
+      />
+    </div>
+  </div>
+
+  <div class="user-loader">
+    <UiLoadersSpinner :spinning="isLoading" />
+  </div>
+</UiContextMenu>

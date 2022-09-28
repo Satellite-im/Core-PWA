@@ -1,13 +1,22 @@
 import * as mutations from '~/store/video/mutations'
+import { VideoState } from '~/store/video/types'
 
 describe('mutations.default.toggleCamera', () => {
   test('0', () => {
-    const result: any = mutations.default.toggleCamera({ disabled: true })
+    const videoState: VideoState = {
+      disabled: true,
+    }
+    const result: any = mutations.default.toggleCamera(videoState)
+    expect(videoState).toHaveProperty('disabled', false)
     expect(result).toMatchSnapshot()
   })
 
   test('1', () => {
-    const result: any = mutations.default.toggleCamera({ disabled: false })
+    const videoState: VideoState = {
+      disabled: false,
+    }
+    const result: any = mutations.default.toggleCamera(videoState)
+    expect(videoState).toHaveProperty('disabled', true)
     expect(result).toMatchSnapshot()
   })
 })

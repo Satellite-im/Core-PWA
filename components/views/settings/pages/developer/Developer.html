@@ -1,0 +1,16 @@
+<SettingsPage>
+  <SettingsHeader>
+    {{$t('pages.settings.developer.title')}}
+    <template #subheading>
+      {{$t('pages.settings.developer.subtitle')}}
+    </template>
+  </SettingsHeader>
+
+  <SettingsSection>
+    <SettingsUnit>
+      <TypographyLabel :text="$t('pages.settings.developer.identifier')" />
+      <br />
+      <InteractablesInput size="xs" readonly v-model="accounts.active" />
+    </SettingsUnit>
+  </SettingsSection>
+</SettingsPage>

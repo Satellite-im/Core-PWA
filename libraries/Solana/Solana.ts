@@ -1,20 +1,31 @@
 // eslint-disable-next-line import/named
-import { Cluster, Connection, PublicKey } from '@solana/web3.js'
+import { PublicKey, clusterApiUrl } from '@solana/web3.js'
 
 /**
  * Utility function to convert the string from config into a
  * solana Cluster string
  * @param network a generic string from the config file
- * @returns a Solana Cluster type ('mainnet-beta | testnet | devnet')
+ * @returns rpc url for the given cluster
  */
-export const getClusterFromNetworkConfig = (network: string): Cluster => {
+export const getClusterFromNetworkConfig = (network: string): string => {
   switch (network) {
     case 'mainnet-beta':
-      return network
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_MAINNET_RPC ||
+        clusterApiUrl(network)
+      )
     case 'testnet':
-      return network
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_TESTNET_RPC ||
+        clusterApiUrl(network)
+      )
+    case 'local':
+      return 'http://localhost:8899'
     default:
-      return 'devnet'
+      return (
+        process.env.NUXT_ENV_FIGMENT_SOLANA_DEVNET_RPC ||
+        clusterApiUrl('devnet')
+      )
   }
 }
 
@@ -71,6 +82,30 @@ export function sleep(ms: number): Promise<void> {
 }
 
 /**
+ * Utility function to retry a promise
+ * @param fn promise function to retry
+ * @param retries number of retries
+ * @param delay time in ms to wait after each failure
+ * @returns a promise that resolves with result of input fn
+ */
+
+export const retry = async <T>(
+  fn: () => Promise<T>,
+  retries: number = 3,
+  delay: number = 2000,
+): Promise<T> => {
+  try {
+    return await fn()
+  } catch (e) {
+    if (!retries) {
+      throw e
+    }
+    await sleep(delay)
+    return await retry(fn, retries - 1, delay)
+  }
+}
+
+/**
  * Utility function to convert a string into a fixed length buffer
  * @param stringToConvert string to be converted
  * @param length fixed length of the final buffer
@@ -87,26 +122,6 @@ export function stringToBuffer(stringToConvert: string, length: number) {
  */
 export function stringFromBuffer(bufferToConvert: Buffer) {
   return Buffer.from(bufferToConvert).toString('utf-8').replace(/\0.*$/g, '')
-}
-
-/**
- * Waits until a given Solana account exists on the network
- * @param connection Solana connection instance
- * @param accountKey Account public key to wait for
- */
-export async function waitForAccount(
-  connection: Connection,
-  accountKey: PublicKey,
-) {
-  while (true) {
-    await sleep(3000)
-    const accountInfo = await connection.getAccountInfo(accountKey)
-    if (accountInfo === null) {
-      continue
-    } else {
-      break
-    }
-  }
 }
 
 /**

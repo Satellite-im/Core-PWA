@@ -1,0 +1,68 @@
+<div
+  class="keybind-input"
+  v-click-outside="cancel"
+  ref="container"
+  tabindex="-1"
+>
+  <TypographyText as="label">{{ name }}</TypographyText>
+  <div class="control">
+    <TypographyText v-if="!isListening && value === ''" class="info-label">
+      {{$t('pages.settings.keybinds.no_mapping')}}
+    </TypographyText>
+    <TypographyText v-else-if="isListening && !keys.length" class="info-label">
+      {{$t('pages.settings.keybinds.enter_new_keybind')}}
+    </TypographyText>
+    <div
+      v-else
+      class="key-list"
+      :class="{ invalid: isReservedKeybind && !activeModifiers.length }"
+    >
+      <template v-for="key, index in keys">
+        <kbd class="key">{{key}}</kbd>
+        <div v-if="index !== keys.length - 1" class="plus">+</div>
+      </template>
+    </div>
+    <div v-show="isListening" key="editing-controls" class="controls">
+      <InteractablesButton
+        v-tooltip.top="$t('pages.settings.keybinds.cancel')"
+        @click="cancel"
+      >
+        <XIcon size="1x" />
+      </InteractablesButton>
+
+      <span
+        v-tooltip.top="$t(isReservedKeybind ? 'pages.settings.keybinds.reserved' : 'pages.settings.keybinds.save')"
+      >
+        <InteractablesButton @click="save" :disabled="!canSave">
+          <CheckIcon size="1x" />
+        </InteractablesButton>
+      </span>
+    </div>
+
+    <div v-show="!isListening" key="normal-controls" class="controls">
+      <InteractablesButton
+        ref="editButton"
+        v-tooltip.top="$t('pages.settings.keybinds.edit')"
+        @click="edit"
+      >
+        <PencilIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        v-tooltip.top="$t('pages.settings.keybinds.reset')"
+        @click="reset"
+        :disabled="!canReset"
+      >
+        <UndoIcon size="1x" />
+      </InteractablesButton>
+
+      <InteractablesButton
+        v-tooltip.top="$t('pages.settings.keybinds.clear')"
+        @click="clear"
+        :disabled="!canClear"
+      >
+        <XIcon size="1x" />
+      </InteractablesButton>
+    </div>
+  </div>
+</div>

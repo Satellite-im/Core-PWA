@@ -1,7 +1,9 @@
-<div id="bottom-bar-container">
-  <ChatbarFooterIsConnected :typing="typing" />
-  <UiChatTypingIndicator v-if="typing" :users="usersTyping" />
-  <span :class="['charlimit', charlimit ? 'is-error' : 'is-normal']">
+<div class="chatbar-footer">
+  <TypographyText size="sm" :color="charlimit ? 'danger' : 'dark'">
     {{ lengthCount }}
-  </span>
+  </TypographyText>
+  <TypographyText v-if="!isSubscribed" size="sm" color="dark">
+    {{ $t('ui.chat_not_ready') }}
+  </TypographyText>
+  <ChatbarFooterTypingIndicator v-if="isSubscribed" />
 </div>

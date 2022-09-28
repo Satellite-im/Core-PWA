@@ -1,59 +1,52 @@
 // eslint-disable-next-line import/named
 import { Commitment } from '@solana/web3.js'
+import type { IridiumConfig } from '@satellite-im/iridium'
+
+const nodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
+  '/dns4/sync-ny.satellite.im/tcp/443/wss/p2p/12D3KooWRnsCHcpEWE6vPcrFc8sjGusu9xhy6s2PCevMMB24bsQm',
+]
+const gateways = process.env.NUXT_ENV_IRIDIUM_GATEWAYS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
+const apis = process.env.NUXT_ENV_IRIDIUM_APIS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
 
 export const Config = {
   debug: true,
-  textile: {
-    localURI: 'http://localhost:6007',
-    key: process.env.NUXT_ENV_TEXTILE_API_KEY,
-    browser: 'https://hub.textile.io',
-    groupChatThreadID:
-      'bafkv7ordeargenxdutqdltvlo6sbfcfdhuvmocrt4qe6kpohrdbrbdi',
-    fsTable: 'sat.json',
-    bucketName: 'personal-files',
-  },
+  iridium: {
+    nodes,
+    gateways,
+    apis,
+    ipfs: {
+      config: {
+        Bootstrap: nodes,
+      },
+    },
+  } as Partial<IridiumConfig>,
   ipfs: {
-    gateway: 'https://satellite.mypinata.cloud/ipfs/',
+    gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
-    newMessage:
-      'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Notification.m4a',
-    call: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Call.m4a',
-    hangup: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Unused.m4a',
-    mute: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Mute.m4a',
-    unmute: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Unmute.m4a',
-    deafen: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Deafen.m4a',
-    undeafen: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Undeafen.m4a',
-    upload: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Success.m4a',
-    connected: 'QmYUAkVMKNKLZiSbLm4eAbF4NR3xk2eLAetTa1aRZYcTu9/Success.m4a',
-  },
-  cacher: {
-    user_lifespan: 90000,
-  },
-  webtorrent: {
-    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
-      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
-      : [
-          'wss://tracker.openwebtorrent.com',
-          'wss://tracker.sloppyta.co:443/announce',
-          'wss://tracker.novage.com.ua:443/announce',
-          'udp://opentracker.i2p.rocks:6969/announce',
-          'http://opentracker.i2p.rocks:6969/announce',
-          'udp://tracker.opentrackr.org:1337/announce',
-          'http://tracker.opentrackr.org:1337/announce',
-        ],
+    newMessage: `sounds/Notification.m4a`,
+    call: `sounds/Call.m4a`,
+    hangup: `sounds/Unused.m4a`,
+    mute: `sounds/Mute.m4a`,
+    unmute: `sounds/Unmute.m4a`,
+    deafen: `sounds/Deafen.m4a`,
+    undeafen: `sounds/Undeafen.m4a`,
+    upload: `sounds/Success.m4a`,
+    connected: `sounds/Success.m4a`,
   },
   solana: {
-    customFaucet: 'https://faucet.satellite.one',
-    network: 'devnet',
-    serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
-    friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
-    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
+    customFaucet: 'https://dev-faucet.satellite.one',
+    network: process.env.NUXT_ENV_SOLANA_NETWORK || 'devnet',
+    httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
+      ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
+      : undefined,
     defaultCommitment: 'confirmed' as Commitment,
-    defaultPreflightCommitment: 'confirmed' as Commitment,
-    usersProgramId: '7MaC2xrAmmFsuRBEkD6BEL3eJpXCmaikYhLM3eKBPhAH',
   },
   // Realms are just different chains we support
   realms: [
@@ -98,12 +91,19 @@ export const Config = {
     messageMaxChars: 2048,
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
-    typingInputThrottle: 2000,
+    typingInputThrottle: 5000,
+    typingInputDebounce: 1000,
     maxUndoStack: 100,
     batchUndoSeconds: 5,
+    searchCharLimit: 256,
+    groupNameMinLength: 3,
+    groupNameMaxLength: 64,
+    uploadMaxLength: 8, // 8 files at a time
   },
   account: {
-    minimumAccountLength: 5,
+    minLength: 5,
+    maxLength: 32,
+    statusMaxLength: 128,
   },
   profile: {
     noteMaxChars: 256,
@@ -111,18 +111,16 @@ export const Config = {
   routingMiddleware: {
     prerequisitesCheckBypass: ['auth', 'setup'],
   },
-  uploadByteLimit: 1000000 * 8, // 8MB - the current limit for an nsfw scan. Should be fixed in AP-1066
-  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit
+  nsfwPictureLimit: 1048576 * 8, // 8MB - images will be scaled down to this value if possible to prevent memory issues - binary
+  personalFilesLimit: 1000000000 * 4, // 4GB - free tier limit - decimal
+  nsfwVideoLimit: 1073741824 * 2, // 2GB - videos larger than this crash - binary
   regex: {
     // identify if a file type is embeddable image
     image: '^.*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$',
-    // determine if filetype is archive
-    archive: '^.*.(zip|vnd.rar|x-7z-compressed)$',
     // check for empty string or spaces/nbsp
     empty: /^\s*$/,
-    // Regex to check if string contains only emoji's.
-    isEmoji:
-      /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
+    // invalid characters in filesystem name
+    invalid: /[/:"*?<>|~#%&+{}\\]+/,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
     emojiWrapper: /[\p{Emoji_Presentation}\u200D]+/gu,
     // Check for link
@@ -137,6 +135,23 @@ export const Config = {
       /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i,
   },
   webrtc: {
+    iceServers: [
+      {
+        urls: 'stun:stun.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun2.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun3.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun4.l.google.com:19302',
+      },
+      {
+        urls: 'stun:stun.services.mozilla.com',
+      },
+    ],
     constraints: {
       audio: true,
       video: {
@@ -145,15 +160,46 @@ export const Config = {
         height: { min: 576, ideal: 720, max: 1080 },
       },
     },
+    announceFrequency: 30000,
   },
   cropperOptions: {
-    type: 'base64',
+    type: 'blob',
     circle: false,
-    size: { width: 600, height: 600 },
+    size: { width: 160, height: 160 },
     format: 'jpeg',
   },
   locale:
     navigator.languages && navigator.languages.length
       ? navigator.languages[0]
       : navigator.language,
+  // https://github.com/jhildenbiddle/canvas-size#test-results
+  canvasLimits: {
+    web: 11180, // to cater to firefox. chrome goes up to 16384
+    ios: 4096,
+    android: 10836, // lowest android value, some phones can handle more
+    electron: 11180, // including for completeness sake
+  },
+  modal: {
+    errorNetworkActionThrottle: 1000,
+  },
+  seedPhraseCharsCount: 12,
+  pip: {
+    /* Grid config, image splitting the screen in `rows x columns`
+     _____ _____
+    |_____|_____|
+    |_____|_____|
+    |_____|_____|
+    |_____|_____|
+
+    Depending on the center of the Pip, it will land on a specific slot
+    */
+    rows: [0, 1, 2, 3] as const,
+    columns: [0, 1] as const,
+    throttleTime: 100, // ms
+    windowMargin: 80, // pixels
+    enlargeFactor: 1.25,
+    preventDragClass: '.drag-stop', // add this class to pip children that should not trigger drag/resize
+    width: 320,
+    height: 180,
+  },
 }

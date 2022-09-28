@@ -1,76 +1,71 @@
-<div id="accounts-settings">
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle :size="6" :text="$t('pages.settings.accounts.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.accounts.subtitle')"
-      />
-    </div>
-  </div>
+<SettingsPage>
+  <SettingsHeader>
+    {{ $t('pages.settings.accounts.title') }}
+    <template #subheading>
+      {{ $t('pages.settings.accounts.subtitle') }}
+    </template>
+  </SettingsHeader>
 
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyLabel :text="$t('pages.settings.accounts.active')" />
-      <InteractablesInputGroup
-        :copy-content="accounts.active"
-        readonly
-        type="primary"
-        :action="() => $toast.show($t('ui.copied'))"
-        :text="accounts.active"
-      >
-        <clipboard-icon size="1x" />
-      </InteractablesInputGroup>
-    </div>
-  </div>
-
-  <div class="columns is-desktop" v-if="featureReadyToShow">
-    <div class="column">
+  <SettingsUnit>
+    <InteractablesInput
+      readonly
+      :label="$t('pages.settings.accounts.active')"
+      :text="getId"
+      @submit="copyAddress(getId)"
+    >
+      <clipboard-icon size="1x" />
+    </InteractablesInput>
+  </SettingsUnit>
+  <SettingsUnit>
+    <InteractablesInput
+      readonly
+      :label="$t('pages.settings.accounts.active_did')"
+      :text="profile.did"
+      @submit="copyAddress(profile.did)"
+    >
+      <clipboard-icon size="1x" />
+    </InteractablesInput>
+  </SettingsUnit>
+  <!-- <SettingsSection>
+    <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
       <InteractablesInput readonly type="primary" :text="accounts.gasPrice" />
+    </SettingsUnit>
+  </SettingsSection> -->
+
+  <SettingsUnit>
+    <TypographyText as="h3">
+      {{ $t('pages.settings.accounts.devices') }}
+    </TypographyText>
+    <TypographyText color="dark">
+      {{ $t('pages.settings.accounts.no_devices') }}
+    </TypographyText>
+  </SettingsUnit>
+
+  <SettingsUnit>
+    <TypographyText as="h3">
+      {{ $t('pages.settings.profile.phrase.title') }}
+    </TypographyText>
+    <TypographyText color="dark" style="margin-bottom: 1rem">
+      {{ $t('pages.settings.profile.phrase.subtitle') }}
+    </TypographyText>
+    <div class="button-container">
+      <InteractablesButton
+        :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
+        @click="togglePhrase"
+      />
+      <InteractablesButton
+        :text="$t('pages.settings.accounts.copy_phrase')"
+        @click="copyPhrase"
+      />
     </div>
-  </div>
-
-  <UiSpacer :height="20" />
-
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.accounts.devices')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.accounts.no_devices')"
+    <div v-if="showPhrase" class="tag-wrap">
+      <TypographyNumberedWord
+        v-for="word, i in splitPhrase"
+        :key="i"
+        :word="word"
+        :number="i + 1"
       />
     </div>
-  </div>
-
-  <UiSpacer :height="20" />
-
-  <div class="columns is-desktop">
-    <div class="column">
-      <TypographyTitle
-        :size="6"
-        :text="$t('pages.settings.profile.phrase.title')"
-      />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.profile.phrase.subtitle')"
-      />
-      <div v-if="showPhrase" class="tag-wrap">
-        <div v-for="word, i in splitPhrase" class="tag-container">
-          <TypographyNumberedWord :word="word" :number="i + 1" />
-        </div>
-      </div>
-      <div v-else>
-        <InteractablesButton
-          text="Reveal Phrase"
-          size="normal"
-          type="primary"
-          :action="togglePhrase"
-        />
-      </div>
-    </div>
-  </div>
-</div>
+  </SettingsUnit>
+</SettingsPage>

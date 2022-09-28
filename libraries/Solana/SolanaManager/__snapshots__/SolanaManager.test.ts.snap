@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`SolanaManager.default.generateDerivedPublicKey SolanaManager.default.getAccount 0 1`] = `undefined`;
+
+exports[`SolanaManager.default.generateDerivedPublicKey SolanaManager.default.getAccount 1 1`] = `undefined`;
+
+exports[`SolanaManager.default.generateDerivedPublicKey SolanaManager.default.getAccount 2 1`] = `undefined`;
+
+exports[`SolanaManager.default.generateDerivedPublicKey SolanaManager.default.getAllAccounts 0 1`] = `Array []`;
+
+exports[`SolanaManager.default.generateDerivedPublicKey SolanaManager.default.isInitialized 0 1`] = `false`;
+
 exports[`SolanaManager.default.getAccount 0 1`] = `undefined`;
 
 exports[`SolanaManager.default.getAccount 1 1`] = `undefined`;

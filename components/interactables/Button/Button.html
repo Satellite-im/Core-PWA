@@ -1,31 +1,20 @@
 <button
-  :class="`button is-button is-${size} is-${type} ${outlined ? 'is-outlined' : ''} is-${fullWidth ? 'fullwidth' : 'normal-width'} ${inactive ? 'is-inactive' : ''}`"
-  v-on:click="action"
-  :disabled="loading"
-  :type="htmlType"
+  :class="[`button size-${size} color-${color}`, {
+    'outlined': outlined,
+  }]"
+  :disabled="disabled || loading"
+  :type="type"
   ref="button"
+  @click="handleClick"
+  @mousemove.stop="handleMouseMove"
+  @mouseenter="handleMouseEnter"
+  @mouseleave="handleMouseLeave"
+  :aria-label="label || text"
 >
-  <!-- {{$attrs['data-tooltip']}} -->
-  <UiGlowingCursorArea :hide="$attrs['data-tooltip'] ? true : false">
-    <!-- If the button is in the loading state -->
-    <div class="spinner" v-if="loading">
-      <!-- Loading Spinner -->
-      <UiLoadersSpinner
-        spinning
-        :class="`${loadingText ? 'button-icon' : ''}`"
-      />
-      <!-- Loading Text -->
-      <span v-if="loadingText"> {{ loadingText }} </span>
-    </div>
-    <!-- Default button state -->
-    <div v-else class="content">
-      <div
-        :class="`feather ${text.length ? '' : 'no-text-feather'}`"
-        v-if="$slots.default"
-      >
-        <slot></slot>
-      </div>
-      <span v-if="text.length">{{ text }}</span>
-    </div>
-  </UiGlowingCursorArea>
+  <UiLoadersSpinner class="spinner" v-if="loading" spinning />
+  <div v-else class="content">
+    <slot></slot>
+    <span v-if="text.length">{{ text }}</span>
+  </div>
+  <div class="cursor-glow" :style="cursorGlowStyle"></div>
 </button>

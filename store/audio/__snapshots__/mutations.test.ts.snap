@@ -36,18 +36,6 @@ exports[`mutations.default.setInputVolume 4 1`] = `undefined`;
 
 exports[`mutations.default.setInputVolume 5 1`] = `undefined`;
 
-exports[`mutations.default.setMuted 0 1`] = `undefined`;
-
-exports[`mutations.default.setMuted 1 1`] = `undefined`;
-
-exports[`mutations.default.setMuted 2 1`] = `undefined`;
-
-exports[`mutations.default.setMuted 3 1`] = `undefined`;
-
-exports[`mutations.default.setMuted 4 1`] = `undefined`;
-
-exports[`mutations.default.setMuted 5 1`] = `undefined`;
-
 exports[`mutations.default.setSoundLevel 0 1`] = `undefined`;
 
 exports[`mutations.default.setSoundLevel 1 1`] = `undefined`;
@@ -83,3 +71,15 @@ exports[`mutations.default.setVolume 3 1`] = `undefined`;
 exports[`mutations.default.setVolume 4 1`] = `undefined`;
 
 exports[`mutations.default.setVolume 5 1`] = `undefined`;
+
+exports[`mutations.default.toggleMute 0 1`] = `undefined`;
+
+exports[`mutations.default.toggleMute 1 1`] = `undefined`;
+
+exports[`mutations.default.toggleMute 2 1`] = `undefined`;
+
+exports[`mutations.default.toggleMute 3 1`] = `undefined`;
+
+exports[`mutations.default.toggleMute 4 1`] = `undefined`;
+
+exports[`mutations.default.toggleMute 5 1`] = `undefined`;

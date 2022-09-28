@@ -1,9 +1,14 @@
-<div :class="`volume-slider volume-slider--${direction}`">
+<div
+  data-cy="volume-slider"
+  :class="`volume-slider volume-slider--${direction} disable-swipe`"
+>
   <vue-slider
     v-model="value"
     v-bind:direction="direction"
     @change="returnValue"
     :plain="plain"
     :tooltip-formatter="percentageFormatter"
+    :duration="0.15"
+    dragOnClick
   ></vue-slider>
 </div>

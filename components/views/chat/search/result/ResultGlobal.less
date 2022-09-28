@@ -1,0 +1,23 @@
+.search-result-pagination {
+  height: 3rem;
+  margin-top: @light-spacing;
+  padding: 5px 10px;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  li {
+    display: block;
+    margin: 2px;
+    a {
+      display: block;
+      padding: 5px 10px;
+      &:extend(.font-secondary);
+      border-radius: @corner-rounding-smaller;
+    }
+    &.disabled {
+      a {
+        &:extend(.font-muted);
+      }
+    }
+  }
+}

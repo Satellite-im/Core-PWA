@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmitterDefault.on 0 1`] = `undefined`;
+
+exports[`EmitterDefault.on 1 1`] = `undefined`;
+
+exports[`EmitterDefault.on 2 1`] = `undefined`;

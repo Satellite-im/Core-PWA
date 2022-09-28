@@ -1,69 +1,38 @@
-#quick-profile {
-  &:extend(.background-semitransparent-dark);
-  &:extend(.blur);
-  &:extend(.round-corners);
-  &:extend(.bordered);
-  .header {
-    &:extend(.background-primary);
-    width: calc(@full + 2rem);
-    height: 3rem;
-    margin: -@normal-spacing -@normal-spacing calc(@normal-spacing + 20px) -@normal-spacing;
-    position: relative;
-    #userIcon,
-    #closeIcon {
-      cursor: pointer;
-    }
-  }
-  .action {
-    position: absolute;
-    top: 5px;
-    width: 100%;
-    height: 25px;
-    .close-button {
-      position: absolute;
-      z-index: 10;
-      right: @normal-spacing;
-      top: @normal-spacing;
-    }
-  }
-  .is-text {
-    margin-bottom: @light-spacing;
-  }
-  .address {
-    &:extend(.font-muted);
-    font-size: @mini-text-size;
-  }
-  .circle {
-    position: absolute;
-    bottom: -20px;
-    left: @normal-spacing;
-    box-shadow: 0 4px 0 0 @black; /* Border bottom */
-    box-shadow: 0 -4px 0 0 @black; /* Border top */
-    box-shadow: -4px 0 0 0 @black; /* Border left */
-    box-shadow: 4px 0 0 0 @black; /* Border right */
-    box-shadow: 0 0 0 4px @black; /* All the borders by using the spread properties */
-  }
-  .error {
-    font-size: 13px;
-    margin-top: @xlarge-spacing;
-  }
+.quick-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   position: fixed;
-  z-index: 3;
   width: 350px;
-  max-width: calc(@full - 2rem);
-  top: 4rem;
-  left: 4rem;
-  padding: @normal-spacing;
+  padding: 16px;
   overflow: hidden;
+  // background: linear-gradient(
+  //   to bottom,
+  //   @flair-color 0%,
+  //   @flair-color 36px,
+  //   #1c273a 36px,
+  //   @darker 100%
+  // );
+  background: @modal-gradient;
+  box-shadow: @ui-shadow;
+  .round-corners();
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .open-profile-button {
+      cursor: default;
+    }
+  }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  #quick-profile {
+  .quick-profile {
     position: fixed;
     bottom: 0;
-    top: unset;
-    left: 1rem;
-    right: 1rem;
-    width: calc(@full - 2rem);
+    width: 100%;
+    z-index: 1;
   }
 }

@@ -1,25 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`mutations.default.chatText 0 1`] = `undefined`;
+exports[`misc module.default.addFile with empty files array 1`] = `Array []`;
 
-exports[`mutations.default.chatText 1 1`] = `undefined`;
-
-exports[`mutations.default.chatText 2 1`] = `undefined`;
-
-exports[`mutations.default.chatText 3 1`] = `undefined`;
-
-exports[`mutations.default.chatText 4 1`] = `undefined`;
-
-exports[`mutations.default.chatText 5 1`] = `undefined`;
-
-exports[`mutations.default.setChatReply 0 1`] = `undefined`;
-
-exports[`mutations.default.setChatReply 1 1`] = `undefined`;
-
-exports[`mutations.default.setChatReply 2 1`] = `undefined`;
-
-exports[`mutations.default.setChatReply 3 1`] = `undefined`;
-
-exports[`mutations.default.setChatReply 4 1`] = `undefined`;
-
-exports[`mutations.default.setChatReply 5 1`] = `undefined`;
+exports[`misc module.default.addFile with existing files array 1`] = `Array []`;

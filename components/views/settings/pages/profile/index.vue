@@ -4,44 +4,72 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { ClipboardIcon } from 'satellite-lucide-icons'
+import {
+  EditIcon,
+  UserIcon,
+  AlignLeftIcon,
+  LaptopIcon,
+  InfoIcon,
+} from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
-import { AccountsState } from '~/store/accounts/types'
+import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    accounts: AccountsState
-  }
-}
+type Editables = 'about'
+
 export default Vue.extend({
-  name: 'ProfileSettings',
   components: {
-    ClipboardIcon,
+    EditIcon,
+    UserIcon,
+    AlignLeftIcon,
+    LaptopIcon,
+    InfoIcon,
   },
   layout: 'settings',
   data() {
     return {
-      profileInfo: sampleProfileInfo,
+      image: '',
       croppedImage: '',
       showCropper: false,
-      featureReadyToShow: false,
+      loading: new Set() as Set<keyof User>,
+      editing: new Set() as Set<Editables>,
+      inputs: {
+        name: iridium.profile.state?.name ?? '',
+        photoHash: iridium.profile.state?.photoHash ?? '',
+        status: '',
+        about: iridium.profile.state?.about ?? '',
+        accountUrl: '',
+      } as Partial<User>,
     }
   },
   computed: {
-    ...mapState(['accounts', 'ui']),
-    isSmallScreen(): Boolean {
+    ...mapState({
+      accounts: (state) => (state as RootState).accounts,
+      ui: (state) => (state as RootState).ui,
+    }),
+    sampleProfileInfo: () => sampleProfileInfo,
+    isSmallScreen(): boolean {
       // @ts-ignore
-      if (this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md'))
-        return true
-      return false
+      return this.$mq === 'sm' || (this.ui.settingsSideBar && this.$mq === 'md')
     },
     src(): string {
       if (this.croppedImage) {
         return this.croppedImage
       }
-      const hash = this.accounts.details.profilePicture
-      return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
+      const hash = iridium.profile.state?.photoHash
+      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
+    imageInputRef(): HTMLInputElement {
+      return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
+    },
+    profile(): User | undefined {
+      return iridium.profile.state
+    },
+  },
+  beforeDestroy() {
+    URL.revokeObjectURL(this.croppedImage)
+    URL.revokeObjectURL(this.image)
   },
   methods: {
     /**
@@ -58,8 +86,7 @@ export default Vue.extend({
      * @example
      */
     openFileDialog() {
-      const fileInput = this.$refs.file as HTMLElement
-      fileInput.click()
+      this.imageInputRef.click()
     },
     /**
      * @method setCroppedImage DocsTODO
@@ -67,10 +94,12 @@ export default Vue.extend({
      * @param image
      * @example
      */
-    setCroppedImage(image: any) {
-      const fileInput = this.$refs.file as HTMLInputElement
-      this.croppedImage = image
-      fileInput.value = ''
+    setCroppedImage(image: Blob) {
+      this.croppedImage = URL.createObjectURL(image)
+      this.imageInputRef.value = ''
+      const img = new Image()
+      img.src = this.croppedImage
+      // TODO: Save image with iridium
     },
     /**
      * @method selectProfileImage DocsTODO
@@ -79,21 +108,83 @@ export default Vue.extend({
      * @returns
      * @example
      */
-    selectProfileImage(e: any) {
-      if (e.target && e.target.value !== null) {
-        const files = e.target.files || e.dataTransfer.files
-        if (!files.length) return
+    selectProfileImage(e: Event) {
+      const target = e.target as HTMLInputElement
+      const file = target.files?.[0]
 
-        const reader = new FileReader()
-        reader.onload = (e: any) => {
-          this.profileInfo.imageUrl = e.target.result
-          e.target.value = ''
-
-          this.toggleCropper()
-        }
-
-        reader.readAsDataURL(files[0])
+      if (file) {
+        this.image = URL.createObjectURL(file)
+        this.toggleCropper()
       }
+    },
+    /**
+     * @method updateUserDetail
+     * @description Updates user details
+     * @example this.updateUserDetail('name', 'John Doe')
+     */
+    async updateUserDetail(e: SubmitEvent, key: keyof User, value: string) {
+      e.stopPropagation()
+      e.preventDefault()
+
+      try {
+        this.loading.add(key)
+        await iridium.profile.updateUser({
+          [key]: value.trim(),
+        })
+        const inputs = this.inputs as { [key in keyof User]: string }
+        inputs[key] = value.trim()
+        this.$toast.show(
+          this.$t('pages.settings.profile.detail_updated') as string,
+        )
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
+      } finally {
+        this.loading.delete(key)
+        // Note: For Vue 2 reactivity
+        this.loading = new Set(...this.loading.entries())
+      }
+    },
+    /**
+     * @method toggleEditing
+     * @description Toggles editing state of a field
+     * @example this.toggleEditing('name')
+     */
+    toggleEditing(key: Editables) {
+      if (this.editing.has(key)) {
+        this.editing.delete(key)
+        // Note: For Vue 2 reactivity
+        this.editing = new Set(...this.editing.entries())
+      } else {
+        this.editing.add(key)
+        // Note: For Vue 2 reactivity
+        this.editing = new Set(...this.editing.entries())
+      }
+    },
+    /**
+     * @method submitEdit
+     * @description Updates input value
+     * @example this.submitEdit('name', 'John Doe')
+     */
+    submitEdit(e: SubmitEvent, key: Editables) {
+      e.stopPropagation()
+      e.preventDefault()
+      const value = this.inputs[key] || ''
+      const valueChanged = this.profile?.[key] !== value
+      if (this.editing.has(key) && valueChanged) {
+        this.updateUserDetail(e, key, value)
+      }
+      this.toggleEditing(key)
+    },
+    /**
+     * @method getEditButtonText
+     * @description Returns the label for the edit button
+     * @example this.getEditLabel('about')
+     */
+    getEditButtonText(key: Editables) {
+      if (this.editing.has(key)) {
+        return this.$t('global.save') as string
+      }
+      return this.$t('global.edit') as string
     },
   },
 })

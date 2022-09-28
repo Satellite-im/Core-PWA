@@ -1,208 +1,6 @@
-import * as mutations from '~/store/chat/mutations'
-import { UploadDropItemType } from '~/types/files/file'
-
-describe('mutations.default.setChatReply', () => {
-  test('0', () => {
-    const object2: any = [
-      { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'elio@example.com' },
-      { userId: '9876', value: 'Elio' },
-      { userId: '12345', value: 'Dillenberg' },
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Dillenberg' },
-      { userId: '9876', value: 'Elio' },
-    ]
-    const object: any = [
-      { replyId: 'da7588892', value: false },
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-      { replyId: '12345', value: true },
-      { replyId: 'da7588892', value: true },
-      { replyId: 'da7588892', value: true },
-    ]
-    const result: any = mutations.default.setChatReply(
-      { replies: object, chatTexts: object2 },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('1', () => {
-    const object2: any = [
-      { userId: 'da7588892', value: 'Elio' },
-      { userId: 'da7588892', value: 'elio@example.com' },
-      { userId: 'da7588892', value: 'Dillenberg' },
-    ]
-    const object: any = [{ replyId: 'da7588892', value: true }]
-    const result: any = mutations.default.setChatReply(
-      { replies: object, chatTexts: object2 },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('2', () => {
-    const object2: any = [
-      { userId: '12345', value: 'Elio' },
-      { userId: '9876', value: 'elio@example.com' },
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Elio' },
-    ]
-    const object: any = [
-      { replyId: 'da7588892', value: false },
-      { replyId: '12345', value: false },
-      { replyId: 'da7588892', value: true },
-    ]
-    const result: any = mutations.default.setChatReply(
-      { replies: object, chatTexts: object2 },
-      { replyId: '12345', value: false },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('3', () => {
-    const object2: any = [
-      { userId: '12345', value: 'elio@example.com' },
-      { userId: '9876', value: 'Dillenberg' },
-    ]
-    const object: any = [
-      { replyId: '12345', value: false },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: false },
-    ]
-    const result: any = mutations.default.setChatReply(
-      { replies: object, chatTexts: object2 },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('4', () => {
-    const object2: any = [
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Dillenberg' },
-      { userId: '9876', value: 'Dillenberg' },
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Elio' },
-      { userId: 'da7588892', value: 'elio@example.com' },
-      { userId: 'da7588892', value: 'Elio' },
-    ]
-    const object: any = [
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: true },
-      { replyId: '12345', value: true },
-    ]
-    const result: any = mutations.default.setChatReply(
-      { replies: object, chatTexts: object2 },
-      { replyId: 'da7588892', value: false },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('5', () => {
-    const result: any = mutations.default.setChatReply(
-      { replies: [], chatTexts: [] },
-      { replyId: '', value: false },
-    )
-    expect(result).toMatchSnapshot()
-  })
-})
-
-describe('mutations.default.chatText', () => {
-  test('0', () => {
-    const object2: any = [
-      { userId: '12345', value: 'elio@example.com' },
-      { userId: '9876', value: 'Elio' },
-    ]
-    const object: any = [
-      { replyId: '9876', value: false },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
-    ]
-    const result: any = mutations.default.chatText(
-      { replies: object, chatTexts: object2 },
-      { userId: '12345', value: 'Elio' },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('1', () => {
-    const object2: any = [
-      { userId: '12345', value: 'Dillenberg' },
-      { userId: '12345', value: 'elio@example.com' },
-      { userId: '12345', value: 'Elio' },
-    ]
-    const object: any = [
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-      { replyId: '12345', value: false },
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-      { replyId: 'da7588892', value: true },
-      { replyId: '12345', value: false },
-    ]
-    const result: any = mutations.default.chatText(
-      { replies: object, chatTexts: object2 },
-      { userId: '9876', value: 'elio@example.com' },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('2', () => {
-    const object2: any = [
-      { userId: '12345', value: 'Elio' },
-      { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'elio@example.com' },
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'elio@example.com' },
-    ]
-    const object: any = [
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: false },
-    ]
-    const result: any = mutations.default.chatText(
-      { replies: object, chatTexts: object2 },
-      { userId: '12345', value: 'elio@example.com' },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('3', () => {
-    const object2: any = [
-      { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'elio@example.com' },
-      { userId: '12345', value: 'Elio' },
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Elio' },
-    ]
-    const object: any = [
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: false },
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-      { replyId: '9876', value: true },
-      { replyId: 'bc23a9d531064583ace8f67dad60f6bb', value: true },
-    ]
-    const result: any = mutations.default.chatText(
-      { replies: object, chatTexts: object2 },
-      { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Dillenberg' },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('4', () => {
-    const object2: any = [
-      { userId: '12345', value: 'Dillenberg' },
-      { userId: 'bc23a9d531064583ace8f67dad60f6bb', value: 'Dillenberg' },
-      { userId: '12345', value: 'elio@example.com' },
-      { userId: '9876', value: 'elio@example.com' },
-    ]
-    const object: any = [
-      { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
-      { replyId: '12345', value: false },
-    ]
-    const result: any = mutations.default.chatText(
-      { replies: object, chatTexts: object2 },
-      { userId: 'c466a48309794261b64a4f02cfcc3d64', value: 'Dillenberg' },
-    )
-    expect(result).toMatchSnapshot()
-  })
-
-  test('5', () => {
-    const result: any = mutations.default.chatText(
-      { replies: [], chatTexts: [] },
-      { userId: '', value: '' },
-    )
-    expect(result).toMatchSnapshot()
-  })
-})
+import { ChatFileUpload } from './types'
+import InitialChatState from './state'
+import * as module from '~/store/chat/mutations'
 
 describe('misc', () => {
   const object2: any = [
@@ -215,14 +13,14 @@ describe('misc', () => {
     { replyId: 'c466a48309794261b64a4f02cfcc3d64', value: false },
     { replyId: '12345', value: false },
   ]
-  const object3: UploadDropItemType[] = []
+  const object3: ChatFileUpload[] = []
   const state = { replies: object, chatTexts: object2, files: object3 }
 
-  test('mutations.default.addFile with empty files array', () => {
+  test('module.default.addFile with empty files array', () => {
     const obj = {
       file: {
-        file: 'path',
-        url: 'string',
+        file: 'path2',
+        url: 'string2',
         nsfw: {
           checking: false,
           status: false,
@@ -230,71 +28,132 @@ describe('misc', () => {
       },
       address: 'address1',
     }
-    mutations.default.addFile(state, obj)
-    expect(state.files[obj.address]).toEqual([obj.file])
+    module.default.addFile(state, obj)
+    expect(state.files).toMatchSnapshot()
   })
-  test.skip('draft mutations.default.addFile with non-empty files array', () => {
+
+  test('module.default.addFile with existing files array', () => {
+    const obj = {
+      file: {
+        file: 'path2',
+        url: 'string2',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+      address: 'address1',
+    }
+    module.default.addFile(state, obj)
+    const obj2 = {
+      file: {
+        file: 'path3',
+        url: 'string3',
+        nsfw: {
+          checking: false,
+          status: false,
+        },
+      },
+      address: 'address1',
+    }
+    module.default.addFile(state, obj2)
+    expect(state.files).toMatchSnapshot()
+  })
+})
+
+describe('misc', () => {
+  test('module.removeFile', () => {
+    const localState = {
+      ...InitialChatState,
+      files: {
+        file1: [
+          {
+            file: 'path2',
+            url: 'string2',
+            nsfw: {
+              checking: false,
+              status: false,
+            },
+            progress: 0,
+          },
+        ],
+      },
+    }
+    const argument = { id: 'file1', index: 0 }
+
+    module.default.removeFile(localState, argument)
+
+    expect(localState.files).toEqual({ file1: [] })
+  })
+
+  // test('module.setFileProgress', () => {
+  //   const localState = {
+  //     ...InitialChatState,
+  //     files: {
+  //       file1: [
+  //         {
+  //           file: 'path2',
+  //           url: 'string2',
+  //           nsfw: {
+  //             checking: false,
+  //             status: false,
+  //           },
+  //           progress: 0,
+  //         },
+  //       ],
+  //     },
+  //   }
+  //   const argument = { id: 'file1', index: 0, progress: 10 }
+
+  //   module.default.setFileProgress(localState, argument)
+
+  //   expect(localState.files).toEqual({
+  //     file1: [
+  //       {
+  //         file: 'path2',
+  //         nsfw: { checking: false, status: false },
+  //         progress: 10,
+  //         url: 'string2',
+  //       },
+  //     ],
+  //   })
+  // })
+
+  test('module.default.deleteFiles', () => {
     const state = {
-      replies: object,
-      chatTexts: object2,
-      files: [
-        {
-          file: 'path_file_0',
-          nsfw: { checking: false, status: false },
-          url: 'string',
-        },
-      ],
-    }
-    const obj = {
-      file: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
-      address: 'address1',
-    }
-    mutations.default.addFile(state, obj)
-    expect(state.files[obj.address]).toEqual([obj.file])
-  })
-  test('mutations.default.setFiles', () => {
-    const state = { replies: object, chatTexts: object2, files: object3 }
-    const obj = {
+      ...InitialChatState,
       files: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
+        file1: [
+          {
+            file: 'path2',
+            url: 'string2',
+            nsfw: {
+              checking: false,
+              status: false,
+            },
+            progress: 0,
+          },
+        ],
       },
-
-      address: 'address1',
     }
 
-    mutations.default.setFiles(state, obj)
-    expect(state.files[obj.address]).toEqual(obj.files)
+    module.default.deleteFiles(state, 'file1')
+    expect(state.files).toEqual({})
   })
-  test('mutations.default.deleteFiles', () => {
-    const state = { replies: object, chatTexts: object2, files: object3 }
-    const obj = {
-      files: {
-        file: 'path',
-        url: 'string',
-        nsfw: {
-          checking: false,
-          status: false,
-        },
-      },
 
-      address: 'address1',
+  test('module.default.setDraftMessage', () => {
+    const state = {
+      ...InitialChatState,
+      draftMessages: {
+        conversation_id: 'no_message',
+      },
+    }
+    const argument = {
+      conversationId: 'conversation_id',
+      message: 'message',
     }
 
-    mutations.default.setFiles(state, obj)
-    expect(state.files[obj.address]).toEqual(obj.files)
-    mutations.default.deleteFiles(state, obj.address)
-    expect(state.files).not.toEqual(obj.files)
+    module.default.setDraftMessage(state, argument)
+    expect(state.draftMessages[argument.conversationId]).toBe(argument.message)
   })
 })

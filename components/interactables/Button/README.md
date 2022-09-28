@@ -29,5 +29,3 @@ Generic button component.
 **action** Function or method to be called when the button is clicked
 
 **loading** Optionall loading state for the button (useful for async tasks)
-
-**loadingText** Ability to add custom loading texts into the button

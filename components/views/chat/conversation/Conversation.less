@@ -1,29 +1,77 @@
-#conversation {
-  padding: @normal-spacing;
+.conversation {
+  position: relative; // Dont remove
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  justify-content: space-between;
+  padding-bottom: 16px;
 
   .separator {
     margin: @normal-spacing 3rem;
   }
-}
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #conversation {
-    overflow-x: hidden;
-    &:extend(.light-padding);
+  .messages {
+    margin: 0 @normal-spacing;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+
+    .caret_divider + .chat-message-container.show-header {
+      margin-top: 0;
+    }
   }
-}
 
-.zoop {
-  height: 20px;
-  overflow: auto;
-}
-.loading-bar {
-  margin-top: -10px !important;
-}
+  .loader-container {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    gap: 16px;
+    padding: 8px 16px;
+    margin: 8px 0 8px 52px;
+    background: linear-gradient(
+      0deg,
+      rgba(42, 54, 75, 0.5) 0%,
+      rgba(48, 52, 71, 0.5) 100%
+    );
+    box-shadow: 0 10px 20px 0 #080b0f3b;
+    border-radius: @corner-rounding;
+    height: 61px;
 
-@media only screen and (max-width: @mobile-breakpoint) {
-  #conversation {
-    padding-left: 0;
-    padding-right: 0;
+    .icon {
+      color: @flair-color;
+      flex-shrink: 0;
+    }
+  }
+
+  &-infiniteScroll.is-reversed {
+    order: -1;
+  }
+
+  &-info {
+    &:extend(.first-layer);
+    font-family: @secondary-font;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &-loader {
+    &:extend(.background-semitransparent-light);
+    &:extend(.round-corners);
+    &:extend(.light-padding);
+    &:extend(.font-flair);
+    width: calc(@full - @light-spacing * 2);
+    font-size: 10pt;
+    margin: @light-spacing;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &-spinner {
+      margin-right: @light-spacing;
+    }
   }
 }

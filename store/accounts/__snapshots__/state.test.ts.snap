@@ -3,10 +3,13 @@
 exports[`init should return the initial settings state 1`] = `
 Object {
   "active": "",
+  "adapter": "",
   "encryptedPhrase": "",
+  "entropyMessage": "",
   "error": "",
   "gasPrice": "",
   "initialized": false,
+  "isNewAccount": false,
   "lastVisited": "/",
   "loading": false,
   "locked": true,

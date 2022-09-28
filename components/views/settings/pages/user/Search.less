@@ -7,7 +7,6 @@
     flex-wrap: wrap;
     max-width: @full;
     min-width: 0;
-    height: auto;
     margin-top: @xlight-spacing;
   }
 
@@ -25,6 +24,8 @@
       margin-left: @xlight-spacing;
     }
     .action {
+      display: flex;
+      align-items: center;
       margin-left: @xlight-spacing;
       cursor: pointer;
     }
@@ -58,6 +59,7 @@
     &:extend(.full-width);
     height: 200px;
     overflow-y: auto;
+    z-index: @first-layer-zindex;
 
     &.active {
       display: flex;
@@ -74,7 +76,7 @@
 
     &.bottom {
       left: 0px;
-      top: 0px;
+      top: 100%;
       .user-search-result {
         left: 0px;
         top: 0px;
@@ -87,6 +89,7 @@
     background: @darker;
     border: 1px solid @background;
     position: absolute;
+    height: auto;
 
     li {
       display: flex;
@@ -98,6 +101,8 @@
       }
       .action {
         flex: 0 0;
+        display: flex;
+        align-items: center;
         .fa-plus {
           cursor: pointer;
         }

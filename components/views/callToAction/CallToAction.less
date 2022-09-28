@@ -1,21 +1,28 @@
 .cta {
   display: flex;
   flex-direction: column;
-  max-width: 600px;
-  padding: 40px @large-spacing @normal-spacing;
-  &:extend(.modal-gradient);
+  justify-content: center;
+  height: 100%;
+  max-width: @mobile-breakpoint; // matches breakpoint in components/ui/Modal/Modal.less
+  padding: 32px;
+  background: @modal-gradient;
   color: @secondary-text;
 
   .sat-icon {
     fill: @white;
     margin: 0 auto @normal-spacing;
+    overflow: visible;
   }
+
   .main-title {
     text-align: center;
     font-weight: 400;
   }
+
   .title {
     color: @secondary-text;
+    margin-bottom: 32px;
+
     &.sub {
       margin-bottom: @normal-spacing;
     }
@@ -30,6 +37,6 @@
   }
 
   .button {
-    margin-top: @normal-spacing;
+    margin-top: 32px;
   }
 }

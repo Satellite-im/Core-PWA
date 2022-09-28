@@ -1,38 +1,35 @@
 .edit-message {
   &-body {
+    display: flex;
+    &:extend(.round-corners);
+    &:extend(.background-semitransparent-lighter);
+
+    &.is-error {
+      border: 1px solid @red;
+    }
+
+    .editable-container {
+      padding-left: 8px;
+      max-height: 50vh;
+    }
+
+    button {
+      font-size: @larger-icon-size;
+      padding: 12px 8px;
+      align-items: center;
+      height: @chatbar-input-height;
+      color: @white;
+    }
+
     &-input {
       height: 100%;
       flex-grow: 1;
-      font-size: @text-size;
       word-break: break-all;
       blockquote {
         border-left: 4px solid @text-muted;
         padding-left: @light-spacing;
       }
       &:extend(.round-corners);
-      p {
-        font-size: @text-size !important;
-      }
-    }
-    display: flex;
-    &:extend(.round-corners);
-    &:extend(.background-semitransparent-lighter);
-    &:extend(.more-pad-sides);
-
-    &.is-error {
-      border: 1px solid @red;
-    }
-
-    .emoji-toggle {
-      cursor: pointer;
-      height: 24px;
-      padding-left: 5px;
-      position: sticky;
-      top: 0;
-    }
-
-    .editable-container {
-      max-height: 50vh;
     }
   }
   &-bottom {
@@ -41,15 +38,23 @@
     margin: 0 -@light-spacing 0 0;
     justify-content: space-between;
     & > div {
-      padding: 0 @light-spacing;
-      a {
-        margin-right: @light-spacing;
+      display: flex;
+      margin: 0 @light-spacing;
+      > div {
+        &:not(:last-child)::after {
+          content: '•';
+          margin: 0 @light-spacing;
+        }
       }
+    }
+
+    .action {
+      color: @flair-color;
     }
   }
   margin: @light-spacing 0px;
   &:extend(.light-padding);
   &:extend(.background-semitransparent-dark);
   &:extend(.round-corners);
-  border: 1px solid @primary-color;
+  border: 1px solid @flair-color;
 }

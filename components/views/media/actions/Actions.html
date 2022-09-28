@@ -1,52 +1,52 @@
-<div id="actions">
+<div class="media-actions">
   <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    data-tooltip="Video"
+    data-cy="call-video"
+    v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
   >
     <InteractablesButton
       class="left"
-      :type="videoMuted ? 'danger' : 'dark'"
-      size="small"
-      :action="toggleVideo"
-      :loading="isLoading"
-      loadingText=""
+      :color="videoMuted ? 'danger' : 'dark'"
+      @click="() => toggleMute('video')"
+      :loading="buttonsLoading.includes('video')"
     >
-      <video-icon v-if="!videoMuted" size="1.2x" />
-      <video-off-icon v-else size="1.2x" />
+      <video-icon data-cy="video-unmuted" v-if="!videoMuted" size="1.2x" />
+      <video-off-icon data-cy="video-muted" v-else size="1.2x" />
+    </InteractablesButton>
+  </div>
+  <div v-tooltip.top="audioMuted ? $t('controls.unmute') : $t('controls.mute')">
+    <InteractablesButton
+      :color="audioMuted ? 'danger' : 'dark'"
+      data-cy="call-audio"
+      @click="() => toggleMute('audio')"
+      :loading="buttonsLoading.includes('audio')"
+    >
+      <mic-icon data-cy="audio-unmuted" v-if="!audioMuted" size="1.2x" />
+      <mic-off-icon data-cy="audio-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
   <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    :data-tooltip="$t('controls.mute')"
+    v-tooltip.top="screenMuted ? $t('controls.screen') : $t('controls.stop_streaming')"
   >
     <InteractablesButton
-      :type="audioMuted ? 'danger' : 'dark'"
-      size="small"
-      :action="toggleMute"
-      :loading="isLoading"
-      loadingText=""
+      :color="screenMuted ? 'danger' : 'dark'"
+      data-cy="call-screen-share"
+      @click="() => toggleMute('screen')"
+      :loading="buttonsLoading.includes('screen')"
     >
-      <mic-icon v-if="!audioMuted" size="1.2x" />
-      <mic-off-icon v-else size="1.2x" />
+      <screen-share-icon
+        data-cy="screen-unmuted"
+        v-if="!screenMuted"
+        size="1.2x"
+      />
+      <screen-share-off-icon data-cy="screen-muted" v-else size="1.2x" />
     </InteractablesButton>
   </div>
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    :data-tooltip="$t('controls.not_available')"
-  >
-    <InteractablesButton type="dark" disabled size="small" :action="() => {}">
-      <screen-share-icon size="1.2x" />
-    </InteractablesButton>
-  </div>
-  <div
-    class="has-tooltip has-tooltip-primary has-tooltip-hidden-touch"
-    data-tooltip="Hangup"
-  >
+  <div v-tooltip.top="$t('controls.hang_up')">
     <InteractablesButton
       class="right"
-      type="danger"
-      size="small"
-      :action="() => hangUp()"
+      color="danger"
+      data-cy="call-hangup"
+      @click="hangUp"
     >
       <phone-off-icon size="1.2x" />
     </InteractablesButton>

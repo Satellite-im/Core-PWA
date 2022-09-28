@@ -4,9 +4,12 @@ import pkg from './package.json'
 export default defineNuxtConfig({
   alias: {
     tslib: 'tslib/tslib.es6.js',
+    'merge-options': 'merge-options/index.js',
+    '@satellite-im/iridium': '@satellite-im/iridium/dist/browser/index.js',
   },
   bridge: {
     nitro: false,
+    meta: true,
   },
   server: {
     host: '0.0.0.0',
@@ -21,9 +24,9 @@ export default defineNuxtConfig({
     middleware: ['authenticated'],
     extendRoutes(routes, resolve) {
       routes.push({
-        path: '/friends/list/:id',
+        path: '/friends',
         components: {
-          default: resolve(__dirname, 'pages/friends/list'),
+          default: resolve(__dirname, 'pages/friends'),
         },
       })
     },
@@ -31,7 +34,6 @@ export default defineNuxtConfig({
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Satellite-Absolute',
     htmlAttrs: {
       lang: 'en',
     },
@@ -40,7 +42,7 @@ export default defineNuxtConfig({
       {
         name: 'viewport',
         content:
-          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0',
       },
       { hid: 'description', name: 'description', content: '' },
       { name: 'mobile-web-app-capable', content: 'yes' },
@@ -50,46 +52,45 @@ export default defineNuxtConfig({
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon_16.png',
+        href: '/favicon_16.png',
         sizes: '16x16',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon_32.png',
+        href: '/favicon_32.png',
         sizes: '32x32',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon.png',
+        href: '/favicon.png',
         sizes: '96x96',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon.png',
+        href: '/favicon.png',
       },
     ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/styles/framework/framework.less'],
+  css: [
+    '@/assets/styles/reset.css',
+    '@/assets/styles/framework/framework.less',
+    '@/assets/styles/base.less',
+    '@/assets/styles/themes/moonless_night.less',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // Third Party
-    { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
-    { src: '~/plugins/thirdparty/clipboard.ts' },
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/thirdparty/vue3-touch-events.ts' },
-    { src: '~/plugins/thirdparty/multiselect.ts' },
-    { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
-    { src: '~/plugins/thirdparty/vuetify.ts' },
-    { src: '~/plugins/thirdparty/swiper.ts' },
+    { src: '~/plugins/thirdparty/tooltip.ts' },
     // Local
     { src: '~/plugins/local/classLoader.ts' },
     { src: '~/plugins/local/notifications.ts', mode: 'client' },
@@ -98,6 +99,7 @@ export default defineNuxtConfig({
     { src: '~/plugins/local/mock.ts' },
     { src: '~/plugins/local/style.ts' },
     { src: '~/plugins/local/envinfo.ts' },
+    { src: '~/plugins/local/contextmenu.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -135,7 +137,7 @@ export default defineNuxtConfig({
 
   toast: {
     position: 'top-center',
-    duration: 1000,
+    duration: 3000,
     containerClass: 'toasty-container',
   },
 
@@ -163,14 +165,14 @@ export default defineNuxtConfig({
       permissions: ['unlimitedStorage', 'fullscreen'],
     },
     icon: {
-      source: '/static/favicon.png',
+      source: '/favicon.png',
     },
     workbox: {
       // uncomment next line to test local
       // enabled: true,
       runtimeCaching: [
         {
-          urlPattern: 'https://satellite.mypinata.cloud/ipfs/*',
+          urlPattern: 'https://satellite.infura-ipfs.io/ipfs/*',
           handler: 'StaleWhileRevalidate',
           method: 'GET',
           strategyOptions: {
@@ -200,10 +202,18 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: ['@solana'],
     extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
       config.node = {
         fs: 'empty',
         encoding: 'empty',
+        child_process: 'empty',
+        dgram: 'empty',
+        tls: 'empty',
+        dns: 'empty',
       }
       if (process.env.ENVIRONMENT !== 'dev') {
         const testAttributes = ['data-cy']
@@ -228,20 +238,39 @@ export default defineNuxtConfig({
         }
       }
     },
-    babel: { compact: true },
+    babel: {
+      plugins: ['lodash'],
+      compact: true,
+      presets({ isServer }, [preset, options]) {
+        options.targets = isServer
+          ? { node: 'current' }
+          : {
+              browsers: [
+                'last 1 chrome version',
+                'last 1 firefox version',
+                'last 1 safari version',
+              ],
+            }
+      },
+    },
   },
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
-    textileKey: process.env.TEXTILE_API_KEY,
+    feedbackUrl: process.env.NUXT_ENV_FEEDBACK_URL,
   },
   webpack: {
     watchOptions: {
-      ignored: '/node_modules/',
+      ignored: ['/node_modules/', '/.vscode/'],
     },
     stats: 'verbose',
   },
   // Ignore types files inside vuex modules otherwise they are included in the
   // vuex configuration
-  ignore: ['**/*.test.*', 'store/*/types.ts'],
+  ignore: [
+    '**/*.test.*',
+    'store/*/types.ts',
+    'node_modules/@satellite-im/iridium/src/',
+    '../iridium/node_modules/',
+  ],
 })

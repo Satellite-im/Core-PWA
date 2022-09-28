@@ -1,0 +1,64 @@
+<template src="./Toolbar.html"></template>
+
+<script lang="ts">
+import Vue from 'vue'
+import {
+  PhoneCallIcon,
+  UserPlusIcon,
+  MenuIcon,
+  VideoIcon,
+} from 'satellite-lucide-icons'
+
+import iridium from '~/libraries/Iridium/IridiumManager'
+import {
+  conversationHooks,
+  call,
+} from '~/components/compositions/conversations'
+
+export default Vue.extend({
+  components: {
+    PhoneCallIcon,
+    UserPlusIcon,
+    MenuIcon,
+    VideoIcon,
+  },
+  setup() {
+    const {
+      conversation,
+      conversationId,
+      isGroup,
+      otherDids,
+      otherParticipants,
+      enableRTC,
+    } = conversationHooks()
+
+    async function handleCall() {
+      if (isGroup.value || !enableRTC.value || !conversationId.value) {
+        return
+      }
+      await call({
+        recipient: otherDids.value[0],
+        conversationId: conversationId.value,
+        kinds: ['audio'],
+      })
+    }
+
+    return {
+      conversation,
+      isGroup,
+      enableRTC,
+      otherParticipants,
+      handleCall,
+    }
+  },
+
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+      chat: iridium.chat.state,
+    }
+  },
+})
+</script>
+
+<style scoped lang="less" src="./Toolbar.less"></style>

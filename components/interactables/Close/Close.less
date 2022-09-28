@@ -1,23 +1,15 @@
 .close-button {
   &:extend(.font-primary);
   position: absolute;
-  right: 2rem;
-  top: 1.75rem;
+  right: 0;
+  top: 0;
   font-size: @text-size;
-  background: @foreground-alt;
-  width: 1.5rem;
-  height: 1.5rem;
-  text-align: center;
-  border-radius: @half;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  .close-button {
-    right: @normal-spacing;
-    top: @normal-spacing;
-  }
+  color: @dark;
+  filter: drop-shadow(0px 5px 8px @black);
 }

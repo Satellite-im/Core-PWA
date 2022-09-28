@@ -1,47 +1,67 @@
 .container {
-  margin: 0 auto;
+  margin: 16px auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
+  gap: 40px;
+  user-select: none;
+
+  .header {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .info-button {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .realm-container {
     &:extend(.full-width);
     display: inline-flex;
     justify-content: center;
-    margin-top: @normal-spacing;
-  }
-
-  .create_pin_section {
-    margin-bottom: @normal-spacing;
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
-    &:extend(.bordered);
-    &:extend(.more-pad-sides);
-
-    .subtitle {
-      margin: 0;
-      &:extend(.font-secondary);
-    }
+    margin: 24px 0 70px 0;
   }
 
   .decryption-body {
-    min-width: 250px;
     align-self: center;
-    margin-bottom: 25vh;
+
+    .input-container {
+      margin-bottom: 8px;
+    }
+
+    .delete-link {
+      color: #fff;
+      margin: @normal-spacing auto 0 auto;
+
+      &:hover {
+        opacity: 0.75;
+      }
+    }
   }
 
   .version {
-    position: absolute;
-    bottom: @normal-spacing;
+    flex-grow: 1;
+    flex-basis: 0;
     justify-content: center;
-    &:extend(.full-width);
+    align-items: flex-end;
+  }
+
+  .random-user-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
   }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0 2rem;
+    margin: 16px;
 
     .decryption-body {
       &:extend(.full-width);

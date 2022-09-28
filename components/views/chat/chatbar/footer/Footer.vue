@@ -1,11 +1,10 @@
-<template src="./Footer.html" />
+<template src="./Footer.html"></template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { toArray } from 'lodash'
 import { CircleIcon } from 'satellite-lucide-icons'
-import { Config } from '~/config'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -14,25 +13,19 @@ export default Vue.extend({
   props: {
     charlimit: {
       type: Boolean,
+      required: true,
     },
-    usersTyping: {
-      type: Array,
-      default: () => [{ name: 'Phoenix' }, { name: 'Ariel' }],
-      required: false,
-    },
-    typing: {
+    isSubscribed: {
       type: Boolean,
-      default: false,
-      required: false,
+      required: true,
     },
   },
   computed: {
-    ...mapState(['ui']),
-    lengthCount() {
-      /* toArray(): https://lodash.com/docs/4.17.15#toArray */
-      return `${toArray(this.ui.chatbarContent).length}/${
-        this.$Config.chat.maxChars
-      }`
+    ...mapState({
+      chatbarContent: (state) => (state as RootState).ui.chatbarContent,
+    }),
+    lengthCount(): string {
+      return `${this.chatbarContent.length}/${this.$Config.chat.maxChars}`
     },
   },
 })
