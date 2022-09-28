@@ -15,4 +15,5 @@ jobs:
       - name: Prettify code
         uses: creyD/prettier_action@v4.2
         with:
+          prettier_options: --write **/*.{ts,vue,html}
           only_changed: true
