@@ -46,9 +46,6 @@ const mutations = {
     delete state.files[address]
     state.files = { ...state.files }
   },
-  setCountError(state: ChatState, countError: boolean) {
-    state.countError = countError
-  },
   setDraftMessage(
     state: ChatState,
     {

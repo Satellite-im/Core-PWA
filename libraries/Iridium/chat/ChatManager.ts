@@ -63,8 +63,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   public state: State = initialState
   public ephemeral: {
     typing: { [key: Conversation['id']]: string[] | undefined }
+    subscriptions: Conversation['id'][]
   } = {
     typing: {},
+    subscriptions: [],
   }
 
   async start() {
@@ -92,14 +94,17 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           `requesting sync subscription to ${topic}`,
         )
         // ask the sync node to subscribe to this topic
-        return iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
+        await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
           sync: {
             offline: true,
           },
           handler: this.onConversationMessage.bind(this, conversation.id),
         })
+        this.ephemeral.subscriptions.push(conversation.id)
       }),
     )
+
+    iridium.sendSyncFetch()
     this.ready = true
     this.emit('ready', {})
   }
@@ -413,10 +418,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversations/${id}`, conversation)
 
     // ask the sync node to subscribe to this topic
-    iridium.connector?.subscribe(`/chat/conversations/${id}`, {
+    await iridium.connector?.subscribe(`/chat/conversations/${id}`, {
       sync: { offline: true },
       handler: this.onConversationMessage.bind(this, id),
     })
+    this.ephemeral.subscriptions.push(id)
+    iridium.sendSyncFetch()
 
     return id
   }
@@ -603,6 +610,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     Vue.delete(this.state.conversations, id)
     this.set('/conversations', this.state.conversations)
     await iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
+    const index = this.ephemeral.subscriptions.indexOf(id)
+    if (index > -1) {
+      this.ephemeral.subscriptions.splice(index, 1)
+    }
   }
 
   getConversation(id: Conversation['id']): Conversation | undefined {

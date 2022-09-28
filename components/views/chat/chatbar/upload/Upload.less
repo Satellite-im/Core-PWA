@@ -2,4 +2,9 @@ button {
   padding: 12px 0;
   font-size: @larger-icon-size;
   color: @white;
+
+  &[disabled] {
+    color: @gray;
+    cursor: not-allowed;
+  }
 }
