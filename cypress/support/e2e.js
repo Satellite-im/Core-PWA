@@ -1,4 +1,5 @@
 import './commands'
+import 'cypress-localstorage-commands'
 import 'cypress-real-events/support'
 
 Cypress.on('uncaught:exception', (err, runnable) => {

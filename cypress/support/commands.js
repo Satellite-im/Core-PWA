@@ -300,46 +300,35 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
 
 //Chat - Basic Commands for Text and Emojis
 
-Cypress.Commands.add('chatFeaturesProfileName', (value) => {
+Cypress.Commands.add('chatFeaturesProfileName', () => {
   // clicks on user name
-  cy.get('[data-cy=user-name]')
-    .should('be.visible')
-    .should('have.text', value)
-    .click()
+  cy.get('[data-cy=user-name]').should('be.visible').click()
   cy.wait(1000)
 })
 
 Cypress.Commands.add(
   'chatFeaturesSendMessage',
   (message, assertMessage = true) => {
+    //Type message
     cy.get('[data-cy=editable-input]')
       .should('be.visible')
       .trigger('input')
-      .paste({
-        pasteType: 'text',
-        pastePayload: message,
-      })
+      .type(message)
+    //Assert message is displayed in editable input bar and click on send message
     cy.get('[data-cy=editable-input]')
       .should('have.text', message)
       .then(() => {
         cy.get('[data-cy=send-message]').click() //sending text message
       })
-    // Wait until loading indicator disappears
-    cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should(
-      'not.exist',
-    )
-    // Assert message
+    // If Assert message is true, validate it was sent
     if (assertMessage) {
-      cy.contains(message, { timeout: 30000 })
-        .last()
-        .scrollIntoView()
-        .should('exist')
+      cy.contains(message).last().scrollIntoView().should('exist')
     }
   },
 )
 
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
-  cy.get('#emoji-toggle > .control-icon').click()
+  cy.get('[data-cy=send-emoji]').click()
   cy.get(emojiLocator).click() // sending emoji
   cy.get('[data-cy=send-message]').click() //sending emoji message
   cy.contains(emojiValue)
@@ -523,7 +512,6 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
     }
   })
 
-  //Find the friend and click on the message button associated
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
     .then(($el) => {
@@ -543,6 +531,22 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   cy.get('[data-cy=message-container]', { timeout: 120000 })
     .last()
     .should('exist')
+})
+
+Cypress.Commands.add('goToNewChat', () => {
+  //If sidebar is hidden, click on hamburger menu
+  cy.get('#app').then(($app) => {
+    if ($app.hasClass('hide-sidebars')) {
+      cy.get('[data-cy=hamburger-button]').click()
+    }
+  })
+
+  //Go to sidebar friends button and then click on send message button to begin conversation
+  cy.get('[data-cy=sidebar-friends]').click()
+  cy.get('[data-cy="friend-send-message-2"]').click()
+
+  //Wait until chat page is loaded
+  cy.get('#conversation-container', { timeout: 30000 }).should('be.visible')
 })
 
 Cypress.Commands.add('workaroundChatLoad', (user) => {
@@ -567,11 +571,15 @@ Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
   cy.get(locator).realHover()
   cy.contains(expectedMessage).should('be.visible')
+  cy.wait(1000)
+  cy.get('body').realHover({ position: 'topLeft' })
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').realHover()
   cy.contains(expectedMessage).should('be.visible')
+  cy.wait(1000)
+  cy.get('body').realHover({ position: 'topLeft' })
 })
 
 // Chat - URL Commands

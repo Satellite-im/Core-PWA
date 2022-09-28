@@ -12,7 +12,9 @@ module.exports = defineConfig({
   animationDistanceThreshold: 50,
   e2e: {
     setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
+      require('./cypress/plugins/index.js')(on, config)
+      require('cypress-localstorage-commands/plugin')(on, config)
+      return config
     },
     baseUrl: 'http://localhost:3000',
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',

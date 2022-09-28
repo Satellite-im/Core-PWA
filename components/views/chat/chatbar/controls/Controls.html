@@ -2,6 +2,7 @@
   <UiComingSoon
     v-if="!$device.isMobile"
     :tooltipText="$t('coming_soon.send_money')"
+    data-cy="send-money"
     :tooltipPosition="'top'"
   >
     <button
@@ -15,6 +16,7 @@
   <button
     v-tooltip.top="$t('ui.glyphs')"
     @click="toggleEnhancers('glyphs')"
+    data-cy="send-glyph"
     :disabled="disabled"
   >
     <box-select-icon
@@ -25,6 +27,7 @@
   <button
     v-tooltip.top="$t('ui.emoji')"
     @click="toggleEnhancers('emoji')"
+    data-cy="send-emoji"
     :disabled="disabled"
   >
     <smile-icon

@@ -6,7 +6,7 @@ let friendUsername,
   friendUserID,
   myUserID = ''
 
-describe('Create Two Reusable Accounts', () => {
+describe('Create two reusable accounts and validate friend request/accept flow', () => {
   before(() => {
     // Delete Localstorage Snapshots before starting tests
     cy.clearLocalStorageSnapshot()
@@ -114,5 +114,10 @@ describe('Create Two Reusable Accounts', () => {
     cy.contains('No requests found').should('be.visible')
     cy.contains('You have no pending friend requests').should('be.visible')
     cy.saveLocalStorage('Chat User A')
+  })
+
+  after(() => {
+    // Save Localstorage Snapshots for next specs
+    cy.saveLocalStorage('Chat User A', 'Chat User B')
   })
 })

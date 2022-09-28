@@ -16,7 +16,7 @@
         :placeholder="$t('ui.search')"
       />
     </div>
-    <div class="emoji-list">
+    <div class="emoji-list" data-cy="emoji-picker">
       <div v-for="(emojiGroup, category) in emojis" :key="category">
         <TypographyText size="xs" color="light">
           {{ category }}
