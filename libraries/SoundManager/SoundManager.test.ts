@@ -8,6 +8,23 @@ describe('init', () => {
 })
 
 describe('Manage sounds', () => {
+  // Commented out code, could be used if issue is related to lack of mocking
+  // const original = global.Audio
+
+  // beforeAll(() => {
+  //   Object.defineProperty(global, 'Audio', {
+  //     configurable: true,
+  //     value: { pause: jest.fn(), play: jest.fn() },
+  //   })
+  // })
+
+  // afterAll(() => {
+  //   Object.defineProperty(global, 'Audio', {
+  //     configurable: true,
+  //     value: original,
+  //   })
+  // })
+
   let inst: any
   const volume: number = 1.0
 
@@ -59,13 +76,18 @@ describe('Manage sounds', () => {
       return Promise.resolve()
     }
 
-    const spy = jest.spyOn(instance.sounds[Sounds.NEW_MESSAGE], 'stop')
+    const spy = jest.spyOn(instance.sounds[Sounds.NEW_MESSAGE], 'stop') // Should be called
+
     instance.playSound(Sounds.NEW_MESSAGE)
     instance.playSound(Sounds.CALL)
     instance.playSound(Sounds.DEAFEN)
 
     const result = instance.stopSounds([Sounds.NEW_MESSAGE, Sounds.CALL])
     // expect(spy).toHaveBeenCalled()
+    // Spy is never called, precisely because playingSounds always returns []
+    // Why is the returned array empty? Because it's never stored
+    // Currently being investigated because of mismatched type on playingSounds function
+
     expect(result).toMatchSnapshot()
   })
 
