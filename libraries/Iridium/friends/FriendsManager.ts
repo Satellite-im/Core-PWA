@@ -350,7 +350,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
       await this.send(payload)
     } else {
-      // Notify the recepient
+      // Notify the recipient
       const buildNotification: Exclude<Notification, 'id'> = {
         fromName: user.name,
         at: request.at,
