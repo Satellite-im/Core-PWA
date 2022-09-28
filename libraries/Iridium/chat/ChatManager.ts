@@ -18,8 +18,8 @@ import { v4 } from 'uuid'
 import {
   ChatError,
   Conversation,
-  ConversationMessage,
   ConversationMessagePayload,
+  ConversationMessage,
   IridiumConversationEvent,
   MessageAttachment,
   MessageEdit,
@@ -38,6 +38,7 @@ import {
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { uploadFile } from '~/libraries/Iridium/utils'
+
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
@@ -65,9 +66,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   public ephemeral: {
     typing: { [key: Conversation['id']]: string[] | undefined }
     subscriptions: Conversation['id'][]
+    conversations: { [key: string]: ConversationMessage[] }
   } = {
     typing: {},
     subscriptions: [],
+    conversations: {},
   }
 
   async start() {
@@ -718,27 +721,44 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       id: tempCid.toString() as string,
     }
 
-    await Promise.all([
-      iridium.connector?.store(partial, {
-        syncPin: true,
-        encrypt: conversation?.participants
-          ? { recipients: conversation?.participants }
-          : undefined,
-      }),
-      iridium.connector?.publish(
-        `/chat/conversations/${conversationId}`,
-        {
-          type: 'chat/message',
-          cid: tempCid.toString() as string,
-          message,
-        },
-        {
+    const ephMsg: ConversationMessage = {
+      ...message,
+      status: 'pending',
+    }
+
+    this.setEphemeralConversation(conversationId, ephMsg)
+
+    try {
+      await Promise.all([
+        iridium.connector?.store(partial, {
+          syncPin: true,
           encrypt: conversation?.participants
-            ? { recipients: conversation.participants }
+            ? { recipients: conversation?.participants }
             : undefined,
-        },
-      ),
-    ])
+        }),
+        iridium.connector?.publish(
+          `/chat/conversations/${conversationId}`,
+          {
+            type: 'chat/message',
+            cid: tempCid.toString() as string,
+            message,
+          },
+          {
+            encrypt: conversation?.participants
+              ? { recipients: conversation.participants }
+              : undefined,
+          },
+        ),
+      ])
+    } catch (error) {
+      this.setEphemeralConversation(conversationId, {
+        ...ephMsg,
+        status: 'failed',
+      })
+      return
+    }
+
+    this.setEphemeralConversation(conversationId, ephMsg, true)
 
     Vue.set(
       this.state.conversations[conversationId].message,
@@ -747,9 +767,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
     Vue.set(this.state.conversations[conversationId], 'lastReadAt', Date.now())
 
-    if (message.id === undefined) {
-      throw new Error('message not sent, failed to store')
-    }
     this.set(
       `/conversations/${conversationId}`,
       this.state.conversations[conversationId],
@@ -851,6 +868,29 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const index = typingList.indexOf(did)
       if (index >= 0) typingList.splice(index, 1)
     }
+  }
+
+  setEphemeralConversation(
+    conversationId: string,
+    message: ConversationMessage,
+    remove: boolean = false,
+  ) {
+    const conversationMessages = this.ephemeral.conversations[conversationId]
+    if (!remove) {
+      if (!conversationMessages) {
+        Vue.set(this.ephemeral.conversations, conversationId, [message])
+        return
+      }
+      const index = conversationMessages.findIndex(
+        (msg) => msg.id === message.id,
+      )
+      if (index === -1) conversationMessages.push(message)
+      else conversationMessages.splice(index, 1, message)
+      return
+    }
+
+    const index = conversationMessages.findIndex((msg) => msg.id === message.id)
+    if (index >= 0) conversationMessages.splice(index, 1)
   }
 
   // Check if user is in other groups other than `exlude` groups.
