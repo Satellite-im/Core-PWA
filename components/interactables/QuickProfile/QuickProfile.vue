@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ArrowRightIcon } from 'satellite-lucide-icons'
+import { ArrowRightIcon, EditIcon } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -12,6 +12,7 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 export default Vue.extend({
   components: {
     ArrowRightIcon,
+    EditIcon,
   },
   data() {
     return {
@@ -20,10 +21,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      quickProfile: (state) => (state as RootState).ui.quickProfile,
+      ui: (state) => (state as RootState).ui,
     }),
     user(): User | undefined {
-      return this.quickProfile?.user
+      return this.ui?.quickProfile?.user
     },
     src(): string {
       const hash = this.user?.photoHash
@@ -35,14 +36,24 @@ export default Vue.extend({
       }
       return iridium.chat.directConversationIdFromDid(this.user.did)
     },
+    about(): string | undefined {
+      return this.conversationId
+        ? this.user?.about
+        : iridium.profile.state?.about ?? ''
+    },
+    status(): string | undefined {
+      return this.conversationId
+        ? this.user?.status
+        : iridium.profile.state?.status ?? ''
+    },
   },
   mounted() {
     const quick = this.$refs.quick as HTMLElement
     quick.focus()
 
-    if (this.$device.isDesktop && this.quickProfile) {
-      quick.style.top = `${this.quickProfile.position.y}px`
-      quick.style.left = `${this.quickProfile.position.x}px`
+    if (this.$device.isDesktop && this.ui.quickProfile) {
+      quick.style.top = `${this.ui.quickProfile.position.y}px`
+      quick.style.left = `${this.ui.quickProfile.position.x}px`
     }
     this.handleOverflow()
   },
@@ -51,22 +62,24 @@ export default Vue.extend({
       this.$store.commit('ui/setQuickProfile', undefined)
     },
     handleOverflow() {
-      if (!this.quickProfile || this.$device.isMobile) {
+      if (!this.ui.quickProfile || this.$device.isMobile) {
         return
       }
       const quick = this.$refs.quick as HTMLElement
       const widthOverflow =
-        this.quickProfile.position.x + quick.clientWidth - window.innerWidth
+        this.ui.quickProfile.position.x + quick.clientWidth - window.innerWidth
       const heightOverflow =
-        this.quickProfile.position.y + quick.clientHeight - window.innerHeight
+        this.ui.quickProfile.position.y +
+        quick.clientHeight -
+        window.innerHeight
       if (widthOverflow > -8) {
         quick.style.left = `${
-          this.quickProfile.position.x - widthOverflow - 16
+          this.ui.quickProfile.position.x - widthOverflow - 16
         }px`
       }
       if (heightOverflow > -8) {
         quick.style.top = `${
-          this.quickProfile.position.y - heightOverflow - 16
+          this.ui.quickProfile.position.y - heightOverflow - 16
         }px`
       }
     },

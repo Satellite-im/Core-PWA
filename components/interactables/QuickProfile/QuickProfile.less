@@ -18,13 +18,30 @@
   .round-corners();
 
   .top {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 16px;
 
     .open-profile-button {
       cursor: default;
+
+      &-self {
+        cursor: pointer;
+      }
     }
+
+    .edit-icon {
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+      color: @flair-color;
+    }
+  }
+  .row-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
