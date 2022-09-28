@@ -35,7 +35,7 @@ export default class SolanaAdapter implements Adapter {
     if (!wallet?.secretKey) {
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
-    // eslint-disable-next-line import/no-named-as-default-member
+
     return nacl.sign.detached(messageBytes, wallet?.secretKey)
   }
 
