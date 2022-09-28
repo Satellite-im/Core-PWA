@@ -34,6 +34,7 @@ export default {
     search: 'Search',
     home: 'Home',
     peer_not_active: 'Please wait while peer connects...',
+    chat_not_ready: 'Please wait while connecting...',
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
     emoji: 'Emoji',
@@ -437,6 +438,8 @@ export default {
             title: 'Audio Input',
             subtitle:
               "Select which input device you'd like people to hear your silky smooth voice from.",
+            on: 'Enable Testing',
+            off: 'Disable Testing',
           },
           output: {
             title: 'Audio Output',

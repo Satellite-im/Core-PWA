@@ -1,5 +1,9 @@
 #!/bin/bash
 export PNPM_HOME=./.pnpm-links/
+
+## if there is an env file, read them into server variables
+. .env
+
 if [ ! -d ./linked-iridium ]; then
   git clone https://github.com/Satellite-im/iridium.git ./linked-iridium
   cp .env ./linked-iridium/.env
@@ -9,13 +13,20 @@ else
   git pull -f
 fi
 
-if [[ -z "${DEPLOY_ENV}" ]]; then
+git checkout $DEPLOY_ENV
+
+if [ -z $DEPLOY_ENV ] || [$DEPLOY_ENV == "dev"]; then
+  echo "Checking out Dev Environment"
+  export SYNC_NODE_ADDR=/dns4/sync-dev-ny.satellite.im/tcp/443/wss,/dns4/sync-dev-lon.satellite.im/tcp/443/wss,/dns4/sync-dev-sgp.satellite.im/tcp/443/wss
   git checkout dev
-else
-  git checkout ${DEPLOY_ENV}
+elif [$DEPLOY_ENV == "qa"]; then
+  echo "Checking out QA Environment"
+  export SYNC_NODE_ADDR=/dns4/sync-qa-lon.satellite.im/tcp/443/wss,/dns4/sync-qa-ny.satellite.im/tcp/443/wss
+elif [$DEPLOY_ENV == "prod"]; then
+  echo "Checking out Prod Environment"
+  export SYNC_NODE_ADDR=/dns4/sync-ny-1.satellite.im/tcp/443/wss,/dns4/sync-sf-1.satellite.im/tcp/443/wss,/dns4/sync-fra-1.satellite.im/tcp/443/wss,/dns4/sync-sgp-1.satellite.im/tcp/443/wss
 fi
 
-export SYNC_NODE_ADDR=/ip4/138.197.229.159/tcp/4003/ws,/ip4/138.197.229.159/tcp/4002
 corepack enable
 corepack prepare pnpm@latest --activate
 pnpm i --unsafe-perm

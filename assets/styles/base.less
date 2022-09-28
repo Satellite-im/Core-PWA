@@ -189,16 +189,6 @@ a.link {
   &:extend(.font-flair);
 }
 
-.simple-menu {
-  .active {
-    &:extend(.background-flair);
-
-    &:hover {
-      &:extend(.background-flair);
-    }
-  }
-}
-
 .version {
   &:extend(.font-muted);
 }
@@ -224,20 +214,6 @@ button {
     ::selection {
       background: rgba(var(--flair-color-rgb), 0.99) !important;
     }
-    /* this breaks icons
-    svg {
-      transform: translateZ(0);
-    } */
-  }
-}
-
-.vc-is-dark {
-  .vc-weekday {
-    &:extend(.font-flair);
-  }
-  .vc-highlight {
-    &:extend(.background-flair-gradient);
-    &:extend(.glow-flair);
   }
 }
 
