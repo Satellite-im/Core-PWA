@@ -65,7 +65,6 @@ const Upload = Vue.extend({
     async handleFile(event: InputEvent) {
       document.body.style.cursor = 'progress'
       this.$store.dispatch('ui/setChatbarFocus')
-      this.$store.commit('chat/setCountError', false)
       const target = event.target as HTMLInputElement
       if (target.files === null) {
         return
