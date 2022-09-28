@@ -1,4 +1,28 @@
 import * as mutations from '~/store/audio/mutations'
+import InitialAudioState from '~/store/audio/state'
+import { AudioState } from '~/store/audio/types'
+
+let instance: any
+let initialState: AudioState
+
+describe('Test audio/mutations', () => {
+  beforeEach(() => {
+    instance = mutations.default
+    initialState = InitialAudioState()
+  })
+
+  test('setMute to true', () => {
+    const argument = true
+    instance.setMute(initialState, argument)
+    expect(initialState.muted).toBeTruthy()
+  })
+
+  test('setMute to false', () => {
+    const argument = false
+    instance.setMute(initialState, argument)
+    expect(initialState.muted).toBeFalsy()
+  })
+})
 
 describe('mutations.default.mute', () => {
   test('0', () => {

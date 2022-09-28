@@ -10,19 +10,7 @@ exports[`Manage sounds sound plays 1`] = `undefined`;
 
 exports[`Manage sounds sound stops 1`] = `undefined`;
 
-exports[`init should pass: 
-    Object {
-    "CALL": "call",
-    "CONNECTED": "connected",
-    "DEAFEN": "deafen",
-    "HANGUP": "hangup",
-    "MUTE": "mute",
-    "NEW_MESSAGE": "newMessage",
-    "UNDEAFEN": "undeafen",
-    "UNMUTE": "unmute",
-    "UPLOAD": "upload",
-    }
-         1`] = `
+exports[`init should pass 1`] = `
 Object {
   "CALL": "call",
   "CONNECTED": "connected",
