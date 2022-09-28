@@ -12,8 +12,8 @@ jobs:
         run: yarn
       - name: eslint
         uses: tj-actions/eslint-changed-files@v14
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.2
+      - uses: EPMatt/reviewdog-action-prettier@v1
         with:
-          prettier_options: --write **/*.{ts,vue,html}
-          only_changed: true
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: warning
