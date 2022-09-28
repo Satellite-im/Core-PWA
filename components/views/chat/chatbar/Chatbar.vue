@@ -125,8 +125,7 @@ const Chatbar = Vue.extend({
       return (
         Boolean(this.files.length) ||
         Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
-        this.commandPreview ||
-        this.chat.countError
+        this.commandPreview
       )
     },
     isSubscribed(): boolean {
