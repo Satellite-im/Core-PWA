@@ -48,6 +48,9 @@ const Controls = Vue.extend({
       this.$store.commit('files/setSearchValue', value)
     },
   },
+  beforeDestroy() {
+    this.$store.commit('files/setSearchValue', '')
+  },
   methods: {
     /**
      * @method addFile

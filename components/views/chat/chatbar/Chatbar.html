@@ -3,13 +3,12 @@
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply />
-  <ChatbarUploadError v-if="chat.countError" />
   <ChatbarUploadPreview v-if="files.length" />
   <div
     class="chatbar-wrap"
     :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners}"
   >
-    <ChatbarUpload ref="upload" />
+    <ChatbarUpload ref="upload" :disabled="!isSubscribed" />
     <!-- <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
       v-if="hasCommand"
@@ -30,5 +29,5 @@
       @send="sendMessage"
     />
   </div>
-  <ChatbarFooter :charlimit="charlimit" />
+  <ChatbarFooter :charlimit="charlimit" :isSubscribed="isSubscribed" />
 </div>

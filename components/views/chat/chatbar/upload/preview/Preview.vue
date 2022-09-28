@@ -8,7 +8,6 @@ import { RootState } from '~/types/store/store'
 export default Vue.extend({
   computed: {
     ...mapState({
-      countError: (state: RootState) => state.chat.countError,
       files(state: RootState) {
         return state.chat.files?.[this.$route.params.id] ?? []
       },

@@ -18,7 +18,6 @@ export default Vue.extend({
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
-      media: (state) => (state as RootState).media,
       files: (state) => (state as RootState).files,
       settings: (state) => (state as RootState).settings,
       isNewAccount: (state) => (state as RootState).accounts.isNewAccount,

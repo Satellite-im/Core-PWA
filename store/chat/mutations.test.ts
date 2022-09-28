@@ -62,15 +62,6 @@ describe('misc', () => {
 })
 
 describe('misc', () => {
-  test('module.setCountError', () => {
-    const argument = true
-    const localState = { ...InitialChatState }
-
-    module.default.setCountError(localState, argument)
-
-    expect(localState.countError).toEqual(argument)
-  })
-
   test('module.removeFile', () => {
     const localState = {
       ...InitialChatState,
