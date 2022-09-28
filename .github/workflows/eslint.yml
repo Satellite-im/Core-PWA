@@ -1,10 +1,10 @@
-name: eslint/prettier
+name: eslint-prettier
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  eslint/prettier:
+  eslint-prettier:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
