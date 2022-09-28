@@ -12,3 +12,7 @@ jobs:
         run: yarn
       - name: eslint
         uses: tj-actions/eslint-changed-files@v14
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.2
+        with:
+          only_changed: true
