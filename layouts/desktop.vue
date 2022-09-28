@@ -10,10 +10,12 @@
   >
     <Slimbar :servers="$mock.servers" />
     <Sidebar />
-    <UiDroppableWrapper v-if="displayDroppable" @handle-drop-prop="handleDrop">
+    <UiDroppableWrapper
+      :disabled="!displayDroppable"
+      @handle-drop-prop="handleDrop"
+    >
       <Nuxt ref="page" />
     </UiDroppableWrapper>
-    <Nuxt v-else />
     <UiGlobal />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
@@ -56,9 +58,8 @@ export default Vue.extend({
       return iridium.settings.state.privacy.consentToScan
     },
     displayDroppable(): boolean {
-      return (
-        this.$route.path.includes('files') || this.$route.path.includes('chat')
-      )
+      const droppablePages = ['/files', '/chat']
+      return droppablePages.includes(this.$route.path)
     },
     ready(): boolean {
       return iridium.ready && !!iridium.profile.state?.did
@@ -72,6 +73,8 @@ export default Vue.extend({
      * @example v-on:drop="handleDrop"
      */
     handleDrop(e: DragEvent) {
+      if (!this.displayDroppable) return
+
       e.preventDefault()
       if (!e?.dataTransfer) {
         return
