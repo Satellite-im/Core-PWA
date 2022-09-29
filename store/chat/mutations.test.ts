@@ -156,4 +156,60 @@ describe('misc', () => {
     module.default.setDraftMessage(state, argument)
     expect(state.draftMessages[argument.conversationId]).toBe(argument.message)
   })
+
+  test('module.default.setActiveUploadChat', () => {
+    const state = InitialChatState()
+    const argument = 'conversation_id'
+
+    module.default.setActiveUploadChat(state, argument)
+    expect(state.activeUploadChats).toEqual([argument])
+  })
+
+  test('module.default.setActiveUploadChat for more than two calls', () => {
+    const state = InitialChatState()
+
+    const initialArgument = 'conversation_id'
+    module.default.setActiveUploadChat(state, initialArgument)
+
+    const secondaryArgument = 'conversation_id'
+    module.default.setActiveUploadChat(state, secondaryArgument)
+
+    expect(state.activeUploadChats).toEqual([
+      initialArgument,
+      secondaryArgument,
+    ])
+  })
+
+  test('module.default.removeActiveUploadChat', () => {
+    const state = InitialChatState()
+    const argument = 'conversation_id'
+
+    module.default.setActiveUploadChat(state, argument)
+    expect(state.activeUploadChats).toEqual([argument])
+    module.default.removeActiveUploadChat(state, argument)
+    expect(state.activeUploadChats).toEqual([])
+  })
+
+  test('module.default.removeActiveUploadChat for more than two calls', () => {
+    const state = InitialChatState()
+
+    const initialArgument = 'conversation_id'
+    module.default.setActiveUploadChat(state, initialArgument)
+
+    const secondaryArgument = 'conversation_id'
+    module.default.setActiveUploadChat(state, secondaryArgument)
+
+    expect(state.activeUploadChats).toEqual([
+      initialArgument,
+      secondaryArgument,
+    ])
+
+    module.default.removeActiveUploadChat(state, initialArgument)
+
+    expect(state.activeUploadChats).toEqual([initialArgument])
+
+    module.default.removeActiveUploadChat(state, secondaryArgument)
+
+    expect(state.activeUploadChats).toEqual([])
+  })
 })

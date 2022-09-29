@@ -55,7 +55,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: 8px;
+  gap: 12px;
   width: 240px;
   margin-right: 16px;
   overflow-y: auto;

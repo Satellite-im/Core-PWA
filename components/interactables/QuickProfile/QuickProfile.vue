@@ -35,6 +35,9 @@ export default Vue.extend({
       }
       return iridium.chat.directConversationIdFromDid(this.user.did)
     },
+    self(): boolean {
+      return iridium.id === this.user?.did
+    },
   },
   mounted() {
     const quick = this.$refs.quick as HTMLElement
@@ -97,6 +100,10 @@ export default Vue.extend({
       if (iridium.id === this.user?.did) {
         this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
         this.close()
+
+        if (this.$device.isMobile) {
+          this.$router.push('/mobile/settings')
+        }
       } else {
         // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
         // this.$store.dispatch('ui/showProfile', this.user)

@@ -21,11 +21,9 @@
     <div class="row">
       <TypographyText
         class="ellipsis"
-        color="light"
-        font="heading"
-        weight="bold"
+        as="h4"
+        :color="unreadCount ? 'light' : 'dark'"
         data-cy="sidebar-user-name"
-        :color="!!unreadCount ? 'light' : 'dark'"
       >
         {{ conversation.name }}
       </TypographyText>
