@@ -14,7 +14,7 @@ const recoverySeed =
     .map((item) => item.recoverySeed) + '{enter}'
 
 data.allDevices.forEach((item) => {
-  describe(
+  describe.skip(
     `Run responsiveness tests on ${item.description}`,
     {
       viewportHeight: item.height,

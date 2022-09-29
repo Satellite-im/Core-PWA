@@ -8,7 +8,7 @@ const recoverySeed =
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 let urlToValidate = 'https://www.google.com'
 
-describe('Chat features with two accounts at the same time - First User', () => {
+describe.skip('Chat features with two accounts at the same time - First User', () => {
   it('Load account from Chat Pair A (first account)', { retries: 2 }, () => {
     //Import first account
     cy.importAccount(randomPIN, recoverySeed)

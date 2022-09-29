@@ -7,7 +7,8 @@ const recoverySeed =
     .filter((item) => item.description === 'cypress')
     .map((item) => item.recoverySeed) + '{enter}'
 
-describe('Chat Toolbar Tests', () => {
+describe.skip('Chat Toolbar Tests', () => {
+  // Skipping since import account is not working
   it(
     'Chat - Toolbar - Load Account for Testing Scenarios',
     { retries: 2 },

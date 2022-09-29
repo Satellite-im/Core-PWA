@@ -12,15 +12,16 @@ const recoverySeed =
 let imageURL
 
 describe('Chat Features Tests', () => {
+  before(() => {
+    // Save Localstorage Snapshots for next specs
+    cy.restoreLocalStorage('Chat User A', 'Chat User B')
+  })
   it('Chat - Send message on chat', { retries: 2 }, () => {
     // Import account
-    cy.importAccount(randomPIN, recoverySeed)
-
-    // Validate profile name displayed
-    cy.validateChatPageIsLoaded()
+    cy.loginWithLocalStorage('Chat User A', '12345')
 
     // Validate message is sent
-    cy.goToConversation('Only Text Friend')
+    cy.goToNewChat()
     cy.chatFeaturesSendMessage(randomMessage)
   })
 
@@ -28,13 +29,13 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
+  // Skipped because edit feature is coming soon
   it.skip('Chat - Edit message on chat', () => {
-    // skipped because edit feature is coming soon
     cy.chatFeaturesEditMessage(randomMessage, randomNumber)
   })
 
+  // Skipped because edit feature is coming soon
   it.skip('Chat - Message edited shows edited status', () => {
-    // skipped because edit feature is coming soon
     cy.get('[data-cy=message-edited]').last().parents()
 
     cy.contains(randomMessage + randomNumber)
@@ -74,13 +75,14 @@ describe('Chat Features Tests', () => {
       .should('equal', randomMessage)
       .then((clipboardText) => {
         //Simulating the paste event through a cypress command passing the clipboard data
-        cy.get('[data-cy=editable-input]').realClick().paste({
+        cy.get('[data-cy=editable-input]').click().paste({
           pasteType: 'text',
           pastePayload: clipboardText,
         })
       })
     // Validating that editable input text matches with pasted value
     cy.get('[data-cy=editable-input]').should('have.text', randomMessage)
+    cy.get('[data-cy=editable-input]').click().clear()
   })
 
   //Skipped because it needs rework - AP-1324
@@ -114,47 +116,58 @@ describe('Chat Features Tests', () => {
   it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
     // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
     cy.hoverOnComingSoonIcon(
-      '#chatbar-controls > span',
+      '[data-cy=send-money]',
       'Send Money Coming Soon',
-    )
+    ).then(() => {
+      cy.contains('Send Money Coming Soon').should('not.exist')
+    })
   })
 
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
     // Emoji picker is displayed  when clicking on its button
-    cy.get('#emoji-toggle').click()
-    cy.get('.navbar > .button-group > .active > #custom-cursor-area').should(
-      'contain',
-      'Emoji',
-    )
-    cy.get('#emoji-toggle').click()
+    cy.get('[data-cy=send-emoji]').click()
+    cy.contains('Frequently used').should('be.visible')
+    cy.get('[data-cy=emoji-picker]').should('be.visible')
+
+    //Click outside to close the emoji picker
+    cy.get('body')
+      .realClick({ position: 'topLeft' })
+      .then(() => {
+        cy.get('[data-cy=emoji-picker]').should('not.exist')
+      })
   })
 
   it('Chat - Verify when clicking on Glyphs, the glyphs picker appears', () => {
     // Glyphs picker is displayed when clicking on its button
-    cy.get('#glyph-toggle').click()
-    cy.get('.pack-list > .is-text').should('contain', 'Try using some glyphs')
-    cy.get('#glyph-toggle').click()
+    cy.get('[data-cy=emoji-picker]').should('not.exist')
+    cy.get('[data-cy=send-glyph]').click()
+    cy.contains('Try using some glyphs').should('be.visible')
+    cy.get('[data-cy=glyphs-picker]').should('be.visible')
+    //Click outside to close the glyphs picker
+    cy.get('body')
+      .realClick({ position: 'topLeft' })
+      .then(() => {
+        cy.get('[data-cy=glyphs-picker]').should('not.exist')
+      })
   })
 
   it('Chat - Validate User ID can be copied when clicked on it', () => {
-    //Click on toggle-sidebar only if app is collapsed
-    cy.get('#app-wrap').then(($appWrap) => {
-      if ($appWrap.hasClass('is-collapsed')) {
-        cy.get('[data-cy=toggle-sidebar]').click()
-      }
-    })
-
-    //Start validation
-    cy.chatFeaturesProfileName('Only Text')
-    cy.get('[data-cy=hamburger-button]').click()
+    cy.chatFeaturesProfileName()
+    cy.contains('ATTN: Copied to clipboard.').should('be.visible')
   })
 
-  //Following two tests are skipped because Profile Screen is not visible now
+  //Test is skipped because Profile Screen cannot be accessed now from Main Chat Page
   it.skip('Chat - Add a note to user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'add')
   })
 
+  //Test is skipped because Profile Screen cannot be accessed now from Main Chat Page
   it.skip('Chat - Assert note from user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
+  })
+
+  after(() => {
+    // Save Localstorage Snapshots for next specs
+    cy.saveLocalStorage('Chat User A', 'Chat User B')
   })
 })

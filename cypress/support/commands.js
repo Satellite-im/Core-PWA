@@ -1,15 +1,10 @@
 import 'cypress-file-upload'
 import 'cypress-localstorage-commands'
 import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
-import { date } from 'fp-ts'
 
 addMatchImageSnapshotCommand({
   customSnapshotsDir: '/cypress/snapshots',
 })
-
-const faker = require('faker')
-const randomName = faker.internet.userName(name) // generate random name
-const randomStatus = faker.lorem.word() // generate random status
 
 const COMMAND_DELAY = 2000 // to run tests slower
 
@@ -35,30 +30,36 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add('visitRootPage', (isMobile = false) => {
-  cy.deleteStorage()
-  cy.wait(1000)
-  // Pass arguments depending if the test is on mobile or desktop browser
-  if (isMobile === false) {
-    cy.visit('/')
-  } else if (isMobile === true) {
-    // Pass user agent with data for a mobile device
-    cy.on('window:before:load', (win) => {
-      Object.defineProperty(win.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+Cypress.Commands.add(
+  'visitRootPage',
+  (isMobile = false, remainingAttempts = 3) => {
+    cy.deleteStorage()
+    cy.wait(1000)
+    // Pass arguments depending if the test is on mobile or desktop browser
+    if (isMobile === false) {
+      cy.visit('/')
+    } else if (isMobile === true) {
+      // Pass user agent with data for a mobile device
+      cy.on('window:before:load', (win) => {
+        Object.defineProperty(win.navigator, 'userAgent', {
+          value:
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+        })
       })
-    })
-    // Use visit Mobile command instead of visit for mobile devices
-    cy.visit('/')
-  }
-  cy.wait(1000)
-  cy.get('body').then(($body) => {
-    if (!($body.find('.create_pin_section').length > 0)) {
-      cy.visitRootPage(isMobile)
+      // Use visit Mobile command instead of visit for mobile devices
+      cy.visit('/')
     }
-  })
-})
+    cy.get('body').then(($body) => {
+      if (
+        !($body.find('[data-cy=input-group]').length > 0) &&
+        remainingAttempts > 1
+      ) {
+        remainingAttempts -= 1
+        cy.visitRootPage(isMobile, remainingAttempts)
+      }
+    })
+  },
+)
 
 Cypress.Commands.add('deleteStorage', () => {
   cy.removeLocalStorage('Satellite-Store')
@@ -81,28 +82,29 @@ Cypress.Commands.add(
 
 //Create Account Commands
 
-Cypress.Commands.add('createAccount', (pin, isMobile = false) => {
+Cypress.Commands.add('createAccount', (pin, username, isMobile = false) => {
   cy.clearDatabase()
   cy.visitRootPage(isMobile)
   cy.url().should('contain', '#/auth/unlock')
-  cy.get('[data-cy=add-input]')
+  cy.get('[data-cy=input-group]')
     .should('be.visible')
     .trigger('input')
     .type(pin, { log: false }, { force: true })
   cy.get('[data-cy=submit-input]').click()
   cy.get('[data-cy=create-account-button]').click()
-  cy.get('.title').should('contain', 'Recovery Seed')
+  cy.get('.font-heading').should('contain', 'Recovery Seed')
   cy.contains('I Saved It').click()
   cy.validateUserInputIsDisplayed()
   cy.get('[data-cy=username-input]')
     .should('be.visible')
     .trigger('input')
-    .type(randomName)
+    .type(username)
   cy.get('[data-cy=status-input]')
     .should('be.visible')
     .trigger('input')
-    .type(randomStatus)
+    .type('testing')
   cy.get('[data-cy=sign-in-button]').click()
+  cy.welcomeModal(username)
 })
 
 Cypress.Commands.add(
@@ -112,27 +114,23 @@ Cypress.Commands.add(
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
-      cy.snapshotTestGet('.subtitle', 'Create Account Pin')
+      cy.snapshotTestGet(
+        '[data-cy="pin-label"] > .font-weight-normal',
+        'Choose Your Password',
+      )
     }
-    cy.get('[data-cy=add-input]')
+    cy.contains('Store Password? (Less Secure)').should('be.visible')
+    cy.contains('Choose Your Password').should('be.visible')
+    cy.get('[data-cy=input-group]')
       .should('be.visible')
       .trigger('input')
       .type(pin, { log: false }, { force: true })
-    cy.contains('Store Pin? (Less Secure)').should('be.visible')
     if (savePin === true) {
       cy.get('.switch-button').click().should('have.class', 'enabled')
     } else {
       cy.get('.switch-button').should('not.have.class', 'enabled')
     }
-    cy.contains('Create Account Pin').should('be.visible')
-    cy.contains(
-      "The pin can be anything you want, just don't forget it.",
-    ).should('be.visible')
-    cy.contains('Choose Your Pin').should('be.visible')
-    cy.get('[data-cy=add-input]').should('be.visible')
-    cy.contains('Store Pin? (Less Secure)').should('be.visible')
-    cy.get('[data-cy=submit-input]').should('be.visible')
-    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=submit-input]').should('be.visible').click()
   },
 )
 
@@ -154,21 +152,20 @@ Cypress.Commands.add('createAccountUserInput', (username, status) => {
   cy.get('[data-cy=username-input]')
     .should('be.visible')
     .trigger('input')
-    .type(randomName)
+    .type(username)
   cy.get('[data-cy=status-input]', { timeout: 30000 })
     .should('be.visible')
     .trigger('input')
-    .type(randomStatus)
+    .type(status)
 })
 
 Cypress.Commands.add('createAccountAddImage', (filepath) => {
-  cy.get('.is-outlined > #custom-cursor-area').should('be.visible').click()
+  cy.get('.header-content > .button').should('be.visible').click()
   cy.get('.input-file').attachFile(filepath)
 })
 
 Cypress.Commands.add('createAccountSubmit', () => {
   cy.get('[data-cy=sign-in-button]').should('be.visible').click()
-  cy.contains('Linking Satellites...').should('be.visible')
 })
 
 Cypress.Commands.add(
@@ -215,7 +212,25 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('welcomeModal', (username) => {
+  cy.get('.modal-dialog', { timeout: 30000 }).should('exist')
+  cy.contains('Welcome, ' + username + '!').should('exist')
+  cy.contains(
+    'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
+  ).should('exist')
+  cy.contains('Got It!').should('exist')
+  cy.get('.action').click()
+})
+
 //Import Account Commands
+
+Cypress.Commands.add('loginWithLocalStorage', (snapshot, pin) => {
+  cy.restoreLocalStorage(snapshot)
+  cy.visit('/')
+  cy.get('[data-cy=input-group]').trigger('input').type(pin)
+  cy.get('[data-cy="submit-input"]').click()
+  cy.validateChatPageIsLoaded()
+})
 
 Cypress.Commands.add(
   'importAccount',
@@ -285,46 +300,35 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
 
 //Chat - Basic Commands for Text and Emojis
 
-Cypress.Commands.add('chatFeaturesProfileName', (value) => {
+Cypress.Commands.add('chatFeaturesProfileName', () => {
   // clicks on user name
-  cy.get('[data-cy=user-name]')
-    .should('be.visible')
-    .should('have.text', value)
-    .click()
+  cy.get('[data-cy=user-name]').should('be.visible').click()
   cy.wait(1000)
 })
 
 Cypress.Commands.add(
   'chatFeaturesSendMessage',
   (message, assertMessage = true) => {
+    //Type message
     cy.get('[data-cy=editable-input]')
       .should('be.visible')
       .trigger('input')
-      .paste({
-        pasteType: 'text',
-        pastePayload: message,
-      })
+      .type(message)
+    //Assert message is displayed in editable input bar and click on send message
     cy.get('[data-cy=editable-input]')
       .should('have.text', message)
       .then(() => {
         cy.get('[data-cy=send-message]').click() //sending text message
       })
-    // Wait until loading indicator disappears
-    cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should(
-      'not.exist',
-    )
-    // Assert message
+    // If Assert message is true, validate it was sent
     if (assertMessage) {
-      cy.contains(message, { timeout: 30000 })
-        .last()
-        .scrollIntoView()
-        .should('exist')
+      cy.contains(message).last().scrollIntoView().should('exist')
     }
   },
 )
 
 Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
-  cy.get('#emoji-toggle > .control-icon').click()
+  cy.get('[data-cy=send-emoji]').click()
   cy.get(emojiLocator).click() // sending emoji
   cy.get('[data-cy=send-message]').click() //sending emoji message
   cy.contains(emojiValue)
@@ -508,7 +512,6 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
     }
   })
 
-  //Find the friend and click on the message button associated
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
     .then(($el) => {
@@ -528,6 +531,22 @@ Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
   cy.get('[data-cy=message-container]', { timeout: 120000 })
     .last()
     .should('exist')
+})
+
+Cypress.Commands.add('goToNewChat', () => {
+  //If sidebar is hidden, click on hamburger menu
+  cy.get('#app').then(($app) => {
+    if ($app.hasClass('hide-sidebars')) {
+      cy.get('[data-cy=hamburger-button]').click()
+    }
+  })
+
+  //Go to sidebar friends button and then click on send message button to begin conversation
+  cy.get('[data-cy=sidebar-friends]').click()
+  cy.get('[data-cy="friend-send-message-2"]').click()
+
+  //Wait until chat page is loaded
+  cy.get('#conversation-container', { timeout: 30000 }).should('be.visible')
 })
 
 Cypress.Commands.add('workaroundChatLoad', (user) => {
@@ -552,11 +571,15 @@ Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
   cy.get(locator).realHover()
   cy.contains(expectedMessage).should('be.visible')
+  cy.wait(1000)
+  cy.get('body').realHover({ position: 'topLeft' })
 })
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').realHover()
   cy.contains(expectedMessage).should('be.visible')
+  cy.wait(1000)
+  cy.get('body').realHover({ position: 'topLeft' })
 })
 
 // Chat - URL Commands
