@@ -83,6 +83,12 @@ export default Vue.extend({
     async searchFriend() {
       this.error = ''
       this.searching = true
+
+      if (this.query === iridium.id || this.query === this.shortID) {
+        this.error = this.$t('friends.self_add')
+        return
+      }
+
       let matches = await this.users.searchPeer(this.query)
 
       if (matches.length === 0) {
@@ -91,9 +97,7 @@ export default Vue.extend({
 
       if (matches.length === 1) {
         const did = matches[0].did
-        if (did === iridium.id) {
-          this.error = this.$t('friends.self_add')
-        } else if (this.friends.friends.includes(did)) {
+        if (this.friends.friends.includes(did)) {
           this.error = this.$t('friends.already_friend')
         } else if (this.friends.requests[did]) {
           this.error = this.$t('friends.already_request')

@@ -58,7 +58,7 @@ export type UserType = 'friend' | 'stranger' | 'incoming' | 'outgoing'
 
 type ButtonAttributes = {
   icon: any
-  func: (e: MouseEvent | undefined) => void
+  func: () => void
   tooltip: TranslateResult
 }
 
@@ -146,15 +146,14 @@ export default Vue.extend({
     },
   },
   methods: {
-    showQuickProfile(e: MouseEvent | undefined, user: User) {
+    showQuickProfile(e: MouseEvent, user: User) {
       this.$store.commit('ui/setQuickProfile', {
         user,
         position: { x: e?.x, y: e?.y },
       })
     },
 
-    openChat(e: MouseEvent | undefined) {
-      e?.stopPropagation()
+    openChat() {
       const conversationId = iridium.chat.directConversationIdFromDid(
         this.user.did,
       )
@@ -162,28 +161,24 @@ export default Vue.extend({
         `${this.$device.isMobile ? '/mobile' : ''}/chat/${conversationId}`,
       )
     },
-    async createFriendRequest(e: MouseEvent | undefined) {
-      e?.stopPropagation()
+    async createFriendRequest() {
       this.loading = true
       await iridium.friends.requestCreate(this.user, false)
       this.loading = false
       this.$emit('requestSent')
     },
-    async acceptFriendRequest(e: MouseEvent | undefined) {
-      e?.stopPropagation()
+    async acceptFriendRequest() {
       this.loading = true
       await iridium.friends.requestAccept(this.user.did)
       this.loading = false
     },
-    async removeRequest(e: MouseEvent | undefined) {
-      e?.stopPropagation()
+    async removeRequest() {
       this.loading = true
       await iridium.friends.requestReject(this.user.did)
       this.loading = false
     },
 
-    async removeFriend(e: MouseEvent | undefined) {
-      e?.stopPropagation()
+    async removeFriend() {
       this.loading = true
       await iridium.friends.friendRemove(this.user.did)
       this.loading = false
