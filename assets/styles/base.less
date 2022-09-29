@@ -29,6 +29,10 @@
   src: url('~assets/fonts/Poppins-Bold.ttf');
 }
 
+#app {
+  background: @background;
+}
+
 body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
@@ -38,7 +42,6 @@ body {
   overscroll-behavior: contain;
   caret-color: @flair-color;
   color: @body;
-  background: @background;
 }
 
 hr {
