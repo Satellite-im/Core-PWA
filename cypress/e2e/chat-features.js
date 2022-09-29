@@ -1,5 +1,3 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
