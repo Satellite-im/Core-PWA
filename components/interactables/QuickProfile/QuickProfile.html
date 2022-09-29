@@ -10,7 +10,7 @@
     <button @click="openProfile" class="open-profile-button" :class="{self}">
       <UiUserState :user="user" :size="40" />
     </button>
-    <div>
+    <div class="text-container">
       <TypographyText as="h4" class="ellipsis">
         {{ user.name }}
       </TypographyText>
