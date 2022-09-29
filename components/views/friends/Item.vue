@@ -9,16 +9,17 @@
       :disabled="loading"
       @click="showQuickProfile($event, user)"
     > -->
-    <div class="friend">
+    <div class="friend" data-cy="friend">
       <UiUserState :user="user" />
       <div class="text-container">
-        <div class="ellipsis">{{ user.name }}</div>
+        <div data-cy="friend-name" class="ellipsis">{{ user.name }}</div>
         <div v-if="user.status" class="ellipsis">{{ user.status }}</div>
       </div>
       <div class="button-container">
         <InteractablesButton
           v-if="cancelButton"
           v-tooltip.top="cancelButton.tooltip"
+          data-cy="friend-cancel-button"
           :disabled="loading"
           color="dark"
           size="sm"
@@ -29,6 +30,7 @@
         <InteractablesButton
           v-if="confirmButton"
           v-tooltip.top="confirmButton.tooltip"
+          data-cy="friend-confirm-button"
           :loading="loading"
           color="dark"
           size="sm"

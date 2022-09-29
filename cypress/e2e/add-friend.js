@@ -50,8 +50,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
       .should('be.visible')
       .then(() => {
         cy.get('[data-cy=friend-name]').should('contain', friendUsername)
-        cy.get('[data-cy=friend-did]').should('contain', friendUserID)
-        cy.get('[data-cy=friend-send-request]').click()
+        cy.get('[data-cy=friend-confirm-button]').click()
       })
     cy.contains('Friend request successfully sent!').should('be.visible')
   })
@@ -61,7 +60,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
     cy.get('[data-cy=tab-element]').contains('Requests').click()
     cy.contains('Outgoing requests').should('be.visible')
     cy.get('[data-cy=friend-name]').should('contain', friendUsername)
-    cy.get('[data-cy="friend-cancel-request-sent"]').click()
+    cy.get('[data-cy="friend-cancel-button"]').click()
     cy.contains('No requests found').should('be.visible')
     cy.contains('You have no pending friend requests').should('be.visible')
   })
@@ -86,8 +85,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
       .should('be.visible')
       .then(() => {
         cy.get('[data-cy=friend-name]').should('contain', friendUsername)
-        cy.get('[data-cy=friend-did]').should('contain', friendUserID)
-        cy.get('[data-cy=friend-send-request]').click()
+        cy.get('[data-cy=friend-confirm-button]').click()
       })
     cy.contains('Friend request successfully sent!').should('be.visible')
 
@@ -109,7 +107,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
       .find('[data-cy=friend-name]')
       .should('contain', secondRandomName)
       .parents('[data-cy=friend]')
-      .find('[data-cy=accept-friend-request]')
+      .find('[data-cy=friend-confirm-button]')
       .click()
     cy.contains('No requests found').should('be.visible')
     cy.contains('You have no pending friend requests').should('be.visible')
