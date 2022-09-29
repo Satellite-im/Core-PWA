@@ -51,10 +51,12 @@ hr {
   border: none;
 }
 
-// remove later to be more accessible
-*:focus,
-*:active {
-  outline: none;
+.outline {
+  outline: solid 2px @light;
+}
+
+*:focus-visible {
+  .outline();
 }
 
 // Scrollbars
