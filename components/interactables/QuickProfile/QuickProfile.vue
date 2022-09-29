@@ -16,7 +16,6 @@ export default Vue.extend({
   data() {
     return {
       text: '',
-      users: iridium.users,
     }
   },
   computed: {
