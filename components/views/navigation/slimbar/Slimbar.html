@@ -18,12 +18,11 @@
   </UiComingSoon>
   <hr />
   <div class="circle-group">
-    <button
-      v-tooltip.right="$t('coming_soon.add_community')"
-      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <plus-icon size="1.8x" />
-    </button>
+    <UiComingSoon :tooltipText="$t('coming_soon.communities')">
+      <button disabled>
+        <plus-icon size="1.8x" />
+      </button>
+    </UiComingSoon>
     <button
       data-cy="settings"
       v-tooltip.right="$t('pages.settings.settings')"
