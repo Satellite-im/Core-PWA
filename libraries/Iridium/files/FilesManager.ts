@@ -18,6 +18,7 @@ import createThumbnail from '~/utilities/Thumbnail'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import { Config } from '~/config'
 import { DIRECTORY_TYPE } from '~/libraries/Files/types/directory'
+import { uploadFile } from '~/libraries/Iridium/utils'
 
 export default class FilesManager extends Emitter {
   public state: { items: IridiumItem[] } = { items: [] }
@@ -102,7 +103,7 @@ export default class FilesManager extends Emitter {
       | undefined
     this.validateName(file.name, parent)
 
-    const safer = await this.upload(file)
+    const safer = await uploadFile(file, [iridium.id])
     if (!safer || !safer.valid) {
       throw new Error(ItemErrors.BLOCKED)
     }
@@ -132,42 +133,6 @@ export default class FilesManager extends Emitter {
         .toLowerCase(),
     })
     this.set('/items', this.state.items)
-  }
-
-  async upload(
-    file: File,
-  ): Promise<{ cid: string; valid: boolean } | undefined> {
-    const fileBuffer = await file.arrayBuffer()
-
-    return new Promise((resolve) => {
-      if (!iridium.connector?.p2p.primaryNodeID) {
-        throw new Error('not connected to primary node')
-      }
-
-      iridium.connector
-        ?.store(
-          { fileBuffer, name: file.name, size: file.size, type: file.type },
-          {
-            syncPin: true,
-            encrypt: {
-              recipients: [
-                iridium.connector.id,
-                iridium.connector.p2p.primaryNodeID,
-              ],
-            },
-          },
-        )
-        .then((cid) => {
-          iridium.connector?.p2p.once('node/message/sync/pin', (msg: any) => {
-            const { payload } = msg
-            const { body } = payload
-            if (body.originalCID === cid.toString()) {
-              resolve({ cid: body.cid, valid: body.valid })
-            }
-          })
-          setTimeout(() => resolve(undefined), 30000)
-        })
-    })
   }
 
   async uploadThumbnail(file: File): Promise<CID | undefined> {

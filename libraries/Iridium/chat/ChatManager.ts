@@ -37,6 +37,7 @@ import {
   Notification,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
+import { uploadFile } from '~/libraries/Iridium/utils'
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
@@ -668,7 +669,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     upload: ChatFileUpload
     conversationId: string
   }): Promise<MessageAttachment | null> {
-    const safer = await this.upload(upload.file, conversationId)
+    const conversation = this.getConversation(conversationId)
+    if (!conversation) {
+      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+    }
+
+    const safer = await uploadFile(upload.file, conversation.participants)
     if (!safer || !safer.valid) {
       return null
     }
@@ -684,54 +690,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
     }
-  }
-
-  async upload(
-    file: File,
-    conversationId: string,
-  ): Promise<{ cid: string; valid: boolean } | undefined> {
-    const conversation = this.getConversation(conversationId)
-    const fileBuffer = await file.arrayBuffer()
-
-    return new Promise((resolve) => {
-      if (!iridium.connector?.p2p.primaryNodeID) {
-        throw new Error('not connected to primary node')
-      }
-      if (!conversation?.participants) {
-        throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-      }
-
-      iridium.connector
-        ?.store(
-          { fileBuffer, name: file.name, size: file.size, type: file.type },
-          {
-            syncPin: true,
-            encrypt: {
-              recipients: [
-                ...conversation.participants,
-                iridium.connector?.p2p.primaryNodeID,
-              ],
-            },
-          },
-        )
-        .then((cid) => {
-          const onSyncPin = (msg: any) => {
-            const { payload } = msg
-            const { body } = payload
-            const { result } = body
-            if (result.originalCID === cid.toString()) {
-              resolve({ cid: result.cid, valid: result.valid })
-            }
-            iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
-          }
-
-          iridium.connector?.p2p.on('node/message/sync/pin', onSyncPin)
-          setTimeout(() => {
-            iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
-            resolve(undefined)
-          }, 30000)
-        })
-    })
   }
 
   /**
