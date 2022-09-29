@@ -6,27 +6,25 @@
   v-click-outside="close"
 >
   <div class="top">
-    <button
-      @click="openProfile"
-      :class="`open-profile-button${!conversationId ? '-self' : ''}`"
-    >
+    <!-- todo - remove self when regular user profile is implemented -->
+    <button @click="openProfile" class="open-profile-button" :class="{self}">
       <UiUserState :user="user" :size="40" />
     </button>
-    <TypographyText as="h4" class="ellipsis"> {{ user.name }} </TypographyText>
-    <button @click="openProfile" class="edit-icon" v-if="!conversationId">
-      <edit-icon size="1.25x" />
-    </button>
+    <div>
+      <TypographyText as="h4" class="ellipsis">
+        {{ user.name }}
+      </TypographyText>
+      <TypographyText v-if="user?.status" color="dark" size="sm">
+        {{user.status}}
+      </TypographyText>
+    </div>
   </div>
-  <div v-if="status">
-    <TypographySubtitle :size="6" :text="status" />
-  </div>
-  <div v-if="about">
-    <TypographyTitle
-      :size="6"
-      :text="$t('pages.settings.profile.about.title')"
-    />
-    <TypographySubtitle :size="6" :text="about" />
-  </div>
+  <template v-if="user?.about">
+    <TypographyText>
+      {{$t('pages.settings.profile.about.title')}}
+    </TypographyText>
+    <TypographyText> {{user.about}} </TypographyText>
+  </template>
   <InteractablesInput
     v-if="conversationId"
     v-model.trim="text"

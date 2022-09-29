@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ArrowRightIcon, EditIcon } from 'satellite-lucide-icons'
+import { ArrowRightIcon } from 'satellite-lucide-icons'
 import { User } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -12,11 +12,11 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 export default Vue.extend({
   components: {
     ArrowRightIcon,
-    EditIcon,
   },
   data() {
     return {
       text: '',
+      users: iridium.users,
     }
   },
   computed: {
@@ -36,15 +36,8 @@ export default Vue.extend({
       }
       return iridium.chat.directConversationIdFromDid(this.user.did)
     },
-    about(): string | undefined {
-      return this.conversationId
-        ? this.user?.about
-        : iridium.profile.state?.about ?? ''
-    },
-    status(): string | undefined {
-      return this.conversationId
-        ? this.user?.status
-        : iridium.profile.state?.status ?? ''
+    self(): boolean {
+      return iridium.id === this.user?.did
     },
   },
   mounted() {
