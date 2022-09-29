@@ -66,7 +66,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   public ephemeral: {
     typing: { [key: Conversation['id']]: string[] | undefined }
     subscriptions: Conversation['id'][]
-    conversations: { [key: string]: ConversationMessage[] }
+    conversations: { [key: string]: ConversationMessage[] | undefined }
   } = {
     typing: {},
     subscriptions: [],
