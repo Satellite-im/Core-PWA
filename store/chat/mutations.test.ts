@@ -1,5 +1,5 @@
-import { ChatFileUpload } from './types'
 import InitialChatState from './state'
+import { ChatFileUpload } from './types'
 import * as module from '~/store/chat/mutations'
 
 describe('misc', () => {
