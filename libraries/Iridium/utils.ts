@@ -72,4 +72,28 @@ export async function uploadFile(
         }, 30000)
       })
   })
+/**
+ * @function isShortDid
+ * @description check if the string is in the shortDID format
+ * @param str string to check
+ * @returns boolean
+ */
+export function isShortDid(str: string) {
+  const lastIndex = str.lastIndexOf('#')
+  if (lastIndex === -1) return false
+
+  const firstPart = str.substring(0, lastIndex)
+  const secondPart = str.substring(lastIndex + 1)
+
+  return firstPart.length !== 0 && secondPart.length === 6
+}
+
+/**
+ * @function isDid
+ * @description check if the string is in the did format
+ * @param str string to check
+ * @returns boolean
+ */
+export function isDid(str: string) {
+  return str.startsWith('did:key:') && str.length === 8 + 48
 }

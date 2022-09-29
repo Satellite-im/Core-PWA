@@ -40,6 +40,7 @@ import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
+import { isDid, isShortDid } from '~/libraries/Iridium/utils'
 
 export default Vue.extend({
   data() {
@@ -64,7 +65,7 @@ export default Vue.extend({
         : `${iridium.id}`
     },
   },
-  async mounted() {
+  mounted() {
     if (this.$route.params.id) {
       this.query = this.$route.params.id
       this._searchFriend()
@@ -77,12 +78,12 @@ export default Vue.extend({
         this.searching = false
         return
       }
+      this.searching = true
       await this.searchFriend()
       this.searching = false
     }, 500),
     async searchFriend() {
       this.error = ''
-      this.searching = true
 
       if (this.query === iridium.id || this.query === this.shortID) {
         this.error = this.$t('friends.self_add')
@@ -93,14 +94,24 @@ export default Vue.extend({
 
       if (matches.length === 0) {
         this.error = this.$t('friends.not_found')
+        return
       }
 
       if (matches.length === 1) {
         const did = matches[0].did
+        const isExact = isShortDid(this.query) || isDid(this.query)
         if (this.friends.friends.includes(did)) {
-          this.error = this.$t('friends.already_friend')
-        } else if (this.friends.requests[did]) {
-          this.error = this.$t('friends.already_request')
+          this.error = isExact
+            ? this.$t('friends.already_friend')
+            : this.$t('friends.not_found')
+          return
+        }
+
+        if (this.friends.requests[did]) {
+          this.error = isExact
+            ? this.$t('friends.already_request')
+            : this.$t('friends.not_found')
+          return
         }
       }
 
@@ -109,7 +120,6 @@ export default Vue.extend({
       matches = matches.filter((m) => !this.friends.requests[m.did])
 
       this.matches = matches
-      this.searching = false
     },
     onFriendRequestSent() {
       this.query = ''
