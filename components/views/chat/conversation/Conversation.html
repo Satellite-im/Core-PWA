@@ -50,12 +50,11 @@
       v-if="isUnreadAboveViewport || isUnreadBelowViewport"
       @click="scrollUnreadIntoView"
     >
-      <TypographyText size="sm">
+      <TypographyText size="sm" color="white">
         {{ $tc('messaging.unread_since', numUnread, { numUnread: numUnread,
         since: unreadSince }) }}
       </TypographyText>
       <div class="dismiss-button" @click.stop="dismissScrollIndicator">
-        <TypographyText size="sm">{{ $t('global.dismiss') }}</TypographyText>
         <x-icon size="1x" />
       </div>
     </div>
