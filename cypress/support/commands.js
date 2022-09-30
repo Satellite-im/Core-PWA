@@ -421,8 +421,8 @@ Cypress.Commands.add('getReply', (messageReplied) => {
 Cypress.Commands.add(
   'chatFeaturesSendGlyph',
   (packIndex = 0, itemIndex = 0) => {
-    cy.get('#glyph-toggle').click()
-    cy.get('#glyphs').should('be.visible')
+    cy.get('[data-cy=send-glyph]').click()
+    cy.get('[data-cy=glyphs-picker]').should('be.visible')
     cy.get('[data-cy=glyph-pack]').eq(packIndex).as('glyph-pack')
     cy.get('@glyph-pack')
       .scrollIntoView()
@@ -430,7 +430,6 @@ Cypress.Commands.add(
       .eq(itemIndex)
       .scrollIntoView()
       .click()
-    cy.get('[data-cy=send-message]').click() //sending glyph message
   },
 )
 
@@ -652,14 +651,16 @@ Cypress.Commands.add('validateGlyphsModal', () => {
     .should('be.visible')
     .invoke('text')
     .then(($text) => {
-      expect($text).to.be.oneOf(['Astrobunny', 'Genshin Impact 2'])
+      expect($text).to.be.oneOf(['Genshin Impact 2', 'Astrobunny'])
     })
-  cy.get('.img-container').children().should('have.length', 3)
-  cy.contains('View Glyph Pack').should('be.visible')
+  cy.get('[data-cy=glyphs-modal-container]').children().should('have.length', 3)
+  cy.get('[data-cy=glyphs-modal-view-btn]')
+    .should('be.visible')
+    .and('contain', 'View Glyph Pack')
 })
 
 Cypress.Commands.add('closeModal', (locator) => {
-  cy.get(locator).find('.close-button').click()
+  cy.get(locator).siblings('[data-cy=close-button]').click()
   cy.get(locator).should('not.exist')
 })
 
