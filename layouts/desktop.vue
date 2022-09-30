@@ -59,7 +59,10 @@ export default Vue.extend({
     },
     displayDroppable(): boolean {
       const droppablePages = ['/files', '/chat']
-      return droppablePages.includes(this.$route.path)
+      const match = droppablePages.filter((path) =>
+        this.$route.path.includes(path),
+      ).length
+      return Boolean(match)
     },
     ready(): boolean {
       return iridium.ready && !!iridium.profile.state?.did
