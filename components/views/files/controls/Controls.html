@@ -13,12 +13,9 @@
           @click="toggleSearchAll"
           class="input-button"
           :class="{ 'active': searchAll }"
+          v-tooltip.top="$t(`pages.files.search.${searchAll ? 'disable_global' : 'enable_global'}`)"
         >
-          <globe-icon
-            class="input-icon"
-            size="1x"
-            v-tooltip.top="$t(`pages.files.search.${searchAll ? 'disable_global' : 'enable_global'}`)"
-          />
+          <globe-icon size="1x" />
         </button>
       </template>
     </InteractablesInput>
