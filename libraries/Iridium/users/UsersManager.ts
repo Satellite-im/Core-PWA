@@ -357,13 +357,13 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
       throw new Error(UsersError.USER_NOT_FOUND)
     }
 
-    delete this.state[didUtils.didString(did)]
-    this.state = { ...this.state }
-    await this.set(`/`, this.state)
     const id = await encoding.hash([user.did, iridium.id].sort())
     if (id && iridium.chat.hasConversation(id)) {
       iridium.chat.deleteConversation(id)
     }
+
+    Vue.delete(this.state, didUtils.didString(did))
+    await this.set(`/`, this.state)
 
     logger.info(this.loggerTag, 'user removed', { did, user, incoming })
 

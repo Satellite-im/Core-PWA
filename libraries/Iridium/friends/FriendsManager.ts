@@ -471,6 +471,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     if (!user) {
       throw new Error(`can't find user: ${did}`)
     }
+
+    request.status = 'accepted'
+    this.state.friends.push(did)
+    Vue.delete(this.state.requests, did)
+
     const participants = [did, iridium.id]
     if (!(await iridium.chat.hasDirectConversation(did))) {
       await iridium.chat.createConversation({
@@ -479,10 +484,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         participants,
       })
     }
-
-    request.status = 'accepted'
-    this.state.friends.push(did)
-    Vue.delete(this.state.requests, did)
 
     await this.set(`/friends`, this.state.friends)
     await this.set(`/requests`, this.state.requests)

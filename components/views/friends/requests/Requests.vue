@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="requests">
     <UiResultsMessage
       v-if="!incomingRequests.length && !outgoingRequests.length"
       :title="$t('friends.no_requests')"
@@ -7,36 +7,30 @@
     />
 
     <!-- Incoming Requests -->
-    <template v-if="incomingRequests.length">
-      <div class="padded_divider">
-        <TypographyHorizontalRuleText
-          plaintext
-          :value="$t('friends.friend_requests')"
-        />
-      </div>
+    <div v-if="incomingRequests.length">
+      <TypographyText as="h4" class="heading">
+        {{ $t('friends.incoming') }}
+      </TypographyText>
       <FriendsItem
         v-for="request in incomingRequests"
         :key="request.did"
         :user="users.getUser(request.did)"
         type="incoming"
       />
-    </template>
+    </div>
 
     <!-- Outgoing Requests -->
-    <template v-if="outgoingRequests.length">
-      <div class="padded_divider">
-        <TypographyHorizontalRuleText
-          plaintext
-          :value="$t('friends.outgoing')"
-        />
-      </div>
+    <div v-if="outgoingRequests.length">
+      <TypographyText as="h4" class="heading">
+        {{ $t('friends.outgoing') }}
+      </TypographyText>
       <FriendsItem
         v-for="request in outgoingRequests"
         :key="request.did"
         :user="users.getUser(request.did)"
         type="outgoing"
       />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -68,4 +62,14 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.requests {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .heading {
+    margin: 0 0 12px 16px;
+  }
+}
+</style>
