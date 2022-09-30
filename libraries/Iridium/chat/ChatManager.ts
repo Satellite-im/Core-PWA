@@ -35,6 +35,7 @@ import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
   Notification,
+  NotificationClickEvent,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { uploadFile } from '~/libraries/Iridium/utils'
@@ -278,6 +279,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       this.setTyping(conversationId, fromDID, false)
 
       const friendName = iridium.users.getUser(message?.from)
+      const description =
+        message.body?.length! > 79
+          ? `${message.body?.substring(0, 80)}...`
+          : message.body || ''
+
       const buildNotification: Exclude<Notification, 'id'> = {
         fromName: friendName?.name || fromDID,
         at: Date.now(),
@@ -287,16 +293,27 @@ export default class ChatManager extends Emitter<ConversationMessage> {
           conversation.participants.length > 2
             ? `${friendName?.name} posted in ${conversation.name}`
             : `New message from ${friendName?.name}`,
-        description:
-          message.body?.length! > 79
-            ? `${message.body?.substring(0, 80)}...`
-            : message.body || '',
+        description,
         image: fromDID,
         type:
           conversation.participants.length > 2
             ? NotificationType.GROUP_MESSAGE
             : NotificationType.DIRECT_MESSAGE,
         seen: false,
+        onNotificationClick: () => {
+          const clickEventData: NotificationClickEvent = {
+            from: fromDID,
+            topic: conversationId,
+            payload: {
+              type: NotificationType.DIRECT_MESSAGE,
+            },
+          }
+
+          // Emit data to the app to handle the click event
+          iridium.notifications.emit('notification/clicked', {
+            ...clickEventData,
+          })
+        },
       }
 
       iridium.notifications?.sendNotification(buildNotification)
