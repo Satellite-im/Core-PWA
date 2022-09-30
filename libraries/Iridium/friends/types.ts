@@ -9,7 +9,7 @@ export type FriendRequestStatus =
   | 'removed'
 
 export type FriendRequest = {
-  user: User
+  did: User['did']
   incoming: boolean
   status: FriendRequestStatus
   at: number

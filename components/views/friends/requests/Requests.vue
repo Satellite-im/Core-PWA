@@ -16,8 +16,8 @@
       </div>
       <FriendsItem
         v-for="request in incomingRequests"
-        :key="request.from"
-        :user="request.user"
+        :key="request.did"
+        :user="users.getUser(request.did)"
         type="incoming"
       />
     </template>
@@ -32,8 +32,8 @@
       </div>
       <FriendsItem
         v-for="request in outgoingRequests"
-        :key="request.from"
-        :user="request.user"
+        :key="request.did"
+        :user="users.getUser(request.did)"
         type="outgoing"
       />
     </template>
@@ -44,30 +44,19 @@
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
-import notNull from '~/utilities/notNull'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'FriendRequests',
   data() {
     return {
       friends: iridium.friends.state,
-      users: iridium.users.state,
+      users: iridium.users,
     }
   },
   computed: {
     requests(): FriendRequest[] {
-      return Object.values(this.friends.requests)
-        .map((request) => {
-          if (!this.users[request.user.did]) {
-            this.users[request.user.did] = {
-              did: request.user.did,
-              name: request.user.name,
-              status: 'offline',
-            }
-          }
-          return { ...request, user: this.users[request.user.did] }
-        })
-        .filter(notNull)
+      return Object.values(this.friends.requests).filter(truthy)
     },
     incomingRequests(): FriendRequest[] {
       return this.requests.filter((r) => r.incoming && r.status !== 'accepted')

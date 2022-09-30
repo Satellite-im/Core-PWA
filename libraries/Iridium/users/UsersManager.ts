@@ -15,6 +15,7 @@ import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import iridium from '../IridiumManager'
 import { User, UsersError, UserStatus } from './types'
 import logger from '~/plugins/local/logger'
+import { truthy } from '~/utilities/typeGuard'
 
 export type IridiumUserEvent = {
   to?: IridiumPeerIdentifier
@@ -25,7 +26,7 @@ export type IridiumUserEvent = {
   at: number
 }
 
-export type UserState = { [key: User['did']]: User }
+export type UserState = { [key: User['did']]: User | undefined }
 
 export type IridiumUserPubsub = IridiumPubsubMessage<
   IridiumDecodedPayload<IridiumUserEvent>
@@ -122,22 +123,21 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   }
 
   async loadUserData() {
-    this.list
-      .filter((u) => !!this.getUser(u.did))
-      .forEach((user: User) => {
-        if (
-          this.getUser(user.did) &&
-          this.ephemeral.status?.[user.did] === 'online' &&
-          Number(user.seen) < Date.now() - 1000 * 30
-        ) {
-          logger.info(this.loggerTag, 'user timed out', user)
-          iridium.users.setUser(user.did, {
-            ...user,
-            seen: Date.now(),
-          })
-          iridium.users.setUserStatus(user.did, 'offline')
-        }
-      })
+    const users = Object.values(this.state).filter(truthy)
+    for (const user of users) {
+      if (
+        this.getUser(user.did) &&
+        this.ephemeral.status?.[user.did] === 'online' &&
+        Number(user.seen) < Date.now() - 1000 * 30
+      ) {
+        logger.info(this.loggerTag, 'user timed out', user)
+        iridium.users.setUser(user.did, {
+          ...user,
+          seen: Date.now(),
+        })
+        iridium.users.setUserStatus(user.did, 'offline')
+      }
+    }
   }
 
   async unsubscribe() {
@@ -152,10 +152,6 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
   async fetch() {
     const fetched = await this.get('/')
     this.state = { ...fetched }
-  }
-
-  async getUsers(): Promise<{ [key: string]: User }> {
-    return this.state || {}
   }
 
   private async onUsersAnnounce(message: IridiumUserPubsub) {
