@@ -3,52 +3,30 @@
   gap: 32px;
   margin-right: auto;
   justify-content: flex-start;
-  width: 100%;
+  flex-grow: 1;
+  user-select: none;
 
   .tab {
-    cursor: pointer;
-    color: @text;
-    background: transparent;
-    padding-bottom: @normal-spacing;
-    margin-bottom: -1px;
-    user-select: none;
+    display: flex;
+    gap: 8px;
+    padding-bottom: 16px;
 
     &.active {
       color: @secondary-text;
       border-bottom: 2px solid @flair-color;
       padding-bottom: calc(@normal-spacing - 2px;);
     }
-
-    &[data-badge] {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      &::after {
-        content: attr(data-badge);
-        text-align: center;
-        font-size: 9pt;
-        background-color: @flair-color;
-        border-radius: 2px;
-        line-height: 0.5;
-        padding: 0.25rem 0.15rem;
-        min-width: 12px;
-        font-family: 'SpaceMono', monospace;
-        pointer-events: none;
-      }
-    }
   }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
-  #tabs {
+  .tabs {
     gap: @normal-spacing;
   }
 }
 
 @media only screen and (max-width: @mobile-small-breakpoint) {
-  #tabs {
+  .tabs {
     gap: initial;
     justify-content: space-between;
   }

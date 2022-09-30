@@ -28,7 +28,7 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .tag {
   user-select: none;
   background-color: @flair-color;
@@ -36,6 +36,7 @@ export default Vue.extend({
   box-shadow: @flair-glow;
   padding: 4px 8px;
   border-radius: @corner-rounding;
+  min-width: 18px;
 
   &.inverted {
     background: @semitransparent-dark-gradient;
