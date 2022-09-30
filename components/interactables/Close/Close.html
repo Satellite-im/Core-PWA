@@ -1,3 +1,7 @@
-<div class="close-button" @click="$emit('click', $event)">
+<div
+  class="close-button"
+  data-cy="close-button"
+  @click="$emit('click', $event)"
+>
   <x-icon size="1.6x" />
 </div>
