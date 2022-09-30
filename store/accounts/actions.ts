@@ -15,6 +15,7 @@ import logger from '~/plugins/local/logger'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
+import { IridiumDocument } from '~/linked-iridium/dist'
 
 export default {
   /**
@@ -192,11 +193,14 @@ export default {
       await iridium.initFromEntropy(entropy)
       await iridium.start()
     }
-    const profile = await iridium.profile?.get()
-    logger.debug(logTag, 'fetched iridium profile', {
-      profile,
-    })
-    // To be continued or maybe removed...
+
+    iridium.connector?.on(
+      'changed',
+      (payload: { path: string; value: { [key: string]: any } }) => {
+        const doc = payload.value
+        // Above doc should have the imported account
+      },
+    )
   },
   async loadAccount({
     commit,
@@ -334,14 +338,10 @@ export default {
     }
 
     if (!iridium.connector) {
-      throw new Error('iridium not initialized')
+      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
     }
 
     const imagePath = await uploadPicture(userData.image)
-
-    if (!iridium.connector) {
-      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
-    }
 
     const profile = {
       did: iridium.id,
