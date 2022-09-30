@@ -44,15 +44,15 @@ export default Vue.extend({
         await this.$store.commit('accounts/setAdapter', 'Solana')
         await this.$store.commit('accounts/setPhrase', mnemonic)
         await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
-        await this.$store.dispatch('accounts/loadAccount')
+        await this.$store.dispatch('accounts/importAccount')
       } catch (error: any) {
         this.error = error.message
-        return
+        // return
       }
 
-      if (this.$route.path !== '/') {
-        this.$router.replace('/')
-      }
+      // if (this.$route.path !== '/') {
+      //   this.$router.replace('/')
+      // }
     },
     isOdd(num: number) {
       return num % 2
