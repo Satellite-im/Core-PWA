@@ -126,7 +126,6 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     const users = Object.values(this.state).filter(truthy)
     for (const user of users) {
       if (
-        this.getUser(user.did) &&
         this.ephemeral.status?.[user.did] === 'online' &&
         Number(user.seen) < Date.now() - 1000 * 30
       ) {
