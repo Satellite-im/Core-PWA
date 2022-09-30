@@ -72,6 +72,8 @@ export async function uploadFile(
         }, 30000)
       })
   })
+}
+
 /**
  * @function isShortDid
  * @description check if the string is in the shortDID format
