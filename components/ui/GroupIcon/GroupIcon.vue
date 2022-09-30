@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { truthy } from '~/utilities/notNull'
 
 type GroupType = 'multi' | 'double' | 'single'
 
@@ -35,7 +36,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      users: iridium.users.state,
+      users: iridium.users,
     }
   },
   computed: {
@@ -49,10 +50,10 @@ export default Vue.extend({
       if (this.members.length > 1) return 'double'
       return 'single'
     },
-    membersInfo(): User[] {
+    membersInfo(): (User & { size: number })[] {
       return this.members
         .map((did, i) => ({
-          ...(this.users?.[did] || {
+          ...(this.users.getUser(did) ?? {
             did,
             name: did,
           }),
