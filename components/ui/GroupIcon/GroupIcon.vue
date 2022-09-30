@@ -5,7 +5,6 @@ import Vue, { PropType } from 'vue'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { truthy } from '~/utilities/notNull'
 
 type GroupType = 'multi' | 'double' | 'single'
 
