@@ -1,36 +1,63 @@
-<!-- dont change the 'conversation-container' id -->
-<div id="conversation-container" class="conversation" ref="container">
-  <div class="messages" ref="messages">
-    <UiBanner>
-      <template #icon><key-icon size="1x" /></template>
-      <template #header>{{$t('conversation.encrypted')}}</template>
-    </UiBanner>
-    <UiChatInfiniteScroll
-      :isLoading="isLoadingMore"
-      :noMore="noMore"
-      @loadMore="loadMore"
-    />
-    <template v-for="(item, i) of chatItems">
-      <TypographyHorizontalRuleText
-        v-if="item.isNextDay"
-        :value="item.message.at.toString()"
+<div class="conversation-wrapper">
+  <!-- dont change the 'conversation-container' id -->
+  <div id="conversation-container" class="conversation" ref="container">
+    <div class="messages" ref="messages">
+      <UiBanner>
+        <template #icon><key-icon size="1x" /></template>
+        <template #header>{{$t('conversation.encrypted')}}</template>
+      </UiBanner>
+      <UiChatInfiniteScroll
+        :isLoading="isLoadingMore"
+        :noMore="noMore"
+        @loadMore="loadMore"
       />
-      <UiCaretDivider v-if="item.isFirstUnreadMessage" text="New Messages" />
-      <Message
-        :key="item.message.id"
-        :item="item"
-        :showHeader="item.showHeader"
-      />
-    </template>
-    <div
-      v-if="activeUploadChats.includes(conversation?.id)"
-      class="loader-container"
-    >
-      <file-icon size="24" class="icon" />
-      <div class="inner">
-        <TypographyText> {{ $t('global.uploading') }} </TypographyText>
-        <UiLoadersLoadingBar />
+      <template v-for="(item, i) of chatItems">
+        <TypographyHorizontalRuleText
+          v-if="item.isNextDay"
+          :value="item.message.at.toString()"
+        />
+        <!-- {{ item.message.id }} - {{ unreadMarkerMessageId }} -->
+        <UiCaretDivider
+          v-if="item.message.id === unreadMarkerMessageId"
+          text="New Messages"
+        />
+        <Message
+          :key="item.message.id"
+          :item="item"
+          :showHeader="item.showHeader"
+          @unreadMessage="onUnreadMessage"
+        />
+      </template>
+      <div
+        v-if="activeUploadChats.includes(conversation?.id)"
+        class="loader-container"
+      >
+        <file-icon size="24" class="icon" />
+        <div class="inner">
+          <TypographyText> {{ $t('global.uploading') }} </TypographyText>
+          <UiLoadersLoadingBar />
+        </div>
       </div>
     </div>
   </div>
+  <transition name="scroll-indicator">
+    <div
+      class="scroll-indicator"
+      :class="{
+        'scroll-indicator-top': isUnreadAboveViewport,
+        'scroll-indicator-bottom': isUnreadBelowViewport,
+      }"
+      v-if="isUnreadAboveViewport || isUnreadBelowViewport"
+      @click="scrollUnreadIntoView"
+    >
+      <TypographyText size="sm">
+        {{ $tc('messaging.unread_since', numUnread, { numUnread: numUnread,
+        since: unreadSince }) }}
+      </TypographyText>
+      <div class="dismiss-button" @click.stop="dismissScrollIndicator">
+        <TypographyText size="sm">{{ $t('global.dismiss') }}</TypographyText>
+        <x-icon size="1x" />
+      </div>
+    </div>
+  </transition>
 </div>

@@ -1,3 +1,11 @@
+.conversation-wrapper {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-grow: 1;
+}
+
 .conversation {
   position: relative; // Dont remove
   display: flex;
@@ -73,5 +81,70 @@
     &-spinner {
       margin-right: @light-spacing;
     }
+  }
+}
+
+.scroll-indicator {
+  position: absolute;
+  background: @flair-gradient;
+  padding: 4px 12px;
+  display: flex;
+  justify-content: space-between;
+  inset: 0 1rem;
+  cursor: pointer;
+  .glow-flair();
+
+  &-top {
+    bottom: auto;
+    border-radius: @corner-rounding;
+  }
+
+  &-bottom {
+    top: auto;
+    border-radius: @corner-rounding @corner-rounding 0 0;
+  }
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dismiss-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.scroll-indicator {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+
+    &.scroll-indicator-top {
+      transform: translateY(-25%);
+    }
+
+    &.scroll-indicator-bottom {
+      transform: translateY(25%);
+    }
+  }
+
+  // &-enter-active {
+  //   transition: all @animation-speed-long ease, opacity 150ms 50ms ease;
+  // }
+  // &-leave-active {
+  //   transition: all @animation-speed-long ease, opacity 150ms ease;
+  // }
+
+  &-enter-active,
+  &-leave-active {
+    transition: all @animation-speed-medium ease;
   }
 }
