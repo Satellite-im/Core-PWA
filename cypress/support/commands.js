@@ -339,21 +339,35 @@ Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
 
 Cypress.Commands.add(
   'chatFeaturesEditMessage',
-  (messageToEdit, messageEdited) => {
+  (messageToEdit, messageEdited, action = 'rightClick') => {
+    //Retrieve message to edit
     cy.get('[data-cy=chat-message]')
       .contains(messageToEdit)
       .last()
       .scrollIntoView()
-      .should('exist')
-      .rightclick()
-    cy.contains('Edit Message').click()
+      .as('messageToEdit')
+    //Select Edit Message option by Right Click or by Hovering Message
+    if (action === 'rightClick') {
+      cy.get('@messageToEdit').should('exist').rightclick()
+      cy.get('[data-cy=context-menu-option]').contains('Edit Message').click()
+    } else if (action === 'hover') {
+      cy.get('@messageToEdit')
+        .should('exist')
+        .realHover()
+        .siblings('[data-cy=message-actions]')
+        .find('[data-cy=message-action-edit]')
+        .click()
+      cy.get('body').realHover({ position: 'topLeft' })
+    }
+    // Editing message
     cy.get('[data-cy=edit-message-input]')
       .scrollIntoView()
       .should('exist')
       .trigger('input')
-      .type(messageEdited) // editing message
-    cy.get('[data-cy=edit-message-input]').type('{enter}')
-    cy.contains(messageToEdit + messageEdited, { timeout: 30000 })
+      .type(messageEdited + '{enter}')
+    //Ensure message was edited
+    cy.get('[data-cy=chat-message]')
+      .contains(messageToEdit + messageEdited)
       .last()
       .scrollIntoView()
       .should('exist')
@@ -543,7 +557,7 @@ Cypress.Commands.add('goToNewChat', () => {
 
   //Go to sidebar friends button and then click on send message button to begin conversation
   cy.get('[data-cy=sidebar-friends]').click()
-  cy.get('[data-cy="friend-send-message-2"]').click()
+  cy.get('[data-cy=friend-confirm-button]').click()
 
   //Wait until chat page is loaded
   cy.get('#conversation-container', { timeout: 30000 }).should('be.visible')
