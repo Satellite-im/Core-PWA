@@ -6,8 +6,8 @@ let imageURL, expecedEditedMessage
 
 describe('Chat Features Tests', () => {
   before(() => {
-    // Save Localstorage Snapshots for next specs
-    cy.restoreLocalStorage('Chat User A', 'Chat User B')
+    // Restore Localstorage Snapshots for next specs
+    cy.restoreLocalStorage('Chat User A')
   })
   it('Chat - Send message on chat', { retries: 2 }, () => {
     // Import account
@@ -163,10 +163,5 @@ describe('Chat Features Tests', () => {
   //Test is skipped because Profile Screen cannot be accessed now from Main Chat Page
   it.skip('Chat - Assert note from user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
-  })
-
-  after(() => {
-    // Save Localstorage Snapshots for next specs
-    cy.saveLocalStorage('Chat User A', 'Chat User B')
   })
 })
