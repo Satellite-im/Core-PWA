@@ -106,7 +106,6 @@ export default Vue.extend({
           !message.status &&
           message.at > lastReadAt &&
           (prevMessage ? prevMessage.at <= lastReadAt : true)
-        // message.id === this.unreadMarkerMessageId
         if (isFirstUnreadMessage && this.unreadMarkerMessageId === null) {
           this.unreadMarkerMessageId = message.id
         }
@@ -190,21 +189,7 @@ export default Vue.extend({
           this.conversation.id,
           maxTime || currentTimestamp,
         )
-        // this.unreadMarkerMessageId = null
       }
-
-      // this.$nextTick(() => {
-      //   const container = this.$refs.container as HTMLElement
-      //   const firstUnread = container.querySelector(
-      //     '.chat-message-container.first-unread-message',
-      //   )
-      //   if (!firstUnread) {
-      //     return
-      //   }
-      //   // firstUnread.scrollIntoView({ behavior: 'smooth' })
-      //   const box = firstUnread.getBoundingClientRect()
-      //   console.log(box.bottom, container.getBoundingClientRect().top)
-      // })
     },
     isLastChatItemAuthor(newValue) {
       if (newValue) {
