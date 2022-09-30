@@ -131,25 +131,11 @@ export default Vue.extend({
       return this.requests.filter(
         (r: FriendRequest) => r.incoming && r.status !== 'accepted',
       )
-      // .sort((a, b) =>
-      //   this.users.state[a.did]?.name.localeCompare(
-      //     this.users.getUser(b.did)?.name,
-      //     undefined,
-      //     {
-      //       sensitivity: 'base',
-      //     },
-      //   ),
-      // )
     },
     outgoingRequests(): FriendRequest[] {
       return this.requests.filter(
         (r: FriendRequest) => !r.incoming && r.status === 'pending',
       )
-      // .sort((a, b) =>
-      //   a.user.name.localeCompare(b.user.name, undefined, {
-      //     sensitivity: 'base',
-      //   }),
-      // )
     },
   },
   watch: {
