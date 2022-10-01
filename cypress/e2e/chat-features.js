@@ -1,20 +1,13 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Only Text')
-    .map((item) => item.recoverySeed) + '{enter}'
-let imageURL
+let imageURL, expecedEditedMessage
 
 describe('Chat Features Tests', () => {
   before(() => {
-    // Save Localstorage Snapshots for next specs
-    cy.restoreLocalStorage('Chat User A', 'Chat User B')
+    // Restore Localstorage Snapshots for next specs
+    cy.restoreLocalStorage('Chat User A')
   })
   it('Chat - Send message on chat', { retries: 2 }, () => {
     // Import account
@@ -29,19 +22,25 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
-  // Skipped because edit feature is coming soon
-  it.skip('Chat - Edit message on chat', () => {
-    cy.chatFeaturesEditMessage(randomMessage, randomNumber)
+  it('Chat - Edit message on chat by hovering and selecting edit button', () => {
+    cy.chatFeaturesEditMessage(randomMessage, randomNumber, 'hover')
+    expecedEditedMessage = randomMessage + randomNumber
   })
 
-  // Skipped because edit feature is coming soon
-  it.skip('Chat - Message edited shows edited status', () => {
-    cy.get('[data-cy=message-edited]').last().parents()
+  it('Chat - Edit message on chat using right-click', () => {
+    cy.chatFeaturesEditMessage(expecedEditedMessage, randomNumber, 'rightClick')
+    expecedEditedMessage += randomNumber
+  })
 
-    cy.contains(randomMessage + randomNumber)
-      .parents('[data-cy=message-container]')
-      .find('[data-cy=message-edited]', { timeout: 30000 })
-      .should('contain', '(edited)')
+  it('Chat - Message edited shows edited status', () => {
+    // Edited message shows (Edited) status
+    cy.get('[data-cy=message-edited]').last().should('contain', '(edited)')
+
+    // Edited message is correct
+    cy.get('[data-cy=message-edited]')
+      .last()
+      .prev('[data-cy=chat-message]')
+      .should('contain', expecedEditedMessage)
   })
 
   it('Chat - Copy paste text', () => {
@@ -65,14 +64,14 @@ describe('Chat Features Tests', () => {
       .should('equal', 'granted')
 
     //Copying the latest text message sent
-    cy.contains(randomMessage).last().scrollIntoView().rightclick()
+    cy.contains(expecedEditedMessage).last().scrollIntoView().rightclick()
     cy.contains('Copy Message').realClick()
 
     //Validating that text messsage copied matches with actual clipboard value
     cy.window()
       .its('navigator.clipboard')
       .invoke('readText')
-      .should('equal', randomMessage)
+      .should('equal', expecedEditedMessage)
       .then((clipboardText) => {
         //Simulating the paste event through a cypress command passing the clipboard data
         cy.get('[data-cy=editable-input]').click().paste({
@@ -81,7 +80,7 @@ describe('Chat Features Tests', () => {
         })
       })
     // Validating that editable input text matches with pasted value
-    cy.get('[data-cy=editable-input]').should('have.text', randomMessage)
+    cy.get('[data-cy=editable-input]').should('have.text', expecedEditedMessage)
     cy.get('[data-cy=editable-input]').click().clear()
   })
 
@@ -164,10 +163,5 @@ describe('Chat Features Tests', () => {
   //Test is skipped because Profile Screen cannot be accessed now from Main Chat Page
   it.skip('Chat - Assert note from user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
-  })
-
-  after(() => {
-    // Save Localstorage Snapshots for next specs
-    cy.saveLocalStorage('Chat User A', 'Chat User B')
   })
 })

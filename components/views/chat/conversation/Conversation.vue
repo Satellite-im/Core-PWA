@@ -34,7 +34,8 @@ export default Vue.extend({
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
       isBlurred: false,
-      resizeObserver: null as ResizeObserver | null,
+      resizeContainerObserver: null as ResizeObserver | null,
+      resizeMessagesObserver: null as ResizeObserver | null,
       isLockedToBottom: true,
     }
   },
@@ -149,26 +150,33 @@ export default Vue.extend({
     }
     container.addEventListener('scroll', () => {
       this.isLockedToBottom =
-        container.scrollTop === container.scrollHeight - container.clientHeight
+        container.scrollHeight - container.clientHeight <=
+        container.scrollTop + 30
     })
-    this.resizeObserver = new ResizeObserver(() => {
+    this.resizeContainerObserver = new ResizeObserver(() => {
       if (this.isLockedToBottom) {
         this.scrollToBottom()
       }
     })
-    this.resizeObserver.observe(messages)
+    this.resizeContainerObserver.observe(container)
+    this.resizeMessagesObserver = new ResizeObserver(() => {
+      if (this.isLockedToBottom) {
+        this.scrollToBottom()
+      }
+    })
+    this.resizeMessagesObserver.observe(messages)
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
     window.removeEventListener('focus', this.handleFocus)
-    this.resizeObserver?.disconnect()
+    this.resizeContainerObserver?.disconnect()
+    this.resizeMessagesObserver?.disconnect()
   },
   methods: {
     scrollToBottom() {
       this.$nextTick(() => {
         const container = this.$refs.container as HTMLElement
-        const y = container.scrollHeight - container.clientHeight
-        container.scrollTo(0, y)
+        container.scrollTop = container.scrollHeight
       })
     },
     handleBlur() {

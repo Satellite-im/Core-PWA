@@ -10,7 +10,7 @@ import {
   VideoOffIcon,
 } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { TrackKind } from '~/libraries/WebRTC/types'

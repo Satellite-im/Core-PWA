@@ -38,6 +38,9 @@ export default Vue.extend({
       default: false,
     },
   },
+  data: () => ({
+    isFocused: false,
+  }),
   methods: {
     /**
      * @method toggle DocsTODO
@@ -48,6 +51,9 @@ export default Vue.extend({
       if (!this.isLocked) {
         this.$emit('toggle', !this.isEnabled)
       }
+    },
+    setFocus(val: boolean) {
+      this.isFocused = val
     },
   },
 })
