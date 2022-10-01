@@ -6,6 +6,22 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
+type GroupType = 'multi' | 'double' | 'single'
+
+function getIconSize(type: GroupType, index: number) {
+  switch (type) {
+    case 'multi':
+      if (index === 0) return 30
+      if (index === 1) return 20
+      return 10
+    case 'double':
+      if (index === 0) return 30
+      return 20
+    default:
+      return 36
+  }
+}
+
 export default Vue.extend({
   props: {
     members: {
@@ -19,7 +35,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      users: iridium.users.state,
+      users: iridium.users,
     }
   },
   computed: {
@@ -28,28 +44,21 @@ export default Vue.extend({
      * @description Returns classname as string based on group members
      * @example :class="groupClass"
      */
-    groupClass(): string {
+    groupClass(): GroupType {
       if (this.members.length > 2) return 'multi'
       if (this.members.length > 1) return 'double'
       return 'single'
     },
-    /**
-     * @method groupIconSize
-     * @description Returns icon size for UICircle for single/two person groups
-     * @example :size="groupIconSize"
-     */
-    groupIconSize(): number {
-      if (this.members.length > 1) return 25
-      return 36
-    },
-    membersInfo(): User[] {
-      return this.members.map(
-        (did) =>
-          this.users?.[did] || {
+    membersInfo(): (User & { size: number })[] {
+      return this.members
+        .map((did, i) => ({
+          ...(this.users.getUser(did) ?? {
             did,
             name: did,
-          },
-      )
+          }),
+          size: getIconSize(this.groupClass, i),
+        }))
+        .slice(0, 3)
     },
   },
   methods: {

@@ -57,6 +57,7 @@ const Chatbar = Vue.extend({
         thr: ReturnType<typeof throttle>
         deb: ReturnType<typeof debounce>
       } | null,
+      isFocused: false,
     }
   },
   computed: {
@@ -379,6 +380,17 @@ const Chatbar = Vue.extend({
           el.scrollIntoView(scrolledAfter)
         }
       })
+    },
+    /**
+     * @method setFocus
+     * @description only set true if focus event was a `tab`. click will not activate outline
+     */
+    setFocus(e: FocusEvent, val: boolean) {
+      if (!val) {
+        this.isFocused = val
+      } else if (e.relatedTarget) {
+        this.isFocused = val
+      }
     },
   },
 })

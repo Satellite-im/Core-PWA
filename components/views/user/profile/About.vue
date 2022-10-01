@@ -13,12 +13,16 @@
       <TypographyText class="loading">
         {{ note }}
       </TypographyText>
-      <InteractablesClickToEdit
-        ref="noteRef"
-        v-model="note"
-        data-cy="profile-add-note"
-        :placeholder="$t('modal.profile.about.click_note')"
-      />
+      <div class="row-wrapper">
+        <InteractablesEditable
+          v-model="note"
+          :placeholder="$t('modal.profile.about.click_note')"
+          :enabled="editing"
+        />
+        <InteractablesButton @click="action()">
+          <edit-icon size="1x" />
+        </InteractablesButton>
+      </div>
     </div>
   </div>
 </template>
@@ -26,65 +30,31 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { EditIcon } from 'satellite-lucide-icons'
 
 export default Vue.extend({
+  components: {
+    EditIcon,
+  },
   data() {
     return {
       observer: null as ResizeObserver | null,
+      note: '' as string,
+      editing: false as boolean,
     }
   },
   computed: {
     ...mapState(['friends', 'ui']),
-    note: {
-      get(): string {
-        return (
-          this.ui?.userProfile?.metadata?.note ??
-          this.$t('modal.profile.about.click_note')
-        )
-      },
-      set(note: string) {
-        const { userProfile } = this.ui
-        let { metadata } = userProfile
-        metadata = {
-          ...(metadata ?? null),
-          note,
-        }
-        this.$store.dispatch('friends/updateFriendMetadata', {
-          to: userProfile.address,
-          metadata,
-        })
-      },
-    },
-  },
-  mounted() {
-    const el = (this.$refs.noteRef as any).$el as HTMLDivElement
-    this.$data.observer = new ResizeObserver(this.handleResize)
-    this.$data.observer.observe(el)
-  },
-  beforeDestroy() {
-    if (this.$data.observer) {
-      const el = (this.$refs.noteRef as any).$el as HTMLDivElement
-      this.$data.observer.unobserve(el)
-    }
   },
   methods: {
-    handleResize: (entries: ResizeObserverEntry[]) => {
-      const [entry] = entries
-      const { target } = entry
-
-      const el = target as HTMLDivElement
-      const scrollEl = el.closest('.scroll-area') as HTMLDivElement
-      const aboutEl = el.closest('.about') as HTMLDivElement
-
-      const scrollTop = aboutEl.clientHeight - scrollEl.clientHeight
-
-      if (scrollEl.scrollTop > scrollTop) {
-        scrollEl.scrollTop = scrollTop
+    action() {
+      if (this.editing) {
+        // TODO: save note
+        this.editing = false
+        return
       }
 
-      if (scrollEl.clientHeight === aboutEl.clientHeight) {
-        scrollEl.classList.remove('ps--active-y')
-      }
+      this.editing = true
     },
   },
 })
@@ -95,6 +65,11 @@ export default Vue.extend({
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
   gap: @normal-spacing;
+}
+
+.row-wrapper {
+  display: flex;
+  align-items: center;
 }
 
 .loading {

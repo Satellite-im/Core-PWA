@@ -1,44 +1,35 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
-const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
-    .map((item) => item.recoverySeed) + '{enter}'
-
 describe('Chat - Sending Glyphs Tests', () => {
+  before(() => {
+    // Restore Localstorage Snapshots for next specs
+    cy.restoreLocalStorage('Chat User A')
+  })
   it('Send a glyph on chat', { retries: 2 }, () => {
-    //Import account
-    cy.importAccount(randomPIN, recoverySeed)
+    // Import account from localstorage
+    cy.loginWithLocalStorage('Chat User A', '12345')
 
-    //Validate profile name displayed
-    cy.validateChatPageIsLoaded()
-
-    //Validate message is sent
-    cy.goToConversation('cypress friend')
+    // Go to a Conversation
+    cy.goToNewChat()
 
     //Send first glyph from Astrobunny pack
-    //cy.chatFeaturesSendGlyph()
+    cy.chatFeaturesSendGlyph()
 
-    //Assert glyph received
-    //cy.goToLastGlyphOnChat()
+    //Assert glyph sent
+    cy.goToLastGlyphOnChat()
   })
 
   it('Send a glyph after scrolling in the selection screen', () => {
     //Send fourth glyph from Genshin Impact 2 pack
     cy.chatFeaturesSendGlyph(6, 3)
 
-    //Assert glyph received
+    //Assert glyph sent
     cy.goToLastGlyphOnChat()
   })
 
   it('Send a glyph from the recents section', () => {
     //Send a glyph from recents section
-    cy.get('#glyph-toggle').click()
-    cy.get('#glyphs').should('be.visible')
+    cy.get('[data-cy=send-glyph]').click()
+    cy.get('[data-cy=glyphs-picker]').should('be.visible')
     cy.get('[data-cy=recent-glyph-item]').first().click()
-    cy.get('[data-cy=send-message]').click() //sending glyph message
 
     //Assert glyph received
     cy.goToLastGlyphOnChat()
@@ -50,8 +41,17 @@ describe('Chat - Sending Glyphs Tests', () => {
   })
 
   it('Validate coming soon modal is displayed on glyph pack screen', () => {
-    cy.contains('View Glyph Pack').click()
+    cy.get('[data-cy=glyphs-modal-view-btn]').click()
     cy.get('[data-cy=modal-cta]').should('be.visible')
     cy.closeModal('[data-cy=modal-cta]')
+  })
+
+  //Skipped until bug #5069 - Modals extra close icon is fixed
+  it.skip('Validate glyph pack modal can be closed', () => {
+    cy.goToLastGlyphOnChat().should('be.visible').click()
+    cy.get('[data-cy=glyphs-modal]').should('be.visible')
+    cy.closeModal('[data-cy=glyphs-modal]').then(() => {
+      cy.get('[data-cy=glyphs-modal]').should('not.exist')
+    })
   })
 })

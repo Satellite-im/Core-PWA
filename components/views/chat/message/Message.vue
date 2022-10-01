@@ -34,6 +34,9 @@ export default Vue.extend({
       default: false,
     },
   },
+  data: () => ({
+    users: iridium.users,
+  }),
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
@@ -52,9 +55,7 @@ export default Vue.extend({
       return this.$route.params.id
     },
     author(): User | undefined {
-      return this.message.from === iridium.id
-        ? (iridium.profile.state as User)
-        : iridium.users.state[this.message.from]
+      return this.users.getUser(this.message.from)
     },
     avatarSrc(): string | undefined {
       return (
@@ -113,8 +114,7 @@ export default Vue.extend({
           return [
             ...mainList,
             { text: this.$t('context.copy_msg'), func: this.copyMessage },
-            // { text: this.$t('context.edit'), func: this.editMessage },
-            // skipped due to edit message is now coming soon and this shouldn't appear on context menu
+            { text: this.$t('context.edit'), func: this.editMessage },
           ]
         }
         // another persons text message

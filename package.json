@@ -1,6 +1,6 @@
 {
   "name": "Core-PWA",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "yarn install --check-files && nuxi dev",
@@ -106,7 +106,7 @@
     "cypress": "^10.8.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-image-snapshot": "^4.0.1",
-    "cypress-localstorage-commands": "^1.7.0",
+    "cypress-localstorage-commands": "^2.2.0",
     "cypress-real-events": "^1.7.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.4.0",

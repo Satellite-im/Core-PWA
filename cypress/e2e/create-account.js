@@ -7,7 +7,8 @@ const randomStatus = faker.lorem.word() // generate random status
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 
 describe('Create Account Validations', () => {
-  it('Create Account', { retries: 2 }, () => {
+  //it('Create Account', { retries: 2 }, () => {
+  it('Create Account', () => {
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 
@@ -15,13 +16,12 @@ describe('Create Account Validations', () => {
     cy.contains(
       "We're going to create an account for you. On the next screen, you'll see a set of words. Screenshot this or write it down. This is the only way to backup your account.",
     ).should('be.visible')
-    cy.get('[data-cy=create-account-button]').should('be.visible')
     cy.createAccountSecondScreen()
 
     //Recovery Seed Screen
-    cy.get('.title').should('be.visible').should('contain', 'Recovery Seed')
-    cy.contains('I Saved It').should('be.visible')
-    cy.get('#custom-cursor-area').should('be.visible')
+    cy.contains(
+      'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
+    ).should('be.visible')
     cy.createAccountRecoverySeed()
 
     //Username and Status Input
@@ -32,25 +32,28 @@ describe('Create Account Validations', () => {
         timeout: 10000,
       },
     ).should('be.visible')
-    cy.get('[data-cy=status-input]').should('be.visible')
     cy.createAccountUserInput(randomName, randomStatus)
 
     //User Image Input
-    cy.createAccountAddImage(filepathCorrect)
+    //Skipped since loading profile picture is disabled now
+    /*
+    cy.createAccountAddImage(filepathCorrect)  
     cy.get('[data-cy=cropper-container]', { timeout: 60000 })
       .should('be.visible')
       .then(() => {
         cy.contains('Crop', { timeout: 30000 }).should('be.visible').click()
       })
-
+    */
     //Finishing Account Creation
     cy.createAccountSubmit()
+    cy.welcomeModal(randomName)
   })
 
-  it(
+  it.skip(
     'Create account with non-NSFW after attempting to load a NSFW image',
     { retries: 2 },
     () => {
+      //Skipped because profile picture upload is disabled now
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 
@@ -80,6 +83,7 @@ describe('Create Account Validations', () => {
 
       //Finishing Account Creation
       cy.createAccountSubmit()
+      cy.welcomeModal(randomName)
     },
   )
 
@@ -87,7 +91,7 @@ describe('Create Account Validations', () => {
     'Create account successfully without image after attempting to add a NSFW picture',
     { retries: 2 },
     () => {
-      //Skipped due to solana issues
+      //Skipped because profile picture upload is disabled now
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 
@@ -109,6 +113,7 @@ describe('Create Account Validations', () => {
 
       //User is still able to sign in and NSFW image will not be loaded
       cy.createAccountSubmit()
+      cy.welcomeModal(randomName)
 
       //Validating profile picture is null and default satellite circle is displayed
       cy.validateChatPageIsLoaded()
@@ -125,7 +130,7 @@ describe('Create Account Validations', () => {
     'Create account without image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
-      //Skipped due to solana issues
+      //Skipped because profile picture upload is disabled now
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 
@@ -146,6 +151,7 @@ describe('Create Account Validations', () => {
 
       //User is still able to sign in and invalid image will not be loaded
       cy.createAccountSubmit()
+      cy.welcomeModal(randomName)
 
       //Validating profile picture is null
       cy.validateChatPageIsLoaded()
@@ -162,7 +168,7 @@ describe('Create Account Validations', () => {
     'Create account with valid image after attempting to add an invalid image file',
     { retries: 2 },
     () => {
-      //Skipped due to solana issues
+      //Skipped because profile picture upload is disabled now
       //Creating pin
       cy.createAccountPINscreen(randomPIN)
 
@@ -192,6 +198,7 @@ describe('Create Account Validations', () => {
 
       //User is able to sign in after adding a correct image
       cy.createAccountSubmit()
+      cy.welcomeModal(randomName)
 
       //Validating profile picture is Not null
       cy.validateChatPageIsLoaded()

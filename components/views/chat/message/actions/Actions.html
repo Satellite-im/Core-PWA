@@ -1,6 +1,7 @@
-<div class="message-actions">
+<div class="message-actions" data-cy="message-actions">
   <div
     class="reply-command"
+    data-cy="message-action-react"
     v-tooltip.top="$t('ui.emoji')"
     @click="emojiReaction"
   >
@@ -12,6 +13,7 @@
   <div
     v-if="!hideReply"
     class="reply-command"
+    data-cy="message-action-reply"
     v-tooltip.top="$t('messaging.reply')"
     @click="setReplyChatbarMessage"
   >
@@ -27,6 +29,7 @@
   <div
     v-if="isEditable"
     class="reply-command"
+    data-cy="message-action-edit"
     v-tooltip.top="$t('controls.edit')"
     @click="editMessage"
   >

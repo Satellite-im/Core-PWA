@@ -6,7 +6,7 @@
   <ChatbarUploadPreview v-if="files.length" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners}"
+    :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners, 'outline': isFocused}"
   >
     <ChatbarUpload ref="upload" :disabled="!isSubscribed" />
     <!-- <div
@@ -19,10 +19,13 @@
       v-model="text"
       ref="editable"
       :placeholder="$t('ui.talk')"
+      class="editable"
       :class="{'has-command' : hasCommand}"
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
+      @focus="setFocus($event, true)"
+      @blur="setFocus($event, false)"
     />
     <ChatbarControls
       :disabled="!isSubscribed || charlimit"

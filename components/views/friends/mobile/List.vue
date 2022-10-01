@@ -7,7 +7,7 @@
       input-kind="text"
       type="dark"
     />
-    <FriendsMobileListItem
+    <FriendsItem
       v-for="e in filteredList"
       :key="e.did"
       :user="e"
@@ -50,7 +50,10 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   padding: 0 1rem 1rem;
-  gap: 1rem;
-  overflow-y: scroll;
+  overflow-y: auto;
+
+  .search {
+    margin-bottom: 1rem;
+  }
 }
 </style>

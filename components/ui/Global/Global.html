@@ -43,7 +43,7 @@
         :set-close-timeout="5000"
       />
     </UiModal> -->
-    <UiModal v-if="incomingCall">
+    <UiModal v-if="incomingCall" :showCloseButton="false">
       <MediaIncomingCall />
     </UiModal>
     <UiModal
