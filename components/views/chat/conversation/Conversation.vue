@@ -222,6 +222,10 @@ export default Vue.extend({
       }
     })
     this.resizeMessagesObserver.observe(messages)
+    iridium.chat.updateConversationReadAt(
+      this.conversation.id,
+      Math.max(...this.messages.map((message) => message.at)),
+    )
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
