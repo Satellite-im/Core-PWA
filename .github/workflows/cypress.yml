@@ -10,13 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Reconfigure git to use HTTP authentication
-        run: >
-          git config --global url."https://github.com/".insteadOf
-          ssh://git@github.com/
       - name: Create env file - core
         run: |
           touch .env
@@ -59,7 +52,7 @@ jobs:
         id: envfileiridium
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./iridium/.env
+          path: ././iridium/.env
       - name: Echo .env
         run: echo "${{ steps.envfileiridium.outputs.content }}"
         working-directory: ./iridium
