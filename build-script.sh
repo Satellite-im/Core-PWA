@@ -1,4 +1,4 @@
 #!/bin/bash
 cd .. 
-cd linked-iridium 
+cd iridium 
 pnpm sync-node
