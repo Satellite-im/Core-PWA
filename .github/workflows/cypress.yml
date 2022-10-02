@@ -33,9 +33,9 @@ jobs:
           version: 7.12.2
           run_install: |
             - recursive: true
-      - name: Iridium
+      - name: git clone iridium
         run: cd .. && git clone https://github.com/Satellite-im/iridium.git
-      - name: Create env file - iridium
+      - name: iridium env, pnpm i and pnpm build
         run: |
           cd .. 
           cd iridium
