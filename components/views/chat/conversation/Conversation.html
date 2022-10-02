@@ -18,7 +18,7 @@
         />
         <UiCaretDivider
           v-if="item.message.id === unreadMarkerMessageId"
-          text="New Messages"
+          :text="$tc('messaging.new_messages', numUnread)"
         />
         <Message
           :key="item.message.id"
