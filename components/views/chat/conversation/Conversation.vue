@@ -154,10 +154,10 @@ export default Vue.extend({
       )
     },
     numUnread(): number {
-      const firstUnreadIndex = this.chatItems.findIndex(
-        (item) => item.isFirstUnreadMessage,
+      const firstUnreadIndex = this.messages.findIndex(
+        (item) => item.id === this.unreadMarkerMessageId,
       )
-      return this.chatItems.length - firstUnreadIndex
+      return this.messages.length - firstUnreadIndex
     },
     unreadSince(): string | null {
       const message = this.chatItems.find(
