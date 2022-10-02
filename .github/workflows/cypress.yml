@@ -33,11 +33,12 @@ jobs:
           version: 7.12.2
           run_install: |
             - recursive: true
-      - name: Linkscript
-        run: sh ./linkscript2.sh
+      - name: Iridium
+        run: cd .. && git clone git@github.com:Satellite-im/iridium.git
       - name: Create env file - iridium
         run: |
-          cd linked-iridium
+          cd .. 
+          cd iridium
           touch .env
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
           echo CERTBOT_EMAIL="support@satellite.im" >> .env
@@ -51,16 +52,16 @@ jobs:
         id: envfileiridium
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./linked-iridium/.env
+          path: ./iridium/.env
       - name: Echo .env
         run: echo "${{ steps.envfileiridium.outputs.content }}"
-        working-directory: linked-iridium
+        working-directory: ./iridium
       - name: Run iridium install
         run: pnpm i
-        working-directory: ./linked-iridium
+        working-directory: ./iridium
       - name: Run iridium build
         run: pnpm build
-        working-directory: ./linked-iridium
+        working-directory: ./iridium
       - name: yarn
         run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
