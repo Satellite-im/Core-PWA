@@ -16,7 +16,6 @@
           v-if="item.isNextDay"
           :value="item.message.at.toString()"
         />
-        <!-- {{ item.message.id }} - {{ unreadMarkerMessageId }} -->
         <UiCaretDivider
           v-if="item.message.id === unreadMarkerMessageId"
           text="New Messages"

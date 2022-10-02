@@ -106,7 +106,7 @@ export default Vue.extend({
           !message.status &&
           message.at > lastReadAt &&
           (prevMessage ? prevMessage.at <= lastReadAt : true)
-        if (isFirstUnreadMessage && this.unreadMarkerMessageId === null) {
+        if (isFirstUnreadMessage) {
           this.unreadMarkerMessageId = message.id
         }
         const replies = this.messages.filter(
