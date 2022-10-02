@@ -48,20 +48,8 @@ jobs:
           echo NODE_ENV="development" >> .env
           echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
           cat .env
-      - name: Read .env file
-        id: envfileiridium
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ././iridium/.env
-      - name: Echo .env
-        run: echo "${{ steps.envfileiridium.outputs.content }}"
-        working-directory: ./iridium
-      - name: Run iridium install
-        run: pnpm i
-        working-directory: ./iridium
-      - name: Run iridium build
-        run: pnpm build
-        working-directory: ./iridium
+          pnpm i
+          pnpm build
       - name: yarn
         run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
