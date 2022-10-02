@@ -41,7 +41,7 @@ jobs:
           run_install: |
             - recursive: true
       - name: Iridium
-        run: cd .. && git clone git@github.com:Satellite-im/iridium.git
+        run: cd .. && git clone https://github.com/Satellite-im/iridium.git
       - name: Create env file - iridium
         run: |
           cd .. 
