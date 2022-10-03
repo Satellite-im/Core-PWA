@@ -45,6 +45,7 @@ export type ConversationMessage = {
   members?: string[]
   lastEditedAt?: number
   call?: MessageCall
+  status?: 'pending' | 'failed'
 }
 
 export type ConversationMessagePayload = Omit<
