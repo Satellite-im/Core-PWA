@@ -14,11 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-         node-version: 16.5.0
-         corepack-enable: true
-      - run: npm i corepack
       - name: Set permissions
         run: |
           chmod -R 777 /github/home
@@ -26,6 +21,7 @@ jobs:
           unset ELECTRON_RUN_AS_NODE
           /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
           export DISPLAY=:99
+      - run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: Create env file - core
         run: |
           touch .env
