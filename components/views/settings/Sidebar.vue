@@ -1,15 +1,17 @@
 <template>
   <aside class="menu">
     <div v-for="group in menuOptions" :key="group.title">
-      <p class="menu-label">{{ group.title }}</p>
-      <ul class="menu-list">
+      <TypographyText class="menu-label" size="sm" color="dark" font="heading">
+        {{ group.title }}
+      </TypographyText>
+      <ul>
         <li v-for="link in group.links" :key="link.to">
-          <a
+          <button
             :class="{ active: settingsRoute === link.to }"
             @click="navigateTo(link.to)"
           >
             {{ link.text }}
-          </a>
+          </button>
         </li>
       </ul>
     </div>
@@ -18,9 +20,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SidebarGrouping } from '~/types/ui/sidebar'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+
+type SidebarGrouping = {
+  title: string
+  links: {
+    to: string
+    text: string
+  }[]
+}
 
 export default Vue.extend({
   computed: {
@@ -106,61 +115,44 @@ export default Vue.extend({
 <style scoped lang="less">
 .menu {
   overflow-y: auto;
-  &:extend(.no-select);
   background: @semitransparent-dark-gradient;
   display: flex;
   flex-direction: column;
-  gap: @normal-spacing;
-
-  .menu-label {
-    &:extend(.font-muted);
-    font-family: @heading-font;
-    font-size: @font-size-sm;
-    margin-bottom: 0.25rem;
-  }
-
-  .menu-list {
-    li {
-      @media only screen and (min-width: @small-breakpoint) {
-        &:hover {
-          &:extend(.background-semitransparent-light);
-        }
-      }
-
-      a {
-        display: block;
-        -webkit-user-drag: none;
-        text-decoration: none;
-        padding: 0.5em 0;
-        &:extend(.no-select);
-        &:extend(.font-primary);
-        &:extend(.round-corners);
-
-        @media only screen and (min-width: @mobile-breakpoint) {
-          padding: 0.5em 0.75em;
-
-          &:hover {
-            .background-semitransparent-light();
-            .font-primary();
-          }
-
-          &.active {
-            .background-flair-gradient();
-            .glow-flair();
-          }
-        }
-
-        @media only screen and (max-width: @mobile-breakpoint) {
-          &:active {
-            opacity: 0.5;
-          }
-        }
-      }
-    }
-  }
+  gap: 1rem;
+  .no-select();
 
   @media only screen and (max-width: @mobile-breakpoint) {
     background: none;
+  }
+
+  .menu-label {
+    margin-bottom: 0.25rem;
+  }
+
+  button {
+    padding: 8px 0;
+    width: 100%;
+    .round-corners();
+
+    @media only screen and (min-width: @mobile-breakpoint) {
+      padding: 0.5em 0.75em;
+
+      &:hover {
+        .background-semitransparent-light();
+        .font-primary();
+      }
+
+      &.active {
+        .background-flair-gradient();
+        .glow-flair();
+      }
+    }
+
+    @media only screen and (max-width: @mobile-breakpoint) {
+      &:active {
+        opacity: 0.5;
+      }
+    }
   }
 }
 </style>
