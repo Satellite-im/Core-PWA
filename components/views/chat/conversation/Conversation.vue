@@ -46,16 +46,20 @@ export default Vue.extend({
     myDid(): string {
       return iridium.id ?? ''
     },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
     conversation(): Conversation {
-      return iridium.chat.state.conversations?.[this.$route.params.id] ?? {}
+      return iridium.chat.state.conversations?.[this.conversationId] ?? {}
     },
     messages(): ConversationMessage[] {
-      if (!Object.keys(this.conversation).length) {
-        return []
-      }
-      return Object.values(this.conversation.message).sort(
-        (a, b) => a.at - b.at,
-      )
+      return [
+        ...Object.values(this.conversation.message ?? []),
+        ...this.ephemeralMessages,
+      ].sort((a, b) => a.at - b.at)
+    },
+    ephemeralMessages(): ConversationMessage[] {
+      return iridium.chat.ephemeral.conversations?.[this.conversationId] ?? []
     },
     chatItems(): ChatItem[] {
       const messages = this.messages
@@ -72,6 +76,7 @@ export default Vue.extend({
           : false
         const lastReadAt = this.conversation.lastReadAt
         const isFirstUnreadMessage =
+          !message.status &&
           message.at > lastReadAt &&
           (prevMessage ? prevMessage.at <= lastReadAt : true)
         const replies = this.messages.filter(
