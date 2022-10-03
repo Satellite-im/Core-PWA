@@ -18,6 +18,7 @@ import { FriendRequest, FriendRequestStatus, FriendsError } from './types'
 import logger from '~/plugins/local/logger'
 import {
   Notification,
+  NotificationClickEvent,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 
@@ -360,6 +361,20 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         image: user.photoHash?.toString() || '',
         type: NotificationType.FRIEND_REQUEST,
         seen: false,
+        onNotificationClick: () => {
+          const clickEventData: NotificationClickEvent = {
+            from: user.name,
+            topic: user.did,
+            payload: {
+              type: NotificationType.FRIEND_REQUEST,
+            },
+          }
+
+          // Emit data to the app to handle the click event
+          iridium.notifications.emit('notification/clicked', {
+            ...clickEventData,
+          })
+        },
       }
       iridium.notifications.sendNotification(buildNotification)
     }
