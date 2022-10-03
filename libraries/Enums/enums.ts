@@ -16,7 +16,6 @@ import {
   FileIconsEnum,
   FileRouteEnum,
 } from '~/libraries/Enums/types/files'
-import { NotificationTypes } from '~/libraries/Enums/types/notification-types'
 
 export {
   FriendsTabs,
@@ -32,7 +31,6 @@ export {
   AddFriendEnum,
   SocialAccountTypesEnum,
   PlatformTypeEnum,
-  NotificationTypes,
   FileSortEnum,
   FileIconsEnum,
   FileRouteEnum,

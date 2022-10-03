@@ -15,6 +15,7 @@ import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
+import { IridiumPeerIdentifier } from '~/../iridium/src/types'
 import {
   ChatError,
   Conversation,
@@ -68,10 +69,12 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     typing: { [key: Conversation['id']]: string[] | undefined }
     subscriptions: Conversation['id'][]
     conversations: { [key: string]: ConversationMessage[] | undefined }
+    activeConversationId: Conversation['id'] | undefined
   } = {
     typing: {},
     subscriptions: [],
     conversations: {},
+    activeConversationId: '',
   }
 
   async start() {
@@ -278,45 +281,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       // Remove is_typing indicator upon user message receive
       this.setTyping(conversationId, fromDID, false)
 
-      const friendName = iridium.users.getUser(message?.from)
-      const description =
-        message.body?.length! > 79
-          ? `${message.body?.substring(0, 80)}...`
-          : message.body || ''
-
-      const buildNotification: Exclude<Notification, 'id'> = {
-        fromName: friendName?.name || fromDID,
-        at: Date.now(),
-        fromAddress: conversationId,
-        chatName: conversation.participants.length > 2 ? conversation.name : '',
-        title:
-          conversation.participants.length > 2
-            ? `${friendName?.name} posted in ${conversation.name}`
-            : `New message from ${friendName?.name}`,
-        description,
-        image: fromDID,
-        type:
-          conversation.participants.length > 2
-            ? NotificationType.GROUP_MESSAGE
-            : NotificationType.DIRECT_MESSAGE,
-        seen: false,
-        onNotificationClick: () => {
-          const clickEventData: NotificationClickEvent = {
-            from: fromDID,
-            topic: conversationId,
-            payload: {
-              type: NotificationType.DIRECT_MESSAGE,
-            },
-          }
-
-          // Emit data to the app to handle the click event
-          iridium.notifications.emit('notification/clicked', {
-            ...clickEventData,
-          })
-        },
+      // Send if conversation is not focused or if chat is not active
+      if (!document.hasFocus() || !this.isActive(conversationId)) {
+        this.sendNotification(message, conversation, fromDID)
       }
-
-      iridium.notifications?.sendNotification(buildNotification)
     } else if (type === 'chat/reaction') {
       const reaction = payload.body.reaction
       logger.info('iridium/chatmanager/onConversationMessage', 'reaction', {
@@ -357,6 +325,56 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         message,
       )
     }
+  }
+
+  isActive(conversationId: string) {
+    return this.ephemeral.activeConversationId === conversationId
+  }
+
+  sendNotification(
+    message: ConversationMessage,
+    conversation: Conversation,
+    fromDID: string,
+  ) {
+    const friendName = iridium.users.getUser(message?.from)
+    const description =
+      message.body?.length! > 79
+        ? `${message.body?.substring(0, 80)}...`
+        : message.body || ''
+
+    const buildNotification: Exclude<Notification, 'id'> = {
+      fromName: friendName?.name || fromDID,
+      at: Date.now(),
+      fromAddress: conversation.id,
+      chatName: conversation.participants.length > 2 ? conversation.name : '',
+      title:
+        conversation.participants.length > 2
+          ? `${friendName?.name} posted in ${conversation.name}`
+          : `New message from ${friendName?.name}`,
+      description,
+      image: fromDID,
+      type:
+        conversation.participants.length > 2
+          ? NotificationType.GROUP_MESSAGE
+          : NotificationType.DIRECT_MESSAGE,
+      seen: false,
+      onNotificationClick: () => {
+        const clickEventData: NotificationClickEvent = {
+          from: fromDID,
+          topic: conversation.id,
+          payload: {
+            type: NotificationType.DIRECT_MESSAGE,
+          },
+        }
+
+        // Emit data to the app to handle the click event
+        iridium.notifications.emit('notification/clicked', {
+          ...clickEventData,
+        })
+      },
+    }
+
+    iridium.notifications?.sendNotification(buildNotification)
   }
 
   hasConversation(id: string) {
