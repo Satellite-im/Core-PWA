@@ -2,7 +2,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { ArchiveIcon } from 'satellite-lucide-icons'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
@@ -17,9 +16,6 @@ import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
 
 export default Vue.extend({
-  components: {
-    ArchiveIcon,
-  },
   props: {
     item: {
       type: Object as PropType<ChatItem>,
@@ -124,6 +120,9 @@ export default Vue.extend({
         ]
       }
       return mainList
+    },
+    actionsEnabled(): boolean {
+      return this.message.type !== 'call' && !this.message.status
     },
   },
   methods: {

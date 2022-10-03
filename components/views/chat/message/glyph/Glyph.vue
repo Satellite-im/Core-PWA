@@ -12,6 +12,11 @@ export default Vue.extend({
       type: Object as PropType<MessageGlyph>,
       required: true,
     },
+    failed: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   computed: {
     ...mapState(['ui']),
