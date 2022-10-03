@@ -7,9 +7,20 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.13.0-chrome95-ff94
+      options: --user 1001
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set permissions
+        run: |
+          chmod -R 777 /github/home
+          chmod -R 777 cypress
+          unset ELECTRON_RUN_AS_NODE
+          /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
+          export DISPLAY=:99
       - name: Create env file - core
         run: |
           touch .env
@@ -68,5 +79,5 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+          name: cypress-screenshots-chat-pair
+          path: cypress/screenshots-chat-pair
