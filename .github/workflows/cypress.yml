@@ -36,8 +36,6 @@ jobs:
           path: ./.env
       - name: Echo .env
         run: echo "${{ steps.envfile.outputs.content }}"
-      - name: Install brew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.2
         with:
