@@ -1,8 +1,15 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { ChevronDownIcon, KeyIcon, FileIcon } from 'satellite-lucide-icons'
+import { mapState, mapGetters } from 'vuex'
+import {
+  ChevronDownIcon,
+  KeyIcon,
+  FileIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+  XIcon,
+} from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import {
   Conversation,
@@ -28,6 +35,9 @@ export default Vue.extend({
     ChevronDownIcon,
     KeyIcon,
     FileIcon,
+    ArrowDownIcon,
+    ArrowUpIcon,
+    XIcon,
   },
   data() {
     return {
@@ -37,11 +47,19 @@ export default Vue.extend({
       resizeContainerObserver: null as ResizeObserver | null,
       resizeMessagesObserver: null as ResizeObserver | null,
       isLockedToBottom: true,
+      firstUnreadMessageElement: null as HTMLElement | null,
+      lastScrolledToUnreadMessageElement: null as HTMLElement | null,
+      isUnreadAboveViewport: false,
+      isUnreadBelowViewport: false,
+      unreadMarkerMessageId: null as string | null,
     }
   },
   computed: {
     ...mapState({
       activeUploadChats: (state) => (state as RootState).chat.activeUploadChats,
+    }),
+    ...mapGetters({
+      getTimestamp: 'settings/getTimestamp',
     }),
     myDid(): string {
       return iridium.id ?? ''
@@ -61,6 +79,15 @@ export default Vue.extend({
     ephemeralMessages(): ConversationMessage[] {
       return iridium.chat.ephemeral.conversations?.[this.conversationId] ?? []
     },
+    hasUnreadMessages(): boolean {
+      const lastMessage = Object.values(this.conversation.message)
+        .sort((a, b) => a.at - b.at)
+        .at(-1)
+      if (!lastMessage) {
+        return false
+      }
+      return lastMessage.at > this.conversation.lastReadAt
+    },
     chatItems(): ChatItem[] {
       const messages = this.messages
         .filter((message) => !message.replyToId)
@@ -79,6 +106,9 @@ export default Vue.extend({
           !message.status &&
           message.at > lastReadAt &&
           (prevMessage ? prevMessage.at <= lastReadAt : true)
+        if (isFirstUnreadMessage) {
+          this.unreadMarkerMessageId = message.id
+        }
         const replies = this.messages.filter(
           (replyMessage) => replyMessage.replyToId === message.id,
         )
@@ -108,17 +138,6 @@ export default Vue.extend({
           isLastCallMessage,
         }
       })
-      const maxTime = Math.max(...this.messages.map((message) => message.at))
-      if (
-        (!maxTime || maxTime > this.conversation.lastReadAt) &&
-        !this.isBlurred
-      ) {
-        const currentTimestamp = this.$dayjs().valueOf()
-        iridium.chat.updateConversationReadAt(
-          this.conversation.id,
-          maxTime || currentTimestamp,
-        )
-      }
       return items
     },
     isLastChatItemAuthor(): boolean {
@@ -134,6 +153,21 @@ export default Vue.extend({
         this.messages.filter((message) => !message.replyToId).length
       )
     },
+    numUnread(): number {
+      const firstUnreadIndex = this.messages.findIndex(
+        (item) => item.id === this.unreadMarkerMessageId,
+      )
+      return this.messages.length - firstUnreadIndex
+    },
+    unreadSince(): string | null {
+      const message = this.chatItems.find(
+        (item) => item.isFirstUnreadMessage,
+      )?.message
+      if (message) {
+        return this.getTimestamp({ time: message.at })
+      }
+      return null
+    },
   },
   watch: {
     chatItems(newValue, oldValue) {
@@ -142,6 +176,24 @@ export default Vue.extend({
         newValue.at(-1)?.message.id !== oldValue.at(-1)?.message.id
       ) {
         this.scrollToBottom()
+      }
+      const maxTime = Math.max(...this.messages.map((message) => message.at))
+      if (
+        oldValue.at(-1) !== newValue.at(-1) &&
+        (!maxTime || maxTime > this.conversation.lastReadAt) &&
+        !this.isBlurred &&
+        this.isLockedToBottom
+      ) {
+        const currentTimestamp = this.$dayjs().valueOf()
+        iridium.chat.updateConversationReadAt(
+          this.conversation.id,
+          maxTime || currentTimestamp,
+        )
+      }
+    },
+    isLastChatItemAuthor(newValue) {
+      if (newValue) {
+        this.unreadMarkerMessageId = null
       }
     },
   },
@@ -155,8 +207,8 @@ export default Vue.extend({
     }
     container.addEventListener('scroll', () => {
       this.isLockedToBottom =
-        container.scrollHeight - container.clientHeight <=
-        container.scrollTop + 30
+        container.scrollTop + container.clientHeight >=
+        container.scrollHeight - 1
     })
     this.resizeContainerObserver = new ResizeObserver(() => {
       if (this.isLockedToBottom) {
@@ -170,6 +222,10 @@ export default Vue.extend({
       }
     })
     this.resizeMessagesObserver.observe(messages)
+    iridium.chat.updateConversationReadAt(
+      this.conversation.id,
+      Math.max(...this.messages.map((message) => message.at)),
+    )
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
@@ -198,6 +254,56 @@ export default Vue.extend({
         this.numMessages += MESSAGE_PAGE_SIZE
         this.isLoadingMore = false
       }, 200)
+    },
+    onUnreadMessage({
+      message,
+      messageEl,
+      isAboveViewport,
+      isBelowViewport,
+    }: {
+      message: ConversationMessage
+      messageEl: HTMLElement
+      isAboveViewport: boolean
+      isBelowViewport: boolean
+    }) {
+      this.firstUnreadMessageElement = messageEl
+      if (this.lastScrolledToUnreadMessageElement === messageEl) {
+        this.isUnreadAboveViewport = false
+        this.isUnreadBelowViewport = false
+        return
+      }
+      this.isUnreadAboveViewport = isAboveViewport
+      this.isUnreadBelowViewport = isBelowViewport
+    },
+    scrollUnreadIntoView() {
+      if (!this.firstUnreadMessageElement) {
+        return
+      }
+      const container = this.$refs.container as HTMLElement
+      const offsetTop = this.firstUnreadMessageElement.offsetTop
+      const containerHeight = container.clientHeight
+      const scrollTop = offsetTop - containerHeight / 2
+      this.lastScrolledToUnreadMessageElement = this.firstUnreadMessageElement
+      this.isUnreadAboveViewport = false
+      this.isUnreadBelowViewport = false
+      iridium.chat.updateConversationReadAt(
+        this.conversation.id,
+        Math.max(...this.messages.map((message) => message.at)),
+      )
+
+      container.scrollTo({
+        behavior: 'smooth',
+        top: scrollTop,
+      })
+    },
+    dismissScrollIndicator() {
+      this.lastScrolledToUnreadMessageElement = this.firstUnreadMessageElement
+      this.isUnreadAboveViewport = false
+      this.isUnreadBelowViewport = false
+      iridium.chat.updateConversationReadAt(
+        this.conversation.id,
+        Math.max(...this.messages.map((message) => message.at)),
+      )
     },
   },
 })
