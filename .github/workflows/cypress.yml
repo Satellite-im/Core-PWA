@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: brew
         run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          docker pull linuxbrew/linuxbrew
           brew install corepack
       - name: Set permissions
         run: |
