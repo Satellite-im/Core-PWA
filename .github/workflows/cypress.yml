@@ -16,7 +16,8 @@ jobs:
         uses: actions/checkout@v2
       - name: corepack
         run: |
-          npm i corepack
+          asdf reshim nodejs
+          corepack enable
       - name: Set permissions
         run: |
           chmod -R 777 /github/home
