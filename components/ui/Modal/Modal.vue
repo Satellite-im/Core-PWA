@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { createFocusTrap, FocusTrap, Options } from 'focus-trap'
 
 export default Vue.extend({
   props: {
@@ -19,11 +20,24 @@ export default Vue.extend({
       default: true,
     },
   },
-  created() {
-    this.addEventListener()
-  },
+  data: () => ({
+    trap: null as FocusTrap | null,
+  }),
   beforeDestroy() {
     this.removeEventListener()
+    this.trap?.deactivate()
+  },
+  mounted() {
+    const modal = this.$refs.modal as HTMLElement
+    const options: Options = {
+      allowOutsideClick: true,
+      escapeDeactivates: false,
+    }
+
+    this.trap = createFocusTrap(modal, options)
+    this.trap.activate()
+
+    this.addEventListener()
   },
   methods: {
     close() {

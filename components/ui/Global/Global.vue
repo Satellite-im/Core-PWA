@@ -72,7 +72,7 @@ export default Vue.extend({
     }
 
     if (this.$config.clientVersion !== lsVersion) {
-      this.toggleModal('changelog')
+      this.toggleModal(ModalWindows.CHANGELOG)
       localStorage.setItem('local-version', this.$config.clientVersion)
     }
 
