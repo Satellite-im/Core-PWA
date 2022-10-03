@@ -13,7 +13,8 @@
     </TypographyText>
   </div>
   <div class="controls">
-    <button
+    <!-- hide until notificationManager is ready -->
+    <!-- <button
       title="notifications"
       class="toggle-alerts"
       :class="{'with-count': notifications.notifications.length}"
@@ -24,7 +25,7 @@
     >
       <bell-icon size="18" />
     </button>
-    <ToolbarAlerts v-if="showAlerts" v-click-outside="toggleAlerts" />
+    <ToolbarAlerts v-if="showAlerts" v-click-outside="toggleAlerts" /> -->
     <button
       title="call"
       v-if="conversation"
@@ -45,7 +46,7 @@
       <video-icon size="1x"  />
     </div> -->
 
-    <div class="vertical-divider" />
+    <!-- <div class="vertical-divider" /> -->
 
     <UiComingSoon
       :tooltip-text="$t('market_place.title')"
