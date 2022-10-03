@@ -14,13 +14,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: brew
+      - name: corepack
         run: |
-          sudo mkdir /usr/local/Cellar/dir_chdir
-          sudo chown -R $(whoami) /usr/local/Cellar
-          chmod u+w /usr/local/Cellar
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew install corepack
+          npm i corepack
       - name: Set permissions
         run: |
           chmod -R 777 /github/home
