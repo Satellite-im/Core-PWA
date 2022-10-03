@@ -14,9 +14,7 @@
       v-if="ui.modals.callToAction"
       @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
-      <CallToAction
-        :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      />
+      <CallToAction @close="toggleModal(ModalWindows.CALL_TO_ACTION)" />
     </UiModal>
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
     <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
@@ -52,33 +50,30 @@
     >
       <Marketplace
         v-click-outside="() => toggleModal(ModalWindows.MARKETPLACE)"
-        :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
+        @close="toggleModal(ModalWindows.MARKETPLACE)"
       />
     </UiModal>
     <UiModal
       v-if="ui.modals.glyph"
-      :close-modal="() => toggleModal(ModalWindows.GLYPH)"
-      @close="() => toggleModal(ModalWindows.GLYPH)"
+      @close="toggleModal(ModalWindows.GLYPH)"
       small
     >
       <Glyphs
         v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
-        :close-modal="() => toggleModal(ModalWindows.GLYPH)"
+        @close="toggleModal(ModalWindows.GLYPH)"
       />
     </UiModal>
     <UiModal
       v-if="ui.modals.userProfile"
-      @close="() => toggleModal(ModalWindows.USER_PROFILE)"
+      @close="toggleModal(ModalWindows.USER_PROFILE)"
     >
-      <UserProfile
-        :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)"
-      />
+      <UserProfile @close="toggleModal(ModalWindows.USER_PROFILE)" />
     </UiModal>
     <UiModal
       v-if="ui.modals.renameFile"
       @close="toggleModal(ModalWindows.RENAME_FILE)"
     >
-      <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
+      <FilesRename @close="toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
     <UiModal
       v-if="ui.modals.changelog"
