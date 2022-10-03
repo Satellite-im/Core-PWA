@@ -200,6 +200,7 @@ export default Vue.extend({
   mounted() {
     window.addEventListener('blur', this.handleBlur)
     window.addEventListener('focus', this.handleFocus)
+
     const container = this.$refs.container as HTMLElement
     const messages = this.$refs.messages as HTMLElement
     if (!container || !messages) {
@@ -226,12 +227,18 @@ export default Vue.extend({
       this.conversation.id,
       Math.max(...this.messages.map((message) => message.at)),
     )
+
+    // Set active conversation ID
+    iridium.chat.ephemeral.activeConversationId = this.conversationId
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
     window.removeEventListener('focus', this.handleFocus)
     this.resizeContainerObserver?.disconnect()
     this.resizeMessagesObserver?.disconnect()
+
+    // Clear active conversation ID
+    iridium.chat.ephemeral.activeConversationId = ''
   },
   methods: {
     scrollToBottom() {
