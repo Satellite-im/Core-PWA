@@ -25,6 +25,7 @@ export default {
     uploading: 'Uploading...',
     edit: 'edit',
     save: 'save',
+    dismiss: 'Dismiss',
   },
   ui: {
     talk: 'Speak Freely...',
@@ -91,7 +92,9 @@ export default {
     pin: 'Password',
     reply: 'Reply',
     typing: '{user} is typing | {user} are typing',
-    new_messages: 'New Messages',
+    new_messages: 'New message | New messages',
+    unread_since:
+      '{numUnread} unread message since {since} | {numUnread} unread messages since {since}',
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',

@@ -10,6 +10,6 @@ Object {
   "image": "",
   "seen": false,
   "title": "",
-  "type": "Seen",
+  "type": 12,
 }
 `;
