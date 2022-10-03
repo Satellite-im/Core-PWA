@@ -6,7 +6,7 @@
   >
     <div class="search-result-header">
       {{$t('search.result.search_results')}}
-      <InteractablesClose class="close" :action="toggle" />
+      <InteractablesClose @click="toggle" />
     </div>
     <!-- <SearchResultGroup
       :groupList="groupList"

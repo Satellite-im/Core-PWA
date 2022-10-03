@@ -1,6 +1,10 @@
 <div
+  ref="container"
   class="chat-message-container"
-  :class="{ 'show-header': showHeader }"
+  :class="{
+    'show-header': showHeader,
+    'first-unread-message': item.isFirstUnreadMessage,
+  }"
   :data-message-id="message.id"
 >
   <MessageNotice v-if="isNotice" :message="message" />

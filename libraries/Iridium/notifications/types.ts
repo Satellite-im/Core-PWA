@@ -3,32 +3,39 @@ export const NotificationsError = {
 }
 
 export enum NotificationType {
-  FRIEND_REQUEST = 'Friend Request',
-  MISSED_CALL = 'MISSED_CALL',
-  FILES_FULL = 'FILES_FULL',
-  FILE_UPLOADED = 'FILE_UPLOADED',
-  FILE_NSFW = 'FILE_NSFW',
-  DEV = 'DEV',
-  DIRECT_MESSAGE = 'Direct Message',
-  GROUP_MESSAGE = 'Group Message',
-  MENTIONS_NOTIFICATION = 'mentionNotification',
-  ACCOUNT_NOTIFICATION = 'accountNotification',
-  APPLICATION_NOTIFICATION = 'applicationNotification',
-  MISCELLANEOUS = 'miscellaneous',
-  SEEN = 'Seen',
+  FRIEND_REQUEST,
+  MISSED_CALL,
+  FILES_FULL,
+  FILE_UPLOADED,
+  FILE_NSFW,
+  DEV,
+  DIRECT_MESSAGE,
+  GROUP_MESSAGE,
+  MENTIONS_NOTIFICATION,
+  ACCOUNT_NOTIFICATION,
+  APPLICATION_NOTIFICATION,
+  MISCELLANEOUS,
+  SEEN,
 }
 
 export type Notification = {
   at: number
-  id?: string
-  chatName?: string
   type: NotificationType
   fromName: string
-  fromAddress?: string
   title: string
   description: string
-  image?: string
   seen: boolean
+  id?: string
+  chatName?: string
+  fromAddress?: string
+  image?: string
+  onNotificationClick?: () => void
+}
+
+export type NotificationClickEvent = {
+  from: string
+  topic: string
+  payload: { type: NotificationType }
 }
 
 export const EmptyNotification: Notification = {

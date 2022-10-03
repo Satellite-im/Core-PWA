@@ -107,4 +107,46 @@ describe('Test files/mutations', () => {
     module.default.setPath(localizedInitialState, argument)
     expect(localizedInitialState.path).toEqual(argument)
   })
+
+  it('should set current upload with an object', () => {
+    const argument = {
+      name: 'file_1',
+      size: 1024,
+    }
+    module.default.setCurrentUpload(localizedInitialState, argument)
+    expect(localizedInitialState.currentUpload).toEqual(argument)
+  })
+
+  it('should set current upload with no argument', () => {
+    const argument = 'not_used'
+    module.default.setCurrentUpload(localizedInitialState)
+    expect(localizedInitialState.currentUpload).toEqual(undefined)
+  })
+
+  it('should push new downloaded file into the addDownload array then remove them', () => {
+    const argument = 'item5'
+    module.default.addDownload(localizedInitialState, argument)
+    expect(localizedInitialState.downloadList).toEqual([
+      'item1',
+      'item2',
+      'item3',
+      'item4',
+      argument,
+    ])
+
+    module.default.removeDownload(localizedInitialState, argument)
+    expect(localizedInitialState.downloadList).toEqual([
+      'item1',
+      'item2',
+      'item3',
+      'item4',
+    ])
+
+    module.default.removeDownload(localizedInitialState, 'item1')
+    expect(localizedInitialState.downloadList).toEqual([
+      'item2',
+      'item3',
+      'item4',
+    ])
+  })
 })

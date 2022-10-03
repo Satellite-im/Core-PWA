@@ -25,7 +25,9 @@
           <button @click="previous">
             <arrow-left-icon class="arrow" />
           </button>
-          <TypographyText>{{ $t(`friends.${route}`) }}</TypographyText>
+          <TypographyText v-if="route">
+            {{ $t(`friends.${route}`) }}
+          </TypographyText>
         </div>
         <div class="bottom">
           <template v-if="route === 'request'">
@@ -54,7 +56,7 @@
             <FriendsSearch />
             <!-- <FriendsQrSection /> -->
             <!-- Commented out because QR section doesn't work -->
-            </template>
+          </template>
         </div>
       </div>
     </div>
@@ -144,9 +146,13 @@ export default Vue.extend({
   },
   watch: {
     route() {
-      // return to main tab if route is not valid
+      // Return to main tab if route is not valid
       if (!this.route && this.swiper?.activeIndex === 1) {
         this.swiper.slideTo(0)
+      }
+      // Go to route tab if route is valid
+      if (this.route && this.swiper?.activeIndex === 0) {
+        this.swiper.slideTo(1)
       }
     },
   },
@@ -156,7 +162,7 @@ export default Vue.extend({
       this.swiperConfig,
     )
 
-    // activate swiper on first load if user sent directly to a tab
+    // Activate swiper on first load if user sent directly to a tab
     if (this.route) {
       this.setSwiperAsTab()
     }
@@ -171,11 +177,9 @@ export default Vue.extend({
           route,
         },
       })
-      this.swiper?.slideNext()
     },
     previous() {
       this.removeRoutes()
-      this.swiper?.slidePrev()
     },
     removeRoutes() {
       this.$router.push({

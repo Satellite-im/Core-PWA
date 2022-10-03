@@ -53,7 +53,7 @@ const mutations = {
       message,
     }: { conversationId: Conversation['id']; message: string },
   ) {
-    state.draftMessages[conversationId] = message
+    Vue.set(state.draftMessages, conversationId, message)
   },
   setReplyChatbarMessage(
     state: ChatState,

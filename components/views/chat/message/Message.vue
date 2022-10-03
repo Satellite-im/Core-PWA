@@ -32,6 +32,7 @@ export default Vue.extend({
   },
   data: () => ({
     users: iridium.users,
+    intersectionObserver: null as IntersectionObserver | null,
   }),
   computed: {
     ...mapState({
@@ -124,6 +125,34 @@ export default Vue.extend({
     actionsEnabled(): boolean {
       return this.message.type !== 'call' && !this.message.status
     },
+  },
+  mounted() {
+    const conversationEl = document.querySelector(
+      '.conversation-wrapper',
+    ) as HTMLElement
+    const messageEl = this.$refs.container as HTMLElement
+    this.intersectionObserver = new IntersectionObserver(
+      (events) => {
+        if (this.item.isFirstUnreadMessage) {
+          const messageBox = messageEl.getBoundingClientRect()
+          const conversationBox = conversationEl.getBoundingClientRect()
+          this.$emit('unreadMessage', {
+            message: this.message,
+            messageEl,
+            isAboveViewport: messageBox.bottom < conversationBox.top,
+            isBelowViewport: messageBox.top > conversationBox.bottom,
+          })
+        }
+      },
+      {
+        root: conversationEl,
+        threshold: 0,
+      },
+    )
+    this.intersectionObserver.observe(messageEl)
+  },
+  beforeDestroy() {
+    this.intersectionObserver?.disconnect()
   },
   methods: {
     /**

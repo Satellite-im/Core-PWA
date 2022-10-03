@@ -7,6 +7,10 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
+import {
+  NotificationType,
+  NotificationClickEvent,
+} from '~/libraries/Iridium/notifications/types'
 
 export default Vue.extend({
   name: 'Global',
@@ -68,7 +72,7 @@ export default Vue.extend({
     }
 
     if (this.$config.clientVersion !== lsVersion) {
-      this.toggleModal('changelog')
+      this.toggleModal(ModalWindows.CHANGELOG)
       localStorage.setItem('local-version', this.$config.clientVersion)
     }
 
@@ -86,6 +90,25 @@ export default Vue.extend({
     )
     iridium.chat.on('routeCheck', (conversationId: string) =>
       routeCheck(conversationId),
+    )
+    iridium.notifications.on(
+      'notification/clicked',
+      (data: NotificationClickEvent) => {
+        switch (data.payload.type) {
+          case NotificationType.FRIEND_REQUEST: {
+            const mobileLink = '/mobile/friends?route=request'
+            const desktopLink = '/friends?route=request'
+            this.$router.push(this.$device.isMobile ? mobileLink : desktopLink)
+            break
+          }
+          case NotificationType.DIRECT_MESSAGE: {
+            const mobileLink = `/mobile/chat/${data.topic}`
+            const desktopLink = `/chat/${data.topic}`
+            this.$router.push(this.$device.isMobile ? mobileLink : desktopLink)
+            break
+          }
+        }
+      },
     )
   },
   methods: {
