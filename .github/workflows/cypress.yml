@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: corepack
         run: |
+          git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
           asdf reshim nodejs
           corepack enable
       - name: Set permissions
