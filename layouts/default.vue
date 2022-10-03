@@ -1,6 +1,9 @@
 <template>
   <div id="app" :class="`theme-${iridium.settings.state.theme}`">
-    <UiModal v-if="$store.state.ui.modals.errorNetwork.isOpen">
+    <UiModal
+      v-if="$store.state.ui.modals.errorNetwork.isOpen"
+      :show-close-button="false"
+    >
       <UiPopupsErrorNetwork />
     </UiModal>
     <Nuxt />

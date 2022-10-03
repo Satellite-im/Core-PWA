@@ -80,7 +80,10 @@
     >
       <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
-    <UiModal v-if="ui.modals.changelog">
+    <UiModal
+      v-if="ui.modals.changelog"
+      @close="toggleModal(ModalWindows.CHANGELOG)"
+    >
       <UiUpdateModal />
     </UiModal>
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
