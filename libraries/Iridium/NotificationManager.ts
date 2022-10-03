@@ -11,7 +11,9 @@ import {
   NotificationsError,
 } from '~/libraries/Iridium/notifications/types'
 import { Notifications } from '~/utilities/Notifications'
+import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 
+const $Sounds = new SoundManager()
 export default class NotificationManager extends Emitter<Notification> {
   public ready: boolean = false
   public subscriptions: string[] = []
@@ -138,5 +140,10 @@ export default class NotificationManager extends Emitter<Notification> {
 
     const browserNotification = new Notifications()
     await browserNotification.sendNotifications({ ...notification })
+
+    // To match the timing of the browser notification
+    setTimeout(() => {
+      $Sounds.playSound(Sounds.NEW_MESSAGE)
+    }, 1000)
   }
 }
