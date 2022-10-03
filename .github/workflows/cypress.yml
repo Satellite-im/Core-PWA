@@ -16,7 +16,10 @@ jobs:
         uses: actions/checkout@v2
       - name: brew
         run: |
-          docker pull linuxbrew/linuxbrew
+          sudo mkdir /usr/local/Cellar/dir_chdir
+          sudo chown -R $(whoami) /usr/local/Cellar
+          chmod u+w /usr/local/Cellar
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew install corepack
       - name: Set permissions
         run: |
