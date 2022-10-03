@@ -29,6 +29,7 @@
       </template>
       <div
         v-if="activeUploadChats.includes(conversation?.id)"
+        data-cy="file-loader-container"
         class="loader-container"
       >
         <file-icon size="24" class="icon" />
