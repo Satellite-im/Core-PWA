@@ -14,13 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set permissions
-        run: |
-          chmod -R 777 /github/home
-          chmod -R 777 cypress
-          unset ELECTRON_RUN_AS_NODE
-          /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
-          export DISPLAY=:99
       - name: brew
         run: |
           test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
@@ -28,6 +21,13 @@ jobs:
           test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
           echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
           brew install corepack
+      - name: Set permissions
+        run: |
+          chmod -R 777 /github/home
+          chmod -R 777 cypress
+          unset ELECTRON_RUN_AS_NODE
+          /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
+          export DISPLAY=:99
       - name: Create env file - core
         run: |
           touch .env
