@@ -137,9 +137,8 @@ export default Vue.extend({
   mounted() {
     if (this.autofocus) {
       const input = this.$refs.input as HTMLInputElement
-      // set to avoid a11y outline which is set via keyboard focus only
+      // if mobile, delay focus to avoid clash with swiper animation
       if (this.$device.isMobile) {
-        // delay focus to avoid clash with swiper animation
         setTimeout(() => {
           input.focus()
         }, MOBILE_FOCUS_DELAY)
