@@ -58,7 +58,8 @@ export default Vue.extend({
       if (this.as.match('h[1-6]|label')) {
         return 'light'
       }
-      return 'body'
+      // dont need to return 'body' due to global styles
+      return ''
     },
     getSize(): string {
       if (this.size) {

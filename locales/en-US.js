@@ -88,7 +88,6 @@ export default {
   },
   messaging: {
     messages: 'Messages',
-    groups: 'Groups',
     pin: 'Password',
     reply: 'Reply',
     typing: '{user} is typing | {user} are typing',
