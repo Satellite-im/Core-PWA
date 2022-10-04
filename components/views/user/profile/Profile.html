@@ -1,12 +1,18 @@
-<div id="profile" data-cy="profile" v-click-outside="closeProfileModal">
-  <InteractablesClose @click="closeProfileModal" />
-  <img :src="sample.imageUrl" alt="" class="banner" />
-  <div class="profile-body">
-    <img :src="sample.imageUrl" alt="" class="photo" />
-    <div class="details">
-      <div class="details-info">
-        <img :src="sample.imageUrl" alt="" class="photo-sm" />
-        <!--  <UiUserState
+<div
+  v-if="user"
+  id="profile"
+  data-cy="profile"
+  v-click-outside="closeProfileModal"
+>
+  <div class="profile-wrapper">
+    <InteractablesClose :action="closeProfileModal" />
+    <img :src="sample.imageUrl" alt="" class="banner" />
+    <div class="profile-body">
+      <img :src="sample.imageUrl" alt="" class="photo" />
+      <div class="details">
+        <div class="details-info">
+          <img :src="sample.imageUrl" alt="" class="photo-sm" />
+          <!--  <UiUserState
           :user="ui.userProfile.did"
           :size="80"
           :src="profilePictureSrc"
@@ -33,7 +39,7 @@
               <InteractablesButton
                 v-if="!isFriend"
                 @click="createFriendRequest"
-                :loading="Boolean(loading)"
+                :loading="loading"
                 color="success"
               >
                 <user-plus-icon size="1.25x" />
@@ -52,16 +58,12 @@
         >
         </InteractablesTabs>
 
-        <UiSimpleScroll
-          scrollMode="vertical"
-          scrollShow="scroll"
-          class="scroll"
-        >
-          <UserProfileAbout v-if="route === 'about'" />
-          <UserProfileAccounts v-if="route === 'accounts'" />
+        <div class="scroll">
+          <UserProfileAbout :user="user" v-if="route === 'about'" />
+          <UserProfileAccounts :user="user" v-if="route === 'accounts'" />
           <div v-if="route === 'activity'">activity</div>
           <div v-if="route === 'mutual'">mutual</div>
-        </UiSimpleScroll>
+        </div>
       </div>
     </div>
   </div>

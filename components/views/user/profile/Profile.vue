@@ -12,7 +12,6 @@ import {
 import { sampleProfileInfo } from '~/mock/profile'
 import { ProfileInfo } from '~/types/profile/profile'
 import { Tab } from '~/types/ui/tab'
-import { AddFriendEnum } from '~/libraries/Enums/enums'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 
@@ -34,10 +33,23 @@ export default Vue.extend({
       type: Function,
       default: () => {},
     },
+    user: {
+      type: Object as Partial<User> | undefined,
+      default: () => {
+        return {
+          name: iridium.profile.state?.name ?? '',
+          did: iridium.profile.state?.did ?? '',
+          status: iridium.profile.state?.status ?? '',
+          about: iridium.profile.state?.about ?? '',
+          location: iridium.profile.state?.location ?? '',
+          note: iridium.profile.state?.note ?? '',
+        }
+      },
+    },
   },
   data() {
     return {
-      loading: '' as AddFriendEnum,
+      loading: false as Boolean,
       route: 'about' as string,
       tabs: [
         {
@@ -57,13 +69,6 @@ export default Vue.extend({
           route: 'mutual',
         },
       ] as Tab[],
-      user: {
-        name: iridium.profile.state?.name ?? '',
-        status: iridium.profile.state?.status ?? '',
-        about: iridium.profile.state?.about ?? '',
-        location: iridium.profile.state?.location ?? '',
-        note: iridium.profile.state?.note ?? '',
-      } as Partial<User>,
     }
   },
   computed: {
@@ -80,13 +85,15 @@ export default Vue.extend({
       return ['', '#F6CC6B', '#61CEA4', '#DA716F']
     },
     isFriend(): boolean {
-      // TODO: fix
-      return false
+      return (
+        (this.user?.did &&
+          !!iridium.friends.state.friends.find((f) => f === this.user.did)) ||
+        iridium.profile.state?.did === this.user.did
+      )
     },
     status() {
       return (
-        (this.ui.userProfile &&
-          iridium.users.ephemeral.status[this.ui.userProfile.did]) ||
+        (this.user?.did && iridium.users.ephemeral.status[this.user.did]) ||
         'offline'
       )
     },
@@ -100,19 +107,11 @@ export default Vue.extend({
       this.route = route
     },
     // TODO: confirm that this works once you can view profiles of non-friends
-    // TODO: update for Iridium
     async createFriendRequest() {
-      // this.loading = AddFriendEnum.SENDING
-      // try {
-      //   await this.$store.dispatch('friends/createFriendRequest', {
-      //     friendToKey: new PublicKey(this.ui.userProfile.address),
-      //   })
-      //   this.$toast.show(this.$t('friends.request_sent') as string)
-      // } catch (e: any) {
-      //   this.$toast.show(this.$t(e.message) as string)
-      // } finally {
-      //   this.loading = AddFriendEnum.EMPTY
-      // }
+      this.loading = true
+      await iridium.friends.requestCreate(this.user, false)
+      this.loading = false
+      this.$toast.show(this.$t('friends.request_sent') as string)
     },
   },
 })

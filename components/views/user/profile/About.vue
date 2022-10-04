@@ -64,18 +64,14 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less">
-.accounts {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
-  gap: @normal-spacing;
-}
-
-.row-wrapper {
+.about {
   display: flex;
-  align-items: center;
-}
+  flex-direction: column;
+  gap: 16px;
 
-.loading {
-  cursor: progress;
+  .row-wrapper {
+    display: flex;
+    align-items: center;
+  }
 }
 </style>

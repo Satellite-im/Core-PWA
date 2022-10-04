@@ -3,6 +3,7 @@
   top: 0;
   left: 0;
   width: @full;
+  height: @full;
 
   .profile-wrapper {
     position: relative;
@@ -10,8 +11,9 @@
     flex-direction: column;
     max-width: 1024px;
     width: @full;
+    max-height: @full;
     border-radius: 5px;
-
+    box-sizing: border-box;
     &:extend(.modal-gradient);
   }
 
@@ -20,16 +22,21 @@
     object-fit: cover;
   }
   .photo {
-    margin-left: @xlarge-spacing;
-    max-height: 424px;
-    margin: -88px 16px 0 0;
+    position: absolute;
+    top: 32px;
+    left: 16px;
+    max-height: 360px;
   }
   .photo-sm {
     display: none;
   }
   .profile-body {
     display: flex;
-    padding: 12px;
+    padding: 8px;
+    padding-left: 288px;
+    min-height: 360px;
+    box-sizing: border-box;
+    overflow: auto;
 
     .details {
       width: @full;
@@ -38,6 +45,7 @@
 
       .scroll {
         padding: 16px;
+        overflow: auto;
       }
     }
     .details-info {
@@ -45,7 +53,7 @@
       flex-wrap: wrap;
 
       .details-wrapper {
-        padding: 32px 0;
+        padding: 32px 16px;
         width: @full;
         display: flex;
         justify-content: space-between;
@@ -65,42 +73,15 @@
       border-bottom: 1px solid rgba(@gray, 0.5);
     }
     .buttons {
-      flex-shrink: 0;
       display: flex;
+      padding-left: 16px;
       gap: 8px;
       .button {
         max-height: 30px;
       }
     }
-    .scroll-area {
-      padding: 0 @large-spacing 0 @large-spacing;
-      margin: auto;
-      max-height: 250px;
-      @media only screen and (max-width: @mobile-breakpoint) {
-        max-height: calc(@app-height - 468px);
-      }
-    }
-    .about {
-      display: flex;
-      flex-direction: column;
-      gap: @normal-spacing;
-
-      // temp font fixes until we refactor headings
-      .title.is-6 {
-        font-size: 12px;
-        margin-bottom: 0.5rem;
-      }
-      p {
-        font-size: 12px;
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: @medium-breakpoint) {
-  #profile {
-    .photo {
-      max-height: 320px;
+    .scroll {
+      overflow: auto;
     }
   }
 }
@@ -114,33 +95,64 @@
       height: 150px;
     }
 
-    .details {
-      .details-info {
-        justify-content: center;
-        .details-wrapper {
-          padding: 32px 16px;
-        }
-      }
+    .photo {
+      max-height: 280px;
     }
 
-    .photo {
-      display: none;
-    }
-    .photo-sm {
-      display: block;
-      max-height: 220px;
-      margin: -140px 0 0 0;
-    }
     .profile-body {
-      padding-top: 0;
+      padding-left: 224px;
+      .details {
+        .details-info {
+          justify-content: center;
+        }
+      }
     }
   }
 }
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #profile {
+    .photo {
+      display: none;
+    }
+    .photo-sm {
+      position: absolute;
+      display: block;
+      max-height: 180px;
+      top: 10px;
+      border-radius: 50px;
+    }
+    .profile-body {
+      padding-left: 0;
+      .details {
+        .details-info {
+          .details-wrapper {
+            padding: 48px 16px;
+          }
+        }
+      }
+      .tabs {
+        padding: 0 @light-spacing;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: @mobile-candybar-breakpoint) {
+  #profile {
     .photo-sm {
       max-height: 160px;
+    }
+    .buttons {
+      flex-direction: column-reverse;
+      justify-content: flex-end;
+    }
+    .profile-body {
+      .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+      }
     }
   }
 }
