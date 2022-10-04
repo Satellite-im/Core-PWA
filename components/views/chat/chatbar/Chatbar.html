@@ -24,8 +24,8 @@
       :focus="ui.chatbarFocus"
       @keydown="handleInputKeydown"
       @paste="handlePaste"
-      @focus="setFocus($event, true)"
-      @blur="setFocus($event, false)"
+      @focus="handleFocus"
+      @blur="isFocused = false"
     />
     <ChatbarControls
       :disabled="!isSubscribed || charlimit"
