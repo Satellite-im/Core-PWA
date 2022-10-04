@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Set permissions
         run: |
-          chmod -R 777 github/home/.cache/Cypress/10.9.0/binary_state.json
+          chmod -R 777 github/home/.cache
           chmod -R 777 /github/home
           chmod -R 777 cypress
           unset ELECTRON_RUN_AS_NODE
