@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Set permissions
         run: |
+          chmod -R 777 /home
           chmod -R 777 /github/home
           chmod -R 777 cypress
           unset ELECTRON_RUN_AS_NODE
