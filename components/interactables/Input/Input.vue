@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DeleteIcon, EyeIcon, EyeOffIcon } from 'satellite-lucide-icons'
+import whatInput from 'what-input'
 import { InputType, InputColor } from './types'
 import { Size } from '~/types/typography'
 
@@ -101,7 +102,6 @@ export default Vue.extend({
   data() {
     return {
       showPassword: false,
-      isMousedown: false,
       isFocused: false,
     }
   },
@@ -135,11 +135,9 @@ export default Vue.extend({
     },
   },
   mounted() {
-    window.addEventListener('blur', this.setMousedown)
     if (this.autofocus) {
       const input = this.$refs.input as HTMLInputElement
       // set to avoid a11y outline which is set via keyboard focus only
-      this.setMousedown()
       if (this.$device.isMobile) {
         // delay focus to avoid clash with swiper animation
         setTimeout(() => {
@@ -150,9 +148,7 @@ export default Vue.extend({
       }
     }
   },
-  beforeDestroy() {
-    window.removeEventListener('blur', this.setMousedown)
-  },
+
   methods: {
     handleSubmit(event: InputEvent) {
       if (this.disabled || this.loading || this.invalid) {
@@ -174,13 +170,9 @@ export default Vue.extend({
       this.showPassword = !this.showPassword
     },
     handleFocus() {
-      if (!this.isMousedown) {
+      if (whatInput.ask() === 'keyboard') {
         this.isFocused = true
       }
-      this.isMousedown = false
-    },
-    setMousedown() {
-      this.isMousedown = true
     },
   },
 })
