@@ -11,7 +11,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
     // Delete Localstorage Snapshots before starting tests
     cy.clearLocalStorageSnapshot()
   })
-  
+
   it('Create First Account and grab friend ID', { retries: 2 }, () => {
     // Create one account
     cy.createAccount('12345', firstRandomName)
