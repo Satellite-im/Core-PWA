@@ -17,7 +17,7 @@ import {
   ConversationMessagePayload,
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
 
 function typingFunction(conversationId: string) {
