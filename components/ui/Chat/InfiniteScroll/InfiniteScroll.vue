@@ -17,26 +17,16 @@ export default {
     parentElement(): HTMLElement {
       return (this.$refs.root as HTMLElement).parentElement as HTMLElement
     },
-    threshold(): number {
-      return window.innerHeight
-    },
   },
   mounted() {
-    this.parentElement.addEventListener('wheel', this.scrollHandler)
-    this.parentElement.addEventListener('touchmove', this.scrollHandler)
+    this.parentElement.addEventListener('scroll', this.scrollHandler)
   },
   beforeDestroy() {
-    this.parentElement.removeEventListener('wheel', this.scrollHandler)
-    this.parentElement.removeEventListener('touchmove', this.scrollHandler)
+    this.parentElement.removeEventListener('scroll', this.scrollHandler)
   },
   methods: {
     scrollHandler() {
-      const offset =
-        this.parentElement.scrollHeight +
-        this.parentElement.scrollTop -
-        this.parentElement.getBoundingClientRect().height
-
-      if (this.isLoading || this.noMore || offset > this.threshold) {
+      if (this.isLoading || this.noMore || this.parentElement.scrollTop > 500) {
         return
       }
       this.$emit('loadMore')
