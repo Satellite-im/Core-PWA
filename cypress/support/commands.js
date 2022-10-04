@@ -440,13 +440,15 @@ Cypress.Commands.add('goToLastGlyphOnChat', () => {
 // Chat - Images Commands
 
 Cypress.Commands.add('chatFeaturesSendImage', (imagePath, filename) => {
-  cy.get('#quick-upload').selectFile(imagePath, {
+  cy.get('[data-cy=chat-file-upload]').selectFile(imagePath, {
     force: true,
   })
   cy.get('[data-cy=file-item]', { timeout: 60000 }).should('exist')
   cy.get('[data-cy=file-item-filename]').should('contain', filename)
   cy.get('[data-cy=send-message]').click() //sending image message
-  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-loader-container]', { timeout: 60000 }).should(
+    'not.exist',
+  )
 })
 
 Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
@@ -486,7 +488,10 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('selectContextMenuOption', (locator, optionText) => {
   cy.get(locator).scrollIntoView().rightclick()
-  cy.contains(optionText).click()
+  cy.get('[data-cy=context-menu]')
+    .find('[data-cy=context-menu-option]')
+    .contains(optionText)
+    .click()
 })
 
 Cypress.Commands.add(
@@ -559,7 +564,7 @@ Cypress.Commands.add('goToNewChat', () => {
   cy.get('[data-cy=friend-confirm-button]').click()
 
   //Wait until chat page is loaded
-  cy.get('#conversation-container', { timeout: 30000 }).should('be.visible')
+  cy.get('#conversation-container', { timeout: 30000 }).should('exist')
 })
 
 Cypress.Commands.add('workaroundChatLoad', (user) => {
