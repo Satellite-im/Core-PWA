@@ -13,14 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: corepack
-        run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          echo '# Set PATH, MANPATH, etc., for Homebrew.' >> /github/home/.profile
-          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /github/home/.profile
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          brew install corepack
-          corepack enable
       - name: Set permissions
         run: |
           chmod -R 777 /github/home
@@ -36,13 +28,6 @@ jobs:
           echo NUXT_ENV_IRIDIUM_APIS=${{ secrets.NUXT_ENV_IRIDIUM_APIS }} >> .env
           echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
           cat .env
-      - name: Read .env file
-        id: envfile
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./.env
-      - name: Echo .env
-        run: echo "${{ steps.envfile.outputs.content }}"
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.2
         with:
@@ -55,6 +40,12 @@ jobs:
         run: |
           cd .. 
           cd iridium
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo '# Set PATH, MANPATH, etc., for Homebrew.' >> /github/home/.profile
+          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /github/home/.profile
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install corepack
+          corepack enable
           touch .env
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
           echo CERTBOT_EMAIL="support@satellite.im" >> .env
