@@ -50,7 +50,7 @@ export default Vue.extend({
       }
 
       if (this.$route.path !== '/') {
-        this.$router.push('/')
+        this.$router.replace('/')
       }
     },
     isOdd(num: number) {

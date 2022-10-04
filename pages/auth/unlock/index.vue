@@ -121,9 +121,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          redirect && (await this.$router.push('/setup/disclaimer'))
+          redirect && (await this.$router.replace('/setup/disclaimer'))
         } else {
-          redirect && (await this.$router.push('/'))
+          redirect && (await this.$router.replace('/'))
         }
       } catch (error: any) {
         this.pin = ''
@@ -193,7 +193,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
         }
 
         if (this.$route.path !== '/') {
-          this.$router.push('/')
+          this.$router.replace('/')
         }
       } catch (error: any) {
         this.error = error.message

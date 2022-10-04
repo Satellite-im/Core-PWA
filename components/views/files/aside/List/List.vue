@@ -46,10 +46,10 @@ export default Vue.extend({
     setActive(route: FileRouteEnum) {
       // if invalid route, reset to default
       if (!route) {
-        this.$router.push('/')
+        this.$router.push({ query: {} })
         return
       }
-      this.$router.push(route)
+      this.$router.push({ query: { route } })
     },
     /**
      * @method isActiveRoute

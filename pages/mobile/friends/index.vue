@@ -183,7 +183,9 @@ export default Vue.extend({
       this.removeRoutes()
     },
     removeRoutes() {
-      this.$router.push('/')
+      this.$router.push({
+        query: {},
+      })
     },
     setSwiperAsTab() {
       this.swiper?.slideTo(1)

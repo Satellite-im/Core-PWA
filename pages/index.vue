@@ -59,7 +59,9 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('accounts/loadAccount')
         const onReady = () => {
-          this.$router.push(this.$device.isMobile ? '/mobile/chat' : '/friends')
+          this.$router.replace(
+            this.$device.isMobile ? '/mobile/chat' : '/friends',
+          )
         }
         if (iridium.ready) {
           onReady()
@@ -68,11 +70,11 @@ export default Vue.extend({
         }
       } catch (error: any) {
         if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          await this.$router.push('/auth/register')
+          await this.$router.replace('/auth/register')
           return
         }
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
-          await this.$router.push('/setup/disclaimer')
+          await this.$router.replace('/setup/disclaimer')
           return
         }
 
@@ -83,7 +85,7 @@ export default Vue.extend({
           state: true,
           action: this.accounts.phrase
             ? () => this.loadAccount()
-            : () => this.$router.push('/auth/unlock'),
+            : () => this.$router.replace('/auth/unlock'),
         })
       }
     },
