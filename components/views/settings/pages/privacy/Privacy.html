@@ -48,13 +48,19 @@
       :title="$t('pages.privacy.consentScan.title')"
       :text="$t('pages.privacy.consentScan.subtitle')"
     >
-      <InteractablesSwitch v-model="consentScan" />
+      <InteractablesSwitch
+        v-model="consentScan"
+        :label="$t('pages.privacy.consentScan.title')"
+      />
     </SettingsUnit>
     <SettingsUnit
       :title="$t('pages.privacy.nsfw.title')"
       :text="$t('pages.privacy.nsfw.subtitle')"
     >
-      <InteractablesSwitch v-model="blockNsfw" />
+      <InteractablesSwitch
+        v-model="blockNsfw"
+        :label="$t('pages.privacy.nsfw.title')"
+      />
     </SettingsUnit>
   </SettingsSection>
 
@@ -70,7 +76,10 @@
       :title="$t('pages.privacy.pin.title')"
       :text="$t('pages.privacy.pin.subtitle')"
     >
-      <InteractablesSwitch v-model="storePin" />
+      <InteractablesSwitch
+        v-model="storePin"
+        :label="$t('pages.privacy.pin.title')"
+      />
     </SettingsUnit>
     <!-- <SettingsUnit
       :title="$t('pages.privacy.activity.title')"
