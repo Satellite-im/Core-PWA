@@ -6,14 +6,15 @@
     padding: 12px @light-spacing;
     align-items: center;
     height: @chatbar-input-height;
-    color: @white;
+    color: @text;
 
     &.send {
       color: @flair-color;
     }
 
     &[disabled] {
-      color: @gray;
+      color: @dark;
+      opacity: 0.75;
       cursor: not-allowed;
     }
   }

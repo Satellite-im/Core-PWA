@@ -37,4 +37,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Card.less"></style>
+<style lang="less" src="./Card.less" scoped></style>

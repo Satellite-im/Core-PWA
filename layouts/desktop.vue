@@ -34,7 +34,7 @@ import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import { RootState } from '~/types/store/store'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'Desktop',

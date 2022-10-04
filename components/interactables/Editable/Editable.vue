@@ -1,6 +1,8 @@
 <template>
   <div class="editable-container">
-    <div v-if="value.length === 0" class="placeholder">{{ placeholder }}</div>
+    <div v-if="value.length === 0 && !isComposing" class="placeholder">
+      {{ placeholder }}
+    </div>
     <div
       ref="editable"
       :contenteditable="enabled"
@@ -73,7 +75,7 @@ const Editable = Vue.extend({
     return {
       currentPosition: 0,
       currentRange: null as Range | null,
-      onComposition: false,
+      isComposing: false,
     }
   },
   watch: {
@@ -182,7 +184,7 @@ const Editable = Vue.extend({
      * @param {KeyboardEvent} e The keydown event
      */
     handleInputKeydown(e: KeyboardEvent) {
-      if (this.onComposition) return
+      if (this.isComposing) return
 
       switch (e.key) {
         case KeybindingEnum.BACKSPACE:
@@ -231,10 +233,10 @@ const Editable = Vue.extend({
      */
     handleCompositionChange(e: InputEvent) {
       if (e.type === 'compositionend') {
-        this.onComposition = false
+        this.isComposing = false
         this.onInput(e)
-      } else if (!this.onComposition) {
-        this.onComposition = true
+      } else if (!this.isComposing) {
+        this.isComposing = true
       }
     },
     /**
@@ -243,7 +245,7 @@ const Editable = Vue.extend({
      * @param {KeyboardEvent} e The input event
      */
     onInput(e: InputEvent) {
-      if (this.onComposition) return
+      if (this.isComposing) return
 
       if (e.inputType === 'historyUndo') {
         this.undo()

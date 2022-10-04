@@ -18,27 +18,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less" src="./AudioPlayer.less"></style>
-<style scoped lang="less">
-.is-text {
-  font-size: @micro-text-size;
-  padding: 0;
-  line-height: 0.8;
-  font-family: @primary-font;
-  &:extend(.font-muted);
-  display: inline-block;
-  text-align: left;
-}
-.download {
-  float: right;
-  font-family: @primary-font;
-  font-size: @mini-text-size;
-  margin-top: 0.25rem;
-  &:extend(.font-muted);
-  cursor: pointer;
-
-  &:hover {
-    &:extend(.font-secondary);
-  }
-}
-</style>
+<style lang="less" src="./AudioPlayer.less" scoped></style>

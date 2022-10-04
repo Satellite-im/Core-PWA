@@ -29,9 +29,29 @@
     .sidebar-nav {
       display: flex;
       flex-direction: column;
-      gap: @light-spacing;
-      position: relative;
-      padding: 0 16px 8px;
+      gap: 2px;
+
+      .sidebar-button {
+        display: flex;
+        align-items: center;
+        padding: 0 16px 0 22px;
+        gap: 12px;
+        height: 44px;
+        color: @dark;
+
+        &.selected {
+          color: @light;
+          .background-semitransparent-lighter();
+        }
+        &:hover:not(.selected) {
+          color: @body;
+          .background-semitransparent-lighter();
+        }
+
+        .tag {
+          margin-left: auto;
+        }
+      }
     }
 
     .banner-wrapper {
@@ -40,26 +60,16 @@
       &:extend(.round-corners);
     }
 
-    .quick-toggle {
-      align-self: flex-end;
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 16px 0 20px;
+      user-select: none;
       position: relative;
-      margin-right: 16px;
-      button {
-        align-items: center;
-        justify-content: center;
-        height: 32px;
-        width: 32px;
-        border-radius: 50%;
-        background-color: @foreground-alt;
-      }
-    }
 
-    .users {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-      .inline-notification {
-        width: @sidebar-width - (@normal-spacing * 2);
+      .quick-toggle {
+        align-self: flex-end;
       }
     }
   }
@@ -74,33 +84,5 @@
     flex-shrink: 0;
     &:extend(.round-corners);
     background: @foreground-gradient;
-  }
-
-  .label-container {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    padding: 8px;
-
-    .label {
-      text-align: center;
-      font-size: @mini-text-size;
-      background-color: @flair-color;
-      border-radius: 2px;
-      line-height: 1;
-      padding: 0.25rem;
-      min-width: 18px;
-      font-family: @primary-font;
-      &:extend(.font-primary);
-      &:extend(.background-flair);
-      pointer-events: none;
-
-      &.inverted {
-        background: @foreground;
-      }
-    }
   }
 }

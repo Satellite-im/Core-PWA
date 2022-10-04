@@ -13,9 +13,9 @@ interface Arguments {
 }
 
 let redirectDebounce: NodeJS.Timer
-window?.addEventListener('beforeunload', () => {
-  clearTimeout(redirectDebounce)
-})
+// window?.addEventListener('beforeunload', () => {
+//   clearTimeout(redirectDebounce)
+// })
 
 window?.addEventListener('popstate', () => {
   clearTimeout(redirectDebounce)

@@ -1,29 +1,34 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
-const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
-    .map((item) => item.recoverySeed) + '{enter}'
 const pngImagePath = 'cypress/fixtures/images/logo.png'
 const jpgImagePath = 'cypress/fixtures/images/jpeg-test.jpg'
 const gifImagePath = 'cypress/fixtures/images/gif-test.gif'
 const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 const path = require('path')
 
-describe.skip('Chat - Sending Images Tests', () => {
-  // Skipping since import account is not working
+describe('Chat - Sending Images Tests', () => {
+  // Before starting spec - Restore Localstorage Snapshots for next specs
+  before(() => {
+    cy.restoreLocalStorage('Chat User A')
+  })
+
+  // Setup downloads folder for cypress
   const downloadsFolder = Cypress.config('downloadsFolder')
-  it('Load account for test chat images scenarios', { retries: 2 }, () => {
-    //Import account
-    cy.importAccount(randomPIN, recoverySeed)
 
-    //Validate profile name displayed
-    cy.validateChatPageIsLoaded()
+  it('Load account and consent file upload', { retries: 2 }, () => {
+    // Import account from localstorage
+    cy.loginWithLocalStorage('Chat User A', '12345')
 
-    //Validate message is sent
-    cy.goToConversation('cypress friend')
+    // Go to a Conversation
+    cy.goToNewChat()
+
+    //Click on file upload for the first time
+    cy.get('[data-cy=chat-file-upload-btn-container]').click()
+    cy.get('[data-cy=confirmation-modal]')
+      .find('[data-cy=confirmation-modal-header]')
+      .should('have.text', 'Consent to File Scanning')
+      .and('be.visible')
+    cy.get('[data-cy=confirmation-modal]')
+      .find('[data-cy=confirm-button]')
+      .click()
   })
 
   it('PNG image is sent successfully on chat', () => {
@@ -47,7 +52,8 @@ describe.skip('Chat - Sending Images Tests', () => {
     cy.readFile(downloadedFile, { timeout: 15000 }).should('exist')
   })
 
-  it('GIF image is sent successfully on chat', () => {
+  it.skip('GIF image is sent successfully on chat', () => {
+    // Skipping for now since GIF upload from file of 5mb fails
     //Send GIF Image
     cy.chatFeaturesSendImage(gifImagePath, 'gif-test.gif')
     cy.goToLastImageOnChat()

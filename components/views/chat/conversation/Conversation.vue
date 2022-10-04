@@ -223,10 +223,7 @@ export default Vue.extend({
       }
     })
     this.resizeMessagesObserver.observe(messages)
-    iridium.chat.updateConversationReadAt(
-      this.conversation.id,
-      Math.max(...this.messages.map((message) => message.at)),
-    )
+    iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
 
     // Set active conversation ID
     iridium.chat.ephemeral.activeConversationId = this.conversationId
@@ -293,10 +290,7 @@ export default Vue.extend({
       this.lastScrolledToUnreadMessageElement = this.firstUnreadMessageElement
       this.isUnreadAboveViewport = false
       this.isUnreadBelowViewport = false
-      iridium.chat.updateConversationReadAt(
-        this.conversation.id,
-        Math.max(...this.messages.map((message) => message.at)),
-      )
+      iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
 
       container.scrollTo({
         behavior: 'smooth',
@@ -307,10 +301,7 @@ export default Vue.extend({
       this.lastScrolledToUnreadMessageElement = this.firstUnreadMessageElement
       this.isUnreadAboveViewport = false
       this.isUnreadBelowViewport = false
-      iridium.chat.updateConversationReadAt(
-        this.conversation.id,
-        Math.max(...this.messages.map((message) => message.at)),
-      )
+      iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
     },
   },
 })

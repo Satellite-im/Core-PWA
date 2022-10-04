@@ -1,4 +1,4 @@
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 
 describe('notNull utility', () => {
   test('Expect undefined to be true', () => {

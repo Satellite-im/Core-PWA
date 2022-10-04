@@ -9,7 +9,7 @@
               <user-plus-icon />
             </button>
             <button @click="next('request')">
-              <UiDotBadge :show="hasFriendRequests">
+              <UiDotBadge :show="Boolean(incomingRequests.length)">
                 <user-check-icon />
               </UiDotBadge>
             </button>
@@ -75,6 +75,7 @@ import 'swiper/css'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 import { FriendsTabs } from '~/libraries/Enums/enums'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'MobileFriends',
@@ -87,7 +88,7 @@ export default Vue.extend({
   data: () => ({
     swiper: undefined as Swiper | undefined,
     friends: iridium.friends.state,
-    users: iridium.users.state,
+    users: iridium.users,
   }),
   computed: {
     route(): FriendsTabs {
@@ -115,33 +116,26 @@ export default Vue.extend({
         },
       }
     },
-    friendsList(): (Friend | undefined)[] {
+    friendsList(): Friend[] {
       return this.friends.friends
-        .map((did) => iridium.users.state[did])
+        .map((did) => this.users.state[did])
+        .filter(truthy)
         .sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
         )
     },
+    requests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(truthy)
+    },
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests)
-        .filter((r: FriendRequest) => r.incoming && r.status !== 'accepted')
-        .sort((a, b) =>
-          a.user.name.localeCompare(b.user.name, undefined, {
-            sensitivity: 'base',
-          }),
-        )
+      return this.requests.filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
+      )
     },
     outgoingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests)
-        .filter((r: FriendRequest) => !r.incoming && r.status === 'pending')
-        .sort((a, b) =>
-          a.user.name.localeCompare(b.user.name, undefined, {
-            sensitivity: 'base',
-          }),
-        )
-    },
-    hasFriendRequests(): boolean {
-      return this.incomingRequests.length > 0
+      return this.requests.filter(
+        (r: FriendRequest) => !r.incoming && r.status === 'pending',
+      )
     },
   },
   watch: {
