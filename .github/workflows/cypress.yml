@@ -63,8 +63,10 @@ jobs:
         run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
       - run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
-      - name: Cypress
-        uses: cypress-io/github-action@v2
+      - name: Cypress tests with debug logs
+        uses: cypress-io/github-action@v4
+        env:
+          DEBUG: 'cypress:*'
         with:
           working-directory: ./
           install: false
