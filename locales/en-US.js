@@ -687,6 +687,7 @@ export default {
   },
   errors: {
     accounts: {
+      timed_out: 'Connection with nodes timed out',
       pin_too_short: 'Password must be at least 5 characters.',
       invalid_pin: 'Password does not match',
       invalid_group_id: 'GroupID is invalid',

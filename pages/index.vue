@@ -57,7 +57,9 @@ export default Vue.extend({
      */
     async loadAccount() {
       try {
-        await this.$store.dispatch('accounts/loadAccount')
+        if (!iridium.profile.ready) {
+          await this.$store.dispatch('accounts/loadAccount')
+        }
         const onReady = () => {
           this.$router.replace(
             this.$device.isMobile ? '/mobile/chat' : '/friends',
@@ -76,6 +78,14 @@ export default Vue.extend({
         if (error.message === AccountsError.USER_DERIVATION_FAILED) {
           await this.$router.replace('/setup/disclaimer')
           return
+        }
+
+        if (error.message === AccountsError.TIMED_OUT) {
+          this.$toast.error(this.$t('errors.accounts.timed_out') as string)
+          this.$store.commit('ui/toggleErrorNetworkModal', {
+            state: true,
+            action: () => this.$router.replace('/auth/unlock'),
+          })
         }
 
         logger.error('pages/index/loadAccount', 'error loading account', {

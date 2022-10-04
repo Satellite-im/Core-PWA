@@ -156,8 +156,8 @@ export default {
     dispatch,
   }: ActionsArguments<AccountsState>) {
     const timeoutId = setTimeout(() => {
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }, 60000)
+      throw new Error(AccountsError.TIMED_OUT)
+    }, 30000)
 
     logger.info('accounts/actions/loadAccount', 'beginning account load')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -248,12 +248,17 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     userData: UserRegistrationPayload,
   ) {
+    const timeoutId = setTimeout(() => {
+      throw new Error(AccountsError.TIMED_OUT)
+    }, 30000)
+
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
 
     if (!state.initialized) {
       const mnemonic = state.phrase
 
       if (mnemonic === '') {
+        clearTimeout(timeoutId)
         throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
       }
 
@@ -265,12 +270,14 @@ export default {
     const walletAccount = await $BlockchainClient.payerAccount
     if (!walletAccount) {
       commit('setRegistrationStatus', RegistrationStatus.UNKNOWN)
+      clearTimeout(timeoutId)
       throw new Error(AccountsError.PAYER_NOT_PRESENT)
     }
 
     const userInfo = await iridium.profile?.get()
     if (userInfo?.id) {
       commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      clearTimeout(timeoutId)
       throw new Error(AccountsError.USER_ALREADY_REGISTERED)
     }
 
@@ -292,12 +299,14 @@ export default {
     }
 
     if (!iridium.connector) {
+      clearTimeout(timeoutId)
       throw new Error('iridium not initialized')
     }
 
     const imagePath = await uploadPicture(userData.image)
 
     if (!iridium.connector) {
+      clearTimeout(timeoutId)
       throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
     }
 
@@ -315,6 +324,7 @@ export default {
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
+    clearTimeout(timeoutId)
     return dispatch('startup', walletAccount)
   },
 

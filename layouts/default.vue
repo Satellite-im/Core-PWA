@@ -33,37 +33,41 @@ export default Vue.extend({
       flair: flairs[iridium.settings.state.flair],
     }
   },
-  mounted() {
-    this.checkAccount()
-  },
-  methods: {
-    async checkAccount() {
-      try {
-        await this.$store.dispatch('accounts/loadAccount')
-        const onReady = () => {
-          this.$router.push('/auth/unlock')
-        }
-        if (iridium.ready) {
-          this.loaded = true
-          onReady()
-        } else {
-          iridium.on('ready', onReady)
-        }
-      } catch (error: any) {
-        this.loaded = true
-
-        const redirectObj = {
-          [AccountsError.MNEMONIC_NOT_PRESENT]: '/auth/unlock',
-          [AccountsError.USER_NOT_REGISTERED]: '/auth/register',
-          [AccountsError.USER_DERIVATION_FAILED]: '/setup/disclaimer',
-        }
-        if (this.$route.path === redirectObj[error.message]) {
-          return
-        }
-        redirectObj[error.message] &&
-          this.$router.push(redirectObj[error.message])
+  async mounted() {
+    try {
+      await this.$store.dispatch('accounts/loadAccount')
+      const onReady = () => {
+        this.$router.push('/auth/unlock')
       }
-    },
+      if (iridium.ready) {
+        this.loaded = true
+        onReady()
+      } else {
+        iridium.on('ready', onReady)
+      }
+    } catch (error: any) {
+      this.loaded = true
+
+      const redirectObj = {
+        [AccountsError.MNEMONIC_NOT_PRESENT]: '/auth/unlock',
+        [AccountsError.USER_NOT_REGISTERED]: '/auth/register',
+        [AccountsError.USER_DERIVATION_FAILED]: '/setup/disclaimer',
+      }
+      if (this.$route.path === redirectObj[error.message]) {
+        return
+      }
+
+      if (redirectObj[error.message] === AccountsError.TIMED_OUT) {
+        this.$toast.error(this.$t('errors.accounts.timed_out') as string)
+        this.$store.commit('ui/toggleErrorNetworkModal', {
+          state: true,
+          action: () => this.$router.replace('/auth/unlock'),
+        })
+      }
+
+      redirectObj[error.message] &&
+        this.$router.push(redirectObj[error.message])
+    }
   },
 })
 </script>

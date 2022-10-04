@@ -31,6 +31,7 @@ export interface AccountsState {
 }
 
 export enum AccountsError {
+  TIMED_OUT = 'errors.accounts.timed_out',
   INVALID_PIN = 'errors.accounts.invalid_pin',
   INVALID_GROUPID = 'errors.accounts.invalid_group_id',
   CANNOT_FIND_GROUP = 'errors.accounts.cannot_find_group',
