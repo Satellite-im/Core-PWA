@@ -16,7 +16,7 @@ module.exports = defineConfig({
       require('cypress-localstorage-commands/plugin')(on, config)
       return config
     },
-    baseUrl: 'http://google.pt',
+    baseUrl: 'http://localhost:3000/',
     specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
   },
 })
