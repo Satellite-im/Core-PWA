@@ -86,8 +86,7 @@
   </SettingsSection>
 
   <!--Audio Bitrate & Sample-->
-  <UiComingSoon :areaCover="true" :hide="true">
-    <SettingsSection>
+  <!-- <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.bitrate.title')"
         :text="$t('pages.settings.audio.bitrate.subtitle')"
@@ -108,17 +107,17 @@
           :label="$t('pages.settings.audio.sampleSize.title')"
         />
       </SettingsUnit>
-    </SettingsSection>
+    </SettingsSection> -->
 
-    <!--Echo Cancellation & Noise Suppression-->
-    <SettingsSection>
+  <!--Echo Cancellation & Noise Suppression-->
+  <!-- <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.echo.title')"
         :text="$t('pages.settings.audio.echo.subtitle')"
       >
         <InteractablesSwitch
           v-model="isEchoCancellation"
-          :isEnabled="settings.echoCancellation"
+          :label="$t('pages.settings.audio.echo.title')"
         />
       </SettingsUnit>
       <SettingsUnit
@@ -127,11 +126,11 @@
       >
         <InteractablesSwitch
           v-model="isNoiseSuppression"
-          :isEnabled="settings.noiseSuppression"
+          :label="$t('pages.settings.audio.noise.title')"
         />
       </SettingsUnit>
-    </SettingsSection>
-  </UiComingSoon>
+    </SettingsSection> -->
+
   <!-- Video -->
   <TypographyHorizontalRuleText
     plaintext
@@ -169,7 +168,10 @@
       :title="$t('pages.settings.video.flipVideo.title')"
       :text="$t('pages.settings.video.flipVideo.subtitle')"
     >
-      <InteractablesSwitch v-model="flipVideo" />
+      <InteractablesSwitch
+        v-model="flipVideo"
+        :label="$t('pages.settings.video.flipVideo.title')"
+      />
     </SettingsUnit>
   </SettingsSection>
 
