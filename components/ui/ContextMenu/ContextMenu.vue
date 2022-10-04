@@ -111,7 +111,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .context-menu-container {
   display: flex;
   justify-content: flex-end;

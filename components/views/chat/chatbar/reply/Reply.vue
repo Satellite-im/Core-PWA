@@ -27,4 +27,4 @@ export default Vue.extend({
   },
 })
 </script>
-<style lang="less" src="./Reply.less"></style>
+<style lang="less" src="./Reply.less" scoped></style>
