@@ -1,21 +1,18 @@
 <template>
   <div class="about">
-    <div>
+    <div v-if="profile.about">
       <TypographyTitle :text="$t('modal.profile.about.me')" :size="6" />
-      <TypographyText>Lorem ipsum dolor</TypographyText>
+      <TypographyText>{{ profile.about }}</TypographyText>
     </div>
-    <div>
+    <div v-if="profile.location">
       <TypographyTitle :text="$t('modal.profile.about.location')" :size="6" />
-      <TypographyText>Lorem ipsum dolor</TypographyText>
+      <TypographyText>{{ profile.location }}</TypographyText>
     </div>
     <div>
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
-      <TypographyText class="loading">
-        {{ note }}
-      </TypographyText>
       <div class="row-wrapper">
         <InteractablesEditable
-          v-model="note"
+          v-model="profile.note"
           :placeholder="$t('modal.profile.about.click_note')"
           :enabled="editing"
         />
@@ -31,6 +28,8 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { EditIcon } from 'satellite-lucide-icons'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   components: {
@@ -39,8 +38,12 @@ export default Vue.extend({
   data() {
     return {
       observer: null as ResizeObserver | null,
-      note: '' as string,
       editing: false as boolean,
+      profile: {
+        about: iridium.profile.state?.about ?? '',
+        location: iridium.profile.state?.location ?? '',
+        note: iridium.profile.state?.note ?? '',
+      } as Partial<User>,
     }
   },
   computed: {

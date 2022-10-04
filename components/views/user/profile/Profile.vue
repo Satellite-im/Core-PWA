@@ -10,13 +10,11 @@ import {
   AwardIcon,
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
-
-import { Friend } from '~/types/ui/friends'
 import { ProfileInfo } from '~/types/profile/profile'
 import { Tab } from '~/types/ui/tab'
-
 import { AddFriendEnum } from '~/libraries/Enums/enums'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -59,6 +57,13 @@ export default Vue.extend({
           route: 'mutual',
         },
       ] as Tab[],
+      user: {
+        name: iridium.profile.state?.name ?? '',
+        status: iridium.profile.state?.status ?? '',
+        about: iridium.profile.state?.about ?? '',
+        location: iridium.profile.state?.location ?? '',
+        note: iridium.profile.state?.note ?? '',
+      } as Partial<User>,
     }
   },
   computed: {

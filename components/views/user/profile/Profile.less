@@ -1,9 +1,19 @@
 #profile {
-  display: flex;
-  flex-direction: column;
-  width: 964px;
-  height: @full;
-  min-height: 600px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: @full;
+
+  .profile-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 1024px;
+    width: @full;
+    border-radius: 5px;
+
+    &:extend(.modal-gradient);
+  }
 
   .banner {
     height: 120px;
@@ -12,13 +22,15 @@
   .photo {
     margin-left: @xlarge-spacing;
     max-height: 424px;
-    margin-top: -88px;
+    margin: -88px 16px 0 0;
   }
   .photo-sm {
     display: none;
   }
   .profile-body {
     display: flex;
+    padding: 12px;
+
     .details {
       width: @full;
       display: flex;
@@ -30,13 +42,18 @@
     }
     .details-info {
       display: flex;
-      flex-direction: row;
-      padding: @large-spacing;
+      flex-wrap: wrap;
+
+      .details-wrapper {
+        padding: 32px 0;
+        width: @full;
+        display: flex;
+        justify-content: space-between;
+      }
       .intro {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        margin-left: @normal-spacing;
         .badges {
           display: flex;
           gap: 0.4rem;
@@ -48,11 +65,11 @@
       border-bottom: 1px solid rgba(@gray, 0.5);
     }
     .buttons {
-      padding-bottom: @normal-spacing;
-      margin-left: auto;
-
-      &.mobile {
-        display: none;
+      flex-shrink: 0;
+      display: flex;
+      gap: 8px;
+      .button {
+        max-height: 30px;
       }
     }
     .scroll-area {
@@ -82,18 +99,37 @@
 
 @media only screen and (max-width: @medium-breakpoint) {
   #profile {
+    .photo {
+      max-height: 320px;
+    }
+  }
+}
+
+@media only screen and (max-width: @small-breakpoint) {
+  #profile {
     display: flex;
     flex-direction: column;
-    width: 600px;
-    height: 546px;
+
+    .banner {
+      height: 150px;
+    }
+
+    .details {
+      .details-info {
+        justify-content: center;
+        .details-wrapper {
+          padding: 32px 16px;
+        }
+      }
+    }
 
     .photo {
       display: none;
     }
     .photo-sm {
       display: block;
-      max-height: 212px;
-      margin: -88px @large-spacing 0 0;
+      max-height: 220px;
+      margin: -140px 0 0 0;
     }
     .profile-body {
       padding-top: 0;
@@ -103,26 +139,8 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   #profile {
-    width: @full;
-    height: @full;
     .photo-sm {
-      display: none;
-    }
-  }
-}
-@media only screen and (max-width: @mobile-small-breakpoint) {
-  #profile {
-    .profile-body {
-      .buttons {
-        margin-left: initial;
-        padding: 0 @large-spacing;
-        &.desktop {
-          display: none;
-        }
-        &.mobile {
-          display: flex;
-        }
-      }
+      max-height: 160px;
     }
   }
 }

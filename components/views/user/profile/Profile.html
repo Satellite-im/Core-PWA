@@ -11,59 +11,58 @@
           :size="80"
           :src="profilePictureSrc"
         /> -->
-        <div class="intro">
-          <div>
-            <TypographyTitle :text="ui.userProfile.name" :size="6" />
-            <TypographyText>{{ ui.userProfile.status }}</TypographyText>
-          </div>
-          <!-- todo: add real badges and conditional -->
-          <div class="badges">
-            <award-icon
-              v-for="n in 3"
-              :key="n"
-              size="1.2x"
-              :style="`color:${badgeColors[n]}`"
-            />
+          <div class="details-wrapper">
+            <div class="intro">
+              <div>
+                <TypographyTitle :text="user.name" :size="6" />
+                <TypographyText weight="light"
+                  >{{ user.status }}</TypographyText
+                >
+              </div>
+              <!-- todo: add real badges and conditional -->
+              <div class="badges">
+                <award-icon
+                  v-for="n in 3"
+                  :key="n"
+                  size="1.2x"
+                  :style="`color:${badgeColors[n]}`"
+                />
+              </div>
+            </div>
+            <div class="buttons">
+              <InteractablesButton
+                v-if="!isFriend"
+                @click="createFriendRequest"
+                :loading="Boolean(loading)"
+                color="success"
+              >
+                <user-plus-icon size="1.25x" />
+              </InteractablesButton>
+              <InteractablesButton>
+                <more-vertical-icon size="1.25x" />
+              </InteractablesButton>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="buttons mobile">
-        <InteractablesButton
-          v-if="!isFriend"
-          @click="createFriendRequest"
-          :loading="Boolean(loading)"
+        <InteractablesTabs
+          :tabs="tabs"
+          @setRoute="setRoute"
+          :route="route"
+          class="tabs"
         >
-          <user-plus-icon size="1.25x" />
-        </InteractablesButton>
-        <InteractablesButton>
-          <more-vertical-icon size="1.25x" />
-        </InteractablesButton>
-      </div>
-      <InteractablesTabs
-        :tabs="tabs"
-        @setRoute="setRoute"
-        :route="route"
-        class="tabs"
-      >
-        <div class="buttons desktop">
-          <InteractablesButton
-            v-if="!isFriend"
-            @click="createFriendRequest"
-            :loading="Boolean(loading)"
-          >
-          </InteractablesButton>
-          <InteractablesButton>
-            <more-vertical-icon size="1.25x" />
-          </InteractablesButton>
-        </div>
-      </InteractablesTabs>
+        </InteractablesTabs>
 
-      <UiSimpleScroll scrollMode="vertical" scrollShow="scroll" class="scroll">
-        <UserProfileAbout v-if="route === 'about'" />
-        <UserProfileAccounts v-if="route === 'accounts'" />
-        <div v-if="route === 'activity'">activity</div>
-        <div v-if="route === 'mutual'">mutual</div>
-      </UiSimpleScroll>
+        <UiSimpleScroll
+          scrollMode="vertical"
+          scrollShow="scroll"
+          class="scroll"
+        >
+          <UserProfileAbout v-if="route === 'about'" />
+          <UserProfileAccounts v-if="route === 'accounts'" />
+          <div v-if="route === 'activity'">activity</div>
+          <div v-if="route === 'mutual'">mutual</div>
+        </UiSimpleScroll>
+      </div>
     </div>
   </div>
 </div>
