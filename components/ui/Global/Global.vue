@@ -8,8 +8,9 @@ import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import {
+  Notification,
   NotificationType,
-  NotificationClickEvent,
+  NotificationBase,
 } from '~/libraries/Iridium/notifications/types'
 
 export default Vue.extend({
@@ -91,27 +92,56 @@ export default Vue.extend({
     iridium.chat.on('routeCheck', (conversationId: string) =>
       routeCheck(conversationId),
     )
-    iridium.notifications.on(
-      'notification/clicked',
-      (data: NotificationClickEvent) => {
-        switch (data.payload.type) {
-          case NotificationType.FRIEND_REQUEST: {
-            const mobileLink = '/mobile/friends?route=request'
-            const desktopLink = '/friends?route=request'
-            this.$router.push(this.$device.isMobile ? mobileLink : desktopLink)
-            break
-          }
-          case NotificationType.DIRECT_MESSAGE: {
-            const mobileLink = `/mobile/chat/${data.topic}`
-            const desktopLink = `/chat/${data.topic}`
-            this.$router.push(this.$device.isMobile ? mobileLink : desktopLink)
-            break
-          }
-        }
-      },
-    )
+    this.listenForNotifications()
   },
   methods: {
+    listenForNotifications() {
+      iridium.notifications.on(
+        'notification/create',
+        (data: NotificationBase) => {
+          const notification: Notification = {
+            at: data.at || Date.now(),
+            type: data.type,
+            fromName: data.fromName,
+            title: this.$t(data.title, data.titleValues) as string,
+            description: this.$t(
+              data.description,
+              data.descriptionValues,
+            ) as string,
+            seen: false,
+            image: data.image || '',
+            onNotificationClick: () =>
+              this.handleNotificationClick(
+                data.type,
+                data.notificationClickParams,
+              ),
+          }
+
+          iridium.notifications.sendNotification(notification)
+        },
+      )
+    },
+    handleNotificationClick(
+      type: NotificationType,
+      params: Record<string, any> = {},
+    ) {
+      switch (type) {
+        case NotificationType.FRIEND_REQUEST: {
+          const mobileLink = '/mobile/friends?route=requests'
+          const desktopLink = '/friends?route=requests'
+          this.$router.push(this.$device.isMobile ? mobileLink : desktopLink)
+          break
+        }
+        case NotificationType.GROUP_MESSAGE:
+        case NotificationType.DIRECT_MESSAGE: {
+          const conversationId = params.conversationId
+          const mobileLink = `/mobile/chat/${conversationId}`
+          const desktopLink = `/chat/${conversationId}`
+          this.$router.push(this.$device.isMobile ? mobileLink : desktopLink)
+          break
+        }
+      }
+    },
     /**
      * @method toggleModal
      * @description

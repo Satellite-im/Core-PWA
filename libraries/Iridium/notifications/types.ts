@@ -1,3 +1,6 @@
+import { type } from 'os'
+import { User } from '~/libraries/Iridium/users/types'
+
 export const NotificationsError = {
   NOTIFICATION_NOT_SENT: 'error.notifications.notifications_not_sent',
 }
@@ -30,6 +33,19 @@ export type Notification = {
   fromAddress?: string
   image?: string
   onNotificationClick?: () => void
+}
+
+export type NotificationBase = {
+  type: NotificationType
+  title: string
+  description: string
+  fromName: string
+  at?: number
+  image?: string
+  titleValues?: object
+  descriptionValues?: object
+  onNotificationClick?: void
+  notificationClickParams?: object
 }
 
 export type NotificationClickEvent = {
