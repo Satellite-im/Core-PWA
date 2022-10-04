@@ -5,9 +5,9 @@
     v-for="tab in tabs"
     @click="setRoute(tab.route)"
     :class="{active: route === tab.route}"
-    :data-badge="tab.badge || null"
   >
     {{tab.text}}
+    <TypographyTag v-if="tab.badge" small> {{tab.badge}} </TypographyTag>
   </button>
   <slot />
 </div>

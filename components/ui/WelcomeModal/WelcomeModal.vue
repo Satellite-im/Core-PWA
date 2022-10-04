@@ -44,7 +44,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .mascot-glow {
   position: absolute;
   filter: blur(10px);

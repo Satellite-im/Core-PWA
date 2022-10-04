@@ -1,5 +1,6 @@
 <button
   @click="clickFileInput"
+  data-cy="chat-file-upload-btn-container"
   v-tooltip.top="$t('global.upload')"
   :disabled="disabled"
 >
@@ -7,6 +8,7 @@
   <input
     type="file"
     ref="upload"
+    data-cy="chat-file-upload"
     style="display: none"
     @click="resetFileInput"
     @change="handleFile"

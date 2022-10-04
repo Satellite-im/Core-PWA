@@ -4,6 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { throttle, debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
+import whatInput from 'what-input'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { KeybindingEnum, MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
@@ -16,7 +17,7 @@ import {
   ConversationMessagePayload,
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
 
 function typingFunction(conversationId: string) {
@@ -381,15 +382,9 @@ const Chatbar = Vue.extend({
         }
       })
     },
-    /**
-     * @method setFocus
-     * @description only set true if focus event was a `tab`. click will not activate outline
-     */
-    setFocus(e: FocusEvent, val: boolean) {
-      if (!val) {
-        this.isFocused = val
-      } else if (e.relatedTarget) {
-        this.isFocused = val
+    handleFocus() {
+      if (whatInput.ask() === 'keyboard') {
+        this.isFocused = true
       }
     },
   },

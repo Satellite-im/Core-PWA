@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DeleteIcon, EyeIcon, EyeOffIcon } from 'satellite-lucide-icons'
+import whatInput from 'what-input'
 import { InputType, InputColor } from './types'
 import { Size } from '~/types/typography'
 
@@ -100,11 +101,12 @@ export default Vue.extend({
   },
   data() {
     return {
-      Appends,
       showPassword: false,
+      isFocused: false,
     }
   },
   computed: {
+    Appends: () => Appends,
     isEmpty(): boolean {
       return !this.text.length
     },
@@ -134,17 +136,18 @@ export default Vue.extend({
   },
   mounted() {
     if (this.autofocus) {
-      const inputRef = this.$refs.input as HTMLInputElement
+      const input = this.$refs.input as HTMLInputElement
+      // if mobile, delay focus to avoid clash with swiper animation
       if (this.$device.isMobile) {
-        // delay focus to avoid clash with swiper animation
         setTimeout(() => {
-          inputRef.focus()
+          input.focus()
         }, MOBILE_FOCUS_DELAY)
       } else {
-        this.$nextTick(() => inputRef.focus())
+        this.$nextTick(() => input.focus())
       }
     }
   },
+
   methods: {
     handleSubmit(event: InputEvent) {
       if (this.disabled || this.loading || this.invalid) {
@@ -164,6 +167,11 @@ export default Vue.extend({
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword
+    },
+    handleFocus() {
+      if (whatInput.ask() === 'keyboard') {
+        this.isFocused = true
+      }
     },
   },
 })

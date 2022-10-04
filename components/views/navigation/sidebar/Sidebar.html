@@ -10,56 +10,54 @@
       <InteractablesSidebarToggle />
     </div>
     <div class="sidebar-nav">
-      <InteractablesButton
-        class="sidebar-full-btn"
+      <button
+        class="sidebar-button"
+        :class="{selected: $route.path.includes('/files')}"
         data-cy="sidebar-files"
-        :color="$route.path.includes('/files') ? 'primary' : 'dark'"
-        @click="() => $router.push('/files')"
-        :text="$t('files.files')"
+        @click="$router.push('/files')"
       >
-        <folder-icon size="1.2x" />
-      </InteractablesButton>
+        <folder-icon size="20" />
+        <TypographyText size="sm"> {{$t('files.files')}} </TypographyText>
+      </button>
 
-      <InteractablesButton
-        class="sidebar-full-btn"
+      <button
+        class="sidebar-button"
+        :class="{selected: $route.path.includes('/friends')}"
         data-cy="sidebar-friends"
-        :color="$route.path.includes('/friends') ? 'primary' : 'dark'"
-        @click="() => $router.push('/friends')"
-        :text="$t('friends.friends')"
+        @click="$router.push('/friends')"
       >
-        <users-icon size="1.2x" />
+        <users-icon size="20" />
+        <TypographyText size="sm"> {{$t('friends.friends')}} </TypographyText>
 
-        <span v-if="incomingRequestsLength" class="label-container">
-          <TypographyText
-            size="xs"
-            class="label"
-            :class="{inverted : $route.path.includes('/friends')}"
-          >
-            {{incomingRequestsLength}}
-          </TypographyText>
-        </span>
-      </InteractablesButton>
+        <TypographyTag v-if="incomingRequestsLength" class="tag" small>
+          {{incomingRequestsLength}}
+        </TypographyTag>
+      </button>
     </div>
 
     <div v-show="$config.feedbackUrl" class="banner-wrapper">
       <UiEarlyAccessBanner />
     </div>
-
-    <div class="quick-toggle">
-      <button
-        title="$t('pages.chat.new_chat')"
-        @click="toggleModal"
-        v-tooltip.top="$t('pages.chat.new_chat')"
-      >
-        <plus-icon size="1.4x" />
-      </button>
+    <div class="toggle-container">
+      <TypographyText as="label" color="dark">
+        {{$t('messaging.messages')}}
+      </TypographyText>
+      <div class="quick-toggle">
+        <button
+          title="$t('pages.chat.new_chat')"
+          v-tooltip.left="$t('pages.chat.new_chat')"
+          @click="toggleModal"
+        >
+          <plus-icon size="20" />
+        </button>
+      </div>
       <SidebarQuick
         v-if="isQuickchatVisible"
         v-click-outside="toggleModal"
         @toggle="toggleModal"
       />
     </div>
-    <SidebarList class="conversation-list" :filter="filter" />
+    <SidebarList :filter="filter" />
   </div>
   <div class="controls">
     <SidebarControls />

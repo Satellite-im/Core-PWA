@@ -9,7 +9,7 @@ import { blobToBase64 } from '~/utilities/BlobManip'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
 import { ItemErrors } from '~/libraries/Iridium/files/types'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 
 const convert = require('heic-convert')
 

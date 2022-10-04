@@ -1,5 +1,5 @@
 <template>
-  <div class="confirmation">
+  <div class="confirmation" data-cy="confirmation-modal">
     <div class="confirmation-main">
       <TypographyText color="flair" class="icon-container">
         <info-icon size="2x" />
@@ -10,7 +10,12 @@
             <info-icon size="1.5x" />
           </TypographyText>
 
-          <TypographyText as="h2" color="light" font="heading">
+          <TypographyText
+            data-cy="confirmation-modal-header"
+            as="h2"
+            color="light"
+            font="heading"
+          >
             <slot name="title" />
           </TypographyText>
         </div>
@@ -24,6 +29,7 @@
     <div class="buttons">
       <InteractablesButton
         :color="showConfirmButton ? 'light' : 'primary'"
+        data-cy="close-button"
         class="close-button"
         @click="close"
       >
@@ -33,6 +39,7 @@
       <InteractablesButton
         v-if="showConfirmButton"
         color="primary"
+        data-cy="confirm-button"
         class="confirm-button"
         @click="confirm"
       >

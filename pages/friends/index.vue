@@ -8,6 +8,7 @@ import type { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 import { Tab } from '~/types/ui/tab'
 import { RootState } from '~/types/store/store'
 import { FriendsTabs } from '~/libraries/Enums/enums'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'Friends',
@@ -38,9 +39,9 @@ export default Vue.extend({
       return this.$route.query.route as FriendsTabs
     },
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-      )
+      return Object.values(this.friends.requests)
+        .filter(truthy)
+        .filter((r: FriendRequest) => r.incoming && r.status !== 'accepted')
     },
     tabs(): Tab[] {
       return [
