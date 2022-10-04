@@ -942,9 +942,3 @@ Cypress.Commands.add('getAttached', (selector) => {
     })
     .then(() => cy.wrap($el))
 })
-
-Cypress.Commands.add('forceVisit', url => {
-  cy.window().then(win => {
-    return win.open(url, '_self')
-  })
-})
