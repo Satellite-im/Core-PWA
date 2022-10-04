@@ -66,7 +66,7 @@ jobs:
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
-          DEBUG: 'cypress:*'
+          DEBUG: '@cypress/github-action'
         with:
           working-directory: ./
           install: false
