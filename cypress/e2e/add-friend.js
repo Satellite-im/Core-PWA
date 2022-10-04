@@ -12,6 +12,12 @@ describe('Create two reusable accounts and validate friend request/accept flow',
     cy.clearLocalStorageSnapshot()
   })
 
+  it('test', () => {
+    // test
+    cy.forcevisit('/')
+    cy.contains('Outgoing requests').should('be.visible')
+    })
+  
   it('Create First Account and grab friend ID', { retries: 2 }, () => {
     // Create one account
     cy.createAccount('12345', firstRandomName)
