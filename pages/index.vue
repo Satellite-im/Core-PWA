@@ -91,7 +91,7 @@ export default Vue.extend({
           state: true,
           action: this.accounts.phrase
             ? () => this.loadAccount()
-            : () => this.$router.push('auth/unlock'),
+            : () => this.$router.replace('/auth/unlock'),
         })
         this.$router.replace('/')
       }

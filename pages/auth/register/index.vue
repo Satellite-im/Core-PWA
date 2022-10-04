@@ -49,6 +49,7 @@ export default Vue.extend({
   methods: {
     async confirm(userData: UserRegistrationData) {
       try {
+        console.log('register')
         await this.$store.dispatch('accounts/registerUser', {
           name: userData.username,
           image: userData.photoHash,

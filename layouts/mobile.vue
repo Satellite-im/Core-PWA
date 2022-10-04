@@ -48,11 +48,11 @@ export default Vue.extend({
     },
   },
   mounted() {
-    if (iridium.profile.ready) {
+    if (iridium.ready && iridium.profile.ready) {
       this.loaded = true
       return
     }
-    this.$router.push('auth/unlock')
+    this.$router.replace('/auth/unlock')
   },
 })
 </script>
