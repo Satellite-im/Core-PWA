@@ -72,7 +72,6 @@ jobs:
           run: sh ./build-script.sh
           command: npm run cy:run
           browser: chrome
-          wait-on: google.pt
           wait-on-timeout: 300
       - name: Artifacts
         uses: actions/upload-artifact@v2
