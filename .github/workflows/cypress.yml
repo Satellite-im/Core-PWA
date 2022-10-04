@@ -22,16 +22,6 @@ jobs:
           unset ELECTRON_RUN_AS_NODE
           /usr/bin/Xvfb :99 -screen 0 1920x1080x24+32 &
           export DISPLAY=:99
-      - name: build cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          # If source files changed but packages didn't, rebuild from a prior cache.
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-
-      - run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
       - name: Create env file - core
         run: |
           touch .env
@@ -72,6 +62,7 @@ jobs:
       - name: yarn
         run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
+      - run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
