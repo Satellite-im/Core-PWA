@@ -35,9 +35,8 @@
                 />
               </div>
             </div>
-            <div class="buttons">
+            <div class="buttons" v-if="!isFriend">
               <InteractablesButton
-                v-if="!isFriend"
                 @click="createFriendRequest"
                 :loading="loading"
                 color="success"

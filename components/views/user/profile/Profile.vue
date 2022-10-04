@@ -86,7 +86,7 @@ export default Vue.extend({
     },
     isFriend(): boolean {
       return (
-        (this.user?.did &&
+        (!!this.user?.did &&
           !!iridium.friends.state.friends.find((f) => f === this.user.did)) ||
         iridium.profile.state?.did === this.user.did
       )

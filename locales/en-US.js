@@ -857,6 +857,8 @@ export default {
         location: 'Location',
         add_note: 'Add Note',
         click_note: 'Click to add note',
+        click_location: 'Click to add your location',
+        click_about: 'Click to add something about you',
       },
       accounts: 'Accounts',
       activity: {
