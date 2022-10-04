@@ -123,6 +123,7 @@ export default Vue.extend({
     },
     onFriendRequestSent() {
       this.query = ''
+      this.$toast.show(this.$t('friends.request_sent') as string)
     },
     copyId() {
       if (!iridium.connector) return
