@@ -52,7 +52,7 @@ export default Vue.extend({
       this.loaded = true
       return
     }
-    this.$router.replace('/auth/unlock')
+    this.$router.push('/auth/unlock')
   },
 })
 </script>

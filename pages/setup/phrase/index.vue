@@ -24,7 +24,7 @@ export default Vue.extend({
       return num % 2 === 1
     },
     confirm(): void {
-      this.$router.replace('/')
+      this.$router.push('/')
     },
     copyPhrase(): void {
       navigator.clipboard.writeText(this.passPhrase)

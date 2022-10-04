@@ -13,10 +13,10 @@ export default Vue.extend({
   methods: {
     async generateWallet() {
       await this.$store.dispatch('accounts/generateWallet')
-      this.$router.push('phrase')
+      this.$router.push('/setup/phrase')
     },
     importAccount() {
-      this.$router.push('importAccount')
+      this.$router.push('/setup/importAccount')
     },
     async connectAccount() {
       await this.$store.dispatch('accounts/connectWallet')

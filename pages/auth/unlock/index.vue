@@ -121,9 +121,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          redirect && (await this.$router.replace('/setup/disclaimer'))
+          redirect && (await this.$router.push('/setup/disclaimer'))
         } else {
-          redirect && (await this.$router.replace('/'))
+          redirect && (await this.$router.push('/'))
         }
       } catch (error: any) {
         this.pin = ''
@@ -140,6 +140,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
      */
     async create() {
       try {
+        console.log('creaaaaate')
         this.status = 'loading'
         await this.$store.dispatch('accounts/setPin', this.pin)
         await this.decrypt()
@@ -157,6 +158,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
       location.reload()
     },
     action() {
+      console.log('acgtiooon')
       if (this.step === 'login') {
         this.decrypt()
         return
@@ -193,7 +195,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
         }
 
         if (this.$route.path !== '/') {
-          this.$router.replace('/')
+          this.$router.push('/')
         }
       } catch (error: any) {
         this.error = error.message

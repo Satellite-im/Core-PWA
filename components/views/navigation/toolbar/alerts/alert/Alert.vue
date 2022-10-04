@@ -48,7 +48,7 @@ export default Vue.extend({
     notificationLink(alertType: NotificationType) {
       switch (alertType) {
         case NotificationType.FRIEND_REQUEST: {
-          this.$router.push({ path: '/friends' })
+          this.$router.push('/friends')
           break
         }
         case NotificationType.DIRECT_MESSAGE: {

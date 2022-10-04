@@ -52,7 +52,7 @@ export default Vue.extend({
         this.$store.commit('files/setPath', [])
         // if invalid route, reset to default
         if (!Object.values(FileRouteEnum).includes(value)) {
-          this.$router.push({ query: {} })
+          this.$router.push('/')
         }
       },
     },

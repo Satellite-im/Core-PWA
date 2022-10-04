@@ -41,7 +41,7 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('accounts/loadAccount')
         const onReady = () => {
-          this.$router.replace('/auth/unlock')
+          this.$router.push('/auth/unlock')
         }
         if (iridium.ready) {
           this.loaded = true
@@ -51,17 +51,17 @@ export default Vue.extend({
         }
       } catch (error: any) {
         this.loaded = true
-        if (error.message === AccountsError.MNEMONIC_NOT_PRESENT) {
-          await this.$router.replace('/auth/unlock')
+
+        const redirectObj = {
+          [AccountsError.MNEMONIC_NOT_PRESENT]: '/auth/unlock',
+          [AccountsError.USER_NOT_REGISTERED]: '/auth/register',
+          [AccountsError.USER_DERIVATION_FAILED]: '/setup/disclaimer',
+        }
+        if (this.$route.path === redirectObj[error.message]) {
           return
         }
-        if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          await this.$router.replace('/auth/register')
-          return
-        }
-        if (error.message === AccountsError.USER_DERIVATION_FAILED) {
-          await this.$router.replace('/setup/disclaimer')
-        }
+        redirectObj[error.message] &&
+          this.$router.push(redirectObj[error.message])
       }
     },
   },

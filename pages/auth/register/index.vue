@@ -58,9 +58,7 @@ export default Vue.extend({
           ready: iridium.ready,
         })
         const onReady = () => {
-          this.$router.replace(
-            this.$device.isMobile ? '/mobile/chat' : '/friends',
-          )
+          this.$router.push(this.$device.isMobile ? '/mobile/chat' : '/friends')
         }
         if (iridium.ready) {
           onReady()

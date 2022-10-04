@@ -65,16 +65,13 @@ export default Vue.extend({
       ).length
       return Boolean(match)
     },
-    ready(): boolean {
-      return iridium.ready && !!iridium.profile.state?.did
-    },
   },
   mounted() {
     if (iridium.ready && iridium.profile.ready) {
       this.loaded = true
       return
     }
-    this.$router.replace('/auth/unlock')
+    this.$router.push('/auth/unlock')
   },
   methods: {
     /**
