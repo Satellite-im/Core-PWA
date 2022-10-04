@@ -100,11 +100,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      Appends,
       showPassword: false,
+      isMousedown: false,
+      isFocused: false,
     }
   },
   computed: {
+    Appends: () => Appends,
     isEmpty(): boolean {
       return !this.text.length
     },
@@ -133,17 +135,23 @@ export default Vue.extend({
     },
   },
   mounted() {
+    window.addEventListener('blur', this.setMousedown)
     if (this.autofocus) {
-      const inputRef = this.$refs.input as HTMLInputElement
+      const input = this.$refs.input as HTMLInputElement
+      // set to avoid a11y outline which is set via keyboard focus only
+      this.setMousedown()
       if (this.$device.isMobile) {
         // delay focus to avoid clash with swiper animation
         setTimeout(() => {
-          inputRef.focus()
+          input.focus()
         }, MOBILE_FOCUS_DELAY)
       } else {
-        this.$nextTick(() => inputRef.focus())
+        this.$nextTick(() => input.focus())
       }
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('blur', this.setMousedown)
   },
   methods: {
     handleSubmit(event: InputEvent) {
@@ -164,6 +172,15 @@ export default Vue.extend({
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword
+    },
+    handleFocus() {
+      if (!this.isMousedown) {
+        this.isFocused = true
+      }
+      this.isMousedown = false
+    },
+    setMousedown() {
+      this.isMousedown = true
     },
   },
 })

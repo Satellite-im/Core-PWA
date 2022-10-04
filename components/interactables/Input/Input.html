@@ -2,7 +2,10 @@
   <TypographyText v-if="label" as="label" uppercase>
     {{ label }}
   </TypographyText>
-  <div class="input-outer" :class="`font-size-${derivedSize}`">
+  <div
+    class="input-outer"
+    :class="[`font-size-${derivedSize}`, {'outline': isFocused}]"
+  >
     <div
       class="input-inner"
       :class="[
@@ -27,6 +30,9 @@
         data-cy="input-group"
         @keydown.enter="handleSubmit"
         @input="handleInput"
+        @mousedown="setMousedown"
+        @focus="handleFocus"
+        @blur="isFocused = false"
       />
 
       <div v-if="enabledAppends.length" class="append input-options">
