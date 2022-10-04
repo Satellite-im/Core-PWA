@@ -1,17 +1,18 @@
-<label class="switch-container">
+<TypographyText as="label" class="switch-container">
   <input
     type="checkbox"
     class="hidden"
-    :checked="isEnabled"
+    :checked="value"
     :disabled="isLocked"
     @click="toggle"
-    @focus="setFocus(true)"
-    @blur="setFocus(false)"
+    @focus="handleFocus"
+    @blur="isFocused = false"
   />
   <div
     class="switch-button"
     data-cy="switch-button"
-    :class="{ enabled: isEnabled, locked: isLocked, outline: isFocused }"
+    :class="{ enabled: value, locked: isLocked, outline: isFocused }"
+    aria-hidden="true"
   />
-  <TypographyText v-if="label" as="label"> {{ label }} </TypographyText>
-</label>
+  <div :class="{hidden: !showLabel}">{{ label }}</div>
+</TypographyText>

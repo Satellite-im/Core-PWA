@@ -1,40 +1,28 @@
 <template src="./Switch.html"></template>
 <script lang="ts">
 import Vue from 'vue'
+import whatInput from 'what-input'
 
 export default Vue.extend({
   model: {
-    prop: 'isEnabled',
+    prop: 'value',
     event: 'toggle',
   },
   props: {
-    /**
-     * Should the toggle switch be 'on'
-     */
-    isEnabled: Boolean,
-    /**
-     * Allows you to override the switch colors
-     */
-    color: {
-      type: String,
-      required: false,
-      default: 'null',
+    value: {
+      type: Boolean,
+      required: true,
     },
-    /**
-     * If provided, a label will be attached to the right of the switch
-     */
-    label: {
-      type: String,
-      required: false,
-      default: '',
-    },
-
-    /**
-     * If provided the button would appear as disabled and non interactable
-     */
     isLocked: {
       type: Boolean,
-      required: false,
+      default: false,
+    },
+    label: {
+      type: String,
+      required: true,
+    },
+    showLabel: {
+      type: Boolean,
       default: false,
     },
   },
@@ -49,11 +37,13 @@ export default Vue.extend({
      */
     toggle() {
       if (!this.isLocked) {
-        this.$emit('toggle', !this.isEnabled)
+        this.$emit('toggle', !this.value)
       }
     },
-    setFocus(val: boolean) {
-      this.isFocused = val
+    handleFocus() {
+      if (whatInput.ask() === 'keyboard') {
+        this.isFocused = true
+      }
     },
   },
 })

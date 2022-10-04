@@ -4,6 +4,7 @@
   margin: @light-spacing 0;
   align-items: center;
   gap: 10px;
+  width: fit-content;
 
   .switch-button {
     position: relative;
@@ -41,7 +42,7 @@
         transform: translateY(-50%)
           translateX(calc(calc(1.6rem - (2 * 0.125rem)) + (2 * 0.125rem)));
         border: 0.2rem solid @flair-color;
-        background: @white !important;
+        background: @white;
       }
     }
 
@@ -50,15 +51,15 @@
 
       &::after {
         border-color: @gray;
-        background: @gray !important;
-        box-shadow: -5px 0px 20px -2px @gray !important;
+        background: @gray;
+        box-shadow: -5px 0px 20px -2px @gray;
       }
 
       &.enabled {
-        box-shadow: unset !important;
-        background: @gray !important;
+        box-shadow: unset;
+        background: @gray;
         &::after {
-          background: @white !important;
+          background: @white;
         }
       }
     }
