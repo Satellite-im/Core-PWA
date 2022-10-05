@@ -80,25 +80,18 @@ jobs:
           cd iridium
           pnpm sync-node &
 
-      - name: Yarn Dev
-        working-directory: ./
-        run: yarn dev &
-
-      - name: Ping to localhost
-        run: curl -v http://localhost:3000/
-
-      #- name: Cypress tests with debug logs
-      #  uses: cypress-io/github-action@v4
-      #  env:
-      #    DEBUG: '@cypress/github-action'
-      #  with:
-      #    working-directory: ./
-      #    install: false
-      #    start: yarn dev
-      #    command: npx cypress run --browser chrome
-      #    wait-on: 'http://localhost:3000'
-      #    wait-on-timeout: 300
-      #    config-file: cypress.config.js
+      - name: Cypress tests with debug logs
+        uses: cypress-io/github-action@v4
+        env:
+          DEBUG: '@cypress/github-action'
+        with:
+          working-directory: ./
+          install: false
+          start: yarn dev
+          command: curl -v http://localhost:3000 && npx cypress run --browser chrome
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 300
+          config-file: cypress.config.js
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
