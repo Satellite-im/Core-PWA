@@ -45,7 +45,6 @@ export default Vue.extend({
       isLoadingMore: false,
       isBlurred: false,
       resizeContainerObserver: null as ResizeObserver | null,
-      resizeMessagesObserver: null as ResizeObserver | null,
       isLockedToBottom: true,
       firstUnreadMessageElement: null as HTMLElement | null,
       lastScrolledToUnreadMessageElement: null as HTMLElement | null,
@@ -172,7 +171,7 @@ export default Vue.extend({
   watch: {
     chatItems(newValue, oldValue) {
       if (
-        this.isLastChatItemAuthor &&
+        (this.isLastChatItemAuthor || this.isLockedToBottom) &&
         newValue.at(-1)?.message.id !== oldValue.at(-1)?.message.id
       ) {
         this.scrollToBottom()
@@ -217,12 +216,6 @@ export default Vue.extend({
       }
     })
     this.resizeContainerObserver.observe(container)
-    this.resizeMessagesObserver = new ResizeObserver(() => {
-      if (this.isLockedToBottom) {
-        this.scrollToBottom()
-      }
-    })
-    this.resizeMessagesObserver.observe(messages)
     iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
 
     // Set active conversation ID
@@ -232,7 +225,6 @@ export default Vue.extend({
     window.removeEventListener('blur', this.handleBlur)
     window.removeEventListener('focus', this.handleFocus)
     this.resizeContainerObserver?.disconnect()
-    this.resizeMessagesObserver?.disconnect()
 
     // Clear active conversation ID
     iridium.chat.ephemeral.activeConversationId = ''
