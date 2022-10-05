@@ -19,6 +19,24 @@ describe('SatelliteDB/SearchIndex', () => {
     const idxb = new SearchIndex()
   })
 
+  test('constructor with a customized argument', () => {
+    const idxc = new SearchIndex({
+      records: false, // We put false to cover the branch on the constructor
+      schema: undefined,
+      index: {
+        documentCount: 0,
+        nextId: 0,
+        documentIds: {},
+        fieldIds: { id: 0, text: 1 },
+        fieldLength: {},
+        averageFieldLength: [],
+        storedFields: {},
+        index: [],
+        serializationVersion: 1,
+      },
+    })
+  })
+
   test('searchIndex.update()', async () => {
     const data = [
       { id: '1', text: 'first match' },
@@ -101,6 +119,27 @@ describe('SatelliteDB/SearchIndex', () => {
     idx.upsert({ id: '1', text: 'foo bar baz' })
     expect(idx.search('foo')?.length).toEqual(1)
     expect(idx.search('foo')?.[0]?.text).toEqual('foo bar baz')
+  })
+
+  test('searchIndex.serialize()', async () => {
+    const result = idx.serialize()
+    const expectedResult = {
+      index: {
+        documentCount: 0,
+        nextId: 0,
+        documentIds: {},
+        fieldIds: { id: 0, text: 1 },
+        fieldLength: {},
+        averageFieldLength: [],
+        storedFields: {},
+        index: [],
+        serializationVersion: 1,
+      },
+      schema: { fields: ['id', 'text'], storeFields: ['id', 'text'] },
+    }
+    const stringifyExpectedResult = JSON.stringify(expectedResult)
+
+    expect(result).toEqual(stringifyExpectedResult)
   })
 
   test('searchIndex.upsertAll()', async () => {
