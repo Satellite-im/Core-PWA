@@ -6,7 +6,7 @@ on:
 
 jobs:
   cypress-run:
-    runs-on: macos-latest
+    runs-on: macos-12
     container:
       image: cypress/browsers:node16.13.0-chrome95-ff94
       options: --user 0
