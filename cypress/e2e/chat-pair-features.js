@@ -1,40 +1,19 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
-const faker = require('faker')
-const recoverySeedAccountOne =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat User A')
-    .map((item) => item.recoverySeed) + '{enter}'
-const recoverySeedAccountTwo =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat User B')
-    .map((item) => item.recoverySeed) + '{enter}'
-const recoverySeedAccountThree =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat User C')
-    .map((item) => item.recoverySeed) + '{enter}'
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 const textReply = 'This is a reply to the message'
 let glyphURL, imageURL, fileURL, messageTimestamp, messageTimestampPast
 
 describe.skip('Chat features with two accounts', () => {
-  // Skipping since import account is not working
-  it(
-    'Ensure chat window from first account is displayed',
-    { retries: 2 },
-    () => {
-      //Import first account
-      cy.importAccount(randomPIN, recoverySeedAccountOne)
-      //Validate Chat Screen is loaded
-      cy.validateChatPageIsLoaded()
+  // Skipped for pending rework needed due to iridium changes
+  it('Ensure chat window from first account is displayed', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.restoreLocalStorage('Chat User A').then(() => {
+      cy.loginWithLocalStorage('12345')
+    })
 
-      //Go to Conversation
-      cy.goToConversation('Chat User B')
-    },
-  )
+    // Go to a Conversation
+    cy.goToConversation('Chat User B')
+  })
 
   it('Send message to user B', () => {
     //Send message
@@ -132,17 +111,18 @@ describe.skip('Chat features with two accounts', () => {
 
   it('File messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
+    cy.saveLocalStorage('Chat User A')
   })
 
-  it(
-    'Ensure chat window from second account is displayed',
-    { retries: 2 },
-    () => {
-      cy.importAccount(randomPIN, recoverySeedAccountTwo)
-      cy.validateChatPageIsLoaded()
-      cy.goToConversation('Chat User A')
-    },
-  )
+  it('Ensure chat window from second account is displayed', () => {
+    // Login with User B by restoring LocalStorage Snapshot
+    cy.restoreLocalStorage('Chat User B').then(() => {
+      cy.loginWithLocalStorage('12345')
+    })
+
+    // Go to a Conversation
+    cy.goToConversation('Chat User A')
+  })
 
   it('Assert message received from user A', () => {
     //Adding assertion to validate that messages are displayed
@@ -294,7 +274,8 @@ describe.skip('Chat features with two accounts', () => {
       })
   })
 
-  it(
+  // Skipped since we are not able to create three accounts at the same time until further research is done on how to restore localstorage for more than two snapshots
+  it.skip(
     'User should be able to reply without first clicking into the chat bar - Chat User C',
     { retries: 2 },
     () => {
@@ -307,7 +288,8 @@ describe.skip('Chat features with two accounts', () => {
     },
   )
 
-  it(
+  // Skipped since we are not able to create three accounts at the same time until further research is done on how to restore localstorage for more than two snapshots
+  it.skip(
     'Send a message from third account to second account',
     { retries: 2 },
     () => {
@@ -320,18 +302,15 @@ describe.skip('Chat features with two accounts', () => {
     },
   )
 
-  it(
-    'React to other users reaction - Load Account User A',
-    { retries: 2 },
-    () => {
-      //import Chat User A account the one that receive reactions previously
-      cy.importAccount(randomPIN, recoverySeedAccountOne)
-      cy.validateChatPageIsLoaded()
+  it('React to other users reaction - Load Account User A', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.restoreLocalStorage('Chat User A').then(() => {
+      cy.loginWithLocalStorage('12345')
+    })
 
-      //Go to conversation with Chat User B
-      cy.goToConversation('Chat User B')
-    },
-  )
+    // Go to a Conversation
+    cy.goToConversation('Chat User B')
+  })
 
   it('React to other users reaction - Execute validation', () => {
     //Find the last reaction message

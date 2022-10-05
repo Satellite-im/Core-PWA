@@ -5,20 +5,17 @@ const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 const path = require('path')
 
 describe('Chat - Sending Images Tests', () => {
-  // Before starting spec - Restore Localstorage Snapshots for next specs
-  before(() => {
-    cy.restoreLocalStorage('Chat User A')
-  })
-
   // Setup downloads folder for cypress
   const downloadsFolder = Cypress.config('downloadsFolder')
 
-  it('Load account and consent file upload', { retries: 2 }, () => {
-    // Import account from localstorage
-    cy.loginWithLocalStorage('Chat User A', '12345')
+  it('Load account and consent file upload', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.restoreLocalStorage('Chat User A').then(() => {
+      cy.loginWithLocalStorage('12345')
+    })
 
     // Go to a Conversation
-    cy.goToNewChat()
+    cy.goToConversation('Chat User B')
 
     //Click on file upload for the first time
     cy.get('[data-cy=chat-file-upload-btn-container]').click()
@@ -71,5 +68,9 @@ describe('Chat - Sending Images Tests', () => {
       'contain',
       'Image failed to load',
     )
+  })
+
+  after(() => {
+    cy.saveLocalStorage('Chat User A')
   })
 })

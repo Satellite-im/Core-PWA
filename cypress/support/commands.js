@@ -224,8 +224,7 @@ Cypress.Commands.add('welcomeModal', (username) => {
 
 //Import Account Commands
 
-Cypress.Commands.add('loginWithLocalStorage', (snapshot, pin) => {
-  cy.restoreLocalStorage(snapshot)
+Cypress.Commands.add('loginWithLocalStorage', (pin) => {
   cy.visit('/')
   cy.get('[data-cy=input-group]').trigger('input').type(pin)
   cy.get('[data-cy="submit-input"]').click()
@@ -517,38 +516,27 @@ Cypress.Commands.add('clickOutside', () => {
 
 Cypress.Commands.add('validateChatPageIsLoaded', (isMobile = false) => {
   if (isMobile === false) {
-    cy.get('[data-cy=user-name]', { timeout: 120000 }).should('exist')
+    cy.get('[data-cy=user-name]', { timeout: 30000 }).should('exist')
   } else if (isMobile === true) {
-    cy.get('#mobile-nav', { timeout: 120000 }).should('exist')
+    cy.get('#mobile-nav', { timeout: 30000 }).should('exist')
   }
 })
 
-Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
-  cy.get('#app-wrap').then(($appWrap) => {
-    if (!$appWrap.hasClass('is-open')) {
-      cy.get('[data-cy=toggle-sidebar]').click()
+Cypress.Commands.add('goToConversation', (user) => {
+  //If sidebar is hidden, click on hamburger menu
+  cy.get('#app').then(($app) => {
+    if ($app.hasClass('hide-sidebars')) {
+      cy.get('[data-cy=hamburger-button]').click()
     }
   })
 
+  // Go to friend by choosing it from sidebar
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
-    .then(($el) => {
-      cy.getAttached($el).click()
-    })
+    .click()
 
-  // Hide sidebar if not on mobile browser
-  if (isMobile === false) {
-    cy.get('[data-cy=hamburger-button]').click()
-
-    //Navigate through several pages before going to conversation
-    //As a workaround for the issue of message containers taking a lot of time to be loaded
-    cy.workaroundChatLoad(user)
-  }
-
-  //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-container]', { timeout: 120000 })
-    .last()
-    .should('exist')
+  //Wait until chat page is loaded
+  cy.get('#conversation-container', { timeout: 30000 }).should('exist')
 })
 
 Cypress.Commands.add('goToNewChat', () => {
@@ -565,22 +553,6 @@ Cypress.Commands.add('goToNewChat', () => {
 
   //Wait until chat page is loaded
   cy.get('#conversation-container', { timeout: 30000 }).should('exist')
-})
-
-Cypress.Commands.add('workaroundChatLoad', (user) => {
-  //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
-
-  cy.get('[data-cy=toggle-sidebar]').click() //Click on toggle sidebar to display sidebar menu
-  cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
-  cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
-  cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
-  //Click on the conversation again
-  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
-    .contains(user)
-    .then(($el) => {
-      cy.getAttached($el).click()
-    })
-  cy.get('[data-cy=hamburger-button]').click() // Hide sidebar if not on mobile browser
 })
 
 // Chat - Hover on Icon Commands
@@ -941,4 +913,44 @@ Cypress.Commands.add('getAttached', (selector) => {
       expect(Cypress.dom.isDetached($el)).to.be.false
     })
     .then(() => cy.wrap($el))
+})
+
+// Friend Requests Commands
+
+Cypress.Commands.add('sendFriendRequest', (friendID, friendName) => {
+  cy.get('[data-cy=add-friend-page]')
+    .find('[data-cy=input-group]')
+    .click()
+    .type(friendID)
+  cy.get('[data-cy=friend]')
+    .should('be.visible')
+    .then(() => {
+      cy.get('[data-cy=friend-name]').should('contain', friendName)
+      cy.get('[data-cy=friend-confirm-button]').click()
+    })
+  cy.contains('Friend request successfully sent!').should('be.visible')
+})
+
+Cypress.Commands.add('acceptUpcomingFriendRequest', (upcomingFriendName) => {
+  cy.get('[data-cy=friend-requests-page]')
+    .find('[data-cy=friend]')
+    .find('[data-cy=friend-name]')
+    .should('contain', upcomingFriendName)
+    .parents('[data-cy=friend]')
+    .find('[data-cy=friend-confirm-button]')
+    .click()
+  cy.contains('No requests found').should('be.visible')
+  cy.contains('You have no pending friend requests').should('be.visible')
+})
+
+Cypress.Commands.add('validateRequestsBadge', () => {
+  cy.get('[data-cy=tab-element]')
+    .contains('Requests')
+    .find('[data-cy=tab-badge]')
+    .should('contain', '1')
+})
+
+Cypress.Commands.add('goToFriendsPage', (page) => {
+  cy.get('[data-cy=sidebar-friends]').click()
+  cy.get('[data-cy=tab-element]').contains(page).click()
 })

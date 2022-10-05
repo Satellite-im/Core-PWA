@@ -1,5 +1,5 @@
 <template>
-  <div class="requests">
+  <div class="requests" data-cy="friend-requests-page">
     <UiResultsMessage
       v-if="!incomingRequests.length && !outgoingRequests.length"
       :title="$t('friends.no_requests')"

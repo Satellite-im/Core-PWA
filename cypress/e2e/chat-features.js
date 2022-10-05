@@ -6,15 +6,14 @@ let imageURL, expecedEditedMessage
 
 describe('Chat Features Tests', () => {
   before(() => {
-    // Restore Localstorage Snapshots for next specs
-    cy.restoreLocalStorage('Chat User A')
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.restoreLocalStorage('Chat User A').then(() => {
+      cy.loginWithLocalStorage('12345')
+    })
   })
-  it('Chat - Send message on chat', { retries: 2 }, () => {
-    // Import account
-    cy.loginWithLocalStorage('Chat User A', '12345')
-
+  it('Chat - Send message on chat', () => {
     // Validate message is sent
-    cy.goToNewChat()
+    cy.goToConversation('Chat User B')
     cy.chatFeaturesSendMessage(randomMessage)
   })
 
@@ -116,9 +115,9 @@ describe('Chat Features Tests', () => {
     // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
     cy.hoverOnComingSoonIcon(
       '[data-cy=send-money]',
-      'Send Money Coming Soon',
+      'Send Money (Coming Soon)',
     ).then(() => {
-      cy.contains('Send Money Coming Soon').should('not.exist')
+      cy.contains('Send Money (Coming Soon)').should('not.exist')
     })
   })
 
