@@ -2,6 +2,9 @@
   <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
+    <UiModal v-if="incomingCall" :showCloseButton="false">
+      <MediaIncomingCall />
+    </UiModal>
     <UiModal
       v-if="ui.modals.consentScanConfirmation"
       @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
@@ -41,9 +44,6 @@
         :set-close-timeout="5000"
       />
     </UiModal> -->
-    <UiModal v-if="incomingCall" :showCloseButton="false">
-      <MediaIncomingCall />
-    </UiModal>
     <UiModal
       v-if="ui.modals.marketplace"
       @close="toggleModal(ModalWindows.MARKETPLACE)"
