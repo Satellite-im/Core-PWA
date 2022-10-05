@@ -41,7 +41,7 @@ export default class IridiumProfile extends Emitter {
 
   onStateChanged(state: { path: string; value: any }) {
     logger.info('iridium/profile', 'state changed', { state })
-    if (state.path.startsWith('/profile')) {
+    if (state.path.startsWith('/')) {
       if (!state.value?.profile || !state.value?.profile?.did) {
         logger.info(
           'iridium/profile',

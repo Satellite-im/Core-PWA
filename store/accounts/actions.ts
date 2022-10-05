@@ -16,6 +16,7 @@ import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/Phanto
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 import { IridiumDocument } from '~/linked-iridium/dist'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default {
   /**
@@ -151,66 +152,6 @@ export default {
    * this.$store.dispatch('accounts/loadAccount')
    * ```
    */
-  async importAccount({
-    commit,
-    state,
-    dispatch,
-  }: ActionsArguments<AccountsState>) {
-    const logTag = 'accounts/actions/importAccount'
-    logger.info(logTag, 'importing account')
-
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-    if (state.adapter === 'Solana') {
-      $BlockchainClient.setAdapter(new SolanaAdapter())
-      logger.info(logTag, 'using solana adapter')
-    } else {
-      $BlockchainClient.setAdapter(new PhantomAdapter())
-      logger.info(logTag, 'using phantom wallet')
-    }
-
-    logger.info(logTag, 'state', state)
-    if (!state.phrase.length) {
-      logger.error(logTag, 'empty mnemonic')
-      throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
-    }
-
-    const mnemonic = state.phrase
-    await $BlockchainClient.initFromMnemonic(mnemonic)
-    if (!$BlockchainClient.isPayerInitialized) {
-      logger.error(logTag, 'user derivation failed')
-      throw new Error(AccountsError.USER_DERIVATION_FAILED)
-    }
-
-    if (!iridium.connector) {
-      logger.debug(logTag, 'signing message for iridium')
-      const { pinHash } = state
-      const entropyMessage = IdentityManager.generateEntropyMessage(
-        $BlockchainClient.account.publicKey.toBase58(),
-        pinHash,
-      )
-      const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      logger.debug(logTag, 'initializing iridium with entropy')
-      await iridium.initFromEntropy(entropy)
-      await iridium.start()
-    }
-
-    iridium.connector?.once(
-      'changed',
-      async (payload: { path: string; value: { [key: string]: any } }) => {
-        const profile = payload.value.profile
-        window.console.log('profile', profile)
-        if (!profile?.did) {
-          try {
-            await this.$router.replace('/auth/register')
-          } catch (_) {}
-          logger.error(logTag, 'user not registered, redirecting')
-          throw new Error(AccountsError.USER_NOT_REGISTERED)
-        }
-        commit('setUserDetails', profile)
-        await this.$router.push('/')
-      },
-    )
-  },
   async loadAccount({
     commit,
     state,
@@ -245,6 +186,27 @@ export default {
     }
 
     if (!iridium.connector) {
+      iridium.profile?.once('ready', async (payload: User) => {
+        const profile = payload
+
+        logger.debug(logTag, 'fetched iridium profile', {
+          profile,
+        })
+        if (!profile?.did) {
+          try {
+            await this.$router.replace('/auth/register')
+          } catch (_) {}
+          logger.error(logTag, 'user not registered, redirecting')
+          throw new Error(AccountsError.USER_NOT_REGISTERED)
+        }
+        logger.debug(
+          logTag,
+          'user loaded, dispatching setUserDetails & setRegistrationStatus',
+          profile,
+        )
+        commit('setUserDetails', profile)
+        commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      })
       logger.debug(logTag, 'signing message for iridium')
       const { pinHash } = state
       const entropyMessage = IdentityManager.generateEntropyMessage(
@@ -257,34 +219,9 @@ export default {
       await iridium.start()
     }
 
-    const { details } = state
-    window.console.log('details', details)
-    const profile = !details ? await iridium.profile?.get() : state.details
-
-    logger.debug(logTag, 'fetched iridium profile', {
-      profile,
-    })
-    if (!profile?.did) {
-      try {
-        this.$router.replace('/auth/register')
-      } catch (_) {}
-      logger.error(logTag, 'user not registered, redirecting')
-      throw new Error(AccountsError.USER_NOT_REGISTERED)
-    }
-
-    window.console.log('profilo preso')
-
     iridium.on('ready', () => {
       logger.info(logTag, 'iridium ready')
       commit('setActiveAccount', iridium.id)
-
-      logger.debug(
-        logTag,
-        'user loaded, dispatching setUserDetails & setRegistrationStatus',
-        profile,
-      )
-      commit('setUserDetails', profile)
-      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
       logger.info(logTag, 'finished')
       return dispatch('startup')
     })
