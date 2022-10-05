@@ -16,6 +16,7 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { UserStatus } from '~/libraries/Iridium/users/types'
 import { FriendRequest } from '~/libraries/Iridium/friends/types'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   components: {
@@ -49,9 +50,9 @@ export default Vue.extend({
       },
     },
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-      )
+      return Object.values(this.friends.requests)
+        .filter(truthy)
+        .filter((r: FriendRequest) => r?.incoming && r.status !== 'accepted')
     },
     hasFriendRequests(): boolean {
       return this.incomingRequests.length > 0

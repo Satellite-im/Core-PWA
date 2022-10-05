@@ -10,6 +10,8 @@ import {
 } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
+import { truthy } from '~/utilities/typeGuard'
+
 export default Vue.extend({
   components: {
     UsersIcon,
@@ -26,9 +28,10 @@ export default Vue.extend({
   },
   computed: {
     incomingRequestsLength(): number {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.status === 'pending' && r.incoming,
-      ).length
+      return Object.values(this.friends.requests)
+        .filter(truthy)
+        .filter((r: FriendRequest) => r?.status === 'pending' && r.incoming)
+        .length
     },
   },
   methods: {
