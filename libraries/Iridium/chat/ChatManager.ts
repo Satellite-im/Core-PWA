@@ -473,7 +473,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     conversationId: string,
     count: number,
   ): Promise<void> {
-    this.state.unreadCounts[conversationId] = count
+    Vue.set(this.state.unreadCounts, conversationId, count)
     await this.set(`/unreadCounts/${conversationId}`, count)
   }
 
