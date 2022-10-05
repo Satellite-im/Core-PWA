@@ -1,5 +1,7 @@
 import * as web3 from '@solana/web3.js'
+import * as Solana from '~/libraries/Solana/Solana'
 import * as SolanaManager from '~/libraries/Solana/SolanaManager/SolanaManager'
+import { SolanaWallet } from '~/types/solana/solana'
 const SolanaManagerDefault = SolanaManager.default
 
 describe('SolanaManager.default.getPath', () => {
@@ -445,6 +447,50 @@ describe('SolanaManager.default.generateDerivedPublicKey', () => {
     test('2', () => {
       const result: any = inst3.getAccount('')
       expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('Test SolanaManager', () => {
+    let instance: any
+
+    beforeEach(() => {
+      instance = new SolanaManagerDefault()
+    })
+
+    test('deriveSeed with invalid derivation path', () => {
+      const stringAsBuffer = Solana.stringToBuffer('string', 'string'.length)
+      try {
+        const result: any = instance.deriveSeed(stringAsBuffer, '/')
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+        expect(error).toHaveProperty('message', `Invalid derivation path`)
+      }
+    })
+
+    test('createRandomKeypair with non Uint8Array type', async () => {
+      const result: any = instance
+        .createRandomKeypair()
+        .then((result: SolanaWallet) => {})
+        .catch((error: any) => {
+          expect(error).toBeInstanceOf(TypeError)
+          expect(error).toHaveProperty(
+            'message',
+            `unexpected type, use Uint8Array`,
+          )
+        })
+    })
+
+    test('initializeRandom with non Uint8Array type', async () => {
+      const result: any = instance
+        .initializeRandom()
+        .then((result: any) => {})
+        .catch((error: any) => {
+          expect(error).toBeInstanceOf(TypeError)
+          expect(error).toHaveProperty(
+            'message',
+            `unexpected type, use Uint8Array`,
+          )
+        })
     })
   })
 })
