@@ -121,14 +121,14 @@ export class IridiumManager extends Emitter {
     this.connector.on('ready', this.onP2pReady.bind(this))
     this.profile.on('ready', this.onP2pReady.bind(this))
     this.profile.on('changed', this.onP2pReady.bind(this))
-    this.profile.on('ready', this.onProfileChange.bind(this))
-    this.profile.on('changed', this.onProfileChange.bind(this))
+    this.profile.on('ready', this.onProfileChange.bind(this, 'ready'))
+    this.profile.on('changed', this.onProfileChange.bind(this, 'changed'))
 
     logger.info(logTag, 'initializing profile')
     await this.profile.start()
   }
 
-  async onProfileChange() {
+  async onProfileChange(data: string) {
     const logTag = 'iridium/manager/onProfileChange'
     clearTimeout(this.initDebounce)
     this.initDebounce = setTimeout(async () => {
