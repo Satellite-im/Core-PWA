@@ -65,7 +65,7 @@ jobs:
       - run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
 
       - name: run build-script
-        run: sh ./build-script.sh
+        run: sh ./build-script.sh &
 
   run-cypress:
     runs-on: ubuntu-latest
