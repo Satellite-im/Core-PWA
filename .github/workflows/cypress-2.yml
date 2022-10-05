@@ -79,10 +79,6 @@ jobs:
           cd iridium
           pnpm sync-node &
 
-      - name: Yarn Sync Node
-        run: yarn link "@satellite-im/iridium"
-        working-directory: ./
-
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
