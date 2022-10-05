@@ -12,7 +12,6 @@ import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encod
 import { CID } from 'multiformats'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as json from 'multiformats/codecs/json'
-import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
 import {
@@ -21,7 +20,6 @@ import {
   ConversationMessagePayload,
   ConversationMessage,
   IridiumConversationEvent,
-  MessageAttachment,
   MessageEdit,
   MessageEditPayload,
   MessageReaction,
@@ -30,13 +28,10 @@ import {
 import { Friend } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
-import { ChatFileUpload } from '~/store/chat/types'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
-  Notification,
   NotificationBase,
-  NotificationClickEvent,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { uploadFile } from '~/libraries/Iridium/utils'
@@ -52,10 +47,12 @@ export type ConversationPubsubEvent = IridiumMessage<
 
 export type State = {
   conversations: { [key: string]: Conversation }
+  unreadCounts: { [key: string]: number }
 }
 
 const initialState: State = {
   conversations: {},
+  unreadCounts: {},
 }
 
 export type Conversations = {
@@ -82,6 +79,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.state.conversations = {
       ...this.state.conversations,
       ...(fetched?.conversations || {}),
+    }
+    this.state.unreadCounts = {
+      ...this.state.unreadCounts,
+      ...(fetched?.unreadCounts || {}),
     }
     const conversations = Object.values(this.state.conversations)
     iridium.connector?.p2p.on<
@@ -468,6 +469,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     this.emit(`conversations/${conversationId}`, conversation)
   }
 
+  async updateUnreadCount(
+    conversationId: string,
+    count: number,
+  ): Promise<void> {
+    this.state.unreadCounts[conversationId] = count
+    await this.set(`/unreadCounts/${conversationId}`, count)
+  }
+
   async createGroupConversation({
     name,
     participants,
@@ -634,6 +643,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   async deleteConversation(id: string) {
     Vue.delete(this.state.conversations, id)
     this.set('/conversations', this.state.conversations)
+    Vue.delete(this.state.unreadCounts, id)
+    this.set('/unreadCounts', this.state.unreadCounts)
     await iridium.connector?.unsubscribe(`/chat/conversations/${id}`)
     const index = this.ephemeral.subscriptions.indexOf(id)
     if (index > -1) {

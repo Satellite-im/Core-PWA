@@ -52,6 +52,12 @@ export default Vue.extend({
       const count = Object.values(
         iridium.chat.state.conversations[this.conversationId].message,
       ).filter((a) => a.at > this.conversation.lastReadAt).length
+
+      // Update the total unread count in iridium if it's different
+      if (iridium.chat.state.unreadCounts[this.conversationId] !== count) {
+        iridium.chat.updateUnreadCount(this.conversationId, count)
+      }
+
       return count > 99 ? '99+' : count
     },
     userId(): string {

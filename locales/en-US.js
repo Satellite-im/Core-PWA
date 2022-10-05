@@ -819,7 +819,6 @@ export default {
     message: 'Message',
     options: 'Options',
     cancel: 'Cancel request',
-    request: 'Requests',
     copy_your_id: 'Copy your ID',
     no_requests: 'No requests found',
     no_requests_subtitle: 'You have no pending friend requests',
@@ -914,7 +913,6 @@ export default {
     new_message: {
       title: 'New Message',
       group_title: '{name} ({server})',
-      body: 'You have a new message from {name}!',
     },
   },
 }
