@@ -73,13 +73,6 @@ jobs:
       - name: Change Owner
         run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
 
-      - name: Sync Node
-        working-directory: ./
-        run: |
-          cd ..
-          cd iridium
-          pnpm sync-node &
-
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
@@ -87,11 +80,16 @@ jobs:
         with:
           working-directory: ./
           install: false
-          start: yarn dev
-          command: curl -v http://localhost:3000 && npx cypress run --browser chrome
+          start: |
+            ../iridium/pnpm sync-node
+            yarn dev
+          command: npx cypress run --browser chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
           config-file: cypress.config.js
+
+      - name: Run CURL
+        run: curl -v http://localhost:3000
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
