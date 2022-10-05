@@ -55,7 +55,7 @@
       <TypographyTag
         v-if="unreadCount"
         class="tag"
-        :text="unreadCount.toString()"
+        :text="unreadCount > 99 ? '99+' : unreadCount.toString()"
         small
       />
     </div>

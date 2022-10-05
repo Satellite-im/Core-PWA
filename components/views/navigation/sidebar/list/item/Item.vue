@@ -53,11 +53,6 @@ export default Vue.extend({
         iridium.chat.state.conversations[this.conversationId].message,
       ).filter((a) => a.at > this.conversation.lastReadAt).length
 
-      // Update the total unread count in iridium if it's different
-      if (iridium.chat.state.unreadCounts[this.conversationId] !== count) {
-        iridium.chat.updateUnreadCount(this.conversationId, count)
-      }
-
       return count > 99 ? '99+' : count
     },
     userId(): string {
@@ -172,6 +167,12 @@ export default Vue.extend({
         this.setTimestamp()
       },
       deep: true,
+    },
+    unreadCount(newCount: number) {
+      // Update the total unread count in iridium if different
+      if (iridium.chat.state.unreadCounts[this.conversationId] !== newCount) {
+        iridium.chat.updateUnreadCount(this.conversationId, newCount)
+      }
     },
   },
   mounted() {
