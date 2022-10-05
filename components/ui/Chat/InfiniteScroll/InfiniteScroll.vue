@@ -19,10 +19,12 @@ export default {
     },
   },
   mounted() {
-    this.parentElement.addEventListener('scroll', this.scrollHandler)
+    this.parentElement.addEventListener('wheel', this.scrollHandler)
+    this.parentElement.addEventListener('touchmove', this.scrollHandler)
   },
   beforeDestroy() {
-    this.parentElement.removeEventListener('scroll', this.scrollHandler)
+    this.parentElement.removeEventListener('wheel', this.scrollHandler)
+    this.parentElement.removeEventListener('touchmove', this.scrollHandler)
   },
   methods: {
     scrollHandler() {
