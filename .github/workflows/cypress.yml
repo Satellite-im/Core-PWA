@@ -67,10 +67,6 @@ jobs:
       - name: run build-script
         run: sh ./build-script.sh &
 
-  run-cypress:
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
