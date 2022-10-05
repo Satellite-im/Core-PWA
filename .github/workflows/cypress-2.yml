@@ -87,9 +87,6 @@ jobs:
         working-directory: ./
         run: yarn dev &
 
-      - name: Run CURL
-        run: curl -v http://localhost:3000
-
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
