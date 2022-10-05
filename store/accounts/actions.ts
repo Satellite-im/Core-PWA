@@ -194,11 +194,20 @@ export default {
       await iridium.start()
     }
 
-    iridium.connector?.on(
+    iridium.connector?.once(
       'changed',
-      (payload: { path: string; value: { [key: string]: any } }) => {
-        const doc = payload.value
-        // Above doc should have the imported account
+      async (payload: { path: string; value: { [key: string]: any } }) => {
+        const profile = payload.value.profile
+        window.console.log('profile', profile)
+        if (!profile?.did) {
+          try {
+            await this.$router.replace('/auth/register')
+          } catch (_) {}
+          logger.error(logTag, 'user not registered, redirecting')
+          throw new Error(AccountsError.USER_NOT_REGISTERED)
+        }
+        commit('setUserDetails', profile)
+        await this.$router.push('/')
       },
     )
   },
@@ -248,7 +257,10 @@ export default {
       await iridium.start()
     }
 
-    const profile = await iridium.profile?.get()
+    const { details } = state
+    window.console.log('details', details)
+    const profile = !details ? await iridium.profile?.get() : state.details
+
     logger.debug(logTag, 'fetched iridium profile', {
       profile,
     })
@@ -259,6 +271,9 @@ export default {
       logger.error(logTag, 'user not registered, redirecting')
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
+
+    window.console.log('profilo preso')
+
     iridium.on('ready', () => {
       logger.info(logTag, 'iridium ready')
       commit('setActiveAccount', iridium.id)

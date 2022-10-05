@@ -69,6 +69,7 @@ export default Vue.extend({
             this.$device.isMobile ? '/mobile/chat' : '/friends',
           )
         }
+        window.console.log('controllo ready', iridium.ready)
         if (iridium.ready) {
           onReady()
         } else {
