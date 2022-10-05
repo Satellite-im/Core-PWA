@@ -64,14 +64,31 @@ jobs:
           echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
           cat .env
           pnpm i
-          pnpm build
+
+      - name: pnpm watch in the background
+        working-directory: ./
+        run: |
+          cd ..
+          cd iridium
+          pnpm watch &
 
       - name: Yarn Install
-        run: rm -fr node_modules && yarn cache clean && yarn install
         working-directory: ./
+        run: rm -fr node_modules && yarn cache clean && yarn install
 
       - name: Change Owner
         run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
+
+      - name: Run Build Script in the background
+        working-directory: ./
+        run: sh ./build-script.sh &
+
+      - name: Start Server in the background
+        working-directory: ./
+        run: yarn dev &
+
+      - name: Run CURL
+        run: curl -v http://localhost:3000
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
@@ -79,17 +96,9 @@ jobs:
           DEBUG: '@cypress/github-action'
         with:
           working-directory: ./
-          install: false
-          start: |
-            sh ./build-script.sh
-            yarn dev
           command: npx cypress run --browser chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
-          config-file: cypress.config.js
-
-      - name: Run CURL
-        run: curl -v http://localhost:3000
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
