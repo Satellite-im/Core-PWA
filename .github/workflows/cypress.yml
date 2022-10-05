@@ -75,8 +75,7 @@ jobs:
           working-directory: ./
           install: false
           start: yarn dev
-          command: npm run cy:run
-          browser: chrome
+          command: npx cypress run --browser electron
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
           config-file: cypress.config.js
