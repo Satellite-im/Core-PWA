@@ -77,6 +77,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     activeConversationId: '',
   }
 
+  private logPrefix = 'iridium/ChatManager'
+
   async start() {
     const fetched = await this.get<State>()
     this.state.conversations = {
@@ -98,7 +100,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       conversations.map(async (conversation) => {
         const topic = `/chat/conversations/${conversation.id}`
         logger.info(
-          'iridium/chatmanager/init',
+          `${this.logPrefix}/start`,
           `requesting sync subscription to ${topic}`,
         )
         // ask the sync node to subscribe to this topic
@@ -186,7 +188,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const { stored, payload } = msg
       if (stored.topic) {
         logger.info(
-          'iridium/chatmanager',
+          `${this.logPrefix}/onSyncFetchResponse`,
           'sync/fetch/message - emitting synced message',
           payload,
         )
@@ -199,7 +201,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     })
 
     logger.info(
-      'iridium/chatmanager',
+      `${this.logPrefix}/onSyncFetchResponse`,
       'sync/fetch/messages - sending delivery receipt',
       message.payload.body.messages,
     )
@@ -210,7 +212,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         (message: { cid: string }) => message.cid,
       ),
     })
-    logger.info('iridium/chatmanager', 'sync/fetch/messages - done')
+    logger.info(
+      `${this.logPrefix}/onSyncFetchResponse`,
+      'sync/fetch/messages - done',
+    )
   }
 
   get<T = IridiumDocument>(path: string = '', options: any = {}) {
@@ -262,7 +267,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         })
       })
       logger.info(
-        'iridium/chatmanager/onConversationMessage',
+        `${this.logPrefix}/onConversationMessage`,
         'message received',
         { message, cid, from, conversationId },
       )
@@ -287,7 +292,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       }
     } else if (type === 'chat/reaction') {
       const reaction = payload.body.reaction
-      logger.info('iridium/chatmanager/onConversationMessage', 'reaction', {
+      logger.info(`${this.logPrefix}/onConversationMessage`, 'reaction', {
         reaction,
         from,
         conversationId,
@@ -312,7 +317,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const { messageId, conversationId, body, lastEditedAt } = payload.body
         .message as MessageEdit
 
-      logger.info('iridium/chatmanager/onConversationMessage', 'message edit', {
+      logger.info(`${this.logPrefix}/onConversationMessage`, 'message edit', {
         from,
         conversationId,
       })
@@ -700,11 +705,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const safer = await uploadFile(upload.file, conversation.participants)
     if (!safer || !safer.valid) {
+      logger.error(`${this.logPrefix}/addFile`, 'file content is not valid')
       return null
     }
 
-    const syncPinResult = await iridium.connector?.load(safer.cid)
-
+    const syncPinResult = await iridium.connector?.fileLoad(safer.cid)
     return {
       cid: syncPinResult.cid,
       name: upload.file.name,
