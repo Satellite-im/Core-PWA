@@ -345,7 +345,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const isGroup = conversation.type === 'group'
 
     iridium.notifications.emit('notification/create', {
-      type: NotificationType.FRIEND_REQUEST,
+      type: isGroup
+        ? NotificationType.GROUP_MESSAGE
+        : NotificationType.DIRECT_MESSAGE,
       title: isGroup
         ? 'notifications.new_message.group_title'
         : sender?.name || 'notifications.new_message.title',
@@ -355,6 +357,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       description,
       fromName: sender?.name || '',
       image: fromDID,
+      notificationClickParams: {
+        conversationId: conversation.id,
+      },
     } as NotificationBase)
   }
 
