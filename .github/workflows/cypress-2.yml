@@ -65,13 +65,6 @@ jobs:
           cat .env
           pnpm i
 
-      - name: pnpm watch in the background
-        working-directory: ./
-        run: |
-          cd ..
-          cd iridium
-          pnpm watch &
-
       - name: Yarn Install
         working-directory: ./
         run: rm -fr node_modules && yarn cache clean && yarn install
@@ -79,19 +72,21 @@ jobs:
       - name: Change Owner
         run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
 
-      - name: Run Build Script in the background
+      - name: pnpm watch in the background
         working-directory: ./
-        run: sh ./build-script.sh &
-
-      - name: Start Server in the background
-        working-directory: ./
-        run: yarn dev &
+        run: |
+          cd ..
+          cd iridium
+          pnpm watch &
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
           DEBUG: '@cypress/github-action'
         with:
+          start: |
+            sh ./build-script.sh
+            yarn dev
           working-directory: ./
           command: npx cypress run --browser chrome
           wait-on: 'http://localhost:3000'
