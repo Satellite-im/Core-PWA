@@ -60,11 +60,16 @@ export function conversationHooks(conversationId?: Conversation['id']) {
   })
 
   const sortedMessages: ComputedRef<ConversationMessage[]> = computed(() => {
-    if (!conversationId) {
+    // todo - fix type definition for ChatManager key value pairs. can be undefined
+    if (
+      !conversationId ||
+      !managers.chat.state.conversations[conversationId]?.message
+    ) {
       return []
     }
+
     return Object.values(
-      managers.chat.state.conversations[conversationId].message,
+      managers.chat.state.conversations[conversationId]?.message,
     ).sort((a, b) => a.at - b.at)
   })
 
@@ -74,10 +79,13 @@ export function conversationHooks(conversationId?: Conversation['id']) {
     }
 
     let count = 0
-    let i = sortedMessages.value.length - 1
-    while (sortedMessages.value[i].at < conversation.value?.lastReadAt) {
-      count++
-      i--
+
+    for (let i = sortedMessages.value.length - 1; i >= 0; i--) {
+      if (sortedMessages.value[i].at > conversation.value.lastReadAt) {
+        count++
+      } else {
+        break
+      }
     }
 
     return count
