@@ -195,6 +195,7 @@ export default {
         if (!profile?.did) {
           try {
             await this.$router.replace('/auth/register')
+            return
           } catch (_) {}
           logger.error(logTag, 'user not registered, redirecting')
           throw new Error(AccountsError.USER_NOT_REGISTERED)
