@@ -54,6 +54,7 @@ jobs:
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install corepack
           corepack enable
+          corepack prepare pnpm@latest --activate
           touch .env
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
           echo CERTBOT_EMAIL="support@satellite.im" >> .env
@@ -63,6 +64,7 @@ jobs:
           echo NODE_ENV="development" >> .env
           echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
           cat .env
+          pnpm i
 
       - name: Yarn Install
         working-directory: ./
@@ -71,32 +73,35 @@ jobs:
       - name: Change Owner
         run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
 
-      - name: run Linkscript
-        working-directory: ./
-        run: |
-          sh ./linkscript.sh
-          yarn
-
       - name: pnpm watch in the background
         working-directory: ./
         run: |
           cd ..
           cd iridium
-          pnpm i
+          pnpm i  --unsafe-perm
+          pnpm i --unsafe-perm
+          pnpm build:ipfs
+          pnpm build:browser
+          yarn link
+          cd ..
+          grep -v "@satellite-im/iridium" package.json > tmppackage && mv tmppackage package.json
+          yarn link @satellite-im/iridium
           pnpm watch &
 
       - name: Sync Node
         working-directory: ./
         run: sh ./build-script.sh &
 
+      - name: Yarn Link
+        working-directory: ./
+        run: yarn link "@satellite-im/iridium"
+
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
           DEBUG: '@cypress/github-action'
         with:
-          start: |
-            yarn link "@satellite-im/iridium"
-            yarn dev
+          start: yarn dev
           working-directory: ./
           command: npx cypress run --browser chrome
           wait-on: 'http://localhost:3000'
