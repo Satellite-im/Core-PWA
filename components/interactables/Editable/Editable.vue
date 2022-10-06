@@ -76,6 +76,7 @@ const Editable = Vue.extend({
       currentPosition: 0,
       currentRange: null as Range | null,
       isComposing: false,
+      autocompleteText: '',
     }
   },
   watch: {
@@ -304,6 +305,7 @@ const Editable = Vue.extend({
       const messageBox = this.$refs?.editable as HTMLElement
       this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       this.currentRange = getCurrentRange()
+      this.updateAutocomplete()
     },
     /**
      * @method onFocus
@@ -322,6 +324,50 @@ const Editable = Vue.extend({
     onBlur(e: Event) {
       document.removeEventListener('selectionchange', this.onSelectionChange)
       this.$emit('blur', e)
+    },
+    updateAutocomplete() {
+      const range = this.currentRange
+      if (range?.startOffset !== range?.endOffset) {
+        this.$emit('autocomplete', {
+          show: false,
+          text: '',
+        })
+        return
+      }
+      const pos = this.currentPosition
+      // Prefix the value with space because we only want to match
+      // '@username' on it's own, ie. we don't want to autocomplete
+      // when typing an email address.
+      const val = ' ' + this.value
+      const regex = / @([^\s]*)$/
+      let match = val.match(regex)
+      const substring = val.substring(match?.index ?? 0)
+      match = substring.match(/^ @([^\s]*)/)
+      this.autocompleteText = match?.[1] ?? ''
+      this.$emit('autocomplete', {
+        show: regex.test(val.substring(0, pos + 1)),
+        text: this.autocompleteText,
+      })
+    },
+    doAutocomplete(val: string) {
+      const range = this.currentRange
+      if (!range) {
+        return
+      }
+      let node = range.startContainer
+      let offset = range.startOffset
+      if (range.startOffset === 0) {
+        if (node.previousSibling?.textContent) {
+          node = node.previousSibling
+          offset = node.textContent?.length ?? 0
+        }
+      }
+      range.setStart(node, offset - this.autocompleteText.length)
+      document.execCommand('insertText', false, val + ' ')
+      this.$emit('autocomplete', {
+        show: false,
+        text: '',
+      })
     },
   },
 })

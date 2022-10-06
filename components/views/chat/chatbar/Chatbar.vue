@@ -59,6 +59,10 @@ const Chatbar = Vue.extend({
         deb: ReturnType<typeof debounce>
       } | null,
       isFocused: false,
+      isA11yFocused: false,
+      showAutocomplete: false,
+      autocompleteText: '',
+      autocompleteSelection: '',
     }
   },
   computed: {
@@ -125,6 +129,9 @@ const Chatbar = Vue.extend({
     },
     isSharpCorners(): boolean {
       return (
+        (this.isFocused &&
+          this.showAutocomplete &&
+          this.autocompleteSelection) ||
         Boolean(this.files.length) ||
         Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
         this.commandPreview
@@ -197,6 +204,7 @@ const Chatbar = Vue.extend({
     }
 
     this.typingFunction = typingFunction(this.conversationId)
+    window.editable = this.$refs.editable
   },
   methods: {
     /**
@@ -218,6 +226,11 @@ const Chatbar = Vue.extend({
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case KeybindingEnum.ENTER:
+          if (this.showAutocomplete && this.autocompleteSelection) {
+            event.preventDefault()
+            this.$refs.editable.doAutocomplete(this.autocompleteSelection)
+            return
+          }
           if (!event.shiftKey) {
             event.preventDefault()
             if (!this.hasCommand) {
@@ -235,9 +248,20 @@ const Chatbar = Vue.extend({
           }
           break
         case KeybindingEnum.ARROW_UP:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            this.$refs.autocomplete.selectPrev()
+            return
+          }
           if (!event.shiftKey && !this.text.length) {
             event.preventDefault()
             this.editMessage()
+          }
+          break
+        case KeybindingEnum.ARROW_DOWN:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            this.$refs.autocomplete.selectNext()
           }
           break
         default:
@@ -280,6 +304,7 @@ const Chatbar = Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      this.text = this.text.trimEnd()
       if (this.text.length > this.$Config.chat.maxChars) {
         return
       }
@@ -383,9 +408,25 @@ const Chatbar = Vue.extend({
       })
     },
     handleFocus() {
+      this.isFocused = true
       if (whatInput.ask() === 'keyboard') {
-        this.isFocused = true
+        this.isA11yFocused = true
       }
+    },
+    handleBlur() {
+      this.isFocused = false
+      this.isA11yFocused = false
+    },
+    handleAutocomplete(event: { show: boolean; text: string }) {
+      this.showAutocomplete = event.show
+      this.autocompleteText = event.text
+    },
+    handleAutocompleteSelection(val: string) {
+      this.autocompleteSelection = val
+    },
+    handleAutocompleteClick(val: string) {
+      console.log('xxx handleAutocompleteClick', val)
+      this.$refs.editable.doAutocomplete(val)
     },
   },
 })
