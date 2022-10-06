@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
+import { debounce } from 'lodash'
 import {
   ChevronDownIcon,
   KeyIcon,
@@ -176,6 +177,7 @@ export default Vue.extend({
       ) {
         this.scrollToBottom()
       }
+
       const maxTime = Math.max(...this.messages.map((message) => message.at))
       if (
         oldValue.at(-1) !== newValue.at(-1) &&
@@ -205,11 +207,7 @@ export default Vue.extend({
     if (!container || !messages) {
       return
     }
-    container.addEventListener('scroll', () => {
-      this.isLockedToBottom =
-        container.scrollTop + container.clientHeight >=
-        container.scrollHeight - 1
-    })
+    container.addEventListener('scroll', this.onScroll)
     this.resizeContainerObserver = new ResizeObserver(() => {
       if (this.isLockedToBottom) {
         this.scrollToBottom()
@@ -230,6 +228,12 @@ export default Vue.extend({
     iridium.chat.ephemeral.activeConversationId = ''
   },
   methods: {
+    onScroll: debounce(function (this: any) {
+      const container = this.$refs.container as HTMLElement
+      this.isLockedToBottom =
+        container.scrollTop + container.clientHeight >=
+        container.scrollHeight - 1
+    }, 100),
     scrollToBottom() {
       this.$nextTick(() => {
         const container = this.$refs.container as HTMLElement
@@ -249,7 +253,18 @@ export default Vue.extend({
       setTimeout(() => {
         this.numMessages += MESSAGE_PAGE_SIZE
         this.isLoadingMore = false
-      }, 200)
+        const container = this.$refs.container as HTMLElement
+        const currentScrollTop = container.scrollTop
+        const currentScrollHeight = container.scrollHeight
+        this.$nextTick(() => {
+          container.scrollTop =
+            // in case the scrollHeight has changed in the meanwhile (new messages, etc..), make up the difference
+            container.scrollHeight -
+            currentScrollHeight +
+            // in case the user has scrolled in the meanwhile, make up the difference
+            currentScrollTop
+        })
+      }, 1000)
     },
     onUnreadMessage({
       message,

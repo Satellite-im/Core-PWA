@@ -17,9 +17,6 @@ export default {
     parentElement(): HTMLElement {
       return (this.$refs.root as HTMLElement).parentElement as HTMLElement
     },
-    threshold(): number {
-      return window.innerHeight
-    },
   },
   mounted() {
     this.parentElement.addEventListener('wheel', this.scrollHandler)
@@ -31,12 +28,7 @@ export default {
   },
   methods: {
     scrollHandler() {
-      const offset =
-        this.parentElement.scrollHeight +
-        this.parentElement.scrollTop -
-        this.parentElement.getBoundingClientRect().height
-
-      if (this.isLoading || this.noMore || offset > this.threshold) {
+      if (this.isLoading || this.noMore || this.parentElement.scrollTop > 500) {
         return
       }
       this.$emit('loadMore')

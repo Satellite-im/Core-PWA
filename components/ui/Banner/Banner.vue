@@ -23,6 +23,7 @@
 
 <style lang="less" scoped>
 .banner {
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
