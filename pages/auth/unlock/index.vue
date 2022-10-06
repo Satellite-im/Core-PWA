@@ -180,17 +180,12 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
         )
         await this.decrypt(false)
         await this.$store.dispatch('accounts/generateWallet')
-        try {
-          await this.$store.dispatch('accounts/loadAccount')
-        } catch (error: any) {
-          if (error.message === AccountsError.USER_NOT_REGISTERED) {
-            await this.$store.dispatch('accounts/registerUser', {
-              name: (Math.random() + 1).toString(36).substring(2),
-              image: '',
-              status: 'user-status',
-            })
-          }
-        }
+
+        await this.$store.dispatch('accounts/registerUser', {
+          name: (Math.random() + 1).toString(36).substring(2),
+          image: '',
+          status: 'user-status',
+        })
 
         if (this.$route.path !== '/') {
           this.$router.replace('/')
