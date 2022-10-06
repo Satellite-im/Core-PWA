@@ -77,32 +77,16 @@ jobs:
         working-directory: ./
         run: sh ./build-script.sh &
 
-      - name: Start Server (Yarn Dev)
-        working-directory: ./
-        run: yarn dev &
-
-      - name: Wait For Localhost to be Ready
-        uses: nev7n/wait_for_response@v1
+      - name: Cypress tests with debug logs
+        uses: cypress-io/github-action@v4
+        env:
+          DEBUG: '@cypress/github-action'
         with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 300000
-          interval: 10000
-
-      - name: Ping to Localhost
-        working-directory: ./
-        run: curl -v http://localhost:3000/
-
-      #- name: Cypress tests with debug logs
-      #  uses: cypress-io/github-action@v4
-      #  env:
-      #    DEBUG: '@cypress/github-action'
-      #  with:
-      #    start: yarn dev
-      #    working-directory: ./
-      #    command: npx cypress run --browser chrome
-      #    wait-on: 'http://localhost:3000'
-      #    wait-on-timeout: 300
+          start: yarn dev
+          working-directory: ./
+          command: npx cypress run --browser chrome
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 300
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
