@@ -38,11 +38,24 @@ jobs:
         uses: pnpm/action-setup@v2.2.2
         with:
           version: 7.12.2
-          run_install: |
-            - recursive: true
+          run_install: false
 
       - name: Git clone iridium
         run: cd .. && git clone https://github.com/Satellite-im/iridium.git
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        working-directory: ../iridium
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Iridium env, pnpm i and pnpm build
         run: |
@@ -66,12 +79,22 @@ jobs:
           pnpm i
           pnpm build
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Cache for CorePWA
+        uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Yarn Install
         working-directory: ./
         run: rm -fr node_modules && yarn cache clean && yarn install
-
-      - name: Change Owner
-        run: chown -R 1001:1001 /github/home/.cache && echo "pwn dat cache"
 
       - name: Sync Node
         working-directory: ./
