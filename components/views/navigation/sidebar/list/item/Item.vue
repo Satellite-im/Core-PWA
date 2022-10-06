@@ -1,7 +1,7 @@
 <template src="./Item.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue, { ComputedRef, computed, PropType, Ref, ref } from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import VueMarkdown from 'vue-markdown'
 import { mapGetters } from 'vuex'
@@ -14,6 +14,8 @@ import {
 } from '~/libraries/Iridium/chat/types'
 import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
+import { conversationHooks } from '~/components/compositions/conversations'
+import { Config } from '~/config'
 
 export default Vue.extend({
   components: {
@@ -24,6 +26,72 @@ export default Vue.extend({
       type: String as PropType<Conversation['id']>,
       required: true,
     },
+  },
+  setup(props) {
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    console.log($nuxt.$i18n.t('global.name'))
+
+    const { conversation, sortedMessages } = conversationHooks(
+      props.conversationId,
+    )
+
+    const isLoading = ref(false)
+    const timestamp = ref('')
+    const timeoutId: Ref<NodeJS.Timeout | null> = ref(null)
+
+    const subtitle: ComputedRef<string> = computed(() => {
+      const lastMsg = sortedMessages.value.at(-1)
+      const html = toHTML(lastMsg?.body ?? '', { liveTyping: false })
+      const firstLine = html.split('<br>')[0]
+
+      return firstLine.replace(
+        Config.regex.emojiWrapper,
+        (emoji) => `<span class="emoji">${emoji}</span>`,
+      )
+    })
+
+    // const lastMessageDisplay: ComputedRef<string> = computed(() => {
+    //   const message = sortedMessages.value.at(-1)
+    //   if (!message) {
+    //     return this.$t('messaging.say_hi') as string
+    //   }
+
+    //   const name = iridium.users.getUser(message.from)?.name
+    //   const members = message.members
+    //     ?.map((did) => iridium.users.getUser(did)?.name)
+    //     .filter((name) => name)
+    //     .join(', ')
+
+    //   const fromSelf = message.from === iridium.id
+
+    //   if (message.attachments.length) {
+    //     return fromSelf
+    //       ? (this.$t('messaging.you_sent_attachment') as string)
+    //       : (this.$t('messaging.sent_attachment', { name }) as string)
+    //   }
+
+    //   switch (message.type) {
+    //     case 'glyph':
+    //       return fromSelf
+    //         ? (this.$t('messaging.you_sent_glyph') as string)
+    //         : (this.$t('messaging.sent_glyph', { name }) as string)
+    //     case 'member_join':
+    //       return this.$t('messaging.group_join', {
+    //         name,
+    //         members,
+    //       }) as string
+    //     case 'member_leave':
+    //       return this.$t('messaging.group_leave', { name }) as string
+    //     case 'call':
+    //       if (fromSelf) {
+    //         return this.$t('messaging.call_outgoing') as string
+    //       }
+    //       return this.$t('messaging.call_incoming', { name }) as string
+    //   }
+
+    //   return message?.body ?? ''
+    // }
   },
   data() {
     return {
@@ -45,7 +113,7 @@ export default Vue.extend({
     conversation(): Conversation {
       return iridium.chat.state.conversations[this.conversationId]
     },
-    /* 
+    /*
       Returns number of unread messages for this conversation id
     */
     unreadCount(): string | number {
@@ -67,16 +135,6 @@ export default Vue.extend({
     },
     status(): UserStatus {
       return this.ephemeral.status[this.userId] || 'offline'
-    },
-    isTyping(): boolean {
-      if (!this.user) return false
-
-      return (
-        !!this.conversation &&
-        (iridium.chat.ephemeral.typing[this.conversation.id] || []).includes(
-          this.user.did,
-        )
-      )
     },
     contextMenuValues(): ContextMenuItem[] {
       return this.conversation?.type === 'direct'
@@ -154,7 +212,7 @@ export default Vue.extend({
           return this.$t('messaging.call_incoming', { name }) as string
       }
 
-      return message.body || ''
+      return message?.body ?? ''
     },
     isSelected(): boolean {
       return this.conversation?.id === this.$route.params.id
