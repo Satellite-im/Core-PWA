@@ -1,7 +1,7 @@
 <template src="./Toolbar.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { computed, ComputedRef } from 'vue'
 import {
   PhoneCallIcon,
   UserPlusIcon,
@@ -10,10 +10,8 @@ import {
 } from 'satellite-lucide-icons'
 
 import iridium from '~/libraries/Iridium/IridiumManager'
-import {
-  conversationHooks,
-  call,
-} from '~/components/compositions/conversations'
+import { conversationHooks } from '~/components/compositions/conversations'
+import { webrtcHooks } from '~/components/compositions/webrtc'
 
 export default Vue.extend({
   components: {
@@ -23,14 +21,15 @@ export default Vue.extend({
     VideoIcon,
   },
   setup() {
-    const {
-      conversation,
-      conversationId,
-      isGroup,
-      otherDids,
-      otherParticipants,
-      enableRTC,
-    } = conversationHooks()
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    const conversationId: ComputedRef<string | undefined> = computed(() => {
+      return $nuxt.$route.params.id
+    })
+
+    const { conversation, isGroup, otherDids, otherParticipants } =
+      conversationHooks(conversationId.value)
+    const { enableRTC, call } = webrtcHooks(conversationId.value)
 
     async function handleCall() {
       if (isGroup.value || !enableRTC.value || !conversationId.value) {
