@@ -17,6 +17,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Create env file - iridium
+        run: |
+          cd ..
+          cd iridium
+          echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
+          echo CERTBOT_EMAIL="support@satellite.im" >> .env
+          echo SYNC_NODE_SEED="sync node a seed" >> .env
+          echo SYNC_NODE_ADDR=${{ secrets.SYNC_NODE_ADDR }} >> .env
+          echo SERVERDATAVOLUME=${{ secrets.SERVERDATAVOLUME }} >> .env
+          echo NODE_ENV="development" >> .env
+          echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
+          cat .env
+
       - name: Create env file - core
         run: |
           touch .env
@@ -26,41 +39,25 @@ jobs:
           echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
           cat .env
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.2
-        with:
-          version: 7.12.2
-          run_install: false
+      - name: Yarn Install
+        run: yarn install
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
+      - name: Pnpm build and watch
+        working-directory: ./
         run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-
-      - name: Cache for CorePWA
-        uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          cd ..
+          cd iridium
+          pnpm i
+          pnpm watch &
 
       - name: Sync Node
         working-directory: ./
-        run: sh ./build-script.sh &
+        run: cd ..
+          cd iridium
+          pnpm sync-node &
+
+      - name: Yarn Link
+        run: yarn link "@satellite-im/iridium"
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
