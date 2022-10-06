@@ -1,0 +1,25 @@
+<div
+  v-if="sortedUsers.length"
+  class="chatbar-autocomplete"
+  role="listbox"
+  @mousedown="handleMouseDown"
+>
+  <TypographyText size="sm">Searching for: "<b>{{ text }}</b>"</TypographyText>
+  <div class="items">
+    <div
+      v-for="user, i in sortedUsers"
+      class="item"
+      :class="{ selected: i === selectedIndex }"
+      @click="(e) => handleClick(e, i)"
+      @mousemove="selectedIndex = i"
+      role="option"
+      :aria-selected="i === selectedIndex ? 'true' : 'false'"
+      :aria-label="user.name"
+    >
+      <UiUserState :user="user" :size="24" />
+      <TypographyText class="username" font="heading" size="sm">
+        {{ user.name }}
+      </TypographyText>
+    </div>
+  </div>
+</div>
