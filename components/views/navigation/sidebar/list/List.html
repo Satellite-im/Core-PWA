@@ -6,7 +6,7 @@
     @slideNext="$emit('slideNext')"
   />
   <div v-if="!sortedConversations.length" class="empty-friends-wrapper">
-    <TypographyText v-if="filter" class="no-result" weight="bold">
+    <TypographyText v-if="filter" weight="bold">
       {{ $t('ui.no_results') }}
     </TypographyText>
     <FriendsEmptyMessage v-else displayImage />
