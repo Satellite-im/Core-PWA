@@ -19,6 +19,7 @@ import {
 } from '~/libraries/Iridium/chat/types'
 import { notNull } from '~/utilities/typeGuard'
 import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
+import { AutocompleteRef } from '~/components/views/chat/chatbar/autocomplete/Autocomplete.vue'
 
 function typingFunction(conversationId: string) {
   const deb = debounce(() => {
@@ -129,9 +130,9 @@ const Chatbar = Vue.extend({
     },
     isSharpCorners(): boolean {
       return (
-        (this.isFocused &&
-          this.showAutocomplete &&
-          this.autocompleteSelection) ||
+        Boolean(
+          this.isFocused && this.showAutocomplete && this.autocompleteSelection,
+        ) ||
         Boolean(this.files.length) ||
         Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
         this.commandPreview
@@ -153,7 +154,7 @@ const Chatbar = Vue.extend({
       /**
        * @method set
        * @description Sets current chatbar text to new value
-       * @param val Value to set the chatbar content to
+       * @param value Value to set the chatbar content to
        * @example set('This is the new chatbar content')
        */
       set(value: string) {
@@ -204,7 +205,6 @@ const Chatbar = Vue.extend({
     }
 
     this.typingFunction = typingFunction(this.conversationId)
-    window.editable = this.$refs.editable
   },
   methods: {
     /**
@@ -228,7 +228,9 @@ const Chatbar = Vue.extend({
         case KeybindingEnum.ENTER:
           if (this.showAutocomplete && this.autocompleteSelection) {
             event.preventDefault()
-            this.$refs.editable.doAutocomplete(this.autocompleteSelection)
+            ;(this.$refs.editable as EditableRef).doAutocomplete(
+              this.autocompleteSelection,
+            )
             return
           }
           if (!event.shiftKey) {
@@ -250,7 +252,7 @@ const Chatbar = Vue.extend({
         case KeybindingEnum.ARROW_UP:
           if (this.showAutocomplete) {
             event.preventDefault()
-            this.$refs.autocomplete.selectPrev()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectPrev()
             return
           }
           if (!event.shiftKey && !this.text.length) {
@@ -261,7 +263,7 @@ const Chatbar = Vue.extend({
         case KeybindingEnum.ARROW_DOWN:
           if (this.showAutocomplete) {
             event.preventDefault()
-            this.$refs.autocomplete.selectNext()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectNext()
           }
           break
         default:
@@ -425,8 +427,7 @@ const Chatbar = Vue.extend({
       this.autocompleteSelection = val
     },
     handleAutocompleteClick(val: string) {
-      console.log('xxx handleAutocompleteClick', val)
-      this.$refs.editable.doAutocomplete(val)
+      ;(this.$refs.editable as EditableRef).doAutocomplete(val)
     },
   },
 })
