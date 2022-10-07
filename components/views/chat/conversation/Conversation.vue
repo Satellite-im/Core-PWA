@@ -255,7 +255,7 @@ export default Vue.extend({
               0,
             )
         })
-      }, Math.random() * 1500)
+      }, 250)
     },
     onUnreadMessage({
       message,

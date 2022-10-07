@@ -7,7 +7,7 @@
   }"
   :data-message-id="message.id"
 >
-  <MessageNotice v-if="isNotice" :message="message" />
+  <MessageNotice v-if="isNotice" :message="message" v-once />
   <div
     v-else
     class="chat-message"
