@@ -305,7 +305,9 @@ const Editable = Vue.extend({
       const messageBox = this.$refs?.editable as HTMLElement
       this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       this.currentRange = getCurrentRange()
-      this.updateAutocomplete()
+      if (this.$listeners.autocomplete) {
+        this.updateAutocomplete()
+      }
     },
     /**
      * @method onFocus
