@@ -7,7 +7,9 @@ on:
 jobs:
   cypress:
     name: Cypress 2
-    runs-on: macos-latest
+    runs-on: ubuntu-20.04
+    container: cypress/included:10.8.0
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -71,32 +73,41 @@ jobs:
           chmod +x ./linkscript.sh
           ./linkscript.sh
 
-      - name: Pnpm i
-        working-directory: ./
-        run: |
-          cd ..
-          cd iridium
-          pnpm i
+      - name: Yarn
+        run: yarn
 
-      - name: Sync Node
+      - name: Pnpm i
+        working-directory: ../iridium
+        run: pnpm i
+
+      - name: Pnpm Watch
+        working-directory: ../iridium
+        run: pnpm watch &
+
+      - name: Pnpm Sync Node
+        working-directory: ../iridium
+        run: pnpm sync-node &
+
+      - name: Yarn Link
         working-directory: ./
+        run: yarn link "@satellite-im/iridium"
+
+      - name: Validate cypress is installed and list of files from main repo
         run: |
-          cd ..
-          cd iridium
-          pnpm sync-node &
+          npx cypress info
+          ls -la
+
+      - name: List of cypress specs
+        working-directory: ./cypress/e2e
+        run: ls -la
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
           DEBUG: '@cypress/github-action'
         with:
-          install-command: yarn --frozen-lockfile --silent
-          start: |
-            cd .. && cd iridium && pnpm watch &&
-            cd .. && cd iridium && pnpm sync-node &
-            yarn link "@satellite-im/iridium"
-            npx cypress info
-            yarn dev
+          install: false
+          start: yarn dev
           browser: chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
