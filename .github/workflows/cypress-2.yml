@@ -79,23 +79,23 @@ jobs:
           cd iridium
           pwd
           ls -la
-          cd ..
+
+      - name: Printing information from cypress
+        working-directory: ./
+        run: |
+          npx cypress info
           cd cypress/e2e
           ls -la
-          npx cypress info
 
-      - name: Cypress tests with debug logs
-        uses: cypress-io/github-action@v4
-        env:
-          DEBUG: '@cypress/github-action'
+      - name: Wait on localhost
+        uses: ./
         with:
-          install: false
+          working-directory: ./
           start: yarn dev
-          browser: chrome
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 300
-          spec: cypress/e2e/add-friend.js
-          config-file: cypress.config.js
+          wait-on: 'http://localhost:3000/'
+
+      - name: Run cypress
+        run: npx cypress run --browser chrome --spec "cypress/e2e/add-friend.js"
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
