@@ -44,11 +44,7 @@
               >
                 <user-plus-icon size="1.25x" />
               </InteractablesButton>
-              <InteractablesButton
-                @click="redirectToProfile"
-                :loading="loading"
-                v-if="isMe"
-              >
+              <InteractablesButton @click="redirectToProfile" v-if="isMe">
                 <edit-icon size="1.25x" /> {{$t('modal.profile.edit')}}
               </InteractablesButton>
               <InteractablesButton v-if="!isMe">
