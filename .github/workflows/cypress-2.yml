@@ -24,9 +24,11 @@ jobs:
           cd ..
           git clone https://github.com/Satellite-im/iridium.git
 
-      - name: Run Linkscript
+      - name: Change permissions on scripts and run Linkscript
         run: |
           chmod +x ./linkscript.sh
+          chmod +x ./cypress/scripts/watch-script.sh
+          chmod +x ./cypress/scripts/sync-node-script.sh
           ./linkscript.sh
 
       - name: Yarn Install
@@ -59,14 +61,6 @@ jobs:
         working-directory: ../iridium
         run: pnpm i
 
-      - name: Pnpm Watch
-        working-directory: ../iridium
-        run: pnpm watch &
-
-      - name: Pnpm Sync Node
-        working-directory: ../iridium
-        run: pnpm sync-node &
-
       - name: Yarn Link Iridium Repo
         working-directory: ./
         run: yarn link "@satellite-im/iridium"
@@ -87,19 +81,17 @@ jobs:
           cd cypress/e2e
           ls -la
 
-      - name: Start server
-        run: yarn dev &
-
-      - name: Wait on localhost
-        uses: nev7n/wait_for_response@v1
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
         with:
-          url: 'http://localhost:3000/'
-          responseCode: 200
-          timeout: 300000
-          interval: 15000
-
-      - name: Run cypress
-        run: npx cypress run --browser chrome --spec "cypress/e2e/add-friend.js"
+          start: |
+            ./cypress/scripts/watch-script.sh
+            ./cypress/scripts/sync-node-script.sh
+            yarn dev
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 300
+          spec: cypress/e2e/add-friend.js
+          browser: chrome
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
