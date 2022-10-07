@@ -1,5 +1,5 @@
 <div
-  v-if="sortedUsers.length"
+  v-if="sortedUsers.length && !alreadyCompleted"
   class="chatbar-autocomplete"
   role="listbox"
   @mousedown="handleMouseDown"

@@ -6,8 +6,9 @@ import fuzzysort from 'fuzzysort'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
+import { truthy } from '~/utilities/typeGuard'
 
-export default Vue.extend({
+const Autocomplete = Vue.extend({
   props: {
     text: {
       type: String,
@@ -32,12 +33,11 @@ export default Vue.extend({
           .map((did) => {
             return iridium.users.getUser(did)
           })
-          .filter((u): u is User => Boolean(u))
+          .filter(truthy)
           .sort((a, b) => collator.compare(a.name, b.name)) ?? []
       )
     },
     sortedUsers(): User[] {
-      console.log('xxx', this.users)
       if (this.text === '') {
         return this.users
       }
@@ -49,9 +49,14 @@ export default Vue.extend({
       this.$emit('sortedUsers', results)
       return results
     },
+    alreadyCompleted(): boolean {
+      return (
+        this.sortedUsers.length === 1 && this.sortedUsers[0].name === this.text
+      )
+    },
   },
   watch: {
-    sortedUsers(oldValue: User[], newValue: User[]) {
+    sortedUsers() {
       this.selectedIndex = 0
       this.updateSelection()
     },
@@ -74,7 +79,7 @@ export default Vue.extend({
       this.selectedIndex = (this.selectedIndex + delta + len) % len
     },
     updateSelection() {
-      if (!this.sortedUsers.length) {
+      if (!this.sortedUsers.length || this.alreadyCompleted) {
         this.$emit('selection', null)
         return
       }
@@ -89,6 +94,9 @@ export default Vue.extend({
     },
   },
 })
+
+export type AutocompleteRef = InstanceType<typeof Autocomplete>
+export default Autocomplete
 </script>
 
 <style scoped lang="less" src="./Autocomplete.less"></style>
