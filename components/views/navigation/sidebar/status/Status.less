@@ -8,4 +8,20 @@
     text-align: left;
     overflow: hidden;
   }
+
+  .name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      color: @dark;
+      opacity: 0;
+      transition: opacity @animation-speed-medium ease;
+    }
+
+    &:hover svg {
+      opacity: 1;
+    }
+  }
 }

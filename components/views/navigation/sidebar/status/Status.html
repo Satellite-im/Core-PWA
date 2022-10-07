@@ -1,15 +1,14 @@
 <div class="status">
   <UiUserState :user="profile" />
-  <button
-    class="user-info"
-    v-tooltip.top="$t('controls.copy_id')"
-    @click="copyId"
-  >
-    <TypographyText class="ellipsis" as="h4" data-cy="user-name">
-      {{profile.name}}
-    </TypographyText>
+  <div class="user-info">
+    <button class="name" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
+      <TypographyText class="ellipsis" as="h4" data-cy="user-name">
+        {{profile.name}}
+      </TypographyText>
+      <ClipboardCopyIcon size="0.9x" />
+    </button>
     <TypographyText class="ellipsis" size="sm" color="dark">
       {{profile.status || $t('pages.settings.accounts.no_status')}}
     </TypographyText>
-  </button>
+  </div>
 </div>
