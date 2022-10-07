@@ -35,6 +35,28 @@ import Cursor from '~/libraries/ui/Cursor'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 import WithHistory, { Operation } from '~/components/mixins/UI/WithHistory'
 
+/**
+ * @method wordUnderCursor
+ * @returns Tuple of word under cursor, and the cursor index within the word
+ */
+function wordUnderCursor(
+  text: string,
+  cursorPosition: number,
+): [string, number] {
+  let s = Math.max(0, cursorPosition - 1)
+  for (; s > 0; s--) {
+    if (text[s] === ' ') {
+      s++
+      break
+    }
+  }
+  let e = s + 1
+  for (; e < text.length; e++) {
+    if (text[e] === ' ') break
+  }
+  return [text.substring(s, e), cursorPosition - s]
+}
+
 function getCurrentRange() {
   const sel = document.getSelection()
   if (sel && sel.rangeCount > 0) {
@@ -337,18 +359,12 @@ const Editable = Vue.extend({
         return
       }
       const pos = this.currentPosition
-      // Prefix the value with space because we only want to match
-      // '@username' on it's own, ie. we don't want to autocomplete
-      // when typing an email address.
-      const val = ' ' + this.value
-      const regex = / @([^\s]*)$/
-      let match = val.match(regex)
-      const substring = val.substring(match?.index ?? 0)
-      match = substring.match(/^ @([^\s]*)/)
-      this.autocompleteText = match?.[1] ?? ''
+      const [word, index] = wordUnderCursor(this.value, pos)
+      const visible = word.startsWith('@') && index !== 0
+      this.autocompleteText = word.substring(1)
       this.$emit('autocomplete', {
-        show: regex.test(val.substring(0, pos + 1)),
-        text: this.autocompleteText,
+        show: visible,
+        text: word.substring(1),
       })
     },
     doAutocomplete(val: string) {
