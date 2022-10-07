@@ -84,8 +84,8 @@ jobs:
       - name: Yarn Link
         run: yarn link "@satellite-im/iridium"
 
-      #- name: Run cypress install
-      #  run: cypress install
+      - name: Run cypress install
+        run: cypress install
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
