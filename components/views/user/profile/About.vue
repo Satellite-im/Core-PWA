@@ -2,59 +2,32 @@
   <div class="about">
     <div>
       <TypographyTitle
-        v-if="(!isMe && user.about.length) || isMe"
+        v-if="user.about.length"
         :text="$t('modal.profile.about.me')"
         :size="6"
       />
-      <TypographyText v-if="!isMe && user.about.length">{{
-        user.about
-      }}</TypographyText>
-
-      <form v-else @submit="(e) => submitEdit(e, 'about')">
-        <div class="row-wrapper">
-          <InteractablesEditable
-            v-model="inputs.about"
-            :placeholder="$t('modal.profile.about.click_about')"
-            :enabled="editing.has('about')"
-          />
-          <InteractablesButton type="submit">
-            <edit-icon size="1x" />
-          </InteractablesButton>
-        </div>
-      </form>
+      <TypographyText v-if="user.about.length">
+        {{ user.about }}</TypographyText
+      >
     </div>
     <div>
       <TypographyTitle
-        v-if="(!isMe && user.location.length) || isMe"
+        v-if="user.location.length"
         :text="$t('modal.profile.about.location')"
         :size="6"
       />
-      <TypographyText v-if="!isMe && user.location.length">{{
+      <TypographyText v-if="user.location.length">{{
         user.location
       }}</TypographyText>
-
-      <form v-else @submit="(e) => submitEdit(e, 'location')">
-        <div class="row-wrapper">
-          <InteractablesEditable
-            v-model="inputs.location"
-            :placeholder="$t('modal.profile.about.click_location')"
-            :enabled="editing.has('location')"
-          />
-          <InteractablesButton type="submit">
-            <edit-icon size="1x" />
-          </InteractablesButton>
-        </div>
-      </form>
     </div>
     <div v-if="!isMe">
       <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
-
-      <form @submit="(e) => submitEdit(e, 'note')">
-        <div class="row-wrapper">
+      <form @submit="(e) => submitEdit(e)">
+        <div v-click-outside="toggleEditingOff" class="row-wrapper">
           <InteractablesEditable
-            v-model="inputs.note"
+            v-model="note"
             :placeholder="$t('modal.profile.about.click_note')"
-            :enabled="editing.has('note')"
+            :enabled="editing"
           />
           <InteractablesButton type="submit">
             <edit-icon size="1x" />
@@ -71,8 +44,6 @@ import { mapState } from 'vuex'
 import { EditIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
-
-type Editables = 'about' | 'location' | 'note'
 
 export default Vue.extend({
   components: {
@@ -96,13 +67,8 @@ export default Vue.extend({
   data() {
     return {
       observer: null as ResizeObserver | null,
-      loading: new Set() as Set<keyof User>,
-      editing: new Set() as Set<Editables>,
-      inputs: {
-        about: this.user.about ?? '',
-        location: this.user.location ?? '',
-        note: this.user.note ?? '',
-      } as Partial<User>,
+      editing: false as Boolean,
+      note: this.user?.note ?? ('' as Partial<User>),
     }
   },
   computed: {
@@ -113,59 +79,25 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * @method updateUserDetail
-     * @description Updates user details
-     * @example this.updateUserDetail('name', 'John Doe')
+     * @method toggleEditingOff
+     * @description Toggles editing state off
      */
-    async updateUserDetail(e: SubmitEvent, key: keyof User, value: string) {
-      e.stopPropagation()
-      e.preventDefault()
-
-      try {
-        this.loading.add(key)
-        await iridium.profile.updateUser({
-          [key]: value.trim(),
-        })
-        const inputs = this.inputs as { [key in keyof User]: string }
-        inputs[key] = value.trim()
-        this.$toast.show(
-          this.$t('pages.settings.profile.detail_updated') as string,
-        )
-      } catch (e: any) {
-        this.$toast.error(this.$t(e.message) as string)
-      } finally {
-        this.loading.delete(key)
-        this.loading = new Set(...this.loading.entries())
-      }
-    },
-    /**
-     * @method toggleEditing
-     * @description Toggles editing state of a field
-     * @example this.toggleEditing('name')
-     */
-    toggleEditing(key: Editables) {
-      if (this.editing.has(key)) {
-        this.editing.delete(key)
-        this.editing = new Set(...this.editing.entries())
-      } else {
-        this.editing.add(key)
-        this.editing = new Set(...this.editing.entries())
-      }
+    toggleEditingOff() {
+      this.editing = false
     },
     /**
      * @method submitEdit
      * @description Updates input value
-     * @example this.submitEdit('name', 'John Doe')
      */
-    submitEdit(e: SubmitEvent, key: Editables) {
+    submitEdit(e: SubmitEvent) {
       e.stopPropagation()
       e.preventDefault()
-      const value = this.inputs[key] || ''
-      const valueChanged = this.user?.[key] !== value
-      if (this.editing.has(key) && valueChanged) {
-        this.updateUserDetail(e, key, value)
+      const value = this.note || ''
+      const valueChanged = this.user?.note !== value
+      if (this.editing && valueChanged) {
+        // TODO update note
       }
-      this.toggleEditing(key)
+      this.editing = !this.editing
     },
   },
 })
@@ -176,6 +108,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   gap: 16px;
+  word-break: break-all;
 
   .row-wrapper {
     display: flex;

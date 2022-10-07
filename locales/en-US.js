@@ -871,6 +871,7 @@ export default {
         servers: 'Servers',
         friends: 'Friends',
       },
+      edit: 'Edit',
     },
     call_to_action: {
       title: 'Coming Soon',

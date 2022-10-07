@@ -8,9 +8,11 @@ import {
   UserPlusIcon,
   MoreVerticalIcon,
   AwardIcon,
+  EditIcon,
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { ProfileInfo } from '~/types/profile/profile'
+import { SettingsRoutes } from '~/store/ui/types'
 import { Tab } from '~/types/ui/tab'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
@@ -27,6 +29,7 @@ export default Vue.extend({
     UserPlusIcon,
     MoreVerticalIcon,
     AwardIcon,
+    EditIcon,
   },
   props: {
     closeModal: {
@@ -91,6 +94,9 @@ export default Vue.extend({
         iridium.profile.state?.did === this.user.did
       )
     },
+    isMe(): boolean {
+      return !!this.user?.did && iridium.profile.state?.did === this.user.did
+    },
     status() {
       return (
         (this.user?.did && iridium.users.ephemeral.status[this.user.did]) ||
@@ -112,6 +118,13 @@ export default Vue.extend({
       await iridium.friends.requestCreate(this.user, false)
       this.loading = false
       this.$toast.show(this.$t('friends.request_sent') as string)
+    },
+    redirectToProfile() {
+      if (this.$device.isMobile) {
+        this.$router.push('/mobile/settings')
+      }
+
+      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
     },
   },
 })

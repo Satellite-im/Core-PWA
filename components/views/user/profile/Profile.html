@@ -35,15 +35,23 @@
                 />
               </div>
             </div>
-            <div class="buttons" v-if="!isFriend">
+            <div class="buttons">
               <InteractablesButton
                 @click="createFriendRequest"
                 :loading="loading"
                 color="success"
+                v-if="!isFriend"
               >
                 <user-plus-icon size="1.25x" />
               </InteractablesButton>
-              <InteractablesButton>
+              <InteractablesButton
+                @click="redirectToProfile"
+                :loading="loading"
+                v-if="isMe"
+              >
+                <edit-icon size="1.25x" /> {{$t('modal.profile.edit')}}
+              </InteractablesButton>
+              <InteractablesButton v-if="!isMe">
                 <more-vertical-icon size="1.25x" />
               </InteractablesButton>
             </div>
