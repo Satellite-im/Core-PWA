@@ -87,6 +87,9 @@ jobs:
           cd cypress/e2e
           ls -la
 
+      - name: Start server
+        run: yarn dev &
+
       - name: Wait on localhost
         uses: nev7n/wait_for_response@v1
         with:
