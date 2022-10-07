@@ -64,7 +64,7 @@ jobs:
           ./linkscript.sh
 
       - name: Run Yarn on CorePWA
-        run: yarn --prefer-offline
+        run: yarn install --frozen-lockfile
 
       - name: Pnpm i and watch
         working-directory: ./
@@ -83,6 +83,9 @@ jobs:
 
       - name: Yarn Link
         run: yarn link "@satellite-im/iridium"
+
+      #- name: Run cypress install
+      #  run: cypress install
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
