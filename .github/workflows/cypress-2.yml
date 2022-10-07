@@ -80,34 +80,29 @@ jobs:
         working-directory: ../iridium
         run: pnpm i
 
-      - name: Pnpm Watch
-        working-directory: ../iridium
-        run: pnpm watch &
-
-      - name: Pnpm Sync Node
-        working-directory: ../iridium
-        run: pnpm sync-node &
-
-      - name: Yarn Link
-        working-directory: ./
-        run: yarn link "@satellite-im/iridium"
-
-      - name: Validate cypress is installed and list of files from main repo
-        run: |
-          npx cypress info
-          ls -la
-
-      - name: List of cypress specs
-        working-directory: ./cypress/e2e
-        run: ls -la
-
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
           DEBUG: '@cypress/github-action'
         with:
           install: false
-          start: yarn dev
+          start: |
+            # Execute PNPM Watch in the background
+            cd .. && cd iridium && pwd && pnpm watch &
+            # Execute PNPM Sync Node in the background
+            cd .. && cd iridium && pwd && pnpm sync-node &
+            # Yarn Link Iridium repo
+            yarn link "@satellite-im/iridium"
+            # Printing cypress info
+            npx cypress info
+            # List of files from CorePWA repo
+            pwd && ls -la
+            # List of files from Iridium repo
+            cd .. && cd iridium && pwd && ls -la && cd ..
+            # List of spec files from Cypress
+            cd cypress/e2e && pwd && ls -la && cd ../..
+            # Start server
+            yarn dev
           browser: chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
