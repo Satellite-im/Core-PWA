@@ -4,7 +4,7 @@ const gifImagePath = 'cypress/fixtures/images/gif-test.gif'
 const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 const path = require('path')
 
-describe('Chat - Sending Images Tests', () => {
+describe.skip('Chat - Sending Images Tests', () => {
   // Before starting spec - Restore Localstorage Snapshots for next specs
   before(() => {
     cy.restoreLocalStorage('Chat User A')

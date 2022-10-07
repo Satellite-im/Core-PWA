@@ -1,0 +1,86 @@
+name: Run Cypress Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  cypress:
+    name: Run Cypress Tests on CorePWA 🌡️
+    runs-on: ubuntu-20.04
+    container:
+      image: cypress/browsers:node16.5.0-chrome94-ff93
+      options: --user 1001
+
+    steps:
+      - name: Checkout 🔖
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 🔨
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Git Clone Iridium Repo 🗳️
+        run: |
+          cd ..
+          git clone https://github.com/Satellite-im/iridium.git
+
+      - name: Change permissions on scripts and run Linkscript 🔨
+        run: |
+          chmod +x ./linkscript.sh
+          chmod +x ./cypress/scripts/watch-script.sh
+          chmod +x ./cypress/scripts/sync-node-script.sh
+          ./linkscript.sh
+
+      - name: Install Yarn Dependencies on Core 🔨
+        run: yarn
+
+      - name: Create env file - Iridium 🔨
+        run: |
+          cd ..
+          cd iridium
+          echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
+          echo CERTBOT_EMAIL="support@satellite.im" >> .env
+          echo SYNC_NODE_SEED="sync node a seed" >> .env
+          echo SYNC_NODE_ADDR=${{ secrets.SYNC_NODE_ADDR }} >> .env
+          echo SERVERDATAVOLUME=${{ secrets.SERVERDATAVOLUME }} >> .env
+          echo NODE_ENV="development" >> .env
+          echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
+          cat .env
+
+      - name: Create env file - Core 🔨
+        working-directory: ./
+        run: |
+          touch .env
+          echo ENVIRONMENT="dev" >> .env
+          echo NUXT_ENV_IRIDIUM_SYNC_NODES=${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }} >> .env
+          echo NUXT_ENV_IRIDIUM_APIS=${{ secrets.NUXT_ENV_IRIDIUM_APIS }} >> .env
+          echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
+          cat .env
+
+      - name: Install PNPM dependencies on Iridium 🔨
+        working-directory: ../iridium
+        run: pnpm i
+
+      - name: Yarn Link Iridium Repo 🔨
+        working-directory: ./
+        run: yarn link "@satellite-im/iridium"
+
+      - name: Execute Cypress Tests 🌡️
+        uses: cypress-io/github-action@v4
+        with:
+          start: |
+            sh ./cypress/scripts/watch-script.sh
+            sh ./cypress/scripts/sync-node-script.sh
+            yarn dev
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 300
+          browser: chrome
+
+      - name: Upload screenshots of tests failed 📷
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
