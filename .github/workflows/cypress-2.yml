@@ -85,8 +85,8 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           start: |
-            ./cypress/scripts/watch-script.sh
-            ./cypress/scripts/sync-node-script.sh
+            sh ./cypress/scripts/watch-script.sh
+            sh ./cypress/scripts/sync-node-script.sh
             yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
