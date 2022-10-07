@@ -55,7 +55,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
     cy.contains('Friend request successfully sent!').should('be.visible')
   })
 
-  it('Friend request sent is displayed and user cancels it', () => {
+  it.skip('Friend request sent is displayed and user cancels it', () => {
     // Type friend ID to add it and validate that friend request is sent. Then cancel it
     cy.get('[data-cy=tab-element]').contains('Requests').click()
     cy.contains('Outgoing requests').should('be.visible')
@@ -76,7 +76,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
     cy.get('@friend-request-input').click().clear()
   })
 
-  it('Send again friend request to User A', () => {
+  it.skip('Send again friend request to User A', () => {
     // Type friend ID to add it and validate that friend request is sent
     cy.get('[data-cy=add-friend-page]')
       .find('[data-cy=input-group]')
@@ -93,7 +93,7 @@ describe('Create two reusable accounts and validate friend request/accept flow',
     cy.saveLocalStorage('Chat User B')
   })
 
-  it('Chat User A has a friend request displayed and accepts it', () => {
+  it.skip('Chat User A has a friend request displayed and accepts it', () => {
     // Login with User A by restoring LocalStorage Snapshot
     cy.loginWithLocalStorage('Chat User A', '12345')
 

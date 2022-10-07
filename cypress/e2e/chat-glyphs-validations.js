@@ -1,4 +1,4 @@
-describe('Chat - Sending Glyphs Tests', () => {
+describe.skip('Chat - Sending Glyphs Tests', () => {
   before(() => {
     // Restore Localstorage Snapshots for next specs
     cy.restoreLocalStorage('Chat User A')
