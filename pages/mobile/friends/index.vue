@@ -3,7 +3,7 @@
     <div class="swiper-wrapper">
       <div class="swiper-slide" :class="{ 'disable-swipe': !Boolean(route) }">
         <div class="top">
-          <div>Friends</div>       
+          <div>Friends</div>
           <div class="button-container">
             <button @click="next('add')">
               <user-plus-icon />
