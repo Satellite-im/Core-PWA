@@ -40,10 +40,13 @@ jobs:
           restore-keys: |
             cypress-${{ runner.os }}-cypress-
 
-      - name: Clone Iridium Repo
+      - name: Run Linkscript
         run: |
-          cd ..
-          git clone https://github.com/Satellite-im/iridium.git
+          chmod +x ./linkscript.sh
+          ./linkscript.sh
+
+      - name: Yarn Install
+        run: yarn
 
       - name: Create env file - iridium
         run: |
@@ -68,17 +71,34 @@ jobs:
           echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
           cat .env
 
-      - name: Run Linkscript
-        run: |
-          chmod +x ./linkscript.sh
-          ./linkscript.sh
-
-      - name: Yarn
-        run: yarn
-
       - name: Pnpm i
         working-directory: ../iridium
         run: pnpm i
+
+      - name: Pnpm Watch
+        working-directory: ../iridium
+        run: pnpm watch &
+
+      - name: Pnpm Sync Node
+        working-directory: ../iridium
+        run: pnpm sync-node &
+
+      - name: Yarn Link Iridium Repo
+        working-directory: ./
+        run: yarn link "@satellite-im/iridium"
+
+      - name: Printing information of all repos to ensure everything is working correctly
+        run: |
+          pwd
+          ls -la
+          cd ..
+          cd iridium
+          pwd
+          ls -la
+          cd ..
+          cd cypres/e2e
+          ls -la
+          npx cypress info
 
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
@@ -86,23 +106,7 @@ jobs:
           DEBUG: '@cypress/github-action'
         with:
           install: false
-          start: |
-            # Execute PNPM Watch in the background
-            cd .. && cd iridium && pwd && pnpm watch &
-            # Execute PNPM Sync Node in the background
-            cd .. && cd iridium && pwd && pnpm sync-node &
-            # Yarn Link Iridium repo
-            yarn link "@satellite-im/iridium"
-            # Printing cypress info
-            npx cypress info
-            # List of files from CorePWA repo
-            pwd && ls -la
-            # List of files from Iridium repo
-            cd .. && cd iridium && pwd && ls -la && cd ..
-            # List of spec files from Cypress
-            cd cypress/e2e && pwd && ls -la && cd ../..
-            # Start server
-            yarn dev
+          start: yarn dev
           browser: chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
