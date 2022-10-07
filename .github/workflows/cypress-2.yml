@@ -1,4 +1,4 @@
-name: Cypress Second Action
+name: Run Cypress Tests
 
 on:
   pull_request:
@@ -6,14 +6,14 @@ on:
 
 jobs:
   cypress:
-    name: Cypress 2
+    name: Run Cypress Tests on CorePWA 🌡️
     runs-on: ubuntu-20.04
     container:
       image: cypress/browsers:node16.5.0-chrome94-ff93
       options: --user 1001
 
     steps:
-      - name: Checkout
+      - name: Checkout 🔖
         uses: actions/checkout@v2
 
       - name: Setup Node.js 🔨
@@ -21,22 +21,22 @@ jobs:
         with:
           node-version: 16
 
-      - name: Git Clone Iridium Repo
+      - name: Git Clone Iridium Repo 🗳️
         run: |
           cd ..
           git clone https://github.com/Satellite-im/iridium.git
 
-      - name: Change permissions on scripts and run Linkscript
+      - name: Change permissions on scripts and run Linkscript 🔨
         run: |
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
           ./linkscript.sh
 
-      - name: Yarn Install
+      - name: Install Yarn Dependencies on Core 🔨
         run: yarn
 
-      - name: Create env file - iridium
+      - name: Create env file - Iridium 🔨
         run: |
           cd ..
           cd iridium
@@ -49,7 +49,7 @@ jobs:
           echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
           cat .env
 
-      - name: Create env file - core
+      - name: Create env file - Core 🔨
         working-directory: ./
         run: |
           touch .env
@@ -59,31 +59,15 @@ jobs:
           echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
           cat .env
 
-      - name: Pnpm i
+      - name: Install PNPM dependencies on Iridium 🔨
         working-directory: ../iridium
         run: pnpm i
 
-      - name: Yarn Link Iridium Repo
+      - name: Yarn Link Iridium Repo 🔨
         working-directory: ./
         run: yarn link "@satellite-im/iridium"
 
-      - name: Printing information of all repos to ensure everything is working correctly
-        run: |
-          pwd
-          ls -la
-          cd ..
-          cd iridium
-          pwd
-          ls -la
-
-      - name: Printing information from cypress
-        working-directory: ./
-        run: |
-          npx cypress info
-          cd cypress/e2e
-          ls -la
-
-      - name: Cypress run
+      - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
           start: |
@@ -92,10 +76,9 @@ jobs:
             yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
-          spec: cypress/e2e/add-friend.js
           browser: chrome
 
-      - name: Artifacts
+      - name: Upload screenshots of tests failed 📷
         uses: actions/upload-artifact@v2
         if: failure()
         with:
