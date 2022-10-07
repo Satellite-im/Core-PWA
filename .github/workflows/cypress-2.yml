@@ -30,6 +30,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Cache Cypress binary
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-cypress-
+
       - name: Clone Iridium Repo
         run: |
           cd ..
@@ -63,13 +71,12 @@ jobs:
           chmod +x ./linkscript.sh
           ./linkscript.sh
 
-      - name: Pnpm i and watch
+      - name: Pnpm i
         working-directory: ./
         run: |
           cd ..
           cd iridium
           pnpm i
-          pnpm watch &
 
       - name: Sync Node
         working-directory: ./
@@ -78,25 +85,23 @@ jobs:
           cd iridium
           pnpm sync-node &
 
-      - name: Run Yarn on CorePWA
-        run: yarn install
-
-      - name: Yarn Link
-        run: yarn link "@satellite-im/iridium"
-
-      - name: Run cypress install
-        run: npx cypress info
-
       - name: Cypress tests with debug logs
         uses: cypress-io/github-action@v4
         env:
           DEBUG: '@cypress/github-action'
         with:
-          start: yarn dev
-          install: false
-          command: npx cypress run --browser chrome
+          install-command: yarn --frozen-lockfile --silent
+          start: |
+            cd .. && cd iridium && pnpm watch &&
+            cd .. && cd iridium && pnpm sync-node &
+            yarn link "@satellite-im/iridium"
+            npx cypress info
+            yarn dev
+          browser: chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
+          spec: cypress/e2e/add-friend.js
+          config-file: cypress.config.js
 
       - name: Artifacts
         uses: actions/upload-artifact@v2
