@@ -3,11 +3,9 @@ import {
   IridiumPeerIdentifier,
   Emitter,
   didUtils,
-  encoding,
   IridiumPubsubMessage,
 } from '@satellite-im/iridium'
 import type {
-  IridiumMessage,
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
@@ -17,8 +15,7 @@ import { User } from '../users/types'
 import { FriendRequest, FriendRequestStatus, FriendsError } from './types'
 import logger from '~/plugins/local/logger'
 import {
-  Notification,
-  NotificationClickEvent,
+  NotificationBase,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 
@@ -349,32 +346,21 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
       await this.send(payload)
     } else {
-      // Notify the recipient
-      const buildNotification: Exclude<Notification, 'id'> = {
-        fromName: user.name,
-        at: request.at,
-        title: 'New Request',
-        description: `New ${NotificationType.FRIEND_REQUEST} From ${user.name}`,
-        image: user.photoHash?.toString() || '',
-        type: NotificationType.FRIEND_REQUEST,
-        seen: false,
-        onNotificationClick: () => {
-          const clickEventData: NotificationClickEvent = {
-            from: user.name,
-            topic: user.did,
-            payload: {
-              type: NotificationType.FRIEND_REQUEST,
-            },
-          }
-
-          // Emit data to the app to handle the click event
-          iridium.notifications.emit('notification/clicked', {
-            ...clickEventData,
-          })
-        },
-      }
-      iridium.notifications.sendNotification(buildNotification)
+      this.sendNotification(user)
     }
+  }
+
+  private sendNotification(user: User) {
+    iridium.notifications.emit('notification/create', {
+      type: NotificationType.FRIEND_REQUEST,
+      title: 'notifications.friend_request.title',
+      description: 'notifications.friend_request.body',
+      descriptionValues: {
+        name: user.name,
+      },
+      fromName: user.name,
+      image: user.photoHash,
+    } as NotificationBase)
   }
 
   /**

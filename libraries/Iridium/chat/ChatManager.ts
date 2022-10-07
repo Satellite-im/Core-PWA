@@ -15,7 +15,6 @@ import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
-import { IridiumPeerIdentifier } from '~/../iridium/src/types'
 import {
   ChatError,
   Conversation,
@@ -36,6 +35,7 @@ import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
   Notification,
+  NotificationBase,
   NotificationClickEvent,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
@@ -77,6 +77,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     activeConversationId: '',
   }
 
+  private logPrefix = 'iridium/ChatManager'
+
   async start() {
     const fetched = await this.get<State>()
     this.state.conversations = {
@@ -98,7 +100,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       conversations.map(async (conversation) => {
         const topic = `/chat/conversations/${conversation.id}`
         logger.info(
-          'iridium/chatmanager/init',
+          `${this.logPrefix}/start`,
           `requesting sync subscription to ${topic}`,
         )
         // ask the sync node to subscribe to this topic
@@ -186,7 +188,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const { stored, payload } = msg
       if (stored.topic) {
         logger.info(
-          'iridium/chatmanager',
+          `${this.logPrefix}/onSyncFetchResponse`,
           'sync/fetch/message - emitting synced message',
           payload,
         )
@@ -199,7 +201,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     })
 
     logger.info(
-      'iridium/chatmanager',
+      `${this.logPrefix}/onSyncFetchResponse`,
       'sync/fetch/messages - sending delivery receipt',
       message.payload.body.messages,
     )
@@ -210,7 +212,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         (message: { cid: string }) => message.cid,
       ),
     })
-    logger.info('iridium/chatmanager', 'sync/fetch/messages - done')
+    logger.info(
+      `${this.logPrefix}/onSyncFetchResponse`,
+      'sync/fetch/messages - done',
+    )
   }
 
   get<T = IridiumDocument>(path: string = '', options: any = {}) {
@@ -262,7 +267,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         })
       })
       logger.info(
-        'iridium/chatmanager/onConversationMessage',
+        `${this.logPrefix}/onConversationMessage`,
         'message received',
         { message, cid, from, conversationId },
       )
@@ -287,7 +292,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       }
     } else if (type === 'chat/reaction') {
       const reaction = payload.body.reaction
-      logger.info('iridium/chatmanager/onConversationMessage', 'reaction', {
+      logger.info(`${this.logPrefix}/onConversationMessage`, 'reaction', {
         reaction,
         from,
         conversationId,
@@ -312,7 +317,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const { messageId, conversationId, body, lastEditedAt } = payload.body
         .message as MessageEdit
 
-      logger.info('iridium/chatmanager/onConversationMessage', 'message edit', {
+      logger.info(`${this.logPrefix}/onConversationMessage`, 'message edit', {
         from,
         conversationId,
       })
@@ -331,50 +336,36 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return this.ephemeral.activeConversationId === conversationId
   }
 
-  sendNotification(
+  private sendNotification(
     message: ConversationMessage,
     conversation: Conversation,
     fromDID: string,
   ) {
-    const friendName = iridium.users.getUser(message?.from)
+    const sender = iridium.users.getUser(message?.from)
     const description =
       message.body?.length! > 79
         ? `${message.body?.substring(0, 80)}...`
         : message.body || ''
 
-    const buildNotification: Exclude<Notification, 'id'> = {
-      fromName: friendName?.name || fromDID,
-      at: Date.now(),
-      fromAddress: conversation.id,
-      chatName: conversation.participants.length > 2 ? conversation.name : '',
-      title:
-        conversation.participants.length > 2
-          ? `${friendName?.name} posted in ${conversation.name}`
-          : `New message from ${friendName?.name}`,
+    const isGroup = conversation.type === 'group'
+
+    iridium.notifications.emit('notification/create', {
+      type: isGroup
+        ? NotificationType.GROUP_MESSAGE
+        : NotificationType.DIRECT_MESSAGE,
+      title: isGroup
+        ? 'notifications.new_message.group_title'
+        : sender?.name || 'notifications.new_message.title',
+      titleValues: isGroup
+        ? { name: sender?.name, server: conversation.name }
+        : undefined,
       description,
+      fromName: sender?.name || '',
       image: fromDID,
-      type:
-        conversation.participants.length > 2
-          ? NotificationType.GROUP_MESSAGE
-          : NotificationType.DIRECT_MESSAGE,
-      seen: false,
-      onNotificationClick: () => {
-        const clickEventData: NotificationClickEvent = {
-          from: fromDID,
-          topic: conversation.id,
-          payload: {
-            type: NotificationType.DIRECT_MESSAGE,
-          },
-        }
-
-        // Emit data to the app to handle the click event
-        iridium.notifications.emit('notification/clicked', {
-          ...clickEventData,
-        })
+      notificationClickParams: {
+        conversationId: conversation.id,
       },
-    }
-
-    iridium.notifications?.sendNotification(buildNotification)
+    } as NotificationBase)
   }
 
   hasConversation(id: string) {
@@ -714,11 +705,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     const safer = await uploadFile(upload.file, conversation.participants)
     if (!safer || !safer.valid) {
+      logger.error(`${this.logPrefix}/addFile`, 'file content is not valid')
       return null
     }
 
-    const syncPinResult = await iridium.connector?.load(safer.cid)
-
+    const syncPinResult = await iridium.connector?.fileLoad(safer.cid)
     return {
       cid: syncPinResult.cid,
       name: upload.file.name,

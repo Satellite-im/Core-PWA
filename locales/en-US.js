@@ -46,8 +46,6 @@ export default {
     more: 'More',
     live: 'Live {time}',
     edited: 'edited',
-    online: 'All users are offline | {name} is online | {name} are online',
-    offline: '{name} is not connected',
     background_call: 'Current call',
     no_results: 'No results found',
     early_access: 'Early Access',
@@ -907,5 +905,16 @@ export default {
     copy_img: 'Copy Image',
     save_img: 'Save Image',
     copy_link: 'Copy Link',
+  },
+  notifications: {
+    friend_request: {
+      title: 'Friend Request',
+      body: '{name} sent you a friend request!',
+    },
+    new_message: {
+      title: 'New Message',
+      group_title: '{name} ({server})',
+      body: 'You have a new message from {name}!',
+    },
   },
 }

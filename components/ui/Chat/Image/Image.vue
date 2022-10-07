@@ -39,8 +39,8 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    const { fileBuffer } = await iridium.connector?.load(this.attachment.cid)
-    this.blob = new Blob([fileBuffer], { type: this.attachment.type })
+    const { file } = await iridium.connector?.load(this.attachment.cid)
+    this.blob = new Blob([file], { type: this.attachment.type })
     this.dataURL = URL.createObjectURL(this.blob)
   },
   beforeDestroy() {
