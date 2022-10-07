@@ -80,7 +80,7 @@ jobs:
           pwd
           ls -la
           cd ..
-          cd cypres/e2e
+          cd cypress/e2e
           ls -la
           npx cypress info
 
