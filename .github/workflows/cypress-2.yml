@@ -93,7 +93,6 @@ jobs:
           DEBUG: '@cypress/github-action'
         with:
           start: yarn dev
-          working-directory: ./
           install: false
           command: npx cypress run --browser chrome
           wait-on: 'http://localhost:3000'
