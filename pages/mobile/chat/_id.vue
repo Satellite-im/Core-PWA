@@ -30,7 +30,6 @@
         />
         <Conversation />
         <Chatbar ref="chatbar" />
-        <UserProfile />
       </div>
     </div>
   </div>
