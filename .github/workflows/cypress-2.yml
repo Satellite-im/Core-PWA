@@ -24,6 +24,7 @@ jobs:
 
       - name: Create env file - iridium
         run: |
+          cd ..
           cd iridium
           echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
           echo CERTBOT_EMAIL="support@satellite.im" >> .env
