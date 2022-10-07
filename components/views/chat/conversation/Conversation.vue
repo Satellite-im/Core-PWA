@@ -245,6 +245,11 @@ export default Vue.extend({
     }, 100),
     // Dont trigger this behaviour when dragging the scrollbar
     onWheelScroll: throttle(function (this: any) {
+      this.isScrolling = true
+      clearTimeout(this.timeoutScrolling)
+      this.timeoutScrolling = setTimeout(() => {
+        this.isScrolling = false
+      }, 200)
       const container = this.$refs.container as HTMLElement | null
       if (!container) return
       if (container.scrollTop === 0) {
@@ -300,7 +305,7 @@ export default Vue.extend({
               0,
             )
         })
-      }, Math.random() * 1500)
+      }, 250)
     },
     onUnreadMessage({
       message,
