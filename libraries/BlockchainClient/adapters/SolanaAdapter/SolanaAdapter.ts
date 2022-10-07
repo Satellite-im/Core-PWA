@@ -5,7 +5,6 @@ import {
   SignatureResult,
 } from '@solana/web3.js'
 import nacl from 'tweetnacl'
-import nacl from 'tweetnacl'
 import {
   Account,
   Adapter,
