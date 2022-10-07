@@ -9,7 +9,7 @@ jobs:
     name: Cypress 2
     runs-on: ubuntu-20.04
     container:
-      image: cypress/included:10.8.0
+      image: cypress/browsers:node16.5.0-chrome94-ff93
       options: --user 1001
 
     steps:
