@@ -63,7 +63,8 @@ jobs:
 
       - name: Sync Node
         working-directory: ./
-        run: cd ..
+        run: |
+          cd ..
           cd iridium
           pnpm sync-node &
 
@@ -77,6 +78,7 @@ jobs:
         with:
           start: yarn dev
           working-directory: ./
+          install: false
           command: npx cypress run --browser chrome
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
