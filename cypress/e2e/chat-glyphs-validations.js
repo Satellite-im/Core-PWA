@@ -1,9 +1,12 @@
+
 describe('Chat - Sending Glyphs Tests', () => {
-  it('Send a glyph on chat', () => {
-    // Login with User A by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User A').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+  before(() => {
+    // Restore Localstorage Snapshots for next specs
+    cy.restoreLocalStorage('Chat User A')
+  })
+  it('Send a glyph on chat', { retries: 2 }, () => {
+    // Import account from localstorage
+    cy.loginWithLocalStorage('Chat User A', '12345')
 
     // Go to a Conversation
     cy.goToConversation('Chat User B')

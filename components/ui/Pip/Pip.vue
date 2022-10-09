@@ -30,6 +30,7 @@ type QuarterType = {
 }
 
 const DRAG_INTERVAL_MS = 1000 / 60
+const DRAG_RELEASE_MOMENTUM = 20
 
 function isLeftButton(e: MouseEvent) {
   const evt = e || window.event
@@ -55,6 +56,8 @@ export default Vue.extend({
       dragInterval: null as NodeJS.Timer | null,
       mouseX: 0,
       mouseY: 0,
+      oldMouseX: 0,
+      oldMouseY: 0,
     }
   },
   computed: {
@@ -74,15 +77,30 @@ export default Vue.extend({
       const blockWidth = window.innerWidth / Config.pip.columns.length
       const blockHeight = window.innerHeight / Config.pip.rows.length
 
+      const x = this.x + (this.mouseX - this.oldMouseX) * DRAG_RELEASE_MOMENTUM
+      const y = this.y + (this.mouseY - this.oldMouseY) * DRAG_RELEASE_MOMENTUM
+
       const containerCenter = {
-        x: this.x + this.elWidth / 2,
-        y: this.y + this.elHeight / 2,
+        x: x + this.elWidth / 2,
+        y: y + this.elHeight / 2,
       }
 
       return {
-        x: Math.floor(containerCenter.x / blockWidth),
-        y: Math.floor(containerCenter.y / blockHeight),
-      }
+        x: Math.max(
+          0,
+          Math.min(
+            Config.pip.columns.length - 1,
+            Math.floor(containerCenter.x / blockWidth),
+          ),
+        ),
+        y: Math.max(
+          0,
+          Math.min(
+            Config.pip.rows.length - 1,
+            Math.floor(containerCenter.y / blockHeight),
+          ),
+        ),
+      } as QuarterType
     },
     moveToQuarter(quarter: QuarterType, useAnimation = false) {
       const blockHeight = window.innerHeight / Config.pip.rows.length
@@ -147,11 +165,13 @@ export default Vue.extend({
       this.isDragging = false
       document.removeEventListener('mouseup', this.mouseUp)
       document.removeEventListener('mousemove', this.mouseMove)
-      this.quarter = this.calcPosition() as QuarterType
+      this.quarter = this.calcPosition()
       this.moveToQuarter(this.quarter, true)
       // TODO: document.body.style.pointerEvents = 'auto'
     },
     mouseMove(e: MouseEvent) {
+      this.oldMouseX = this.mouseX ?? e.clientX
+      this.oldMouseY = this.mouseY ?? e.clientY
       this.mouseX = e.clientX
       this.mouseY = e.clientY
     },

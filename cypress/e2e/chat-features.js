@@ -4,7 +4,7 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 let imageURL, expecedEditedMessage
 
-describe('Chat Features Tests', () => {
+describe.skip('Chat Features Tests', () => {
   before(() => {
     // Login with User A by restoring LocalStorage Snapshot
     cy.restoreLocalStorage('Chat User A').then(() => {

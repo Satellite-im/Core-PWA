@@ -17,10 +17,8 @@ import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
 import { ModalWindows } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-import {
-  conversationHooks,
-  call,
-} from '~/components/compositions/conversations'
+import { conversationHooks } from '~/components/compositions/conversations'
+import { webrtcHooks } from '~/components/compositions/webrtc'
 import { User } from '~/libraries/Iridium/users/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 
@@ -42,14 +40,13 @@ export default Vue.extend({
   setup() {
     // @ts-ignore
     const $nuxt = useNuxtApp()
-    const {
-      conversation,
-      conversationId,
-      isGroup,
-      otherDids,
-      otherParticipants,
-      enableRTC,
-    } = conversationHooks()
+    const conversationId: ComputedRef<string | undefined> = computed(() => {
+      return $nuxt.$route.params.id
+    })
+
+    const { conversation, isGroup, otherDids, otherParticipants } =
+      conversationHooks(conversationId.value)
+    const { enableRTC, call } = webrtcHooks(conversationId.value)
 
     const subtitleText: ComputedRef<string | undefined> = computed(() => {
       if (isGroup.value) {
@@ -77,6 +74,7 @@ export default Vue.extend({
       callTooltipText,
       otherParticipants,
       otherDids,
+      call,
     }
   },
   data() {
@@ -108,7 +106,7 @@ export default Vue.extend({
         kinds.push('audio')
       }
       this.$store.commit('video/setDisabled', true)
-      await call({
+      await this.call({
         recipient: this.otherDids[0],
         conversationId: this.conversationId,
         kinds,

@@ -35,6 +35,28 @@ import Cursor from '~/libraries/ui/Cursor'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 import WithHistory, { Operation } from '~/components/mixins/UI/WithHistory'
 
+/**
+ * @method wordUnderCursor
+ * @returns Tuple of word under cursor, and the cursor index within the word
+ */
+function wordUnderCursor(
+  text: string,
+  cursorPosition: number,
+): [string, number] {
+  let s = Math.max(0, cursorPosition - 1)
+  for (; s > 0; s--) {
+    if (text[s] === ' ') {
+      s++
+      break
+    }
+  }
+  let e = s + 1
+  for (; e < text.length; e++) {
+    if (text[e] === ' ') break
+  }
+  return [text.substring(s, e), cursorPosition - s]
+}
+
 function getCurrentRange() {
   const sel = document.getSelection()
   if (sel && sel.rangeCount > 0) {
@@ -76,6 +98,7 @@ const Editable = Vue.extend({
       currentPosition: 0,
       currentRange: null as Range | null,
       isComposing: false,
+      autocompleteText: '',
     }
   },
   watch: {
@@ -304,6 +327,9 @@ const Editable = Vue.extend({
       const messageBox = this.$refs?.editable as HTMLElement
       this.currentPosition = Cursor.getCurrentCursorPosition(messageBox)
       this.currentRange = getCurrentRange()
+      if (this.$listeners.autocomplete) {
+        this.updateAutocomplete()
+      }
     },
     /**
      * @method onFocus
@@ -322,6 +348,44 @@ const Editable = Vue.extend({
     onBlur(e: Event) {
       document.removeEventListener('selectionchange', this.onSelectionChange)
       this.$emit('blur', e)
+    },
+    updateAutocomplete() {
+      const range = this.currentRange
+      if (range?.startOffset !== range?.endOffset) {
+        this.$emit('autocomplete', {
+          show: false,
+          text: '',
+        })
+        return
+      }
+      const pos = this.currentPosition
+      const [word, index] = wordUnderCursor(this.value, pos)
+      const visible = word.startsWith('@') && index !== 0
+      this.autocompleteText = word.substring(1)
+      this.$emit('autocomplete', {
+        show: visible,
+        text: word.substring(1),
+      })
+    },
+    doAutocomplete(val: string) {
+      const range = this.currentRange
+      if (!range) {
+        return
+      }
+      let node = range.startContainer
+      let offset = range.startOffset
+      if (range.startOffset === 0) {
+        if (node.previousSibling?.textContent) {
+          node = node.previousSibling
+          offset = node.textContent?.length ?? 0
+        }
+      }
+      range.setStart(node, offset - this.autocompleteText.length)
+      document.execCommand('insertText', false, val + ' ')
+      this.$emit('autocomplete', {
+        show: false,
+        text: '',
+      })
     },
   },
 })

@@ -6,9 +6,17 @@
   <ChatbarUploadPreview v-if="files.length" />
   <div
     class="chatbar-wrap"
-    :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners, 'outline': isFocused}"
+    :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners, 'outline': isA11yFocused}"
   >
     <ChatbarUpload ref="upload" :disabled="!isSubscribed" />
+    <ChatbarAutocomplete
+      ref="autocomplete"
+      v-if="isFocused && showAutocomplete"
+      :text="autocompleteText"
+      :conversationId="conversationId"
+      @selection="handleAutocompleteSelection"
+      @click="handleAutocompleteClick"
+    />
     <!-- <div
       :class="`chat-label ${isValidCommand ? 'green' : 'color-danger'}`"
       v-if="hasCommand"
@@ -25,7 +33,8 @@
       @keydown="handleInputKeydown"
       @paste="handlePaste"
       @focus="handleFocus"
-      @blur="isFocused = false"
+      @blur="handleBlur"
+      @autocomplete="handleAutocomplete"
     />
     <ChatbarControls
       :disabled="!isSubscribed || charlimit"

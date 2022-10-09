@@ -8,8 +8,11 @@ export default Vue.extend({
   setup() {
     // @ts-ignore
     const $nuxt = useNuxtApp()
+    const conversationId: ComputedRef<string | undefined> = computed(() => {
+      return $nuxt.$route.params.id
+    })
 
-    const { otherTypingParticipants } = conversationHooks()
+    const { otherTypingParticipants } = conversationHooks(conversationId.value)
 
     const text: ComputedRef<string> = computed(() => {
       return $nuxt.$i18n.tc(

@@ -5,6 +5,11 @@ const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 const path = require('path')
 
 describe('Chat - Sending Images Tests', () => {
+  // Before starting spec - Restore Localstorage Snapshots for next specs
+  before(() => {
+    cy.restoreLocalStorage('Chat User A')
+  })
+
   // Setup downloads folder for cypress
   const downloadsFolder = Cypress.config('downloadsFolder')
 
