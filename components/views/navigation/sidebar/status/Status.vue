@@ -2,9 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { ClipboardCopyIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
+  components: {
+    ClipboardCopyIcon,
+  },
   data: () => ({
     profile: iridium.profile.state,
   }),
