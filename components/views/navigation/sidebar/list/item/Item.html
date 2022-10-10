@@ -10,8 +10,8 @@
     @click="openConversation"
   >
     <UiUserState
-      v-if="conversation.type === 'direct' && user && status"
-      :user="user"
+      v-if="conversation.type === 'direct'"
+      :user="otherParticipants[0]"
       :conversationId="conversationId"
     />
     <UiGroupIcon
@@ -24,7 +24,7 @@
         <TypographyText
           class="ellipsis"
           as="h4"
-          :color="unreadCount ? 'light' : 'dark'"
+          :color="numUnreadMessages ? 'light' : 'dark'"
           data-cy="sidebar-user-name"
         >
           {{ conversation.name }}
@@ -32,7 +32,7 @@
 
         <TypographyText
           class="timestamp"
-          v-if="messages.length"
+          v-if="sortedMessages.length"
           color="dark"
           size="xs"
         >
@@ -44,20 +44,15 @@
         <TypographyText
           size="sm"
           class="subtitle"
-          :color="unreadCount ? 'light' : 'dark'"
-          :weight="unreadCount ? 'bold' : ''"
+          :color="numUnreadMessages ? 'light' : 'dark'"
+          :weight="numUnreadMessages ? 'bold' : ''"
         >
-          <div
-            ref="subtitle"
-            class="ellipsis"
-            :class="{ bigmoji: containsOnlyEmoji(lastMessageDisplay) }"
-            v-html="subtitle"
-          />
+          <div class="ellipsis" v-html="subtitle" />
         </TypographyText>
         <TypographyTag
-          v-if="unreadCount"
+          v-if="numUnreadMessages"
           class="tag"
-          :text="unreadCount.toString()"
+          :text="unreadDisplay"
           small
         />
       </div>
