@@ -1,27 +1,25 @@
 <template>
   <div class="about">
-    <div>
-      <TypographyTitle
-        v-if="user.about.length"
-        :text="$t('modal.profile.about.me')"
-        :size="6"
-      />
-      <TypographyText v-if="user.about.length">
-        {{ user.about }}</TypographyText
-      >
-    </div>
-    <div>
-      <TypographyTitle
-        v-if="user.location.length"
-        :text="$t('modal.profile.about.location')"
-        :size="6"
-      />
-      <TypographyText v-if="user.location.length">{{
-        user.location
-      }}</TypographyText>
-    </div>
+    <template v-if="user.about.length">
+      <div>
+        <TypographyText weight="bold" size="lg">
+          {{ $t('modal.profile.about.me') }}</TypographyText
+        >
+        <TypographyText> {{ user.about }}</TypographyText>
+      </div>
+    </template>
+    <template v-if="user.location.length">
+      <div>
+        <TypographyText weight="bold" size="lg">{{
+          $t('modal.profile.about.location')
+        }}</TypographyText>
+        <TypographyText>{{ user.location }}</TypographyText>
+      </div>
+    </template>
     <div v-if="!isMe">
-      <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
+      <TypographyText weight="bold" size="lg">{{
+        $t('modal.profile.about.add_note')
+      }}</TypographyText>
       <form @submit="(e) => submitEdit(e)">
         <div v-click-outside="toggleEditingOff" class="row-wrapper">
           <InteractablesEditable
@@ -49,32 +47,22 @@ export default Vue.extend({
   components: {
     EditIcon,
   },
-  props: {
-    user: {
-      type: Object as Partial<User> | undefined,
-      default: () => {
-        return {
-          name: iridium.profile.state?.name ?? '',
-          did: iridium.profile.state?.did ?? '',
-          status: iridium.profile.state?.status ?? '',
-          about: iridium.profile.state?.about ?? '',
-          location: iridium.profile.state?.location ?? '',
-          note: iridium.profile.state?.note ?? '',
-        }
-      },
-    },
-  },
   data() {
     return {
       observer: null as ResizeObserver | null,
       editing: false as Boolean,
-      note: this.user?.note ?? ('' as Partial<User>),
+      note: '' as Partial<User>,
     }
   },
   computed: {
     ...mapState(['friends', 'ui']),
     isMe(): boolean {
       return !!this.user?.did && iridium.profile.state?.did === this.user.did
+    },
+
+    user(): User | undefined {
+      // TODO load here profile info of
+      return iridium.profile.state
     },
   },
   methods: {
