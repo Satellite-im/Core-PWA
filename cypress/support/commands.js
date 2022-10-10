@@ -30,87 +30,66 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add(
-  'visitRootPage',
-  (isMobile = false, remainingAttempts = 3) => {
-    cy.deleteStorage()
-    cy.wait(1000)
-    // Pass arguments depending if the test is on mobile or desktop browser
-    if (isMobile === false) {
-      cy.visit('/')
-    } else if (isMobile === true) {
-      // Pass user agent with data for a mobile device
-      cy.on('window:before:load', (win) => {
-        Object.defineProperty(win.navigator, 'userAgent', {
-          value:
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-        })
-      })
-      // Use visit Mobile command instead of visit for mobile devices
-      cy.visit('/')
-    }
-    cy.get('body').then(($body) => {
-      if (
-        !($body.find('[data-cy=input-group]').length > 0) &&
-        remainingAttempts > 1
-      ) {
-        remainingAttempts -= 1
-        cy.visitRootPage(isMobile, remainingAttempts)
-      }
-    })
-  },
-)
-
-Cypress.Commands.add('deleteStorage', () => {
-  cy.removeLocalStorage('Satellite-Store')
-  cy.window().then((win) => {
-    win.sessionStorage.clear()
-  })
+Cypress.Commands.add('visitRootPage', (isMobile = false) => {
+  //Before starting, delete localstorage and wait one second to allow for this process to complete
   cy.clearCookies()
-})
-
-Cypress.Commands.add(
-  'clearDatabase',
-  () =>
-    new Cypress.Promise(async (resolve) => {
-      const req = indexedDB.deleteDatabase('SatelliteDB')
-      req.onsuccess = function () {
-        resolve()
+  cy.clearLocalStorage()
+    .then(() => {
+      if (isMobile === true) {
+        // Pass user agent with data for a mobile device
+        cy.on('window:before:load', (win) => {
+          Object.defineProperty(win.navigator, 'userAgent', {
+            value:
+              'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+          })
+        })
       }
-    }),
-)
+      // Visit root page and ensure that Choose Your Password is displayed
+      cy.visit('/')
+    })
+    .then(() => {
+      // Validate that oops please stand by is not visible and pin input is visible, if not retry for 2 more times
+      cy.contains('Choose Your Password').should('be.visible')
+    })
+})
 
 //Create Account Commands
 
-Cypress.Commands.add('createAccount', (pin, username, isMobile = false) => {
-  cy.clearDatabase()
-  cy.visitRootPage(isMobile)
-  cy.url().should('contain', '#/auth/unlock')
-  cy.get('[data-cy=input-group]')
-    .should('be.visible')
-    .trigger('input')
-    .type(pin, { log: false }, { force: true })
-  cy.get('[data-cy=submit-input]').click()
-  cy.get('[data-cy=create-account-button]').click()
-  cy.get('.font-heading').should('contain', 'Recovery Seed')
-  cy.contains('I Saved It').click()
-  cy.validateUserInputIsDisplayed()
-  cy.get('[data-cy=username-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type(username)
-  cy.get('[data-cy=status-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type('testing')
-  cy.get('[data-cy=sign-in-button]').click()
-  cy.welcomeModal(username)
-})
+Cypress.Commands.add(
+  'createAccount',
+  (pin, username, isMobile = false, savePin = false) => {
+    cy.visitRootPage(isMobile)
+    cy.url().should('contain', '#/auth/unlock')
+    cy.get('[data-cy=input-group]')
+      .should('be.visible')
+      .trigger('input')
+      .type(pin, { log: false }, { force: true })
+    if (savePin === true) {
+      cy.get('.switch-button').click().should('have.class', 'enabled')
+    } else {
+      cy.get('.switch-button').should('not.have.class', 'enabled')
+    }
+    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=create-account-button]').click()
+    cy.get('.font-heading').should('contain', 'Recovery Seed')
+    cy.contains('I Saved It').click()
+    cy.validateUserInputIsDisplayed()
+    cy.get('[data-cy=username-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(username)
+    cy.get('[data-cy=status-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type('testing')
+    cy.get('[data-cy=sign-in-button]').click()
+    cy.welcomeModal(username)
+  },
+)
 
 Cypress.Commands.add(
   'createAccountPINscreen',
   (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.clearDatabase()
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
@@ -224,17 +203,16 @@ Cypress.Commands.add('welcomeModal', (username) => {
 
 //Import Account Commands
 
-Cypress.Commands.add('loginWithLocalStorage', (pin) => {
-  cy.visit('/')
-  cy.get('[data-cy=input-group]').trigger('input').type(pin)
-  cy.get('[data-cy="submit-input"]').click()
+Cypress.Commands.add('loginWithLocalStorage', (username) => {
+  cy.restoreLocalStorage(username).then(() => {
+    cy.visit('/')
+  })
   cy.validateChatPageIsLoaded()
 })
 
 Cypress.Commands.add(
   'importAccount',
   (pin, recoverySeed, isMobile = false, savePin = false) => {
-    cy.clearDatabase()
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     cy.get('[data-cy=add-input]')
@@ -259,7 +237,6 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'importAccountPINscreen',
   (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.clearDatabase()
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {

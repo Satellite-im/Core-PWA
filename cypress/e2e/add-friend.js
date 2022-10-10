@@ -1,9 +1,9 @@
 import 'cypress-localstorage-commands'
-const faker = require('faker')
+//const faker = require('faker')
 //const firstRandomName = faker.internet.userName(name) // generate random name for First Account
 //const secondRandomName = faker.internet.userName(name) // generate random name for Second Account
 //const thirdRandomName = faker.internet.userName(name) // generate random name for Third Account
-let userID, firstUserID, secondUserID, thirdUserID, myLocalStorage
+let firstUserID, secondUserID, thirdUserID
 
 describe('Create Accounts and Add Friends', () => {
   before(() => {
@@ -13,13 +13,13 @@ describe('Create Accounts and Add Friends', () => {
 
   it('Create First Account', () => {
     // Create one account
-    cy.createAccount('12345', 'Chat User A')
+    cy.createAccount('12345', 'Chat User A', false, true)
 
     // Save userId and userName from LocalStorage
     cy.validateChatPageIsLoaded().then(() => {
-      myLocalStorage = localStorage.getItem('Satellite-Store')
-      myLocalStorage = JSON.parse(myLocalStorage)
-      firstUserID = myLocalStorage.accounts.details.did
+      let firstLocalStorage = localStorage.getItem('Satellite-Store')
+      firstLocalStorage = JSON.parse(firstLocalStorage)
+      firstUserID = firstLocalStorage.accounts.details.did
     })
 
     // Save Localstorage Snapshot for Chat User A
@@ -28,13 +28,13 @@ describe('Create Accounts and Add Friends', () => {
 
   it('Create Second Account', () => {
     // Create Second User Account
-    cy.createAccount('12345', 'Chat User B')
+    cy.createAccount('12345', 'Chat User B', false, true)
 
     // Save User ID from LocalStorage
     cy.validateChatPageIsLoaded().then(() => {
-      myLocalStorage = localStorage.getItem('Satellite-Store')
-      myLocalStorage = JSON.parse(myLocalStorage)
-      secondUserID = myLocalStorage.accounts.details.did
+      let secondLocalStorage = localStorage.getItem('Satellite-Store')
+      secondLocalStorage = JSON.parse(secondLocalStorage)
+      secondUserID = secondLocalStorage.accounts.details.did
     })
 
     // Save Localstorage Snapshot for Chat User B
@@ -43,13 +43,13 @@ describe('Create Accounts and Add Friends', () => {
 
   it('Create Third Account', () => {
     // Create Third User Account
-    cy.createAccount('12345', 'Chat User C')
+    cy.createAccount('12345', 'Chat User C', false, true)
 
     // Save User ID from LocalStorage
     cy.validateChatPageIsLoaded().then(() => {
-      myLocalStorage = localStorage.getItem('Satellite-Store')
-      myLocalStorage = JSON.parse(myLocalStorage)
-      thirdUserID = myLocalStorage.accounts.details.did
+      let thirdLocalStorage = localStorage.getItem('Satellite-Store')
+      thirdLocalStorage = JSON.parse(thirdLocalStorage)
+      thirdUserID = thirdLocalStorage.accounts.details.did
     })
 
     // Save Localstorage Snapshot for Chat User C
@@ -58,9 +58,7 @@ describe('Create Accounts and Add Friends', () => {
 
   it('Import second account and add first account as friend', () => {
     // Login with User B by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User B').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+    cy.loginWithLocalStorage('Chat User B')
 
     // Go to Friends and send a friend request to First User
     cy.goToFriendsPage('Add Friend')
@@ -93,11 +91,11 @@ describe('Create Accounts and Add Friends', () => {
     // Type friend ID to add it and validate that friend request is sent
     cy.get('[data-cy=add-friend-page]')
       .find('[data-cy=input-group]')
-      .type(friendUserID)
+      .type(firstUserID)
     cy.get('[data-cy=friend]')
       .should('be.visible')
       .then(() => {
-        cy.get('[data-cy=friend-name]').should('contain', friendUsername)
+        cy.get('[data-cy=friend-name]').should('contain', 'Chat User A')
         cy.get('[data-cy=friend-confirm-button]').click()
       })
     cy.contains('Friend request successfully sent!').should('be.visible')
@@ -106,11 +104,9 @@ describe('Create Accounts and Add Friends', () => {
     cy.saveLocalStorage('Chat User B')
   })
 
-  it.skip('Chat User A has a friend request displayed and accepts it', () => {
+  it('Chat User A has a friend request displayed and accepts it', () => {
     // Login with User A by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User A').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+    cy.loginWithLocalStorage('Chat User A')
 
     // Go to Friends tab and validate that a friend request was received
     cy.goToFriendsPage('Requests')
@@ -135,9 +131,7 @@ describe('Create Accounts and Add Friends', () => {
 
   it('Load first account and accept upcoming friend request', () => {
     // Login with User A by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User A').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+    cy.loginWithLocalStorage('Chat User A')
 
     // Go to Friends tab and validate that a friend request was received
     cy.goToFriendsPage('Requests')
@@ -147,11 +141,9 @@ describe('Create Accounts and Add Friends', () => {
   })
 
   // Skipped since further research is needed on how to restore localstorage for more than two snapshots
-  it.skip('Load second account and send friend request to third user', () => {
+  it('Load second account and send friend request to third user', () => {
     // Login with User B by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User B').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+    cy.loginWithLocalStorage('Chat User B')
 
     // Send friend request to user A
     cy.goToFriendsPage('Add Friend')
@@ -162,11 +154,9 @@ describe('Create Accounts and Add Friends', () => {
   })
 
   // Skipped since further research is needed on how to restore localstorage for more than two snapshots
-  it.skip('Load third account and accept upcoming friend request', () => {
+  it('Load third account and accept upcoming friend request', () => {
     // Login with User C by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User C').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+    cy.loginWithLocalStorage('Chat User C')
 
     // Go to Friends tab and validate that a friend request was received
     cy.goToFriendsPage('Requests')
