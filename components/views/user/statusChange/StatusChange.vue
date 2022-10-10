@@ -1,82 +1,20 @@
 <template>
   <div class="modal">
     <button
+      v-for="status in statusList"
+      :key="status"
       class="status-button"
-      :class="{ selected: currentStatus === 'online' }"
-      @click="setStatus('online')"
+      :class="{ selected: currentStatus === status }"
+      @click="setStatus(status)"
     >
       <div class="inner-container">
-        <svg
-          width="12"
-          height="20"
-          viewBox="0 0 12 12"
-          class="status is-online"
-        >
-          <rect width="12" height="12" rx="6" ry="6" />
-        </svg>
+        <UiDynamicIcon size="1x" :icon="status" />
         <TypographyText size="sm" weight="bold">
-          {{ $t('popups.status_change.online') }}
+          {{ $t(`popups.status_change.${status}`) }}
         </TypographyText>
       </div>
       <TypographyText size="xs">
-        {{ $t('popups.status_change.online_sub') }}
-      </TypographyText>
-    </button>
-    <button
-      class="status-button"
-      :class="{ selected: currentStatus === 'busy' }"
-      @click="setStatus('busy')"
-    >
-      <div class="inner-container">
-        <svg width="12" height="20" viewBox="0 0 12 12" class="status is-busy">
-          <rect width="12" height="12" rx="6" ry="6" />
-          <rect width="8" height="4" class="mask" rx="1" ry="1" y="4" x="2" />
-        </svg>
-        <TypographyText size="sm" weight="bold">
-          {{ $t('popups.status_change.busy') }}
-        </TypographyText>
-      </div>
-      <TypographyText size="xs">
-        {{ $t('popups.status_change.busy_sub') }}
-      </TypographyText>
-    </button>
-    <button
-      class="status-button"
-      :class="{ selected: currentStatus === 'away' }"
-      @click="setStatus('away')"
-    >
-      <div class="inner-container">
-        <svg width="12" height="20" viewBox="0 0 12 12" class="status is-away">
-          <rect width="12" height="12" rx="6" ry="6" />
-        </svg>
-        <TypographyText size="sm" weight="bold">
-          {{ $t('popups.status_change.away') }}
-        </TypographyText>
-      </div>
-      <TypographyText size="xs">
-        {{ $t('popups.status_change.away_sub') }}
-      </TypographyText>
-    </button>
-    <button
-      class="status-button"
-      :class="{ selected: currentStatus === 'offline' }"
-      @click="setStatus('offline')"
-    >
-      <div class="inner-container">
-        <svg
-          width="12"
-          height="20"
-          viewBox="0 0 12 12"
-          class="status is-offline"
-        >
-          <rect width="12" height="12" rx="6" ry="6" />
-        </svg>
-        <TypographyText size="sm" weight="bold">
-          {{ $t('popups.status_change.offline') }}
-        </TypographyText>
-      </div>
-      <TypographyText size="xs">
-        {{ $t('popups.status_change.offline_sub') }}
+        {{ $t(`popups.status_change.${status}_sub`) }}
       </TypographyText>
     </button>
   </div>
@@ -88,6 +26,11 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { UserStatus } from '~/libraries/Iridium/Users/types'
 
 export default Vue.extend({
+  data() {
+    return {
+      statusList: ['online', 'busy', 'away', 'offline'],
+    }
+  },
   computed: {
     currentStatus(): string | undefined {
       return iridium.profile.state?.status
@@ -129,29 +72,11 @@ export default Vue.extend({
     padding: @light-spacing @large-spacing;
     text-align: left;
     box-sizing: border-box;
-    min-height: 44px;
 
     .inner-container {
       display: flex;
       align-items: center;
       gap: 12px;
-    }
-
-    .is-online {
-      fill: @green;
-    }
-    .is-busy {
-      fill: @red;
-
-      .mask {
-        fill: @black;
-      }
-    }
-    .is-offline {
-      fill: @gray;
-    }
-    .is-away {
-      fill: @yellow;
     }
 
     &.selected {
