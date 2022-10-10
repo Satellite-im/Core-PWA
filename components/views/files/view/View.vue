@@ -50,8 +50,6 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    if (this.$refs.modal) (this.$refs.modal as HTMLElement).focus()
-
     if (this.file?.thumbnail) {
       this.thumbnail = URL.createObjectURL(
         await iridium.files.fetchThumbnail(this.file.thumbnail, this.file.type),
@@ -85,9 +83,6 @@ export default Vue.extend({
     },
     share() {
       this.$toast.show(this.$t('todo - share') as string)
-    },
-    close() {
-      this.$store.commit('files/setPreview', undefined)
     },
   },
 })
