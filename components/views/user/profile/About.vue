@@ -50,8 +50,8 @@ export default Vue.extend({
   data() {
     return {
       observer: null as ResizeObserver | null,
-      editing: false as Boolean,
       note: '' as Partial<User>,
+      editing: false as Boolean,
     }
   },
   computed: {
