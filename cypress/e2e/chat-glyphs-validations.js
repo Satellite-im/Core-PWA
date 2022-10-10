@@ -1,4 +1,3 @@
-
 describe('Chat - Sending Glyphs Tests', () => {
   before(() => {
     // Restore Localstorage Snapshots for next specs
