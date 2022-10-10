@@ -59,8 +59,8 @@ jobs:
       
       - name: Generate Android APK 🔨
         run: yarn android-generate
-      
-      - uses: actions/upload-artifact@v2	
+
+      - uses: actions/upload-artifact@v2
         with:
           name: debug-apk
           path: android/app/build/outputs/apk/debug/android-debug.apk
