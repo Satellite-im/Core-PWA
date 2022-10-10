@@ -2,7 +2,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { debounce, throttle } from 'lodash'
 import {
   ChevronDownIcon,
   KeyIcon,
@@ -18,6 +17,7 @@ import {
 } from '~/libraries/Iridium/chat/types'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { RootState } from '~/types/store/store'
+import { ScrollerRef } from '~/components/ui/Chat/InfiniteScroll/InfiniteScroll.vue'
 
 export interface ChatItem {
   message: ConversationMessage
@@ -45,15 +45,11 @@ export default Vue.extend({
       numMessages: MESSAGE_PAGE_SIZE,
       isLoadingMore: false,
       isBlurred: false,
-      resizeContainerObserver: null as ResizeObserver | null,
-      isLockedToBottom: true,
       firstUnreadMessageElement: null as HTMLElement | null,
       lastScrolledToUnreadMessageElement: null as HTMLElement | null,
       isUnreadAboveViewport: false,
       isUnreadBelowViewport: false,
       unreadMarkerMessageId: null as string | null,
-      isScrolling: false,
-      timeoutScrolling: undefined as undefined | NodeJS.Timer,
     }
   },
   computed: {
@@ -174,12 +170,13 @@ export default Vue.extend({
   },
   watch: {
     chatItems(newValue, oldValue) {
+      const scroller = this.$refs.container as ScrollerRef
       if (
-        (this.isLastChatItemAuthor || this.isLockedToBottom) &&
+        (this.isLastChatItemAuthor || scroller.isLockedToBottom) &&
         newValue[newValue.length - 1]?.message.id !==
           oldValue[oldValue.length - 1]?.message.id
       ) {
-        this.scrollToBottom()
+        scroller.scrollToBottom()
       }
 
       const maxTime = Math.max(...this.messages.map((message) => message.at))
@@ -187,7 +184,7 @@ export default Vue.extend({
         oldValue[oldValue.length - 1] !== newValue[newValue.length - 1] &&
         (!maxTime || maxTime > this.conversation.lastReadAt) &&
         !this.isBlurred &&
-        this.isLockedToBottom
+        scroller.isLockedToBottom
       ) {
         const currentTimestamp = this.$dayjs().valueOf()
         iridium.chat.updateConversationReadAt(
@@ -213,61 +210,15 @@ export default Vue.extend({
 
     // Set active conversation ID
     iridium.chat.ephemeral.activeConversationId = this.conversationId
-
-    const container = this.$refs.container as HTMLElement
-    const messages = this.$refs.messages as HTMLElement
-    if (!container || !messages) {
-      return
-    }
-
-    this.resizeContainerObserver = new ResizeObserver(() => {
-      if (this.isLockedToBottom) {
-        this.scrollToBottom()
-      }
-    })
-    this.resizeContainerObserver.observe(container)
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
     window.removeEventListener('focus', this.handleFocus)
-    this.resizeContainerObserver?.disconnect()
 
     // Clear active conversation ID
     iridium.chat.ephemeral.activeConversationId = ''
   },
   methods: {
-    onScroll: debounce(function (this: any) {
-      const container = this.$refs.container as HTMLElement | null
-      if (!container) return
-      this.isLockedToBottom =
-        container.scrollTop + container.clientHeight >=
-        container.scrollHeight - 1
-    }, 100),
-    // Dont trigger this behaviour when dragging the scrollbar
-    onWheelScroll: throttle(function (this: any) {
-      this.isScrolling = true
-      clearTimeout(this.timeoutScrolling)
-      this.timeoutScrolling = setTimeout(() => {
-        this.isScrolling = false
-      }, 200)
-      const container = this.$refs.container as HTMLElement | null
-      if (!container) return
-      if (container.scrollTop === 0) {
-        const el = document.querySelector(
-          `[data-id="message-scroll-loader"]`,
-        ) as HTMLElement | null
-
-        if (!el) return
-        el.scrollIntoView(false)
-      }
-    }, 100),
-    scrollToBottom() {
-      this.$nextTick(() => {
-        const container = this.$refs.container as HTMLElement | null
-        if (!container) return
-        container.scrollTop = container.scrollHeight
-      })
-    },
     handleBlur() {
       this.isBlurred = true
     },
@@ -282,8 +233,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.isLoadingMore = false
         this.numMessages += MESSAGE_PAGE_SIZE
-        const container = this.$refs.container as HTMLElement | null
-        if (!container) return
+        const container = (this.$refs.container as ScrollerRef).$el
 
         const currentScrollTop = container.scrollTop
         const currentScrollHeight = container.scrollHeight
@@ -305,7 +255,7 @@ export default Vue.extend({
               0,
             )
         })
-      }, 250)
+      }, Math.random() * 1500)
     },
     onUnreadMessage({
       message,
@@ -331,7 +281,7 @@ export default Vue.extend({
       if (!this.firstUnreadMessageElement) {
         return
       }
-      const container = this.$refs.container as HTMLElement
+      const container = (this.$refs.container as ScrollerRef).$el
       const offsetTop = this.firstUnreadMessageElement.offsetTop
       const containerHeight = container.clientHeight
       const scrollTop = offsetTop - containerHeight / 2

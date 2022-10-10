@@ -9,3 +9,24 @@ export function conversationMessageIsNotice(message: ConversationMessage) {
       return false
   }
 }
+
+export function isVisible(
+  ele: HTMLElement,
+  container: HTMLElement,
+  partial = false,
+) {
+  const cTop = container.scrollTop
+  const cBottom = cTop + container.clientHeight
+
+  const eTop = ele.offsetTop
+  const eBottom = eTop + ele.clientHeight
+
+  const scrolledBefore = eTop >= cTop
+  const scrolledAfter = eBottom <= cBottom
+  const isTotal = scrolledBefore && scrolledAfter
+  const isPartial =
+    partial &&
+    ((eTop < cTop && eBottom > cTop) || (eBottom > cBottom && eTop < cBottom))
+
+  return { isElVisible: isTotal || isPartial, scrolledAfter, scrolledBefore }
+}

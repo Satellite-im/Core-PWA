@@ -1,18 +1,14 @@
 <div class="conversation-wrapper">
   <!-- dont change the 'conversation-container' id -->
-  <div
+  <UiChatInfiniteScroll
     id="conversation-container"
     class="conversation"
     ref="container"
-    @scroll="onScroll"
-    @wheel.passive="onWheelScroll"
-    @touchmove.passive="onWheelScroll"
+    :isLoading="isLoadingMore"
+    :noMore="noMore"
+    @loadMore="loadMore"
+    v-slot="{ isScrolling }"
   >
-    <UiChatInfiniteScroll
-      :isLoading="isLoadingMore"
-      :noMore="noMore"
-      @loadMore="loadMore"
-    />
     <div class="messages" ref="messages">
       <template v-if="noMore">
         <UiBanner>
@@ -60,7 +56,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </UiChatInfiniteScroll>
   <transition name="scroll-indicator">
     <div
       class="scroll-indicator"
