@@ -61,7 +61,7 @@ export default Vue.extend({
     },
 
     user(): User | undefined {
-      // TODO load here profile info of
+      // TODO load here profile info
       return iridium.profile.state
     },
   },
