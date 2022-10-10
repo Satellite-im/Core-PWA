@@ -2,6 +2,9 @@
   <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
+    <UiModal v-if="incomingCall" :showCloseButton="false">
+      <MediaIncomingCall />
+    </UiModal>
     <UiModal
       v-if="ui.modals.consentScanConfirmation"
       @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
@@ -41,9 +44,6 @@
         :set-close-timeout="5000"
       />
     </UiModal> -->
-    <UiModal v-if="incomingCall" :showCloseButton="false">
-      <MediaIncomingCall />
-    </UiModal>
     <UiModal
       v-if="ui.modals.marketplace"
       @close="toggleModal(ModalWindows.MARKETPLACE)"
@@ -73,7 +73,7 @@
       v-if="ui.modals.renameFile"
       @close="toggleModal(ModalWindows.RENAME_FILE)"
     >
-      <FilesRename @close="toggleModal(ModalWindows.RENAME_FILE)" />
+      <FilesRename />
     </UiModal>
     <UiModal
       v-if="ui.modals.changelog"
@@ -82,7 +82,14 @@
       <UiUpdateModal />
     </UiModal>
     <UiChatImageOverlay v-if="ui.chatImageOverlay" />
-    <FilesView v-if="files.preview" />
+    <UiModal
+      v-if="files.preview"
+      :showCloseButton="false"
+      fullscreen
+      @close="$store.commit('files/setPreview', undefined)"
+    >
+      <FilesView @close="$store.commit('files/setPreview', undefined)" />
+    </UiModal>
     <UiModal
       v-if="isNewAccount"
       @close="$store.commit('accounts/setNewAccount', false)"

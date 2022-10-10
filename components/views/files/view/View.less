@@ -1,52 +1,34 @@
-#view-file {
+.fullscreen-file {
   display: flex;
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  &:extend(.first-layer);
-  padding: 16px;
+  justify-content: center;
+  height: 100%;
+  --padding: 16px;
+  padding: var(--padding);
 
   .file-nav {
-    width: calc(100% - 32px); //to account for padding
     display: flex;
-    position: absolute;
     gap: 16px;
+    position: absolute;
+    width: calc(100% - var(--padding) * 2);
 
     .file-info {
-      flex: 1;
+      flex-grow: 1;
+      overflow: hidden;
     }
 
     .controls {
       display: flex;
       height: fit-content;
-      margin-left: auto;
-      gap: @normal-spacing;
+      gap: 16px;
       flex-shrink: 0;
-
-      .control {
-        display: flex;
-        font-size: @icon-size;
-        &:extend(.font-secondary);
-        &.disabled {
-          cursor: not-allowed;
-        }
-        &--close {
-          &:before {
-            left: auto;
-            right: 0;
-            transform: translate(0, 100%);
-          }
-        }
-      }
     }
   }
 
   .image-container {
-    display: flex;
-    margin: auto;
     max-width: 80vw;
     max-height: 60vh;
-    &:extend(.round-corners);
+    align-self: center;
+    .round-corners();
 
     img {
       height: 100%;
@@ -55,19 +37,7 @@
   }
 
   .no-preview {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    margin: auto;
-    .subtitle {
-      display: block;
-      text-align: center;
-      margin-bottom: 0;
-    }
-    .file-icon {
-      font-size: 50pt;
-      margin: auto;
-      margin-bottom: @normal-spacing;
-    }
+    align-self: center;
+    color: @flair-color;
   }
 }

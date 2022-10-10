@@ -19,6 +19,10 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    fullscreen: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     trap: null as FocusTrap | null,
