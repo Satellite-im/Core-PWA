@@ -56,7 +56,6 @@ jobs:
       - name: Yarn Link Iridium Repo 🔨
         working-directory: ./
         run: yarn link "@satellite-im/iridium"
-      
       - name: Generate Android APK 🔨
         run: yarn android-generate
 
