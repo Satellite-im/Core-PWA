@@ -1,10 +1,10 @@
 import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'im.satellite.absolute',
+  appId: 'im.satellite.core',
   appName: 'Satellite',
   webDir: 'dist',
-  bundledWebRuntime: true,
+  bundledWebRuntime: false,
   plugins: {
     LocalNotifications: {
       smallIcon: 'notification',
