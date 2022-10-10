@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import { extendedDayjs } from '~/plugins/local/dayjs'
+import { $dayjs } from '~/plugins/local/dayjs'
 import { RootState } from '~/types/store/store'
 import { SettingsState } from '~/store/settings/types'
 
@@ -27,7 +27,7 @@ const getters: GetterTree<SettingsState, RootState> & SettingsGetters = {
   getTimestamp:
     (state: SettingsState) =>
     ({ time, full }): string => {
-      return extendedDayjs(time)
+      return $dayjs(time)
         .local()
         .tz(state.timezone)
         .format(full ? 'L LT' : 'LT')
@@ -35,7 +35,7 @@ const getters: GetterTree<SettingsState, RootState> & SettingsGetters = {
   getDate:
     (state: SettingsState) =>
     (time): string => {
-      return extendedDayjs(time).local().tz(state.timezone).format('L')
+      return $dayjs(time).local().tz(state.timezone).format('L')
     },
 }
 

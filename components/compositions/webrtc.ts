@@ -5,19 +5,20 @@ import { User } from '~/libraries/Iridium/users/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { conversationHooks } from '~/components/compositions/conversations'
 
-export function webrtcHooks(conversationId: Conversation['id'] | undefined) {
+export function webrtcHooks(conversationId?: Conversation['id']) {
   const managers = reactive({
     users: iridium.users,
     webrtc: iridium.webRTC,
   })
 
-  const { otherDids } = conversationHooks(conversationId)
+  const { isGroup, otherDids } = conversationHooks(conversationId)
 
+  // todo remove group check after group call implementation
   const enableRTC: ComputedRef<boolean> = computed(() => {
     return Boolean(
       otherDids.value?.filter(
         (did) => managers.users.ephemeral.status[did] === 'online',
-      ).length,
+      ).length && !isGroup.value,
     )
   })
 

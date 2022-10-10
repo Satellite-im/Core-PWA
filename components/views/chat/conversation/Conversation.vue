@@ -214,7 +214,10 @@ export default Vue.extend({
       }
     })
     this.resizeContainerObserver.observe(container)
-    iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
+    // todo - fix type definition, can be undefined on mobile
+    if (this.conversationId) {
+      iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
+    }
 
     // Set active conversation ID
     iridium.chat.ephemeral.activeConversationId = this.conversationId

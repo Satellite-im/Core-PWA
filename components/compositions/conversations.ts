@@ -1,11 +1,13 @@
 import { computed, ComputedRef, reactive } from 'vue'
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
+import { truthy } from '~/utilities/typeGuard'
 
-export function conversationHooks(
-  conversationId: Conversation['id'] | undefined,
-) {
+export function conversationHooks(conversationId?: Conversation['id']) {
   const managers = reactive({
     chat: iridium.chat,
     users: iridium.users,
@@ -30,22 +32,22 @@ export function conversationHooks(
     )
   })
 
-  const otherParticipants: ComputedRef<(User | undefined)[]> = computed(() => {
-    return otherDids.value.map((did) => managers.users.getUser(did))
+  const otherParticipants: ComputedRef<User[]> = computed(() => {
+    return otherDids.value
+      .map((did) => managers.users.getUser(did))
+      .filter(truthy)
   })
 
-  const otherTypingParticipants: ComputedRef<(User | undefined)[]> = computed(
-    () => {
-      if (!conversationId) {
-        return []
-      }
-      return (
-        managers.chat.ephemeral.typing[conversationId]?.map((did) =>
-          managers.users.getUser(did),
-        ) ?? []
-      )
-    },
-  )
+  const otherTypingParticipants: ComputedRef<User[]> = computed(() => {
+    if (!conversationId) {
+      return []
+    }
+    return (
+      managers.chat.ephemeral.typing[conversationId]
+        ?.map((did) => managers.users.getUser(did))
+        .filter(truthy) ?? []
+    )
+  })
 
   const allParticipantsAlphaSorted: ComputedRef<User[]> = computed(() => {
     if (!conversation.value) {
@@ -53,8 +55,40 @@ export function conversationHooks(
     }
     const arr = conversation.value.participants
       .map((p) => managers.users.getUser(p))
-      .filter((item): item is User => Boolean(item))
+      .filter(truthy)
     return arr.sort((a, b) => a?.name?.localeCompare(b?.name))
+  })
+
+  const sortedMessages: ComputedRef<ConversationMessage[]> = computed(() => {
+    // todo - fix type definition for ChatManager key value pairs. can be undefined
+    if (
+      !conversationId ||
+      !managers.chat.state.conversations[conversationId]?.message
+    ) {
+      return []
+    }
+
+    return Object.values(
+      managers.chat.state.conversations[conversationId]?.message,
+    ).sort((a, b) => a.at - b.at)
+  })
+
+  const numUnreadMessages: ComputedRef<number> = computed(() => {
+    if (!conversationId || !conversation.value) {
+      return 0
+    }
+
+    let count = 0
+
+    for (let i = sortedMessages.value.length - 1; i >= 0; i--) {
+      if (sortedMessages.value[i].at > conversation.value.lastReadAt) {
+        count++
+      } else {
+        break
+      }
+    }
+
+    return count
   })
 
   return {
@@ -65,5 +99,7 @@ export function conversationHooks(
     otherParticipants,
     otherTypingParticipants,
     allParticipantsAlphaSorted,
+    sortedMessages,
+    numUnreadMessages,
   }
 }
