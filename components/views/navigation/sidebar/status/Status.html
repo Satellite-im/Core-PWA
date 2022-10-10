@@ -1,5 +1,9 @@
 <div class="status">
-  <UiUserState :user="profile" />
+  <UiUserState
+    :user="profile"
+    :clickable="featureReady"
+    @openStatus="toggleStatusChange"
+  />
   <div class="user-info">
     <button class="name" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
       <TypographyText class="ellipsis" as="h4" data-cy="user-name">
@@ -11,4 +15,9 @@
       {{profile.status || $t('pages.settings.accounts.no_status')}}
     </TypographyText>
   </div>
+  <UserStatusChange
+    v-if="showStatusModal"
+    @closeStatus="closeStatusModal"
+    v-click-outside="closeStatusModal"
+  />
 </div>

@@ -11,6 +11,8 @@ export default Vue.extend({
   },
   data: () => ({
     profile: iridium.profile.state,
+    showStatusModal: false,
+    featureReady: true,
   }),
   methods: {
     copyId() {
@@ -20,6 +22,14 @@ export default Vue.extend({
         : `${iridium.id}`
       navigator.clipboard.writeText(shortID)
       this.$toast.show(this.$t('ui.copied') as string)
+    },
+    toggleStatusChange() {
+      if (this.featureReady) {
+        this.showStatusModal = !this.showStatusModal
+      }
+    },
+    closeStatusModal() {
+      this.showStatusModal = false
     },
   },
 })
