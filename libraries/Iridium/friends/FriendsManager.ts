@@ -358,7 +358,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       descriptionValues: {
         name: user.name,
       },
-      fromName: user.name,
+      senderId: user.name,
       image: user.photoHash,
     } as NotificationBase)
   }

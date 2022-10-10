@@ -1,22 +1,47 @@
-<template src="./Alerts.html"></template>
+<template>
+  <div class="alerts">
+    <div class="header">
+      <TypographyTitle :size="6" :text="$t('pages.chat.mentions')" />
+      <InteractablesTextButton @click="clearNotifications">
+        {{ $t('ui.clear_all') }}
+      </InteractablesTextButton>
+    </div>
+
+    <div v-if="mentions.length" class="list">
+      <!-- <template v-if="alert.type !== 'EMPTY'"> -->
+      <ToolbarAlertsAlert
+        v-for="mention in mentions"
+        :key="mention.id"
+        :mention="mention"
+      />
+      <!-- </template> -->
+    </div>
+
+    <TypographySubtitle v-else :size="6" :text="$t('alerts.caught_up')" />
+  </div>
+</template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { FlaskConicalIcon } from 'satellite-lucide-icons'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { Notification } from '~/libraries/Iridium/notifications/types'
+
 export default Vue.extend({
-  components: {
-    FlaskConicalIcon,
-  },
-  data() {
-    return {
-      notifications: iridium.notifications.state,
-    }
-  },
   computed: {
-    alerts(): Notification[] {
-      return this.notifications.notifications
+    mentions(): ConversationMessage[] {
+      // NOTE: For testing purposes, we're showing all messages until we have a
+      //       better way to filter them.
+      const mentions = Object.values(iridium.chat.state.conversations)
+        .map((conversation: Conversation) =>
+          Object.values(conversation.message),
+        )
+        .flat()
+
+      return mentions
+      // return mentions.reverse()
     },
   },
   methods: {

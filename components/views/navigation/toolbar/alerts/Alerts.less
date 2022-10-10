@@ -1,4 +1,4 @@
-#alerts {
+.alerts {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -22,6 +22,9 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    justify-content: space-between;
+    padding: 0 8px;
+
     .subtitle {
       font-size: @micro-text-size !important;
       font-family: @primary-font;
@@ -30,11 +33,10 @@
     font-family: @primary-font;
   }
 
-  button {
-    flex-shrink: 0;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 8px;
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 }
 

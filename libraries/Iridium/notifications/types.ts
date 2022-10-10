@@ -6,62 +6,34 @@ export const NotificationsError = {
 }
 
 export enum NotificationType {
-  FRIEND_REQUEST,
-  MISSED_CALL,
-  FILES_FULL,
-  FILE_UPLOADED,
-  FILE_NSFW,
-  DEV,
-  DIRECT_MESSAGE,
-  GROUP_MESSAGE,
-  MENTIONS_NOTIFICATION,
-  ACCOUNT_NOTIFICATION,
-  APPLICATION_NOTIFICATION,
-  MISCELLANEOUS,
-  SEEN,
+  FRIEND_REQUEST = 'friend_request',
+  DIRECT_MESSAGE = 'direct_message',
+  GROUP_MESSAGE = 'group_message',
+  MENTION = 'mention',
 }
 
 export type Notification = {
   at: number
   type: NotificationType
-  fromName: string
+  senderId: string
   title: string
   description: string
   seen: boolean
   id?: string
-  chatName?: string
-  fromAddress?: string
+  messageId?: string
+  conversationId?: string
   image?: string
   onNotificationClick?: () => void
 }
 
-export type NotificationBase = {
-  type: NotificationType
-  title: string
-  description: string
-  fromName: string
-  at?: number
-  image?: string
-  titleValues?: object
-  descriptionValues?: object
-  onNotificationClick?: void
-  notificationClickParams?: object
+export interface NotificationBase
+  extends Omit<Notification, 'title' | 'description'> {
+  titleValues?: string
+  descriptionValues?: string
 }
 
 export type NotificationClickEvent = {
   from: string
   topic: string
   payload: { type: NotificationType }
-}
-
-export const EmptyNotification: Notification = {
-  at: 0,
-  id: '',
-  type: NotificationType.SEEN,
-  fromName: '',
-  fromAddress: '',
-  title: '',
-  description: '',
-  image: '',
-  seen: false,
 }

@@ -1,4 +1,4 @@
-.alert {
+.mention {
   opacity: 1;
   display: flex;
   gap: @light-spacing;
@@ -10,7 +10,6 @@
   cursor: pointer;
   position: relative;
   transition: all @animation-speed ease;
-  margin-top: 5px;
 
   .circle {
     flex-shrink: 0;
@@ -23,10 +22,20 @@
     .head {
       display: flex;
       justify-content: space-between;
+
+      .name {
+        flex-grow: 1;
+        &:extend(.ellipsis);
+      }
+
       .subtitle {
         font-size: @text-size;
         margin: 0;
       }
+    }
+
+    .body {
+      white-space: pre-line;
     }
   }
 

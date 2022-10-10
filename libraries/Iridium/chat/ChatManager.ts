@@ -12,34 +12,25 @@ import type { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encod
 import { CID } from 'multiformats'
 import { sha256 } from 'multiformats/hashes/sha2'
 import * as json from 'multiformats/codecs/json'
-import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
 import {
   ChatError,
   Conversation,
-  ConversationMessagePayload,
   ConversationMessage,
   IridiumConversationEvent,
-  MessageAttachment,
   MessageEdit,
-  MessageEditPayload,
   MessageReaction,
-  MessageReactionPayload,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
-import { ChatFileUpload } from '~/store/chat/types'
-import { FILE_TYPE } from '~/libraries/Files/types/file'
-import isNSFW from '~/utilities/NSFW'
 import {
-  Notification,
   NotificationBase,
-  NotificationClickEvent,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { uploadFile } from '~/libraries/Iridium/utils'
+import { truthy } from '~/utilities/typeGuard'
 
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
@@ -314,6 +305,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         message,
       )
     } else if (type === 'chat/edit') {
+      if (!payload.body.message) {
+        console.error('no message in payload')
+        return
+      }
       const { messageId, conversationId, body, lastEditedAt } = payload.body
         .message as MessageEdit
 
@@ -353,18 +348,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       type: isGroup
         ? NotificationType.GROUP_MESSAGE
         : NotificationType.DIRECT_MESSAGE,
-      title: isGroup
-        ? 'notifications.new_message.group_title'
-        : sender?.name || 'notifications.new_message.title',
-      titleValues: isGroup
-        ? { name: sender?.name, server: conversation.name }
-        : undefined,
-      description,
-      fromName: sender?.name || '',
+      senderId: sender?.did,
+      messageId: message.id,
+      conversationId: conversation.id,
       image: fromDID,
-      notificationClickParams: {
-        conversationId: conversation.id,
-      },
     } as NotificationBase)
   }
 
@@ -610,13 +597,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // (check all users in the userManager because there is the case of groups with people not in participants but still in the userManager list, for example when they left the group)
     await Promise.all(
       iridium.users.list
+        .filter(truthy)
         .filter(
           (u) =>
             !participants.includes(u.did) &&
             !iridium.friends.isFriend(u.did) &&
             !this.isUserInOtherGroups(u.did, [id]),
         )
-        .map((u) => iridium.users.userRemove(u.did, true)),
+        .map(async (u) => {
+          return await iridium.users.userRemove(u.did, true)
+        }),
     )
     await this.deleteConversation(id)
   }
