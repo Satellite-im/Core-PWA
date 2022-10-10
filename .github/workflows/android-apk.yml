@@ -7,12 +7,60 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install modules
-        run: yarn install
-      - name: Run tests
+      - name: Checkout 🔖
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 🔨
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Git Clone Iridium Repo 🗳️
+        run: |
+          cd ..
+          git clone https://github.com/Satellite-im/iridium.git
+      - name: Change permissions on scripts and run Linkscript 🔨
+        run: |
+          chmod +x ./linkscript.sh
+          chmod +x ./cypress/scripts/watch-script.sh
+          chmod +x ./cypress/scripts/sync-node-script.sh
+          ./linkscript.sh
+      - name: Install Yarn Dependencies on Core 🔨
+        run: yarn
+
+      - name: Create env file - Iridium 🔨
+        run: |
+          cd ..
+          cd iridium
+          echo HOSTNAME=${{ secrets.HOSTNAME }} >> .env
+          echo CERTBOT_EMAIL="support@satellite.im" >> .env
+          echo SYNC_NODE_SEED="sync node a seed" >> .env
+          echo SYNC_NODE_ADDR=${{ secrets.SYNC_NODE_ADDR }} >> .env
+          echo SERVERDATAVOLUME=${{ secrets.SERVERDATAVOLUME }} >> .env
+          echo NODE_ENV="development" >> .env
+          echo SAFER_URL=${{ secrets.SAFER_URL }} >> .env
+          cat .env
+      - name: Create env file - Core 🔨
+        working-directory: ./
+        run: |
+          touch .env
+          echo ENVIRONMENT="dev" >> .env
+          echo NUXT_ENV_IRIDIUM_SYNC_NODES=${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }} >> .env
+          echo NUXT_ENV_IRIDIUM_APIS=${{ secrets.NUXT_ENV_IRIDIUM_APIS }} >> .env
+          echo NUXT_ENV_IRIDIUM_GATEWAYS=${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }} >> .env
+          cat .env
+      - name: Install PNPM dependencies on Iridium 🔨
+        working-directory: ../iridium
+        run: pnpm i
+
+      - name: Yarn Link Iridium Repo 🔨
+        working-directory: ./
+        run: yarn link "@satellite-im/iridium"
+      
+      - name: Generate Android APK 🔨
         run: yarn android-generate
-      - uses: actions/upload-artifact@v2
+      
+      - uses: actions/upload-artifact@v2	
         with:
           name: debug-apk
           path: android/app/build/outputs/apk/debug/android-debug.apk
