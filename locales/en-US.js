@@ -853,7 +853,6 @@ export default {
     profile: {
       about: {
         tab: 'About',
-        me: 'About Me',
         location: 'Location',
         add_note: 'Add Note',
         click_note: 'Click to add note',

@@ -1,26 +1,17 @@
 <template>
   <div class="about">
-    <template v-if="user.about.length">
-      <div>
-        <TypographyText weight="bold" size="lg">
-          {{ $t('modal.profile.about.me') }}</TypographyText
-        >
-        <TypographyText> {{ user.about }}</TypographyText>
-      </div>
-    </template>
-    <template v-if="user.location.length">
-      <div>
-        <TypographyText weight="bold" size="lg">{{
-          $t('modal.profile.about.location')
-        }}</TypographyText>
-        <TypographyText>{{ user.location }}</TypographyText>
-      </div>
-    </template>
+    <TypographyText v-if="user?.about"> {{ user.about }}</TypographyText>
+    <div v-if="user?.location">
+      <TypographyText as="h4">
+        {{ $t('modal.profile.about.location') }}
+      </TypographyText>
+      <TypographyText>{{ user.location }}</TypographyText>
+    </div>
     <div v-if="!isMe">
-      <TypographyText weight="bold" size="lg">{{
-        $t('modal.profile.about.add_note')
-      }}</TypographyText>
-      <form @submit="(e) => submitEdit(e)">
+      <TypographyText as="h4">
+        {{ $t('modal.profile.about.add_note') }}
+      </TypographyText>
+      <form @submit.prevent="submitEdit">
         <div v-click-outside="toggleEditingOff" class="row-wrapper">
           <InteractablesEditable
             v-model="note"
@@ -42,6 +33,7 @@ import { mapState } from 'vuex'
 import { EditIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -55,14 +47,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['friends', 'ui']),
+    ...mapState({
+      user: (state) => (state as RootState).ui.fullProfile,
+    }),
     isMe(): boolean {
       return !!this.user?.did && iridium.profile.state?.did === this.user.did
-    },
-
-    user(): User | undefined {
-      // TODO load here profile info
-      return iridium.profile.state
     },
   },
   methods: {
@@ -77,9 +66,7 @@ export default Vue.extend({
      * @method submitEdit
      * @description Updates input value
      */
-    submitEdit(e: SubmitEvent) {
-      e.stopPropagation()
-      e.preventDefault()
+    submitEdit() {
       const value = this.note || ''
       const valueChanged = this.user?.note !== value
       if (this.editing && valueChanged) {
@@ -95,8 +82,8 @@ export default Vue.extend({
 .about {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  word-break: break-all;
+  gap: 1rem;
+  word-break: break-word;
 
   .row-wrapper {
     display: flex;

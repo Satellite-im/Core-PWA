@@ -119,6 +119,11 @@ export default Vue.extend({
               type: enableRTC.value ? 'primary' : 'disabled',
             },
             {
+              text: 'profile',
+              func: () =>
+                $nuxt.$store.commit('ui/setFullProfile', iridium.profile.state),
+            },
+            {
               text: $nuxt.$i18n.t('context.remove'),
               func: removeFriend,
               type: 'danger',

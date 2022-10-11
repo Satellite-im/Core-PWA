@@ -67,6 +67,5 @@ Object {
   "showSettings": false,
   "showSidebar": true,
   "unreadMessage": 0,
-  "userProfile": Object {},
 }
 `;
