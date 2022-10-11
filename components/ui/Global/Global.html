@@ -81,7 +81,14 @@
     >
       <UiUpdateModal />
     </UiModal>
-    <UiChatImageOverlay v-if="ui.chatImageOverlay" />
+    <UiModal
+      v-if="ui.chatImageOverlay"
+      :showCloseButton="false"
+      fullscreen
+      @close="$store.commit('ui/setChatImageOverlay', undefined)"
+    >
+      <UiChatImageOverlay />
+    </UiModal>
     <UiModal
       v-if="files.preview"
       :showCloseButton="false"
