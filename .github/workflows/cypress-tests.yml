@@ -35,6 +35,13 @@ jobs:
           touch .env
           echo ENVIRONMENT="dev" >> .env
           cat .env
+      - name: Read .env file
+        id: envfile
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./.env
+      - name: Echo .env
+        run: echo "${{ steps.envfile.outputs.content }}"
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
