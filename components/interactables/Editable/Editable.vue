@@ -9,6 +9,7 @@
       autocapitalize="off"
       class="editable-input"
       data-cy="editable-input"
+      :enterkeyhint="enterkeyhint"
       @compositionupdate="handleCompositionChange"
       @compositionstart="handleCompositionChange"
       @compositionend="handleCompositionChange"
@@ -91,6 +92,10 @@ const Editable = Vue.extend({
     focus: {
       type: Boolean,
       default: true,
+    },
+    enterkeyhint: {
+      type: String,
+      default: undefined,
     },
   },
   data() {

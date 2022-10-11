@@ -179,12 +179,12 @@ const Chatbar = Vue.extend({
     userLastTextMessage(): ConversationMessage | undefined {
       if (!this.conversationId) return
 
-      return Object.values(
+      const sortedMessages = Object.values(
         iridium.chat.state.conversations[this.conversationId].message,
       )
         .filter((m) => m.from === iridium.id && m.type === 'text')
         .sort((a, b) => a.at - b.at)
-        .at(-1)
+      return sortedMessages[sortedMessages.length - 1]
     },
     draftMessage(): string {
       return this.chat.draftMessages[this.conversationId] ?? ''
