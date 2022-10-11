@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@capacitor/android": "^4.3.0",
+    "@capacitor/clipboard": "^4.0.1",
     "@capacitor/core": "^4.3.0",
     "@capacitor/ios": "^4.3.0",
     "@capacitor/local-notifications": "^4.1.1",
