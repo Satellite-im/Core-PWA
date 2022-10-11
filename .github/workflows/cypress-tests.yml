@@ -37,7 +37,6 @@ jobs:
           touch .env
           echo ENVIRONMENT="dev" >> .env
           cat .env
-          
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
