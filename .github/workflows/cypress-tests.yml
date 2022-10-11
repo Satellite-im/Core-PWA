@@ -31,7 +31,14 @@ jobs:
         run: yarn && ./linkscript.sh
       - name: Export env 🔨
         run: export ENVIRONMENT=dev
-
+        
+      - name: Create env file - Core 🔨
+        working-directory: ./
+        run: |
+          touch .env
+          echo ENVIRONMENT="dev" >> .env
+          cat .env
+          
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
