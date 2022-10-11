@@ -30,8 +30,7 @@ jobs:
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
       - name: Export env 🔨
-        run: export ENVIRONMENT=dev
-          echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+        run: echo "ENVIRONMENT=dev" >> $GITHUB_ENV
       - name: Test
         run: echo $ENVIRONMENT
       - name: Execute Cypress Tests 🌡️
