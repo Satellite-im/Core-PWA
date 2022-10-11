@@ -32,6 +32,8 @@ jobs:
       - name: Export env 🔨
         run: export ENVIRONMENT=dev
           echo "ENVIRONMENT=dev" >> $GITHUB_ENV
+      - name: Test
+        run: echo $ENVIRONMENT
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
