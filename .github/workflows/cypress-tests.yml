@@ -29,7 +29,6 @@ jobs:
 
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
-        
       - name: Export env 🔨
         run: export ENVIRONMENT=dev
 
