@@ -312,7 +312,7 @@ export default {
 
     commit('setNewAccount', true)
 
-    await iridium.profile?.set('/', profile)
+    await iridium.profile?.set('/', profile, { store: { syncPin: true } })
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
