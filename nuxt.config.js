@@ -117,7 +117,7 @@ export default defineNuxtConfig({
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     '@nuxtjs/toast',
     '@nuxtjs/pwa',
     [

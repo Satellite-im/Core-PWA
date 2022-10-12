@@ -20,7 +20,7 @@
     "types": [
       "@nuxt/types",
       "@types/node",
-      "nuxt-i18n",
+      "@nuxtjs/i18n",
       "@nuxtjs/device",
       "@nuxtjs/toast",
       "types/modules",
