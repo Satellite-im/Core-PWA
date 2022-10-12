@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'im.satellite.core',
   appName: 'Satellite',
   webDir: 'dist',
-  bundledWebRuntime: false,
+  bundledWebRuntime: true,
   plugins: {
     LocalNotifications: {
       smallIcon: 'notification',
