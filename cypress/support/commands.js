@@ -407,15 +407,17 @@ Cypress.Commands.add(
       .should('exist')
   },
 )
-Cypress.Commands.add('validateCharlimit', (text, assert) => {
-  cy.get('.charlimit')
-    .should('be.visible')
+Cypress.Commands.add('validateCharlimit', (text, error) => {
+  cy.get('[data-cy=chatbar-footer]')
+    .children()
     .should('contain', text)
     .then(($selector) => {
-      if (assert === true) {
-        cy.wrap($selector).should('have.class', 'is-error')
+      if (error === true) {
+        cy.wrap($selector).should('have.class', 'font-color-danger')
+        cy.get('[data-cy=chatbar-wrap]').should('have.class', 'is-error')
       } else {
-        cy.wrap($selector).should('not.have.class', 'is-error')
+        cy.wrap($selector).should('have.class', 'font-color-dark')
+        cy.get('[data-cy=chatbar-wrap]').should('not.have.class', 'is-error')
       }
     })
 })
@@ -594,13 +596,23 @@ Cypress.Commands.add('goToNewChat', () => {
 
 // Chat - Hover on Icon Commands
 
-Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
-  cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
-  cy.get(locator).realHover()
-  cy.contains(expectedMessage).should('be.visible')
-  cy.wait(1000)
-  cy.get('body').realHover({ position: 'topLeft' })
-})
+Cypress.Commands.add(
+  'hoverOnComingSoonIcon',
+  (locator, expectedMessage, parent = false) => {
+    if (parent) {
+      cy.get(locator)
+        .should('be.visible')
+        .parents('.coming-soon')
+        .should('exist')
+    } else {
+      cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
+    }
+    cy.get(locator).realHover()
+    cy.contains(expectedMessage).should('be.visible')
+    cy.wait(1000)
+    cy.get('body').realHover({ position: 'topLeft' })
+  },
+)
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').realHover()
@@ -630,10 +642,8 @@ Cypress.Commands.add('validateComingSoonModal', () => {
   cy.get('.sat-icon').should('be.visible')
   cy.contains('Coming Soon')
     .should('be.visible')
-    .should('have.class', 'main-title')
-  cy.contains('Stay tuned for these upcoming features:')
-    .should('be.visible')
-    .should('have.class', 'sub')
+    .should('have.class', 'heading')
+  cy.contains('Stay tuned for these upcoming features:').should('be.visible')
   cy.contains('Watch Parties').should('be.visible')
   cy.contains('Servers').should('be.visible')
   cy.contains('Community Servers Core').should('be.visible')
@@ -674,7 +684,7 @@ Cypress.Commands.add('validateGlyphsModal', () => {
 })
 
 Cypress.Commands.add('closeModal', (locator) => {
-  cy.get(locator).siblings('[data-cy=close-button]').click()
+  cy.get('body').type('{esc}')
   cy.get(locator).should('not.exist')
 })
 
@@ -808,43 +818,50 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
   cy.get('[data-cy=editable-input]')
     .should('be.visible')
     .trigger('input')
-    .paste({
-      pasteType: 'text',
-      pastePayload: textMarkdown,
-    })
+    .type(textMarkdown)
   // Assert the text message is displayed before sending
   cy.get('[data-cy=editable-input]')
     .should('have.text', textMarkdown)
     .then(() => {
       cy.get('[data-cy=send-message]').click() //sending text message
     })
-  // Wait until loading indicator disappears
-  cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should('not.exist')
+
   // Depending on the markdown passed, assert the text from the corresponding HTML tag
-  if (markdown === '*' || markdown === '_') {
-    cy.get('em').last().should('have.text', text)
-  } else if (markdown === '**') {
-    cy.get('strong').last().should('have.text', text)
-  } else if (markdown === '__') {
-    cy.get('u').last().should('have.text', text)
-  } else if (markdown === '`') {
-    cy.get('code').last().should('have.text', text)
-  } else if (markdown === '***') {
-    cy.get('strong')
-      .last()
-      .should('have.text', text)
-      .parent('em') // Assert that text have a parent EM HTML tag
-      .should('exist')
-  } else if (markdown === '~~') {
-    cy.get('del').last().should('have.text', text)
-  } else if (markdown === '||') {
-    cy.get('.spoiler-container')
-      .last()
-      .should('not.have.class', 'spoiler-open')
-      .click() // Assert that after clicking the spoiler, text is displayed
-      .should('have.class', 'spoiler-open')
-      .find('.spoiler')
-      .should('have.text', text)
+  switch (markdown) {
+    case '*':
+    case '_':
+      cy.get('em').last().should('have.text', text)
+      break
+    case '**':
+      cy.get('strong').last().should('have.text', text)
+      break
+    case '__':
+      cy.get('u').last().should('have.text', text)
+      break
+    case '`':
+      cy.get('code').last().should('have.text', text)
+      break
+    case '***':
+      cy.get('strong')
+        .last()
+        .should('have.text', text)
+        .parent('em') // Assert that text have a parent EM HTML tag
+        .should('exist')
+      break
+    case '~~':
+      cy.get('del').last().should('have.text', text)
+      break
+    case '||':
+      cy.get('.spoiler-container')
+        .last()
+        .should('not.have.class', 'spoiler-open')
+        .click() // Assert that after clicking the spoiler, text is displayed
+        .should('have.class', 'spoiler-open')
+        .find('.spoiler')
+        .should('have.text', text)
+      break
+    default:
+      cy.get('[data-cy=chat-message]').contains(text)
   }
 })
 
