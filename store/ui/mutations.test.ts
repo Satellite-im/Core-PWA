@@ -369,13 +369,13 @@ describe('mutations', () => {
     expect(localizedState.contextMenuPosition).toMatchObject(object)
   })
 
-  test('setUserProfile', () => {
+  test.skip('setFullProfile', () => {
     const localizedState = { ...initialState }
     const object = {
       name: 'John',
     }
-    mutations.default.setUserProfile(localizedState, object)
-    expect(localizedState.userProfile).toMatchObject(object)
+    mutations.default.setFullProfile(localizedState, object)
+    expect(localizedState.fullProfile).toMatchObject(object)
   })
 
   test('chatbarContent', () => {

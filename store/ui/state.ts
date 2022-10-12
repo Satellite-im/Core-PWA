@@ -5,7 +5,6 @@ const InitialUIState = (): UIState => ({
   showSidebar: true,
   showSettings: false,
   settingsRoute: SettingsRoutes.EMPTY,
-  userProfile: {},
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
   modals: {

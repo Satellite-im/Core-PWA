@@ -38,8 +38,11 @@ export default Vue.extend({
       escapeDeactivates: false,
     }
 
-    this.trap = createFocusTrap(modal, options)
-    this.trap.activate()
+    // next tick for conditionally rendered buttons that aren't ready yet
+    this.$nextTick(() => {
+      this.trap = createFocusTrap(modal, options)
+      this.trap.activate()
+    })
 
     this.addEventListener()
   },
