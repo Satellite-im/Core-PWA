@@ -2,6 +2,7 @@
   <component
     :is="type === 'friend' ? 'UiContextMenu' : 'div'"
     :items="contextMenuValues"
+    data-cy="friend-page-list"
     class="friend-wrapper"
   >
     <!-- <button

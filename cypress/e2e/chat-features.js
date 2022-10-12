@@ -2,19 +2,24 @@ const faker = require('faker')
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
-let imageURL, expecedEditedMessage
+let imageURL, expecedEditedMessage, secondUserName
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   before(() => {
-    // Restore Localstorage Snapshots for next specs
-    cy.restoreLocalStorage('Chat User A')
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
+    })
   })
-  it('Chat - Send message on chat', { retries: 2 }, () => {
-    // Import account
-    cy.loginWithLocalStorage('Chat User A', '12345')
+
+  it('Chat - Send message on chat', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.loginWithLocalStorage('Chat User A')
 
     // Validate message is sent
-    cy.goToNewChat()
+    cy.goToConversation(secondUserName)
     cy.chatFeaturesSendMessage(randomMessage)
   })
 
@@ -116,9 +121,9 @@ describe.skip('Chat Features Tests', () => {
     // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
     cy.hoverOnComingSoonIcon(
       '[data-cy=send-money]',
-      'Send Money Coming Soon',
+      'Send Money (Coming Soon)',
     ).then(() => {
-      cy.contains('Send Money Coming Soon').should('not.exist')
+      cy.contains('Send Money (Coming Soon)').should('not.exist')
     })
   })
 
