@@ -1,20 +1,21 @@
 <template>
-  <div class="status-change">
+  <div class="status-change" @mouseleave="$emit('close')">
     <button
-      v-for="status in statusList"
-      :key="status"
+      v-for="item in statusList"
+      :key="item.status"
       class="status-button"
-      :class="{ selected: currentStatus === status }"
-      @click="setStatus(status)"
+      @click="setStatus(item.status)"
     >
-      <UiDynamicIcon size="1x" :icon="status" />
-      <div class="text-container">
-        <TypographyText size="sm" weight="bold">
-          {{ $t(`popups.status_change.${status}`) }}
-        </TypographyText>
-        <TypographyText size="xs">
-          {{ $t(`popups.status_change.${status}_sub`) }}
-        </TypographyText>
+      <div class="wrapper">
+        <UiDynamicIcon :icon="item.status" />
+        <div class="text-container">
+          <TypographyText size="sm" weight="bold">
+            {{ $t(`popups.status.${item.status}`) }}
+          </TypographyText>
+          <TypographyText v-if="item.subtitle" size="xs" color="dark">
+            {{ $t(`popups.status.${item.status}_sub`) }}
+          </TypographyText>
+        </div>
       </div>
     </button>
   </div>
@@ -22,29 +23,28 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import iridium from '~/libraries/Iridium/IridiumManager'
 import { UserStatus } from '~/libraries/Iridium/Users/types'
+
+type StatusListItem = {
+  status: UserStatus
+  subtitle?: boolean
+}
 
 export default Vue.extend({
   data() {
     return {
-      statusList: ['online', 'busy', 'away', 'offline'] as UserStatus[],
+      statusList: [
+        { status: 'online' },
+        { status: 'away' },
+        { status: 'busy', subtitle: true },
+        { status: 'offline' },
+      ] as StatusListItem[],
     }
   },
-  computed: {
-    currentStatus(): string | undefined {
-      return iridium.profile.state?.status
-    },
-  },
   methods: {
-    innermask(status: UserStatus): string {
-      return `url(#mask-state-${status})`
-    },
     setStatus(status: UserStatus) {
-      this.$emit('closeStatus')
-      // TODO create method to save status on iridium
-
-      return status
+      // todo - emit status to peers
+      this.$emit('close')
     },
   },
 })
@@ -55,34 +55,32 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: calc(@sidebar-controls-height + 16px);
-  left: 0;
+  width: 256px;
+  padding: 8px 4px;
+  left: calc(100% + 24px);
+  bottom: -16px;
   box-shadow: @ui-shadow;
   .modal-gradient();
   .round-corners();
 
-  .separator {
-    padding: 0 @light-spacing;
-  }
-
   .status-button {
     display: flex;
-    gap: 8px;
-    padding: 8px 16px;
     text-align: left;
+    align-items: center;
+    padding: 8px 10px;
 
-    .text-container {
+    &:hover {
+      .background-semitransparent-lighter();
+    }
+
+    .wrapper {
       display: flex;
-      flex-direction: column;
-    }
-
-    &.selected {
-      color: @light;
-      .background-semitransparent-lighter();
-    }
-    &:hover:not(.selected) {
-      color: @body;
-      .background-semitransparent-lighter();
+      gap: 8px;
+      .text-container {
+        display: flex;
+        flex-direction: column;
+        word-break: break-word;
+      }
     }
   }
 }

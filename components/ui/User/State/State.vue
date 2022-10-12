@@ -4,7 +4,7 @@
     class="user-state"
     data-cy="user-state"
     :style="`width:${size}px; height:${size}px`"
-    @click="clickable && $emit('openStatus')"
+    @click="clickable && $emit('click', $event)"
   >
     <svg width="40" height="40" viewBox="0 0 40 40" class="mask">
       <foreignObject x="0" y="0" width="40" height="40" :mask="outermask">

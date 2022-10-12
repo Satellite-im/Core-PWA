@@ -6,10 +6,9 @@
   v-click-outside="close"
 >
   <div class="top">
-    <!-- todo - remove self when regular user profile is implemented -->
-    <button @click="openProfile" class="open-profile-button" :class="{self}">
-      <UiUserState :user="user" :size="40" />
-    </button>
+    <!-- <button @click="openProfile"> -->
+    <UiUserState :user="user" :size="40" />
+    <!-- </button> -->
     <div class="text-container">
       <TypographyText as="h4" class="ellipsis">
         {{ user.name }}
@@ -18,13 +17,23 @@
         {{user.status}}
       </TypographyText>
     </div>
+    <InteractablesButton v-if="isMe" size="sm" @click="openSettings">
+      <edit-icon size="1x" />
+    </InteractablesButton>
   </div>
-  <template v-if="user?.about">
-    <TypographyText>
-      {{$t('pages.settings.profile.about.title')}}
-    </TypographyText>
-    <TypographyText> {{user.about}} </TypographyText>
-  </template>
+  <div class="status-container" v-if="quickProfile.showStatusChange">
+    <button
+      class="open-status-button"
+      @mouseenter="setMenuVis(true)"
+      @focus="setMenuVis(true)"
+      v-click-outside="() => setMenuVis(false)"
+    >
+      <!-- <UiDynamicIcon :icon="status" /> -->
+      {{ $t(`popups.status.${status}`) }}
+      <chevron-right-icon size="1x" style="margin-left: auto" />
+    </button>
+    <UserStatusChange v-if="isStatusMenuVisible" @close="setMenuVis(false)" />
+  </div>
   <InteractablesInput
     v-if="conversationId"
     v-model.trim="text"
