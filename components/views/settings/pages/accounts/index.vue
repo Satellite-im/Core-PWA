@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
+import { Clipboard } from '@capacitor/clipboard'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
@@ -53,11 +54,42 @@ export default Vue.extend({
       this.showPhrase = !this.showPhrase
     },
     copyAddress(copyText: string) {
-      navigator.clipboard.writeText(copyText)
+      // navigator.clipboard.writeText(copyText)
+
+      // Uses @capacitor plugin now
+      const copyTextPromise = new Promise((resolve, reject) => {
+        resolve(
+          Clipboard.write({
+            string: copyText,
+          }),
+        )
+      })
+      copyTextPromise
+        .then(() => {
+          this.$toast.show(this.$t('ui.copied') as string)
+        })
+        .catch(() => {
+          this.$toast.error('Error when copying') // TODO: Put this in en-US later
+        })
       this.$toast.show(this.$t('ui.copied') as string)
     },
     copyPhrase() {
-      navigator.clipboard.writeText(this.accountPhrase)
+      // Uses @capacitor plugin now
+      const copyTextPromise = new Promise((resolve, reject) => {
+        resolve(
+          Clipboard.write({
+            string: this.accountPhrase,
+          }),
+        )
+      })
+      copyTextPromise
+        .then(() => {
+          this.$toast.show(this.$t('ui.copied') as string)
+        })
+        .catch(() => {
+          this.$toast.error('Error when copying') // TODO: Put this in en-US later
+        })
+      this.$toast.show(this.$t('ui.copied') as string)
       this.$toast.show(this.$t('ui.copied') as string)
     },
   },
