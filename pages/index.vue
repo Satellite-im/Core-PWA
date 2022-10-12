@@ -62,37 +62,7 @@ export default Vue.extend({
      * @example mounted() { this.loadAccount() }
      */
     async loadAccount() {
-      try {
-        await this.$store.dispatch('accounts/loadAccount')
-        const onReady = () => {
-          this.$router.replace(
-            this.$device.isMobile ? '/mobile/chat' : '/friends',
-          )
-        }
-        if (iridium.ready) {
-          onReady()
-        } else {
-          iridium.on('ready', onReady)
-        }
-      } catch (error: any) {
-        if (error.message === AccountsError.USER_NOT_REGISTERED) {
-          await this.$router.replace('/auth/register')
-          return
-        }
-        if (error.message === AccountsError.USER_DERIVATION_FAILED) {
-          await this.$router.replace('/setup/disclaimer')
-          return
-        }
-
-        logger.error('pages/index/loadAccount', 'error loading account', {
-          error,
-        })
-        this.$store.commit('ui/toggleErrorNetworkModal', {
-          state: true,
-          action: this.loadAccount,
-        })
-        this.$router.replace('/')
-      }
+      await this.$store.dispatch('accounts/loadAccount')
     },
   },
 })
