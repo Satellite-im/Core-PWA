@@ -51,13 +51,12 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
     })
 
     // todo - refactor to accept multiple recipients for group calls
-    await iridium.webRTC
-      .call({
-        recipient,
-        conversationId,
-        kinds,
-      })
-      .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
+    await iridium.webRTC.call({
+      recipient,
+      conversationId,
+      kinds,
+    })
+    // .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
   }
   return { enableRTC, isActiveCall, call }
 }

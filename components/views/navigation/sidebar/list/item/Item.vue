@@ -71,7 +71,7 @@ export default Vue.extend({
     const lastMessageDisplay: ComputedRef<string> = computed(() => {
       const message = sortedMessages.value[sortedMessages.value.length - 1]
       if (!message) {
-        return $nuxt.$i18n.t('messaging.say_hi')
+        // return $nuxt.$i18n.t('messaging.say_hi')
       }
 
       const name = iridium.users.getUser(message.from)?.name
@@ -83,60 +83,61 @@ export default Vue.extend({
       const fromSelf = message.from === iridium.id
 
       if (message.attachments.length) {
-        return fromSelf
-          ? $nuxt.$i18n.t('messaging.you_sent_attachment')
-          : $nuxt.$i18n.t('messaging.sent_attachment', { name })
+        // return fromSelf
+        //   ? $nuxt.$i18n.t('messaging.you_sent_attachment')
+        //   : $nuxt.$i18n.t('messaging.sent_attachment', { name })
       }
 
-      switch (message.type) {
-        case 'glyph':
-          return fromSelf
-            ? $nuxt.$i18n.t('messaging.you_sent_glyph')
-            : $nuxt.$i18n.t('messaging.sent_glyph', { name })
-        case 'member_join':
-          return $nuxt.$i18n.t('messaging.group_join', {
-            name,
-            members,
-          })
-        case 'member_leave':
-          return $nuxt.$i18n.t('messaging.group_leave', { name })
-        case 'call':
-          if (fromSelf) {
-            return $nuxt.$i18n.t('messaging.call_outgoing')
-          }
-          return $nuxt.$i18n.t('messaging.call_incoming', { name })
-      }
+      // switch (message.type) {
+      //   case 'glyph':
+      //     return fromSelf
+      //       ? $nuxt.$i18n.t('messaging.you_sent_glyph')
+      //       : $nuxt.$i18n.t('messaging.sent_glyph', { name })
+      //   case 'member_join':
+      //     return $nuxt.$i18n.t('messaging.group_join', {
+      //       name,
+      //       members,
+      //     })
+      //   case 'member_leave':
+      //     return $nuxt.$i18n.t('messaging.group_leave', { name })
+      //   case 'call':
+      //     if (fromSelf) {
+      //       return $nuxt.$i18n.t('messaging.call_outgoing')
+      //     }
+      //     return $nuxt.$i18n.t('messaging.call_incoming', { name })
+      // }
 
       return message?.body ?? ''
     })
 
     const contextMenuValues: ComputedRef<ContextMenuItem[]> = computed(() => {
-      return conversation.value?.type === 'direct'
-        ? [
-            {
-              text: $nuxt.$i18n.t('context.voice'),
-              func: enableRTC.value ? handleCall : () => {},
-              type: enableRTC.value ? 'primary' : 'disabled',
-            },
-            {
-              text: $nuxt.$i18n.t('context.remove'),
-              func: removeFriend,
-              type: 'danger',
-            },
-          ]
-        : [
-            {
-              text: $nuxt.$i18n.t('context.voice'),
-              func: () => {},
-              type: 'disabled',
-            },
+      // return conversation.value?.type === 'direct'
+      //   ? [
+      //       {
+      //         text: $nuxt.$i18n.t('context.voice'),
+      //         func: enableRTC.value ? handleCall : () => {},
+      //         type: enableRTC.value ? 'primary' : 'disabled',
+      //       },
+      //       {
+      //         text: $nuxt.$i18n.t('context.remove'),
+      //         func: removeFriend,
+      //         type: 'danger',
+      //       },
+      //     ]
+      //   : [
+      //       {
+      //         text: $nuxt.$i18n.t('context.voice'),
+      //         func: () => {},
+      //         type: 'disabled',
+      //       },
 
-            {
-              text: $nuxt.$i18n.t('context.leave_group'),
-              func: leaveGroup,
-              type: 'danger',
-            },
-          ]
+      //       {
+      //         text: $nuxt.$i18n.t('context.leave_group'),
+      //         func: leaveGroup,
+      //         type: 'danger',
+      //       },
+      //     ]
+      return []
     })
 
     async function handleCall() {
@@ -149,9 +150,7 @@ export default Vue.extend({
 
     async function removeFriend() {
       isLoading.value = true
-      await iridium.friends
-        .friendRemove(otherDids.value[0])
-        .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
+      await iridium.friends.friendRemove(otherDids.value[0])
       isLoading.value = false
     }
 
@@ -174,13 +173,13 @@ export default Vue.extend({
       clearTimeout(timeoutId.value)
       if ($dayjs().diff(lastMsg, 'second') < 30) {
         timeoutId.value = setTimeout(setTimestamp, 30000)
-        timestamp.value = $nuxt.$i18n.t('time.now')
+        // timestamp.value = $nuxt.$i18n.t('time.now')
         return
       }
       if ($dayjs().isSame(lastMsg, 'day')) {
         timestamp.value = getTimestamp(lastMsg)
       } else if ($dayjs().diff(lastMsg, 'day') <= 1) {
-        timestamp.value = $nuxt.$i18n.t('time.yesterday')
+        // timestamp.value = $nuxt.$i18n.t('time.yesterday')
       } else if ($dayjs().diff(lastMsg, 'day') <= 2) {
         timestamp.value = '2 d'
       } else {
