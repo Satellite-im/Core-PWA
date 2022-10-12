@@ -77,10 +77,13 @@
   .controls {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     height: @sidebar-controls-height;
+    padding: 16px;
     box-shadow: @ui-shadow;
     flex-shrink: 0;
     &:extend(.round-corners);
     background: @foreground-gradient;
+    position: relative;
   }
 }

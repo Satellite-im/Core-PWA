@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="status-change">
     <button
       v-for="status in statusList"
       :key="status"
@@ -7,15 +7,15 @@
       :class="{ selected: currentStatus === status }"
       @click="setStatus(status)"
     >
-      <div class="inner-container">
-        <UiDynamicIcon size="1x" :icon="status" />
+      <UiDynamicIcon size="1x" :icon="status" />
+      <div class="text-container">
         <TypographyText size="sm" weight="bold">
           {{ $t(`popups.status_change.${status}`) }}
         </TypographyText>
+        <TypographyText size="xs">
+          {{ $t(`popups.status_change.${status}_sub`) }}
+        </TypographyText>
       </div>
-      <TypographyText size="xs">
-        {{ $t(`popups.status_change.${status}_sub`) }}
-      </TypographyText>
     </button>
   </div>
 </template>
@@ -28,7 +28,7 @@ import { UserStatus } from '~/libraries/Iridium/Users/types'
 export default Vue.extend({
   data() {
     return {
-      statusList: ['online', 'busy', 'away', 'offline'],
+      statusList: ['online', 'busy', 'away', 'offline'] as UserStatus[],
     }
   },
   computed: {
@@ -51,16 +51,15 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="less">
-.modal {
-  &:extend(.modal-gradient);
+.status-change {
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: calc(@sidebar-controls-height + @light-spacing);
+  bottom: calc(@sidebar-controls-height + 16px);
   left: 0;
-  width: @full;
-  border-radius: 5px;
-  box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: @ui-shadow;
+  .modal-gradient();
+  .round-corners();
 
   .separator {
     padding: 0 @light-spacing;
@@ -68,15 +67,13 @@ export default Vue.extend({
 
   .status-button {
     display: flex;
-    flex-direction: column;
-    padding: @light-spacing @large-spacing;
+    gap: 8px;
+    padding: 8px 16px;
     text-align: left;
-    box-sizing: border-box;
 
-    .inner-container {
+    .text-container {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
     }
 
     &.selected {
@@ -86,10 +83,6 @@ export default Vue.extend({
     &:hover:not(.selected) {
       color: @body;
       .background-semitransparent-lighter();
-    }
-
-    .tag {
-      margin-left: auto;
     }
   }
 }
