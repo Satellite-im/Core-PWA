@@ -166,6 +166,14 @@ export default {
         "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your password to connect or try again later.",
       action: 'Try Again',
     },
+    status: {
+      title: 'Change Status',
+      online: 'Online',
+      busy: 'Busy',
+      busy_sub: 'You will not receive notifications',
+      away: 'Away',
+      offline: 'Offline',
+    },
   },
   files: {
     files: 'Files',
