@@ -72,6 +72,7 @@ export default Vue.extend({
       const message = sortedMessages.value[sortedMessages.value.length - 1]
       if (!message) {
         // return $nuxt.$i18n.t('messaging.say_hi')
+        return ''
       }
 
       const name = iridium.users.getUser(message.from)?.name
