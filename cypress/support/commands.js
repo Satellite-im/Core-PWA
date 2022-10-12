@@ -31,26 +31,32 @@ for (const command of [
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
 Cypress.Commands.add('visitRootPage', (isMobile = false) => {
-  //Before starting, delete localstorage and wait one second to allow for this process to complete
-  cy.clearCookies()
+  //Clear localstorage, cookies, sessionstorage and indexedDB before starting
   cy.clearLocalStorage()
-    .then(() => {
-      if (isMobile === true) {
-        // Pass user agent with data for a mobile device
-        cy.on('window:before:load', (win) => {
-          Object.defineProperty(win.navigator, 'userAgent', {
-            value:
-              'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-          })
-        })
-      }
-      // Visit root page and ensure that Choose Your Password is displayed
-      cy.visit('/')
+  cy.clearCookies()
+  cy.window().then((win) => {
+    win.sessionStorage.clear()
+  })
+  cy.window().then((win) => {
+    win.indexedDB.databases().then((r) => {
+      for (var i = 0; i < r.length; i++) win.indexedDB.deleteDatabase(r[i].name)
     })
-    .then(() => {
-      // Validate that oops please stand by is not visible and pin input is visible, if not retry for 2 more times
-      cy.contains('Choose Your Password').should('be.visible')
+  })
+
+  //Only if viewport is mobile, then pass this specific window setup
+  if (isMobile === true) {
+    // Pass user agent with data for a mobile device
+    cy.on('window:before:load', (win) => {
+      Object.defineProperty(win.navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+      })
     })
+  }
+
+  // Visit root page and ensure that Choose Your Password is displayed
+  cy.visit('/')
+  cy.contains('Choose Your Password').should('be.visible')
 })
 
 //Create Account Commands
@@ -204,9 +210,25 @@ Cypress.Commands.add('welcomeModal', (username) => {
 //Import Account Commands
 
 Cypress.Commands.add('loginWithLocalStorage', (username) => {
-  cy.restoreLocalStorage(username).then(() => {
-    cy.visit('/')
+  //Clear localstorage, cookies, sessionstorage and indexedDB before starting
+  cy.clearLocalStorage()
+  cy.clearCookies()
+  cy.window().then((win) => {
+    win.sessionStorage.clear()
   })
+  cy.window().then((win) => {
+    win.indexedDB.databases().then((r) => {
+      for (var i = 0; i < r.length; i++) win.indexedDB.deleteDatabase(r[i].name)
+    })
+  })
+
+  //Restore profile passed for localstorage
+  cy.restoreLocalStorage(username)
+
+  //Visit rootpage
+  cy.visit('/')
+
+  //Ensure chatpage is loaded
   cy.validateChatPageIsLoaded()
 })
 
@@ -280,6 +302,42 @@ Cypress.Commands.add('chatFeaturesProfileName', () => {
   // clicks on user name
   cy.get('[data-cy=user-name]').should('be.visible').click()
   cy.wait(1000)
+})
+
+Cypress.Commands.add('copyUserIDFromProfile', () => {
+  let userID
+
+  // Allowing Chrome Browser to have read and write access to clipboard
+  cy.wrap(
+    Cypress.automation('remote:debugger:protocol', {
+      command: 'Browser.grantPermissions',
+      params: {
+        permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'],
+        //make the permission trigger by allowing the current origin only
+        origin: window.location.origin,
+      },
+    }),
+  )
+
+  //Ensuring permissions for read were granted
+  cy.window()
+    .its('navigator.permissions')
+    .invoke('query', { name: 'clipboard-read' })
+    .its('state')
+    .should('equal', 'granted')
+
+  // Clicks on user name
+  cy.get('[data-cy=user-name]').should('be.visible').click()
+
+  //Validating that text messsage copied matches with actual clipboard value
+  cy.window()
+    .its('navigator.clipboard')
+    .invoke('readText')
+    .then((clipboardText) => {
+      userID = clipboardText
+    })
+
+  return userID
 })
 
 Cypress.Commands.add(
@@ -437,13 +495,15 @@ Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
 // Chat - Send Files Commands
 
 Cypress.Commands.add('chatFeaturesSendFile', (filePath, filename) => {
-  cy.get('#quick-upload').selectFile(filePath, {
+  cy.get('[data-cy=chat-file-upload]').selectFile(filePath, {
     force: true,
   })
   cy.get('[data-cy=file-item]', { timeout: 30000 }).should('exist')
   cy.get('[data-cy=file-item-filename]').should('contain', filename)
   cy.get('[data-cy=send-message]').click() //sending image message
-  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-loader-container]', { timeout: 60000 }).should(
+    'not.exist',
+  )
 })
 
 // Chat - Context Menu Commands
@@ -898,33 +958,41 @@ Cypress.Commands.add('sendFriendRequest', (friendID, friendName) => {
   cy.get('[data-cy=add-friend-page]')
     .find('[data-cy=input-group]')
     .click()
+    .trigger('input')
     .type(friendID)
-  cy.get('[data-cy=friend]')
+  cy.get('[data-cy=add-friend-page]')
+    .find('[data-cy=friend]')
     .should('be.visible')
     .then(() => {
       cy.get('[data-cy=friend-name]').should('contain', friendName)
-      cy.get('[data-cy=friend-confirm-button]').click()
+      cy.get('[data-cy=add-friend-page]')
+        .find('[data-cy=friend-confirm-button]')
+        .click()
     })
   cy.contains('Friend request successfully sent!').should('be.visible')
 })
 
-Cypress.Commands.add('acceptUpcomingFriendRequest', (upcomingFriendName) => {
-  cy.get('[data-cy=friend-requests-page]')
-    .find('[data-cy=friend]')
-    .find('[data-cy=friend-name]')
-    .should('contain', upcomingFriendName)
-    .parents('[data-cy=friend]')
-    .find('[data-cy=friend-confirm-button]')
-    .click()
-  cy.contains('No requests found').should('be.visible')
-  cy.contains('You have no pending friend requests').should('be.visible')
-})
+Cypress.Commands.add(
+  'acceptUpcomingFriendRequest',
+  (upcomingFriendName, pendingReqs = 1) => {
+    cy.get('[data-cy=friend-requests-page]')
+      .find('[data-cy=friend-name]')
+      .contains(upcomingFriendName)
+      .parents('[data-cy=friend]')
+      .find('[data-cy=friend-confirm-button]')
+      .click()
+    if (pendingReqs === 1) {
+      cy.contains('No requests found').should('be.visible')
+      cy.contains('You have no pending friend requests').should('be.visible')
+    }
+  },
+)
 
-Cypress.Commands.add('validateRequestsBadge', () => {
+Cypress.Commands.add('validateRequestsBadge', (pendingReqs = '1') => {
   cy.get('[data-cy=tab-element]')
     .contains('Requests')
     .find('[data-cy=tab-badge]')
-    .should('contain', '1')
+    .should('contain', pendingReqs)
 })
 
 Cypress.Commands.add('goToFriendsPage', (page) => {

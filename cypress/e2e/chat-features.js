@@ -2,18 +2,24 @@ const faker = require('faker')
 const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
-let imageURL, expecedEditedMessage
+let imageURL, expecedEditedMessage, secondUserName
 
-describe.skip('Chat Features Tests', () => {
+describe('Chat Features Tests', () => {
   before(() => {
-    // Login with User A by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User A').then(() => {
-      cy.loginWithLocalStorage('12345')
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
     })
   })
+
   it('Chat - Send message on chat', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.loginWithLocalStorage('Chat User A')
+
     // Validate message is sent
-    cy.goToConversation('Chat User B')
+    cy.goToConversation(secondUserName)
     cy.chatFeaturesSendMessage(randomMessage)
   })
 

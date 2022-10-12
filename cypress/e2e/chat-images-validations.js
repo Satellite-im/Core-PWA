@@ -3,24 +3,26 @@ const jpgImagePath = 'cypress/fixtures/images/jpeg-test.jpg'
 const gifImagePath = 'cypress/fixtures/images/gif-test.gif'
 const invalidImagePath = 'cypress/fixtures/images/incorrect-image.png'
 const path = require('path')
+let secondUserName
 
 describe('Chat - Sending Images Tests', () => {
-  // Before starting spec - Restore Localstorage Snapshots for next specs
   before(() => {
-    cy.restoreLocalStorage('Chat User A')
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
+    })
   })
 
   // Setup downloads folder for cypress
   const downloadsFolder = Cypress.config('downloadsFolder')
-
   it('Load account and consent file upload', () => {
     // Login with User A by restoring LocalStorage Snapshot
-    cy.restoreLocalStorage('Chat User A').then(() => {
-      cy.loginWithLocalStorage('12345')
-    })
+    cy.loginWithLocalStorage('Chat User A')
 
     // Go to a Conversation
-    cy.goToConversation('Chat User B')
+    cy.goToConversation(secondUserName)
 
     //Click on file upload for the first time
     cy.get('[data-cy=chat-file-upload-btn-container]').click()
@@ -47,6 +49,7 @@ describe('Chat - Sending Images Tests', () => {
 
   it('Save Image from Chat', () => {
     // Go to last image (jpeg), right click and select on context menu Save Image
+    cy.wait(1000) // wait one second until last image is loaded
     cy.goToLastImageOnChat(30000).as('lastImage')
     cy.selectContextMenuOption('@lastImage', 'Save Image')
     // Assert image was downloaded in downloads folder with the same name
@@ -73,9 +76,5 @@ describe('Chat - Sending Images Tests', () => {
       'contain',
       'Image failed to load',
     )
-  })
-
-  after(() => {
-    cy.saveLocalStorage('Chat User A')
   })
 })
