@@ -59,9 +59,10 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  if (!iridium.ready && route.path !== '/' && !isAuth) {
-    return eventuallyRedirect('/')
-  }
+  // Note: NAVIGATION logic to handle this condition has been moved into the loadAccount Action
+  // if (!iridium.ready && route.path !== '/' && !isAuth) {
+  //   return eventuallyRedirect('/')
+  // }
 
   if (route && (route.path === '/' || isAuth) && iridium.ready) {
     return eventuallyRedirect('/friends')

@@ -17,6 +17,13 @@ export default class IridiumProfile extends Emitter {
     await this.fetch()
     this.ready = true
     this.emit('ready', this.state)
+
+    // Emit changed if the profile is not empty
+    // needed for account recovery
+    if (this.state?.did) {
+      this.emit('changed', this.state)
+    }
+
     logger.info('iridium/profile', 'profile state loaded', {
       state: this.state,
     })
@@ -51,8 +58,9 @@ export default class IridiumProfile extends Emitter {
       }
       logger.info('iridium/profile', 'profile state changed', state)
       this.state = state.value?.profile
+
       this.setUser()
-      this.emit('changed', state)
+      this.emit('changed', this.state)
     }
   }
 

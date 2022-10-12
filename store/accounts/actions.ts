@@ -15,7 +15,6 @@ import logger from '~/plugins/local/logger'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
-import { IridiumDocument } from '~/linked-iridium/dist'
 import { User } from '~/libraries/Iridium/users/types'
 
 export default {
@@ -146,20 +145,19 @@ export default {
   /**
    * @method loadAccount
    * @description Performs all the action needed to retrieve the user account
-   * from Solana
    * @example
    * ```typescript
    * this.$store.dispatch('accounts/loadAccount')
    * ```
    */
-  async loadAccount({
-    commit,
-    state,
-    dispatch,
-  }: ActionsArguments<AccountsState>) {
+  async loadAccount(
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
+    recover: boolean, // In case we are trying to recover an account from the seed phrase
+  ) {
     const logTag = 'accounts/actions/loadAccount'
     logger.info(logTag, 'start loading account')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+
     if (state.adapter === 'Solana') {
       $BlockchainClient.setAdapter(new SolanaAdapter())
       logger.info(logTag, 'using solana adapter')
@@ -182,11 +180,12 @@ export default {
 
     if (!$BlockchainClient.isPayerInitialized) {
       logger.error(logTag, 'user derivation failed')
+      await this.$router.replace('/setup/disclaimer')
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
     if (!iridium.connector) {
-      iridium.profile?.once('ready', async (payload: User) => {
+      const onProfile = async (payload: User) => {
         const profile = payload
 
         logger.debug(logTag, 'fetched iridium profile', {
@@ -207,7 +206,13 @@ export default {
         )
         commit('setUserDetails', profile)
         commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-      })
+
+        this.$router.replace(
+          this.$device.isMobile ? '/mobile/chat' : '/friends',
+        )
+      }
+
+      iridium.profile?.once(recover ? 'changed' : 'ready', onProfile)
       logger.debug(logTag, 'signing message for iridium')
       const { pinHash } = state
       const entropyMessage = IdentityManager.generateEntropyMessage(
@@ -217,15 +222,16 @@ export default {
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
       logger.debug(logTag, 'initializing iridium with entropy')
       await iridium.initFromEntropy(entropy)
+
+      iridium.once('ready', () => {
+        logger.info(logTag, 'iridium ready')
+        commit('setActiveAccount', iridium.id)
+        logger.info(logTag, 'finished')
+        return dispatch('startup')
+      })
+
       await iridium.start()
     }
-
-    iridium.on('ready', () => {
-      logger.info(logTag, 'iridium ready')
-      commit('setActiveAccount', iridium.id)
-      logger.info(logTag, 'finished')
-      return dispatch('startup')
-    })
   },
   /**
    * @method registerUser

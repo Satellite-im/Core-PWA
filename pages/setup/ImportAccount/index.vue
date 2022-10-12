@@ -44,7 +44,7 @@ export default Vue.extend({
         await this.$store.commit('accounts/setAdapter', 'Solana')
         await this.$store.commit('accounts/setPhrase', mnemonic)
         await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
-        await this.$store.dispatch('accounts/loadAccount')
+        await this.$store.dispatch('accounts/loadAccount', true)
         this.$router.push('/')
       } catch (error: any) {
         this.error = error.message
