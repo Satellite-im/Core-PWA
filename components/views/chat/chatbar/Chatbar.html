@@ -6,6 +6,7 @@
   <ChatbarUploadPreview v-if="files.length" />
   <div
     class="chatbar-wrap"
+    data-cy="chatbar-wrap"
     :class="{'is-error': charlimit, 'top-corners-sharp': isSharpCorners, 'outline': isA11yFocused}"
   >
     <ChatbarUpload ref="upload" :disabled="!isSubscribed" />

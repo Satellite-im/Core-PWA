@@ -53,12 +53,9 @@ describe('Chat - Sending Glyphs Tests', () => {
     cy.closeModal('[data-cy=modal-cta]')
   })
 
-  //Skipped until bug #5069 - Modals extra close icon is fixed
-  it.skip('Validate glyph pack modal can be closed', () => {
+  it('Validate glyph pack modal can be closed', () => {
     cy.goToLastGlyphOnChat().should('be.visible').click()
     cy.get('[data-cy=glyphs-modal]').should('be.visible')
-    cy.closeModal('[data-cy=glyphs-modal]').then(() => {
-      cy.get('[data-cy=glyphs-modal]').should('not.exist')
-    })
+    cy.closeModal('[data-cy=glyphs-modal]')
   })
 })

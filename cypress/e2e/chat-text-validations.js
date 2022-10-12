@@ -1,27 +1,27 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Only Text')
-    .map((item) => item.recoverySeed) + '{enter}'
-let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 const randomMessage = faker.lorem.sentence() // generate random sentence
+let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 const randomURL = faker.internet.url() // generate random url
 let urlToValidate = 'https://www.google.com'
 let urlToValidateTwo = 'http://www.google.com'
 let urlToValidateThree = 'www.google.com'
+let secondUserName
 
-describe.skip('Chat Text and Sending Links Validations', () => {
-  // Skipping since import account is not working
-  it('Load account for validation', { retries: 2 }, () => {
-    //Import account
-    cy.importAccount(randomPIN, recoverySeed)
+describe('Chat Text and Sending Links Validations', () => {
+  before(() => {
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
+    })
+  })
+  it('Load account for validation', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.loginWithLocalStorage('Chat User A')
 
-    //Ensure messages are displayed before starting
-    cy.validateChatPageIsLoaded()
-    cy.goToConversation('Only Text Friend')
+    // Validate message is sent
+    cy.goToConversation(secondUserName)
   })
 
   it('Message with more than 2048 chars - Counter get reds', () => {
@@ -79,12 +79,9 @@ describe.skip('Chat Text and Sending Links Validations', () => {
     cy.validateCharlimit('1/2048', false)
     cy.get('[data-cy=send-message]').click()
 
-    //Message with only empty space is not sent
-    cy.get('[data-cy=editable-input]').should('have.text', ' ')
-    cy.validateCharlimit('1/2048', false)
-
-    //Clear input for next test
-    cy.get('[data-cy=editable-input]').trigger('input').clear()
+    //Message with only empty space is not sent and input is cleared
+    cy.get('[data-cy=editable-input]').should('have.text', '')
+    cy.validateCharlimit('0/2048', false)
   })
 
   it('Send empty message by clicking on send icon', () => {
@@ -109,10 +106,6 @@ describe.skip('Chat Text and Sending Links Validations', () => {
     cy.get('[data-cy=editable-input]').trigger('input').type('😄')
     cy.validateCharlimit('2/2048', false)
     cy.get('[data-cy=send-message]').click()
-    // Wait until loading indicator disappears
-    cy.get('[data-cy=loading-indicator]', { timeout: 30000 }).should(
-      'not.exist',
-    )
     cy.get('[data-cy=chat-message]').last().scrollIntoView()
   })
 
