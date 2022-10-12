@@ -853,10 +853,11 @@ export default {
     profile: {
       about: {
         tab: 'About',
-        me: 'About Me',
         location: 'Location',
         add_note: 'Add Note',
         click_note: 'Click to add note',
+        click_location: 'Click to add your location',
+        click_about: 'Click to add something about you',
       },
       accounts: 'Accounts',
       activity: {
@@ -869,6 +870,7 @@ export default {
         servers: 'Servers',
         friends: 'Friends',
       },
+      edit: 'Edit',
     },
     call_to_action: {
       title: 'Coming Soon',

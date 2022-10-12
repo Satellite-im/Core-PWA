@@ -64,10 +64,10 @@
       />
     </UiModal>
     <UiModal
-      v-if="ui.modals.userProfile"
-      @close="toggleModal(ModalWindows.USER_PROFILE)"
+      v-if="ui.fullProfile"
+      @close="$store.commit('ui/setFullProfile', undefined)"
     >
-      <UserProfile @close="toggleModal(ModalWindows.USER_PROFILE)" />
+      <UserProfile @close="$store.commit('ui/setFullProfile', undefined)" />
     </UiModal>
     <UiModal
       v-if="ui.modals.renameFile"
