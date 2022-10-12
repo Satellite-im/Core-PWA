@@ -1,4 +1,4 @@
-import { Emitter } from '@satellite-im/iridium'
+import { Emitter, IridiumSetOptions } from '@satellite-im/iridium'
 import { User } from '../Users/types'
 import iridium from '../IridiumManager'
 import logger from '~/plugins/local/logger'
@@ -68,7 +68,11 @@ export default class IridiumProfile extends Emitter {
     return iridium.connector?.get<T>(`/profile${path}`, options)
   }
 
-  async set(path: string = '/', payload: User, options: any = {}) {
+  async set(
+    path: string = '/',
+    payload: User,
+    options: IridiumSetOptions = {},
+  ) {
     await iridium.connector?.set(
       `/profile${path === '/' ? '' : `/${path}`}`,
       payload,
