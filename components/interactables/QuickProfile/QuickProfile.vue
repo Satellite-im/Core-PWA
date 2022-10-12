@@ -2,8 +2,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ArrowRightIcon } from 'satellite-lucide-icons'
-import { User } from '~/libraries/Iridium/users/types'
+import {
+  ArrowRightIcon,
+  ChevronRightIcon,
+  EditIcon,
+} from 'satellite-lucide-icons'
+import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
@@ -12,10 +16,14 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 export default Vue.extend({
   components: {
     ArrowRightIcon,
+    ChevronRightIcon,
+    EditIcon,
   },
   data() {
     return {
       text: '',
+      isStatusMenuVisible: false,
+      users: iridium.users,
     }
   },
   computed: {
@@ -25,9 +33,8 @@ export default Vue.extend({
     user(): User | undefined {
       return this.quickProfile?.user
     },
-    src(): string {
-      const hash = this.user?.photoHash
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    isMe(): boolean {
+      return iridium.id === this.user?.did
     },
     conversationId(): Conversation['id'] | undefined {
       if (!this.user) {
@@ -35,8 +42,13 @@ export default Vue.extend({
       }
       return iridium.chat.directConversationIdFromDid(this.user.did)
     },
-    self(): boolean {
-      return iridium.id === this.user?.did
+    status(): UserStatus {
+      if (!this.user?.did) {
+        return 'offline'
+      }
+      return this.isMe
+        ? 'online'
+        : this.users?.ephemeral.status[this.user.did] ?? 'offline'
     },
   },
   mounted() {
@@ -96,18 +108,17 @@ export default Vue.extend({
       })
       this.close()
     },
-    openProfile() {
-      if (iridium.id === this.user?.did) {
-        this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
-        this.close()
+    openProfile() {},
+    openSettings() {
+      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
+      this.close()
 
-        if (this.$device.isMobile) {
-          this.$router.push('/mobile/settings')
-        }
-      } else {
-        // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
-        // this.$store.dispatch('ui/showProfile', this.user)
+      if (this.$device.isMobile) {
+        this.$router.push('/mobile/settings')
       }
+    },
+    setMenuVis(val: boolean) {
+      this.isStatusMenuVisible = val
     },
   },
 })

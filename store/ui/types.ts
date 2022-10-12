@@ -18,7 +18,6 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
   CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
@@ -78,8 +77,8 @@ export type Position = {
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile?: { user: User; position: Position }
-  userProfile: object
+  quickProfile?: { user: User; position: Position; showStatusChange?: boolean }
+  fullProfile?: User
   contextMenuPosition: Position
   settingsRoute: SettingsRoutes
   showSidebar: boolean

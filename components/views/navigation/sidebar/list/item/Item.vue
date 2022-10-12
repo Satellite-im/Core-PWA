@@ -69,7 +69,7 @@ export default Vue.extend({
     })
 
     const lastMessageDisplay: ComputedRef<string> = computed(() => {
-      const message = sortedMessages.value.at(-1)
+      const message = sortedMessages.value[sortedMessages.value.length - 1]
       if (!message) {
         return $nuxt.$i18n.t('messaging.say_hi')
       }

@@ -21,6 +21,18 @@ export default Vue.extend({
       navigator.clipboard.writeText(shortID)
       this.$toast.show(this.$t('ui.copied') as string)
     },
+    openQuickProfile() {
+      const status = this.$refs.status as HTMLElement
+      const { x, y } = status.getBoundingClientRect()
+      const horizOffset = 32
+      const vertOffset = 136
+
+      this.$store.commit('ui/setQuickProfile', {
+        user: this.profile,
+        position: { x: x - horizOffset, y: y - vertOffset },
+        showStatusChange: true,
+      })
+    },
   },
 })
 </script>

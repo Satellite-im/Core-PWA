@@ -80,9 +80,10 @@ export default Vue.extend({
       return iridium.chat.ephemeral.conversations?.[this.conversationId] ?? []
     },
     hasUnreadMessages(): boolean {
-      const lastMessage = Object.values(this.conversation.message)
-        .sort((a, b) => a.at - b.at)
-        .at(-1)
+      const sortedMessages = Object.values(this.conversation.message).sort(
+        (a, b) => a.at - b.at,
+      )
+      const lastMessage = sortedMessages[sortedMessages.length - 1]
       if (!lastMessage) {
         return false
       }
@@ -141,7 +142,7 @@ export default Vue.extend({
       return items
     },
     isLastChatItemAuthor(): boolean {
-      const lastItem = this.chatItems.at(-1)
+      const lastItem = this.chatItems[this.chatItems.length - 1]
       if (!lastItem || !iridium.connector) {
         return false
       }
@@ -173,14 +174,15 @@ export default Vue.extend({
     chatItems(newValue, oldValue) {
       if (
         (this.isLastChatItemAuthor || this.isLockedToBottom) &&
-        newValue.at(-1)?.message.id !== oldValue.at(-1)?.message.id
+        newValue[newValue.length - 1]?.message.id !==
+          oldValue[oldValue.length - 1]?.message.id
       ) {
         this.scrollToBottom()
       }
 
       const maxTime = Math.max(...this.messages.map((message) => message.at))
       if (
-        oldValue.at(-1) !== newValue.at(-1) &&
+        oldValue[oldValue.length - 1] !== newValue[newValue.length - 1] &&
         (!maxTime || maxTime > this.conversation.lastReadAt) &&
         !this.isBlurred &&
         this.isLockedToBottom

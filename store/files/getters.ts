@@ -24,7 +24,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
       if (state.search.searchAll) {
         items = iridium.files.flat
       } else {
-        const parentId = state.path.at(-1)?.id
+        const parentId = state.path[state.path.length - 1]?.id
         const parent = iridium.files.flat.find(
           (e) => e.id === parentId,
         ) as IridiumDirectory
@@ -50,7 +50,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
 
       // If "SearchAll" is inactive, we only want to sort the items that are in the current directory
       if (!searchAllActive && state.path.length) {
-        const parentId = state.path.at(-1)?.id
+        const parentId = state.path[state.path.length - 1]?.id
         const parent = iridium.files.flat.find(
           (e) => e.id === parentId,
         ) as IridiumDirectory

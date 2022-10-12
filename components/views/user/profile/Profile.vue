@@ -3,45 +3,36 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
-import {
-  UserPlusIcon,
-  MoreVerticalIcon,
-  AwardIcon,
-} from 'satellite-lucide-icons'
-import { sampleProfileInfo } from '~/mock/profile'
-
-import { Friend } from '~/types/ui/friends'
-import { ProfileInfo } from '~/types/profile/profile'
-import { Tab } from '~/types/ui/tab'
-
-import { AddFriendEnum } from '~/libraries/Enums/enums'
+import { UserPlusIcon, AwardIcon, EditIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    closeModal: () => void
-    route: string
-  }
-}
+import { SettingsRoutes } from '~/store/ui/types'
+import { Tab } from '~/types/ui/tab'
+import { RootState } from '~/types/store/store'
+import { sampleProfileInfo } from '~/mock/profile'
+import { ProfileInfo } from '~/types/profile/profile'
 
 export default Vue.extend({
   components: {
     UserPlusIcon,
-    MoreVerticalIcon,
     AwardIcon,
-  },
-  props: {
-    closeModal: {
-      type: Function,
-      default: () => {},
-    },
+    EditIcon,
   },
   data() {
     return {
-      loading: '' as AddFriendEnum,
-      route: 'about' as string,
-      tabs: [
+      loading: false,
+      route: 'about',
+      friends: iridium.friends.state.friends,
+    }
+  },
+  computed: {
+    ...mapState({
+      user: (state) => (state as RootState).ui.fullProfile,
+    }),
+    sample(): ProfileInfo {
+      return sampleProfileInfo
+    },
+    tabs(): Tab[] {
+      return [
         {
           text: this.$t('modal.profile.about.tab'),
           route: 'about',
@@ -58,56 +49,37 @@ export default Vue.extend({
           text: this.$t('modal.profile.mutual.tab'),
           route: 'mutual',
         },
-      ] as Tab[],
-    }
-  },
-  computed: {
-    ...mapState(['ui', 'friends', 'accounts']),
-    sample(): ProfileInfo {
-      return sampleProfileInfo
-    },
-    profilePictureSrc(): string {
-      const hash = this.ui.userProfile.profilePicture
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
-    },
-    // temp until we get real badges
-    badgeColors(): string[] {
-      return ['', '#F6CC6B', '#61CEA4', '#DA716F']
+      ]
     },
     isFriend(): boolean {
-      // TODO: fix
-      return false
+      return this.user ? this.friends.includes(this.user.did) : false
     },
-    status() {
-      return (
-        (this.ui.userProfile &&
-          iridium.users.ephemeral.status[this.ui.userProfile.did]) ||
-        'offline'
-      )
+    isMe(): boolean {
+      return this.user?.did === iridium.id
     },
   },
   methods: {
     closeProfileModal() {
-      this.closeModal()
-      this.$store.commit('ui/setUserProfile', {})
+      this.$store.commit('ui/setFullProfile', undefined)
     },
     setRoute(route: string) {
       this.route = route
     },
-    // TODO: confirm that this works once you can view profiles of non-friends
-    // TODO: update for Iridium
     async createFriendRequest() {
-      // this.loading = AddFriendEnum.SENDING
-      // try {
-      //   await this.$store.dispatch('friends/createFriendRequest', {
-      //     friendToKey: new PublicKey(this.ui.userProfile.address),
-      //   })
-      //   this.$toast.show(this.$t('friends.request_sent') as string)
-      // } catch (e: any) {
-      //   this.$toast.show(this.$t(e.message) as string)
-      // } finally {
-      //   this.loading = AddFriendEnum.EMPTY
-      // }
+      if (!this.user) {
+        return
+      }
+      this.loading = true
+      await iridium.friends.requestCreate(this.user, false)
+      this.loading = false
+      this.$toast.show(this.$t('friends.request_sent') as string)
+    },
+    openSettings() {
+      if (this.$device.isMobile) {
+        this.$router.push('/mobile/settings')
+      }
+      this.closeProfileModal()
+      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PERSONALIZE)
     },
   },
 })
