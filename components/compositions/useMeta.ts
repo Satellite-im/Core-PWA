@@ -30,7 +30,7 @@ const useMeta = () => {
   // @ts-ignore
   useHead({
     title: computed(() => {
-      const pageTitle = $nuxt.$i18n.t('global.name')
+      const pageTitle = 'Satellite.im'
 
       return totalNotificationCount.value
         ? `(${totalNotificationCount.value}) ${pageTitle}`
