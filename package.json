@@ -8,7 +8,7 @@
     "dev:tracker": "yarn bittorrent-tracker -p 5001",
     "dev:solanalocalnet": "sh ./solana.localnet.sh",
     "dev:cli": "ts-node -P cli.tsconfig.json --",
-    "build": "nuxt build",
+    "build": "nuxi build",
     "start": "nuxi start",
     "analyze": "nuxt build --analyze",
     "generate": "nuxt generate",
