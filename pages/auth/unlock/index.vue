@@ -129,12 +129,12 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
         } else {
           redirect && (await this.$router.replace('/'))
         }
-
-        this.status = 'idle'
-        clearTimeout(timeout)
       } catch (error: any) {
         this.pin = ''
         this.error = error.message
+      } finally {
+        this.status = 'idle'
+        clearTimeout(timeout)
       }
     },
     // Create & store a new pin, then decrypt.
