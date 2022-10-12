@@ -107,6 +107,10 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
      * @example
      */
     async decrypt(redirect = true) {
+      const timeout = setTimeout(() => {
+        this.pin = ''
+        this.error = `${this.$t('errors.timeout')}`
+      }, 30000)
       try {
         this.status = 'loading'
         await this.$store.dispatch(
@@ -125,11 +129,12 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
         } else {
           redirect && (await this.$router.replace('/'))
         }
+
+        this.status = 'idle'
+        clearTimeout(timeout)
       } catch (error: any) {
         this.pin = ''
         this.error = error.message
-      } finally {
-        this.status = 'idle'
       }
     },
     // Create & store a new pin, then decrypt.
