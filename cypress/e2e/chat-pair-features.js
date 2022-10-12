@@ -92,7 +92,8 @@ describe('Chat pair features with Chat User A  - Part 1', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-glyph]', 'Edit')
   })
 
-  it('Send image to user B', () => {
+  // Skipping due to errors on file uploads - file is missing
+  it.skip('Send image to user B', () => {
     cy.chatFeaturesSendImage(imageLocalPath, 'logo.png')
     cy.goToLastImageOnChat()
       .invoke('attr', 'src')
@@ -101,17 +102,20 @@ describe('Chat pair features with Chat User A  - Part 1', () => {
       })
   })
 
-  it('Context Menu Options - Image Message', () => {
+  // Skipping due to errors on file uploads - file is missing
+  it.skip('Context Menu Options - Image Message', () => {
     let optionsImage = ['Copy Image', 'Save Image']
     cy.get('[data-cy=chat-image]').last().as('lastImage')
     cy.validateAllOptionsInContextMenu('@lastImage', optionsImage)
   })
 
-  it('Image messages cannot be edited', () => {
+  // Skipping due to errors on file uploads - file is missing
+  it.skip('Image messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-image]', 'Edit')
   })
 
-  it('Send file to user B', () => {
+  // Skipping due to errors on file uploads - file is missing
+  it.skip('Send file to user B', () => {
     cy.chatFeaturesSendFile(fileLocalPath, 'test-file.txt')
     cy.get('[data-cy=chat-file]')
       .last()
