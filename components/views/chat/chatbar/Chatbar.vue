@@ -4,6 +4,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { throttle, debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
+import whatInput from 'what-input'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
 import { KeybindingEnum, MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
@@ -16,8 +17,9 @@ import {
   ConversationMessagePayload,
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
+import { AutocompleteRef } from '~/components/views/chat/chatbar/autocomplete/Autocomplete.vue'
 
 function typingFunction(conversationId: string) {
   const deb = debounce(() => {
@@ -57,6 +59,11 @@ const Chatbar = Vue.extend({
         thr: ReturnType<typeof throttle>
         deb: ReturnType<typeof debounce>
       } | null,
+      isFocused: false,
+      isA11yFocused: false,
+      showAutocomplete: false,
+      autocompleteText: '',
+      autocompleteSelection: '',
     }
   },
   computed: {
@@ -123,6 +130,9 @@ const Chatbar = Vue.extend({
     },
     isSharpCorners(): boolean {
       return (
+        Boolean(
+          this.isFocused && this.showAutocomplete && this.autocompleteSelection,
+        ) ||
         Boolean(this.files.length) ||
         Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
         this.commandPreview
@@ -144,7 +154,7 @@ const Chatbar = Vue.extend({
       /**
        * @method set
        * @description Sets current chatbar text to new value
-       * @param val Value to set the chatbar content to
+       * @param value Value to set the chatbar content to
        * @example set('This is the new chatbar content')
        */
       set(value: string) {
@@ -161,20 +171,15 @@ const Chatbar = Vue.extend({
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
-    placeholder(): string {
-      return !this.hasCommand && this.text === ''
-        ? (this.$t('ui.talk') as string)
-        : ''
-    },
     userLastTextMessage(): ConversationMessage | undefined {
       if (!this.conversationId) return
 
-      return Object.values(
+      const sortedMessages = Object.values(
         iridium.chat.state.conversations[this.conversationId].message,
       )
         .filter((m) => m.from === iridium.id && m.type === 'text')
         .sort((a, b) => a.at - b.at)
-        .at(-1)
+      return sortedMessages[sortedMessages.length - 1]
     },
     draftMessage(): string {
       return this.chat.draftMessages[this.conversationId] ?? ''
@@ -216,6 +221,13 @@ const Chatbar = Vue.extend({
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case KeybindingEnum.ENTER:
+          if (this.showAutocomplete && this.autocompleteSelection) {
+            event.preventDefault()
+            ;(this.$refs.editable as EditableRef).doAutocomplete(
+              this.autocompleteSelection,
+            )
+            return
+          }
           if (!event.shiftKey) {
             event.preventDefault()
             if (!this.hasCommand) {
@@ -233,9 +245,20 @@ const Chatbar = Vue.extend({
           }
           break
         case KeybindingEnum.ARROW_UP:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectPrev()
+            return
+          }
           if (!event.shiftKey && !this.text.length) {
             event.preventDefault()
             this.editMessage()
+          }
+          break
+        case KeybindingEnum.ARROW_DOWN:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectNext()
           }
           break
         default:
@@ -278,6 +301,7 @@ const Chatbar = Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      this.text = this.text.trimEnd()
       if (this.text.length > this.$Config.chat.maxChars) {
         return
       }
@@ -379,6 +403,26 @@ const Chatbar = Vue.extend({
           el.scrollIntoView(scrolledAfter)
         }
       })
+    },
+    handleFocus() {
+      this.isFocused = true
+      if (whatInput.ask() === 'keyboard') {
+        this.isA11yFocused = true
+      }
+    },
+    handleBlur() {
+      this.isFocused = false
+      this.isA11yFocused = false
+    },
+    handleAutocomplete(event: { show: boolean; text: string }) {
+      this.showAutocomplete = event.show
+      this.autocompleteText = event.text
+    },
+    handleAutocompleteSelection(val: string) {
+      this.autocompleteSelection = val
+    },
+    handleAutocompleteClick(val: string) {
+      ;(this.$refs.editable as EditableRef).doAutocomplete(val)
     },
   },
 })

@@ -3,11 +3,9 @@ import {
   IridiumPeerIdentifier,
   Emitter,
   didUtils,
-  encoding,
   IridiumPubsubMessage,
 } from '@satellite-im/iridium'
 import type {
-  IridiumMessage,
   IridiumGetOptions,
   IridiumSetOptions,
 } from '@satellite-im/iridium/src/types'
@@ -17,7 +15,7 @@ import { User } from '../users/types'
 import { FriendRequest, FriendRequestStatus, FriendsError } from './types'
 import logger from '~/plugins/local/logger'
 import {
-  Notification,
+  NotificationBase,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 
@@ -30,7 +28,7 @@ export type IridiumFriendEvent = {
 }
 export type FriendState = {
   friends: string[]
-  requests: { [key: string]: FriendRequest }
+  requests: { [key: string]: FriendRequest | undefined }
   blocked: string[]
 }
 
@@ -115,24 +113,25 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
           logger.info(this.loggerTag, 'connecting to friends', {
             friends: this.state.friends,
           })
+          // todo add type guard #4809
           await Promise.all(
             Object.values(this.state.requests)
-              .filter((request) => request.incoming)
+              .filter((request) => request?.incoming)
               .map(async (request) => {
-                if (!iridium.connector) return
-                if (!iridium.connector.p2p.hasPeer(request.user.did)) {
+                if (!iridium.connector || !request?.did) return
+                if (!iridium.connector.p2p.hasPeer(request.did)) {
                   logger.info(
                     this.loggerTag,
                     'registering requested friend as peer with iridium',
                     request,
                   )
                   await iridium.connector.p2p.addPeer({
-                    did: request.user.did,
+                    did: request.did,
                     type: 'peer',
                   })
                 }
-                if (!iridium.users.hasUser(request.user.did)) {
-                  await iridium.users.searchPeer(request.user.did)
+                if (!iridium.users.hasUser(request.did)) {
+                  await iridium.users.searchPeer(request.did)
                 }
               }),
           )
@@ -255,7 +254,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     const str = didUtils.didString(did)
     return (
       this.state.requests?.[str] &&
-      this.state.requests?.[str].status !== 'rejected'
+      this.state.requests?.[str]?.status !== 'rejected'
     )
   }
 
@@ -272,10 +271,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         ],
       },
     })
-  }
-
-  broadcast(event: IridiumFriendEvent) {
-    return iridium.connector?.publish(`/friends/announce`, event)
   }
 
   /**
@@ -308,15 +303,16 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     }
 
     const request: FriendRequest = {
-      user,
+      did: user.did,
       status: 'pending',
       incoming,
       at: Date.now(),
     }
 
+    await iridium.users.setUser(did, user)
+
     Vue.set(this.state.requests, did, request)
     await this.set(`/requests/${did}`, request)
-    iridium.users.setUser(did, user)
     logger.info(this.loggerTag, 'friend request created', {
       did,
       incoming,
@@ -350,18 +346,16 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
 
       await this.send(payload)
     } else {
-      // Notify the recipient
-      const buildNotification: Exclude<Notification, 'id'> = {
-        fromName: user.name,
-        at: request.at,
-        title: 'New Request',
-        description: `New ${NotificationType.FRIEND_REQUEST} From ${user.name}`,
-        image: user.photoHash?.toString() || '',
-        type: NotificationType.FRIEND_REQUEST,
-        seen: false,
-      }
-      iridium.notifications.sendNotification(buildNotification)
+      this.sendNotification(user)
     }
+  }
+
+  private sendNotification(user: User) {
+    iridium.notifications.emit('notification/create', {
+      type: NotificationType.FRIEND_REQUEST,
+      senderId: user.did,
+      image: user.photoHash,
+    } as NotificationBase)
   }
 
   /**
@@ -458,6 +452,11 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
     if (!user) {
       throw new Error(`can't find user: ${did}`)
     }
+
+    request.status = 'accepted'
+    this.state.friends.push(did)
+    Vue.delete(this.state.requests, did)
+
     const participants = [did, iridium.id]
     if (!(await iridium.chat.hasDirectConversation(did))) {
       await iridium.chat.createConversation({
@@ -466,10 +465,6 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
         participants,
       })
     }
-
-    request.status = 'accepted'
-    this.state.friends = [...this.state.friends, did]
-    Vue.delete(this.state.requests, did)
 
     await this.set(`/friends`, this.state.friends)
     await this.set(`/requests`, this.state.requests)

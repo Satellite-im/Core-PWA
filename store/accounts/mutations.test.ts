@@ -1,6 +1,6 @@
-import { AccountsState, RegistrationStatus } from './types'
-import InitialAccountsState from './state'
 import mutations from './mutations'
+import InitialAccountsState from './state'
+import { AccountsState, RegistrationStatus } from './types'
 import { User } from 'libraries/Iridium/users/types'
 
 describe('Test accounts/mutations', () => {

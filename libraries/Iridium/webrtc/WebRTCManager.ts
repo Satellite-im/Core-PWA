@@ -4,7 +4,6 @@ import {
   IridiumMessage,
   IridiumDocument,
 } from '@satellite-im/iridium'
-import { IridiumDecodedPayload } from '@satellite-im/iridium/src/core/encoding'
 import { SignalData } from 'simple-peer'
 import Vue from 'vue'
 import iridium from '../IridiumManager'
@@ -23,13 +22,10 @@ import { Wire } from '~/libraries/WebRTC/Wire'
 
 const $Sounds = new SoundManager()
 
-// const announceFrequency = 60000
-
 const initialState: WebRTCState = {
   incomingCall: null,
   activeCall: null,
   streamMuted: {},
-  callTime: 0,
   callStartedAt: 0,
   streamConstraints: {
     audio: true,
@@ -51,11 +47,6 @@ type WebRTCTypingMessage = {
   type: 'typing'
   conversationId: string
 }
-type WebRTCSignalMessage = {
-  type: 'signal'
-  conversationId: string
-}
-
 export default class WebRTCManager extends Emitter {
   public state: WebRTCState
   private loggerTag = 'iridium/webRTC'
@@ -100,12 +91,6 @@ export default class WebRTCManager extends Emitter {
 
     // Initialize the Wire
     await this.wire.start()
-
-    setInterval(() => {
-      if (this.state.activeCall) {
-        this.state.callTime = Date.now() - this.state.callStartedAt
-      }
-    }, 1000)
   }
 
   async stop() {

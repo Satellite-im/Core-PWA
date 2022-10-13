@@ -7,6 +7,7 @@ import { mapState } from 'vuex'
 import { ClipboardIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   name: 'AccountsSettings',
@@ -14,6 +15,13 @@ export default Vue.extend({
     ClipboardIcon,
   },
   layout: 'settings',
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   data() {
     return {
       showPhrase: false,
@@ -51,14 +59,6 @@ export default Vue.extend({
      */
     togglePhrase() {
       this.showPhrase = !this.showPhrase
-    },
-    copyAddress(copyText: string) {
-      navigator.clipboard.writeText(copyText)
-      this.$toast.show(this.$t('ui.copied') as string)
-    },
-    copyPhrase() {
-      navigator.clipboard.writeText(this.accountPhrase)
-      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

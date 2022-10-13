@@ -2,10 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
 import { SettingsIcon, PlusIcon, SatelliteIcon } from 'satellite-lucide-icons'
-import { ModalWindows } from '~/store/ui/types'
-import { RootState } from '~/types/store/store'
 
 type UiServer = {
   name: string
@@ -19,9 +16,6 @@ export default Vue.extend({
     SatelliteIcon,
   },
   computed: {
-    ...mapState({
-      modals: (state) => (state as RootState).ui.modals,
-    }),
     servers(): UiServer[] {
       return [
         {
@@ -41,20 +35,6 @@ export default Vue.extend({
           address: '0x73bceb1cd57c711feac4224d062b0f6ff338501e',
         },
       ]
-    },
-  },
-  methods: {
-    /**
-     * @method toggleModal
-     * @param modalName - enum for which modal
-     * @description This updates the state to show/hide the specific modal you pass in
-     * @example toggleModal(ModalWindows.WALLET)
-     */
-    toggleModal(modalName: ModalWindows): void {
-      this.$store.commit('ui/toggleModal', {
-        name: modalName,
-        state: this.modals[modalName],
-      })
     },
   },
 })

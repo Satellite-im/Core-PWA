@@ -1,3 +1,11 @@
+.conversation-wrapper {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-grow: 1;
+}
+
 .conversation {
   position: relative; // Dont remove
   display: flex;
@@ -13,12 +21,21 @@
 
   .messages {
     margin: 0 @normal-spacing;
-    margin-top: auto;
     display: flex;
     flex-direction: column;
 
     .caret_divider + .chat-message-container.show-header {
       margin-top: 0;
+    }
+
+    .notice-text {
+      height: 30px;
+      font-size: @text-size;
+      font-family: @secondary-font;
+      color: @text-muted;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
@@ -73,5 +90,64 @@
     &-spinner {
       margin-right: @light-spacing;
     }
+  }
+}
+
+.scroll-indicator {
+  position: absolute;
+  background: @flair-gradient;
+  padding: 4px 12px;
+  display: flex;
+  justify-content: space-between;
+  inset: 0 1rem;
+  cursor: pointer;
+  .glow-flair();
+
+  &-top {
+    bottom: auto;
+    border-radius: @corner-rounding;
+  }
+
+  &-bottom {
+    top: auto;
+    border-radius: @corner-rounding @corner-rounding 0 0;
+  }
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dismiss-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.scroll-indicator {
+  color: @white;
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+
+    &.scroll-indicator-top {
+      transform: translateY(-25%);
+    }
+
+    &.scroll-indicator-bottom {
+      transform: translateY(25%);
+    }
+  }
+
+  &-enter-active,
+  &-leave-active {
+    transition: all @animation-speed-medium ease;
   }
 }

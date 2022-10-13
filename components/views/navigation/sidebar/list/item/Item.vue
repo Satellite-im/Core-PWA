@@ -1,19 +1,26 @@
 <template src="./Item.html"></template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { TranslateResult } from 'vue-i18n'
+import Vue, {
+  ComputedRef,
+  computed,
+  PropType,
+  Ref,
+  ref,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+} from 'vue'
 import VueMarkdown from 'vue-markdown'
-import { mapGetters } from 'vuex'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import {
-  Conversation,
-  ConversationMessage,
-} from '~/libraries/Iridium/chat/types'
-import { User, UserStatus } from '~/libraries/Iridium/users/types'
-import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
+import { Conversation } from '~/libraries/Iridium/chat/types'
+import { conversationHooks } from '~/components/compositions/conversations'
+import { webrtcHooks } from '~/components/compositions/webrtc'
+import { Config } from '~/config'
+import { $dayjs } from '~/plugins/local/dayjs'
+import { getDate, getTimestamp } from '~/utilities/timestamp'
 
 export default Vue.extend({
   components: {
@@ -25,100 +32,46 @@ export default Vue.extend({
       required: true,
     },
   },
-  data() {
-    return {
-      isLoading: false,
-      timestamp: '' as string | TranslateResult,
-      timeoutId: undefined as NodeJS.Timeout | undefined,
-      conversations: iridium.chat.state.conversations,
-      ephemeral: iridium.users.ephemeral,
-      users: iridium.users.state,
-    }
-  },
-  computed: {
-    ...mapGetters('settings', ['getTimestamp', 'getDate']),
-    subtitle(): string {
-      const html = this.markdownToHtml(this.lastMessageDisplay)
+  setup(props) {
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    const {
+      conversation,
+      numUnreadMessages,
+      otherDids,
+      otherParticipants,
+      sortedMessages,
+    } = conversationHooks(props.conversationId)
+    const { enableRTC, call } = webrtcHooks(props.conversationId)
+
+    const isLoading = ref(false)
+    const timestamp = ref('')
+    const timeoutId: Ref<NodeJS.Timeout | undefined> = ref(undefined)
+
+    const unreadDisplay: ComputedRef<string> = computed(() => {
+      return numUnreadMessages.value >= 100
+        ? '99+'
+        : numUnreadMessages.value.toString()
+    })
+
+    const isSelected: ComputedRef<boolean> = computed(() => {
+      return props.conversationId === $nuxt.$route.params.id
+    })
+
+    const subtitle: ComputedRef<string> = computed(() => {
+      const html = toHTML(lastMessageDisplay.value, { liveTyping: false })
       const firstLine = html.split('<br>')[0]
-      return this.wrapEmoji(firstLine)
-    },
-    conversation(): Conversation {
-      return iridium.chat.state.conversations[this.conversationId]
-    },
-    /* 
-      Returns number of unread messages for this conversation id
-    */
-    unreadCount(): string | number {
-      const count = Object.values(
-        iridium.chat.state.conversations[this.conversationId].message,
-      ).filter((a) => a.at > this.conversation.lastReadAt).length
-      return count > 99 ? '99+' : count
-    },
-    userId(): string {
-      const userId =
-        (this.conversation.participants || []).find(
-          (participant) => participant !== iridium.id,
-        ) || ''
 
-      return userId
-    },
-    user(): User {
-      return iridium.users.state[this.userId]
-    },
-    status(): UserStatus {
-      return this.ephemeral.status[this.userId] || 'offline'
-    },
-    isTyping(): boolean {
-      if (!this.user) return false
-
-      return (
-        !!this.conversation &&
-        (iridium.chat.ephemeral.typing[this.conversation.id] || []).includes(
-          this.user.did,
-        )
+      return firstLine.replace(
+        Config.regex.emojiWrapper,
+        (emoji) => `<span class="emoji">${emoji}</span>`,
       )
-    },
-    contextMenuValues(): ContextMenuItem[] {
-      return this.conversation?.type === 'direct'
-        ? [
-            {
-              text: this.$t('context.voice'),
-              func: this.status === 'online' ? this.call : () => {},
-              type: this.status === 'online' ? 'primary' : 'disabled',
-            },
-            // {
-            //   text: this.$t('context.profile'),
-            //   func: () => this.$store.dispatch('ui/showProfile', this.user),
-            // },
-            {
-              text: this.$t('context.remove'),
-              func: this.removeFriend,
-              type: 'danger',
-            },
-          ]
-        : [
-            {
-              text: this.$t('context.voice'),
-              func: () => {},
-              type: 'disabled',
-            },
+    })
 
-            {
-              text: this.$t('context.leave_group'),
-              func: this.leaveGroup,
-              type: 'danger',
-            },
-          ]
-    },
-    messages(): ConversationMessage[] {
-      return Object.values(
-        iridium.chat.state.conversations[this.conversationId].message,
-      ).sort((a, b) => a.at - b.at)
-    },
-    lastMessageDisplay(): string {
-      const message = this.messages.at(-1)
+    const lastMessageDisplay: ComputedRef<string> = computed(() => {
+      const message = sortedMessages.value[sortedMessages.value.length - 1]
       if (!message) {
-        return this.$t('messaging.say_hi') as string
+        return $nuxt.$i18n.t('messaging.say_hi')
       }
 
       const name = iridium.users.getUser(message.from)?.name
@@ -131,78 +84,137 @@ export default Vue.extend({
 
       if (message.attachments.length) {
         return fromSelf
-          ? (this.$t('messaging.you_sent_attachment') as string)
-          : (this.$t('messaging.sent_attachment', { name }) as string)
+          ? $nuxt.$i18n.t('messaging.you_sent_attachment')
+          : $nuxt.$i18n.t('messaging.sent_attachment', { name })
       }
 
       switch (message.type) {
         case 'glyph':
           return fromSelf
-            ? (this.$t('messaging.you_sent_glyph') as string)
-            : (this.$t('messaging.sent_glyph', { name }) as string)
+            ? $nuxt.$i18n.t('messaging.you_sent_glyph')
+            : $nuxt.$i18n.t('messaging.sent_glyph', { name })
         case 'member_join':
-          return this.$t('messaging.group_join', {
+          return $nuxt.$i18n.t('messaging.group_join', {
             name,
             members,
-          }) as string
+          })
         case 'member_leave':
-          return this.$t('messaging.group_leave', { name }) as string
+          return $nuxt.$i18n.t('messaging.group_leave', { name })
         case 'call':
-          if (message.from === iridium.id) {
-            return this.$t('messaging.call_outgoing') as string
+          if (fromSelf) {
+            return $nuxt.$i18n.t('messaging.call_outgoing')
           }
-          return this.$t('messaging.call_incoming', { name }) as string
+          return $nuxt.$i18n.t('messaging.call_incoming', { name })
       }
 
-      return message.body || ''
-    },
-    isSelected(): boolean {
-      return this.conversation?.id === this.$route.params.id
-    },
+      return message?.body ?? ''
+    })
+
+    const contextMenuValues: ComputedRef<ContextMenuItem[]> = computed(() => {
+      return conversation.value?.type === 'direct'
+        ? [
+            {
+              text: $nuxt.$i18n.t('context.voice'),
+              func: enableRTC.value ? handleCall : () => {},
+              type: enableRTC.value ? 'primary' : 'disabled',
+            },
+            {
+              text: $nuxt.$i18n.t('context.remove'),
+              func: removeFriend,
+              type: 'danger',
+            },
+          ]
+        : [
+            {
+              text: $nuxt.$i18n.t('context.voice'),
+              func: () => {},
+              type: 'disabled',
+            },
+
+            {
+              text: $nuxt.$i18n.t('context.leave_group'),
+              func: leaveGroup,
+              type: 'danger',
+            },
+          ]
+    })
+
+    async function handleCall() {
+      call({
+        recipient: otherDids.value[0],
+        conversationId: props.conversationId,
+        kinds: ['audio'],
+      })
+    }
+
+    async function removeFriend() {
+      isLoading.value = true
+      await iridium.friends
+        .friendRemove(otherDids.value[0])
+        .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
+      isLoading.value = false
+    }
+
+    async function leaveGroup() {
+      iridium.chat.leaveGroup(props.conversationId)
+    }
+
+    /**
+     * "now" for less than 30 sec
+     * "hh:mm AM/PM" between 31 sec and a day
+     * "yesterday" the day before
+     * "2d" 2 days before
+     * "MM/DD/YYYY" > 2 days before
+     */
+    function setTimestamp() {
+      const lastMsg = sortedMessages.value.at(-1)?.at
+      if (!lastMsg) {
+        return
+      }
+      clearTimeout(timeoutId.value)
+      if ($dayjs().diff(lastMsg, 'second') < 30) {
+        timeoutId.value = setTimeout(setTimestamp, 30000)
+        timestamp.value = $nuxt.$i18n.t('time.now')
+        return
+      }
+      if ($dayjs().isSame(lastMsg, 'day')) {
+        timestamp.value = getTimestamp(lastMsg)
+      } else if ($dayjs().diff(lastMsg, 'day') <= 1) {
+        timestamp.value = $nuxt.$i18n.t('time.yesterday')
+      } else if ($dayjs().diff(lastMsg, 'day') <= 2) {
+        timestamp.value = '2 d'
+      } else {
+        timestamp.value = getDate(lastMsg)
+      }
+      const midnight = $dayjs().add(1, 'day').startOf('day').valueOf()
+      // update timestamp at midnight tonight
+      timeoutId.value = setTimeout(() => setTimestamp(), midnight - Date.now())
+    }
+
+    onMounted(setTimestamp)
+    watch(sortedMessages, setTimestamp)
+    onBeforeUnmount(() => {
+      clearTimeout(timeoutId.value)
+    })
+
+    return {
+      contextMenuValues,
+      isLoading,
+      isSelected,
+      numUnreadMessages,
+      otherParticipants,
+      sortedMessages,
+      subtitle,
+      timestamp,
+      unreadDisplay,
+    }
   },
-  watch: {
-    messages: {
-      handler() {
-        this.setTimestamp()
-      },
-      deep: true,
+  computed: {
+    conversation(): Conversation {
+      return iridium.chat.state.conversations[this.conversationId]
     },
-  },
-  mounted() {
-    // Array.from(
-    //   (this.$refs.subtitle as HTMLElement).getElementsByClassName(
-    //     'spoiler-container',
-    //   ),
-    // ).forEach((spoiler) => {
-    //   spoiler.addEventListener('click', (e) => {
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    //     spoiler.classList.add('spoiler-open')
-    //   })
-    // })
-    this.setTimestamp()
-  },
-  beforeDestroy() {
-    clearTimeout(this.timeoutId)
-    this.$store.commit('ui/toggleContextMenu', false)
   },
   methods: {
-    async removeFriend() {
-      if (!this.user?.did) {
-        return
-      }
-      this.isLoading = true
-      await iridium.friends
-        .friendRemove(this.user.did)
-        .catch((e) => this.$toast.error(this.$t(e.message) as string))
-      this.isLoading = false
-    },
-    async leaveGroup() {
-      if (!this.conversation?.id) {
-        return
-      }
-      iridium.chat.leaveGroup(this.conversation.id)
-    },
     /**
      * @method openConversation
      * @description Navigates to user or group conversation
@@ -220,80 +232,6 @@ export default Vue.extend({
         return
       }
       this.$router.push(`/chat/${this.conversation.id}`)
-    },
-    async call() {
-      await iridium.webRTC
-        .call({
-          recipient: this.userId,
-          conversationId: this.conversationId,
-          kinds: ['audio'],
-        })
-        .catch((e) => this.$toast.error(this.$t(e.message) as string))
-    },
-    /**
-     * @method markdownToHtml
-     * @description convert text markdown to html
-     * @param str String to convert
-     */
-    markdownToHtml(text: string) {
-      return toHTML(text, { liveTyping: false })
-    },
-    /**
-     * @method wrapEmoji
-     * @description Wraps emojis in spans with the emoji class
-     * @param str String to wrap emojis within
-     */
-    wrapEmoji(str: string): string {
-      return str.replace(
-        this.$Config.regex.emojiWrapper,
-        (emoji) => `<span class="emoji">${emoji}</span>`,
-      )
-    },
-    /**
-     * @method containsOnlyEmoji
-     * @description Check whether or not a string only contains an emoji
-     * @param str String to check against
-     */
-    containsOnlyEmoji(str: string): boolean {
-      return onlyHasEmoji(str)
-    },
-    /**
-     * @description set timestamp
-     * "now" for less than 30 sec
-     * "hh:mm AM/PM" between 31 sec and a day
-     * "yesterday" the day before
-     * "2d" 2 days before
-     * "MM/DD/YYYY" > 2 days before
-     */
-    setTimestamp() {
-      if (!this.messages.length) {
-        return
-      }
-      const lastMsg = this.messages.at(-1)?.at
-
-      clearTimeout(this.timeoutId)
-      if (this.$dayjs().diff(lastMsg, 'second') < 30) {
-        this.timeoutId = setTimeout(() => this.setTimestamp(), 30000)
-        this.timestamp = this.$t('time.now')
-        return
-      }
-      if (this.$dayjs().isSame(lastMsg, 'day')) {
-        this.timestamp = this.getTimestamp({
-          time: lastMsg,
-        })
-      } else if (this.$dayjs().diff(lastMsg, 'day') <= 1) {
-        this.timestamp = this.$t('time.yesterday')
-      } else if (this.$dayjs().diff(lastMsg, 'day') <= 2) {
-        this.timestamp = '2 d'
-      } else {
-        this.timestamp = this.getDate(lastMsg)
-      }
-      const midnight = this.$dayjs().add(1, 'day').startOf('day').valueOf()
-      // update timestamp at midnight tonight
-      this.timeoutId = setTimeout(
-        () => this.setTimestamp(),
-        midnight - Date.now(),
-      )
     },
   },
 })

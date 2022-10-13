@@ -8,7 +8,7 @@
   }
 }
 
-.chat-message-container {
+.chat-message-container + .chat-message-container {
   &.show-header {
     padding-top: @normal-spacing;
   }
@@ -102,10 +102,14 @@
     .status {
       font-size: @font-size-xs;
       color: @gray;
-      &.editing {
-        vertical-align: bottom;
-        margin-top: 0;
-      }
+    }
+
+    .pending {
+      opacity: 0.5;
+    }
+
+    .failed {
+      color: @red;
     }
 
     .markdown {

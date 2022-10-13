@@ -1,26 +1,23 @@
-.item {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
+.wrapper {
   position: relative;
-  padding: 0 16px;
-  &:extend(.no-select);
+  .item {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    text-align: left;
+    width: 100%;
+    user-select: none;
+    outline-offset: -2px;
 
-  &.is-loading {
-    pointer-events: none;
-    .user-loader {
-      display: flex;
+    &.selected {
+      .background-semitransparent-lighter();
     }
-  }
 
-  &.selected {
-    &:extend(.background-semitransparent-lighter);
-  }
-
-  &:hover:not(.selected) {
-    &:extend(.background-semitransparent-light);
+    &:hover:not(.selected) {
+      .background-semitransparent-light();
+    }
   }
 
   .user-info {
@@ -49,13 +46,19 @@
     }
   }
 
-  .user-loader {
+  .loader {
     inset: 0;
     display: none;
     position: absolute;
     align-items: center;
     justify-content: center;
     background-color: rgba(@black, 0.2);
-    &:extend(.first-layer);
+  }
+
+  &.is-loading {
+    pointer-events: none;
+    .loader {
+      display: flex;
+    }
   }
 }

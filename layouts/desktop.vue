@@ -34,7 +34,7 @@ import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import { RootState } from '~/types/store/store'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'Desktop',
@@ -59,7 +59,10 @@ export default Vue.extend({
     },
     displayDroppable(): boolean {
       const droppablePages = ['/files', '/chat']
-      return droppablePages.includes(this.$route.path)
+      const match = droppablePages.filter((path) =>
+        this.$route.path.includes(path),
+      ).length
+      return Boolean(match)
     },
     ready(): boolean {
       return iridium.ready && !!iridium.profile.state?.did
@@ -106,8 +109,6 @@ export default Vue.extend({
   inset: 0;
   position: absolute;
   transition: left @animation-speed-long ease;
-  /* background required for modal backdrop-filter to work properly */
-  background: @background;
 
   &.hide-sidebars {
     left: calc(calc(@sidebar-width + @slimbar-width) * -1);

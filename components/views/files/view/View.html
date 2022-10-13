@@ -1,41 +1,27 @@
-<div id="view-file" @keydown.esc="close" tabindex="1" ref="modal">
+<div class="fullscreen-file">
   <div class="file-nav">
-    <div class="file-info ellipsis">
-      <TypographyText as="h2" class="ellipsis">
+    <div class="file-info">
+      <TypographyText class="ellipsis" as="h2">
         {{ file.name }}
       </TypographyText>
-      <TypographyText> {{ file.type }} </TypographyText>
-      <TypographyText> {{ $filesize(file.size) }} </TypographyText>
-      <TypographyText> {{ $dayjs(file.modified).fromNow() }} </TypographyText>
+      <TypographyText class="ellipsis" color="dark" size="sm">
+        {{ file.type }}
+      </TypographyText>
+      <TypographyText color="dark" size="sm">
+        {{ $filesize(file.size) }}
+      </TypographyText>
     </div>
     <div class="controls">
-      <UiLoadersSpinner
-        v-if="isDownloading"
-        class="control disabled"
-        spinning
-      />
+      <UiLoadersSpinner v-if="isDownloading" class="disabled" spinning />
       <button
         v-else
-        @click="download"
         v-tooltip.bottom="$t('controls.download')"
-        class="control"
+        @click="download"
       >
-        <download-icon size="1x" />
+        <download-icon />
       </button>
-      <!-- 
-      <a
-        v-tooltip.bottom="$t('controls.share_link')"
-        class="control"
-        @click="share"
-      >
-        <link-icon size="1x" />
-      </a> -->
-      <button
-        class="control control--close"
-        v-tooltip.bottom="$t('ui.close')"
-        @click="close"
-      >
-        <x-icon size="1x" />
+      <button v-tooltip.bottom="$t('ui.close')" @click="$emit('close')">
+        <x-icon />
       </button>
     </div>
   </div>
@@ -44,18 +30,9 @@
     class="image-container"
     :nsfw="file.nsfw"
   >
-    <img :src="thumbnail" />
+    <img :src="thumbnail" draggable="false" />
   </ui-image-container>
-  <div v-else class="no-preview">
-    <UiLoadersSpinner v-if="isDownloading" class="file-icon" spinning />
-    <button v-else @click="download" v-tooltip.top="$t('controls.download')">
-      <download-icon size="1x" class="file-icon" />
-    </button>
-    <TypographyText as="h1"> {{ file.name }} </TypographyText>
-    <TypographyText>{{ file.type }}</TypographyText>
-    <TypographyText>{{ $filesize(file.size) }}</TypographyText>
-    <TypographyText>{{ $dayjs(file.modified).fromNow() }}</TypographyText>
-  </div>
+  <file-icon v-else class="no-preview" size="68" />
   <a
     v-show="false"
     ref="download"

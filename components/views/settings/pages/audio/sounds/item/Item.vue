@@ -1,7 +1,7 @@
 <template>
   <div class="sounds-item">
     <TypographyText font="heading">{{ title }}</TypographyText>
-    <InteractablesSwitch :is-enabled="value" @toggle="toggle" />
+    <InteractablesSwitch :value="value" :label="title" @toggle="toggle" />
   </div>
 </template>
 

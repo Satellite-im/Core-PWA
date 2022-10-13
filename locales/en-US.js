@@ -1,27 +1,17 @@
 export default {
   coming_soon: {
-    communities: 'Communities\nComing Soon',
-    add_community: 'New Community\nComing Soon',
-    send_money: 'Send Money\nComing Soon',
-    alerts: 'Alerts\nComing Soon',
-    marketplace: 'Marketplace\nComing Soon',
-    wallet: 'Wallet\nComing Soon',
-    archived: 'Archived Messages\nComing Soon',
-    group_call: 'Group Call\nComing Soon',
-    group_chat_search: 'Group Chat Search\nComing Soon',
+    communities: 'Communities\n(Coming Soon)',
+    send_money: 'Send Money\n(Coming Soon)',
+    wallet: 'Wallet\n(Coming Soon)',
+    group_call: 'Group Call\n(Coming Soon)',
   },
   welcome_message: {
-    dismiss_forever: 'Dismiss Forever',
     welcome: 'Welcome, {user}!',
     ea_warning:
       'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   },
   global: {
-    name: 'Satellite.im',
-    encrypted: 'Encrypted',
-    unencrypted: 'Unencrypted',
     upload: 'Upload',
-    upload_files: 'Upload Files',
     uploading: 'Uploading...',
     edit: 'edit',
     save: 'save',
@@ -45,8 +35,6 @@ export default {
     more: 'More',
     live: 'Live {time}',
     edited: 'edited',
-    online: 'All users are offline | {name} is online | {name} are online',
-    offline: '{name} is not connected',
     background_call: 'Current call',
     no_results: 'No results found',
     early_access: 'Early Access',
@@ -87,11 +75,12 @@ export default {
   },
   messaging: {
     messages: 'Messages',
-    groups: 'Groups',
     pin: 'Password',
     reply: 'Reply',
     typing: '{user} is typing | {user} are typing',
-    new_messages: 'New Messages',
+    new_messages: 'New message | New messages',
+    unread_since:
+      '{numUnread} unread message since {since} | {numUnread} unread messages since {since}',
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',
@@ -166,6 +155,14 @@ export default {
         "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your password to connect or try again later.",
       action: 'Try Again',
     },
+    status: {
+      title: 'Change Status',
+      online: 'Online',
+      busy: 'Busy',
+      busy_sub: 'You will not receive notifications',
+      away: 'Away',
+      offline: 'Offline',
+    },
   },
   files: {
     files: 'Files',
@@ -239,6 +236,7 @@ export default {
         enable_consent:
           'Please consent to file scanning in your privacy settings',
         lost: 'Cannot find a file, please try again later',
+        timeout: 'Connection timeout, please try again later',
       },
     },
     unlock: {
@@ -659,22 +657,6 @@ export default {
       new_message: 'New Message',
     },
   },
-  servers: {
-    new_server: 'New Community',
-    create: {
-      heading: 'Create a server',
-      photo_text:
-        'Give your server a face. Choose a memorable photo to show its members.',
-      photo_button: 'Set photo',
-      server_name: 'Enter a server name',
-      server_name_placeholder: 'Server name...',
-      create_server: 'Create server',
-      select_friends: 'Invite your friends to this server',
-      server_name_error: 'Server name must be at least 5 characters.',
-      select_friends_placeholder: 'Search friends...',
-      user_picker_empty: 'No friends found',
-    },
-  },
   conversation: {
     encrypted: 'Messages are secured by end-to-end encryption.',
     reply: 'reply | replies',
@@ -706,8 +688,7 @@ export default {
       network: 'We are experiencing network issues, please try again later',
     },
     chat: {
-      drop_file_count: 'Sorry, you can only upload 8 files at a time',
-      contains_nsfw: 'Unable to upload file/s due to NSFW status',
+      contains_nsfw: 'Your profile picture can not contain explicit content',
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
@@ -797,10 +778,8 @@ export default {
     received: 'Received',
     sent: 'Sent',
     no_friend_request: 'You have no new friend requests.',
-    outgoing: 'Outgoing requests',
-    blocked_friends: 'Blocked friends',
-    blocked: 'Blocked',
-    no_blocked: 'You have no blocked users, yay!',
+    outgoing: 'Outgoing',
+    incoming: 'Incoming',
     search_placeholder: 'Search friends...',
     add: 'Add Friend',
     add_description:
@@ -824,7 +803,7 @@ export default {
     no_requests_subtitle: 'You have no pending friend requests',
   },
   market_place: {
-    title: 'Marketplace\nComing soon',
+    title: 'Marketplace\n(Coming Soon)',
     glyphs: 'Glyphs',
     themes: 'Themes',
     nfts: 'NFTs',
@@ -852,10 +831,11 @@ export default {
     profile: {
       about: {
         tab: 'About',
-        me: 'About Me',
         location: 'Location',
         add_note: 'Add Note',
         click_note: 'Click to add note',
+        click_location: 'Click to add your location',
+        click_about: 'Click to add something about you',
       },
       accounts: 'Accounts',
       activity: {
@@ -868,6 +848,7 @@ export default {
         servers: 'Servers',
         friends: 'Friends',
       },
+      edit: 'Edit',
     },
     call_to_action: {
       title: 'Coming Soon',
@@ -904,5 +885,16 @@ export default {
     copy_img: 'Copy Image',
     save_img: 'Save Image',
     copy_link: 'Copy Link',
+  },
+  notifications: {
+    friend_request: {
+      title: 'Friend Request',
+      body: '{name} sent you a friend request!',
+    },
+    new_message: {
+      title: 'New Message',
+      group_title: '{name} ({server})',
+      body: 'You have a new message from {name}!',
+    },
   },
 }

@@ -1,44 +1,39 @@
+import { type } from 'os'
+import { User } from '~/libraries/Iridium/users/types'
+
 export const NotificationsError = {
   NOTIFICATION_NOT_SENT: 'error.notifications.notifications_not_sent',
 }
 
 export enum NotificationType {
-  FRIEND_REQUEST = 'Friend Request',
-  MISSED_CALL = 'MISSED_CALL',
-  FILES_FULL = 'FILES_FULL',
-  FILE_UPLOADED = 'FILE_UPLOADED',
-  FILE_NSFW = 'FILE_NSFW',
-  DEV = 'DEV',
-  DIRECT_MESSAGE = 'Direct Message',
-  GROUP_MESSAGE = 'Group Message',
-  MENTIONS_NOTIFICATION = 'mentionNotification',
-  ACCOUNT_NOTIFICATION = 'accountNotification',
-  APPLICATION_NOTIFICATION = 'applicationNotification',
-  MISCELLANEOUS = 'miscellaneous',
-  SEEN = 'Seen',
+  FRIEND_REQUEST = 'friend_request',
+  DIRECT_MESSAGE = 'direct_message',
+  GROUP_MESSAGE = 'group_message',
+  MENTION = 'mention',
 }
 
 export type Notification = {
   at: number
-  id?: string
-  chatName?: string
   type: NotificationType
-  fromName: string
-  fromAddress?: string
+  senderId: string
   title: string
   description: string
-  image?: string
   seen: boolean
+  id?: string
+  messageId?: string
+  conversationId?: string
+  image?: string
+  onNotificationClick?: () => void
 }
 
-export const EmptyNotification: Notification = {
-  at: 0,
-  id: '',
-  type: NotificationType.SEEN,
-  fromName: '',
-  fromAddress: '',
-  title: '',
-  description: '',
-  image: '',
-  seen: false,
+export interface NotificationBase
+  extends Omit<Notification, 'title' | 'description'> {
+  titleValues?: Record<string, string>
+  desriptionValues?: Record<string, string>
+}
+
+export type NotificationClickEvent = {
+  from: string
+  topic: string
+  payload: { type: NotificationType }
 }

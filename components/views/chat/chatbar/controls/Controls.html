@@ -2,6 +2,7 @@
   <UiComingSoon
     v-if="!$device.isMobile"
     :tooltipText="$t('coming_soon.send_money')"
+    data-cy="send-money"
     :tooltipPosition="'top'"
   >
     <button
@@ -9,12 +10,13 @@
       @click="toggleMiniWallet"
       disabled
     >
-      <banknote-icon size="1x" class="control-icon" color="grey" />
+      <banknote-icon size="1x" class="control-icon" />
     </button>
   </UiComingSoon>
   <button
     v-tooltip.top="$t('ui.glyphs')"
     @click="toggleEnhancers('glyphs')"
+    data-cy="send-glyph"
     :disabled="disabled"
   >
     <box-select-icon
@@ -25,6 +27,7 @@
   <button
     v-tooltip.top="$t('ui.emoji')"
     @click="toggleEnhancers('emoji')"
+    data-cy="send-emoji"
     :disabled="disabled"
   >
     <smile-icon

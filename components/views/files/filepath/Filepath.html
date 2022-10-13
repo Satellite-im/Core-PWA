@@ -1,12 +1,10 @@
-<nav class="breadcrumb" aria-label="breadcrumbs">
-  <ul>
-    <li>
-      <button @click="$store.commit('files/setPath', [])">
-        <home-icon class="font-color-flair" size="1.5x" />
-      </button>
-    </li>
-    <li v-for="el, i in path" @click="setPath(el.id)">
-      <a :class="{'active' : i === path.length - 1}"> {{ el.name }} </a>
-    </li>
-  </ul>
-</nav>
+<ol aria-label="breadcrumbs">
+  <li>
+    <button @click="$store.commit('files/setPath', [])">
+      <home-icon size="1.5x" />
+    </button>
+  </li>
+  <li v-for="el, i in path" @click="setPath(el.id)">
+    <button :disabled="i === path.length - 1">{{ el.name }}</button>
+  </li>
+</ol>

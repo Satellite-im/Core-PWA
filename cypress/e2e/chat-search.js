@@ -1,35 +1,50 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const randomMessage = faker.lorem.sentence() // generate random sentence
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Only Text')
-    .map((item) => item.recoverySeed) + '{enter}'
+const randomMessageOne = faker.lorem.sentence() // generate random sentence
+const randomMessageTwo = faker.lorem.sentence() // generate random sentence
+const randomMessageThree = faker.lorem.sentence() // generate random sentence
+let secondUserName
 
 describe.skip('Chat Search Tests', () => {
-  //Skipping search tests due to a bug on chat searchbar not triggering input
-  it('Chat - Search - Load account for testing', { retries: 2 }, () => {
-    // Import account
-    cy.importAccount(randomPIN, recoverySeed)
+  //Skipping Chat Search Tests since this is a coming soon functionality
+  before(() => {
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
+    })
+  })
 
-    // Validate profile name displayed
-    cy.validateChatPageIsLoaded()
+  it('Chat - Search - Load account for testing', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.loginWithLocalStorage('Chat User A')
 
-    // Go to chat
-    cy.goToConversation('Only Text Friend')
+    // Validate message is sent
+    cy.goToConversation(secondUserName)
+  })
+
+  it('Chat - Search - Pretest - Send messages needed for further testing', () => {
+    // Send 25 times a message to validate navigation through search results
+    for (let i = 0; i < 25; i++) {
+      // Validate message is sent
+      cy.chatFeaturesSendMessage(randomMessageTwo)
+    }
+    // Send 5 times a message to validate navigation through search results
+    for (let i = 0; i < 5; i++) {
+      // Validate message is sent
+      cy.chatFeaturesSendMessage(randomMessageThree)
+    }
   })
 
   it('Chat - Search - Send message on chat', () => {
     // Validate message is sent
-    cy.chatFeaturesSendMessage(randomMessage)
+    cy.chatFeaturesSendMessage(randomMessageOne)
   })
 
   it('Chat - Search - Text message - Exact match', () => {
     //Get text from last chat-message and look for it in search bar
     cy.get('[data-cy=chat-message]')
-      .contains(randomMessage)
+      .contains(randomMessageOne)
       .last()
       .invoke('text')
       .then(($message) => {
@@ -37,7 +52,7 @@ describe.skip('Chat Search Tests', () => {
       })
 
     //Assert results and close search modal
-    cy.assertFirstMatchOnSearch(randomMessage)
+    cy.assertFirstMatchOnSearch(randomMessageOne)
     cy.get('[data-cy=chat-search-result]').find('.close-button').click()
   })
 
@@ -62,7 +77,7 @@ describe.skip('Chat Search Tests', () => {
 
   it('Chat - Search Results - Pagination is displayed when more than 10 matches are found', () => {
     //Look for a word showing more than 10 results in chat and ensure pagination is displayed
-    cy.searchFromTextInChat('9876543210')
+    cy.searchFromTextInChat(randomMessageTwo)
     cy.get('[data-cy=chat-search-result-pagination]').should('exist')
   })
 
@@ -79,7 +94,7 @@ describe.skip('Chat Search Tests', () => {
     cy.navigateThroughSearchResults()
   })
 
-  it('Chat - Search Results - Navigate through results oredered by Relevant', () => {
+  it('Chat - Search Results - Navigate through results ordered by Relevant', () => {
     //Click on Sort By Relevant
     cy.get('.orderby-item').contains('Relevant').click()
 
@@ -92,8 +107,8 @@ describe.skip('Chat Search Tests', () => {
 
   it('Chat - Search - Results - Pagination is NOT displayed when 10 or less matches are found', () => {
     //Search for a random number and assert results
-    cy.searchFromTextInChat('1234567890')
-    cy.assertFirstMatchOnSearch('1234567890')
+    cy.searchFromTextInChat(randomMessageThree)
+    cy.assertFirstMatchOnSearch(randomMessageThree)
 
     //Validate that pagination is not displayed and close search modal
     cy.get('[data-cy=chat-search-result-pagination]').should('not.exist')

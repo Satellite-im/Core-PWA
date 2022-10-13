@@ -1,5 +1,9 @@
-import * as actions from '~/store/audio/actions'
+import { Sounds } from '~/libraries/SoundManager/SoundManager'
+import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 import { RegistrationStatus } from '~/store/accounts/types'
+import * as actions from '~/store/audio/actions'
+import initialAudioState from '~/store/audio/state'
+import { AudioState } from '~/store/audio/types'
 import {
   ConversationActivity,
   ConversationConnection,
@@ -7,10 +11,6 @@ import {
 import { DataStateType } from '~/store/dataState/types'
 import { CaptureMouseTypes } from '~/store/settings/types'
 import { RootState } from '~/types/store/store'
-import { AudioState } from '~/store/audio/types'
-import initialAudioState from '~/store/audio/state'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { $WebRTC } from '~/libraries/WebRTC/WebRTC'
 
 jest.mock('~/libraries/WebRTC/WebRTC', () => ({
   $WebRTC: {

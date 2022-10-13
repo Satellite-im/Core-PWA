@@ -1,6 +1,10 @@
 <div
+  ref="container"
   class="chat-message-container"
-  :class="{ 'show-header': showHeader }"
+  :class="{
+    'show-header': showHeader,
+    'first-unread-message': item.isFirstUnreadMessage,
+  }"
   :data-message-id="message.id"
 >
   <MessageNotice v-if="isNotice" :message="message" />
@@ -33,7 +37,7 @@
         v-if="message.body && !isEditing"
         :text="markdownToHtml"
         class="markdown"
-        :class="{ bigmoji: containsOnlyEmoji }"
+        :class="{ bigmoji: containsOnlyEmoji, pending: message.status === 'pending', failed: message.status === 'failed' }"
         data-cy="chat-message"
       />
       <MessageEdit
@@ -49,9 +53,14 @@
       >
         ({{$t('ui.edited')}})
       </span>
-      <MessageGlyph v-else-if="message.glyph" :glyph="message.glyph" />
+      <MessageGlyph
+        v-else-if="message.glyph"
+        :glyph="message.glyph"
+        :failed="message.status === 'failed'"
+        :class="{ pending: message.status === 'pending', failed: message.status === 'failed' }"
+      />
       <MessageActions
-        v-if="message.type !== 'call'"
+        v-if="actionsEnabled"
         :setReplyChatbarMessage="setReplyChatbarMessage"
         :emojiReaction="emojiReaction"
         :editMessage="editMessage"

@@ -12,23 +12,20 @@
       "
     />
     <TypographyText v-if="error" color="danger">
-      {{ $t(error) }}
+      {{ error }}
     </TypographyText>
     <UiLoadersLoadingBar v-else-if="searching" />
-    <div v-else-if="!query" class="id-container">
-      <button class="id-button" @click="copyId">
-        <TypographyText class="id" color="dark">
-          {{ $t('friends.copy_your_id') }}
-        </TypographyText>
-      </button>
-    </div>
-    <div v-else-if="matches && matches.length">
-      <FriendsFriend
-        v-for="match in matches"
-        :key="match.did"
-        :user="match"
-        is-preview
-        class="friend-item"
+    <button v-else-if="!query" class="id-button" @click="copyText(shortID)">
+      <TypographyText color="dark">
+        {{ $t('friends.copy_your_id') }}
+      </TypographyText>
+    </button>
+    <div v-else-if="matches.length" class="matches">
+      <FriendsItem
+        v-for="user in matches"
+        :key="user.did"
+        :user="user"
+        type="stranger"
         @requestSent="onFriendRequestSent"
       />
     </div>
@@ -37,21 +34,31 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import { TranslateResult } from 'vue-i18n'
 import { debounce } from 'lodash'
 import { mapState } from 'vuex'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
+import { isDid, isShortDid } from '~/libraries/Iridium/utils'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   data() {
     return {
-      error: '',
+      error: '' as string | TranslateResult,
       query: '',
       searching: false,
-      user: null as User | null,
       matches: [] as User[],
+      friends: iridium.friends.state,
+      users: iridium.users,
     }
   },
   computed: {
@@ -66,90 +73,81 @@ export default Vue.extend({
         : `${iridium.id}`
     },
   },
-  async mounted() {
-    if (this.$route.params && this.$route.params.id) {
+  mounted() {
+    if (this.$route.params.id) {
       this.query = this.$route.params.id
       this._searchFriend()
     }
-    iridium.friends?.on('request/error', (err: string) => {
-      this.error = err
-    })
   },
   methods: {
     _searchFriend: debounce(async function (this: any) {
       if (!this.query.length) {
         this.error = ''
-        this.user = null
         this.searching = false
         return
       }
+      this.searching = true
       await this.searchFriend()
       this.searching = false
     }, 500),
     async searchFriend() {
-      this.user = null
       this.error = ''
-      this.searching = true
-      const matches = await iridium.users.searchPeer(this.query)
-      const hasFriend =
-        matches.length === 1 && iridium.friends.isFriend(matches[0].did)
-      const existRequest =
-        matches.length === 1 && iridium.friends.hasRequest(matches[0].did)
 
-      if (
-        this.query === iridium.id ||
-        this.query === this.shortID ||
-        (matches.length === 1 && matches[0].did === iridium.id)
-      ) {
-        this.error = this.$t('friends.self_add') as string
+      if (this.query === iridium.id || this.query === this.shortID) {
+        this.error = this.$t('friends.self_add')
         return
       }
-      if (hasFriend) {
-        this.error = this.$t('friends.already_friend') as string
-      }
-      if (existRequest) {
-        this.error = this.$t('friends.already_request') as string
-      }
+
+      let matches = await this.users.searchPeer(this.query)
+
       if (matches.length === 0) {
-        this.error = this.$t('friends.not_found') as string
+        this.error = this.$t('friends.not_found')
+        return
       }
 
+      if (matches.length === 1) {
+        const did = matches[0].did
+        const isExact = isShortDid(this.query) || isDid(this.query)
+        if (this.friends.friends.includes(did)) {
+          this.error = isExact
+            ? this.$t('friends.already_friend')
+            : this.$t('friends.not_found')
+          return
+        }
+
+        if (this.friends.requests[did]) {
+          this.error = isExact
+            ? this.$t('friends.already_request')
+            : this.$t('friends.not_found')
+          return
+        }
+      }
+
+      // filter out existing friends and requests
+      matches = matches.filter((m) => !this.friends.friends.includes(m.did))
+      matches = matches.filter((m) => !this.friends.requests[m.did])
+
       this.matches = matches
-      this.searching = false
     },
     onFriendRequestSent() {
-      this.user = null
       this.query = ''
       this.$toast.show(this.$t('friends.request_sent') as string)
-    },
-    copyId() {
-      if (!iridium.connector) return
-      navigator.clipboard.writeText(this.shortID)
-      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })
 </script>
 
 <style lang="less" scoped>
-.friend-item {
-  margin-top: 16px;
-}
-
-.id-container {
-  display: flex;
-  justify-content: flex-end;
+.id-button {
   user-select: none;
+  margin-left: auto;
+  padding: 4px 8px;
 
-  .id-button {
-    .id {
-      white-space: nowrap;
-      padding: 4px 8px;
-
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+  &:hover {
+    opacity: 0.8;
   }
+}
+.matches {
+  margin-top: 16px;
 }
 </style>

@@ -1,23 +1,22 @@
 <template src="./Chat.html"></template>
 
 <script lang="ts">
-import Vue, { computed, ComputedRef, reactive } from 'vue'
-import iridium from '~/libraries/Iridium/IridiumManager'
+import Vue, { computed, ComputedRef } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
+import { webrtcHooks } from '~/components/compositions/webrtc'
 
 export default Vue.extend({
   name: 'Chat',
   layout: 'desktop',
   setup() {
-    const { conversationId, isGroup } = conversationHooks()
-
-    const state = reactive({
-      webrtc: iridium.webRTC,
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    const conversationId: ComputedRef<string> = computed(() => {
+      return $nuxt.$route.params.id
     })
 
-    const isActiveCall: ComputedRef<boolean> = computed(() => {
-      return state.webrtc.isActiveCall(conversationId.value)
-    })
+    const { isGroup } = conversationHooks(conversationId.value)
+    const { isActiveCall } = webrtcHooks(conversationId.value)
 
     return { isGroup, isActiveCall }
   },

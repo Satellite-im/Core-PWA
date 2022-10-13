@@ -7,9 +7,13 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
+import { listenToNotifications } from '~/components/compositions/listenToNotifications'
 
 export default Vue.extend({
   name: 'Global',
+  setup() {
+    listenToNotifications()
+  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
@@ -68,7 +72,7 @@ export default Vue.extend({
     }
 
     if (this.$config.clientVersion !== lsVersion) {
-      this.toggleModal('changelog')
+      this.toggleModal(ModalWindows.CHANGELOG)
       localStorage.setItem('local-version', this.$config.clientVersion)
     }
 

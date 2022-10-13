@@ -27,13 +27,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { computed, ComputedRef } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   setup() {
-    const { conversationId, allParticipantsAlphaSorted } = conversationHooks()
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    const conversationId: ComputedRef<string | undefined> = computed(() => {
+      return $nuxt.$route.params.id
+    })
+
+    const { allParticipantsAlphaSorted } = conversationHooks(
+      conversationId.value,
+    )
 
     return { conversationId, allParticipantsAlphaSorted }
   },
@@ -55,7 +63,7 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  gap: 8px;
+  gap: 12px;
   width: 240px;
   margin-right: 16px;
   overflow-y: auto;

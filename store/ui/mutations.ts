@@ -1,11 +1,5 @@
 import Vue from 'vue'
-import {
-  Position,
-  SettingsRoutes,
-  UIState,
-  EnhancerInfo,
-  RecentGlyph,
-} from './types'
+import { SettingsRoutes, UIState, EnhancerInfo, RecentGlyph } from './types'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 
@@ -22,14 +16,11 @@ export default {
   setContextMenuPosition(state: UIState, e: MouseEvent) {
     state.contextMenuPosition = { x: e.x, y: e.y }
   },
-  setQuickProfile(
-    state: UIState,
-    data: { user: User; position: Position } | undefined,
-  ) {
+  setQuickProfile(state: UIState, data: UIState['quickProfile']) {
     Vue.set(state, 'quickProfile', data)
   },
-  setUserProfile(state: UIState, userProfile: Object) {
-    state.userProfile = userProfile
+  setFullProfile(state: UIState, user?: User) {
+    Vue.set(state, 'fullProfile', user)
   },
   chatbarContent(state: UIState, content: string) {
     state.chatbarContent = content

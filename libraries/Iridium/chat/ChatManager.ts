@@ -18,8 +18,8 @@ import { v4 } from 'uuid'
 import {
   ChatError,
   Conversation,
-  ConversationMessage,
   ConversationMessagePayload,
+  ConversationMessage,
   IridiumConversationEvent,
   MessageAttachment,
   MessageEdit,
@@ -34,9 +34,12 @@ import { ChatFileUpload } from '~/store/chat/types'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
-  Notification,
+  NotificationBase,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
+import { uploadFile } from '~/libraries/Iridium/utils'
+import { truthy } from '~/utilities/typeGuard'
+
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
     message?: ConversationMessage
@@ -64,12 +67,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   public ephemeral: {
     typing: { [key: Conversation['id']]: string[] | undefined }
     subscriptions: Conversation['id'][]
+    conversations: { [key: string]: ConversationMessage[] | undefined }
+    activeConversationId: Conversation['id'] | undefined
+    startedAt: number
   } = {
     typing: {},
     subscriptions: [],
+    conversations: {},
+    activeConversationId: '',
+    startedAt: 0,
   }
 
+  private logPrefix = 'iridium/ChatManager'
+
   async start() {
+    this.ephemeral.startedAt = Date.now().valueOf()
     const fetched = await this.get<State>()
     this.state.conversations = {
       ...this.state.conversations,
@@ -90,7 +102,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       conversations.map(async (conversation) => {
         const topic = `/chat/conversations/${conversation.id}`
         logger.info(
-          'iridium/chatmanager/init',
+          `${this.logPrefix}/start`,
           `requesting sync subscription to ${topic}`,
         )
         // ask the sync node to subscribe to this topic
@@ -178,7 +190,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const { stored, payload } = msg
       if (stored.topic) {
         logger.info(
-          'iridium/chatmanager',
+          `${this.logPrefix}/onSyncFetchResponse`,
           'sync/fetch/message - emitting synced message',
           payload,
         )
@@ -191,7 +203,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     })
 
     logger.info(
-      'iridium/chatmanager',
+      `${this.logPrefix}/onSyncFetchResponse`,
       'sync/fetch/messages - sending delivery receipt',
       message.payload.body.messages,
     )
@@ -202,7 +214,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         (message: { cid: string }) => message.cid,
       ),
     })
-    logger.info('iridium/chatmanager', 'sync/fetch/messages - done')
+    logger.info(
+      `${this.logPrefix}/onSyncFetchResponse`,
+      'sync/fetch/messages - done',
+    )
   }
 
   get<T = IridiumDocument>(path: string = '', options: any = {}) {
@@ -254,7 +269,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         })
       })
       logger.info(
-        'iridium/chatmanager/onConversationMessage',
+        `${this.logPrefix}/onConversationMessage`,
         'message received',
         { message, cid, from, conversationId },
       )
@@ -273,32 +288,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       // Remove is_typing indicator upon user message receive
       this.setTyping(conversationId, fromDID, false)
 
-      const friendName = iridium.users.getUser(message?.from)
-      const buildNotification: Exclude<Notification, 'id'> = {
-        fromName: friendName?.name || fromDID,
-        at: Date.now(),
-        fromAddress: conversationId,
-        chatName: conversation.participants.length > 2 ? conversation.name : '',
-        title:
-          conversation.participants.length > 2
-            ? `${friendName?.name} posted in ${conversation.name}`
-            : `New message from ${friendName?.name}`,
-        description:
-          message.body?.length! > 79
-            ? `${message.body?.substring(0, 80)}...`
-            : message.body || '',
-        image: fromDID,
-        type:
-          conversation.participants.length > 2
-            ? NotificationType.GROUP_MESSAGE
-            : NotificationType.DIRECT_MESSAGE,
-        seen: false,
+      const receivedWhileOffline = this.ephemeral.startedAt > message.at
+      if (
+        (!document.hasFocus() || !this.isActive(conversationId)) &&
+        !receivedWhileOffline
+      ) {
+        this.sendNotification(message, conversation, fromDID)
       }
-
-      iridium.notifications?.sendNotification(buildNotification)
     } else if (type === 'chat/reaction') {
       const reaction = payload.body.reaction
-      logger.info('iridium/chatmanager/onConversationMessage', 'reaction', {
+      logger.info(`${this.logPrefix}/onConversationMessage`, 'reaction', {
         reaction,
         from,
         conversationId,
@@ -320,10 +319,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         message,
       )
     } else if (type === 'chat/edit') {
+      if (!payload.body.message) {
+        console.error('no message in payload')
+        return
+      }
       const { messageId, conversationId, body, lastEditedAt } = payload.body
         .message as MessageEdit
 
-      logger.info('iridium/chatmanager/onConversationMessage', 'message edit', {
+      logger.info(`${this.logPrefix}/onConversationMessage`, 'message edit', {
         from,
         conversationId,
       })
@@ -338,6 +341,29 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
   }
 
+  isActive(conversationId: string) {
+    return this.ephemeral.activeConversationId === conversationId
+  }
+
+  private sendNotification(
+    message: ConversationMessage,
+    conversation: Conversation,
+    fromDID: string,
+  ) {
+    const sender = iridium.users.getUser(message?.from)
+    const isGroup = conversation.type === 'group'
+
+    iridium.notifications.emit('notification/create', {
+      type: isGroup
+        ? NotificationType.GROUP_MESSAGE
+        : NotificationType.DIRECT_MESSAGE,
+      senderId: sender?.did,
+      messageId: message.id,
+      conversationId: conversation.id,
+      image: fromDID,
+    } as NotificationBase)
+  }
+
   hasConversation(id: string) {
     return Object.keys(this.state.conversations).includes(id)
   }
@@ -346,7 +372,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const messages = Object.values(
       this.state.conversations[conversation.id].message,
     ).sort((a, b) => a.at - b.at)
-    return messages.at(-1)?.at ?? (conversation.createdAt || 0)
+    return messages[messages.length - 1]?.at ?? (conversation.createdAt || 0)
   }
 
   getSortedConversations(): Conversation[] {
@@ -580,13 +606,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // (check all users in the userManager because there is the case of groups with people not in participants but still in the userManager list, for example when they left the group)
     await Promise.all(
       iridium.users.list
+        .filter(truthy)
         .filter(
           (u) =>
             !participants.includes(u.did) &&
             !iridium.friends.isFriend(u.did) &&
             !this.isUserInOtherGroups(u.did, [id]),
         )
-        .map((u) => iridium.users.userRemove(u.did, true)),
+        .map(async (u) => {
+          await iridium.users.userRemove(u.did, true)
+        }),
     )
     await this.deleteConversation(id)
   }
@@ -668,13 +697,18 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     upload: ChatFileUpload
     conversationId: string
   }): Promise<MessageAttachment | null> {
-    const safer = await this.upload(upload.file, conversationId)
+    const conversation = this.getConversation(conversationId)
+    if (!conversation) {
+      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+    }
+
+    const safer = await uploadFile(upload.file, conversation.participants)
     if (!safer || !safer.valid) {
+      logger.error(`${this.logPrefix}/addFile`, 'file content is not valid')
       return null
     }
 
-    const syncPinResult = await iridium.connector?.load(safer.cid)
-
+    const syncPinResult = await iridium.connector?.fileLoad(safer.cid)
     return {
       cid: syncPinResult.cid,
       name: upload.file.name,
@@ -684,54 +718,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         ? (upload.file.type as FILE_TYPE)
         : FILE_TYPE.GENERIC,
     }
-  }
-
-  async upload(
-    file: File,
-    conversationId: string,
-  ): Promise<{ cid: string; valid: boolean } | undefined> {
-    const conversation = this.getConversation(conversationId)
-    const fileBuffer = await file.arrayBuffer()
-
-    return new Promise((resolve) => {
-      if (!iridium.connector?.p2p.primaryNodeID) {
-        throw new Error('not connected to primary node')
-      }
-      if (!conversation?.participants) {
-        throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-      }
-
-      iridium.connector
-        ?.store(
-          { fileBuffer, name: file.name, size: file.size, type: file.type },
-          {
-            syncPin: true,
-            encrypt: {
-              recipients: [
-                ...conversation.participants,
-                iridium.connector?.p2p.primaryNodeID,
-              ],
-            },
-          },
-        )
-        .then((cid) => {
-          const onSyncPin = (msg: any) => {
-            const { payload } = msg
-            const { body } = payload
-            const { result } = body
-            if (result.originalCID === cid.toString()) {
-              resolve({ cid: result.cid, valid: result.valid })
-            }
-            iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
-          }
-
-          iridium.connector?.p2p.on('node/message/sync/pin', onSyncPin)
-          setTimeout(() => {
-            iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
-            resolve(undefined)
-          }, 30000)
-        })
-    })
   }
 
   /**
@@ -760,27 +746,44 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       id: tempCid.toString() as string,
     }
 
-    await Promise.all([
-      iridium.connector?.store(partial, {
-        syncPin: true,
-        encrypt: conversation?.participants
-          ? { recipients: conversation?.participants }
-          : undefined,
-      }),
-      iridium.connector?.publish(
-        `/chat/conversations/${conversationId}`,
-        {
-          type: 'chat/message',
-          cid: tempCid.toString() as string,
-          message,
-        },
-        {
+    const ephMsg: ConversationMessage = {
+      ...message,
+      status: 'pending',
+    }
+
+    this.setEphemeralConversation(conversationId, ephMsg)
+
+    try {
+      await Promise.all([
+        iridium.connector?.store(partial, {
+          syncPin: true,
           encrypt: conversation?.participants
-            ? { recipients: conversation.participants }
+            ? { recipients: conversation?.participants }
             : undefined,
-        },
-      ),
-    ])
+        }),
+        iridium.connector?.publish(
+          `/chat/conversations/${conversationId}`,
+          {
+            type: 'chat/message',
+            cid: tempCid.toString() as string,
+            message,
+          },
+          {
+            encrypt: conversation?.participants
+              ? { recipients: conversation.participants }
+              : undefined,
+          },
+        ),
+      ])
+    } catch (error) {
+      this.setEphemeralConversation(conversationId, {
+        ...ephMsg,
+        status: 'failed',
+      })
+      return
+    }
+
+    this.setEphemeralConversation(conversationId, ephMsg, true)
 
     Vue.set(
       this.state.conversations[conversationId].message,
@@ -789,9 +792,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
     Vue.set(this.state.conversations[conversationId], 'lastReadAt', Date.now())
 
-    if (message.id === undefined) {
-      throw new Error('message not sent, failed to store')
-    }
     this.set(
       `/conversations/${conversationId}`,
       this.state.conversations[conversationId],
@@ -893,6 +893,31 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       const index = typingList.indexOf(did)
       if (index >= 0) typingList.splice(index, 1)
     }
+  }
+
+  setEphemeralConversation(
+    conversationId: string,
+    message: ConversationMessage,
+    remove: boolean = false,
+  ) {
+    const conversationMessages = this.ephemeral.conversations[conversationId]
+    if (!remove) {
+      if (!conversationMessages) {
+        Vue.set(this.ephemeral.conversations, conversationId, [message])
+        return
+      }
+      const index = conversationMessages.findIndex(
+        (msg) => msg.id === message.id,
+      )
+      if (index === -1) conversationMessages.push(message)
+      else conversationMessages.splice(index, 1, message)
+      return
+    }
+
+    const index = conversationMessages?.findIndex(
+      (msg) => msg.id === message.id,
+    )
+    if (index >= 0) conversationMessages?.splice(index, 1)
   }
 
   // Check if user is in other groups other than `exlude` groups.

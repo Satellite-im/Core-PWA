@@ -1,6 +1,13 @@
-<template src="./InfiniteScroll.html"></template>
+<template>
+  <div ref="root" class="infinite-scroll" />
+</template>
 
 <script lang="ts">
+import { throttle } from 'lodash'
+
+// the higher the sooner we trigger the 'loadMore' emit
+const LOADING_TOLERANCE = 0.25
+
 export default {
   name: 'InfiniteScroll',
   props: {
@@ -17,8 +24,14 @@ export default {
     parentElement(): HTMLElement {
       return (this.$refs.root as HTMLElement).parentElement as HTMLElement
     },
-    threshold(): number {
-      return window.innerHeight
+    messageLoaderHeight(): number {
+      return (
+        (
+          document.querySelector(
+            `[data-id="message-scroll-loader"]`,
+          ) as HTMLElement
+        )?.offsetHeight ?? 0
+      )
     },
   },
   mounted() {
@@ -30,19 +43,21 @@ export default {
     this.parentElement.removeEventListener('touchmove', this.scrollHandler)
   },
   methods: {
-    scrollHandler() {
-      const offset =
-        this.parentElement.scrollHeight +
-        this.parentElement.scrollTop -
-        this.parentElement.getBoundingClientRect().height
+    scrollHandler: throttle(function (this: any) {
+      const contentPart =
+        (this.parentElement.scrollHeight - this.messageLoaderHeight) *
+        LOADING_TOLERANCE
 
-      if (this.isLoading || this.noMore || offset > this.threshold) {
+      if (
+        this.isLoading ||
+        this.noMore ||
+        this.parentElement.scrollTop > this.messageLoaderHeight + contentPart
+      ) {
         return
       }
+
       this.$emit('loadMore')
-    },
+    }, 100),
   },
 }
 </script>
-
-<style scoped lang="less" src="./InfiniteScroll.less"></style>

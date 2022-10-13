@@ -41,6 +41,7 @@
     <InteractablesSwitch
       v-model="storePin"
       :label="$t('pages.unlock.store_pin')"
+      show-label
     />
 
     <br />
@@ -67,7 +68,10 @@
 
   <UiVersion name version @click="toggleChangelogVisibility" />
 
-  <UiModal v-if="ui.modals.changelog">
+  <UiModal
+    v-if="ui.modals.changelog"
+    @close="toggleModal(ModalWindows.CHANGELOG)"
+  >
     <UiUpdateModal />
   </UiModal>
 

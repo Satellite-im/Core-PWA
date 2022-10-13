@@ -38,11 +38,10 @@
         <InteractablesInput
           v-model="name"
           :placeholder="$t('user.registration.username_placeholder')"
-          input-kind="text"
-          type="primary"
           :min-length="$Config.account.minLength"
           :max-length="$Config.account.maxLength"
           :invalid="isInvalidName && Boolean(error.length)"
+          autofocus
         />
       </div>
 
@@ -51,8 +50,6 @@
         <InteractablesInput
           v-model="status"
           :placeholder="$t('user.registration.status_placeholder')"
-          input-kind="text"
-          type="primary"
           :max-length="$Config.account.statusMaxLength"
           :invalid="isInvalidStatus && Boolean(error.length)"
         />

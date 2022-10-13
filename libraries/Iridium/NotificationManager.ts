@@ -11,7 +11,9 @@ import {
   NotificationsError,
 } from '~/libraries/Iridium/notifications/types'
 import { Notifications } from '~/utilities/Notifications'
+import SoundManager, { Sounds } from '~/libraries/SoundManager/SoundManager'
 
+const $Sounds = new SoundManager()
 export default class NotificationManager extends Emitter<Notification> {
   public ready: boolean = false
   public subscriptions: string[] = []
@@ -119,25 +121,29 @@ export default class NotificationManager extends Emitter<Notification> {
    * @method sendNotification
    */
   async sendNotification(notification: Exclude<Notification, 'id'>) {
+    const { onNotificationClick, ...iridiumNotification } = notification
+
     if (!iridium.connector) return
-    const notificationID = await iridium.connector.store(notification, {})
+    const notificationID = await iridium.connector.store(
+      iridiumNotification,
+      {},
+    )
     if (!notificationID) {
       throw new Error(NotificationsError.NOTIFICATION_NOT_SENT)
     }
     notification.id = notificationID.toString()
-    this.state.notifications = [...this.state.notifications, notification]
+    this.state.notifications = [
+      ...this.state.notifications,
+      iridiumNotification,
+    ]
     await this.save()
 
-    this.emit(`notifications/send`, {
-      notification,
-      from: iridium.connector.did,
-    })
     const browserNotification = new Notifications()
-    await browserNotification.sendNotifications(
-      notification.type!,
-      notification.title!,
-      notification.image!,
-      notification.description!,
-    )
+    await browserNotification.sendNotifications({ ...notification })
+
+    // To match the timing of the browser notification
+    setTimeout(() => {
+      $Sounds.playSound(Sounds.NEW_MESSAGE)
+    }, 1000)
   }
 }

@@ -5,7 +5,7 @@
   position: fixed;
   width: 350px;
   padding: 16px;
-  overflow: hidden;
+  box-shadow: @ui-shadow;
   // background: linear-gradient(
   //   to bottom,
   //   @flair-color 0%,
@@ -13,17 +13,37 @@
   //   #1c273a 36px,
   //   @darker 100%
   // );
-  background: @modal-gradient;
-  box-shadow: @ui-shadow;
+  .background-semitransparent-light();
   .round-corners();
+  .blur();
 
   .top {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 
-    .open-profile-button {
-      cursor: default;
+    .text-container {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    > *:not(.text-container) {
+      flex-shrink: 0;
+    }
+  }
+  .status-container {
+    position: relative;
+    display: flex;
+    .open-status-button {
+      padding: 4px 8px;
+      flex-grow: 1;
+      gap: 8px;
+      align-items: center;
+      .round-corners();
+      // todo - improve background and hover contrast
+      &:hover {
+        .background-semitransparent-lighter();
+      }
     }
   }
 }

@@ -51,13 +51,19 @@
       <TypographyText class="music-label">
         {{ $t('pages.settings.profile.accounts.displayMusic') }}
       </TypographyText>
-      <InteractablesSwitch v-model="account.displayMusic" />
+      <InteractablesSwitch
+        v-model="account.displayMusic"
+        :label="$t('pages.settings.profile.accounts.displayMusic')"
+      />
     </div>
     <div class="display-row">
       <TypographyText class="music-label">
         {{ $t('pages.settings.profile.accounts.displayOnProfile') }}
       </TypographyText>
-      <InteractablesSwitch v-model="account.displayOnProfile" />
+      <InteractablesSwitch
+        v-model="account.displayOnProfile"
+        :label="$t('pages.settings.profile.accounts.displayOnProfile')"
+      />
     </div>
   </div>
 </div>

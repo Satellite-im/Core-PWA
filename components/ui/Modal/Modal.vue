@@ -2,6 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { createFocusTrap, FocusTrap, Options } from 'focus-trap'
 
 export default Vue.extend({
   props: {
@@ -18,12 +19,32 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    fullscreen: {
+      type: Boolean,
+      default: false,
+    },
   },
-  created() {
-    this.addEventListener()
-  },
+  data: () => ({
+    trap: null as FocusTrap | null,
+  }),
   beforeDestroy() {
     this.removeEventListener()
+    this.trap?.deactivate()
+  },
+  mounted() {
+    const modal = this.$refs.modal as HTMLElement
+    const options: Options = {
+      allowOutsideClick: true,
+      escapeDeactivates: false,
+    }
+
+    // next tick for conditionally rendered buttons that aren't ready yet
+    this.$nextTick(() => {
+      this.trap = createFocusTrap(modal, options)
+      this.trap.activate()
+    })
+
+    this.addEventListener()
   },
   methods: {
     close() {

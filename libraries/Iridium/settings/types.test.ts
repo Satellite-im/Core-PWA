@@ -1,4 +1,4 @@
-import { themes, languages, defaultKeybinds, KeybindKeys } from './types'
+import { defaultKeybinds, KeybindKeys, languages, themes } from './types'
 
 describe('themes', () => {
   test('check themes export type', () => {

@@ -1,42 +1,42 @@
 .cta {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   height: 100%;
   max-width: @mobile-breakpoint; // matches breakpoint in components/ui/Modal/Modal.less
   padding: 32px;
-  background: @modal-gradient;
   color: @secondary-text;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   .sat-icon {
-    fill: @white;
-    margin: 0 auto @normal-spacing;
+    display: block;
+    fill: @text;
+    margin: 1rem auto;
     overflow: visible;
   }
 
-  .main-title {
+  .heading {
     text-align: center;
-    font-weight: 400;
-  }
-
-  .title {
-    color: @secondary-text;
-    margin-bottom: 32px;
-
-    &.sub {
-      margin-bottom: @normal-spacing;
-    }
+    margin-bottom: 2rem;
   }
 
   ul {
     display: flex;
     flex-direction: column;
     gap: @light-spacing;
-    list-style-type: disc;
-    margin-left: @normal-spacing;
+    margin-left: 1.5rem;
+    margin-top: 1rem;
+
+    li {
+      list-style-type: disc;
+    }
+  }
+
+  .horizontal-rule {
+    margin: 2rem 0;
   }
 
   .button {
-    margin-top: 32px;
+    margin-top: 2rem;
+    width: 100%;
   }
 }

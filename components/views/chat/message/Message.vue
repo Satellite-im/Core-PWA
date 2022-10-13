@@ -2,7 +2,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { ArchiveIcon } from 'satellite-lucide-icons'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
@@ -15,11 +14,9 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
-  components: {
-    ArchiveIcon,
-  },
   props: {
     item: {
       type: Object as PropType<ChatItem>,
@@ -34,6 +31,17 @@ export default Vue.extend({
       default: false,
     },
   },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
+  data: () => ({
+    users: iridium.users,
+    intersectionObserver: null as IntersectionObserver | null,
+  }),
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
@@ -52,9 +60,7 @@ export default Vue.extend({
       return this.$route.params.id
     },
     author(): User | undefined {
-      return this.message.from === iridium.id
-        ? (iridium.profile.state as User)
-        : iridium.users.state[this.message.from]
+      return this.users.getUser(this.message.from)
     },
     avatarSrc(): string | undefined {
       return (
@@ -113,8 +119,7 @@ export default Vue.extend({
           return [
             ...mainList,
             { text: this.$t('context.copy_msg'), func: this.copyMessage },
-            // { text: this.$t('context.edit'), func: this.editMessage },
-            // skipped due to edit message is now coming soon and this shouldn't appear on context menu
+            { text: this.$t('context.edit'), func: this.editMessage },
           ]
         }
         // another persons text message
@@ -125,6 +130,37 @@ export default Vue.extend({
       }
       return mainList
     },
+    actionsEnabled(): boolean {
+      return this.message.type !== 'call' && !this.message.status
+    },
+  },
+  mounted() {
+    const conversationEl = document.querySelector(
+      '.conversation-wrapper',
+    ) as HTMLElement
+    const messageEl = this.$refs.container as HTMLElement
+    this.intersectionObserver = new IntersectionObserver(
+      (events) => {
+        if (this.item.isFirstUnreadMessage) {
+          const messageBox = messageEl.getBoundingClientRect()
+          const conversationBox = conversationEl.getBoundingClientRect()
+          this.$emit('unreadMessage', {
+            message: this.message,
+            messageEl,
+            isAboveViewport: messageBox.bottom < conversationBox.top,
+            isBelowViewport: messageBox.top > conversationBox.bottom,
+          })
+        }
+      },
+      {
+        root: conversationEl,
+        threshold: 0,
+      },
+    )
+    this.intersectionObserver.observe(messageEl)
+  },
+  beforeDestroy() {
+    this.intersectionObserver?.disconnect()
   },
   methods: {
     /**
@@ -148,7 +184,7 @@ export default Vue.extend({
       if (!this.message.body) {
         return
       }
-      navigator.clipboard.writeText(this.message.body)
+      this.copyText(this.message.body)
     },
     setReplyChatbarMessage() {
       this.$store.commit('chat/setReplyChatbarMessage', {
