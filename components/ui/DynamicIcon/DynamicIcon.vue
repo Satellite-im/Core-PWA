@@ -17,7 +17,7 @@
       class="is-busy"
     >
       <rect width="12" height="12" rx="6" ry="6" />
-      <rect width="8" height="4" class="mask" rx="1" ry="1" y="4" x="2" />
+      <rect width="6" height="2" class="mask" rx="1" ry="1" y="5" x="3" />
     </svg>
     <svg
       v-else-if="icon === 'away'"

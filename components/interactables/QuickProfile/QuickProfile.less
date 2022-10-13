@@ -24,7 +24,14 @@
 
     .text-container {
       flex-grow: 1;
-      overflow: hidden;
+      box-sizing: border-box;
+      overflow-x: clip;
+
+      * {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
 
     > *:not(.text-container) {
