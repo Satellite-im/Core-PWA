@@ -22,8 +22,10 @@ export default Vue.extend({
     EditIcon,
   },
   setup(props, { emit }) {
+    // @ts-ignore
+    const { $store } = useNuxtApp()
     function close() {
-      emit('close')
+      $store.commit('ui/setQuickProfile', undefined)
     }
 
     handleEsc(close)
