@@ -1,18 +1,12 @@
-<div class="image-mask" @click="closeChatImageOverlay">
-  <div class="size-container">
-    <ui-image-container
-      class="image-container"
-      :nsfw="chatImageOverlay.nsfw"
-      @click.stop
-    >
-      <img :src="chatImageOverlay.dataURL" />
-    </ui-image-container>
-    <a
-      :href="chatImageOverlay.dataURL"
-      :download="chatImageOverlay.name"
-      :rel="$t('controls.download')"
-    >
-      {{ $t('controls.download') }}
-    </a>
-  </div>
+<div v-click-outside="closeChatImageOverlay">
+  <ui-image-container class="image-container" :nsfw="chatImageOverlay.nsfw">
+    <img :src="chatImageOverlay.dataURL" draggable="false" />
+  </ui-image-container>
+  <a
+    :href="chatImageOverlay.dataURL"
+    :download="chatImageOverlay.name"
+    :rel="$t('controls.download')"
+  >
+    {{ $t('controls.download') }}
+  </a>
 </div>

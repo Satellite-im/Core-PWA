@@ -30,7 +30,7 @@
     class="image-container"
     :nsfw="file.nsfw"
   >
-    <img :src="thumbnail" />
+    <img :src="thumbnail" draggable="false" />
   </ui-image-container>
   <file-icon v-else class="no-preview" size="68" />
   <a
