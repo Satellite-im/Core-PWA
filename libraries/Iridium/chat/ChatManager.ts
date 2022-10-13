@@ -38,6 +38,7 @@ import {
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { uploadFile } from '~/libraries/Iridium/utils'
+import { truthy } from '~/utilities/typeGuard'
 
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
@@ -604,13 +605,16 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     // (check all users in the userManager because there is the case of groups with people not in participants but still in the userManager list, for example when they left the group)
     await Promise.all(
       iridium.users.list
+        .filter(truthy)
         .filter(
           (u) =>
             !participants.includes(u.did) &&
             !iridium.friends.isFriend(u.did) &&
             !this.isUserInOtherGroups(u.did, [id]),
         )
-        .map((u) => iridium.users.userRemove(u.did, true)),
+        .map(async (u) => {
+          await iridium.users.userRemove(u.did, true)
+        }),
     )
     await this.deleteConversation(id)
   }
@@ -909,8 +913,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       return
     }
 
-    const index = conversationMessages.findIndex((msg) => msg.id === message.id)
-    if (index >= 0) conversationMessages.splice(index, 1)
+    const index = conversationMessages?.findIndex(
+      (msg) => msg.id === message.id,
+    )
+    if (index >= 0) conversationMessages?.splice(index, 1)
   }
 
   // Check if user is in other groups other than `exlude` groups.
