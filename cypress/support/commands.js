@@ -30,87 +30,72 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add(
-  'visitRootPage',
-  (isMobile = false, remainingAttempts = 3) => {
-    cy.deleteStorage()
-    cy.wait(1000)
-    // Pass arguments depending if the test is on mobile or desktop browser
-    if (isMobile === false) {
-      cy.visit('/')
-    } else if (isMobile === true) {
-      // Pass user agent with data for a mobile device
-      cy.on('window:before:load', (win) => {
-        Object.defineProperty(win.navigator, 'userAgent', {
-          value:
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-        })
-      })
-      // Use visit Mobile command instead of visit for mobile devices
-      cy.visit('/')
-    }
-    cy.get('body').then(($body) => {
-      if (
-        !($body.find('[data-cy=input-group]').length > 0) &&
-        remainingAttempts > 1
-      ) {
-        remainingAttempts -= 1
-        cy.visitRootPage(isMobile, remainingAttempts)
-      }
-    })
-  },
-)
-
-Cypress.Commands.add('deleteStorage', () => {
-  cy.removeLocalStorage('Satellite-Store')
+Cypress.Commands.add('visitRootPage', (isMobile = false) => {
+  //Clear localstorage, cookies, sessionstorage and indexedDB before starting
+  cy.clearLocalStorage()
+  cy.clearCookies()
   cy.window().then((win) => {
     win.sessionStorage.clear()
   })
-  cy.clearCookies()
-})
+  cy.window().then((win) => {
+    win.indexedDB.databases().then((r) => {
+      for (var i = 0; i < r.length; i++) win.indexedDB.deleteDatabase(r[i].name)
+    })
+  })
 
-Cypress.Commands.add(
-  'clearDatabase',
-  () =>
-    new Cypress.Promise(async (resolve) => {
-      const req = indexedDB.deleteDatabase('SatelliteDB')
-      req.onsuccess = function () {
-        resolve()
-      }
-    }),
-)
+  //Only if viewport is mobile, then pass this specific window setup
+  if (isMobile === true) {
+    // Pass user agent with data for a mobile device
+    cy.on('window:before:load', (win) => {
+      Object.defineProperty(win.navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+      })
+    })
+  }
+
+  // Visit root page and ensure that Choose Your Password is displayed
+  cy.visit('/')
+  cy.contains('Choose Your Password').should('be.visible')
+})
 
 //Create Account Commands
 
-Cypress.Commands.add('createAccount', (pin, username, isMobile = false) => {
-  cy.clearDatabase()
-  cy.visitRootPage(isMobile)
-  cy.url().should('contain', '#/auth/unlock')
-  cy.get('[data-cy=input-group]')
-    .should('be.visible')
-    .trigger('input')
-    .type(pin, { log: false }, { force: true })
-  cy.get('[data-cy=submit-input]').click()
-  cy.get('[data-cy=create-account-button]').click()
-  cy.get('.font-heading').should('contain', 'Recovery Seed')
-  cy.contains('I Saved It').click()
-  cy.validateUserInputIsDisplayed()
-  cy.get('[data-cy=username-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type(username)
-  cy.get('[data-cy=status-input]')
-    .should('be.visible')
-    .trigger('input')
-    .type('testing')
-  cy.get('[data-cy=sign-in-button]').click()
-  cy.welcomeModal(username)
-})
+Cypress.Commands.add(
+  'createAccount',
+  (pin, username, isMobile = false, savePin = false) => {
+    cy.visitRootPage(isMobile)
+    cy.url().should('contain', '#/auth/unlock')
+    cy.get('[data-cy=input-group]')
+      .should('be.visible')
+      .trigger('input')
+      .type(pin, { log: false }, { force: true })
+    if (savePin === true) {
+      cy.get('.switch-button').click().should('have.class', 'enabled')
+    } else {
+      cy.get('.switch-button').should('not.have.class', 'enabled')
+    }
+    cy.get('[data-cy=submit-input]').click()
+    cy.get('[data-cy=create-account-button]').click()
+    cy.get('.font-heading').should('contain', 'Recovery Seed')
+    cy.contains('I Saved It').click()
+    cy.validateUserInputIsDisplayed()
+    cy.get('[data-cy=username-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type(username)
+    cy.get('[data-cy=status-input]')
+      .should('be.visible')
+      .trigger('input')
+      .type('testing')
+    cy.get('[data-cy=sign-in-button]').click()
+    cy.welcomeModal(username)
+  },
+)
 
 Cypress.Commands.add(
   'createAccountPINscreen',
   (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.clearDatabase()
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
@@ -224,18 +209,32 @@ Cypress.Commands.add('welcomeModal', (username) => {
 
 //Import Account Commands
 
-Cypress.Commands.add('loginWithLocalStorage', (snapshot, pin) => {
-  cy.restoreLocalStorage(snapshot)
+Cypress.Commands.add('loginWithLocalStorage', (username) => {
+  //Clear localstorage, cookies, sessionstorage and indexedDB before starting
+  cy.clearLocalStorage()
+  cy.clearCookies()
+  cy.window().then((win) => {
+    win.sessionStorage.clear()
+  })
+  cy.window().then((win) => {
+    win.indexedDB.databases().then((r) => {
+      for (var i = 0; i < r.length; i++) win.indexedDB.deleteDatabase(r[i].name)
+    })
+  })
+
+  //Restore profile passed for localstorage
+  cy.restoreLocalStorage(username)
+
+  //Visit rootpage
   cy.visit('/')
-  cy.get('[data-cy=input-group]').trigger('input').type(pin)
-  cy.get('[data-cy="submit-input"]').click()
+
+  //Ensure chatpage is loaded
   cy.validateChatPageIsLoaded()
 })
 
 Cypress.Commands.add(
   'importAccount',
   (pin, recoverySeed, isMobile = false, savePin = false) => {
-    cy.clearDatabase()
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     cy.get('[data-cy=add-input]')
@@ -260,7 +259,6 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'importAccountPINscreen',
   (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.clearDatabase()
     cy.visitRootPage(isMobile)
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
@@ -304,6 +302,42 @@ Cypress.Commands.add('chatFeaturesProfileName', () => {
   // clicks on user name
   cy.get('[data-cy=user-name]').should('be.visible').click()
   cy.wait(1000)
+})
+
+Cypress.Commands.add('copyUserIDFromProfile', () => {
+  let userID
+
+  // Allowing Chrome Browser to have read and write access to clipboard
+  cy.wrap(
+    Cypress.automation('remote:debugger:protocol', {
+      command: 'Browser.grantPermissions',
+      params: {
+        permissions: ['clipboardReadWrite', 'clipboardSanitizedWrite'],
+        //make the permission trigger by allowing the current origin only
+        origin: window.location.origin,
+      },
+    }),
+  )
+
+  //Ensuring permissions for read were granted
+  cy.window()
+    .its('navigator.permissions')
+    .invoke('query', { name: 'clipboard-read' })
+    .its('state')
+    .should('equal', 'granted')
+
+  // Clicks on user name
+  cy.get('[data-cy=user-name]').should('be.visible').click()
+
+  //Validating that text messsage copied matches with actual clipboard value
+  cy.window()
+    .its('navigator.clipboard')
+    .invoke('readText')
+    .then((clipboardText) => {
+      userID = clipboardText
+    })
+
+  return userID
 })
 
 Cypress.Commands.add(
@@ -373,15 +407,17 @@ Cypress.Commands.add(
       .should('exist')
   },
 )
-Cypress.Commands.add('validateCharlimit', (text, assert) => {
-  cy.get('.charlimit')
-    .should('be.visible')
+Cypress.Commands.add('validateCharlimit', (text, error) => {
+  cy.get('[data-cy=chatbar-footer]')
+    .children()
     .should('contain', text)
     .then(($selector) => {
-      if (assert === true) {
-        cy.wrap($selector).should('have.class', 'is-error')
+      if (error === true) {
+        cy.wrap($selector).should('have.class', 'font-color-danger')
+        cy.get('[data-cy=chatbar-wrap]').should('have.class', 'is-error')
       } else {
-        cy.wrap($selector).should('not.have.class', 'is-error')
+        cy.wrap($selector).should('have.class', 'font-color-dark')
+        cy.get('[data-cy=chatbar-wrap]').should('not.have.class', 'is-error')
       }
     })
 })
@@ -461,13 +497,15 @@ Cypress.Commands.add('goToLastImageOnChat', (waitTime = 30000) => {
 // Chat - Send Files Commands
 
 Cypress.Commands.add('chatFeaturesSendFile', (filePath, filename) => {
-  cy.get('#quick-upload').selectFile(filePath, {
+  cy.get('[data-cy=chat-file-upload]').selectFile(filePath, {
     force: true,
   })
   cy.get('[data-cy=file-item]', { timeout: 30000 }).should('exist')
   cy.get('[data-cy=file-item-filename]').should('contain', filename)
   cy.get('[data-cy=send-message]').click() //sending image message
-  cy.get('[data-cy=file-item]', { timeout: 120000 }).should('not.exist')
+  cy.get('[data-cy=file-loader-container]', { timeout: 60000 }).should(
+    'not.exist',
+  )
 })
 
 // Chat - Context Menu Commands
@@ -517,38 +555,27 @@ Cypress.Commands.add('clickOutside', () => {
 
 Cypress.Commands.add('validateChatPageIsLoaded', (isMobile = false) => {
   if (isMobile === false) {
-    cy.get('[data-cy=user-name]', { timeout: 120000 }).should('exist')
+    cy.get('[data-cy=user-name]', { timeout: 30000 }).should('exist')
   } else if (isMobile === true) {
-    cy.get('#mobile-nav', { timeout: 120000 }).should('exist')
+    cy.get('#mobile-nav', { timeout: 30000 }).should('exist')
   }
 })
 
-Cypress.Commands.add('goToConversation', (user, isMobile = false) => {
-  cy.get('#app-wrap').then(($appWrap) => {
-    if (!$appWrap.hasClass('is-open')) {
-      cy.get('[data-cy=toggle-sidebar]').click()
+Cypress.Commands.add('goToConversation', (user) => {
+  //If sidebar is hidden, click on hamburger menu
+  cy.get('#app').then(($app) => {
+    if ($app.hasClass('hide-sidebars')) {
+      cy.get('[data-cy=hamburger-button]').click()
     }
   })
 
+  // Go to friend by choosing it from sidebar
   cy.get('[data-cy=sidebar-user-name]', { timeout: 60000 })
     .contains(user)
-    .then(($el) => {
-      cy.getAttached($el).click()
-    })
+    .click()
 
-  // Hide sidebar if not on mobile browser
-  if (isMobile === false) {
-    cy.get('[data-cy=hamburger-button]').click()
-
-    //Navigate through several pages before going to conversation
-    //As a workaround for the issue of message containers taking a lot of time to be loaded
-    cy.workaroundChatLoad(user)
-  }
-
-  //Wait until conversation is fully loaded
-  cy.get('[data-cy=message-container]', { timeout: 120000 })
-    .last()
-    .should('exist')
+  //Wait until chat page is loaded
+  cy.get('#conversation-container', { timeout: 30000 }).should('exist')
 })
 
 Cypress.Commands.add('goToNewChat', () => {
@@ -567,31 +594,25 @@ Cypress.Commands.add('goToNewChat', () => {
   cy.get('#conversation-container', { timeout: 30000 }).should('exist')
 })
 
-Cypress.Commands.add('workaroundChatLoad', (user) => {
-  //Note: This workaround only works for non mobile tests. Mobiles tests will be skipped for now
-
-  cy.get('[data-cy=toggle-sidebar]').click() //Click on toggle sidebar to display sidebar menu
-  cy.getAttached('[data-cy=sidebar-files]').click() //Go to files page
-  cy.getAttached('[data-cy=sidebar-friends]').click() //Go to friends page
-  cy.getAttached('[data-cy=sidebar-files]').click() // Return to files page
-  //Click on the conversation again
-  cy.get('[data-cy=sidebar-user-name]', { timeout: 30000 })
-    .contains(user)
-    .then(($el) => {
-      cy.getAttached($el).click()
-    })
-  cy.get('[data-cy=hamburger-button]').click() // Hide sidebar if not on mobile browser
-})
-
 // Chat - Hover on Icon Commands
 
-Cypress.Commands.add('hoverOnComingSoonIcon', (locator, expectedMessage) => {
-  cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
-  cy.get(locator).realHover()
-  cy.contains(expectedMessage).should('be.visible')
-  cy.wait(1000)
-  cy.get('body').realHover({ position: 'topLeft' })
-})
+Cypress.Commands.add(
+  'hoverOnComingSoonIcon',
+  (locator, expectedMessage, parent = false) => {
+    if (parent) {
+      cy.get(locator)
+        .should('be.visible')
+        .parents('.coming-soon')
+        .should('exist')
+    } else {
+      cy.get(locator).should('be.visible').find('.coming-soon').should('exist')
+    }
+    cy.get(locator).realHover()
+    cy.contains(expectedMessage).should('be.visible')
+    cy.wait(1000)
+    cy.get('body').realHover({ position: 'topLeft' })
+  },
+)
 
 Cypress.Commands.add('hoverOnActiveIcon', (locator, expectedMessage) => {
   cy.get(locator).should('be.visible').realHover()
@@ -621,10 +642,8 @@ Cypress.Commands.add('validateComingSoonModal', () => {
   cy.get('.sat-icon').should('be.visible')
   cy.contains('Coming Soon')
     .should('be.visible')
-    .should('have.class', 'main-title')
-  cy.contains('Stay tuned for these upcoming features:')
-    .should('be.visible')
-    .should('have.class', 'sub')
+    .should('have.class', 'heading')
+  cy.contains('Stay tuned for these upcoming features:').should('be.visible')
   cy.contains('Watch Parties').should('be.visible')
   cy.contains('Servers').should('be.visible')
   cy.contains('Community Servers Core').should('be.visible')
@@ -665,7 +684,7 @@ Cypress.Commands.add('validateGlyphsModal', () => {
 })
 
 Cypress.Commands.add('closeModal', (locator) => {
-  cy.get(locator).siblings('[data-cy=close-button]').click()
+  cy.get('body').type('{esc}')
   cy.get(locator).should('not.exist')
 })
 
@@ -799,43 +818,50 @@ Cypress.Commands.add('sendMessageWithMarkdown', (text, markdown) => {
   cy.get('[data-cy=editable-input]')
     .should('be.visible')
     .trigger('input')
-    .paste({
-      pasteType: 'text',
-      pastePayload: textMarkdown,
-    })
+    .type(textMarkdown)
   // Assert the text message is displayed before sending
   cy.get('[data-cy=editable-input]')
     .should('have.text', textMarkdown)
     .then(() => {
       cy.get('[data-cy=send-message]').click() //sending text message
     })
-  // Wait until loading indicator disappears
-  cy.get('[data-cy=loading-indicator]', { timeout: 60000 }).should('not.exist')
+
   // Depending on the markdown passed, assert the text from the corresponding HTML tag
-  if (markdown === '*' || markdown === '_') {
-    cy.get('em').last().should('have.text', text)
-  } else if (markdown === '**') {
-    cy.get('strong').last().should('have.text', text)
-  } else if (markdown === '__') {
-    cy.get('u').last().should('have.text', text)
-  } else if (markdown === '`') {
-    cy.get('code').last().should('have.text', text)
-  } else if (markdown === '***') {
-    cy.get('strong')
-      .last()
-      .should('have.text', text)
-      .parent('em') // Assert that text have a parent EM HTML tag
-      .should('exist')
-  } else if (markdown === '~~') {
-    cy.get('del').last().should('have.text', text)
-  } else if (markdown === '||') {
-    cy.get('.spoiler-container')
-      .last()
-      .should('not.have.class', 'spoiler-open')
-      .click() // Assert that after clicking the spoiler, text is displayed
-      .should('have.class', 'spoiler-open')
-      .find('.spoiler')
-      .should('have.text', text)
+  switch (markdown) {
+    case '*':
+    case '_':
+      cy.get('em').last().should('have.text', text)
+      break
+    case '**':
+      cy.get('strong').last().should('have.text', text)
+      break
+    case '__':
+      cy.get('u').last().should('have.text', text)
+      break
+    case '`':
+      cy.get('code').last().should('have.text', text)
+      break
+    case '***':
+      cy.get('strong')
+        .last()
+        .should('have.text', text)
+        .parent('em') // Assert that text have a parent EM HTML tag
+        .should('exist')
+      break
+    case '~~':
+      cy.get('del').last().should('have.text', text)
+      break
+    case '||':
+      cy.get('.spoiler-container')
+        .last()
+        .should('not.have.class', 'spoiler-open')
+        .click() // Assert that after clicking the spoiler, text is displayed
+        .should('have.class', 'spoiler-open')
+        .find('.spoiler')
+        .should('have.text', text)
+      break
+    default:
+      cy.get('[data-cy=chat-message]').contains(text)
   }
 })
 
@@ -941,4 +967,52 @@ Cypress.Commands.add('getAttached', (selector) => {
       expect(Cypress.dom.isDetached($el)).to.be.false
     })
     .then(() => cy.wrap($el))
+})
+
+// Friend Requests Commands
+
+Cypress.Commands.add('sendFriendRequest', (friendID, friendName) => {
+  cy.get('[data-cy=add-friend-page]')
+    .find('[data-cy=input-group]')
+    .click()
+    .trigger('input')
+    .type(friendID)
+  cy.get('[data-cy=add-friend-page]')
+    .find('[data-cy=friend]')
+    .should('be.visible')
+    .then(() => {
+      cy.get('[data-cy=friend-name]').should('contain', friendName)
+      cy.get('[data-cy=add-friend-page]')
+        .find('[data-cy=friend-confirm-button]')
+        .click()
+    })
+  cy.contains('Friend request successfully sent!').should('be.visible')
+})
+
+Cypress.Commands.add(
+  'acceptUpcomingFriendRequest',
+  (upcomingFriendName, pendingReqs = 1) => {
+    cy.get('[data-cy=friend-requests-page]')
+      .find('[data-cy=friend-name]')
+      .contains(upcomingFriendName)
+      .parents('[data-cy=friend]')
+      .find('[data-cy=friend-confirm-button]')
+      .click()
+    if (pendingReqs === 1) {
+      cy.contains('No requests found').should('be.visible')
+      cy.contains('You have no pending friend requests').should('be.visible')
+    }
+  },
+)
+
+Cypress.Commands.add('validateRequestsBadge', (pendingReqs = '1') => {
+  cy.get('[data-cy=tab-element]')
+    .contains('Requests')
+    .find('[data-cy=tab-badge]')
+    .should('contain', pendingReqs)
+})
+
+Cypress.Commands.add('goToFriendsPage', (page) => {
+  cy.get('[data-cy=sidebar-friends]').click()
+  cy.get('[data-cy=tab-element]').contains(page).click()
 })

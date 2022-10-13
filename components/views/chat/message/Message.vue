@@ -13,13 +13,29 @@ import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
-import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   props: {
-    item: {
-      type: Object as PropType<ChatItem>,
+    message: {
+      type: Object as PropType<ConversationMessage>,
       required: true,
+    },
+    replies: {
+      type: Array as PropType<Array<ConversationMessage>>,
+      required: true,
+    },
+    isScrolling: {
+      type: Boolean,
+      default: false,
+    },
+    isFirstUnreadMessage: {
+      type: Boolean,
+      default: false,
+    },
+    isLastCallMessage: {
+      type: Boolean,
+      default: false,
     },
     showHeader: {
       type: Boolean,
@@ -29,6 +45,13 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+  },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
   },
   data: () => ({
     users: iridium.users,
@@ -42,12 +65,6 @@ export default Vue.extend({
     ...mapGetters({
       getTimestamp: 'settings/getTimestamp',
     }),
-    message(): ConversationMessage {
-      return this.item.message
-    },
-    replies(): ConversationMessage[] {
-      return this.item.replies
-    },
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
@@ -132,8 +149,8 @@ export default Vue.extend({
     ) as HTMLElement
     const messageEl = this.$refs.container as HTMLElement
     this.intersectionObserver = new IntersectionObserver(
-      (events) => {
-        if (this.item.isFirstUnreadMessage) {
+      () => {
+        if (this.isFirstUnreadMessage) {
           const messageBox = messageEl.getBoundingClientRect()
           const conversationBox = conversationEl.getBoundingClientRect()
           this.$emit('unreadMessage', {
@@ -150,6 +167,19 @@ export default Vue.extend({
       },
     )
     this.intersectionObserver.observe(messageEl)
+
+    if (!this.$refs['message-row']) return
+    Array.from(
+      (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
+        'spoiler-container',
+      ),
+    ).forEach((spoiler) => {
+      spoiler.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        spoiler.classList.add('spoiler-open')
+      })
+    })
   },
   beforeDestroy() {
     this.intersectionObserver?.disconnect()
@@ -176,7 +206,7 @@ export default Vue.extend({
       if (!this.message.body) {
         return
       }
-      navigator.clipboard.writeText(this.message.body)
+      this.copyText(this.message.body)
     },
     setReplyChatbarMessage() {
       this.$store.commit('chat/setReplyChatbarMessage', {

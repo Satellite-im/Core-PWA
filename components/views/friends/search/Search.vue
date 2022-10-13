@@ -15,7 +15,7 @@
       {{ error }}
     </TypographyText>
     <UiLoadersLoadingBar v-else-if="searching" />
-    <button v-else-if="!query" class="id-button" @click="copyId">
+    <button v-else-if="!query" class="id-button" @click="copyText(shortID)">
       <TypographyText color="dark">
         {{ $t('friends.copy_your_id') }}
       </TypographyText>
@@ -41,8 +41,16 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 import { RootState } from '~/types/store/store'
 import { isDid, isShortDid } from '~/libraries/Iridium/utils'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   data() {
     return {
       error: '' as string | TranslateResult,
@@ -124,11 +132,6 @@ export default Vue.extend({
     onFriendRequestSent() {
       this.query = ''
       this.$toast.show(this.$t('friends.request_sent') as string)
-    },
-    copyId() {
-      if (!iridium.connector) return
-      navigator.clipboard.writeText(this.shortID)
-      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

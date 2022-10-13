@@ -1,8 +1,10 @@
 <template>
-  <div
+  <component
+    :is="clickable ? 'button' : 'div'"
     class="user-state"
     data-cy="user-state"
     :style="`width:${size}px; height:${size}px`"
+    @click="clickable && $emit('click', $event)"
   >
     <svg width="40" height="40" viewBox="0 0 40 40" class="mask">
       <foreignObject x="0" y="0" width="40" height="40" :mask="outermask">
@@ -31,7 +33,7 @@
         </foreignObject>
       </svg>
     </svg>
-  </div>
+  </component>
 </template>
 
 <script lang="ts">
@@ -56,6 +58,10 @@ export default Vue.extend({
     showStatus: {
       type: Boolean,
       default: true,
+    },
+    clickable: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

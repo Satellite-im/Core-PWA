@@ -3,7 +3,7 @@
   class="chat-message-container"
   :class="{
     'show-header': showHeader,
-    'first-unread-message': item.isFirstUnreadMessage,
+    'first-unread-message': isFirstUnreadMessage,
   }"
   :data-message-id="message.id"
 >
@@ -32,10 +32,15 @@
     </template>
     <!-- todo end -->
     <div v-if="message.type !== 'call'" class="timestamp">{{ timestamp }}</div>
-    <UiContextMenu class="body" :items="contextMenuValues">
-      <MessageMarkdown
+    <UiContextMenu
+      v-if="message.body || message.glyph"
+      class="body"
+      :items="contextMenuValues"
+    >
+      <span
         v-if="message.body && !isEditing"
-        :text="markdownToHtml"
+        ref="message-row"
+        v-html="markdownToHtml"
         class="markdown"
         :class="{ bigmoji: containsOnlyEmoji, pending: message.status === 'pending', failed: message.status === 'failed' }"
         data-cy="chat-message"
@@ -60,7 +65,7 @@
         :class="{ pending: message.status === 'pending', failed: message.status === 'failed' }"
       />
       <MessageActions
-        v-if="actionsEnabled"
+        v-if="!isScrolling && actionsEnabled"
         :setReplyChatbarMessage="setReplyChatbarMessage"
         :emojiReaction="emojiReaction"
         :editMessage="editMessage"
@@ -71,12 +76,12 @@
     <MessageCallDirection
       v-if="message.type === 'call'"
       :message="message"
-      :isLastCallMessage="item.isLastCallMessage"
+      :isLastCallMessage="isLastCallMessage"
     />
     <MessageCall
       v-if="message.type === 'call'"
       :message="message"
-      :isLastCallMessage="item.isLastCallMessage"
+      :isLastCallMessage="isLastCallMessage"
     />
     <MessageAttachments
       v-if="message.attachments.length"

@@ -28,15 +28,14 @@ export default Vue.extend({
 <style scoped lang="less">
 .message-loader {
   .message-loader-item {
-    &:extend(.full-width);
     display: flex;
   }
 
   .placeholder-profile {
     position: relative;
     overflow: hidden;
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     border-radius: @full;
     background: rgba(36, 40, 57, 0.5);
     margin-top: 0.5rem;
@@ -57,7 +56,6 @@ export default Vue.extend({
         rgba(34, 44, 63, 0.5) @half,
         transparent @full
       );
-      animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
   .right {
@@ -98,7 +96,6 @@ export default Vue.extend({
         rgba(34, 44, 63, 0.5) @half,
         transparent @full
       );
-      animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
 }

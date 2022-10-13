@@ -9,6 +9,8 @@ export type User = {
   photoHash?: string | CID
   accountUrl?: string
   about?: string
+  location?: string
+  note?: string
 }
 
 export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'

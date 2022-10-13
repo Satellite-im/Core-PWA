@@ -1,34 +1,13 @@
-.image-mask {
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.75);
-  &:extend(.second-layer);
-  &:extend(.absolute-coverage);
+img {
+  max-height: 80vh;
+  max-width: 80vw;
+  height: auto;
+}
 
-  .size-container {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-
-    .image-container {
-      display: flex;
-
-      img {
-        &:extend(.round-corners);
-        max-height: 80vh;
-        max-width: 80vw;
-        height: auto;
-      }
-    }
-    a {
-      color: @text-muted;
-      display: flex;
-      margin-right: auto;
-      &:hover,
-      &:focus {
-        color: @white;
-        text-decoration: underline;
-      }
-    }
+a {
+  color: @text-muted;
+  &:hover {
+    color: @white;
+    text-decoration: underline;
   }
 }

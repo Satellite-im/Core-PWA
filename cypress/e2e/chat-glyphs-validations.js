@@ -1,14 +1,21 @@
-describe.skip('Chat - Sending Glyphs Tests', () => {
+let secondUserName
+
+describe('Chat - Sending Glyphs Tests', () => {
   before(() => {
-    // Restore Localstorage Snapshots for next specs
-    cy.restoreLocalStorage('Chat User A')
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
+    })
   })
-  it('Send a glyph on chat', { retries: 2 }, () => {
+
+  it('Send a glyph on chat', () => {
     // Import account from localstorage
-    cy.loginWithLocalStorage('Chat User A', '12345')
+    cy.loginWithLocalStorage('Chat User A')
 
     // Go to a Conversation
-    cy.goToNewChat()
+    cy.goToConversation(secondUserName)
 
     //Send first glyph from Astrobunny pack
     cy.chatFeaturesSendGlyph()
@@ -46,12 +53,9 @@ describe.skip('Chat - Sending Glyphs Tests', () => {
     cy.closeModal('[data-cy=modal-cta]')
   })
 
-  //Skipped until bug #5069 - Modals extra close icon is fixed
-  it.skip('Validate glyph pack modal can be closed', () => {
+  it('Validate glyph pack modal can be closed', () => {
     cy.goToLastGlyphOnChat().should('be.visible').click()
     cy.get('[data-cy=glyphs-modal]').should('be.visible')
-    cy.closeModal('[data-cy=glyphs-modal]').then(() => {
-      cy.get('[data-cy=glyphs-modal]').should('not.exist')
-    })
+    cy.closeModal('[data-cy=glyphs-modal]')
   })
 })

@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
-import { debounce } from 'lodash'
+import { debounce, throttle } from 'lodash'
 import {
   ChevronDownIcon,
   KeyIcon,
@@ -52,6 +52,8 @@ export default Vue.extend({
       isUnreadAboveViewport: false,
       isUnreadBelowViewport: false,
       unreadMarkerMessageId: null as string | null,
+      isScrolling: false,
+      timeoutScrolling: undefined as undefined | NodeJS.Timer,
     }
   },
   computed: {
@@ -101,7 +103,7 @@ export default Vue.extend({
         const timeDiff = prevMessage ? message.at - prevMessage.at : 0
         const isNextDay = prevMessage
           ? !this.$dayjs(prevMessage.at).isSame(message.at, 'day')
-          : false
+          : true
         const lastReadAt = this.conversation.lastReadAt
         const isFirstUnreadMessage =
           !message.status &&
@@ -204,18 +206,6 @@ export default Vue.extend({
     window.addEventListener('blur', this.handleBlur)
     window.addEventListener('focus', this.handleFocus)
 
-    const container = this.$refs.container as HTMLElement
-    const messages = this.$refs.messages as HTMLElement
-    if (!container || !messages) {
-      return
-    }
-    container.addEventListener('scroll', this.onScroll)
-    this.resizeContainerObserver = new ResizeObserver(() => {
-      if (this.isLockedToBottom) {
-        this.scrollToBottom()
-      }
-    })
-    this.resizeContainerObserver.observe(container)
     // todo - fix type definition, can be undefined on mobile
     if (this.conversationId) {
       iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
@@ -223,6 +213,19 @@ export default Vue.extend({
 
     // Set active conversation ID
     iridium.chat.ephemeral.activeConversationId = this.conversationId
+
+    const container = this.$refs.container as HTMLElement
+    const messages = this.$refs.messages as HTMLElement
+    if (!container || !messages) {
+      return
+    }
+
+    this.resizeContainerObserver = new ResizeObserver(() => {
+      if (this.isLockedToBottom) {
+        this.scrollToBottom()
+      }
+    })
+    this.resizeContainerObserver.observe(container)
   },
   beforeDestroy() {
     window.removeEventListener('blur', this.handleBlur)
@@ -234,14 +237,34 @@ export default Vue.extend({
   },
   methods: {
     onScroll: debounce(function (this: any) {
-      const container = this.$refs.container as HTMLElement
+      const container = this.$refs.container as HTMLElement | null
+      if (!container) return
       this.isLockedToBottom =
         container.scrollTop + container.clientHeight >=
         container.scrollHeight - 1
     }, 100),
+    // Dont trigger this behaviour when dragging the scrollbar
+    onWheelScroll: throttle(function (this: any) {
+      this.isScrolling = true
+      clearTimeout(this.timeoutScrolling)
+      this.timeoutScrolling = setTimeout(() => {
+        this.isScrolling = false
+      }, 200)
+      const container = this.$refs.container as HTMLElement | null
+      if (!container) return
+      if (container.scrollTop === 0) {
+        const el = document.querySelector(
+          `[data-id="message-scroll-loader"]`,
+        ) as HTMLElement | null
+
+        if (!el) return
+        el.scrollIntoView(false)
+      }
+    }, 100),
     scrollToBottom() {
       this.$nextTick(() => {
-        const container = this.$refs.container as HTMLElement
+        const container = this.$refs.container as HTMLElement | null
+        if (!container) return
         container.scrollTop = container.scrollHeight
       })
     },
@@ -255,21 +278,34 @@ export default Vue.extend({
       // TODO: we'll want to instead call iridium in this method once paginated
       // fetching is added, for now we'll just take a slice.
       this.isLoadingMore = true
+      const lastMessage = this.chatItems[0]
       setTimeout(() => {
-        this.numMessages += MESSAGE_PAGE_SIZE
         this.isLoadingMore = false
-        const container = this.$refs.container as HTMLElement
+        this.numMessages += MESSAGE_PAGE_SIZE
+        const container = this.$refs.container as HTMLElement | null
+        if (!container) return
+
         const currentScrollTop = container.scrollTop
         const currentScrollHeight = container.scrollHeight
+        const lastMessageOffsetTop = this.getMessageOffsetTop(
+          lastMessage.message.id,
+        )
+
         this.$nextTick(() => {
           container.scrollTop =
-            // in case the scrollHeight has changed in the meanwhile (new messages, etc..), make up the difference
             container.scrollHeight -
             currentScrollHeight +
             // in case the user has scrolled in the meanwhile, make up the difference
-            currentScrollTop
+            currentScrollTop -
+            // in case the user has scrolled beyond the loaders, lets reset the scroll position above the lastMessage
+            Math.min(
+              container.scrollTop +
+                container.clientHeight -
+                lastMessageOffsetTop,
+              0,
+            )
         })
-      }, 1000)
+      }, Math.random() * 1500)
     },
     onUnreadMessage({
       message,
@@ -314,6 +350,25 @@ export default Vue.extend({
       this.isUnreadAboveViewport = false
       this.isUnreadBelowViewport = false
       iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
+    },
+    getMessageOffsetTop(id: string) {
+      let offsetTop = 0
+      const el = document.querySelector(
+        `[data-message-id="${id}"]`,
+      ) as HTMLElement | null
+      if (el) {
+        const elBody = el.querySelector('.body') as HTMLElement
+
+        const currentLastMessage = this.chatItems.find(
+          (i) => i.message.id === id,
+        )
+        offsetTop = // take the offsetTop from the body only if the currentLastMessage does not have to show the header
+          elBody && !currentLastMessage?.showHeader
+            ? elBody.offsetTop
+            : el.offsetTop
+      }
+
+      return offsetTop
     },
   },
 })

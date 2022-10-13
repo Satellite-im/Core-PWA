@@ -49,6 +49,12 @@ export default Vue.extend({
   methods: {
     async confirm(userData: UserRegistrationData) {
       try {
+        const timeout = setTimeout(() => {
+          this.$store.commit('ui/toggleErrorNetworkModal', {
+            state: true,
+            action: () => this.confirm(userData),
+          })
+        }, this.$Config.connection.timeout)
         await this.$store.dispatch('accounts/registerUser', {
           name: userData.username,
           image: userData.photoHash,
@@ -58,6 +64,7 @@ export default Vue.extend({
           ready: iridium.ready,
         })
         const onReady = () => {
+          clearTimeout(timeout)
           this.$router.replace(
             this.$device.isMobile ? '/mobile/chat' : '/friends',
           )

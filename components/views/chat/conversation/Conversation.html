@@ -1,16 +1,33 @@
 <div class="conversation-wrapper">
   <!-- dont change the 'conversation-container' id -->
-  <div id="conversation-container" class="conversation" ref="container">
-    <UiBanner v-if="noMore">
-      <template #icon><key-icon size="1x" /></template>
-      <template #header>{{$t('conversation.encrypted')}}</template>
-    </UiBanner>
+  <div
+    id="conversation-container"
+    class="conversation"
+    ref="container"
+    @scroll="onScroll"
+    @wheel.passive="onWheelScroll"
+    @touchmove.passive="onWheelScroll"
+  >
     <UiChatInfiniteScroll
       :isLoading="isLoadingMore"
       :noMore="noMore"
       @loadMore="loadMore"
     />
     <div class="messages" ref="messages">
+      <template v-if="noMore">
+        <UiBanner>
+          <template #icon><key-icon size="1x" /></template>
+          <template #header>{{$t('conversation.encrypted')}}</template>
+        </UiBanner>
+        <div class="notice-text">
+          {{ $t('pages.chat.infinite_scroll.no_more') }}
+        </div>
+      </template>
+      <UiLoadersMessage
+        v-if="!noMore"
+        data-id="message-scroll-loader"
+        :count="20"
+      />
       <template v-for="(item, i) of chatItems">
         <TypographyHorizontalRuleText
           v-if="item.isNextDay"
@@ -22,8 +39,12 @@
         />
         <Message
           :key="item.message.id"
-          :item="item"
+          :message="item.message"
+          :replies="item.replies"
+          :isLastCallMessage="item.isLastCallMessage"
+          :isFirstUnreadMessage="item.isFirstUnreadMessage"
           :showHeader="item.showHeader"
+          :isScrolling="isScrolling"
           @unreadMessage="onUnreadMessage"
         />
       </template>

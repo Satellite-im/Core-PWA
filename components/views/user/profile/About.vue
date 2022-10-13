@@ -1,28 +1,21 @@
 <template>
   <div class="about">
-    <div>
-      <TypographyTitle :text="$t('modal.profile.about.me')" :size="6" />
-      <TypographyText>Lorem ipsum dolor</TypographyText>
-    </div>
-    <div>
-      <TypographyTitle :text="$t('modal.profile.about.location')" :size="6" />
-      <TypographyText>Lorem ipsum dolor</TypographyText>
-    </div>
-    <div>
-      <TypographyTitle :text="$t('modal.profile.about.add_note')" :size="6" />
-      <TypographyText class="loading">
-        {{ note }}
+    <TypographyText v-if="user?.about"> {{ user.about }}</TypographyText>
+    <div v-if="user?.location">
+      <TypographyText as="h4">
+        {{ $t('modal.profile.about.location') }}
       </TypographyText>
-      <div class="row-wrapper">
-        <InteractablesEditable
-          v-model="note"
-          :placeholder="$t('modal.profile.about.click_note')"
-          :enabled="editing"
-        />
-        <InteractablesButton @click="action()">
-          <edit-icon size="1x" />
-        </InteractablesButton>
-      </div>
+      <TypographyText>{{ user.location }}</TypographyText>
+    </div>
+    <div v-if="!isMe">
+      <TypographyText as="h4">
+        {{ $t('modal.profile.about.add_note') }}
+      </TypographyText>
+      <InteractablesEditable
+        v-model="note"
+        :placeholder="$t('modal.profile.about.click_note')"
+        :enabled="editing"
+      />
     </div>
   </div>
 </template>
@@ -30,49 +23,39 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { EditIcon } from 'satellite-lucide-icons'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
-  components: {
-    EditIcon,
-  },
   data() {
     return {
-      observer: null as ResizeObserver | null,
-      note: '' as string,
-      editing: false as boolean,
+      note: '' as User['note'],
+      editing: false,
     }
   },
   computed: {
-    ...mapState(['friends', 'ui']),
+    ...mapState({
+      user: (state) => (state as RootState).ui.fullProfile,
+    }),
+    isMe(): boolean {
+      return !!this.user?.did && iridium.profile.state?.did === this.user.did
+    },
   },
   methods: {
-    action() {
-      if (this.editing) {
-        // TODO: save note
-        this.editing = false
-        return
-      }
-
-      this.editing = true
+    setNote() {
+      // TODO update note
+      this.editing = false
     },
   },
 })
 </script>
 
 <style scoped lang="less">
-.accounts {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
-  gap: @normal-spacing;
-}
-
-.row-wrapper {
+.about {
   display: flex;
-  align-items: center;
-}
-
-.loading {
-  cursor: progress;
+  flex-direction: column;
+  gap: 1rem;
+  word-break: break-word;
 }
 </style>

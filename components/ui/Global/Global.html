@@ -24,16 +24,6 @@
       <WalletPopup />
     </UiModal>
     <!-- <UiModal
-      v-if="ui.modals.createServer"
-      :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
-      :title="$t('servers.create.heading')"
-    >
-      <ServersCreate
-        v-click-outside="() => toggleModal(ModalWindows.CREATE_SERVER)"
-        :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
-      />
-    </UiModal> -->
-    <!-- <UiModal
       v-if="ui.modals.error"
       :title="$t('popups.error.title')"
       @close="toggleModal(ModalWindows.ERROR)"
@@ -64,10 +54,10 @@
       />
     </UiModal>
     <UiModal
-      v-if="ui.modals.userProfile"
-      @close="toggleModal(ModalWindows.USER_PROFILE)"
+      v-if="ui.fullProfile"
+      @close="$store.commit('ui/setFullProfile', undefined)"
     >
-      <UserProfile @close="toggleModal(ModalWindows.USER_PROFILE)" />
+      <UserProfile @close="$store.commit('ui/setFullProfile', undefined)" />
     </UiModal>
     <UiModal
       v-if="ui.modals.renameFile"
@@ -81,7 +71,13 @@
     >
       <UiUpdateModal />
     </UiModal>
-    <UiChatImageOverlay v-if="ui.chatImageOverlay" />
+    <UiModal
+      v-if="ui.chatImageOverlay"
+      fullscreen
+      @close="$store.commit('ui/setChatImageOverlay', undefined)"
+    >
+      <UiChatImageOverlay />
+    </UiModal>
     <UiModal
       v-if="files.preview"
       :showCloseButton="false"

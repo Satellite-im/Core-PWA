@@ -7,7 +7,9 @@
     :class="{active: route === tab.route}"
   >
     {{tab.text}}
-    <TypographyTag v-if="tab.badge" small> {{tab.badge}} </TypographyTag>
+    <TypographyTag v-if="tab.badge" data-cy="tab-badge" small>
+      {{tab.badge}}
+    </TypographyTag>
   </button>
   <slot />
 </div>

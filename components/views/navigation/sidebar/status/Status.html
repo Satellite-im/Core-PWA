@@ -1,5 +1,5 @@
-<div class="status">
-  <UiUserState :user="profile" />
+<div class="status" ref="status">
+  <UiUserState :user="profile" clickable @click="openQuickProfile" />
   <div class="user-info">
     <button class="name" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
       <TypographyText class="ellipsis" as="h4" data-cy="user-name">

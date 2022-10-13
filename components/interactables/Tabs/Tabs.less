@@ -1,10 +1,9 @@
 .tabs {
   display: flex;
   gap: 32px;
-  margin-right: auto;
-  justify-content: flex-start;
-  flex-grow: 1;
   user-select: none;
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(@gray, 0.5);
 
   .tab {
     display: flex;
@@ -22,6 +21,12 @@
 @media only screen and (max-width: @mobile-breakpoint) {
   .tabs {
     gap: @normal-spacing;
+    padding: 0;
+
+    .tab {
+      flex: 1;
+      justify-content: center;
+    }
   }
 }
 

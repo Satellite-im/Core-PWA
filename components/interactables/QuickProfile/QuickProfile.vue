@@ -2,22 +2,44 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { ArrowRightIcon } from 'satellite-lucide-icons'
-import { User } from '~/libraries/Iridium/users/types'
+import {
+  ArrowRightIcon,
+  ChevronRightIcon,
+  EditIcon,
+} from 'satellite-lucide-icons'
+import { createFocusTrap, FocusTrap, Options } from 'focus-trap'
+import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { handleEsc } from '~/components/compositions/events'
 
 export default Vue.extend({
   components: {
     ArrowRightIcon,
+    ChevronRightIcon,
+    EditIcon,
   },
-  data() {
+  setup(props, { emit }) {
+    // @ts-ignore
+    const { $store } = useNuxtApp()
+    function close() {
+      $store.commit('ui/setQuickProfile', undefined)
+    }
+
+    handleEsc(close)
+
     return {
-      text: '',
+      close,
     }
   },
+  data: () => ({
+    text: '',
+    isStatusMenuVisible: false,
+    users: iridium.users,
+    trap: null as FocusTrap | null,
+  }),
   computed: {
     ...mapState({
       quickProfile: (state) => (state as RootState).ui.quickProfile,
@@ -25,9 +47,8 @@ export default Vue.extend({
     user(): User | undefined {
       return this.quickProfile?.user
     },
-    src(): string {
-      const hash = this.user?.photoHash
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    isMe(): boolean {
+      return iridium.id === this.user?.did
     },
     conversationId(): Conversation['id'] | undefined {
       if (!this.user) {
@@ -35,13 +56,30 @@ export default Vue.extend({
       }
       return iridium.chat.directConversationIdFromDid(this.user.did)
     },
-    self(): boolean {
-      return iridium.id === this.user?.did
+    status(): UserStatus {
+      if (!this.user?.did) {
+        return 'offline'
+      }
+      return this.isMe
+        ? 'online'
+        : this.users?.ephemeral.status[this.user.did] ?? 'offline'
     },
+  },
+  beforeDestroy() {
+    this.trap?.deactivate()
   },
   mounted() {
     const quick = this.$refs.quick as HTMLElement
-    quick.focus()
+
+    // non friend quick profiles do not have buttons. will add profile link later and remove this check
+    if (this.conversationId || this.isMe) {
+      const options: Options = {
+        allowOutsideClick: true,
+        escapeDeactivates: false,
+      }
+      this.trap = createFocusTrap(quick, options)
+      this.trap.activate()
+    }
 
     if (this.$device.isDesktop && this.quickProfile) {
       quick.style.top = `${this.quickProfile.position.y}px`
@@ -50,9 +88,6 @@ export default Vue.extend({
     this.handleOverflow()
   },
   methods: {
-    close() {
-      this.$store.commit('ui/setQuickProfile', undefined)
-    },
     handleOverflow() {
       if (!this.quickProfile || this.$device.isMobile) {
         return
@@ -74,18 +109,12 @@ export default Vue.extend({
       }
     },
     sendMessage() {
-      if (!this.user || !this.text.length || !this.conversationId) {
+      if (!this.user || !this.conversationId) {
         return
       }
-
-      if (this.conversationId !== this.$route.params.id) {
-        this.$router.push(
-          this.$device.isMobile
-            ? `/mobile/chat/${this.conversationId}`
-            : `/chat/${this.conversationId}`,
-        )
-      }
-
+      this.$router.push(
+        `${this.$device.isMobile ? '/mobile' : ''}/chat/${this.conversationId}`,
+      )
       iridium.chat.sendMessage({
         at: Date.now(),
         type: 'text',
@@ -96,18 +125,17 @@ export default Vue.extend({
       })
       this.close()
     },
-    openProfile() {
-      if (iridium.id === this.user?.did) {
-        this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
-        this.close()
+    openProfile() {},
+    openSettings() {
+      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
+      this.close()
 
-        if (this.$device.isMobile) {
-          this.$router.push('/mobile/settings')
-        }
-      } else {
-        // hide profile modal depend on this task AP-1717 (https://satellite-im.atlassian.net/browse/AP-1717)
-        // this.$store.dispatch('ui/showProfile', this.user)
+      if (this.$device.isMobile) {
+        this.$router.push('/mobile/settings')
       }
+    },
+    setMenuVis(val: boolean) {
+      this.isStatusMenuVisible = val
     },
   },
 })

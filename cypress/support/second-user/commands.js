@@ -44,21 +44,9 @@ Cypress.Commands.add('deleteStorage', () => {
   cy.clearCookies()
 })
 
-Cypress.Commands.add(
-  'clearDatabase',
-  () =>
-    new Cypress.Promise(async (resolve) => {
-      const req = indexedDB.deleteDatabase('SatelliteDB')
-      req.onsuccess = function () {
-        resolve()
-      }
-    }),
-)
-
 //Import Account Commands
 
 Cypress.Commands.add('importAccount', (pin, recoverySeed) => {
-  cy.clearDatabase()
   cy.visitRootPage()
   cy.url().should('contain', '#/auth/unlock')
   cy.get('[data-cy=add-input]')
