@@ -259,35 +259,6 @@
       flex-grow: 1;
       &:extend(.ellipsis);
     }
-
-    .edit-button {
-      padding: 8px;
-      opacity: 0;
-
-      &.mobile,
-      &.active,
-      &:focus {
-        opacity: 1;
-      }
-    }
-
-    &:hover {
-      .edit-button {
-        opacity: 1;
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-.edit-button {
-  font-style: italic;
-  white-space: nowrap;
-  color: @text-muted;
-  transition: @animation-speed-long ease-in-out;
-
-  &:hover {
-    opacity: 0.8;
   }
 }
 

@@ -34,9 +34,7 @@ import { ChatFileUpload } from '~/store/chat/types'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
-  Notification,
   NotificationBase,
-  NotificationClickEvent,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
 import { uploadFile } from '~/libraries/Iridium/utils'
@@ -314,6 +312,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         message,
       )
     } else if (type === 'chat/edit') {
+      if (!payload.body.message) {
+        console.error('no message in payload')
+        return
+      }
       const { messageId, conversationId, body, lastEditedAt } = payload.body
         .message as MessageEdit
 
@@ -353,18 +355,10 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       type: isGroup
         ? NotificationType.GROUP_MESSAGE
         : NotificationType.DIRECT_MESSAGE,
-      title: isGroup
-        ? 'notifications.new_message.group_title'
-        : sender?.name || 'notifications.new_message.title',
-      titleValues: isGroup
-        ? { name: sender?.name, server: conversation.name }
-        : undefined,
-      description,
-      fromName: sender?.name || '',
+      senderId: sender?.did,
+      messageId: message.id,
+      conversationId: conversation.id,
       image: fromDID,
-      notificationClickParams: {
-        conversationId: conversation.id,
-      },
     } as NotificationBase)
   }
 
