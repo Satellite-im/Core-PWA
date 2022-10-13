@@ -85,7 +85,6 @@ export default Vue.extend({
   max-width: 500px;
   padding: 24px;
   user-select: none;
-  background: @modal-gradient;
   &:extend(.round-corners);
 
   .confirmation-main {
