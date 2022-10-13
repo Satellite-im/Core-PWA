@@ -8,12 +8,14 @@
       },
     ]"
   >
-    <Slimbar :servers="$mock.servers" />
+    <Slimbar />
     <Sidebar />
-    <UiDroppableWrapper v-if="displayDroppable" @handle-drop-prop="handleDrop">
+    <UiDroppableWrapper
+      :disabled="!displayDroppable"
+      @handle-drop-prop="handleDrop"
+    >
       <Nuxt ref="page" />
     </UiDroppableWrapper>
-    <Nuxt v-else />
     <UiGlobal />
     <!-- Sets the global css variable for the theme flair color -->
     <v-style>
@@ -32,7 +34,7 @@ import { FilesControlsRef } from '~/components/views/files/controls/Controls.vue
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import { RootState } from '~/types/store/store'
-import notNull from '~/utilities/notNull'
+import { notNull } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'Desktop',
@@ -43,7 +45,6 @@ export default Vue.extend({
   data() {
     return {
       settings: iridium.settings.state,
-      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
@@ -57,9 +58,14 @@ export default Vue.extend({
       return iridium.settings.state.privacy.consentToScan
     },
     displayDroppable(): boolean {
-      return (
-        this.$route.path.includes('files') || this.$route.path.includes('chat')
-      )
+      const droppablePages = ['/files', '/chat']
+      const match = droppablePages.filter((path) =>
+        this.$route.path.includes(path),
+      ).length
+      return Boolean(match)
+    },
+    ready(): boolean {
+      return iridium.ready && !!iridium.profile.state?.did
     },
   },
   methods: {
@@ -70,6 +76,8 @@ export default Vue.extend({
      * @example v-on:drop="handleDrop"
      */
     handleDrop(e: DragEvent) {
+      if (!this.displayDroppable) return
+
       e.preventDefault()
       if (!e?.dataTransfer) {
         return

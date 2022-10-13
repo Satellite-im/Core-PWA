@@ -2,21 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-msedge",
+      "type": "msedge",
       "name": "edge: profile-1",
       "request": "launch",
       "url": "http://localhost:3000/?p1",
       "userDataDir": "${workspaceFolder}/.vscode/pwa-msedge/profile-1"
     },
     {
-      "type": "pwa-msedge",
+      "type": "msedge",
       "name": "edge: profile-2",
       "request": "launch",
       "url": "http://localhost:3000/?p2",
       "userDataDir": "${workspaceFolder}/.vscode/pwa-msedge/profile-2"
     },
     {
-      "type": "pwa-msedge",
+      "type": "msedge",
       "name": "edge: profile-3",
       "request": "launch",
       "url": "http://localhost:3000/?p3",

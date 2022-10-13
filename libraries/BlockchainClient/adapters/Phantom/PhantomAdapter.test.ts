@@ -5,7 +5,7 @@ jest.mock('../../interfaces')
 jest.mock('~/libraries/Phantom/PhantomManager')
 
 describe('PhantomAdapter', () => {
-  let instance
+  let instance: PhantomAdapter
 
   beforeEach(() => {
     instance = new PhantomAdapter()

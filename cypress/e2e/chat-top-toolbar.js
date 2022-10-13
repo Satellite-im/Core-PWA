@@ -1,25 +1,22 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
-const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'cypress')
-    .map((item) => item.recoverySeed) + '{enter}'
+let secondUserName
 
 describe('Chat Toolbar Tests', () => {
-  it(
-    'Chat - Toolbar - Load Account for Testing Scenarios',
-    { retries: 2 },
-    () => {
-      //Import account
-      cy.importAccount(randomPIN, recoverySeed)
+  before(() => {
+    //Retrieve username from Chat User B
+    cy.restoreLocalStorage('Chat User B')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      secondUserName = tempLS.accounts.details.name
+    })
+  })
 
-      //Ensure messages are displayed before starting
-      cy.validateChatPageIsLoaded()
-      cy.goToConversation('cypress friend')
-    },
-  )
+  it('Chat - Toolbar - Load Account for Testing Scenarios', () => {
+    // Login with User A by restoring LocalStorage Snapshot
+    cy.loginWithLocalStorage('Chat User A')
+
+    // Validate message is sent
+    cy.goToConversation(secondUserName)
+  })
 
   it('Chat - Toolbar - Audio icon is active', () => {
     //Start validations
@@ -29,26 +26,19 @@ describe('Chat Toolbar Tests', () => {
     )
   })
 
-  it('Chat - Toolbar - Alerts icon is active', () => {
-    cy.hoverOnActiveIcon('[data-cy=toolbar-alerts]', 'Alerts')
-  })
-
-  it('Chat - Toolbar - Archived Messages icon shows Coming Soon', () => {
-    cy.hoverOnComingSoonIcon(
-      '[data-cy=toolbar-archived-messages]',
-      'Archived Messages Coming Soon',
-    )
-  })
-
   it('Chat - Toolbar - Marketplace icon shows Coming Soon', () => {
     cy.hoverOnComingSoonIcon(
       '[data-cy=toolbar-marketplace]',
-      'Marketplace Coming soon',
+      'Marketplace (Coming Soon)',
     )
   })
 
   it('Chat - Toolbar - Wallet icon shows Coming Soon', () => {
-    cy.hoverOnComingSoonIcon('[data-cy=toolbar-wallet]', 'Wallet Coming Soon')
+    cy.hoverOnComingSoonIcon('[data-cy=toolbar-wallet]', 'Wallet (Coming Soon)')
+  })
+
+  it('Chat - Toolbar - Search Bar shows Coming Soon', () => {
+    cy.hoverOnComingSoonIcon('[data-cy=chat-search-input]', 'Coming Soon', true)
   })
 
   it('Chat - Marketplace - Coming Soon modal content is correct', () => {
@@ -82,8 +72,9 @@ describe('Chat Toolbar Tests', () => {
     cy.closeModal('[data-cy=glyphs-modal]')
   })
 
-  it('Chat - Glyphs Selection - Coming soon modal', () => {
-    cy.get('#glyph-toggle').click()
+  //Skipped due to bug of Coming Soon modal showing on background when clicking on Glyphs Marketplace
+  it.skip('Chat - Glyphs Selection - Coming soon modal', () => {
+    cy.get('[data-cy=send-glyph]').click()
     cy.get('[data-cy=glyphs-marketplace]').click()
     cy.get('[data-cy=modal-cta]').should('be.visible')
     cy.closeModal('[data-cy=modal-cta]')

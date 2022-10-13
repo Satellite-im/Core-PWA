@@ -4,7 +4,8 @@
 import Vue from 'vue'
 import { CornerUpLeftIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import { User } from '~/libraries/Iridium/users/types'
+import { WebRTCEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
   components: {
@@ -15,29 +16,49 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    width: {
+      type: Number,
+      required: true,
+    },
+    height: {
+      type: Number,
+      required: true,
+    },
   },
-  setup() {
-    const { remoteParticipants } = useWebRTC()
-
-    const remoteParticipant = computed(() => {
-      return remoteParticipants.value.length > 0
-        ? remoteParticipants.value[0]
-        : null
-    })
-
-    return { remoteParticipant }
+  data() {
+    return {
+      webrtc: iridium.webRTC.state,
+    }
+  },
+  computed: {
+    remoteParticipant(): User | undefined {
+      return iridium.webRTC.remoteParticipants()?.[0] ?? undefined
+    },
+    remoteStream(): WebRTCEnum | undefined {
+      if (!this.remoteParticipant) {
+        return
+      }
+      const muted = this.webrtc.streamMuted[this.remoteParticipant.did]
+      if (!muted) {
+        return
+      }
+      const streams = ['screen', 'video', 'audio'] as WebRTCEnum[]
+      const stream = streams.find((stream) => !muted[stream])
+      return stream
+    },
   },
   methods: {
     navigateToActiveConversation() {
-      if (!iridium.webRTC.state.activeCall?.callId) {
+      const conversationId = this.webrtc.activeCall?.callId
+      if (!conversationId) {
         return
       }
-      if (this.$device.isMobile) {
-        // mobile, show slide 1 which is chat slide, set showSidebar flag false as css related
-        this.$store.commit('ui/setSwiperSlideIndex', 1)
-        this.$store.commit('ui/showSidebar', false)
-      }
-      this.$router.push(`/chat/${iridium.webRTC.state.activeCall.callId}`)
+
+      this.$router.push(
+        this.$device.isMobile
+          ? `/mobile/chat/${conversationId}`
+          : `/chat/${conversationId}`,
+      )
     },
   },
 })

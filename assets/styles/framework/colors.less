@@ -1,8 +1,8 @@
 // Base Colors
-@foreground: #2b2b3b;
-@foreground-alt: #3a3a50;
+@foreground: #252a3a;
+@foreground-alt: #2d3744;
 @midground: #16161e;
-@midground-alt: #1a1a24;
+@midground-alt: #00000026;
 @background-hover: #2e303d;
 
 @darker: #121216;
@@ -20,8 +20,8 @@
 
 @scrollbar-color: @flair-color;
 
+@text: #dae0ff;
 @secondary-text: #dae0ff;
-@text: #ffffff;
 @text-muted: #a0a9cf;
 
 // backgrounds
@@ -32,6 +32,14 @@
   ),
   linear-gradient(252.44deg, #1c273a 0%, rgba(0, 0, 0, 0.1) 100%),
   linear-gradient(107.56deg, #1c273a 0%, rgba(0, 0, 0, 0.1) 100%), @darker;
+
+@settings-background: linear-gradient(
+    180deg,
+    rgba(27, 38, 56, 0.25) 0%,
+    rgba(0, 0, 0, 0.17) 100%
+  ),
+  linear-gradient(252.44deg, #1f252e 0%, rgba(0, 0, 0, 0.1) 100%),
+  linear-gradient(107.56deg, #222733 0%, rgba(0, 0, 0, 0.1) 100%), #1b2343;
 
 @foreground-gradient: linear-gradient(
     163.91deg,
@@ -124,9 +132,9 @@
 // Semitransparent Gradients
 @semitransparent-dark-gradient: linear-gradient(
   328deg,
-  #16171dda 0%,
-  #16171dda 75%,
-  #0f141dd5 100%
+  #16171d70 0%,
+  #16171d70 75%,
+  #0f141d6a 100%
 );
 @semitransparent-light-gradient: linear-gradient(
   0deg,
@@ -142,6 +150,11 @@
   0deg,
   rgba(49, 63, 87, 0.8) 0%,
   rgba(62, 66, 90, 0.5) 100%
+);
+@semitransparent-grey-gradient: linear-gradient(
+  40deg,
+  #2d313f 40%,
+  #293040 100%
 );
 @semitransparent-red-gradient: linear-gradient(
   0deg,

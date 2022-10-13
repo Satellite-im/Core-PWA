@@ -2,6 +2,7 @@ import { LocalNotifications } from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
+import { Notification as NotificationType } from '~/libraries/Iridium/notifications/types'
 
 const isSupported = (): boolean =>
   'Notification' in window &&
@@ -16,14 +17,6 @@ export const Notifications = class Notifications {
   constructor() {
     const envinfo = new EnvInfo()
     this.currentPlatform = envinfo.currentPlatform
-    if (this.currentPlatform === PlatformTypeEnum.WEB) {
-      // all mount needs for web/pwa
-      if (this.notificationPermission !== 'granted' && isSupported()) {
-        Notification.requestPermission().then((result: any) => {
-          this.notificationPermission = result
-        })
-      }
-    }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // These are shown in the notification as options the user can interact with outside of the app
@@ -83,13 +76,13 @@ export const Notifications = class Notifications {
    * @returns
    * @example
    */
-  requestNotificationPermission(): any {
+  async requestNotificationPermission(): any {
     if (
       (this.currentPlatform === PlatformTypeEnum.WEB ||
         this.currentPlatform === PlatformTypeEnum.ELECTRON) &&
       isSupported()
     ) {
-      Notification.requestPermission()
+      await Notification.requestPermission()
     }
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       // and maybe iOS?
@@ -117,59 +110,52 @@ export const Notifications = class Notifications {
    * @method sendNotifications DocsTODO
    * @description
    * @param type
-   * @param titleText
+   * @param title
    * @param image
-   * @param message
+   * @param description
    * @example
    */
-  async sendNotifications(
-    type: string,
-    titleText: string,
-    image: string,
-    message: string,
-  ): Promise<void> {
+  async sendNotifications({
+    type,
+    title,
+    image,
+    description,
+    onNotificationClick,
+  }: NotificationType): Promise<void> {
     if (
       this.currentPlatform === PlatformTypeEnum.WEB ||
       this.currentPlatform === PlatformTypeEnum.ELECTRON
     ) {
+      if (this.notificationPermission !== 'granted' && isSupported()) {
+        Notification.requestPermission().then((result: any) => {
+          this.notificationPermission = result
+        })
+      }
+
       // browser notification api
-      await new Notification(`${titleText}`, {
+      const notification = new Notification(`${title}`, {
         tag: String(new Date().getTime()),
-        body: message,
+        body: description,
         icon: `${this.$Config.ipfs.gateway}${image}`,
         badge: `${this.$Config.ipfs.gateway}${image}`,
       })
+
+      notification.onclick = (event: any) => {
+        event.preventDefault()
+        if (onNotificationClick) {
+          onNotificationClick()
+        }
+        window.focus()
+        notification.close()
+      }
     }
-    // if (this.currentPlatform === PlatformTypeEnum.WEB) {
-    //   await LocalNotifications.schedule({
-    //     notifications: [
-    //       {
-    //         title: `${type} ${titleText}`,
-    //         body: message,
-    //         id: new Date().getTime(),
-    //         schedule: {
-    //           at: new Date(new Date().getTime() + 1000),
-    //           allowWhileIdle: true,
-    //         },
-    //         actionTypeId: 'CHAT_MESSAGE',
-    //         extra: null,
-    //         attachments: [
-    //           {
-    //             id: 'face',
-    //             url: `${this.$Config.ipfs.gateway}${image}`,
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   })
-    // }
 
     if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
       await LocalNotifications.schedule({
         notifications: [
           {
-            title: titleText,
-            body: message,
+            title,
+            body: description,
             id: new Date().getTime(),
             schedule: {
               at: new Date(new Date().getTime() + 3000),

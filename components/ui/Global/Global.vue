@@ -2,23 +2,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { TrackKind } from '~/libraries/WebRTC/types'
 import { ModalWindows } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    toggleModal: (modalName: string) => void
-  }
-}
+import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
+import { PropCommonEnum } from '~/libraries/Enums/enums'
+import { RootState } from '~/types/store/store'
+import { listenToNotifications } from '~/components/compositions/listenToNotifications'
 
 export default Vue.extend({
   name: 'Global',
   setup() {
-    const { isActiveCall, isBackgroundCall } = useWebRTC()
-
-    return { isActiveCall, isBackgroundCall }
+    listenToNotifications()
   },
   data() {
     return {
@@ -26,13 +20,29 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui', 'media', 'conversation', 'files']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+      files: (state) => (state as RootState).files,
+      settings: (state) => (state as RootState).settings,
+      isNewAccount: (state) => (state as RootState).accounts.isNewAccount,
+    }),
     ModalWindows: () => ModalWindows,
-    showBackgroundCall(): boolean {
-      if (!this.$device.isMobile) {
-        return this.isBackgroundCall
-      }
-      return this.isBackgroundCall || (this.isActiveCall && this.ui.showSidebar)
+    incomingCall(): WebRTCIncomingCall | null {
+      return this.webrtc.incomingCall
+    },
+    isBackgroundCall(): boolean {
+      return iridium.webRTC.isBackgroundCall(this.$route.params.id)
+    },
+    isActiveCall(): boolean {
+      return iridium.webRTC.isActiveCall(this.$route.params.id)
+    },
+  },
+  watch: {
+    'settings.audioInput'(audioInput: string) {
+      this.updateWebRTCState({ audioInput })
+    },
+    'settings.videoInput'(videoInput: string) {
+      this.updateWebRTCState({ videoInput })
     },
   },
   mounted() {
@@ -62,9 +72,25 @@ export default Vue.extend({
     }
 
     if (this.$config.clientVersion !== lsVersion) {
-      this.toggleModal('changelog')
+      this.toggleModal(ModalWindows.CHANGELOG)
       localStorage.setItem('local-version', this.$config.clientVersion)
     }
+
+    const { audioInput, videoInput } = this.settings
+    this.updateWebRTCState({ audioInput, videoInput })
+
+    const routeCheck = (conversationId: string) => {
+      if (conversationId === this.$route.params.id) {
+        this.$router.push(this.$device.isMobile ? `/mobile/chat` : `/friends`)
+      }
+    }
+
+    iridium.friends.on('routeCheck', (conversationId: string) =>
+      routeCheck(conversationId),
+    )
+    iridium.chat.on('routeCheck', (conversationId: string) =>
+      routeCheck(conversationId),
+    )
   },
   methods: {
     /**
@@ -72,44 +98,34 @@ export default Vue.extend({
      * @description
      * @example
      */
-    toggleModal(modalName: keyof ModalWindows): void {
+    toggleModal(modalName: ModalWindows): void {
       this.$store.commit('ui/toggleModal', {
         name: modalName,
         state: !this.ui.modals[modalName],
       })
     },
     /**
-     * @method acceptCall DocsTODO
-     * @description
-     * @example
+     * @method updateWebRTCState
+     * @description Updates the WebRTC state with the given settings.
+     * @example this.updateWebRTCState({ audioInput: 'default', videoInput: 'default' })
      */
-    async acceptCall(kinds: TrackKind[]) {
-      try {
-        await iridium.webRTC.acceptCall(kinds)
-      } catch (error) {
-        if (error instanceof Error) {
-          this.$toast.error(this.$t(error.message) as string)
-        }
+    updateWebRTCState({
+      audioInput,
+      videoInput,
+    }: {
+      audioInput?: string
+      videoInput?: string
+    }) {
+      const streamConstraints = {} as MediaStreamConstraints
+
+      if (audioInput && audioInput !== PropCommonEnum.DEFAULT) {
+        streamConstraints.audio = { deviceId: audioInput }
+      }
+      if (videoInput && videoInput !== PropCommonEnum.DEFAULT) {
+        streamConstraints.video = { deviceId: videoInput }
       }
 
-      const callId = this.webrtc.activeCall?.callId
-      if (!callId) {
-        return
-      }
-
-      const callingPath = `/chat/${callId}`
-      if (this.$route.path !== callingPath) {
-        this.$router.push(callingPath)
-      }
-    },
-    /**
-     * @method denyCall DocsTODO
-     * @description
-     * @example
-     */
-    denyCall() {
-      this.$store.commit('ui/fullscreen', false)
-      iridium.webRTC.denyCall()
+      iridium.webRTC.streamConstraints = streamConstraints
     },
   },
 })

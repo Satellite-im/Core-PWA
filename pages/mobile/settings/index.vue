@@ -5,6 +5,7 @@
         class="swiper-slide"
         :class="{ 'disable-swipe': !Boolean(settingsRoute) }"
       >
+        <TypographyText as="h1">Settings</TypographyText>
         <SettingsSidebar class="sidebar" />
       </div>
       <div
@@ -32,9 +33,11 @@
         />
         <SettingsPagesProfile v-if="settingsRoute === SettingsRoutes.PROFILE" />
         <SettingsPagesStorage v-if="settingsRoute === SettingsRoutes.STORAGE" />
-        <SettingsPagesNetwork v-if="settingsRoute === SettingsRoutes.NETWORK" />
+        <!-- <SettingsPagesNetwork v-if="settingsRoute === SettingsRoutes.NETWORK" /> -->
         <SettingsPagesRealms v-if="settingsRoute === SettingsRoutes.REALMS" />
-        <SettingsPagesPrivacy v-if="settingsRoute === SettingsRoutes.PRIVACY" />
+        <SettingsPagesPrivacy
+          v-if="settingsRoute === SettingsRoutes.PRIVACY_AND_PERMISSIONS"
+        />
       </div>
     </div>
   </div>
@@ -65,11 +68,12 @@ export default Vue.extend({
         noSwipingClass: 'disable-swipe',
         allowSlidePrev: false,
         on: {
-          activeIndexChange: ({ activeIndex }) => {
+          slideChangeTransitionEnd: ({ activeIndex }) => {
             if (!this.swiper) {
               return
             }
             if (activeIndex === 0) {
+              this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
             }
@@ -86,6 +90,8 @@ export default Vue.extend({
     settingsRoute(val) {
       if (val) {
         this.swiper?.slideNext()
+      } else {
+        this.swiper?.slidePrev()
       }
     },
   },
@@ -112,15 +118,18 @@ export default Vue.extend({
 
   .swiper-slide {
     display: flex;
-    padding: 8px;
-    overflow-y: scroll;
-
-    .sidebar {
-      flex: 1;
-    }
+    flex-direction: column;
+    gap: 24px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 24px;
 
     &.profile {
       padding: 0;
+    }
+
+    .settings-page {
+      width: 100%;
     }
   }
 }

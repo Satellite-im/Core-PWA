@@ -1,10 +1,4 @@
-export type User = {
-  did: string
-  name: string
-  status?: 'online' | 'offline' | 'busy' | 'away'
-  seen?: number
-  photoHash?: string
-}
+import { User } from '../users/types'
 
 export type Friend = User & {}
 
@@ -15,7 +9,7 @@ export type FriendRequestStatus =
   | 'removed'
 
 export type FriendRequest = {
-  user: User
+  did: User['did']
   incoming: boolean
   status: FriendRequestStatus
   at: number

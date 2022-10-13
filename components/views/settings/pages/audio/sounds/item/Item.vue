@@ -1,7 +1,7 @@
 <template>
   <div class="sounds-item">
-    <TypographyTitle :size="7" :text="title" />
-    <InteractablesSwitch :is-enabled="value" @toggle="toggle" />
+    <TypographyText font="heading">{{ title }}</TypographyText>
+    <InteractablesSwitch :value="value" :label="title" @toggle="toggle" />
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: @light-spacing 0;
+
   .title {
     margin-bottom: 0;
   }

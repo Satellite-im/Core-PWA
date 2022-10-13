@@ -5,7 +5,7 @@
     @click="() => toggleMute('audio')"
     data-cy="sidebar-mic-button"
     :text="$t('controls.mic')"
-    :loading="isLoading"
+    :loading="buttonsLoading.includes('audio')"
   >
     <mic-off-icon data-cy="sidebar-mic-muted" v-if="audioMuted" size="1x" />
     <mic-icon data-cy="sidebar-mic-unmuted" v-else size="1x" />
@@ -14,8 +14,9 @@
     :color="audio.deafened ? 'danger' : 'dark'"
     data-cy="sidebar-audio-button"
     v-tooltip.top="audio.deafened ? $t('controls.undeafen') : $t('controls.deafen')"
-    @click="() => toggleDeafen()"
+    @click="() => toggleMute('headphones')"
     :text="$t('controls.headphones')"
+    :loading="buttonsLoading.includes('headphones')"
   >
     <headphones-off-icon
       data-cy="sidebar-audio-deafened"
@@ -30,7 +31,7 @@
     v-tooltip.top="videoMuted ? $t('controls.turn_on_camera') : $t('controls.turn_off_camera')"
     :text="$t('controls.video')"
     @click="() => toggleMute('video')"
-    :loading="isLoading"
+    :loading="buttonsLoading.includes('video')"
   >
     <video-off-icon data-cy="sidebar-video-muted" v-if="videoMuted" size="1x" />
     <video-icon data-cy="sidebar-video-unmuted" v-else size="1x" />

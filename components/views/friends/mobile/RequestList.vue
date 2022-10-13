@@ -1,9 +1,9 @@
 <template>
   <div class="list">
-    <FriendsMobileListItem
-      v-for="e in list.map((e) => e.user)"
-      :key="e.did"
-      :user="e"
+    <FriendsItem
+      v-for="request in list"
+      :key="request.did"
+      :user="users.getUser(request.did)"
       :type="type"
     />
   </div>
@@ -11,6 +11,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { FriendRequest } from '~/libraries/Iridium/friends/types'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   props: {
@@ -23,12 +24,14 @@ export default Vue.extend({
       required: true,
     },
   },
+  data: () => ({
+    users: iridium.users,
+  }),
 })
 </script>
 <style scoped lang="less">
 .list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 </style>

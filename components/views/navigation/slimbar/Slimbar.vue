@@ -2,19 +2,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
 import { SettingsIcon, PlusIcon, SatelliteIcon } from 'satellite-lucide-icons'
-import { ModalWindows } from '~/store/ui/types'
-import Unread from '~/components/ui/Unread/Unread.vue'
-import { Sounds } from '~/libraries/SoundManager/SoundManager'
-import { DataStateType } from '~/store/dataState/types'
-import { RootState } from '~/types/store/store'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    toggleModal: (modalName: string) => void
-    unsubscribe: () => void
-  }
+type UiServer = {
+  name: string
+  address: string
 }
 
 export default Vue.extend({
@@ -22,52 +14,27 @@ export default Vue.extend({
     SettingsIcon,
     PlusIcon,
     SatelliteIcon,
-    Unread,
-  },
-  props: {
-    servers: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
-    openModal: {
-      type: Function,
-      default: () => {},
-      required: false,
-    },
   },
   computed: {
-    DataStateType: () => DataStateType,
-    ...mapState(['ui']),
-    ...mapState({
-      friendsDS: (state) => (state as RootState).dataState.friends,
-    }),
-    ...mapGetters('friends', ['friendsWithUnreadMessages']),
-    ModalWindows: () => ModalWindows,
-  },
-  created() {
-    this.unsubscribe = this.$store.subscribe((mutation) => {
-      if (mutation.type === 'friends/addFriend') {
-        this.$store.dispatch('sounds/playSound', Sounds.NEW_MESSAGE)
-      }
-    })
-  },
-  beforeDestroy() {
-    this.unsubscribe()
-  },
-  methods: {
-    /**
-     * @method toggleModal
-     * @param modalName - enum for which modal
-     * @description This updates the state to show/hide the specific modal you pass in
-     * @example toggleModal(ModalWindows.WALLET)
-     */
-    toggleModal(modalName: keyof ModalWindows): void {
-      this.$store.commit('ui/toggleModal', {
-        name: modalName,
-        state: !this.ui.modals[modalName],
-      })
+    servers(): UiServer[] {
+      return [
+        {
+          name: 'Solana Fans',
+          address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+        },
+        {
+          name: 'Satellite.im',
+          address: '0x00000000219ab540356cbb839cbe05303d7705fa',
+        },
+        {
+          name: 'Gaming',
+          address: '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8',
+        },
+        {
+          name: 'Blockchain Devs',
+          address: '0x73bceb1cd57c711feac4224d062b0f6ff338501e',
+        },
+      ]
     },
   },
 })

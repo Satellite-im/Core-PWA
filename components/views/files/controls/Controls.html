@@ -13,12 +13,9 @@
           @click="toggleSearchAll"
           class="input-button"
           :class="{ 'active': searchAll }"
+          v-tooltip.top="$t(`pages.files.search.${searchAll ? 'disable_global' : 'enable_global'}`)"
         >
-          <globe-icon
-            class="input-icon"
-            size="1x"
-            v-tooltip.top="$t(`pages.files.search.${searchAll ? 'disable_global' : 'enable_global'}`)"
-          />
+          <globe-icon size="1x" />
         </button>
       </template>
     </InteractablesInput>
@@ -34,7 +31,6 @@
   </div>
   <div class="add-container">
     <InteractablesButton
-      color="primary"
       :text="$t('pages.files.controls.new_file')"
       @click="addFile"
     >
@@ -62,7 +58,9 @@
   <div v-if="errors.length" class="error-container">
     <alert-triangle-icon size="1.3x" />
     <div>
-      <TypographyError v-for="error in errors" :key="error" :text="error" />
+      <TypographyText v-for="error in errors" :key="error" color="danger">
+        {{ $t(error) }}
+      </TypographyText>
     </div>
     <x-icon size="1.3x" class="close" @click="errors = []" />
   </div>

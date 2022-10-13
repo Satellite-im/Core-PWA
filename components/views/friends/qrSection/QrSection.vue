@@ -2,7 +2,7 @@
   <div>
     <TypographyHorizontalRuleText plaintext value="OR" />
     <TypographyText as="h3"> {{ $t('friends.add_via_qr') }} </TypographyText>
-    <TypographyText as="h4">
+    <TypographyText>
       {{ $t('friends.add_qrcode_description') }}
     </TypographyText>
     <div class="card">
@@ -11,10 +11,7 @@
           <TypographyText>
             {{ $t('friends.scan_code') }}
           </TypographyText>
-          <InteractablesButton
-            color="primary"
-            :text="$t('friends.camera_scan')"
-          />
+          <InteractablesButton :text="$t('friends.camera_scan')" />
         </div>
         <div class="qr-section">
           <TypographyText>

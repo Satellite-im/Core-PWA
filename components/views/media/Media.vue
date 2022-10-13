@@ -3,9 +3,24 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { useWebRTC } from '~/libraries/Iridium/webrtc/hooks'
+import { Call } from '~/libraries/WebRTC/Call'
+import { RootState } from '~/types/store/store'
+
+type OptimalBoxDomensionsParams = {
+  containerWidth: number
+  containerHeight: number
+  numBoxes: number
+  aspectRatio: number
+  gap: number
+}
+
+type Stream = {
+  participant: User | undefined
+  stream: string
+  hideTalkingIndicator: boolean
+}
 
 export default Vue.extend({
   props: {
@@ -13,172 +28,149 @@ export default Vue.extend({
       type: Array as PropType<Array<User>>,
       default: () => [],
     },
-    maxViewableUsers: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    fullscreenMaxViewableUsers: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-  },
-  setup() {
-    const { localParticipant, remoteParticipants } = useWebRTC()
-
-    return { localParticipant, remoteParticipants }
   },
   data() {
     return {
       webrtc: iridium.webRTC.state,
+      isFullscreen: false,
+      resizeObserver: null as ResizeObserver | null,
+      mediaUserSize: [160, 90],
+      presenterUserSize: [160, 90],
+      windowHeight: window.innerHeight,
+      presenter: null as Stream | null,
     }
   },
   computed: {
-    ...mapState(['ui', 'accounts', 'groups', 'audio']),
-  },
-  watch: {
-    'ui.fullscreen'(value) {
-      const media: HTMLElement = this.$refs.media as HTMLElement
-      if (!value) {
-        const blocks = media.querySelectorAll('.user, .more-user')
-        if (!media) return
-        for (let j = 0; j < blocks.length; j++) {
-          const block = blocks[j] as HTMLElement
-          /* set media user width to 16rem if 1:1 call on mobile, otherwise set smaller  */
-          block.style.width =
-            this.$device.isMobile && blocks.length > 2 ? '160px' : '16rem'
-          block.style.height =
-            this.$device.isMobile && blocks.length > 2 ? '90px' : '9rem'
-        }
-        media.style.paddingTop = ''
-        media.style.paddingBottom = ''
-      } else {
-        // TODO: Listen to scroll event instead.. - AP-396
-        this.$nextTick(() => {
-          const isFit = function (
-            viewportWidth: number,
-            viewportHeight: number,
-            blockWidth: number,
-            blockHeight: number,
-            blockCount: number,
-          ) {
-            const cols = Math.floor(viewportWidth / blockWidth)
-            const rows = Math.ceil(blockCount / cols)
-            return {
-              fit: blockHeight * rows < viewportHeight,
-              matrix: { cols, rows },
-            }
-          }
-          if (!media) return
-          const blocks = media.querySelectorAll('.user, .more-user')
-          if (
-            blocks.length === 0 ||
-            !document.querySelectorAll('.fullscreen-media')
-          )
-            return
-
-          const viewportWidth = media.clientWidth
-          const viewportHeight = media.clientHeight
-          const blockCount = blocks.length
-          const blockStyle = window.getComputedStyle(blocks[0])
-          const blockMargin = Math.floor(
-            parseInt(blockStyle.margin.replace('px', '')),
-          )
-          const marginPerBlock = blockMargin * 2
-
-          // Variables created that will either be declared if the user is in 'mobile fullscreen calls'
-          // Else, they are left undefined and use different logic for 'desktop fullscreen calls'
-          let mobileMaxBlockContentWidth
-          let mobileAspectRatio
-
-          if (this.$device.isMobile === true) {
-            if (blockCount === 1) {
-              mobileMaxBlockContentWidth = viewportWidth - marginPerBlock * 1.5
-              mobileAspectRatio = 3 / 4
-            } else if (blockCount === 2) {
-              mobileMaxBlockContentWidth = viewportWidth - marginPerBlock * 1.5
-              mobileAspectRatio = 1 / 2
-            } else if (blockCount <= 4) {
-              mobileMaxBlockContentWidth =
-                viewportWidth / 2 - marginPerBlock * 1.5
-              mobileAspectRatio = 4 / 3
-            } else {
-              mobileMaxBlockContentWidth =
-                viewportWidth / 2 - marginPerBlock * 1.5
-              mobileAspectRatio = 3 / 4
-            }
-          }
-
-          // logic for 'desktop fullscreen calls' where we set the max block content size so that a block cannot be larger than half viewportWidth
-          const maxBlockContentWidth =
-            typeof mobileMaxBlockContentWidth === 'undefined'
-              ? viewportWidth / 2 - marginPerBlock * 1.5
-              : mobileMaxBlockContentWidth
-          const aspectRatio =
-            typeof mobileAspectRatio === 'undefined'
-              ? 9 / 16
-              : mobileAspectRatio
-
-          let finalWidth = 160
-          let finalHeight = 90
-          let finalMatrix = { cols: 1, rows: 1 }
-          // if max block of a content is reach, stop the loop
-          let maxBlockContentWidthReached = false
-          for (let i = 2; i <= 100 && !maxBlockContentWidthReached; i++) {
-            maxBlockContentWidthReached =
-              Math.floor((viewportWidth * i) / 100) > maxBlockContentWidth
-            const blockContentWidth = maxBlockContentWidthReached
-              ? maxBlockContentWidth
-              : Math.floor((viewportWidth * i) / 100)
-
-            const blockContentHeight = Math.floor(
-              blockContentWidth * aspectRatio,
-            )
-            const blockWidth = blockContentWidth + marginPerBlock
-            const blockHeight = blockContentHeight + marginPerBlock
-            const { fit, matrix } = isFit(
-              viewportWidth,
-              viewportHeight,
-              blockWidth,
-              blockHeight,
-              blockCount,
-            )
-            if (!fit) {
-              break
-            }
-            finalWidth = blockContentWidth
-            finalHeight = blockContentHeight
-            finalMatrix = matrix
-          }
-          for (let i = 0; i < blockCount; i++) {
-            const block = blocks[i] as HTMLElement
-            block.style.width = finalWidth + 'px'
-            block.style.height = finalHeight + 'px'
-          }
-          const height = finalHeight * finalMatrix.rows
-          if (height <= viewportHeight) {
-            const padding = Math.floor((viewportHeight - height) / 2)
-            media.style.paddingTop = padding + 'px'
-            media.style.paddingBottom = padding + 'px'
-          }
-        })
-      }
+    ...mapState({
+      callHeight: (state) => (state as RootState).ui.callHeight,
+      volume: (state) => (state as RootState).audio.volume,
+    }),
+    localParticipant(): User | undefined {
+      return iridium.webRTC.localParticipant()
     },
-    'audio.volume': {
-      handler(volume) {
-        // Bind stream audio element volume to slider volume
-        const audioStreamElements = document.getElementsByClassName(
-          'remote-audio-stream',
-        ) as HTMLCollectionOf<HTMLAudioElement>
-
-        for (const audioStreamElement of audioStreamElements) {
-          audioStreamElement.volume = volume / 100
-        }
+    remoteParticipants(): User[] {
+      return iridium.webRTC.remoteParticipants()
+    },
+    height: {
+      get(): string {
+        return this.callHeight
+      },
+      set(value) {
+        this.$store.commit('ui/setCallHeight', value)
       },
     },
+    call(): Call | undefined {
+      if (!this.webrtc.activeCall?.callId) {
+        return
+      }
+      return this.webrtc.calls[this.webrtc.activeCall.callId]
+    },
+    streams(): Stream[] {
+      if (!this.call) {
+        return []
+      }
+
+      const muted = Object.entries(iridium.webRTC.state.streamMuted)
+      const participantStreams = muted
+        .filter(([did]) => did === iridium.id || Boolean(this.call?.peers[did]))
+        .map(([did, mutedStreams]) => {
+          const participant = iridium.users.getUser(did)
+          let streams = Object.entries(mutedStreams)
+            .filter(([k, v]) => !v && k !== 'headphones')
+            .map(([k]) => k)
+          streams.unshift('audio')
+          streams = Array.from(new Set(streams))
+          if (streams.length > 1) {
+            streams = streams.filter((s) => s !== 'audio')
+          }
+          return streams.map((stream) => {
+            return {
+              participant,
+              stream,
+              hideTalkingIndicator: streams.length > 1 && stream !== 'video',
+            }
+          })
+        })
+      return participantStreams.flat()
+    },
+  },
+  watch: {
+    streams() {
+      this.calculateUserSizes()
+    },
+  },
+  mounted() {
+    const media = this.$refs.media as HTMLElement
+    const presenter = this.$refs.presenter as HTMLElement
+
+    document.addEventListener('fullscreenchange', this.setFullscreenValue)
+    document.addEventListener('resize', this.scaleHeight)
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === media) {
+          this.calculateMediaUserSize(entry)
+        } else if (entry.target === presenter) {
+          this.calculatePresenterUserSize(entry)
+        }
+      })
+    })
+    this.resizeObserver.observe(media)
+    this.resizeObserver.observe(presenter)
+  },
+  beforeDestroy() {
+    document.removeEventListener('fullscreenchange', this.setFullscreenValue)
+    document.removeEventListener('resize', this.scaleHeight)
+    this.resizeObserver?.disconnect()
   },
   methods: {
+    getBoxDimensionsForLayout(
+      params: OptimalBoxDomensionsParams,
+      numMaxCols: number,
+      numRows: number,
+    ): [number, number] {
+      const rowGap = params.gap * (numRows - 1)
+      const colGap = params.gap * (numMaxCols - 1)
+      let boxWidth = (params.containerWidth - colGap) / numMaxCols
+      let boxHeight = boxWidth / params.aspectRatio
+      const contentHeight = boxHeight * numRows + rowGap
+      if (contentHeight > params.containerHeight) {
+        boxHeight = (params.containerHeight - rowGap) / numRows
+        boxWidth = boxHeight * params.aspectRatio
+      }
+      return [boxWidth, boxHeight]
+    },
+
+    getOptimalBoxDimensions(
+      params: OptimalBoxDomensionsParams,
+    ): [number, number] {
+      let prevWidth = 0
+      let prevHeight = 0
+      let width = 0
+      let height = 0
+      for (let numRows = 1; numRows <= params.numBoxes; numRows++) {
+        const numMaxCols = Math.ceil(params.numBoxes / numRows)
+        prevWidth = width
+        prevHeight = height
+        ;[width, height] = this.getBoxDimensionsForLayout(
+          params,
+          numMaxCols,
+          numRows,
+        )
+        if (prevWidth > width) {
+          return [prevWidth, prevHeight]
+        }
+      }
+      return [width, height]
+    },
+    scaleHeight() {
+      this.height =
+        String(
+          parseInt(this.height as string, 10) +
+            this.windowHeight / window.innerHeight,
+        ) + 'px'
+      this.windowHeight = window.innerHeight
+    },
     /**
      * @method volumeControlValueChange DocsTODO
      * @description Changes volume by setting new value using $Sounds.changeLevels and committing new value to setVolume in state
@@ -189,17 +181,51 @@ export default Vue.extend({
       this.$Sounds.changeLevels(volume / 100)
       this.$store.commit('audio/setVolume', volume)
     },
-    handleDoubleClick(id: string) {
-      if (!this.ui.fullscreen) {
-        this.$store.commit('ui/fullscreen', true)
+    toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        const media = this.$refs.mediastream as HTMLElement
+        media.requestFullscreen()
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen()
       }
-      const media: HTMLElement = this.$refs.media as HTMLElement
-      const element = media.querySelector(`#${id}`)
-      if (element?.classList.contains('full-video')) {
-        element?.classList.remove('full-video')
-      } else {
-        element?.classList.add('full-video')
+    },
+    setFullscreenValue() {
+      this.isFullscreen = Boolean(document.fullscreenElement)
+    },
+    togglePresenter(stream: Stream) {
+      if (this.presenter === stream) {
+        this.presenter = null
+        return
       }
+      this.presenter = stream
+      this.calculateUserSizes()
+    },
+    calculateMediaUserSize(entry?: ResizeObserverEntry) {
+      const media = this.$refs.media as HTMLElement
+      this.mediaUserSize = this.getOptimalBoxDimensions({
+        containerWidth: entry?.contentRect.width ?? media.clientWidth,
+        containerHeight: entry?.contentRect.height ?? media.clientHeight,
+        aspectRatio: 16 / 9,
+        numBoxes: this.streams.length,
+        gap: 10,
+      })
+    },
+    calculatePresenterUserSize(entry?: ResizeObserverEntry) {
+      const presenter = this.$refs.presenter as HTMLElement
+      if (!presenter) {
+        return
+      }
+      this.presenterUserSize = this.getOptimalBoxDimensions({
+        containerWidth: entry?.contentRect.width ?? presenter.clientWidth,
+        containerHeight: entry?.contentRect.height ?? presenter.clientHeight,
+        aspectRatio: 16 / 9,
+        numBoxes: 1,
+        gap: 0,
+      })
+    },
+    calculateUserSizes() {
+      this.calculateMediaUserSize()
+      this.calculatePresenterUserSize()
     },
   },
 })

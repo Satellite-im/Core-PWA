@@ -1,5 +1,6 @@
 .group-icon {
   position: relative;
+  flex-shrink: 0;
 
   .label {
     position: absolute;
@@ -19,7 +20,8 @@
     box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
   }
 
-  .multi {
+  .multi,
+  .double {
     & > div {
       display: flex;
       position: absolute;
@@ -38,27 +40,6 @@
     .group-el-2 {
       top: 0;
       left: 0;
-    }
-  }
-
-  .double {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-
-    & > div {
-      position: absolute;
-    }
-
-    .group-el-0 {
-      top: 5px;
-      left: 0;
-    }
-
-    .group-el-1 {
-      bottom: 5px;
-      right: 0;
     }
   }
 

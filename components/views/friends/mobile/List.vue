@@ -7,7 +7,7 @@
       input-kind="text"
       type="dark"
     />
-    <FriendsMobileListItem
+    <FriendsItem
       v-for="e in filteredList"
       :key="e.did"
       :user="e"
@@ -17,7 +17,7 @@
 </template>
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default Vue.extend({
   props: {
@@ -50,7 +50,10 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   padding: 0 1rem 1rem;
-  gap: 1rem;
-  overflow-y: scroll;
+  overflow-y: auto;
+
+  .search {
+    margin-bottom: 1rem;
+  }
 }
 </style>

@@ -1,55 +1,36 @@
 <template>
-  <div>
-    <template v-if="!incomingRequests.length && !outgoingRequests.length">
-      <UiResultsMessage
-        :title="$t('friends.no_requests')"
-        :subtitle="$t('friends.no_requests_subtitle')"
-      />
-    </template>
+  <div class="requests" data-cy="friend-requests-page">
+    <UiResultsMessage
+      v-if="!incomingRequests.length && !outgoingRequests.length"
+      :title="$t('friends.no_requests')"
+      :subtitle="$t('friends.no_requests_subtitle')"
+    />
 
     <!-- Incoming Requests -->
-    <template v-if="incomingRequests.length">
-      <div class="padded_divider">
-        <TypographyHorizontalRuleText
-          plaintext
-          :value="$t('friends.requests')"
-        />
-      </div>
-      <FriendsFriend
+    <div v-if="incomingRequests.length">
+      <TypographyText as="h4" class="heading">
+        {{ $t('friends.incoming') }}
+      </TypographyText>
+      <FriendsItem
         v-for="request in incomingRequests"
-        :key="request.from"
-        :user="
-          request.user || {
-            did: request.did,
-            name: request.user.name,
-            status: 'offline',
-          }
-        "
-        :request="request"
+        :key="request.did"
+        :user="users.getUser(request.did)"
+        type="incoming"
       />
-    </template>
+    </div>
 
     <!-- Outgoing Requests -->
-    <template v-if="outgoingRequests.length">
-      <div class="padded_divider">
-        <TypographyHorizontalRuleText
-          plaintext
-          :value="$t('friends.outgoing')"
-        />
-      </div>
-      <FriendsFriend
+    <div v-if="outgoingRequests.length">
+      <TypographyText as="h4" class="heading">
+        {{ $t('friends.outgoing') }}
+      </TypographyText>
+      <FriendsItem
         v-for="request in outgoingRequests"
-        :key="request.from"
-        :user="
-          request.user || {
-            did: request.did,
-            name: request.user.name,
-            status: 'offline',
-          }
-        "
-        :request="request"
+        :key="request.did"
+        :user="users.getUser(request.did)"
+        type="outgoing"
       />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -57,26 +38,19 @@
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
-import notNull from '~/utilities/notNull'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'FriendRequests',
   data() {
     return {
       friends: iridium.friends.state,
+      users: iridium.users,
     }
   },
   computed: {
     requests(): FriendRequest[] {
-      return Object.values(this.friends.requests)
-        .map((request) => {
-          const user = iridium.users.getUser(request.user.did)
-          if (!user) {
-            return null
-          }
-          return { ...request, user }
-        })
-        .filter(notNull)
+      return Object.values(this.friends.requests).filter(truthy)
     },
     incomingRequests(): FriendRequest[] {
       return this.requests.filter((r) => r.incoming && r.status !== 'accepted')
@@ -88,4 +62,14 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.requests {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .heading {
+    margin: 0 0 12px 16px;
+  }
+}
+</style>

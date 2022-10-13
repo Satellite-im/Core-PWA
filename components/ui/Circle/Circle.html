@@ -7,7 +7,7 @@
     v-if="type === 'image' && source"
     :src="source"
     alt="Circle Image"
-    :class="`${square ? 'is-square' : 'is-rounded'} image`"
+    :class="`${square ? 'is-square' : 'is-rounded'} circle-image`"
     data-cy="circle-has-picture"
     draggable="false"
   />
@@ -22,6 +22,5 @@
     <div v-else>{{ firstLetter }}</div>
   </div>
 
-  <UiDynamicIcon size="1x" :icon="icon" v-else-if="icon" />
   <slot></slot>
 </div>

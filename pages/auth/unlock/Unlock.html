@@ -1,9 +1,22 @@
 <div class="container">
+  <div class="header">
+    <div v-if="!isChrome" class="banner-wrapper">
+      <UiBanner>
+        <template #header>
+          {{ $t('pages.unlock.browser_warning_header') }}
+        </template>
+        <template #content>
+          {{ $t('pages.unlock.browser_warning_content') }}
+        </template>
+      </UiBanner>
+    </div>
+  </div>
+
   <div class="decryption-body">
     <template v-if="step === 'signup'">
       <UiInfoButton class="info-button">
         <template #title> {{ $t('pages.unlock.create') }} </template>
-        <template #subtitle> {{ pinDescription }} </template>
+        <template #body> {{ pinDescription }} </template>
       </UiInfoButton>
     </template>
 
@@ -15,30 +28,36 @@
         :label="step === 'login' ? $t('pages.unlock.decrypt') : $t('pages.unlock.choose_pin')"
         :placeholder="$t('pages.unlock.placeholder')"
         :loading="status === 'loading'"
-        size="sm"
         autofocus
         @submit="action"
         data-cy="pin-label"
+        :error="$t(error)"
       >
         <unlock-icon size="1x" v-if="getIcon() === 'unlocked'" />
         <chevron-right-icon size="1x" v-else />
       </InteractablesInput>
-      <TypographyError v-if="error" :text="$t(error)" />
     </div>
+
     <InteractablesSwitch
       v-model="storePin"
       :label="$t('pages.unlock.store_pin')"
+      show-label
     />
+
     <br />
-    <a v-if="step === 'login'" class="delete-link" @click="clearAndReset">
-      {{$t('pages.unlock.delete_account_label')}}
-    </a>
-    <div class="realm-container">
-      <InteractablesRealm />
-    </div>
+
+    <button
+      v-if="step === 'login'"
+      class="delete-link font-size-sm"
+      @click="confirmClearAccountModalVisible = true"
+    >
+      {{ $t('pages.unlock.delete_account_label') }}
+    </button>
+
+    <!-- <InteractablesRealm /> -->
+
     <div class="random-user-container" v-if="isDev">
       <InteractablesButton
-        color="primary"
         class="random-user-btn"
         :text="status === 'loading' ? '':  $t('pages.unlock.generate_random_user')"
         @click="createRandom"
@@ -46,6 +65,25 @@
       /></InteractablesButton>
     </div>
   </div>
+
   <UiVersion name version @click="toggleChangelogVisibility" />
-  <UiUpdateModal v-if="ui.modals.changelog" />
+
+  <UiModal
+    v-if="ui.modals.changelog"
+    @close="toggleModal(ModalWindows.CHANGELOG)"
+  >
+    <UiUpdateModal />
+  </UiModal>
+
+  <UiConfirmationModal
+    :show-modal="confirmClearAccountModalVisible"
+    @close="() => confirmClearAccountModalVisible = false"
+    @confirm="clearAccount"
+    show-confirm-button
+  >
+    <template #title>{{ $t('pages.unlock.confirm_clear_account') }}</template>
+    <template #body
+      >{{ $t('pages.unlock.confirm_clear_account_description') }}</template
+    >
+  </UiConfirmationModal>
 </div>

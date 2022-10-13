@@ -1,5 +1,10 @@
-<div class="keybind-input" v-click-outside="cancel">
-  <TypographyLabel :text="name" />
+<div
+  class="keybind-input"
+  v-click-outside="cancel"
+  ref="container"
+  tabindex="-1"
+>
+  <TypographyText as="label">{{ name }}</TypographyText>
   <div class="control">
     <TypographyText v-if="!isListening && value === ''" class="info-label">
       {{$t('pages.settings.keybinds.no_mapping')}}
@@ -28,7 +33,7 @@
       <span
         v-tooltip.top="$t(isReservedKeybind ? 'pages.settings.keybinds.reserved' : 'pages.settings.keybinds.save')"
       >
-        <InteractablesButton color="primary" @click="save" :disabled="!canSave">
+        <InteractablesButton @click="save" :disabled="!canSave">
           <CheckIcon size="1x" />
         </InteractablesButton>
       </span>

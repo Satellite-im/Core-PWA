@@ -13,6 +13,7 @@
     &:extend(.full-width);
     display: flex;
     flex-wrap: wrap;
+    padding: 16px;
     .profile-left {
       &:extend(.full-width);
       margin-top: -240px;
@@ -42,6 +43,7 @@
 
       .subtitle {
         margin-bottom: @light-spacing;
+        user-select: none;
       }
 
       .photo {
@@ -75,9 +77,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: @xlarge-spacing;
   box-sizing: border-box;
-  padding: @large-spacing;
+  padding: @xlarge-spacing;
 }
 
 .profile-left {
@@ -99,7 +101,7 @@
   .profile-section {
     display: flex;
     flex-direction: column;
-    gap: 64px;
+    gap: 40px;
   }
 }
 
@@ -120,24 +122,29 @@
   justify-content: space-between;
   gap: @light-spacing;
   margin-bottom: @normal-spacing;
+  user-select: none;
 
   .title-wrapper {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
+
+    svg {
+      color: @dark;
+    }
   }
 }
 
 .profile-main {
-  background: @midground-alt;
+  background: @semitransparent-dark-gradient;
   padding: @large-spacing;
   &:extend(.round-corners);
   &:extend(.bordered);
 
   .profile-section {
     display: grid;
-    grid-template-columns: 0.3fr 1fr 1fr;
+    grid-template-columns: auto 1fr 1fr;
     grid-template-rows: 0.5fr 0.5fr 0.5fr auto;
     gap: 0px 16px;
     grid-template-areas:
@@ -149,6 +156,7 @@
 
   .subtitle {
     grid-area: subtitle;
+    user-select: none;
   }
 
   .photo {
@@ -167,6 +175,7 @@
   .username {
     align-self: center;
     grid-area: username;
+    user-select: none;
   }
 
   .status-input {
@@ -177,6 +186,7 @@
     grid-area: status;
     margin-top: @normal-spacing;
     padding: 0 8px;
+    user-select: none;
   }
 }
 
@@ -212,19 +222,42 @@
     display: flex;
     justify-content: space-between;
     gap: @normal-spacing;
+    user-select: none;
 
     .subtitle {
       margin-bottom: 0;
     }
   }
+}
 
-  .edit-button {
-    font-style: italic;
-    white-space: nowrap;
-    color: @text-muted;
+.editable-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 8px;
+  margin: 0 -8px;
+  position: relative;
+  border-radius: @corner-rounding;
+  border: 1px solid transparent;
+  background: linear-gradient(
+    0deg,
+    rgba(34, 44, 63, 0.5) 0%,
+    rgba(36, 40, 57, 0.5) 100%
+  );
 
-    &:hover {
-      opacity: 0.8;
+  &.username,
+  &.readonly {
+    background: transparent;
+  }
+
+  &.username {
+    padding: 0;
+    margin: 0;
+    border: none;
+
+    .username-label {
+      flex-grow: 1;
+      &:extend(.ellipsis);
     }
   }
 }
@@ -232,7 +265,7 @@
 .accounts-main {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 2rem;
 
   .accounts-subtitle-wrapper {
     display: flex;
@@ -244,6 +277,7 @@
       justify-content: space-between;
       gap: @normal-spacing;
       margin-bottom: 0;
+      user-select: none;
 
       .subtitle {
         margin-bottom: 0;

@@ -1,13 +1,13 @@
 interface AudioState {
-  muted: Boolean
-  deafened: Boolean
-  volume: Number
-  inputVolume: Number
-  previousVolume: Number
+  muted: boolean
+  deafened: boolean
+  volume: number
+  inputVolume: number
+  previousVolume: number
   sounds: {
-    inboundMedia: Number
-    outboundMedia: Number
-    system: Number
+    inboundMedia: number
+    outboundMedia: number
+    system: number
   }
 }
 

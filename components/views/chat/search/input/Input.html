@@ -61,6 +61,7 @@
     </ul>
   </div>
   <div v-if="isDate && isFocus" refs="datePicker" class="date-selection">
-    <v-calendar is-dark @dayclick="clickDateOption" :max-date="new Date()" />
+    <!-- todo - implement new datepicker library. v-calendar was huge -->
+    <!-- <v-calendar is-dark @dayclick="clickDateOption" :max-date="new Date()" /> -->
   </div>
 </div>

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`chat.conversationMessageIsNotice test case 1 1`] = `false`;
+
+exports[`chat.conversationMessageIsNotice test case 2 1`] = `false`;
+
+exports[`chat.conversationMessageIsNotice test case 3 1`] = `false`;
+
+exports[`chat.conversationMessageIsNotice test case 4 1`] = `false`;
+
+exports[`chat.conversationMessageIsNotice test case 5 1`] = `false`;
+
+exports[`chat.conversationMessageIsNotice test case 6 1`] = `false`;

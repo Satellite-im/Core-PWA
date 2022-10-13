@@ -1,7 +1,9 @@
 <div class="settings-unit" @click="$emit('click', $event)">
-  <div class="text">
+  <div v-if="title && text" class="text">
     <TypographyText v-if="title.length" as="h3"> {{ title }} </TypographyText>
-    <TypographyText v-if="text.length"> {{ text }} </TypographyText>
+    <TypographyText v-if="text.length" color="dark">
+      {{ text }}
+    </TypographyText>
   </div>
   <slot></slot>
 </div>

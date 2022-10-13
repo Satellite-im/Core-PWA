@@ -6,8 +6,8 @@
       </TypographyText>
       <InteractablesButton
         :text="$t('pages.files.aside.upgrade')"
-        class="disabled"
-        v-tooltip.bottom="$t('pages.files.aside.coming_soon')"
+        size="sm"
+        disabled
       />
     </div>
     <UiProgress :progress="percentageUsed" />

@@ -9,6 +9,7 @@ Object {
   "error": "",
   "gasPrice": "",
   "initialized": false,
+  "isNewAccount": false,
   "lastVisited": "/",
   "loading": false,
   "locked": true,

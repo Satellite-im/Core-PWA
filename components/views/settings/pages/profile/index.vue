@@ -13,6 +13,10 @@ import {
 } from 'satellite-lucide-icons'
 import { sampleProfileInfo } from '~/mock/profile'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
+
+type Editables = 'about'
 
 export default Vue.extend({
   components: {
@@ -26,10 +30,17 @@ export default Vue.extend({
   data() {
     return {
       image: '',
-      status: '',
-      accountUrl: '',
       croppedImage: '',
       showCropper: false,
+      loading: new Set() as Set<keyof User>,
+      editing: new Set() as Set<Editables>,
+      inputs: {
+        name: iridium.profile.state?.name ?? '',
+        photoHash: iridium.profile.state?.photoHash ?? '',
+        status: '',
+        about: iridium.profile.state?.about ?? '',
+        accountUrl: '',
+      } as Partial<User>,
     }
   },
   computed: {
@@ -46,11 +57,14 @@ export default Vue.extend({
       if (this.croppedImage) {
         return this.croppedImage
       }
-      const hash = this.accounts?.details?.profilePicture
+      const hash = iridium.profile.state?.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
     },
     imageInputRef(): HTMLInputElement {
       return (this.$refs.imageInput as Vue).$refs.imageInput as HTMLInputElement
+    },
+    profile(): User | undefined {
+      return iridium.profile.state
     },
   },
   beforeDestroy() {
@@ -86,8 +100,6 @@ export default Vue.extend({
       const img = new Image()
       img.src = this.croppedImage
       // TODO: Save image with iridium
-      // Note: This was used for Solana implementation
-      // this.$store.dispatch('accounts/updateProfilePhoto', image)
     },
     /**
      * @method selectProfileImage DocsTODO
@@ -105,10 +117,74 @@ export default Vue.extend({
         this.toggleCropper()
       }
     },
-    removeProfileImage() {
-      this.croppedImage = ''
-      // TODO: Update with IPFS method
-      // this.$store.dispatch('accounts/updateProfilePhoto', '')
+    /**
+     * @method updateUserDetail
+     * @description Updates user details
+     * @example this.updateUserDetail('name', 'John Doe')
+     */
+    async updateUserDetail(e: SubmitEvent, key: keyof User, value: string) {
+      e.stopPropagation()
+      e.preventDefault()
+
+      try {
+        this.loading.add(key)
+        await iridium.profile.updateUser({
+          [key]: value.trim(),
+        })
+        const inputs = this.inputs as { [key in keyof User]: string }
+        inputs[key] = value.trim()
+        this.$toast.show(
+          this.$t('pages.settings.profile.detail_updated') as string,
+        )
+      } catch (e: any) {
+        this.$toast.error(this.$t(e.message) as string)
+      } finally {
+        this.loading.delete(key)
+        // Note: For Vue 2 reactivity
+        this.loading = new Set(...this.loading.entries())
+      }
+    },
+    /**
+     * @method toggleEditing
+     * @description Toggles editing state of a field
+     * @example this.toggleEditing('name')
+     */
+    toggleEditing(key: Editables) {
+      if (this.editing.has(key)) {
+        this.editing.delete(key)
+        // Note: For Vue 2 reactivity
+        this.editing = new Set(...this.editing.entries())
+      } else {
+        this.editing.add(key)
+        // Note: For Vue 2 reactivity
+        this.editing = new Set(...this.editing.entries())
+      }
+    },
+    /**
+     * @method submitEdit
+     * @description Updates input value
+     * @example this.submitEdit('name', 'John Doe')
+     */
+    submitEdit(e: SubmitEvent, key: Editables) {
+      e.stopPropagation()
+      e.preventDefault()
+      const value = this.inputs[key] || ''
+      const valueChanged = this.profile?.[key] !== value
+      if (this.editing.has(key) && valueChanged) {
+        this.updateUserDetail(e, key, value)
+      }
+      this.toggleEditing(key)
+    },
+    /**
+     * @method getEditButtonText
+     * @description Returns the label for the edit button
+     * @example this.getEditLabel('about')
+     */
+    getEditButtonText(key: Editables) {
+      if (this.editing.has(key)) {
+        return this.$t('global.save') as string
+      }
+      return this.$t('global.edit') as string
     },
   },
 })

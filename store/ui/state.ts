@@ -2,16 +2,11 @@ import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
 
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
-  notifications: [],
   showSidebar: true,
-  showSearchResult: false,
   showSettings: false,
   settingsRoute: SettingsRoutes.EMPTY,
-  quickProfile: false,
-  userProfile: {},
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
-  quickProfilePosition: { x: 0, y: 0 },
   modals: {
     newfolder: false,
     createServer: false,
@@ -25,12 +20,11 @@ const InitialUIState = (): UIState => ({
     callToAction: false,
     renameFile: false,
     errorNetwork: { isOpen: false, action: null },
+    consentScanConfirmation: false,
   },
   glyphModalPackId: undefined,
   chatbarContent: '',
   chatbarFocus: false,
-  fullscreen: false,
-  showPinned: false,
   enhancers: {
     show: false,
     floating: false,
@@ -42,11 +36,7 @@ const InitialUIState = (): UIState => ({
   },
   messages: [],
   unreadMessage: 0,
-  isScrollOver: false,
   showOlderMessagesInfo: false,
-  isTyping: false,
-  isReacted: false,
-  activeChannel: undefined,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   glyphMarketplaceView: {
@@ -58,6 +48,7 @@ const InitialUIState = (): UIState => ({
   recentGlyphs: [],
   chatImageOverlay: undefined,
   isMobileNavVisible: true,
+  callHeight: 'auto',
 })
 
 export default InitialUIState

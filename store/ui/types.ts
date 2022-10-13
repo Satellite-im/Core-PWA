@@ -1,8 +1,7 @@
 import { TranslateResult } from 'vue-i18n'
-import { FileMessage } from '~/types/textile/mailbox'
 import { Glyph } from '~/types/ui/glyph'
-import { Channel } from '~/types/ui/server'
-import { Alert } from '~/libraries/ui/Alerts'
+import { MessageAttachment } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
 
 export enum GlyphMarketViewStatus {
   HOME = 'home',
@@ -19,9 +18,9 @@ export enum ModalWindows {
   ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
-  USER_PROFILE = 'userProfile',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
+  CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
 }
 
 export interface EnhancerInfo {
@@ -53,7 +52,7 @@ export enum SettingsRoutes {
   AUDIO_AND_VIDEO = 'audio & Video',
   KEY_BINDS = 'keybinds',
   ACCOUNTS_AND_DEVICES = 'accounts & Devices',
-  PRIVACY = 'privacy',
+  PRIVACY_AND_PERMISSIONS = 'privacy & Permissions',
   DEVELOPER = 'developer',
   INFO = 'info',
   NOTIFICATIONS = 'notifications',
@@ -62,7 +61,7 @@ export enum SettingsRoutes {
   REALMS = 'realms',
 }
 
-export type ContextMenuItemTypes = 'primary' | 'danger'
+export type ContextMenuItemTypes = 'primary' | 'danger' | 'disabled'
 
 export interface ContextMenuItem {
   text: string | TranslateResult
@@ -70,16 +69,18 @@ export interface ContextMenuItem {
   type?: ContextMenuItemTypes
 }
 
+export type Position = {
+  x: number
+  y: number
+}
+
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile: object | boolean
-  userProfile: object
-  notifications: Alert[]
-  contextMenuPosition: object
-  quickProfilePosition: object
+  quickProfile?: { user: User; position: Position; showStatusChange?: boolean }
+  fullProfile?: User
+  contextMenuPosition: Position
   settingsRoute: SettingsRoutes
-  showSearchResult: boolean
   showSidebar: boolean
   modals: {
     [key in ModalWindows]: boolean | object
@@ -87,16 +88,10 @@ export interface UIState {
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
-  showPinned: boolean
-  fullscreen: boolean
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  isScrollOver: boolean
   showOlderMessagesInfo: boolean
-  isTyping: object | boolean
-  isReacted: boolean
-  activeChannel: Channel | undefined
   settingReaction: object
   hoveredGlyphInfo: object | undefined
   glyphMarketplaceView: object
@@ -107,11 +102,7 @@ export interface UIState {
   }
   mostEmojiUsed: EmojiUsage[]
   recentGlyphs: RecentGlyph[]
-  chatImageOverlay?: FileMessage
+  chatImageOverlay?: MessageAttachment & { dataURL: string }
   isMobileNavVisible: boolean
-}
-
-export type Position = {
-  x: number
-  y: number
+  callHeight: string
 }

@@ -2,7 +2,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import { mapState } from 'vuex'
 import {
   PhoneIcon,
   PhoneOffIcon,
@@ -10,9 +10,11 @@ import {
   VideoOffIcon,
 } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { User } from '~/libraries/Iridium/friends/types'
+import { User } from '~/libraries/Iridium/users/types'
 import { WebRTCState } from '~/libraries/Iridium/webrtc/types'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { TrackKind } from '~/libraries/WebRTC/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   name: 'IncomingCall',
@@ -22,32 +24,24 @@ export default Vue.extend({
     VideoIcon,
     VideoOffIcon,
   },
-  props: {
-    acceptCall: {
-      type: Function,
-      default: () => {},
-      required: false,
-    },
-    denyCall: {
-      type: Function,
-      default: () => {},
-      required: false,
-    },
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
+      chat: iridium.chat.state,
     }
   },
   computed: {
+    ...mapState({
+      audio: (state) => (state as RootState).audio,
+    }),
     conversationId(): Conversation['id'] | undefined {
-      return this.$route.params.id
+      return this.incomingCall?.did
     },
     conversation(): Conversation | undefined {
       if (!this.conversationId) {
         return undefined
       }
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.chat.conversations[this.conversationId]
     },
     isGroup(): boolean {
       return this.conversation?.type === 'group'
@@ -56,14 +50,14 @@ export default Vue.extend({
       return this.webrtc.incomingCall
     },
     caller(): User | undefined {
-      if (!this.incomingCall?.did) {
+      if (!this.conversationId) {
         return
       }
       // TODO : fix this later
       if (this.isGroup) {
         return
       }
-      return iridium.users.getUser(this.incomingCall.did)
+      return iridium.users.getUser(this.conversationId)
     },
     callerAvatar(): string {
       if (!this.caller) {
@@ -71,6 +65,41 @@ export default Vue.extend({
       }
       const hash = this.caller.photoHash
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
+    },
+  },
+  methods: {
+    /**
+     * @method acceptCall DocsTODO
+     * @description
+     * @example
+     */
+    async acceptCall() {
+      const conversationId = this.webrtc.incomingCall?.callId
+      if (!conversationId) {
+        return
+      }
+      const kinds = [] as TrackKind[]
+      if (!this.audio.muted) {
+        kinds.push('audio')
+      }
+      this.$store.commit('video/setDisabled', true)
+      await iridium.webRTC
+        .acceptCall(kinds)
+        .catch((e) => this.$toast.error(this.$t(e.message) as string))
+
+      this.$router.push(
+        this.$device.isMobile
+          ? `/mobile/chat/${conversationId}`
+          : `/chat/${conversationId}`,
+      )
+    },
+    /**
+     * @method denyCall DocsTODO
+     * @description
+     * @example
+     */
+    denyCall() {
+      iridium.webRTC.denyCall()
     },
   },
 })

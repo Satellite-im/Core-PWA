@@ -1,23 +1,16 @@
 .friends {
+  display: flex;
+  flex-direction: column;
   padding: @normal-spacing;
   width: 100%;
-  overflow-y: scroll;
 
   .main-content {
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
     max-width: 1250px;
     padding: 16px 0;
   }
-}
-
-.alpha-divider {
-  &:extend(.full-width);
-  display: inline-block;
-  padding-left: @normal-spacing;
-  font-size: @mini-text-size;
-  font-family: @primary-font;
 }
 
 .loading-container {
@@ -32,9 +25,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
   .tabs {
-    padding: 0 @large-spacing;
-    border-bottom: 1px solid rgba(@gray, 0.5);
+    flex-grow: 1;
   }
 }
 

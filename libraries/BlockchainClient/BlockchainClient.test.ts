@@ -1,6 +1,6 @@
 import BlockchainClient from './BlockchainClient'
 
-describe('', () => {
+describe('Test BlockchainClient', () => {
   test('get account but it is uninitialized', () => {
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     try {
@@ -43,17 +43,5 @@ describe('', () => {
     const result = $BlockchainClient.setPhotoHash('string')
     expect(result).toBeFalsy()
     expect(mockedFunction).toHaveBeenCalled()
-  })
-
-  test.skip('get account but it has been initialized', async () => {
-    const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
-    $BlockchainClient.initRandom()
-    // try {
-    const result = $BlockchainClient.account
-    expect(result).toBe(true)
-    // } catch (error) {
-    //   expect(error).toBeInstanceOf(Error)
-    //   expect(error).toHaveProperty('message', `Account is not initialized`)
-    // }
   })
 })

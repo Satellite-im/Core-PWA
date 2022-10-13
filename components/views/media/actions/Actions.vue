@@ -17,6 +17,7 @@ import { mapState } from 'vuex'
 import { WebRTCEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { PeerMutedState, StreamMutedState } from '~/store/webrtc/types'
 
 export default Vue.extend({
   components: {
@@ -30,7 +31,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      isLoading: false,
+      buttonsLoading: [] as WebRTCEnum[],
       webrtc: iridium.webRTC.state,
     }
   },
@@ -39,17 +40,20 @@ export default Vue.extend({
       audio: (state) => (state as RootState).audio,
       video: (state) => (state as RootState).video,
     }),
+    mutedState(): PeerMutedState | undefined {
+      if (!iridium.connector) {
+        return
+      }
+      return this.webrtc.streamMuted[iridium.connector.id]
+    },
     audioMuted(): boolean {
-      return this.audio.muted
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.audio)
     },
     videoMuted(): boolean {
-      return this.video.disabled
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.video)
     },
     screenMuted(): boolean {
-      return Boolean(
-        iridium.connector?.id &&
-          this.webrtc.streamMuted[iridium.connector?.id]?.screen,
-      )
+      return Boolean(iridium.id && this.webrtc.streamMuted[iridium.id]?.screen)
     },
   },
   methods: {
@@ -59,10 +63,9 @@ export default Vue.extend({
      * @example
      */
     async toggleMute(kind: WebRTCEnum) {
-      if (!iridium.connector?.id) return
+      if (!iridium.id) return
 
-      // TODO: isLoading needs to be kind specific, currently all 3 kinds show loading icon if any of them is loading.
-      this.isLoading = true
+      this.buttonsLoading.push(kind)
       try {
         if (kind === WebRTCEnum.AUDIO) {
           await this.$store.dispatch('audio/toggleMute')
@@ -71,13 +74,13 @@ export default Vue.extend({
         } else {
           await iridium.webRTC.toggleMute({
             kind,
-            did: iridium.connector.id,
+            did: iridium.id,
           })
         }
       } catch (e: any) {
         this.$toast.error(this.$t(e.message) as string)
       }
-      this.isLoading = false
+      this.buttonsLoading.splice(this.buttonsLoading.indexOf(kind), 1)
     },
     /**
      * @method hangUp

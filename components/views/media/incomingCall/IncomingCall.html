@@ -1,30 +1,28 @@
 <div class="incoming" data-cy="incoming-call">
   <UiCircle
+    class="avatar"
     :type="callerAvatar ? 'image' : 'random'"
     :seed="caller.did"
     :source="callerAvatar"
     :size="120"
   />
-  <div class="user-info">
-    <TypographyText class="ellipsis" as="h2" :title="caller.name">
-      {{caller.name}}
-    </TypographyText>
-    <TypographyText class="ellipsis" as="h4" :title="caller.status">
-      {{caller.status}}
-    </TypographyText>
-  </div>
+  <TypographyText class="user-info ellipsis" as="h2" :title="caller.name">
+    {{caller.name}}
+  </TypographyText>
   <UiLoadersScaleLoader />
   <div class="buttons">
     <InteractablesButton
       color="danger"
       @click="denyCall"
+      size="lg"
       data-cy="incoming-call-deny"
     >
       <phone-off-icon size="1x" class="button-icon" />
     </InteractablesButton>
     <InteractablesButton
       color="success"
-      @click="acceptCall(['audio'])"
+      @click="acceptCall"
+      size="lg"
       data-cy="incoming-call-accept"
     >
       <phone-icon size="1x" class="button-icon" />

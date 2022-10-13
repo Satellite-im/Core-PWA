@@ -1,19 +1,31 @@
 <SettingsPage>
-  <SettingsUnit>
-    <TypographyTitle :size="6" :text="$t('pages.settings.accounts.title')" />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.accounts.subtitle')"
-    />
-  </SettingsUnit>
+  <SettingsHeader>
+    {{ $t('pages.settings.accounts.title') }}
+    <template #subheading>
+      {{ $t('pages.settings.accounts.subtitle') }}
+    </template>
+  </SettingsHeader>
 
   <SettingsUnit>
-    <TypographyLabel :text="$t('pages.settings.accounts.active')" />
-    <InteractablesInput readonly :text="accounts.active" @submit="copyAddress">
+    <InteractablesInput
+      readonly
+      :label="$t('pages.settings.accounts.active')"
+      :text="getId"
+      @submit="copyText(getId)"
+    >
       <clipboard-icon size="1x" />
     </InteractablesInput>
   </SettingsUnit>
-
+  <SettingsUnit>
+    <InteractablesInput
+      readonly
+      :label="$t('pages.settings.accounts.active_did')"
+      :text="profile.did"
+      @submit="copyText(profile.did)"
+    >
+      <clipboard-icon size="1x" />
+    </InteractablesInput>
+  </SettingsUnit>
   <!-- <SettingsSection>
     <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.accounts.gas_price')" />
@@ -22,32 +34,29 @@
   </SettingsSection> -->
 
   <SettingsUnit>
-    <TypographyTitle :size="6" :text="$t('pages.settings.accounts.devices')" />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.accounts.no_devices')"
-    />
+    <TypographyText as="h3">
+      {{ $t('pages.settings.accounts.devices') }}
+    </TypographyText>
+    <TypographyText color="dark">
+      {{ $t('pages.settings.accounts.no_devices') }}
+    </TypographyText>
   </SettingsUnit>
 
   <SettingsUnit>
-    <TypographyTitle
-      :size="6"
-      :text="$t('pages.settings.profile.phrase.title')"
-    />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.profile.phrase.subtitle')"
-    />
+    <TypographyText as="h3">
+      {{ $t('pages.settings.profile.phrase.title') }}
+    </TypographyText>
+    <TypographyText color="dark" style="margin-bottom: 1rem">
+      {{ $t('pages.settings.profile.phrase.subtitle') }}
+    </TypographyText>
     <div class="button-container">
       <InteractablesButton
         :text="showPhrase ? $t('pages.settings.accounts.hide_phrase') : $t('pages.settings.accounts.reveal_phrase')"
-        color="primary"
         @click="togglePhrase"
       />
       <InteractablesButton
         :text="$t('pages.settings.accounts.copy_phrase')"
-        color="primary"
-        @click="copyPhrase"
+        @click="copyText(accountPhrase)"
       />
     </div>
     <div v-if="showPhrase" class="tag-wrap">

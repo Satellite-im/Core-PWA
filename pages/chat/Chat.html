@@ -5,7 +5,12 @@
     :max-viewable-users="10"
     :fullscreen-max-viewable-users="20"
   />
-  <Conversation />
-  <Chatbar ref="chatbar" />
-  <!-- <WalletMini v-if="ui.modals.walletMini" /> -->
+  <div class="outer-wrapper">
+    <div class="inner-wrapper">
+      <Conversation />
+      <!-- dont remove ref, used in layouts/desktop.vue -->
+      <Chatbar ref="chatbar" />
+    </div>
+    <UserList v-if="isGroup" />
+  </div>
 </div>

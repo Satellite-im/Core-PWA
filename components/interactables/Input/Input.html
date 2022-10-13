@@ -2,34 +2,55 @@
   <TypographyText v-if="label" as="label" uppercase>
     {{ label }}
   </TypographyText>
-  <div class="input-outer" :class="`font-size-${size}`">
-    <div class="input-inner">
+  <div
+    class="input-outer"
+    :class="[`font-size-${derivedSize}`, {'outline': isFocused}]"
+  >
+    <div
+      class="input-inner"
+      :class="[
+        `is-${color}`,
+        {
+          'is-danger': error || invalid,
+          'has-sibling': $slots.default,
+          transparent: transparent,
+        },
+      ]"
+    >
       <input
         ref="input"
         class="input font-body font-color-light"
-        :class="[
-          `is-${color}`,
-          {
-            'show-clear-button': showClearButton,
-            'is-danger': error || invalid
-          }
-        ]"
         :value="text"
-        :type="type"
+        :type="derivedType"
         :readonly="readonly"
         :placeholder="placeholder"
         :minLength="minLength"
         :maxLength="maxLength"
         :disabled="disabled"
+        data-cy="input-group"
         @keydown.enter="handleSubmit"
         @input="handleInput"
-        data-cy="input-group"
+        @focus="handleFocus"
+        @blur="isFocused = false"
       />
-      <div class="append input-options">
-        <button v-if="showClearButton && !isEmpty" @click="clearInput">
+
+      <div v-if="enabledAppends.length" class="append input-options">
+        <button
+          v-if="enabledAppends.includes(Appends.Password)"
+          @click="toggleShowPassword"
+        >
+          <eye-icon size="1x" v-if="!showPassword" />
+          <eye-off-icon size="1x" v-else />
+        </button>
+
+        <button
+          v-if="enabledAppends.includes(Appends.Erase)"
+          @click="clearInput"
+        >
           <delete-icon size="1x" />
         </button>
-        <div v-if="$slots.append" class="slot">
+
+        <div v-if="enabledAppends.includes(Appends.Custom)" class="slot">
           <slot name="append" />
         </div>
       </div>
@@ -39,15 +60,24 @@
       class="button"
       :color="color"
       :disabled="disabled"
-      @click="handleSubmit"
       data-cy="submit-input"
+      :type="buttonType"
+      @click="handleSubmit"
     >
       <UiLoadersSpinner v-if="loading" spinning />
       <slot v-else></slot>
     </InteractablesButton>
   </div>
-  <span v-if="showLimit" class="char-limit">
+  <TypographyText
+    v-if="showLimit"
+    size="xs"
+    color="dark"
+    class="attachment limit"
+    :class="{display: maxLength - text.length <= 100}"
+  >
     {{ text.length }}/{{ maxLength }}
-  </span>
-  <TypographyError v-if="error" class="error" :text="error" small />
+  </TypographyText>
+  <TypographyText v-if="error" as="small" color="danger" class="attachment">
+    {{ error }}
+  </TypographyText>
 </div>

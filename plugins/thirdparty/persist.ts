@@ -12,18 +12,13 @@ const mutationsBlacklist = [
   'accounts/setPhrase',
   'files',
   'toggleMediaIncomingCall',
-  'ui/setMessages',
-  'ui/sendMessage',
   'chat/addFile',
-  'textile/setMessageLoading',
   'groups/setSubscriptionId',
+  'video',
 ]
 
 // State properties path to blacklist saving to store
 const commonProperties = [
-  'webrtc.initialized',
-  'textile.initialized',
-  'textile.messageLoading',
   'accounts.initialized',
   'friends.all',
   'friends',
@@ -32,20 +27,22 @@ const commonProperties = [
   'chat.replyChatbarMessage',
   'ui.editMessage',
   'chat.files',
-  'chat.countError',
+  'chat.activeUploadChats',
   'groups.inviteSubscription',
   'groups.groupSubscriptions',
   'ui.modals',
-  'ui.isScrollOver',
   'ui.isMobileNavVisible',
   'ui.settingsRoute',
   'conversation.participants',
   'files',
+  'ui.callHeight',
+  'accounts.phrase',
+  'ui.quickProfile',
+  'ui.fullProfile'
 ]
 
 const propertiesNoStorePin = [
   'accounts.pin',
-  'accounts.mnemonic',
   'accounts.locked',
   'accounts.error',
   'accounts.loading',

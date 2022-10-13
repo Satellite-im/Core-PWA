@@ -70,13 +70,6 @@ export default Vue.extend({
         }
         return
       }
-
-      this.$store.dispatch('conversation/setConversation', {
-        id: this.user.address,
-        type: 'friend',
-        participants: [this.user],
-        calling: false,
-      })
       this.$router.push(`/chat/direct/${this.user.address}`)
     },
   },

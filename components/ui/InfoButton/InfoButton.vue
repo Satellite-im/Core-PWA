@@ -4,42 +4,10 @@
       <info-icon size="1.5x" />
     </button>
 
-    <transition name="modal">
-      <UiModal v-if="showModal" @close="() => toggleShowModal()">
-        <div class="modal-content">
-          <div class="modal-main">
-            <TypographyText color="flair" class="icon-container">
-              <info-icon size="1.5x" />
-            </TypographyText>
-            <div class="body">
-              <div class="heading">
-                <TypographyText class="info-icon-mobile" color="flair">
-                  <info-icon size="1.5x" />
-                </TypographyText>
-
-                <TypographyText as="h2" color="light" font="heading">
-                  <slot name="title" />
-                </TypographyText>
-              </div>
-
-              <TypographyText color="light" class="subtitle">
-                <slot name="subtitle" />
-              </TypographyText>
-            </div>
-          </div>
-
-          <InteractablesButton
-            color="light"
-            class="close-button"
-            @click="() => toggleShowModal()"
-          >
-            <TypographyText color="light" font="heading">
-              {{ $t('ui.close') }}
-            </TypographyText>
-          </InteractablesButton>
-        </div>
-      </UiModal>
-    </transition>
+    <UiConfirmationModal :show-modal="showModal" @close="toggleShowModal">
+      <template #title><slot name="title" /></template>
+      <template #body><slot name="body" /></template>
+    </UiConfirmationModal>
   </div>
 </template>
 

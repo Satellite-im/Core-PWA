@@ -3,6 +3,7 @@
     id="app"
     :class="[`theme-${settings.theme}`, { 'hidden-nav': !isMobileNavVisible }]"
   >
+    <UiBackgroundCall v-if="isBackgroundCall" />
     <Nuxt />
     <MobileNav />
     <UiGlobal />
@@ -27,12 +28,16 @@ export default Vue.extend({
   data() {
     return {
       settings: iridium.settings.state,
+      webrtc: iridium.webRTC.state,
     }
   },
   computed: {
     ...mapState({
       isMobileNavVisible: (state) => (state as RootState).ui.isMobileNavVisible,
     }),
+    isBackgroundCall(): boolean {
+      return iridium.webRTC.isBackgroundCall(this.$route.params.id)
+    },
     flair(): Flair {
       return flairs[this.settings.flair]
     },

@@ -10,6 +10,8 @@
   padding: 8px;
   max-width: 200px;
   min-width: 150px;
+  box-shadow: @ui-shadow;
+
   .subtitle {
     margin: 0 0 @light-spacing @light-spacing;
     font-size: @mini-text-size;
@@ -20,9 +22,19 @@
     font-size: 14px;
     font-family: @secondary-font;
     &:hover {
-      &.red {
-        &:extend(.font-secondary);
-        &:extend(.background-danger);
+      background: @flair-color;
+    }
+    &.danger {
+      color: @red;
+      &:hover {
+        color: @light;
+        background: @red;
+      }
+    }
+    &.disabled {
+      opacity: 0.5;
+      &:hover {
+        background: none;
       }
     }
   }

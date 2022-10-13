@@ -9,7 +9,7 @@
       &:extend(.font-muted);
     }
 
-    &.is-active {
+    &.selected {
       svg {
         &:extend(.font-secondary);
       }
@@ -27,8 +27,12 @@ li {
   &:extend(.full-width);
   &:extend(.no-select);
 
-  &:hover:not(.is-active) {
-    background: @foreground;
+  &.selected {
+    &:extend(.background-semitransparent-lighter);
+  }
+
+  &:hover:not(.selected) {
+    &:extend(.background-semitransparent-light);
   }
 
   svg {

@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Manage sounds sound does not play 1`] = `undefined`;
-
-exports[`Manage sounds sound does not stop 1`] = `undefined`;
-
-exports[`Manage sounds sound plays 1`] = `undefined`;
-
-exports[`Manage sounds sound stops 1`] = `undefined`;

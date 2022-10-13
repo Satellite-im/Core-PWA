@@ -10,22 +10,29 @@ export default Vue.extend({
   components: {
     UserPlusIcon,
   },
-  data: () => ({
-    conversations: iridium.chat.state.conversations,
-  }),
-  computed: {
-    sortedConversations(): Conversation[] {
-      return Object.values(this.conversations).sort(
-        (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
-      )
+  props: {
+    filter: {
+      type: String,
+      required: true,
     },
   },
-  methods: {
-    lastMessageTimestamp(conversation: Conversation): number {
-      const messages = Object.values(
-        this.conversations[conversation.id].message,
-      ).sort((a, b) => a.at - b.at)
-      return messages.at(-1)?.at ?? (conversation.updatedAt || 0)
+  data() {
+    return {
+      loading: false,
+      chat: iridium.chat.state,
+    }
+  },
+  computed: {
+    sortedConversations(): Conversation[] {
+      const conv = iridium.chat.getSortedConversations()
+      if (!this.filter) {
+        return conv
+      }
+      return conv.filter((c) => {
+        return c.name
+          ?.toLocaleLowerCase()
+          .includes(this.filter.toLocaleLowerCase())
+      })
     },
   },
 })

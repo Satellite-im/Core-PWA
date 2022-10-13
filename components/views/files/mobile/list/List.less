@@ -1,0 +1,17 @@
+#mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: @normal-spacing;
+
+  .files-container {
+    display: flex;
+    flex-direction: column;
+    gap: @normal-spacing;
+  }
+
+  &.mobile-list-flat {
+    .files-container {
+      gap: 0;
+    }
+  }
+}

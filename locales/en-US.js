@@ -1,21 +1,18 @@
 export default {
   coming_soon: {
-    communities: 'Communities\nComing Soon',
-    send_money: 'Send Money\nComing Soon',
-    alerts: 'Alerts\nComing Soon',
-    marketplace: 'Marketplace\nComing Soon',
-    wallet: 'Wallet\nComing Soon',
-    archived: 'Archived Messages\nComing Soon',
-    group_call: 'Group Call\nComing Soon',
-    sidebar_search: 'Friends and Group Search\nComing Soon',
-    group_chat_search: 'Group Chat Search\nComing Soon',
+    communities: 'Communities\n(Coming Soon)',
+    send_money: 'Send Money\n(Coming Soon)',
+    wallet: 'Wallet\n(Coming Soon)',
+    group_call: 'Group Call\n(Coming Soon)',
+  },
+  welcome_message: {
+    welcome: 'Welcome, {user}!',
+    ea_warning:
+      'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   },
   global: {
-    name: 'Satellite.im',
-    encrypted: 'Encrypted',
-    unencrypted: 'Unencrypted',
     upload: 'Upload',
-    upload_files: 'Upload Files',
+    uploading: 'Uploading...',
     edit: 'edit',
     save: 'save',
   },
@@ -27,6 +24,7 @@ export default {
     search: 'Search',
     home: 'Home',
     peer_not_active: 'Please wait while peer connects...',
+    chat_not_ready: 'Please wait while connecting...',
     copied: 'ATTN: Copied to clipboard.',
     send: 'Send',
     emoji: 'Emoji',
@@ -37,9 +35,11 @@ export default {
     more: 'More',
     live: 'Live {time}',
     edited: 'edited',
-    online: 'All users are offline | {name} is online | {name} are online',
-    offline: '{name} is not connected',
-    background_call: 'You are currently in a call with',
+    background_call: 'Current call',
+    no_results: 'No results found',
+    early_access: 'Early Access',
+    early_access_message: 'Please report any bugs or issues at ',
+    confirm: 'Confirm',
   },
   time: {
     now: 'now',
@@ -53,7 +53,7 @@ export default {
     accounts: {
       linked_accounts: 'Linked Accounts',
       link_new_account_or_device: 'Link New Account / Device',
-      require_pin_auth: 'Require Pin Auth?',
+      require_pin_auth: 'Require Password Auth?',
       security_suggestion:
         'This is suggested for all users to increase financial security',
     },
@@ -75,11 +75,12 @@ export default {
   },
   messaging: {
     messages: 'Messages',
-    groups: 'Groups',
-    pin: 'Pin',
+    pin: 'Password',
     reply: 'Reply',
     typing: '{user} is typing | {user} are typing',
-    new_messages: 'New Messages',
+    new_messages: 'New message | New messages',
+    unread_since:
+      '{numUnread} unread message since {since} | {numUnread} unread messages since {since}',
     say_hi: 'Say hi! 👋',
     user_sent: {
       me: 'you sent a {msgType}',
@@ -90,13 +91,7 @@ export default {
       user: 'user sent you something',
     },
     user_sent_group_message: {
-      user: '{user} posted in {group}',
-    },
-    pinned: {
-      archived_messages: 'Archived Messages',
-      new: 'New',
-      old: 'Old',
-      files: 'Files',
+      message: '{user} posted in {group}',
     },
     edit: {
       escape_to: 'escape to',
@@ -104,6 +99,19 @@ export default {
       enter_to: 'enter to',
       save: 'save',
     },
+    group_join: '{name} added {members} to the group.',
+    group_leave: '{name} left the group.',
+    sent_attachment: '{name} sent an attachment.',
+    you_sent_attachment: 'You sent an attachment.',
+    sent_glyph: '{name} sent a glyph.',
+    you_sent_glyph: 'You sent a glyph.',
+    group_join_notice: {
+      added: 'added',
+      to_group: 'to the group.',
+    },
+    group_leave_notice: 'left the group.',
+    call_incoming: '{name} started a call.',
+    call_outgoing: 'You started a call.',
   },
   controls: {
     copy_id: 'Copy ID',
@@ -124,7 +132,7 @@ export default {
     turn_off_camera: 'Turn Off Camera',
     turn_on_camera: 'Turn On Camera',
     crop: 'Crop',
-    edit: 'Coming Soon',
+    edit: 'Edit',
     end_stream: 'End Stream',
     not_connected: 'Offline calling unavailable',
     not_available: 'Not available yet',
@@ -144,8 +152,16 @@ export default {
     error_network: {
       title: 'Oops! Please Stand By',
       subtitle:
-        "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your pin to connect or try again later.",
+        "We're currently in our Alpha stage and working hard on connecting you to a satellite. It looks like we're having some technical issues at the moment. Please re-enter your password to connect or try again later.",
       action: 'Try Again',
+    },
+    status: {
+      title: 'Change Status',
+      online: 'Online',
+      busy: 'Busy',
+      busy_sub: 'You will not receive notifications',
+      away: 'Away',
+      offline: 'Offline',
     },
   },
   files: {
@@ -165,7 +181,6 @@ export default {
         for_1: 'Searching for',
         for_2: 'in',
         all: 'all directories',
-        empty: 'No results found',
         placeholder: 'Search...',
         enable_global: 'Enable Global Search',
         disable_global: 'Disable Global Search',
@@ -208,31 +223,39 @@ export default {
         cancel: 'Cancel',
       },
       errors: {
-        no_empty: 'Item name must be a non empty string',
+        no_empty: 'Item name cannot be empty',
         leading_dot: 'Item name cannot begin with .',
         invalid: 'Item name cannot contain invalid symbols (/:"*?<>|~#%&+{}\\)',
         file_size: 'File needs to have a size of 1 byte or greater',
-        duplicate_name: 'Item with name already exists in this directory',
+        duplicate_name: 'Item with this name already exists in this directory',
         storage_limit: 'This upload would exceed your storage limit',
+        blocked: '{name} cannot be uploaded',
         dir_paradox: 'Directory cannot contain itself',
         dir_parent_paradox: 'Directory cannot contain one of its ancestors',
         in_progress: 'Upload already in progress, try again later',
         enable_consent:
           'Please consent to file scanning in your privacy settings',
-        lost: 'Cannot find file, please try again later',
+        lost: 'Cannot find a file, please try again later',
+        timeout: 'Connection timeout, please try again later',
       },
     },
     unlock: {
       decrypt: 'Decrypt Account',
-      create: 'Create Account Pin',
-      placeholder: 'Enter Pin...',
-      choose_pin: 'Choose Your Pin',
-      choose_pin_description_1: 'Create a pin to protect your account.',
+      create: 'Create Account Password',
+      placeholder: 'Enter Password...',
+      choose_pin: 'Choose Your Password',
+      choose_pin_description_1: 'Create a Password to protect your account.',
       choose_pin_description_2:
-        "The pin can be anything you want, just don't forget it.",
-      store_pin: 'Store Pin? (Less Secure)',
+        "The Password can be anything you want, just don't forget it.",
+      store_pin: 'Store Password? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
+      browser_warning_header: 'Satellite is optimized for Chromium browsers',
+      browser_warning_content:
+        'You may experience UI and functional issues. We will optimize for more browsers in the future.',
+      confirm_clear_account: 'This will clear your account',
+      confirm_clear_account_description:
+        'Are you sure you want to clear your account and all data?',
     },
     loading: {
       loading: 'Linking Satellites...',
@@ -249,7 +272,7 @@ export default {
     inputAccount: {
       title: 'Import Account',
       subtitle:
-        'Enter your 12 word passphrase in exactly the same order your recovery seed was generated.',
+        'Enter your 12-word passphrase in exactly the same order your recovery seed was generated.',
       enter: 'Enter Passphrase',
       reset: 'Reset Passphrase',
       recover: 'Recover Account',
@@ -262,46 +285,59 @@ export default {
         'Write this down in the order that they appear here. Having the correct order is very important when you are recovering your account.',
     },
     privacy: {
-      title: 'Privacy Settings',
+      title: 'Privacy & Permissions',
       subtitle:
         'Choose which features to enable to best suit your privacy preferences.',
-      serverType: {
-        title: 'Signaling Servers',
+      update:
+        'We were not able to check permissions status, please verify your notifications, microphone, and camera permissions in browser',
+      notifications: {
+        title: 'Notifications',
         subtitle:
-          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and CPU usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+          'Allow Satellite to send you notifications when you receive new messages, friend requests, etc.',
       },
+      microphone: {
+        title: 'Microphone',
+        subtitle:
+          'Allow Satellite to use input from your microphone in voice and video calls.',
+      },
+      camera: {
+        title: 'Camera',
+        subtitle:
+          'Allow Satellite to see your beautiful face and show it in video calls.',
+      },
+      screenshare: {
+        title: 'Screen Sharing',
+        subtitle:
+          'Show the other users your screen during voice and video calls.',
+        note: "Screen sharing is an operating system setting labeled as 'Screen Recording', to allow access, you will need to enable browser access to screen recording in your OS",
+      },
+      permissions: {
+        title: 'Permissions',
+        ask_permission: 'Ask Permission',
+        granted: 'Permission Granted',
+        denied: 'Permission Denied',
+      },
+      filesharing: 'File sharing',
       consentScan: {
         title: 'Consent to File Scanning',
         subtitle:
-          'In order to share files/use the encrypted file storage I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material.',
+          'To share files/use the encrypted file storage, I consent to have the hash of my files compared against the Microsoft PhotoDNA service to help prevent the spread of sexual abuse material. \n\nFiles will not leave the Satellite infrastructure. Only the hash of files will be checked against the third party database.',
       },
       nsfw: {
         title: 'Block NSFW content',
-        subtitle: 'If selected, NSFW content will be obscured.',
-      },
-      ownInfo: {
-        title: 'Set my own Signaling Server',
         subtitle:
-          'Enter your http, udp, or websocket URL for your signaling server here',
-        placeholder: 'Please enter ...',
-        lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
-        formatErrorMsg:
-          'Invalid input format. Please add on the following format',
-        errorSampleUrl1: '- http://localhost:3000',
-        errorSampleUrl2: '- wss://www.example.com/socketserver',
-        satelliteServer: 'Satellite + Public Signaling Servers',
-        publicServer: 'Only Public Signaling Servers',
-        userDefinedServer: 'Set my own',
+          'If selected, we will use AI to try and detect and obscure NSFW content.',
       },
+      other: 'Other',
       register: {
         title: 'Register Username Publicly',
         subtitle:
-          'Publicly associate your account ID with a human readable username. Anyone can see this association.',
+          'Publicly associate your account ID with a human-readable username. Anyone can see this association.',
       },
       pin: {
-        title: 'Store Account Pin',
+        title: 'Store Account Password',
         subtitle:
-          "Store your account pin locally so you don't have to enter it manually every time. This is not recommended.",
+          "Store your account password locally, so you don't have to enter it manually every time. This is not recommended.",
       },
       activity: {
         title: 'Display Current Activity',
@@ -311,7 +347,27 @@ export default {
       embeds: {
         title: 'Enable External Embeds',
         subtitle:
-          'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more.',
+          'Allow Satellite to fetch data from external sites to expand links like Spotify, YouTube, and more. This may allow embedded content providers to include their own tracking information.',
+      },
+      ownserver: 'Own server',
+      serverType: {
+        title: 'Signaling Servers',
+        subtitle:
+          "Choose which signaling server group you want to use. If you use 'Satellite + Public Signaling Servers', you are using public servers and Satellite hosted servers to connect with your friends. We do not track connections. We only track server utilization (memory and CPU usage) to know if we need to turn on more signaling servers. If you opt to use 'Only Public Signaling Servers', those are totally outside of Satellite control, so we can not see or have any insight into their operation, logging, or data sharing practices, and you may experience difficulties connecting with friends if the signaling servers are overloaded.",
+      },
+      ownInfo: {
+        title: 'Set my own Signaling Server',
+        subtitle:
+          'Enter your http, udp, or WebSocket URL for your signaling server here',
+        placeholder: 'Please enter ...',
+        lengthErrorMsg: 'URL Too long, please limit to 2048 characters',
+        formatErrorMsg:
+          'Invalid input format. Please add on the following format',
+        errorSampleUrl1: '- http://localhost:3000',
+        errorSampleUrl2: '- wss://www.example.com/socketserver',
+        satelliteServer: 'Satellite + Public Signaling Servers',
+        publicServer: 'Only Public Signaling Servers',
+        userDefinedServer: 'Set my own',
       },
       updating: 'Updating remote settings',
     },
@@ -331,13 +387,13 @@ export default {
       developer: {
         title: 'Developer Settings',
         subtitle:
-          'Mock data and tweak settings for testing. This page is really just for internal use.',
+          'Mock data and tweak settings for testing. This page is just for internal use.',
         identifier: 'Identifier',
       },
       notifications: {
         title: 'Notifications Settings',
         notes:
-          'Notifications work different on every platform. On Web, you need to request notifications. On Desktop and Android notifications are enabled by default.',
+          'Notifications work differently on every platform. On the Web, you need to request notifications. On Desktop and Android notifications are enabled by default.',
         enabled: 'Enable or Disable Notifications',
         labels: {
           current_platform: 'Your current platform is:',
@@ -364,6 +420,8 @@ export default {
         },
       },
       audio: {
+        pageTitle: 'Audio & Video',
+        subtitle: 'Configure your audio and video devices.',
         title: 'Audio',
         sources: {
           title: 'Audio Sources',
@@ -371,13 +429,15 @@ export default {
           permissionButtonText: 'Request Permission',
           permissionRequestMessage: '',
           permissionDeniedMessage:
-            "You have denied microphone access so we can't see what devices you have. Please allow microphone access in your browser.",
+            "You have denied microphone access, so we can't see what devices you have. Please allow microphone access in your browser.",
           browserDoesNotSupportAudioOutChange:
             'Your Browser does not allow setting audio out, so the default is used here. To change this, use a chrome based browser or update your default audio out in your OS.',
           input: {
             title: 'Audio Input',
             subtitle:
               "Select which input device you'd like people to hear your silky smooth voice from.",
+            on: 'Enable Testing',
+            off: 'Disable Testing',
           },
           output: {
             title: 'Audio Output',
@@ -418,7 +478,7 @@ export default {
         title: 'Video',
         sources: {
           permissionDeniedMessage:
-            "You have denied camera access so we can't see what devices you have. Please allow camera access in your browser.",
+            "You have denied camera access, so we can't see what devices you have. Please allow camera access in your browser.",
           input: {
             title: 'Video Input',
             subtitle:
@@ -438,9 +498,8 @@ export default {
         },
       },
       keybinds: {
-        title: 'Default Keybinds',
-        subtitle:
-          'A list of the default keybinds for quickly navigating and using Satellite.',
+        title: 'Keybinds',
+        subtitle: 'Configure keyboard shortcuts.',
         toggleMute: 'Toggle Mute',
         openSettings: 'Open Settings',
         toggleDeafen: 'Toggle Deafen',
@@ -460,6 +519,7 @@ export default {
         subtitle:
           "Select which account you'd prefer to default transactions from.",
         active: 'Active Account',
+        active_did: 'Active Account Decentralized Identifier (did)',
         gas_price: 'Transaction Fee Limit',
         devices: 'Connected Devices',
         no_devices: 'No connected devices found.',
@@ -493,14 +553,14 @@ export default {
       storage: {
         title: 'Storage',
         subtitle:
-          'Control how your data is stored. You can export your local storage information (coming soon) as well as reset Satellite here. Be careful resetting your local storage will clear out your account.',
+          'Control how your data is stored. You can export your local storage information (coming soon) and reset Satellite here. Be careful resetting your local storage will clear out your account.',
         clear: {
           title: 'Clear Storage',
           subtitle:
             'Reset Satellite. This will clear any saved accounts. Do not do this without backing up your account first.',
           subtitle_warning1: 'Are you absolutely sure?',
           subtitle_warning2:
-            'If you do not have your recovery seed your account will be gone forever.',
+            'If you do not have your recovery seed, your account will be gone forever.',
           button: 'Clear Local Storage',
           confirm_button: 'Yes, Really, Clear Local Storage',
           message: 'Local storage cleared successfully',
@@ -514,9 +574,11 @@ export default {
       },
       profile: {
         title: 'Profile',
-        subtitle: 'Update your profile photo, status, banners and more.',
+        subtitle: 'Update your profile photo, status, banners, and more.',
         status_placeholder: 'Some super interesting status message',
         remove_image: 'Remove',
+        current_status: 'Current Status',
+        detail_updated: 'Profile Updated Successfully',
         info: {
           title: 'Account Info',
           subtitle:
@@ -541,9 +603,10 @@ export default {
           title: 'About Me',
           subtitle:
             'Let your friends know who you are! Your about me will display on your profile.',
+          placeholder: 'Enter a short introduction about yourself...',
         },
         accounts: {
-          title: 'Your Accounts',
+          title: 'Your Accounts (Coming Soon)',
           subtitle_url: 'Share your blog, website, or portfolio URL.',
           url_placeholder: 'Enter URL...',
           subtitle_accounts:
@@ -563,13 +626,14 @@ export default {
         'Select one of your friends to add them to the group',
       new_message: 'messages',
       jump_to_current: 'View New Messages',
-      chat_now: 'chat now',
+      chat_now: 'Chat now',
+      create_group: 'Create group',
       add_member: 'Add Member +',
       switch_chat: 'Switch Chat',
       start_watch_party: 'Watch Party',
       new_chat: 'New Chat',
       new_chat_description:
-        'Select one or more of your friends to chat in groups, or one-on-one.',
+        'Select one or more of your friends to chat in groups or one-on-one.',
       no_friends_yet: 'No Friends Yet',
       no_friends_yet_text: "The world doesn't have to be so lonely.",
       enhancers: {
@@ -584,53 +648,36 @@ export default {
       recent_messages: 'Go to most recent messages',
       infinite_scroll: {
         loading: 'Loading ...',
-        no_more: 'No more data.',
+        no_more: 'No more messages.',
       },
       add_reaction: 'Add reaction',
+      members: 'Members - {count}',
     },
     newMessage: {
       new_message: 'New Message',
     },
   },
-  servers: {
-    new_server: 'New Community',
-    create: {
-      heading: 'Create a server',
-      photo_text:
-        "Give your server a face. Choose a memorable photo to show it's members.",
-      photo_button: 'Set photo',
-      server_name: 'Enter a server name',
-      server_name_placeholder: 'Server name...',
-      create_server: 'Create server',
-      select_friends: 'Invite your friends to this server',
-      server_name_error: 'Server name must be at least 5 characters.',
-      select_friends_placeholder: 'Search friends...',
-      user_picker_empty: 'No friends found',
-    },
-  },
   conversation: {
-    encrypted: 'Messages are secured by end to end encryption.',
+    encrypted: 'Messages are secured by end-to-end encryption.',
     reply: 'reply | replies',
     reply_to: 'Reply to',
     multimedia: 'Multimedia content',
     collapse: 'Collapse',
-    replies_separator: ' and ',
-    reply_single: 'Reply from {name}',
-    repliers_less_than_limit: 'Replies from {names}',
-    repliers_more_than_limit: 'Replies from {names} and {leftCount} more ...',
+    repliers: 'Reply from {names} | Replies from {names}',
   },
   errors: {
     accounts: {
-      pin_too_short: 'Pin must be at least 5 characters.',
-      invalid_pin: 'Pin does not match',
+      pin_too_short: 'Password must be at least 5 characters.',
+      invalid_pin: 'Password does not match',
       invalid_group_id: 'GroupID is invalid',
       cannot_find_group: 'Cannot find chosen group',
       user_derivation_failed:
         'We were unable to verify your passphrase. Please check it and try again.',
-      mnemonic_not_present: 'Problem with passphrase, please try again.',
+      mnemonic_not_present: 'Problem with the passphrase, please try again.',
       file_too_large:
         'File is too large, please upload a file smaller than 8MB.',
       invalid_file: 'Please upload a valid image type such as JPG, PNG or SVG',
+      connector_not_present: 'Iridium connector not found',
     },
     friends: {
       request_already_sent: 'You have already sent a request to this user',
@@ -641,15 +688,14 @@ export default {
       network: 'We are experiencing network issues, please try again later',
     },
     chat: {
-      drop_file_count: 'Sorry, you can only upload 8 files at a time',
-      contains_nsfw: 'Unable to upload file/s due to NSFW status',
+      contains_nsfw: 'Your profile picture can not contain explicit content',
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
       group_name:
         'Enter a group name of at least {min} characters, up to {max}',
       conversation_exists:
-        'A conversation with that name already exists, please choose a different name',
+        'A conversation with that name already exists. Please choose a different name',
     },
     storage: {
       database_not_cleared: 'Could not clear database',
@@ -658,6 +704,10 @@ export default {
       permission_denied:
         'Permission denied, please check your browser settings.',
     },
+    opened:
+      'Satellite was opened in a new window or tab. Please close the second instance and reload',
+    already_open:
+      'Satellite is already open in another window or tab. Please close this window or tab and go to the original instance of Satellite.',
   },
   search: {
     search: 'Search... ',
@@ -715,28 +765,28 @@ export default {
   },
   friends: {
     friends: 'Friends',
-    self_add: "You can't add yourself you silly goose.",
+    self_add: "You can't add yourself, you silly goose.",
     already_friend: "You're already friends with this user.",
+    already_request: 'You already have a request for this user.',
     not_found: "Hmm, we couldn't find a user at that address",
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
-    requests: 'Friend requests',
+    friend_requests: 'Friend requests',
     new_friend_request: 'New friend request from {user}',
-    incoming: 'Requests',
+    cancel_friend_request: 'Cancel friend request',
+    requests: 'Requests',
     received: 'Received',
     sent: 'Sent',
     no_friend_request: 'You have no new friend requests.',
-    outgoing: 'Outgoing requests',
-    blocked_friends: 'Blocked friends',
-    blocked: 'Blocked',
-    no_blocked: 'You have no blocked users, yay!',
+    outgoing: 'Outgoing',
+    incoming: 'Incoming',
     search_placeholder: 'Search friends...',
     add: 'Add Friend',
     add_description:
       "Enter your friend's account ID or nickname. Account IDs are case sensitive.",
     add_via_qr: 'Add Via QR',
     add_qrcode_description:
-      'You can also add a friend by having them scan your QR code, or by scanning theirs.',
+      'You can also add a friend by having them scan your QR code or by scanning theirs.',
     scan_code: 'Scan a Friend Code',
     camera_scan: 'Allow Camera Scan',
     friend_code: 'Your Friend Code',
@@ -753,7 +803,7 @@ export default {
     no_requests_subtitle: 'You have no pending friend requests',
   },
   market_place: {
-    title: 'Marketplace\nComing soon',
+    title: 'Marketplace\n(Coming Soon)',
     glyphs: 'Glyphs',
     themes: 'Themes',
     nfts: 'NFTs',
@@ -773,6 +823,7 @@ export default {
   },
   modal: {
     update_modal: {
+      title: 'Update {tagName} is Here!',
       update_required:
         "This update requires a refresh of the Alpha application. Click 'Update Now' below to start fresh on the new update.",
       got_it: 'Got It!',
@@ -780,10 +831,11 @@ export default {
     profile: {
       about: {
         tab: 'About',
-        me: 'About Me',
         location: 'Location',
         add_note: 'Add Note',
         click_note: 'Click to add note',
+        click_location: 'Click to add your location',
+        click_about: 'Click to add something about you',
       },
       accounts: 'Accounts',
       activity: {
@@ -796,6 +848,7 @@ export default {
         servers: 'Servers',
         friends: 'Friends',
       },
+      edit: 'Edit',
     },
     call_to_action: {
       title: 'Coming Soon',
@@ -819,8 +872,7 @@ export default {
     rename: 'Rename',
     delete: 'Delete',
     // SidebarListItem
-    send: 'Send Message',
-    voice: 'Start Call',
+    voice: 'Call',
     video: 'Video Call',
     remove: 'Remove Friend',
     leave_group: 'Leave Group',
@@ -833,5 +885,16 @@ export default {
     copy_img: 'Copy Image',
     save_img: 'Save Image',
     copy_link: 'Copy Link',
+  },
+  notifications: {
+    friend_request: {
+      title: 'Friend Request',
+      body: '{name} sent you a friend request!',
+    },
+    new_message: {
+      title: 'New Message',
+      group_title: '{name} ({server})',
+      body: 'You have a new message from {name}!',
+    },
   },
 }

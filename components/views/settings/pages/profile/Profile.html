@@ -24,7 +24,7 @@
             </div>
 
             <div class="profile-main">
-              <div class="profile-image-cropper" v-if="showCropper">
+              <div v-if="showCropper" class="profile-image-cropper">
                 <div class="content">
                   <InteractablesImageCropper
                     v-click-outside="toggleCropper"
@@ -49,55 +49,93 @@
                       ref="imageInput"
                       @change="selectProfileImage"
                     />
-                    <UiCircle
-                      :type="croppedImage || accounts.details.profilePicture ? 'image' : 'random'"
-                      @click="openFileDialog"
-                      :source="src"
-                      :seed="accounts.active"
-                      :size="isSmallScreen ? 55 : 80"
-                    />
-                    <UiCircle
-                      type="icon"
-                      @click="openFileDialog"
-                      icon="plus"
-                      color="var(--flair-color)"
-                      :size="20"
-                      class="plus-button"
-                    />
+                    <UiComingSoon
+                      style="flex: 1"
+                      :tooltip-text="$t('ui.coming_soon')"
+                      :tooltip-position="'top'"
+                      disabled
+                    >
+                      <UiCircle
+                        :type="croppedImage ? 'image' : 'random'"
+                        :source="src"
+                        :seed="accounts.active"
+                        :size="isSmallScreen ? 55 : 80"
+                        @click="openFileDialog"
+                      />
+                      <UiCircle
+                        type="icon"
+                        icon="plus"
+                        color="var(--flair-color)"
+                        :size="20"
+                        class="plus-button"
+                        @click="openFileDialog"
+                      />
+                    </UiComingSoon>
                   </div>
                 </div>
                 <button
                   v-if="src"
                   class="remove-button"
-                  @click="removeProfileImage"
+                  @click="(e) => updateUserDetail(e, 'photoHash', '')"
                 >
                   <span>{{ $t('pages.settings.profile.remove_image') }}</span>
                 </button>
-                <div class="username">
-                  <TypographyTitle :size="6" :text="accounts.details.name" />
-                </div>
-                <div class="status-input">
-                  <UiComingSoon
-                    style="flex: 1"
-                    :tooltipText="$t('ui.coming_soon')"
-                    :tooltipPosition="'top'"
-                    disabled
+                <form
+                  class="editable-wrapper username"
+                  @submit="(e) => submitEdit(e, 'name')"
+                >
+                  <typography-text
+                    v-if="!editing.has('name')"
+                    class="username-label"
                   >
-                    <InteractablesInput
-                      v-model="status"
-                      size="xs"
-                      type="text"
-                      :placeholder="$t('pages.settings.profile.status_placeholder')"
-                    >
-                      <edit-icon size="1x" />
-                    </InteractablesInput>
-                  </UiComingSoon>
-                </div>
-                <div v-if="!!accounts.details.status" class="status">
-                  <TypographyText as="h6">Current Status</TypographyText>
-                  <TypographyText>
-                    {{ accounts.details.status }}
+                    {{ inputs.name }}
+                  </typography-text>
+
+                  <InteractablesInput
+                    v-else
+                    v-model="inputs.name"
+                    class="username-input"
+                    :placeholder="
+                      $t('user.registration.username_placeholder')
+                    "
+                    autofocus
+                    transparent
+                  />
+
+                  <!-- TODO: Re-enable this when user key with altered names is also updated for peersearch -->
+                  <!-- <button -->
+                  <!-- class="edit-button" -->
+                  <!-- :class="[{ active: editing.has('name') }, { mobile: $device.isMobile }]" -->
+                  <!-- type="submit" -->
+                  <!-- > -->
+                  <!-- {{ getEditButtonText('name') }} -->
+                  <!-- </button> -->
+                </form>
+                <form
+                  class="status-input"
+                  @click="editing.add('status')"
+                  @submit="
+                    (e) => updateUserDetail(e, 'status', inputs.status ?? '')
+                  "
+                >
+                  <InteractablesInput
+                    v-model="inputs.status"
+                    size="xs"
+                    type="text"
+                    :placeholder="
+                      $t('pages.settings.profile.status_placeholder')
+                    "
+                    :loading="loading.has('status')"
+                    button-type="submit"
+                  >
+                    <edit-icon size="1x" />
+                  </InteractablesInput>
+                </form>
+                <div v-if="profile && !!profile.status" class="status">
+                  <TypographyText as="h6">
+                    {{ $t('pages.settings.profile.current_status') }}
                   </TypographyText>
+                  <TypographyText> {{ profile?.status ?? '' }} </TypographyText>
                 </div>
               </div>
             </div>
@@ -106,7 +144,7 @@
 
         <div class="profile-section">
           <!-- About Me -->
-          <div>
+          <form @submit="(e) => submitEdit(e, 'about')">
             <div class="section-title">
               <div class="title-wrapper">
                 <align-left-icon size="1.5x" class="section-icon" />
@@ -116,20 +154,9 @@
                 />
               </div>
               <div>
-                <UiComingSoon
-                  style="flex: 1"
-                  :tooltipText="$t('ui.coming_soon')"
-                  :tooltipPosition="'top'"
-                  disabled
-                >
-                  <button
-                    v-tooltip.top="$t('ui.coming_soon')"
-                    class="edit-button"
-                    @click="() => {}"
-                  >
-                    {{$t('global.edit')}}
-                  </button>
-                </UiComingSoon>
+                <InteractablesTextButton class="edit-button" type="submit">
+                  {{ getEditButtonText('about') }}
+                </InteractablesTextButton>
               </div>
             </div>
             <div class="about-main">
@@ -139,10 +166,19 @@
                   :text="$t('pages.settings.profile.about.subtitle')"
                 />
               </div>
-              <!-- TODO: Enable when about me is implemented -->
-              <!-- <TypographySubtitle :size="6" :text="sampleProfileInfo.about" /> -->
+              <div
+                v-show="inputs.about || editing.has('about')"
+                class="editable-wrapper"
+                :class="{ readonly: !editing.has('about') }"
+              >
+                <InteractablesEditable
+                  v-model="inputs.about"
+                  :placeholder="$t('pages.settings.profile.about.placeholder')"
+                  :enabled="editing.has('about')"
+                />
+              </div>
             </div>
-          </div>
+          </form>
 
           <!-- Your Accounts -->
           <div>
@@ -164,22 +200,32 @@
                     :text="$t('pages.settings.profile.accounts.subtitle_url')"
                     class="accounts-subtitle-text"
                   />
-                  <div v-tooltip.top="$t('controls.edit')">
-                    <info-icon size="1.5x" class="section-icon-tooltip" />
-                  </div>
+                  <UiInfoButton class="info-button">
+                    <template #title
+                      >{{ $t('pages.settings.profile.accounts.title')
+                      }}</template
+                    >
+                    <template #body
+                      >{{ $t('pages.settings.profile.accounts.subtitle_url')
+                      }}</template
+                    >
+                  </UiInfoButton>
                 </div>
 
                 <UiComingSoon
                   style="flex: 1"
-                  :tooltipText="$t('ui.coming_soon')"
-                  :tooltipPosition="'top'"
+                  :tooltip-text="$t('ui.coming_soon')"
+                  :tooltip-position="'top'"
                   disabled
                 >
                   <InteractablesInput
-                    v-model="accountUrl"
+                    v-model="inputs.accountUrl"
                     size="xs"
                     type="text"
-                    :placeholder="$t('pages.settings.profile.accounts.url_placeholder')"
+                    :placeholder="
+                      $t('pages.settings.profile.accounts.url_placeholder')
+                    "
+                    disabled
                   >
                     <edit-icon size="1x" />
                   </InteractablesInput>
@@ -190,7 +236,9 @@
                 <div class="accounts-subtitle">
                   <TypographySubtitle
                     :size="6"
-                    :text="$t('pages.settings.profile.accounts.subtitle_accounts')"
+                    :text="
+                      $t('pages.settings.profile.accounts.subtitle_accounts')
+                    "
                   />
                 </div>
 

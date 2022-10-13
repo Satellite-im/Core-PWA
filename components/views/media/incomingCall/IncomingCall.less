@@ -1,29 +1,39 @@
-@width: 300px;
-
 .incoming {
+  --width: 300px;
+  --height: 380px;
+  --padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  width: @width;
-  height: 380px;
-  padding: 32px;
-  background: @foreground-gradient;
+  width: var(--width);
+  height: var(--height);
+  padding: var(--padding);
   border-radius: @corner-rounding;
+  overflow: hidden;
+
+  .avatar {
+    margin-top: auto;
+  }
 
   .user-info {
-    max-width: @width;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    max-width: calc(var(--width) - var(--padding) * 2);
+    margin-bottom: 0.5rem;
   }
 
   .buttons {
     display: flex;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: stretch;
     margin-top: auto;
+    gap: 16px;
+
+    > .button {
+      flex-grow: 1;
+    }
+  }
+  @media only screen and (max-width: @mobile-breakpoint) {
+    --width: 100%;
+    --height: 100%;
   }
 }

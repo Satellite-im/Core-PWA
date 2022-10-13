@@ -8,7 +8,6 @@ import {
   UserRegistrationPayload,
 } from './types'
 import Crypto from '~/libraries/Crypto/Crypto'
-import { db } from '~/libraries/SatelliteDB/SatelliteDB'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ActionsArguments } from '~/types/store/store'
 import BlockchainClient from '~/libraries/BlockchainClient'
@@ -71,7 +70,7 @@ export default {
         pin,
       )
 
-      await commit('setPhrase', decryptedPhrase)
+      commit('setPhrase', decryptedPhrase)
     }
 
     commit('unlock', pin)
@@ -91,7 +90,7 @@ export default {
       throw new Error(AccountsError.INVALID_PIN)
     }
 
-    await commit('setAdapter', 'Solana')
+    commit('setAdapter', 'Solana')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
     $BlockchainClient.setAdapter(new SolanaAdapter())
 
@@ -102,14 +101,14 @@ export default {
       throw new Error(AccountsError.UNABLE_TO_CREATE_MNEMONIC)
     }
 
-    await commit('setPhrase', userWallet.mnemonic)
+    commit('setPhrase', userWallet.mnemonic)
 
     const { pinHash } = state
     const entropyMessage = IdentityManager.generateEntropyMessage(
       $BlockchainClient.account.publicKey.toBase58(),
       pinHash,
     )
-    commit('setEntropy', entropyMessage)
+    // commit('setEntropy', entropyMessage)
 
     const encryptedPhrase = await Crypto.encryptWithPassword(
       userWallet.mnemonic,
@@ -140,7 +139,7 @@ export default {
 
     const encryptedPhrase = await Crypto.encryptWithPassword(mnemonic, pin)
 
-    await commit('setEncryptedPhrase', encryptedPhrase)
+    commit('setEncryptedPhrase', encryptedPhrase)
   },
   /**
    * @method loadAccount
@@ -165,12 +164,17 @@ export default {
       $BlockchainClient.setAdapter(new PhantomAdapter())
       logger.info('accounts/actions/loadAccount', 'using phantom wallet')
     }
-    const mnemonic = state.phrase
-    if (mnemonic === '') {
-      logger.error('accounts/actions/loadAccount', 'empty mnemonic')
-      throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+
+    if (state.phrase === '') {
+      if (state.encryptedPhrase !== '' && state.pin) {
+        await dispatch('unlock', state.pin)
+      } else {
+        logger.error('accounts/actions/loadAccount', 'empty mnemonic')
+        throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
+      }
     }
 
+    const mnemonic = state.phrase
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
     if (!$BlockchainClient.isPayerInitialized) {
@@ -178,7 +182,7 @@ export default {
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    if (!iridium.ready) {
+    if (!iridium.connector) {
       logger.debug(
         'accounts/actions/loadAccount',
         'signing message for iridium',
@@ -190,29 +194,37 @@ export default {
         'dispatching iridium/initializeFromEntropy',
       )
       await iridium.initFromEntropy(entropy)
+      await iridium.start()
     }
 
-    logger.debug('accounts/actions/loadAccount', 'fetching iridium profile')
-    const userInfo = await iridium.profile?.get()
-    if (!userInfo?.did) {
-      logger.error('accounts/actions/loadAccount', 'user not registered')
+    const profile = await iridium.profile?.get()
+    logger.debug('accounts/actions/loadAccount', 'fetched iridium profile', {
+      profile,
+    })
+    if (!profile?.did) {
+      try {
+        this.$router.replace('/auth/register')
+      } catch (_) {}
+      logger.error(
+        'accounts/actions/loadAccount',
+        'user not registered, redirecting',
+      )
       throw new Error(AccountsError.USER_NOT_REGISTERED)
     }
-    iridium.profile.setUser()
-    commit('setActiveAccount', iridium.connector?.id)
+    iridium.on('ready', () => {
+      logger.info('accounts/actions/loadAccount', 'iridium ready')
+      commit('setActiveAccount', iridium.id)
 
-    logger.debug(
-      'accounts/actions/loadAccount',
-      'user loaded, dispatching setUserDetails & setRegistrationStatus',
-      userInfo,
-    )
-    commit('setUserDetails', {
-      username: userInfo.name,
-      ...userInfo,
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'user loaded, dispatching setUserDetails & setRegistrationStatus',
+        profile,
+      )
+      commit('setUserDetails', profile)
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+      logger.info('accounts/actions/loadAccount', 'finished')
+      return dispatch('startup')
     })
-    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    await iridium.connector?.waitForSyncNode()
-    dispatch('startup')
   },
   /**
    * @method registerUser
@@ -262,46 +274,46 @@ export default {
 
     commit('setRegistrationStatus', RegistrationStatus.SENDING_TRANSACTION)
 
+    if (!iridium.connector) {
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'signing message for iridium',
+      )
+      const { entropyMessage } = state
+      const entropy = await $BlockchainClient.signMessage(entropyMessage)
+      logger.debug(
+        'accounts/actions/loadAccount',
+        'dispatching iridium/initializeFromEntropy',
+      )
+      await iridium.initFromEntropy(entropy)
+      await iridium.start()
+    }
+
+    if (!iridium.connector) {
+      throw new Error('iridium not initialized')
+    }
+
     const imagePath = await uploadPicture(userData.image)
+
+    if (!iridium.connector) {
+      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
+    }
+
     const profile = {
-      did: iridium.connector?.id,
-      peerId: iridium.connector?.peerId,
+      did: iridium.id,
+      peerId: iridium.connector?.peerId.toString(),
       name: userData.name,
       status: userData.status,
       photoHash: imagePath,
     }
-    await iridium.connector?.waitForSyncNode()
-    await iridium.profile?.set('', profile)
-    await iridium.sendSyncInit()
-    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-    commit('setActiveAccount', iridium.connector?.id)
-    commit('setUserDetails', {
-      username: userData.name,
-      status: userData.status,
-      photoHash: imagePath,
-      address: walletAccount.publicKey.toBase58(),
-    })
-    dispatch('startup', walletAccount)
-  },
 
-  /**
-   * @method updateProfilePhoto
-   * @description update profile photo of the user on the Solana blockchain
-   * @param image
-   * @example
-   * ```typescript
-   * this.$store.dispatch(
-   *  'accounts/updateProfilePhoto', image
-   * );
-   * ```
-   */
-  async updateProfilePhoto(
-    { commit, state, dispatch }: ActionsArguments<AccountsState>,
-    image: string,
-  ) {
-    const imagePath = await uploadPicture(image)
-    await iridium.profile?.set('/photoHash', imagePath)
-    commit('setPhotoHash', imagePath)
+    commit('setNewAccount', true)
+
+    await iridium.profile?.set('/', profile)
+    commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+    commit('setActiveAccount', iridium.id)
+    commit('setUserDetails', profile)
+    return dispatch('startup', walletAccount)
   },
 
   /**
@@ -319,7 +331,7 @@ export default {
   ) {
     // Initialize crypto engine
     const $Crypto: Crypto = Vue.prototype.$Crypto
-    await $Crypto.init(userAccount)
+    $Crypto.init(userAccount)
   },
 
   async startup({
@@ -328,6 +340,8 @@ export default {
     state,
   }: ActionsArguments<AccountsState>) {
     dispatch('sounds/setMuteSounds', rootState.audio.deafened, { root: true })
+    dispatch('audio/initialize', null, { root: true })
+    dispatch('video/initialize', null, { root: true })
   },
   async connectWallet({
     commit,
@@ -350,7 +364,7 @@ export default {
       $BlockchainClient.account.publicKey.toBase58(),
       pinHash,
     )
-    commit('setEntropy', entropyMessage)
+    // commit('setEntropy', entropyMessage)
 
     const fakeMnemonic = 'fake mnemonic to bypass checks'
     commit('setPhrase', 'fake mnemonic to bypass checks')
@@ -362,7 +376,7 @@ export default {
 
 /**
  * @method uploadPicture
- * @description helper function to upload image to textile if needed
+ * @description helper function to upload image to iridium if needed
  * @param image data string of uploaded image
  * @returns IPFS CID of image, or '' if no image is present
  */

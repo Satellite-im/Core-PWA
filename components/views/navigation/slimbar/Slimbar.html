@@ -1,54 +1,28 @@
 <div class="slimbar hidden-scroll">
-  <UiCircle
-    class="sat-icon"
-    type="icon"
-    :size="40"
-    @click="$router.push('/chat/direct')"
-  >
+  <UiCircle class="sat-icon" type="icon" :size="40">
     <satellite-icon size="0.75x" />
   </UiCircle>
-
-  <hr
-    v-if="friendsWithUnreadMessages.length && friendsDS !== DataStateType.Loading"
-  />
-
-  <div class="slimbar-spinner" v-if="friendsDS === DataStateType.Loading">
-    <UiLoadersSpinner :spinning="true" />
-  </div>
-
-  <template v-else>
-    <div class="unreads" v-for="user in friendsWithUnreadMessages">
-      <Unread
-        :key="user.address"
-        :user="user"
-        :active="$route.params.address === user.address"
+  <hr />
+  <UiComingSoon :tooltipText="$t('coming_soon.communities')">
+    <div class="circle-group">
+      <UiCircle
+        v-for="server in servers"
+        :key="server.address"
+        type="random"
+        :size="40"
+        :seed="server.address"
+        :name="server.name"
+        @click="$router.push('/server/chat')"
       />
     </div>
-
-    <hr />
-
-    <UiComingSoon :tooltipText="$t('coming_soon.communities')">
-      <div class="circle-group">
-        <UiCircle
-          v-for="server in servers"
-          :key="server.address"
-          type="random"
-          :size="40"
-          :seed="server.address"
-          :name="server.name"
-          @click="$router.push('/server/chat')"
-        />
-      </div>
-    </UiComingSoon>
-  </template>
+  </UiComingSoon>
   <hr />
   <div class="circle-group">
-    <button
-      v-tooltip.right="$t('servers.new_server')"
-      @click="toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <plus-icon size="1.8x" />
-    </button>
+    <UiComingSoon :tooltipText="$t('coming_soon.communities')">
+      <button disabled>
+        <plus-icon size="1.8x" />
+      </button>
+    </UiComingSoon>
     <button
       data-cy="settings"
       v-tooltip.right="$t('pages.settings.settings')"

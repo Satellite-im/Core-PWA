@@ -1,12 +1,15 @@
-<div class="tabs">
+<div class="tabs" data-cy="tab-group">
   <button
     class="tab"
+    data-cy="tab-element"
     v-for="tab in tabs"
     @click="setRoute(tab.route)"
     :class="{active: route === tab.route}"
-    :data-badge="tab.badge || null"
   >
     {{tab.text}}
+    <TypographyTag v-if="tab.badge" data-cy="tab-badge" small>
+      {{tab.badge}}
+    </TypographyTag>
   </button>
   <slot />
 </div>

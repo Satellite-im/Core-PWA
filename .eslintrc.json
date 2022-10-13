@@ -2,6 +2,6 @@
   "plugins": ["cypress"],
   "extends": ["plugin:cypress/recommended"],
   "rules": {
-      "jest/expect-expect": "off"
+    "jest/expect-expect": "off"
   }
 }

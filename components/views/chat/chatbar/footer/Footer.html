@@ -1,11 +1,9 @@
-<div id="bottom-bar-container">
-  <UiChatTypingIndicator v-if="typingParticipants.length" />
-  <ChatbarFooterConnected v-else />
-  <TypographyText
-    class="no-select"
-    size="sm"
-    :color="charlimit ? 'error' : 'dark'"
-  >
+<div class="chatbar-footer" data-cy="chatbar-footer">
+  <TypographyText size="sm" :color="charlimit ? 'danger' : 'dark'">
     {{ lengthCount }}
   </TypographyText>
+  <TypographyText v-if="!isSubscribed" size="sm" color="dark">
+    {{ $t('ui.chat_not_ready') }}
+  </TypographyText>
+  <ChatbarFooterTypingIndicator v-if="isSubscribed" />
 </div>

@@ -1,11 +1,20 @@
 .container {
-  margin: 0 auto;
+  margin: 16px auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-content: flex-end;
   flex-wrap: nowrap;
   flex-direction: column;
   gap: 40px;
+  user-select: none;
+
+  .header {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: center;
+    align-items: center;
+  }
 
   .info-button {
     display: flex;
@@ -16,7 +25,7 @@
     &:extend(.full-width);
     display: inline-flex;
     justify-content: center;
-    margin-top: 24px;
+    margin: 24px 0 70px 0;
   }
 
   .decryption-body {
@@ -27,11 +36,9 @@
     }
 
     .delete-link {
-      display: flex;
-      font-family: @secondary-font;
-      font-size: 10pt;
-      color: white;
-      margin-top: @normal-spacing;
+      color: #fff;
+      margin: @normal-spacing auto 0 auto;
+
       &:hover {
         opacity: 0.75;
       }
@@ -39,7 +46,10 @@
   }
 
   .version {
+    flex-grow: 1;
+    flex-basis: 0;
     justify-content: center;
+    align-items: flex-end;
   }
 
   .random-user-container {
@@ -51,7 +61,7 @@
 
 @media only screen and (max-width: @mobile-breakpoint) {
   .container {
-    margin: 0 2rem;
+    margin: 16px;
 
     .decryption-body {
       &:extend(.full-width);

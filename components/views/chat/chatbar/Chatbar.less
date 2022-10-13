@@ -4,7 +4,7 @@
   transition: height @animation-speed;
 
   @media only screen and (max-width: @mobile-breakpoint) {
-    margin: 0 @normal-spacing @normal-spacing;
+    padding: 8px 16px 0;
     position: sticky;
     bottom: 0;
   }
@@ -17,7 +17,9 @@
     position: relative;
     border-radius: 20px;
     border: 1px solid transparent;
-    &:extend(.background-semitransparent-light);
+    .background-semitransparent-light();
+
+    outline-offset: -2px;
 
     &.is-error {
       border-color: @red;
@@ -26,6 +28,12 @@
     &.top-corners-sharp {
       border-top-left-radius: 0;
       border-top-right-radius: 0;
+    }
+
+    .editable {
+      :focus {
+        outline: none;
+      }
     }
 
     // .chat-label {

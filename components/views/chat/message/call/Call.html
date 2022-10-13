@@ -1,0 +1,32 @@
+<div class="message-call" :class="{ 'active-call': activeCall }">
+  <div class="icon" v-if="activeCall">
+    <PhoneOutgoingIcon size="1.4x" v-if="isOutgoingCall" />
+    <PhoneIncomingIcon size="1.4x" v-else />
+  </div>
+  <div class="content">
+    <TypographyText size="md" color="body">
+      <template v-if="isOutgoingCall">
+        {{ $t('messaging.call_outgoing') }}
+      </template>
+      <template v-else>
+        {{ $t('messaging.call_incoming', { name: incomingName }) }}
+      </template>
+
+      <TypographyText size="xs" color="dark" v-if="!activeCall">
+        {{ startedAtTimestamp }}
+      </TypographyText>
+    </TypographyText>
+
+    <TypographyText size="sm" color="dark" v-if="activeCall">
+      {{ $t('ui.live', { time: callDuration }) }}
+    </TypographyText>
+  </div>
+  <InteractablesButton
+    color="danger"
+    class="icon end-call"
+    v-if="activeCall"
+    @click="hangUp"
+  >
+    <PhoneOffIcon size="1.2x" />
+  </InteractablesButton>
+</div>

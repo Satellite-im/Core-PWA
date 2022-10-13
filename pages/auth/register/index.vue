@@ -2,11 +2,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { TranslateResult } from 'vue-i18n'
 import { RegistrationStatus } from '~/store/accounts/types'
 import { RootState } from '~/types/store/store'
 import { UserRegistrationData } from '~/types/ui/user'
+import logger from '~/plugins/local/logger'
+import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   name: 'RegisterScreen',
@@ -16,13 +18,13 @@ export default Vue.extend({
       error: false,
       storePin: false,
       decrypting: false,
+      ready: false,
     }
   },
   computed: {
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
     }),
-    ...mapGetters(['allPrerequisitesReady']),
     hasToRegister(): boolean {
       return this.accounts.registrationStatus === RegistrationStatus.UNKNOWN
     },
@@ -44,25 +46,34 @@ export default Vue.extend({
       return this.accounts.registrationStatus === RegistrationStatus.REGISTERED
     },
   },
-  watch: {
-    allPrerequisitesReady(nextValue) {
-      if (!nextValue) return
-      this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
-    },
-  },
-  mounted() {
-    if (this.allPrerequisitesReady) {
-      this.$router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
-    }
-  },
   methods: {
     async confirm(userData: UserRegistrationData) {
       try {
+        const timeout = setTimeout(() => {
+          this.$store.commit('ui/toggleErrorNetworkModal', {
+            state: true,
+            action: () => this.confirm(userData),
+          })
+        }, this.$Config.connection.timeout)
         await this.$store.dispatch('accounts/registerUser', {
           name: userData.username,
           image: userData.photoHash,
           status: userData.status,
         })
+        logger.info('pages/index/registerUser', 'success, waiting for ready', {
+          ready: iridium.ready,
+        })
+        const onReady = () => {
+          clearTimeout(timeout)
+          this.$router.replace(
+            this.$device.isMobile ? '/mobile/chat' : '/friends',
+          )
+        }
+        if (iridium.ready) {
+          onReady()
+        } else {
+          iridium.on('ready', onReady)
+        }
       } catch (error: any) {
         this.$store.commit('ui/toggleErrorNetworkModal', {
           state: true,

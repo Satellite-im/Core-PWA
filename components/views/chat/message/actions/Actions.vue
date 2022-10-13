@@ -10,10 +10,11 @@ import {
   MoreVerticalIcon,
 } from 'satellite-lucide-icons'
 import { mapState } from 'vuex'
-import { UIMessage } from '~/types/messaging'
-import { ModalWindows } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
@@ -43,20 +44,15 @@ export default Vue.extend({
       default: () => () => {},
     },
     message: {
-      type: Object as PropType<UIMessage>,
-      default: () => ({
-        id: '0',
-        at: 1620515543000,
-        type: 'text',
-        from: 'group',
-        payload: 'Invalid Message',
-      }),
+      type: Object as PropType<ConversationMessage>,
+      default: null,
     },
   },
   data() {
     return {
       hasMoreSettings: false,
       featureReadyToShow: false,
+      chat: iridium.chat.state,
     }
   },
   computed: {
@@ -71,25 +67,14 @@ export default Vue.extend({
       if (!this.conversationId) {
         return undefined
       }
-      return iridium.chat.state.conversations[this.conversationId]
+      return this.chat.conversations[this.conversationId]
     },
     isGroup(): boolean {
       return this.conversation?.type === 'group'
     },
     isEditable(): boolean {
-      return (
-        this.message.from === this.accounts.details?.textilePubkey &&
-        !(this.message.type === 'glyph' || this.message.type === 'file')
-      )
-    },
-    ModalWindows: () => ModalWindows,
-  },
-  methods: {
-    toggleModal(modalName: ModalWindows) {
-      this.$store.commit('ui/toggleModal', {
-        name: modalName,
-        state: !this.ui.modals[modalName],
-      })
+      // Only text messages atm
+      return this.message.from === iridium.id && this.message.type === 'text'
     },
   },
 })

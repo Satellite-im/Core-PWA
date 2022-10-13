@@ -1,40 +1,65 @@
 <UiContextMenu
-  class="item"
-  :class="{'is-loading' : isLoading , selected : isSelected}"
+  class="wrapper"
+  :class="{ 'is-loading': isLoading}"
   :items="contextMenuValues"
-  @click="openConversation"
-  data-cy="sidebar-user"
 >
-  <template>
-    <UiUserState v-if="conversation.type === 'direct'" :user="user" />
-    <UiGroupIcon v-else :members="participants" />
-  </template>
-  <div class="user-info">
-    <TypographyText
-      class="ellipsis"
-      color="light"
-      font="heading"
-      weight="bold"
-      data-cy="sidebar-user-name"
-    >
-      {{ conversation.name }}
-    </TypographyText>
-    <TypographyText size="sm" data-cy="sidebar-user-name">
-      <div
-        v-html="wrapEmoji(markdownToHtml(lastMessageDisplay))"
-        class="ellipsis"
-        :class="{bigmoji : containsOnlyEmoji(lastMessageDisplay)}"
-        ref="subtitle"
-      />
-    </TypographyText>
-  </div>
-  <div class="user-chat-details">
-    <TypographyText v-if="messages.length" color="dark" size="xs">
-      {{ timestamp }}
-    </TypographyText>
-    <!-- <TypographyTag v-if="unreadMessageCount" :text="unreadMessageCount" /> -->
-  </div>
-  <div class="user-loader">
+  <button
+    class="item"
+    :class="{ selected: isSelected }"
+    data-cy="sidebar-user"
+    @click="openConversation"
+  >
+    <UiUserState
+      v-if="conversation.type === 'direct'"
+      :user="otherParticipants[0]"
+      :conversationId="conversationId"
+    />
+    <UiGroupIcon
+      v-else-if="conversation.participants"
+      :members="conversation.participants"
+    />
+
+    <div class="user-info">
+      <div class="row">
+        <TypographyText
+          class="ellipsis"
+          as="h4"
+          :color="numUnreadMessages ? 'light' : 'dark'"
+          data-cy="sidebar-user-name"
+        >
+          {{ conversation.name }}
+        </TypographyText>
+
+        <TypographyText
+          class="timestamp"
+          v-if="sortedMessages.length"
+          color="dark"
+          size="xs"
+        >
+          {{ timestamp }}
+        </TypographyText>
+      </div>
+
+      <div class="row">
+        <TypographyText
+          size="sm"
+          class="subtitle"
+          :color="numUnreadMessages ? 'light' : 'dark'"
+          :weight="numUnreadMessages ? 'bold' : ''"
+        >
+          <div class="ellipsis" v-html="subtitle" />
+        </TypographyText>
+        <TypographyTag
+          v-if="numUnreadMessages"
+          class="tag"
+          :text="unreadDisplay"
+          small
+        />
+      </div>
+    </div>
+  </button>
+
+  <div class="loader">
     <UiLoadersSpinner :spinning="isLoading" />
   </div>
 </UiContextMenu>

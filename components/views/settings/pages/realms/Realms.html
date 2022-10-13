@@ -1,14 +1,17 @@
 <SettingsPage>
   <SettingsUnit>
-    <TypographyTitle :size="6" :text="$t('pages.settings.realms.title')" />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.realms.subtitle')"
-    />
+    <TypographyText as="h2">
+      {{ $t('pages.settings.realms.title') }}
+    </TypographyText>
+    <TypographyText color="dark">
+      {{ $t('pages.settings.realms.subtitle') }}
+    </TypographyText>
   </SettingsUnit>
 
   <SettingsUnit>
-    <TypographyLabel :text="$t('pages.settings.realms.chain')" />
+    <TypographyText as="label" uppercase>
+      {{ $t('pages.settings.realms.chain') }}
+    </TypographyText>
     <br />
     <SettingsPagesRealmsRealm
       v-for="realm in realms"

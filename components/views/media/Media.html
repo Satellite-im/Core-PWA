@@ -1,35 +1,58 @@
-<div class="mediastream" data-cy="mediastream" ref="mediastream">
-  <MediaHeading />
-  <div class="media" ref="media">
+<div
+  ref="mediastream"
+  class="mediastream"
+  :class="{ 'has-presenter': presenter !== null, 'is-fullscreen': isFullscreen }"
+  data-cy="mediastream"
+  :style="`height:${height}`"
+>
+  <div v-show="presenter !== null" class="presenter" ref="presenter">
     <MediaUser
-      id="local_video"
-      :user="localParticipant"
-      isLocal
-      data-cy="local-video"
-      @dblclick="handleDoubleClick('local_video')"
+      v-if="presenter !== null"
+      :user="presenter.participant"
+      :size="presenterUserSize"
+      :stream="presenter.stream"
+      @click="() => togglePresenter(null)"
+      @mounted="calculateUserSizes"
+      is-presenter
+      hide-talking-indicator
     />
-
-    <MediaUser
-      v-for="participant in remoteParticipants"
-      :id="`remote_video_${ participant.did }`"
-      :user="participant"
-      data-cy="remote-video"
-      @dblclick="handleDoubleClick('remote_video')"
-    />
-
-    <div
-      v-if="ui.fullscreen && users.length > fullscreenMaxViewableUsers || !ui.fullscreen && users.length > maxViewableUsers"
-      class="more-user"
-      :class="{full: ui.fullscreen, 'full-mobile': fullscreenMaxViewableUsers === 6}"
-    >
-      ...
-    </div>
   </div>
-  <MediaActionsVolume
-    :volume="audio.volume"
-    isPopup
-    @volumeControlValueChange="volumeControlValueChange"
-  />
-  <MediaActionsSettings />
+
+  <div
+    class="media"
+    :class="{ 'has-presenter': presenter !== null }"
+    ref="media"
+  >
+    <template v-for="stream in streams">
+      <MediaUser
+        :key="stream.participant.did + stream.stream"
+        :user="stream.participant"
+        data-cy="remote-video"
+        :size="mediaUserSize"
+        :stream="stream.stream"
+        :is-presenter-thumbnail="presenter === stream"
+        :hide-talking-indicator="stream.hideTalkingIndicator"
+        @click="() => togglePresenter(stream)"
+      />
+    </template>
+  </div>
+
+  <MediaHeading />
   <MediaActions />
+  <div class="controls">
+    <MediaActionsVolume
+      :volume="volume"
+      is-popup
+      @volumeControlValueChange="volumeControlValueChange"
+    />
+    <MediaActionsFullscreen
+      :is-fullscreen="isFullscreen"
+      @toggle="toggleFullscreen"
+    />
+  </div>
+  <InteractablesDragBar
+    v-if="!isFullscreen"
+    side="bottom"
+    @resize="(val) => (height = val)"
+  />
 </div>

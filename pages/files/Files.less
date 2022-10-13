@@ -2,12 +2,14 @@
   flex-grow: 1;
   display: grid;
   grid-template-columns: auto 288px;
-  grid-template-rows: min-content min-content 1fr;
+  grid-template-rows: min-content min-content min-content 1fr;
   gap: @normal-spacing;
   grid-auto-flow: row;
   grid-template-areas:
     'controls files-aside-container'
     'files-path files-aside-container'
+    // include mobile-controls for tablet screens
+    'mobile-controls files-aside-container'
     'files-view files-aside-container';
   overflow-y: scroll;
   padding: @normal-spacing;
@@ -40,9 +42,18 @@
     gap: @normal-spacing;
   }
 
+  .mobile-controls {
+    grid-area: mobile-controls;
+  }
+
   .files-view {
     grid-area: files-view;
     min-width: 0; // needed so overflow works properly
+    overflow: auto;
+
+    &__desktop-wrapper {
+      overflow: auto;
+    }
   }
 
   .files-aside-container {
@@ -50,13 +61,14 @@
   }
 
   @media only screen and (max-width: @small-breakpoint) {
-    grid-template-columns: auto;
-    grid-template-rows: auto auto auto 1fr;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto auto auto 1fr;
     gap: @large-spacing;
     grid-template-areas:
       'controls'
       'files-aside-container'
       'files-path'
+      'mobile-controls'
       'files-view';
   }
 }

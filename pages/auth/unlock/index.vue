@@ -21,8 +21,10 @@ export default Vue.extend({
     return {
       pin: '',
       status: 'idle' as 'idle' | 'loading',
-      error: '',
+      error: '' as any,
       step: 'signup' as 'signup' | 'login',
+      isChrome: false,
+      confirmClearAccountModalVisible: false,
     }
   },
   computed: {
@@ -69,7 +71,8 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
   mounted() {
     // This information can be useful for users to help us find and report bugs.
     ConsoleWarning(this.$config.clientVersion, this.$store.state)
-
+    // @ts-ignore
+    this.isChrome = !!window.chrome
     this.$store.commit('accounts/lock')
   },
   methods: {
@@ -104,6 +107,10 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
      * @example
      */
     async decrypt(redirect = true) {
+      const timeout = setTimeout(() => {
+        this.pin = ''
+        this.error = this.$t('errors.timeout')
+      }, this.$Config.connection.timeout)
       try {
         this.status = 'loading'
         await this.$store.dispatch(
@@ -118,15 +125,16 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           } catch (e: any) {
             this.$toast.error(this.$t(e.message) as string)
           }
-          redirect && this.$router.replace('/setup/disclaimer')
+          redirect && (await this.$router.replace('/setup/disclaimer'))
         } else {
-          redirect && this.$router.replace('/')
+          redirect && (await this.$router.replace('/'))
         }
       } catch (error: any) {
         this.pin = ''
         this.error = error.message
       } finally {
         this.status = 'idle'
+        clearTimeout(timeout)
       }
     },
     // Create & store a new pin, then decrypt.
@@ -149,7 +157,7 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
     async deleteAccount() {
       await this.$store.dispatch('settings/clearLocalStorage')
     },
-    async clearAndReset() {
+    async clearAccount() {
       await this.deleteAccount()
       location.reload()
     },
@@ -189,7 +197,9 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
           }
         }
 
-        this.$router.replace('/')
+        if (this.$route.path !== '/') {
+          this.$router.replace('/')
+        }
       } catch (error: any) {
         this.error = error.message
       }

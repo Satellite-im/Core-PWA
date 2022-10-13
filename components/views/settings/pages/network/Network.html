@@ -1,10 +1,11 @@
 <SettingsPage>
   <SettingsUnit>
-    <TypographyTitle :size="6" :text="$t('pages.settings.network.title')" />
-    <TypographySubtitle
-      :size="6"
-      :text="$t('pages.settings.network.subtitle')"
-    />
+    <TypographyText as="h2">
+      {{ $t('pages.settings.network.title') }}
+    </TypographyText>
+    <TypographyText color="dark">
+      {{ $t('pages.settings.network.subtitle') }}
+    </TypographyText>
   </SettingsUnit>
 
   <SettingsUnit>

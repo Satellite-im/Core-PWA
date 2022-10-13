@@ -1,5 +1,11 @@
 button {
   padding: 12px 0;
   font-size: @larger-icon-size;
-  color: @white;
+  color: @text;
+
+  &[disabled] {
+    color: @dark;
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
 }

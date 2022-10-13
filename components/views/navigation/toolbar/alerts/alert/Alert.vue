@@ -16,10 +16,6 @@ export default Vue.extend({
       type: Object as PropType<Notification>,
       required: true,
     },
-    alertDid: {
-      type: String,
-      required: true,
-    },
   },
   computed: {
     setTranslateText(): TranslateResult | undefined {
@@ -30,6 +26,12 @@ export default Vue.extend({
             msgType: this.alert.type,
           })
         }
+        case NotificationType.GROUP_MESSAGE: {
+          return this.$t('messaging.user_sent_group_message.message', {
+            user: this.alert.fromName,
+            group: this.alert.chatName,
+          })
+        }
         case NotificationType.FRIEND_REQUEST: {
           return this.$t('friends.new_friend_request', {
             user: this.alert.fromName,
@@ -38,14 +40,10 @@ export default Vue.extend({
       }
       return this.$t('user_sent_something.user')
     },
-    // alertImage(): string {
-    //   const hash = this.alert?.image
-    //   return hash ? `${this.$Config.textile.browser}/ipfs/${hash}` : ''
-    // },
   },
   methods: {
-    removeNotification(id: string) {
-      iridium.notifications.deleteNotification(this.alertDid)
+    removeNotification() {
+      iridium.notifications.deleteNotification(this.alert.id as string)
     },
     notificationLink(alertType: NotificationType) {
       switch (alertType) {

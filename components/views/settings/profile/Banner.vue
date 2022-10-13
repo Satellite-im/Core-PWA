@@ -35,6 +35,6 @@ export default Vue.extend({
 }
 
 .img-default {
-  filter: blur(4px);
+  filter: blur(8px) brightness(66%);
 }
 </style>

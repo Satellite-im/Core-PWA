@@ -1,29 +1,32 @@
 // eslint-disable-next-line import/named
 import { Commitment } from '@solana/web3.js'
+import type { IridiumConfig } from '@satellite-im/iridium'
 
-const syncNodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
-  '/ip4/localhost/tcp/443/wss/p2p/12D3KooWRgdhiJam4naWGYtgLXtc17ty89MMPvig41p9BhKG7FRW',
+const nodes = process.env.NUXT_ENV_IRIDIUM_SYNC_NODES?.split(',') || [
+  '/dns4/sync-ny.satellite.im/tcp/443/wss/p2p/12D3KooWRnsCHcpEWE6vPcrFc8sjGusu9xhy6s2PCevMMB24bsQm',
 ]
-console.log('debug: | syncNodes', syncNodes)
+const gateways = process.env.NUXT_ENV_IRIDIUM_GATEWAYS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
+const apis = process.env.NUXT_ENV_IRIDIUM_APIS?.split(',') || [
+  'https://satellite.infura-ipfs.io',
+]
 
 export const Config = {
   debug: true,
   iridium: {
-    syncNodes,
+    nodes,
+    gateways,
+    apis,
     ipfs: {
       config: {
-        Addresses: {
-          Swarm: syncNodes,
-          Delegate: syncNodes,
-        },
-        Bootstrap: syncNodes,
+        Bootstrap: nodes,
       },
     },
-  },
+  } as Partial<IridiumConfig>,
   ipfs: {
     gateway: 'https://satellite.infura-ipfs.io/ipfs/',
   },
-  indexedDbName: 'SatelliteDB',
   // Keep in sync with Sounds enum in SoundManager.ts
   sounds: {
     doesLoop: ['call'],
@@ -32,26 +35,10 @@ export const Config = {
     hangup: `sounds/Unused.m4a`,
     mute: `sounds/Mute.m4a`,
     unmute: `sounds/Unmute.m4a`,
-    deafen: `.sounds/Deafen.m4a`,
+    deafen: `sounds/Deafen.m4a`,
     undeafen: `sounds/Undeafen.m4a`,
     upload: `sounds/Success.m4a`,
     connected: `sounds/Success.m4a`,
-  },
-  cacher: {
-    user_lifespan: 90000,
-  },
-  webtorrent: {
-    announceURLs: process.env.NUXT_ENV_DEVELOPMENT_TRACKER
-      ? [process.env.NUXT_ENV_DEVELOPMENT_TRACKER] // DEVELOPMENT, yarn dev:tracker to start
-      : [
-          'wss://tracker.openwebtorrent.com',
-          'wss://tracker.sloppyta.co:443/announce',
-          'wss://tracker.novage.com.ua:443/announce',
-          'udp://opentracker.i2p.rocks:6969/announce',
-          'http://opentracker.i2p.rocks:6969/announce',
-          'udp://tracker.opentrackr.org:1337/announce',
-          'http://tracker.opentrackr.org:1337/announce',
-        ],
   },
   solana: {
     customFaucet: 'https://dev-faucet.satellite.one',
@@ -59,13 +46,7 @@ export const Config = {
     httpHeaders: process.env.NUXT_ENV_FIGMENT_APIKEY
       ? { Authorization: process.env.NUXT_ENV_FIGMENT_APIKEY }
       : undefined,
-    serverProgramId: 'FGdpP9RSN3ZE8d1PXxiBXS8ThCsXdi342KmDwqSQ3ZBz',
-    friendsProgramId: 'BxX6o2HG5DWrJt2v8GMSWNG2V2NtxNbAUF3wdE5Ao5gS',
-    friendsProgramExId: 'GjS6t1gK9nktqDJBTjobm9Fdepxg2FGb4vifRDEQ8hXL',
-    groupchatsProgramId: 'bJhvwTYCkQceANgeShZ4xaxUqEBPsV8e1NgRnLRymxs',
     defaultCommitment: 'confirmed' as Commitment,
-    defaultPreflightCommitment: 'confirmed' as Commitment,
-    usersProgramId: '8n2ct4HBadJdtr8T31JvYPTvmYeZyCuLUjkt3CwcSsh9',
   },
   // Realms are just different chains we support
   realms: [
@@ -110,7 +91,8 @@ export const Config = {
     messageMaxChars: 2048,
     timestampUpdateInterval: 60 * 1000, // 60 seconds
     maxChars: 2048,
-    typingInputThrottle: 2000,
+    typingInputThrottle: 5000,
+    typingInputDebounce: 1000,
     maxUndoStack: 100,
     batchUndoSeconds: 5,
     searchCharLimit: 256,
@@ -139,9 +121,6 @@ export const Config = {
     empty: /^\s*$/,
     // invalid characters in filesystem name
     invalid: /[/:"*?<>|~#%&+{}\\]+/,
-    // Regex to check if string contains only emoji's.
-    isEmoji:
-      /^(\u00A9|\u00AE|[\u2000-\u3300]|\uD83C[\uD000-\uDFFF]|\uD83D[\uD000-\uDFFF]|\uD83E[\uD000-\uDFFF])+$/gi,
     // Regex to wrap emoji's in spans. Note: Doesn't yet support emoji modifiers
     emojiWrapper: /[\p{Emoji_Presentation}\u200D]+/gu,
     // Check for link
@@ -181,6 +160,7 @@ export const Config = {
         height: { min: 576, ideal: 720, max: 1080 },
       },
     },
+    announceFrequency: 30000,
   },
   cropperOptions: {
     type: 'blob',
@@ -204,13 +184,13 @@ export const Config = {
   },
   seedPhraseCharsCount: 12,
   pip: {
-    /* Grid config, image splitting the screen in `rows x columns` 
+    /* Grid config, image splitting the screen in `rows x columns`
      _____ _____
     |_____|_____|
     |_____|_____|
     |_____|_____|
     |_____|_____|
-    
+
     Depending on the center of the Pip, it will land on a specific slot
     */
     rows: [0, 1, 2, 3] as const,
@@ -219,5 +199,10 @@ export const Config = {
     windowMargin: 80, // pixels
     enlargeFactor: 1.25,
     preventDragClass: '.drag-stop', // add this class to pip children that should not trigger drag/resize
+    width: 320,
+    height: 180,
+  },
+  connection: {
+    timeout: 30000,
   },
 }

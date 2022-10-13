@@ -284,7 +284,7 @@ const _htmlOutput = markdown.outputFor(rules, 'html')
 /**
  * Parse markdown and return the HTML output
  */
-export function toHTML(source: string, options: Options = {}) {
+export function toHTML(source: string, options: Options = {}): string {
   const state = {
     inline: true,
     inQuote: false,

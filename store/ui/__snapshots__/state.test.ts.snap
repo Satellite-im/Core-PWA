@@ -2,7 +2,7 @@
 
 exports[`state.default 0 1`] = `
 Object {
-  "activeChannel": undefined,
+  "callHeight": "auto",
   "chatImageOverlay": undefined,
   "chatbarContent": "",
   "chatbarFocus": false,
@@ -29,7 +29,6 @@ Object {
     "route": "emoji",
     "show": false,
   },
-  "fullscreen": false,
   "glyphMarketplaceView": Object {
     "shopId": null,
     "view": "home",
@@ -37,13 +36,11 @@ Object {
   "glyphModalPackId": undefined,
   "hoveredGlyphInfo": undefined,
   "isMobileNavVisible": true,
-  "isReacted": false,
-  "isScrollOver": false,
-  "isTyping": false,
   "messages": Array [],
   "modals": Object {
     "callToAction": false,
     "changelog": false,
+    "consentScanConfirmation": false,
     "createServer": false,
     "error": false,
     "errorNetwork": Object {
@@ -59,12 +56,6 @@ Object {
     "walletMini": false,
   },
   "mostEmojiUsed": Array [],
-  "notifications": Array [],
-  "quickProfile": false,
-  "quickProfilePosition": Object {
-    "x": 0,
-    "y": 0,
-  },
   "recentGlyphs": Array [],
   "settingReaction": Object {
     "groupID": null,
@@ -73,11 +64,8 @@ Object {
   },
   "settingsRoute": "",
   "showOlderMessagesInfo": false,
-  "showPinned": false,
-  "showSearchResult": false,
   "showSettings": false,
   "showSidebar": true,
   "unreadMessage": 0,
-  "userProfile": Object {},
 }
 `;

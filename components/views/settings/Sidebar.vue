@@ -1,15 +1,17 @@
 <template>
   <aside class="menu">
     <div v-for="group in menuOptions" :key="group.title">
-      <p class="menu-label">{{ group.title }}</p>
-      <ul class="menu-list">
+      <TypographyText class="menu-label" size="sm" color="dark" font="heading">
+        {{ group.title }}
+      </TypographyText>
+      <ul>
         <li v-for="link in group.links" :key="link.to">
-          <a
+          <button
             :class="{ active: settingsRoute === link.to }"
             @click="navigateTo(link.to)"
           >
             {{ link.text }}
-          </a>
+          </button>
         </li>
       </ul>
     </div>
@@ -18,9 +20,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { SidebarGrouping } from '~/types/ui/sidebar'
 import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
+
+type SidebarGrouping = {
+  title: string
+  links: {
+    to: string
+    text: string
+  }[]
+}
 
 export default Vue.extend({
   computed: {
@@ -28,9 +37,10 @@ export default Vue.extend({
       settingsRoute: (state) => (state as RootState).ui.settingsRoute,
     }),
     menuOptions(): SidebarGrouping[] {
+      // TODO: Replace all text entries with i18n
       return [
         {
-          title: 'General',
+          title: 'User Settings',
           links: [
             {
               to: SettingsRoutes.PERSONALIZE,
@@ -43,35 +53,6 @@ export default Vue.extend({
             {
               to: SettingsRoutes.AUDIO_AND_VIDEO,
               text: 'Audio & Video',
-            },
-            {
-              to: SettingsRoutes.KEY_BINDS,
-              text: 'Keybinds',
-            },
-            {
-              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
-              text: 'Accounts & Devices',
-            },
-            {
-              to: SettingsRoutes.PRIVACY,
-              text: 'Privacy',
-            },
-          ],
-        },
-        {
-          title: 'Realms & Security',
-          links: [
-            {
-              to: SettingsRoutes.REALMS,
-              text: 'Realms',
-            },
-            {
-              to: SettingsRoutes.STORAGE,
-              text: 'Storage',
-            },
-            {
-              to: SettingsRoutes.NETWORK,
-              text: 'Network',
             },
           ],
         },
@@ -92,6 +73,35 @@ export default Vue.extend({
             },
           ],
         },
+        {
+          title: 'App Settings',
+          links: [
+            /* {
+              to: SettingsRoutes.REALMS,
+              text: 'Realms',
+            }, */ // hidden due to AP-2243
+            {
+              to: SettingsRoutes.STORAGE,
+              text: 'Storage',
+            },
+            /* {
+               to: SettingsRoutes.NETWORK,
+               text: 'Network',
+            }, */
+            {
+              to: SettingsRoutes.KEY_BINDS,
+              text: 'Keybinds',
+            },
+            {
+              to: SettingsRoutes.ACCOUNTS_AND_DEVICES,
+              text: 'Accounts & Devices',
+            },
+            {
+              to: SettingsRoutes.PRIVACY_AND_PERMISSIONS,
+              text: 'Privacy & Permissions',
+            },
+          ],
+        },
       ]
     },
   },
@@ -105,35 +115,42 @@ export default Vue.extend({
 <style scoped lang="less">
 .menu {
   overflow-y: auto;
-  &:extend(.no-select);
-  padding: 16px;
+  background: @semitransparent-dark-gradient;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  .no-select();
 
-  .menu-label {
-    &:extend(.font-muted);
+  @media only screen and (max-width: @mobile-breakpoint) {
+    background: none;
   }
 
-  .menu-list {
-    margin-bottom: @normal-spacing;
+  .menu-label {
+    margin-bottom: 0.25rem;
+  }
 
-    li {
+  button {
+    padding: 8px 0;
+    width: 100%;
+    .round-corners();
+
+    @media only screen and (min-width: @mobile-breakpoint) {
+      padding: 0.5em 0.75em;
+
       &:hover {
-        &:extend(.background-semitransparent-light);
+        .background-semitransparent-light();
+        .font-primary();
       }
-      a {
-        display: block;
-        padding: 0.5em 0.75em;
-        -webkit-user-drag: none;
-        &:extend(.no-select);
-        &:extend(.font-primary);
 
-        &:hover {
-          &:extend(.background-semitransparent-light);
-          &:extend(.font-primary);
-        }
-        &.active {
-          &:extend(.background-flair-gradient);
-          &:extend(.glow-flair);
-        }
+      &.active {
+        .background-flair-gradient();
+        .glow-flair();
+      }
+    }
+
+    @media only screen and (max-width: @mobile-breakpoint) {
+      &:active {
+        opacity: 0.5;
       }
     }
   }

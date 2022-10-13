@@ -1,57 +1,91 @@
-<UiContextMenu class="chat-message-container" :items="contextMenuValues">
+<div
+  ref="container"
+  class="chat-message-container"
+  :class="{
+    'show-header': showHeader,
+    'first-unread-message': item.isFirstUnreadMessage,
+  }"
+  :data-message-id="message.id"
+>
+  <MessageNotice v-if="isNotice" :message="message" />
   <div
+    v-else
     class="chat-message"
-    :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo }"
+    :class="{ 'show-header': showHeader, 'is-replying-to': isReplyingTo, 'is-editing': isEditing }"
   >
+    <!-- todo - add user options context menu -->
     <template v-if="showHeader">
       <div class="avatar">
-        <UiCircle
-          :type="avatarSrc ? 'image' : 'random'"
-          :seed="author.did"
-          :source="avatarSrc"
-        />
+        <button @click="showQuickProfile" tabindex="-1">
+          <UiCircle
+            :type="avatarSrc ? 'image' : 'random'"
+            :seed="author.did"
+            :source="avatarSrc"
+          />
+        </button>
       </div>
       <div class="header">
-        <span :click="showQuickProfile">
-          <UiUserName :username="author.name" />
-        </span>
+        <button @click="showQuickProfile">
+          <TypographyText as="h4"> {{ author.name }} </TypographyText>
+        </button>
       </div>
     </template>
-    <div class="timestamp">{{ timestamp }}</div>
-    <div class="body">
+    <!-- todo end -->
+    <div v-if="message.type !== 'call'" class="timestamp">{{ timestamp }}</div>
+    <UiContextMenu class="body" :items="contextMenuValues">
       <MessageMarkdown
-        v-if="message.body"
-        :text="wrapEmoji(markdownToHtml(message.body))"
+        v-if="message.body && !isEditing"
+        :text="markdownToHtml"
         class="markdown"
-        :class="{ bigmoji: containsOnlyEmoji(message.body) }"
+        :class="{ bigmoji: containsOnlyEmoji, pending: message.status === 'pending', failed: message.status === 'failed' }"
         data-cy="chat-message"
       />
-      <MessageAttachments
-        v-if="message.attachments.length"
-        :attachments="message.attachments"
+      <MessageEdit
+        v-if="isEditing"
+        :message="message"
+        @commitMessage="saveMessage"
+        @cancelMessage="cancelMessage"
       />
-      <MessageGlyph v-if="message.glyph" :glyph="message.glyph" />
-      <span class="status editing" v-if="message.editingAt">
-        <UiLoadersSpinner spinning />
-      </span>
       <span
+        v-else-if="message.lastEditedAt"
         class="status edited"
         data-cy="message-edited"
-        v-else-if="message.editedAt"
       >
         ({{$t('ui.edited')}})
       </span>
+      <MessageGlyph
+        v-else-if="message.glyph"
+        :glyph="message.glyph"
+        :failed="message.status === 'failed'"
+        :class="{ pending: message.status === 'pending', failed: message.status === 'failed' }"
+      />
       <MessageActions
+        v-if="actionsEnabled"
         :setReplyChatbarMessage="setReplyChatbarMessage"
         :emojiReaction="emojiReaction"
         :editMessage="editMessage"
         :message="message"
         :hideReply="hideReplyAction"
       />
-    </div>
+    </UiContextMenu>
+    <MessageCallDirection
+      v-if="message.type === 'call'"
+      :message="message"
+      :isLastCallMessage="item.isLastCallMessage"
+    />
+    <MessageCall
+      v-if="message.type === 'call'"
+      :message="message"
+      :isLastCallMessage="item.isLastCallMessage"
+    />
+    <MessageAttachments
+      v-if="message.attachments.length"
+      class="attachments"
+      :attachments="message.attachments"
+    />
     <div class="footer">
       <MessageReactions :message="message" :emojiReaction="emojiReaction" />
-      <MessageReplies :replies="replies" />
+      <MessageReplies :replies="replies" v-if="replies?.length" />
     </div>
   </div>
-</UiContextMenu>
+</div>

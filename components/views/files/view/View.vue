@@ -24,23 +24,32 @@ export default Vue.extend({
   data() {
     return {
       thumbnail: '',
+      dataURL: '',
     }
   },
   computed: {
     ...mapState({
       file: (state) => (state as RootState).files.preview,
       downloadList: (state) => (state as RootState).files.downloadList,
-      blockNsfw: (state) => (state as RootState).textile.userThread.blockNsfw,
     }),
     isDownloading(): boolean {
       return this.file?.name
         ? this.downloadList.includes(this.file.name)
         : false
     },
+    downloadName(): string {
+      if (!this.file) {
+        return ''
+      }
+      const fileExt = this.file.name
+        .slice(((this.file.name.lastIndexOf('.') - 1) >>> 0) + 2)
+        .toLowerCase()
+      return this.file.extension === fileExt
+        ? this.file.name
+        : `${this.file.name}.${this.file.extension}`
+    },
   },
   async mounted() {
-    if (this.$refs.modal) (this.$refs.modal as HTMLElement).focus()
-
     if (this.file?.thumbnail) {
       this.thumbnail = URL.createObjectURL(
         await iridium.files.fetchThumbnail(this.file.thumbnail, this.file.type),
@@ -61,25 +70,19 @@ export default Vue.extend({
       const file = this.file
       if (file) {
         this.$store.commit('files/addDownload', file.name)
-        const fileExt = file.name
-          .slice(((file.name.lastIndexOf('.') - 1) >>> 0) + 2)
-          .toLowerCase()
-
-        await iridium.files.download(
-          file.id,
-          file.extension === fileExt
-            ? file.name
-            : `${file.name}.${file.extension}`,
-          file.size,
+        const anchor = this.$refs.download as HTMLAnchorElement
+        const { fileBuffer } = await iridium.connector?.load(file.id)
+        this.dataURL = URL.createObjectURL(
+          new Blob([fileBuffer], { type: file.type }),
         )
+        anchor.href = this.dataURL
+        anchor.click()
+        URL.revokeObjectURL(this.dataURL)
         this.$store.commit('files/removeDownload', file.name)
       }
     },
     share() {
       this.$toast.show(this.$t('todo - share') as string)
-    },
-    close() {
-      this.$store.commit('files/setPreview', undefined)
     },
   },
 })

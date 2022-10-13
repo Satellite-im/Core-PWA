@@ -9,21 +9,25 @@
               <user-plus-icon />
             </button>
             <button @click="next('request')">
-              <user-check-icon />
-            </button>
-            <button>
-              <more-vertical-icon />
+              <UiDotBadge :show="Boolean(incomingRequests.length)">
+                <user-check-icon />
+              </UiDotBadge>
             </button>
           </div>
         </div>
-        <FriendsMobileList :list="friendsList" />
+        <FriendsMobileList v-if="friendsList.length" :list="friendsList" />
+        <div v-else class="empty-friends-container">
+          <FriendsEmptyMessage class="empty-friends" @click="setSwiperAsTab" />
+        </div>
       </div>
       <div class="swiper-slide">
         <div class="top">
           <button @click="previous">
             <arrow-left-icon class="arrow" />
           </button>
-          <TypographyText>{{ $t(`friends.${route}`) }}</TypographyText>
+          <TypographyText v-if="route">
+            {{ $t(`friends.${route}`) }}
+          </TypographyText>
         </div>
         <div class="bottom">
           <template v-if="route === 'request'">
@@ -50,7 +54,8 @@
           <template v-else-if="route === 'add'">
             <div>{{ $t('friends.add_description') }}</div>
             <FriendsSearch />
-            <FriendsQrSection />
+            <!-- <FriendsQrSection /> -->
+            <!-- Commented out because QR section doesn't work -->
           </template>
         </div>
       </div>
@@ -62,7 +67,6 @@
 import Vue from 'vue'
 import {
   ArrowLeftIcon,
-  MoreVerticalIcon,
   UserPlusIcon,
   UserCheckIcon,
 } from 'satellite-lucide-icons'
@@ -70,22 +74,26 @@ import { Swiper, SwiperOptions } from 'swiper'
 import 'swiper/css'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
+import { FriendsTabs } from '~/libraries/Enums/enums'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'MobileFriends',
   components: {
     ArrowLeftIcon,
-    MoreVerticalIcon,
     UserPlusIcon,
     UserCheckIcon,
   },
   layout: 'mobile',
   data: () => ({
     swiper: undefined as Swiper | undefined,
-    route: '' as '' | 'request' | 'add',
     friends: iridium.friends.state,
+    users: iridium.users,
   }),
   computed: {
+    route(): FriendsTabs {
+      return this.$route.query.route as FriendsTabs
+    },
     swiperConfig(): SwiperOptions {
       return {
         noSwipingClass: 'disable-swipe',
@@ -98,7 +106,7 @@ export default Vue.extend({
             if (activeIndex === 0) {
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
-              this.route = ''
+              this.removeRoutes()
             }
             if (activeIndex === 1) {
               this.swiper.allowSlidePrev = true
@@ -110,28 +118,36 @@ export default Vue.extend({
     },
     friendsList(): Friend[] {
       return this.friends.friends
-        .map((did) => iridium.users.getUser(did))
+        .map((did) => this.users.state[did])
+        .filter(truthy)
         .sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
         )
     },
+    requests(): FriendRequest[] {
+      return Object.values(this.friends.requests).filter(truthy)
+    },
     incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests)
-        .filter((r: FriendRequest) => r.incoming && r.status !== 'accepted')
-        .sort((a, b) =>
-          a.user.name.localeCompare(b.user.name, undefined, {
-            sensitivity: 'base',
-          }),
-        )
+      return this.requests.filter(
+        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
+      )
     },
     outgoingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests)
-        .filter((r: FriendRequest) => !r.incoming && r.status === 'pending')
-        .sort((a, b) =>
-          a.user.name.localeCompare(b.user.name, undefined, {
-            sensitivity: 'base',
-          }),
-        )
+      return this.requests.filter(
+        (r: FriendRequest) => !r.incoming && r.status === 'pending',
+      )
+    },
+  },
+  watch: {
+    route() {
+      // Return to main tab if route is not valid
+      if (!this.route && this.swiper?.activeIndex === 1) {
+        this.swiper.slideTo(0)
+      }
+      // Go to route tab if route is valid
+      if (this.route && this.swiper?.activeIndex === 0) {
+        this.swiper.slideTo(1)
+      }
     },
   },
   mounted() {
@@ -139,15 +155,33 @@ export default Vue.extend({
       this.$refs.swiper as HTMLElement,
       this.swiperConfig,
     )
+
+    // Activate swiper on first load if user sent directly to a tab
+    if (this.route) {
+      this.setSwiperAsTab()
+    }
   },
   methods: {
-    next(route: 'request' | 'add') {
-      this.route = route
-      this.swiper?.slideNext()
+    toTab(tab: FriendsTabs) {
+      this.next(tab)
+    },
+    next(route: FriendsTabs) {
+      this.$router.push({
+        query: {
+          route,
+        },
+      })
     },
     previous() {
-      this.route = ''
-      this.swiper?.slidePrev()
+      this.removeRoutes()
+    },
+    removeRoutes() {
+      this.$router.push({
+        query: {},
+      })
+    },
+    setSwiperAsTab() {
+      this.swiper?.slideTo(1)
     },
   },
 })
@@ -163,20 +197,39 @@ export default Vue.extend({
     display: flex;
     flex-direction: column;
 
+    .empty-friends-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 16px;
+
+      .empty-friends {
+        max-width: 320px;
+
+        &-side {
+          max-width: 240px;
+        }
+      }
+    }
+
     .top {
       display: flex;
       align-items: center;
       gap: 1.5rem;
       padding: 1rem;
+
       .button-container {
         display: flex;
         margin-left: auto;
         gap: 2rem;
       }
+
       .arrow {
         color: @flair-color;
       }
     }
+
     .bottom {
       flex: 1;
       overflow-y: scroll;

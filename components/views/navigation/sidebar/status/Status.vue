@@ -2,26 +2,43 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { RootState } from '~/types/store/store'
+import { ClipboardCopyIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
-  computed: {
-    ...mapState({
-      accounts: (state) => (state as RootState).accounts,
-    }),
-    src(): string {
-      const hash = this.accounts.details?.profilePicture
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
-    },
+  components: {
+    ClipboardCopyIcon,
   },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
+  data: () => ({
+    profile: iridium.profile.state,
+  }),
   methods: {
     copyId() {
-      if (iridium.connector) {
-        navigator.clipboard.writeText(iridium.connector?.id)
-        this.$toast.show(this.$t('ui.copied') as string)
-      }
+      if (!iridium.connector) return
+      const shortID = this.profile
+        ? `${this.profile.name}#${iridium.id.substring(iridium.id.length - 6)}`
+        : `${iridium.id}`
+      this.copyText(shortID)
+    },
+    openQuickProfile() {
+      const status = this.$refs.status as HTMLElement
+      const { x, y } = status.getBoundingClientRect()
+      const horizOffset = 32
+      const vertOffset = 136
+
+      this.$store.commit('ui/setQuickProfile', {
+        user: this.profile,
+        position: { x: x - horizOffset, y: y - vertOffset },
+        showStatusChange: true,
+      })
     },
   },
 })

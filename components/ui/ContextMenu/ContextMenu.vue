@@ -47,14 +47,12 @@
             v-if="item.text !== 'quickReaction'"
             :key="String(item.text) + '-action'"
             class="action-button"
-            :class="{ danger: item.type === 'danger' }"
+            :class="item?.type"
             @click="(e) => handleAction(e, item.func)"
           >
-            <TypographySubtitle
-              :text="item.text"
-              :size="6"
-              :class="{ danger: item.type === 'danger' }"
-            />
+            <TypographyText :color="item?.type">
+              {{ item.text }}
+            </TypographyText>
           </button>
         </template>
       </div>
@@ -113,7 +111,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .context-menu-container {
   display: flex;
   justify-content: flex-end;
@@ -139,18 +137,17 @@ export default Vue.extend({
     margin: 0 @normal-spacing;
 
     &:extend(.background-semitransparent-dark);
-    &:extend(.font-secondary);
     &:extend(.round-corners);
-
-    .danger {
-      color: @red;
-    }
 
     .action-button {
       height: 56px;
       justify-content: center;
       align-items: center;
-      width: @full;
+      width: 100%;
+
+      &.disabled {
+        opacity: 0.5;
+      }
 
       &:not(:last-child) {
         border-bottom: 0.5px solid @foreground;

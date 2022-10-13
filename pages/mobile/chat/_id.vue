@@ -7,24 +7,27 @@
       >
         <div class="search-container">
           <InteractablesInput
+            v-model="filter"
             class="search"
+            type="search"
             :placeholder="`${$t('ui.search')}...`"
-            show-clear
           />
           <button v-if="$route.params.id" @click="swiper.slideNext()">
-            <menu-icon class="toggle-sidebar" size="1.5x" />
+            <menu-icon class="font-color-flair" size="1.5x" />
           </button>
         </div>
-        <SidebarList class="mobile-list" />
+        <div v-show="$config.feedbackUrl" class="banner-wrapper">
+          <EarlyAccessBanner />
+        </div>
+        <SidebarList :filter="filter" @slideNext="swiper.slideNext()" />
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
-        <!-- <Media
-          v-if="$device.isMobile"
-          :users="$mock.callUsers"
+        <Media
+          v-if="isActiveCall"
           :max-viewable-users="10"
           :fullscreen-max-viewable-users="6"
-        /> -->
+        />
         <Conversation />
         <Chatbar ref="chatbar" />
       </div>
@@ -39,20 +42,28 @@ import { MenuIcon } from 'satellite-lucide-icons'
 import { Swiper, SwiperOptions } from 'swiper'
 import { RootState } from '~/types/store/store'
 import 'swiper/css'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import EarlyAccessBanner from '~/components/ui/EarlyAccessBanner/EarlyAccessBanner.vue'
 
 export default Vue.extend({
   name: 'MobileChat',
   components: {
     MenuIcon,
+    EarlyAccessBanner,
   },
   layout: 'mobile',
   data: () => ({
     swiper: undefined as Swiper | undefined,
+    webrtc: iridium.webRTC.state,
+    filter: '',
   }),
   computed: {
     ...mapState({
       ui: (state) => (state as RootState).ui,
     }),
+    isActiveCall(): boolean {
+      return iridium.webRTC.isActiveCall(this.$route.params.id)
+    },
     swiperConfig(): SwiperOptions {
       return {
         noSwipingClass: 'disable-swipe',
@@ -86,6 +97,13 @@ export default Vue.extend({
     },
   },
 
+  watch: {
+    isActiveCall(val) {
+      if (val) {
+        this.swiper?.slideNext()
+      }
+    },
+  },
   // component is remounted anytime the route param changes
   mounted() {
     this.swiper = new Swiper(
@@ -95,6 +113,9 @@ export default Vue.extend({
     if (this.$route.params.id) {
       this.swiper.slideNext()
     }
+  },
+  beforeDestroy() {
+    this.isMobileNavVisible = true
   },
 })
 </script>
@@ -112,8 +133,8 @@ export default Vue.extend({
     .search-container {
       display: flex;
       align-items: center;
-      gap: @normal-spacing;
-      padding: @normal-spacing @normal-spacing 0;
+      gap: 16px;
+      padding: 16px;
 
       .search {
         flex: 1;
@@ -122,8 +143,8 @@ export default Vue.extend({
         height: fit-content;
       }
     }
-    .mobile-list {
-      padding: @normal-spacing;
+    .banner-wrapper {
+      padding: 0 16px 8px;
     }
   }
 }

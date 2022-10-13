@@ -1,20 +1,28 @@
 <div>
+  <UiSvgDefs class="hidden" />
   <InteractablesContextMenu v-if="ui.contextMenuStatus" />
   <transition name="modal">
+    <UiModal v-if="incomingCall" :showCloseButton="false">
+      <MediaIncomingCall />
+    </UiModal>
+    <UiModal
+      v-if="ui.modals.consentScanConfirmation"
+      @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
+    >
+      <ConsentScanConfirmation
+        @close="() => toggleModal(ModalWindows.CONSENT_SCAN_CONFIRMATION)"
+      />
+    </UiModal>
+    <UiModal
+      v-if="ui.modals.callToAction"
+      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
+    >
+      <CallToAction @close="toggleModal(ModalWindows.CALL_TO_ACTION)" />
+    </UiModal>
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
     <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
       <WalletPopup />
     </UiModal>
-    <!-- <UiModal
-      v-if="ui.modals.createServer"
-      :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
-      :title="$t('servers.create.heading')"
-    >
-      <ServersCreate
-        v-click-outside="() => toggleModal(ModalWindows.CREATE_SERVER)"
-        :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
-      />
-    </UiModal> -->
     <!-- <UiModal
       v-if="ui.modals.error"
       :title="$t('popups.error.title')"
@@ -26,62 +34,72 @@
         :set-close-timeout="5000"
       />
     </UiModal> -->
-    <UiModal v-if="webrtc.incomingCall">
-      <MediaIncomingCall :accept-call="acceptCall" :deny-call="denyCall" />
-    </UiModal>
     <UiModal
       v-if="ui.modals.marketplace"
       @close="toggleModal(ModalWindows.MARKETPLACE)"
     >
       <Marketplace
         v-click-outside="() => toggleModal(ModalWindows.MARKETPLACE)"
-        :close-modal="() => toggleModal(ModalWindows.MARKETPLACE)"
+        @close="toggleModal(ModalWindows.MARKETPLACE)"
       />
     </UiModal>
     <UiModal
       v-if="ui.modals.glyph"
-      :close-modal="() => toggleModal(ModalWindows.GLYPH)"
-      @close="() => toggleModal(ModalWindows.GLYPH)"
+      @close="toggleModal(ModalWindows.GLYPH)"
       small
     >
       <Glyphs
         v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
-        :close-modal="() => toggleModal(ModalWindows.GLYPH)"
+        @close="toggleModal(ModalWindows.GLYPH)"
       />
     </UiModal>
     <UiModal
-      v-if="ui.modals.userProfile"
-      @close="() => toggleModal(ModalWindows.USER_PROFILE)"
+      v-if="ui.fullProfile"
+      @close="$store.commit('ui/setFullProfile', undefined)"
     >
-      <UserProfile
-        :close-modal="() => toggleModal(ModalWindows.USER_PROFILE)"
-      />
-    </UiModal>
-    <UiModal
-      v-if="ui.modals.callToAction"
-      @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-    >
-      <CallToAction
-        :close-modal="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
-      />
+      <UserProfile @close="$store.commit('ui/setFullProfile', undefined)" />
     </UiModal>
     <UiModal
       v-if="ui.modals.renameFile"
       @close="toggleModal(ModalWindows.RENAME_FILE)"
     >
-      <FilesRename :close-modal="() => toggleModal(ModalWindows.RENAME_FILE)" />
+      <FilesRename />
     </UiModal>
-    <UiUpdateModal
+    <UiModal
       v-if="ui.modals.changelog"
-      @close="() => toggleModal(ModalWindows.CHANGELOG)"
-    />
-    <UiChatImageOverlay v-if="ui.chatImageOverlay" />
-    <FilesView v-if="files.preview" />
+      @close="toggleModal(ModalWindows.CHANGELOG)"
+    >
+      <UiUpdateModal />
+    </UiModal>
+    <UiModal
+      v-if="ui.chatImageOverlay"
+      fullscreen
+      @close="$store.commit('ui/setChatImageOverlay', undefined)"
+    >
+      <UiChatImageOverlay />
+    </UiModal>
+    <UiModal
+      v-if="files.preview"
+      :showCloseButton="false"
+      fullscreen
+      @close="$store.commit('files/setPreview', undefined)"
+    >
+      <FilesView @close="$store.commit('files/setPreview', undefined)" />
+    </UiModal>
+    <UiModal
+      v-if="isNewAccount"
+      @close="$store.commit('accounts/setNewAccount', false)"
+    >
+      <UiWelcomeModal />
+    </UiModal>
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
-    <InteractablesQuickProfile v-if="ui.quickProfile" :user="ui.quickProfile" />
+    <InteractablesQuickProfile v-if="ui.quickProfile" />
   </transition>
-  <UiPip v-if="showBackgroundCall" v-slot="{ dragging }">
-    <MediaPreviewCall :dragging="dragging" />
+  <UiPip
+    v-if="$device.isDesktop && isBackgroundCall"
+    v-slot="{ dragging, width, height }"
+  >
+    <MediaPreviewCall :dragging="dragging" :width="width" :height="height" />
   </UiPip>
 </div>

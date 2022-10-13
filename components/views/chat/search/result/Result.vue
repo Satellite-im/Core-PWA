@@ -13,7 +13,6 @@ import {
   UISearchResult,
   MatchTypesEnum,
 } from '~/types/search/search'
-import { DataStateType } from '~/store/dataState/types'
 
 Vue.component('Paginate', VuejsPaginate)
 
@@ -46,21 +45,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['dataState', 'friends', 'accounts']),
+    ...mapState(['friends', 'accounts']),
     ...mapGetters('conversation', ['otherParticipants']),
-
-    DataStateType: () => DataStateType,
-    isLoading: {
-      set(state: DataStateType) {
-        this.$store.commit('dataState/setDataState', {
-          key: 'search',
-          value: state,
-        })
-      },
-      get(): DataStateType {
-        return this.dataState.search
-      },
-    },
     // disabled functionality, will be refactored later
     // userOptions() {
     //   return this.result?.recommends?.users?.length
@@ -123,20 +109,13 @@ export default Vue.extend({
      * @param query
      */
     async fetchResult(): Promise<void> {
-      this.isLoading = DataStateType.Loading
+      this.isLoading = true
       this.queryOptions = {
         ...this.queryOptions,
         accounts: [...this.otherParticipants, this.accounts.details],
         queryString: this.searchQuery,
       }
-      // currently only fetch payload matches, can be refactored later
-      this.result = await this.$store.dispatch('textile/searchConversations', {
-        query: this.queryOptions,
-        page: this.page,
-        orderBy: this.orderBy,
-        fields: [MatchTypesEnum.PAYLOAD],
-      })
-      this.isLoading = DataStateType.Ready
+      this.isLoading = false
     },
     async handleClickPaginate(pageNum: number) {
       this.page = pageNum

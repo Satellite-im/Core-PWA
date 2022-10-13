@@ -6,6 +6,8 @@ import { mapState } from 'vuex'
 
 import { ClipboardIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   name: 'AccountsSettings',
@@ -13,25 +15,40 @@ export default Vue.extend({
     ClipboardIcon,
   },
   layout: 'settings',
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   data() {
     return {
       showPhrase: false,
+      profile: iridium.profile.state,
     }
   },
   computed: {
     ...mapState({
-      accounts: (state) => (state as RootState).accounts,
+      storePin: (state) => (state as RootState).accounts.storePin,
+      accountPhrase: (state) => (state as RootState).accounts.phrase,
     }),
+    getId(): string | undefined {
+      if (!iridium.connector) return
+      return this.profile
+        ? `${this.profile.name}#${iridium.id.substring(iridium.id.length - 6)}`
+        : `${iridium.id}`
+    },
     storePin: {
       set(state) {
         this.$store.commit('accounts/setStorePin', state)
       },
       get(): boolean {
-        return this.accounts.storePin
+        return !!this.storePin
       },
     },
     splitPhrase(): string[] {
-      return this.accounts.phrase.split(' ')
+      return this.accountPhrase.split(' ')
     },
   },
   methods: {
@@ -42,14 +59,6 @@ export default Vue.extend({
      */
     togglePhrase() {
       this.showPhrase = !this.showPhrase
-    },
-    copyAddress() {
-      navigator.clipboard.writeText(this.accounts.active)
-      this.$toast.show(this.$t('ui.copied') as string)
-    },
-    copyPhrase() {
-      navigator.clipboard.writeText(this.accounts.phrase)
-      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

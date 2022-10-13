@@ -27,6 +27,7 @@ const Controls = Vue.extend({
     return {
       searchValue: '' as string,
       newFolderName: '' as string,
+      // todo - switch to a set
       errors: [] as Array<string | TranslateResult>,
     }
   },
@@ -46,6 +47,9 @@ const Controls = Vue.extend({
     searchValue(value: string) {
       this.$store.commit('files/setSearchValue', value)
     },
+  },
+  beforeDestroy() {
+    this.$store.commit('files/setSearchValue', '')
   },
   methods: {
     /**
@@ -78,7 +82,7 @@ const Controls = Vue.extend({
       try {
         iridium.files.addDirectory(
           this.newFolderName,
-          this.path.at(-1)?.id ?? '',
+          this.path[this.path.length - 1]?.id ?? '',
         )
       } catch (e: any) {
         this.errors.push(this.$t(e?.message))
@@ -117,24 +121,31 @@ const Controls = Vue.extend({
       }
 
       for (const file of files) {
-        this.$store.commit('files/setCurrentUpload', {
-          name: file.name,
-          size: file.size,
-        })
+        // this.$store.commit('files/setCurrentUpload', {
+        //   name: file.name,
+        //   size: file.size,
+        // })
+        this.$store.commit(
+          'files/setStatus',
+          this.$t('pages.files.status.upload', [file.name]),
+        )
         await iridium.files
           .addFile({
             file,
-            parentId: this.path.at(-1)?.id ?? '',
-            options: { progress: this.setProgress },
+            parentId: this.path[this.path.length - 1]?.id ?? '',
+            // options: { progress: this.setProgress },
           })
-          .catch((e) => {
-            // ensure there aren't any duplicate error messages
-            if (!this.errors.includes(this.$t(e?.message)))
-              this.errors.push(this.$t(e?.message ?? ''))
+          .catch(({ message }) => {
+            if (message === ItemErrors.BLOCKED) {
+              this.errors.push(this.$t(message, { name: file.name }))
+            }
+            // todo - switch to a set - ensure there aren't any duplicate error messages
+            else if (!this.errors.includes(this.$t(message)))
+              this.errors.push(this.$t(message))
           })
       }
       this.$store.commit('files/setStatus', '')
-      this.$store.commit('files/setCurrentUpload', undefined)
+      // this.$store.commit('files/setCurrentUpload', undefined)
     },
     /**
      * @method setProgress

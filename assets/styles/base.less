@@ -4,6 +4,11 @@
   --flair-color-rgb: @satellite-color-rgb;
 }
 
+html {
+  // Fixes overscroll on Android;
+  position: fixed;
+}
+
 @font-face {
   font-family: 'SpaceMono';
   font-style: normal;
@@ -29,34 +34,25 @@
   src: url('~assets/fonts/Poppins-Bold.ttf');
 }
 
+#app {
+  background: @background;
+}
+
 body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
     env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
   font-family: @body-font;
   font-variant-ligatures: none;
+  touch-action: pan-x pan-y;
   overscroll-behavior: contain;
   caret-color: @flair-color;
   color: @body;
 }
 
-body {
-  background: @background;
-}
+/* ===============
+   Scrollbars 
+   =============== */
 
-hr {
-  background: @splash-radial;
-  height: 1px;
-  margin: @normal-spacing 0;
-  border: none;
-}
-
-// remove later to be more accessible
-*:focus,
-*:active {
-  outline: none;
-}
-
-// Scrollbars
 * {
   &::-webkit-scrollbar {
     width: @scroll-bar-size;
@@ -67,7 +63,7 @@ hr {
   }
   &::-webkit-scrollbar-thumb {
     background-color: @flair-color;
-    &:extend(.round-corners);
+    .round-corners();
   }
   scrollbar-color: @flair-color transparent;
   scrollbar-width: thin;
@@ -84,7 +80,6 @@ hr {
   &:focus-within {
     &::-webkit-scrollbar-thumb {
       background-color: @flair-color;
-      &:extend(.round-corners);
       &:hover {
         background: @semitransparent-white-gradient;
         background-color: @flair-color;
@@ -103,30 +98,75 @@ hr {
   }
 }
 
+/* ===============
+   General 
+   =============== */
+
+.outline {
+  outline: solid 2px @light;
+}
+
+*:focus-visible {
+  .outline();
+}
+
 a {
   cursor: pointer;
-}
-
-code {
-  &:extend(.background-semitransparent-lighter);
-  &:extend(.font-flair);
-}
-
-strong {
-  &:extend(.font-secondary);
-}
-
-a.link {
-  &:extend(.font-flair);
-
+  color: @flair-color-secondary;
+  text-decoration: none;
   &:hover {
-    &:extend(.font-flair);
-    &:extend(.glow-flair);
+    text-decoration: underline;
   }
 }
 
-.is-secondary-background {
-  background: @darker;
+button {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  display: flex;
+  color: inherit;
+  user-select: none;
+}
+
+code {
+  color: @light;
+  display: inline-block;
+  .background-semitransparent-lighter();
+}
+
+hr {
+  background: @splash-radial;
+  height: 1px;
+  margin: 1rem 0;
+  border: none;
+}
+
+::selection {
+  .background-flair();
+
+  /* Safari fix */
+  @media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+      background: rgba(var(--flair-color-rgb), 0.99) !important;
+    }
+  }
+}
+
+.spoiler-container {
+  cursor: pointer;
+  background-color: @gray;
+  border-radius: @corner-rounding-smaller;
+  .spoiler {
+    opacity: 0;
+  }
+  &.spoiler-open {
+    cursor: text;
+    background-color: transparent;
+    .spoiler {
+      opacity: 1;
+    }
+  }
 }
 
 // ------------- Ui Elements-------------
@@ -176,70 +216,8 @@ a.link {
   }
 }
 
-.loading-updating {
-  &:extend(.background-flair);
-}
-
-//Menus
-.is-collapsed .menu-toggle {
-  &:extend(.font-flair);
-}
-
-.context-menu {
-  p {
-    &:hover {
-      &:extend(.background-flair);
-    }
-  }
-}
-
-.simple-menu {
-  .active {
-    &:extend(.background-flair);
-
-    &:hover {
-      &:extend(.background-flair);
-    }
-  }
-}
-
 .version {
   &:extend(.font-muted);
-}
-
-// Buttons
-button {
-  padding: 0;
-  border: none;
-  cursor: pointer;
-  background: transparent;
-  display: flex;
-  color: inherit;
-}
-
-::selection {
-  &:extend(.font-secondary);
-  &:extend(.background-flair);
-}
-
-/* Only for Safari to fix selection text background */
-
-@media not all and (min-resolution: 0.001dpcm) {
-  @supports (-webkit-appearance: none) {
-    ::selection {
-      background: rgba(var(--flair-color-rgb), 0.99) !important;
-    }
-  }
-}
-
-.vc-is-dark {
-  .vc-weekday {
-    &:extend(.font-flair);
-  }
-  .vc-highlight {
-    &:extend(.background-flair-gradient);
-    &:extend(.glow-flair);
-  }
 }
 
 //Chip
@@ -257,34 +235,6 @@ button {
     .vue-slider-dot-tooltip-inner {
       font-family: @secondary-font;
       &:extend(.background-flair);
-      &::after {
-        border-top-color: @flair-color !important;
-      }
-    }
-  }
-}
-
-//Switch
-.switch-container {
-  .switch-button-control {
-    .switch-button {
-      border: 0.125rem solid @flair-color;
-      box-shadow: inset 0px 0px 2px 0px rgba(0, 0, 0, 0.33);
-
-      .sw-button {
-        &:extend(.background-flair);
-        &:extend(.switch-off-glow-flair);
-      }
-
-      &.enabled {
-        &:extend(.background-flair);
-        &:extend(.glow-flair);
-
-        .sw-button {
-          border: 0.2rem solid @flair-color;
-          background: @white !important;
-        }
-      }
     }
   }
 }
@@ -299,30 +249,6 @@ button {
   &:extend(.font-flair);
 }
 
-.is-chatbar-reply {
-  &:extend(.background-flair);
-}
-
-#chat-mobile-sidebar {
-  .label {
-    &:extend(.background-flair);
-  }
-}
-
-//Alerts
-.new-message-alert {
-  &:extend(.background-flair);
-}
-.alert.UNREAD {
-  &:extend(.background-flair);
-}
-
-.unread {
-  .label {
-    &:extend(.background-flair);
-  }
-}
-
 //Info
 .info {
   &--primary {
@@ -333,19 +259,7 @@ button {
   &:extend(.font-flair);
 }
 
-//Quick profile
-#quick-profile {
-  .header {
-    &:extend(.background-flair);
-  }
-  &:extend(.color-flair);
-}
-
 // ------------- Ui Elements-------------
-
-.is-chatbar-reply {
-  &:extend(.background-flair);
-}
 
 //Tooltip
 .v-popper__popper {
@@ -448,15 +362,6 @@ button {
   &:extend(.font-muted);
 }
 
-#aside-box {
-  #actions {
-    &:hover {
-      &:extend(.background-flair-gradient);
-      &:extend(.glow-flair);
-    }
-  }
-}
-
 .locked,
 .disabled,
 .disabled * {
@@ -478,18 +383,6 @@ button {
 
 //------------- Navigation -------------
 
-#mobile-nav {
-  div {
-    .active {
-      &:extend(.font-flair);
-      svg {
-        &:extend(.font-flair);
-      }
-    }
-  }
-}
-
-.alpha-divider,
 .search-option-heading,
 .vc-weekday {
   &:extend(.font-flair);
@@ -501,44 +394,6 @@ button {
     &:extend(.font-primary);
   }
   &:extend(.font-flair);
-}
-
-.user {
-  .user-info {
-    .subtitle {
-      font-size: @micro-text-size;
-      color: @text-muted;
-
-      * {
-        font-size: @micro-text-size;
-        color: @text-muted;
-      }
-    }
-
-    .bigmoji {
-      .emoji {
-        font-size: 18pt;
-        animation-name: emoji-appear;
-        animation-duration: 500ms;
-      }
-    }
-  }
-}
-
-.spoiler-container {
-  cursor: pointer;
-  background-color: @gray;
-  border-radius: @corner-rounding-smaller;
-  .spoiler {
-    opacity: 0;
-  }
-  &.spoiler-open {
-    cursor: text;
-    background-color: transparent;
-    .spoiler {
-      opacity: 1;
-    }
-  }
 }
 
 .__nuxt-error-page {

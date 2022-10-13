@@ -5,7 +5,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { CircleIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
-import iridium from '~/libraries/Iridium/IridiumManager'
 
 export default Vue.extend({
   components: {
@@ -16,24 +15,17 @@ export default Vue.extend({
       type: Boolean,
       required: true,
     },
+    isSubscribed: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     ...mapState({
-      ui: (state) => (state as RootState).ui,
+      chatbarContent: (state) => (state as RootState).ui.chatbarContent,
     }),
-    typingParticipants(): string[] {
-      const conversationId = this.$route.params.id
-      const conversation = iridium.chat.getConversation(conversationId)
-      if (!conversation || !conversation.typing) {
-        return []
-      }
-
-      return Object.keys(conversation.typing).filter(
-        (k) => conversation.typing?.[k],
-      )
-    },
-    lengthCount() {
-      return `${this.ui.chatbarContent.length}/${this.$Config.chat.maxChars}`
+    lengthCount(): string {
+      return `${this.chatbarContent.length}/${this.$Config.chat.maxChars}`
     },
   },
 })

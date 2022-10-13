@@ -1,12 +1,11 @@
-<div class="add">
+<div class="add" data-cy="add-friend-page">
   <div class="title-container">
     <div>
       <TypographyText as="h3"> {{$t('friends.add') }} </TypographyText>
-      <TypographyText as="h4">
-        {{ $t('friends.add_description') }}
-      </TypographyText>
+      <TypographyText> {{ $t('friends.add_description') }} </TypographyText>
     </div>
   </div>
   <FriendsSearch />
-  <FriendsQrSection />
+  <!-- <FriendsQrSection /> -->
+  <!-- Commented out because QR section doesn't work -->
 </div>

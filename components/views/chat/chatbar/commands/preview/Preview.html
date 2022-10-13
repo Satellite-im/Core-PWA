@@ -1,6 +1,6 @@
 <div id="command-preview" v-if="hasCommand">
   <TypographySubtitle :size="6" text="Commands" />
-  <div id="commands" class="hidden-scroll" v-scroll-lock="true">
+  <div id="commands" class="hidden-scroll">
     <UiSimpleScroll scrollMode="vertical" scrollShow="scroll">
       <div
         v-for="command in commands"

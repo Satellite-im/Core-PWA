@@ -12,6 +12,19 @@ interface Arguments {
   route: NuxtRouteConfig
 }
 
+let redirectDebounce: NodeJS.Timer
+// window?.addEventListener('beforeunload', () => {
+//   clearTimeout(redirectDebounce)
+// })
+
+window?.addEventListener('popstate', () => {
+  clearTimeout(redirectDebounce)
+})
+
+window?.addEventListener('pushstate', () => {
+  clearTimeout(redirectDebounce)
+})
+
 /**
  * @method
  * @description
@@ -20,8 +33,7 @@ interface Arguments {
  * @example
  */
 export default function ({ store, route, redirect }: Arguments) {
-  const { locked, phrase } = store.state.accounts
-  const { allPrerequisitesReady } = store.getters
+  const { locked, encryptedPhrase } = store.state.accounts
 
   const eventuallyRedirect = memoize(
     (path: string) => {
@@ -31,13 +43,13 @@ export default function ({ store, route, redirect }: Arguments) {
     () => redirect,
   )
 
-  // If the user is not authenticated
-  if (locked) {
+  const isAuth = route.path.startsWith('/auth')
+  if (locked && !isAuth) {
     return eventuallyRedirect('/auth/unlock')
   }
 
   // If the wallet has not been created yet
-  if (!locked && phrase === '' && !route.path.includes('setup')) {
+  if (!locked && encryptedPhrase === '' && !route.path.includes('setup')) {
     return eventuallyRedirect('/setup/disclaimer')
   }
 
@@ -47,8 +59,13 @@ export default function ({ store, route, redirect }: Arguments) {
     return
   }
 
-  const ready = allPrerequisitesReady && iridium.ready
-  if (!ready) return eventuallyRedirect('/')
+  if (!iridium.ready && route.path !== '/' && !isAuth) {
+    return eventuallyRedirect('/')
+  }
+
+  if (route && (route.path === '/' || isAuth) && iridium.ready) {
+    return eventuallyRedirect('/friends')
+  }
 
   store.commit('accounts/setLastVisited', route.path)
 }

@@ -1,4 +1,5 @@
 <div class="files-container" data-cy="files-screen">
+  <!-- dont remove ref, used in layouts/desktop.vue -->
   <FilesControls ref="controls" class="controls" />
   <div class="files-aside-container">
     <FilesAside />
@@ -16,12 +17,16 @@
 
     <FilesControlsSwitch />
   </div>
+
+  <FilesMobileControls v-if="$device.isMobile" class="mobile-controls" />
+
   <div class="files-view">
     <div v-if="!directory.length">
       <UiResultsMessage
-        :title="$t(`pages.files.${searchValue ? 'search.' : ''}empty`)"
+        :title="$t(`${searchValue ? 'ui.no_results' : 'pages.files.empty'}`)"
       />
     </div>
+
     <FilesMobileList
       v-else-if="$device.isMobile"
       :directory="directory"
@@ -31,23 +36,29 @@
       @remove="remove"
       @handle="handle"
     />
-    <FilesGrid
-      v-else-if="gridLayout"
-      :directory="directory"
-      @like="like"
-      @share="share"
-      @rename="rename"
-      @remove="remove"
-      @handle="handle"
-    />
-    <FilesList
-      v-else-if="!gridLayout"
-      :directory="directory"
-      @like="like"
-      @share="share"
-      @rename="rename"
-      @remove="remove"
-      @handle="handle"
-    />
+
+    <div v-else-if="gridLayout" class="files-view__desktop-wrapper">
+      <FilesGrid
+        :directory="directory"
+        @like="like"
+        @share="share"
+        @rename="rename"
+        @remove="remove"
+        @handle="handle"
+        class="files-view-desktop"
+      />
+    </div>
+
+    <div v-else-if="!gridLayout" class="files-view__desktop-wrapper">
+      <FilesList
+        :directory="directory"
+        @like="like"
+        @share="share"
+        @rename="rename"
+        @remove="remove"
+        @handle="handle"
+        class="files-view-desktop"
+      />
+    </div>
   </div>
 </div>

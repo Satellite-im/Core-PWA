@@ -210,4 +210,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" src="./Settings.less"></style>
+<style lang="less" src="./Settings.less" scoped></style>

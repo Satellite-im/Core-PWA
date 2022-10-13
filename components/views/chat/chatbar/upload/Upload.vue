@@ -4,17 +4,24 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { PlusIcon } from 'satellite-lucide-icons'
 import { isHeic } from '~/utilities/FileType'
-import { SettingsRoutes } from '~/store/ui/types'
 import createThumbnail from '~/utilities/Thumbnail'
 import { blobToBase64 } from '~/utilities/BlobManip'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
+import { ItemErrors } from '~/libraries/Iridium/files/types'
+import { notNull } from '~/utilities/typeGuard'
 
 const convert = require('heic-convert')
 
 const Upload = Vue.extend({
   components: {
     PlusIcon,
+  },
+  props: {
+    disabled: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     ...mapState({
@@ -56,53 +63,54 @@ const Upload = Vue.extend({
      * @example <input @change="handleFile" />
      */
     async handleFile(event: InputEvent) {
+      document.body.style.cursor = 'progress'
       this.$store.dispatch('ui/setChatbarFocus')
-      this.$store.commit('chat/setCountError', false)
       const target = event.target as HTMLInputElement
       if (target.files === null) {
         return
       }
       const newFiles: File[] = [...target?.files]
 
-      if (
-        newFiles.length + this.files.length >
-        this.$Config.chat.uploadMaxLength
-      ) {
-        this.$store.commit('chat/setCountError', true)
-        return
-      }
       const id = this.$route.params.id
 
-      const filesToAdd: { file: File; nsfw: boolean }[] = await Promise.all(
-        newFiles.map(async (file: File) => {
-          // if heic, convert to jpeg so recipient can see in browser
-          if (await isHeic(file)) {
-            const buffer = new Uint8Array(await file.arrayBuffer())
-            const outBuffer = await convert({
-              buffer,
-              format: 'PNG',
-              quality: 1,
-            })
-            const filePng = new File([outBuffer.buffer], `${file.name}.png`, {
-              type: 'image/png',
-            })
-            return { file: filePng, nsfw: await this.$Security.isNSFW(filePng) }
-          }
+      const filesToAdd: ({ file: File; nsfw: boolean } | null)[] =
+        await Promise.all(
+          newFiles.map(async (file: File) => {
+            if (file.size === 0) {
+              this.$toast.error(this.$t(ItemErrors.FILE_SIZE) as string)
+              return null
+            }
+            // if heic, convert to jpeg so recipient can see in browser
+            if (await isHeic(file)) {
+              const buffer = new Uint8Array(await file.arrayBuffer())
+              const outBuffer = await convert({
+                buffer,
+                format: 'PNG',
+                quality: 1,
+              })
+              const filePng = new File([outBuffer.buffer], `${file.name}.png`, {
+                type: 'image/png',
+              })
+              return {
+                file: filePng,
+                nsfw: await this.$Security.isNSFW(filePng),
+              }
+            }
 
-          // handle non heic
-          let nsfw
-          try {
-            nsfw = await this.$Security.isNSFW(file)
-          } catch (e: any) {
-            this.$Logger.log('Upload', e)
-            nsfw = true
-          }
-          return { file, nsfw }
-        }),
-      )
+            // handle non heic
+            let nsfw
+            try {
+              nsfw = await this.$Security.isNSFW(file)
+            } catch (e: any) {
+              this.$Logger.log('Upload', e)
+              nsfw = true
+            }
+            return { file, nsfw }
+          }),
+        )
 
       // set files to show preview, do not send
-      for (const file of filesToAdd) {
+      for (const file of filesToAdd.filter(notNull)) {
         const thumbnail = await createThumbnail(file.file, 200)
         this.$store.commit('chat/addFile', {
           file: {
@@ -113,6 +121,7 @@ const Upload = Vue.extend({
           id,
         })
       }
+      document.body.style.cursor = 'default'
     },
   },
 })

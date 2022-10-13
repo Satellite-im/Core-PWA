@@ -5,7 +5,7 @@
   <ui-image-container
     v-if="item.thumbnail"
     class="image-container"
-    :nsfw="item.nsfw && blockNsfw"
+    :nsfw="item.nsfw"
   >
     <img :src="item.thumbnail" draggable="false" />
   </ui-image-container>
@@ -18,7 +18,7 @@
     </TypographyText>
     <div v-if="item.progress > 0 && item.progress <= 100">
       <UiProgress :progress="item.progress" />
-      <TypographySubtitle :text="`${item.progress}% Uploaded...`" />
+      <TypographyText> {{ `${item.progress}% Uploaded...` }} </TypographyText>
     </div>
   </div>
 </div>

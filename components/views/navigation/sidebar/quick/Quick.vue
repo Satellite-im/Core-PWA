@@ -13,7 +13,6 @@ export default Vue.extend({
   data() {
     return {
       friends: [] as Friend[],
-      conversations: iridium.chat.state.conversations,
       isLoading: false,
       error: '' as TranslateResult,
       name: '',
@@ -58,7 +57,7 @@ export default Vue.extend({
           return
         }
         const participants = [
-          iridium.connector.id,
+          iridium.id,
           ...this.friends.map((friend) => friend.did),
         ]
         const id = await iridium.chat.createGroupConversation({

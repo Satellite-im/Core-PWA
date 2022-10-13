@@ -3,7 +3,7 @@
     <!-- add container so blur effect doesn't go outside the dimensions of the image -->
     <ui-image-container
       v-if="thumbnail"
-      :nsfw="item.nsfw && blockNsfw"
+      :nsfw="item.nsfw"
       class="image-container"
     >
       <img :src="thumbnail" draggable="false" />

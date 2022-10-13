@@ -1,10 +1,11 @@
 <div class="preview-call" :class="{ dragging: dragging }">
   <MediaUser
     v-if="remoteParticipant"
-    :id="`remote_video_${ remoteParticipant.did }`"
     class="preview-call-user"
     :user="remoteParticipant"
+    :stream="remoteStream"
     data-cy="remote-video"
+    :size="[width, height]"
   />
   <MediaActions class="preview-call-actions drag-stop" />
   <button

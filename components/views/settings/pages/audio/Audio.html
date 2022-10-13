@@ -1,4 +1,9 @@
 <SettingsPage>
+  <SettingsHeader>
+    {{$t('pages.settings.audio.pageTitle')}}
+    <template #subheading> {{$t('pages.settings.audio.subtitle')}} </template>
+  </SettingsHeader>
+
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.audio.title')"
@@ -7,14 +12,13 @@
   <!-- Requires user permissions to see in most browsers -->
   <SettingsSection v-if="!userHasGivenAudioAccess">
     <SettingsUnit
+      v-if="!userDeniedAudioAccess"
       :title="$t('pages.settings.audio.sources.title')"
       :text="$t('pages.settings.audio.sources.subtitle')"
-      v-if="!userDeniedAudioAccess"
     >
       <!-- Ask for permissions block -->
       <InteractablesButton
         :text="$t('pages.settings.audio.sources.permissionButtonText')"
-        color="primary"
         @click="enableAudio"
       />
     </SettingsUnit>
@@ -25,6 +29,7 @@
       :text="$t('pages.settings.audio.sources.permissionDeniedMessage')"
     />
   </SettingsSection>
+
   <!-- Permission Granted Block -->
   <SettingsSection v-if="userHasGivenAudioAccess">
     <!-- Audio In -->
@@ -32,10 +37,25 @@
       :title="$t('pages.settings.audio.sources.input.title')"
       :text="$t('pages.settings.audio.sources.input.subtitle')"
     >
+      <InteractablesButton
+        :text="isListening ? $t('pages.settings.audio.sources.input.off') : $t('pages.settings.audio.sources.input.on')"
+        :color="isListening ? 'danger' : 'dark'"
+        :loading="isLoadingTrack"
+        @click="isListening ? stopListening() : startListening()"
+      />
       <InteractablesSelect
         v-model="selectedAudioInput"
         :options="audioInputs"
         :label="$t('pages.settings.audio.sources.input.title')"
+      />
+      <div class="meter-container">
+        <UiMeter :value="micLevel" :height="5" solid />
+      </div>
+      <InteractablesVolume
+        :value="audio.inputVolume"
+        direction="ltr"
+        plain
+        @change="inputVolumeControlValueChange"
       />
     </SettingsUnit>
     <!-- Audio Out -->
@@ -53,40 +73,20 @@
         v-if="!browserAllowsAudioOut"
         :text="$t('pages.settings.audio.sources.browserDoesNotSupportAudioOutChange')"
       />
-    </SettingsUnit>
-  </SettingsSection>
-
-  <!--Audio Bitrate & Sample-->
-  <SettingsSection>
-    <SettingsUnit :title="$t('pages.settings.audio.inputVolume.title')">
-      <br />
-      <div class="meter-container">
-        <UiMeter :value="micLevel" :height="5" solid />
-      </div>
-      <MediaActionsVolume
-        :volume="audio.inputVolume"
-        direction="ltr"
-        plain
-        @volumeControlValueChange="inputVolumeControlValueChange"
-      />
-    </SettingsUnit>
-    <SettingsUnit :title="$t('pages.settings.audio.volume.title')">
-      <br />
       <div class="meter-container">
         <UiMeter :value="0" :height="5" solid />
       </div>
-      <MediaActionsVolume
-        :volume="audio.volume"
+      <InteractablesVolume
+        :value="audio.volume"
         direction="ltr"
         plain
-        @volumeControlValueChange="volumeControlValueChange"
+        @change="volumeControlValueChange"
       />
     </SettingsUnit>
   </SettingsSection>
 
   <!--Audio Bitrate & Sample-->
-  <UiComingSoon :areaCover="true" :hide="true">
-    <SettingsSection>
+  <!-- <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.bitrate.title')"
         :text="$t('pages.settings.audio.bitrate.subtitle')"
@@ -107,17 +107,17 @@
           :label="$t('pages.settings.audio.sampleSize.title')"
         />
       </SettingsUnit>
-    </SettingsSection>
+    </SettingsSection> -->
 
-    <!--Echo Cancellation & Noise Suppression-->
-    <SettingsSection>
+  <!--Echo Cancellation & Noise Suppression-->
+  <!-- <SettingsSection>
       <SettingsUnit
         :title="$t('pages.settings.audio.echo.title')"
         :text="$t('pages.settings.audio.echo.subtitle')"
       >
         <InteractablesSwitch
           v-model="isEchoCancellation"
-          :isEnabled="settings.echoCancellation"
+          :label="$t('pages.settings.audio.echo.title')"
         />
       </SettingsUnit>
       <SettingsUnit
@@ -126,11 +126,11 @@
       >
         <InteractablesSwitch
           v-model="isNoiseSuppression"
-          :isEnabled="settings.noiseSuppression"
+          :label="$t('pages.settings.audio.noise.title')"
         />
       </SettingsUnit>
-    </SettingsSection>
-  </UiComingSoon>
+    </SettingsSection> -->
+
   <!-- Video -->
   <TypographyHorizontalRuleText
     plaintext
@@ -147,7 +147,6 @@
       <InteractablesButton
         v-if="!userHasGivenVideoAccess && !userDeniedVideoAccess"
         :text="$t('pages.settings.audio.sources.permissionButtonText')"
-        color="primary"
         :disabled="!hasWebcam"
         @click="enableVideo"
       />
@@ -171,7 +170,7 @@
     >
       <InteractablesSwitch
         v-model="flipVideo"
-        :isLocked="loading.includes('flipVideo')"
+        :label="$t('pages.settings.video.flipVideo.title')"
       />
     </SettingsUnit>
   </SettingsSection>
@@ -203,7 +202,4 @@
     :value="$t('pages.settings.notifications.title')"
   />
   <SettingsPagesAudioSounds />
-  <TypographyText v-if="loading.length">
-    {{ $t('pages.privacy.updating') }}
-  </TypographyText>
 </SettingsPage>

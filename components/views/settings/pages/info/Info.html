@@ -1,0 +1,27 @@
+<SettingsPage>
+  <SettingsHeader>
+    {{ $t('pages.settings.info.title') }}
+    <template #subheading> {{ $t('pages.settings.info.subtitle') }} </template>
+  </SettingsHeader>
+
+  <SettingsUnit>
+    <TypographyText as="h3">
+      {{ $t('pages.settings.app_info') }}
+    </TypographyText>
+    <pre>
+App Version: {{ this.$config.clientVersion }}
+Browser:     {{ this.$envinfo.navigator.vendor }}, {{ this.$envinfo.navigator.product }}
+Language:    {{ this.$envinfo.navigator.product }}
+<span v-if="cpu">Platform:    {{cpu}}</span>
+<span v-if="renderer">Processor:   {{renderer}}</span>
+Online:      {{ this.$envinfo.navigator.onLine }}</pre>
+  </SettingsUnit>
+  <SettingsUnit>
+    <TypographyText as="h3">
+      {{ $t('pages.settings.changelog') }}
+    </TypographyText>
+    <pre class="release-data">
+      <vue-markdown :source="releaseData && releaseData.body" :breaks="false" />
+    </pre>
+  </SettingsUnit>
+</SettingsPage>

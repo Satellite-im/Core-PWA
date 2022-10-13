@@ -2,27 +2,69 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { throttle } from 'lodash'
+import { throttle, debounce } from 'lodash'
 import { TerminalIcon } from 'satellite-lucide-icons'
+import whatInput from 'what-input'
 import { parseCommand, commands } from '~/libraries/ui/Commands'
-import {
-  KeybindingEnum,
-  MessagingTypesEnum,
-  PropCommonEnum,
-} from '~/libraries/Enums/enums'
+import { KeybindingEnum, MessagingTypesEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ChatbarUploadRef } from '~/components/views/chat/chatbar/upload/Upload.vue'
 import {
   Conversation,
+  ConversationMessage,
   ConversationMessagePayload,
   MessageAttachment,
 } from '~/libraries/Iridium/chat/types'
+import { notNull } from '~/utilities/typeGuard'
+import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
+import { AutocompleteRef } from '~/components/views/chat/chatbar/autocomplete/Autocomplete.vue'
+
+function typingFunction(conversationId: string) {
+  const deb = debounce(() => {
+    iridium.webRTC.sendTyping(conversationId)
+  }, Config.chat.typingInputDebounce)
+
+  return {
+    thr: throttle(deb, Config.chat.typingInputThrottle, { trailing: false }),
+    deb,
+  }
+}
+
+function isVisible(ele: HTMLElement, container: HTMLElement, partial = false) {
+  const cTop = container.scrollTop
+  const cBottom = cTop + container.clientHeight
+
+  const eTop = ele.offsetTop
+  const eBottom = eTop + ele.clientHeight
+
+  const scrolledBefore = eTop >= cTop
+  const scrolledAfter = eBottom <= cBottom
+  const isTotal = scrolledBefore && scrolledAfter
+  const isPartial =
+    partial &&
+    ((eTop < cTop && eBottom > cTop) || (eBottom > cBottom && eTop < cBottom))
+
+  return { isElVisible: isTotal || isPartial, scrolledAfter, scrolledBefore }
+}
 
 const Chatbar = Vue.extend({
   components: {
     TerminalIcon,
+  },
+  data() {
+    return {
+      typingFunction: null as {
+        thr: ReturnType<typeof throttle>
+        deb: ReturnType<typeof debounce>
+      } | null,
+      isFocused: false,
+      isA11yFocused: false,
+      showAutocomplete: false,
+      autocompleteText: '',
+      autocompleteSelection: '',
+    }
   },
   computed: {
     ...mapState({
@@ -88,14 +130,16 @@ const Chatbar = Vue.extend({
     },
     isSharpCorners(): boolean {
       return (
+        Boolean(
+          this.isFocused && this.showAutocomplete && this.autocompleteSelection,
+        ) ||
         Boolean(this.files.length) ||
         Boolean(this.chat.replyChatbarMessages[this.conversationId]) ||
-        this.commandPreview ||
-        this.chat.countError
+        this.commandPreview
       )
     },
     isSubscribed(): boolean {
-      return iridium.chat.subscriptions[this.$route.params.id]?.connected
+      return iridium.chat.ephemeral.subscriptions.includes(this.conversationId)
     },
     text: {
       /**
@@ -110,7 +154,7 @@ const Chatbar = Vue.extend({
       /**
        * @method set
        * @description Sets current chatbar text to new value
-       * @param val Value to set the chatbar content to
+       * @param value Value to set the chatbar content to
        * @example set('This is the new chatbar content')
        */
       set(value: string) {
@@ -127,40 +171,43 @@ const Chatbar = Vue.extend({
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
-    placeholder(): string {
-      return !this.hasCommand && this.text === ''
-        ? (this.$t('ui.talk') as string)
-        : ''
+    userLastTextMessage(): ConversationMessage | undefined {
+      if (!this.conversationId) return
+
+      const sortedMessages = Object.values(
+        iridium.chat.state.conversations[this.conversationId].message,
+      )
+        .filter((m) => m.from === iridium.id && m.type === 'text')
+        .sort((a, b) => a.at - b.at)
+      return sortedMessages[sortedMessages.length - 1]
+    },
+    draftMessage(): string {
+      return this.chat.draftMessages[this.conversationId] ?? ''
+    },
+  },
+  watch: {
+    draftMessage(val) {
+      if (val) this.smartTypingStart()
     },
   },
   mounted() {
-    const message = this.chat.draftMessages[this.conversationId] ?? ''
     this.$store.commit('chat/clearReplyChatbarMessage', {
       conversationId: this.conversationId,
     })
-    this.$store.dispatch('ui/setChatbarContent', { content: message })
+    this.$store.dispatch('ui/setChatbarContent', { content: this.draftMessage })
     if (this.$device.isDesktop) {
       this.$store.dispatch('ui/setChatbarFocus')
     }
+
+    this.typingFunction = typingFunction(this.conversationId)
   },
   methods: {
-    /**
-     * @method throttleTyping
-     * @description Throttles the typing event so that we only send the typing once every two seconds
-     */
-    throttleTyping: throttle(
-      function () {
-        iridium.webRTC.sendTyping(this.conversationId)
-      },
-      Config.chat.typingInputThrottle,
-      { trailing: false },
-    ),
     /**
      * @method smartTypingStart
      * @description Let's us send out events when a user starts typing without spam.
      */
     smartTypingStart() {
-      this.throttleTyping(this)
+      this.typingFunction?.thr && this.typingFunction.thr()
     },
     /**
      * @method handleInputKeydown DocsTODO
@@ -174,6 +221,13 @@ const Chatbar = Vue.extend({
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case KeybindingEnum.ENTER:
+          if (this.showAutocomplete && this.autocompleteSelection) {
+            event.preventDefault()
+            ;(this.$refs.editable as EditableRef).doAutocomplete(
+              this.autocompleteSelection,
+            )
+            return
+          }
           if (!event.shiftKey) {
             event.preventDefault()
             if (!this.hasCommand) {
@@ -190,26 +244,55 @@ const Chatbar = Vue.extend({
             event.preventDefault()
           }
           break
+        case KeybindingEnum.ARROW_UP:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectPrev()
+            return
+          }
+          if (!event.shiftKey && !this.text.length) {
+            event.preventDefault()
+            this.editMessage()
+          }
+          break
+        case KeybindingEnum.ARROW_DOWN:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectNext()
+          }
+          break
         default:
           break
       }
-      this.smartTypingStart()
     },
     async uploadAttachments(): Promise<MessageAttachment[]> {
+      if (!this.files.length) {
+        return []
+      }
       const conversationId = this.$route.params.id
-      return await Promise.all(
-        this.files.map(async (file, index) => {
-          return await iridium.chat.addFile(file, {
-            progress: (bytes) => {
-              this.$store.commit('chat/setFileProgress', {
-                id: conversationId,
-                index,
-                progress: Math.floor((bytes / file.file.size) * 100),
-              })
-            },
-          })
+      this.$store.commit('chat/setActiveUploadChat', conversationId)
+      const files = this.files.map((a) => {
+        return { ...a }
+      })
+      this.$store.commit('chat/deleteFiles', conversationId)
+      const attachments = await Promise.all(
+        files.map(async (upload, index) => {
+          return await iridium.chat.addFile(
+            { upload, conversationId },
+            // {
+            //   progress: (bytes) => {
+            //     this.$store.commit('chat/setFileProgress', {
+            //       id: conversationId,
+            //       index,
+            //       progress: Math.floor((bytes / upload.file.size) * 100),
+            //     })
+            //   },
+            // },
+          )
         }),
       )
+      this.$store.commit('chat/removeActiveUploadChat', conversationId)
+      return attachments.filter(notNull)
     },
     /**
      * @method sendMessage
@@ -218,21 +301,23 @@ const Chatbar = Vue.extend({
      * @example v-on:click="sendMessage"
      */
     async sendMessage() {
+      this.text = this.text.trimEnd()
+      if (this.text.length > this.$Config.chat.maxChars) {
+        return
+      }
+
       if (
         !this.files.length &&
-        (this.text.length > this.$Config.chat.maxChars ||
-          !this.text.trim().length ||
-          !this.isSubscribed)
+        (!this.text.trim().length || !this.isSubscribed)
       ) {
         return
       }
+
       const value = this.text
       this.text = ''
 
       const conversationId = this.$route.params.id
       const attachments = await this.uploadAttachments()
-
-      this.$store.commit('chat/deleteFiles', conversationId)
 
       const payload: ConversationMessagePayload = {
         conversationId,
@@ -248,6 +333,8 @@ const Chatbar = Vue.extend({
         this.$store.commit('chat/clearReplyChatbarMessage', { conversationId })
       }
 
+      this.typingFunction?.thr?.cancel()
+      this.typingFunction?.deb?.cancel()
       await iridium.chat?.sendMessage(payload)
     },
     /**
@@ -276,26 +363,66 @@ const Chatbar = Vue.extend({
           return f.kind !== MessagingTypesEnum.STRING
         })
         .map((f) => f.getAsFile())
+        .filter(notNull)
 
       if (files.length && this.$refs.upload) {
+        if (!this.consentToScan) {
+          this.$store.dispatch('ui/displayConsentSettings')
+          return
+        }
         ;(this.$refs.upload as ChatbarUploadRef).handleFile({
           target: { files },
         })
       }
     },
     handleChatTextFromOutside(text: string) {
-      this.$refs.editable?.handleTextFromOutside(text)
+      if (!this.$refs.editable) {
+        return
+      }
+      ;(this.$refs.editable as EditableRef).handleTextFromOutside(text)
     },
-    /**
-     * @method sendFiles
-     * @description Sends action to Upload the file to textile.
-     */
-    async sendFiles() {
-      // set id in case recipient changes during send
-      const conversationId = this.$route.params.id
-      // send files logic
-      document.body.style.cursor = PropCommonEnum.DEFAULT
-      this.$store.commit('chat/deleteFiles', conversationId)
+    editMessage() {
+      if (!this.userLastTextMessage) return
+      const { id, payload, from } = this.userLastTextMessage
+      this.$store.commit('ui/setEditMessage', {
+        id,
+        payload,
+        from,
+      })
+
+      this.$nextTick(() => {
+        const el = document.querySelector(
+          `[data-message-id="${id}"]`,
+        ) as HTMLElement
+
+        const container = document.getElementById('conversation-container')
+        if (!el || !container) return
+        const { isElVisible, scrolledAfter } = isVisible(el, container)
+
+        if (!isElVisible) {
+          el.scrollIntoView(scrolledAfter)
+        }
+      })
+    },
+    handleFocus() {
+      this.isFocused = true
+      if (whatInput.ask() === 'keyboard') {
+        this.isA11yFocused = true
+      }
+    },
+    handleBlur() {
+      this.isFocused = false
+      this.isA11yFocused = false
+    },
+    handleAutocomplete(event: { show: boolean; text: string }) {
+      this.showAutocomplete = event.show
+      this.autocompleteText = event.text
+    },
+    handleAutocompleteSelection(val: string) {
+      this.autocompleteSelection = val
+    },
+    handleAutocompleteClick(val: string) {
+      ;(this.$refs.editable as EditableRef).doAutocomplete(val)
     },
   },
 })

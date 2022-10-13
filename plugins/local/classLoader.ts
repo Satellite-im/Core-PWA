@@ -11,7 +11,6 @@ import { RootStore } from '~/types/store/store'
 // Utils
 import Logger from '~/utilities/Logger'
 import BlockchainClient from '~/libraries/BlockchainClient'
-import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
 
 declare module 'vue/types/vue' {
   interface Vue {

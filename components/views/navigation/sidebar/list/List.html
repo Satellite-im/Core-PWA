@@ -1,8 +1,14 @@
 <div class="list hover-scroll">
   <SidebarListItem
-    v-for="c in sortedConversations"
-    :key="c.id"
-    :conversation="c"
+    v-for="conversation in sortedConversations"
+    :key="conversation.id"
+    :conversation-id="conversation.id"
+    @slideNext="$emit('slideNext')"
   />
-  <FriendsEmptyMessage v-if="!sortedConversations.length" displayImage />
+  <div v-if="!sortedConversations.length" class="empty-friends-wrapper">
+    <TypographyText v-if="filter" color="dark">
+      {{ $t('ui.no_results') }}
+    </TypographyText>
+    <FriendsEmptyMessage v-else displayImage />
+  </div>
 </div>

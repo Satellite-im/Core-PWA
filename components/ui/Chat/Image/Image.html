@@ -1,28 +1,35 @@
-<div class="image">
+<UiContextMenu class="image" :items="contextMenuValues">
   <figure class="image-placeholder" v-if="usePlaceholder">
     <img
       class="image-placeholder-img"
       data-cy="chat-image-placeholder"
-      :src="placeholderSrc"
-      :alt="placeholderText"
+      :src="placeholderImage"
+      alt=""
     />
-    <figcaption
-      class="image-placeholder-caption"
-      data-cy="image-placeholder-caption"
-    >
-      {{placeholderText}}
+    <figcaption data-cy="image-placeholder-caption">
+      <TypographyText font="heading" size="xs">
+        {{ $t('errors.chat.failed_load') }}
+      </TypographyText>
     </figcaption>
   </figure>
   <ui-image-container
-    v-else
+    v-else-if="dataURL"
     class="image-container"
-    :nsfw="image.nsfw && blockNsfw"
+    :nsfw="attachment.nsfw"
+    transparent
   >
     <img
-      :src="image.url"
-      @click="clickHandler"
-      @error="onImageError"
+      :src="dataURL"
+      @click="imageClick"
+      @error="() => usePlaceholder = true"
       data-cy="chat-image"
     />
   </ui-image-container>
-</div>
+  <a
+    v-show="false"
+    ref="download"
+    :href="dataURL"
+    :rel="$t('controls.download')"
+    :download="attachment.name"
+  />
+</UiContextMenu>

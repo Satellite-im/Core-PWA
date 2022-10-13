@@ -5,30 +5,34 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ClipboardIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   name: 'PhraseScreen',
   components: {
     ClipboardIcon,
   },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   computed: {
     ...mapState({
       passPhrase: (state) => (state as RootState).accounts.phrase,
     }),
-    splitPhrase(): Array<String> {
+    splitPhrase(): String[] {
       return this.passPhrase.split(' ')
     },
   },
   methods: {
-    isOdd(num: any) {
-      return num % 2
+    isOdd(num: number): boolean {
+      return num % 2 === 1
     },
     confirm() {
       this.$router.replace('/')
-    },
-    copyPhrase() {
-      navigator.clipboard.writeText(this.passPhrase)
-      this.$toast.show(this.$t('ui.copied') as string)
     },
   },
 })

@@ -1,6 +1,6 @@
 import { Emitter } from '@satellite-im/iridium'
 import merge from 'deepmerge'
-import { IridiumManager } from '../IridiumManager'
+import iridium from '../IridiumManager'
 import { setInObject } from '../utils'
 import {
   ThemeKeys,
@@ -32,18 +32,18 @@ const initialState: Settings = {
 }
 
 export default class SettingsManager extends Emitter {
-  public readonly iridium: IridiumManager
   public state: Settings
 
-  constructor(iridium: IridiumManager) {
+  constructor() {
     super()
-    this.iridium = iridium
     this.state = initialState
   }
 
-  async init() {
+  async start() {
     await this.fetch()
   }
+
+  async stop() {}
 
   private async fetch() {
     const fetched = await this.get()
@@ -56,7 +56,7 @@ export default class SettingsManager extends Emitter {
   }
 
   get(path: string = '', options: any = {}) {
-    return this.iridium.connector?.get<Settings>(`/settings${path}`, options)
+    return iridium.connector?.get<Settings>(`/settings${path}`, options)
   }
 
   set(path: string = '', payload: any, options: any = {}) {
@@ -64,6 +64,6 @@ export default class SettingsManager extends Emitter {
     if (!didSet) {
       return
     }
-    return this.iridium.connector?.set(`/settings${path}`, payload, options)
+    return iridium.connector?.set(`/settings${path}`, payload, options)
   }
 }

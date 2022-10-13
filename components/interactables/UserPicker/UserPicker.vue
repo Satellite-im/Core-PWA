@@ -20,11 +20,11 @@ export default Vue.extend({
   data: () => ({
     selected: [] as Friend[],
     filter: '',
-    friendDids: iridium.friends.state.friends,
+    fm: iridium.friends.state,
   }),
   computed: {
     friends() {
-      return Object.values(this.friendDids)
+      return Object.values(this.fm.friends)
         .filter((did) => !this.exclude.includes(did))
         .map((did) => {
           return iridium.users.getUser(did)

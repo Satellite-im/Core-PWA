@@ -2,13 +2,24 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { DeleteIcon } from 'satellite-lucide-icons'
+import { DeleteIcon, EyeIcon, EyeOffIcon } from 'satellite-lucide-icons'
+import whatInput from 'what-input'
 import { InputType, InputColor } from './types'
 import { Size } from '~/types/typography'
+
+const MOBILE_FOCUS_DELAY = 300 // ms
+
+enum Appends {
+  Password = 'password',
+  Erase = 'erase',
+  Custom = 'custom',
+}
 
 export default Vue.extend({
   components: {
     DeleteIcon,
+    EyeIcon,
+    EyeOffIcon,
   },
   model: {
     prop: 'text',
@@ -79,23 +90,67 @@ export default Vue.extend({
       type: String,
       default: '',
     },
+    buttonType: {
+      type: String as PropType<InputType>,
+      default: 'button',
+    },
+    transparent: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      showPassword: false,
+      isFocused: false,
+    }
   },
   computed: {
+    Appends: () => Appends,
     isEmpty(): boolean {
       return !this.text.length
     },
     showClearButton(): boolean {
       return this.showClear || this.type === 'search'
     },
+    derivedType(): string {
+      return this.showPassword ? 'text' : this.type
+    },
+    // mobile devices need at least 1rem font size on inputs or it zooms the user in on focus
+    derivedSize(): string {
+      return this.$device.isMobile ? 'md' : this.size
+    },
+    enabledAppends(): string[] {
+      const types: string[] = []
+      if (this.type === 'password') {
+        types.push(Appends.Password)
+      }
+      if (this.showClearButton && !this.isEmpty) {
+        types.push(Appends.Erase)
+      }
+      if (this.$slots.append) {
+        types.push(Appends.Custom)
+      }
+      return types
+    },
   },
   mounted() {
     if (this.autofocus) {
-      this.$nextTick(() => (this.$refs?.input as HTMLElement).focus())
+      const input = this.$refs.input as HTMLInputElement
+      // if mobile, delay focus to avoid clash with swiper animation
+      if (this.$device.isMobile) {
+        setTimeout(() => {
+          input.focus()
+        }, MOBILE_FOCUS_DELAY)
+      } else {
+        this.$nextTick(() => input.focus())
+      }
     }
   },
+
   methods: {
     handleSubmit(event: InputEvent) {
-      if (this.disabled || this.loading || this.error || this.invalid) {
+      if (this.disabled || this.loading || this.invalid) {
         return
       }
       this.$emit('submit', event)
@@ -109,6 +164,14 @@ export default Vue.extend({
     },
     clearInput() {
       this.$emit('change', '')
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword
+    },
+    handleFocus() {
+      if (whatInput.ask() === 'keyboard') {
+        this.isFocused = true
+      }
     },
   },
 })

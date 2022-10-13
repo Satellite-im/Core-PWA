@@ -1,46 +1,56 @@
 <SettingsPage>
+  <SettingsHeader>
+    {{ $t('pages.privacy.title') }}
+    <template #subheading> {{ $t('pages.privacy.subtitle') }} </template>
+  </SettingsHeader>
+
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.privacy.permissions.title')"
+  />
+  <TypographyText v-if="!permissions.length" color="danger">
+    {{ $t('pages.privacy.update') }}
+  </TypographyText>
   <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.privacy.title')" />
-      <TypographySubtitle :size="6" :text="$t('pages.privacy.subtitle')" />
+    <SettingsUnit
+      v-for="perm in permissions"
+      :key="perm.name"
+      :title="$t(`pages.privacy.${perm.name}.title`)"
+      :text="$t(`pages.privacy.${perm.name}.subtitle`)"
+    >
+      <InteractablesPermissions
+        :state="perm.state"
+        @click="handlePermission(perm.name)"
+      />
+    </SettingsUnit>
+    <SettingsUnit
+      :title="$t('pages.privacy.screenshare.title')"
+      :text="$t('pages.privacy.screenshare.subtitle')"
+    >
+      <TypographyText color="danger">
+        {{ $t('pages.privacy.screenshare.note') }}
+      </TypographyText>
     </SettingsUnit>
   </SettingsSection>
+
+  <TypographyHorizontalRuleText
+    plaintext
+    :value="$t('pages.privacy.filesharing')"
+  />
   <SettingsSection>
-    <SettingsUnit
-      :title="$t('pages.privacy.register.title')"
-      :text="$t('pages.privacy.register.subtitle')"
-    >
-      <InteractablesSwitch isLocked v-model="registry" />
-    </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.privacy.pin.title')"
-      :text="$t('pages.privacy.pin.subtitle')"
-    >
-      <InteractablesSwitch v-model="storePin" />
-    </SettingsUnit>
-  </SettingsSection>
-  <SettingsSection>
-    <SettingsUnit
+    <!-- <SettingsUnit
       :title="$t('pages.privacy.embeds.title')"
       :text="$t('pages.privacy.embeds.subtitle')"
     >
       <InteractablesSwitch v-model="embeddedLinks" />
-    </SettingsUnit>
-    <SettingsUnit
-      :title="$t('pages.privacy.activity.title')"
-      :text="$t('pages.privacy.activity.subtitle')"
-    >
-      <InteractablesSwitch v-model="displayCurrentActivity" />
-    </SettingsUnit>
-  </SettingsSection>
-  <SettingsSection>
+    </SettingsUnit> -->
     <SettingsUnit
       :title="$t('pages.privacy.consentScan.title')"
       :text="$t('pages.privacy.consentScan.subtitle')"
     >
       <InteractablesSwitch
         v-model="consentScan"
-        :isLocked="loading.includes('consentScan')"
+        :label="$t('pages.privacy.consentScan.title')"
       />
     </SettingsUnit>
     <SettingsUnit
@@ -49,13 +59,36 @@
     >
       <InteractablesSwitch
         v-model="blockNsfw"
-        :isLocked="loading.includes('blockNsfw')"
+        :label="$t('pages.privacy.nsfw.title')"
       />
     </SettingsUnit>
   </SettingsSection>
-  <TypographyText v-if="loading.length">
-    {{ $t('pages.privacy.updating') }}
-  </TypographyText>
+
+  <TypographyHorizontalRuleText plaintext :value="$t('pages.privacy.other')" />
+  <SettingsSection>
+    <!-- <SettingsUnit
+      :title="$t('pages.privacy.register.title')"
+      :text="$t('pages.privacy.register.subtitle')"
+    >
+      <InteractablesSwitch isLocked v-model="registry" />
+    </SettingsUnit>-->
+    <SettingsUnit
+      :title="$t('pages.privacy.pin.title')"
+      :text="$t('pages.privacy.pin.subtitle')"
+    >
+      <InteractablesSwitch
+        v-model="storePin"
+        :label="$t('pages.privacy.pin.title')"
+      />
+    </SettingsUnit>
+    <!-- <SettingsUnit
+      :title="$t('pages.privacy.activity.title')"
+      :text="$t('pages.privacy.activity.subtitle')"
+    >
+      <InteractablesSwitch v-model="displayCurrentActivity" />
+    </SettingsUnit> -->
+  </SettingsSection>
+
   <!-- <SettingsSection>
     <SettingsUnit
       :title="$t('pages.privacy.serverType.title')"
@@ -69,6 +102,11 @@
     </SettingsUnit>
   </SettingsSection> -->
 
+  <TypographyHorizontalRuleText
+    v-if="serverType === 'own'"
+    plaintext
+    :value="$t('pages.privacy.ownserver')"
+  />
   <SettingsSection
     v-if="serverType === 'own'"
     class="columns is-desktop ownInfo-input-part"

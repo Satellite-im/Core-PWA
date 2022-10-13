@@ -1,13 +1,10 @@
 <SettingsPage>
-  <SettingsSection>
-    <SettingsUnit>
-      <TypographyTitle :size="6" :text="$t('pages.settings.keybinds.title')" />
-      <TypographySubtitle
-        :size="6"
-        :text="$t('pages.settings.keybinds.subtitle')"
-      />
-    </SettingsUnit>
-  </SettingsSection>
+  <SettingsHeader>
+    {{ $t('pages.settings.keybinds.title') }}
+    <template #subheading>
+      {{ $t('pages.settings.keybinds.subtitle') }}
+    </template>
+  </SettingsHeader>
 
   <SettingsSection>
     <SettingsUnit
@@ -23,9 +20,11 @@
     </SettingsUnit>
   </SettingsSection>
 
-  <InteractablesButton
-    :text="$t('pages.settings.keybinds.reset_all')"
-    color="primary"
-    @click="resetKeybinds"
-  />
+  <div>
+    <InteractablesButton
+      :text="$t('pages.settings.keybinds.reset_all')"
+      color="danger"
+      @click="resetKeybinds"
+    />
+  </div>
 </SettingsPage>

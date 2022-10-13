@@ -1,13 +1,12 @@
 .profile-card {
   &:extend(.full-width);
   &:extend(.round-corners);
-  box-shadow: 1.15px 1.15px 2.6px rgba(19, 24, 31, 0.8);
+  box-shadow: @ui-shadow;
 
   &-body {
     padding: @normal-spacing;
-    background: @midground-alt;
-    border-top: none;
-    &:extend(.bordered);
+    background: @semitransparent-dark-gradient;
+    user-select: none;
 
     .profile-badges {
       margin-top: @normal-spacing;

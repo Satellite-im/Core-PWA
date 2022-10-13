@@ -7,12 +7,16 @@ export type MessageGlyph = {
 }
 
 export type MessageAttachment = {
-  id: string
+  cid: string
   name: string
   type: FILE_TYPE
   size: number
-  thumbnail: string
   nsfw: boolean
+}
+
+export type MessageCall = {
+  wasAnswered?: boolean
+  endedAt?: number
 }
 
 export type ConversationMessageType =
@@ -22,6 +26,9 @@ export type ConversationMessageType =
   | 'glyph'
   | 'divider'
   | 'string'
+  | 'member_join'
+  | 'member_leave'
+  | 'call'
 
 export type ConversationMessage = {
   id: string
@@ -33,13 +40,25 @@ export type ConversationMessage = {
   glyph?: MessageGlyph
   attachments: MessageAttachment[]
   reactions: { [key: string]: string[] }
+  payload?: any
   replyToId?: string
+  members?: string[]
+  lastEditedAt?: number
+  call?: MessageCall
+  status?: 'pending' | 'failed'
 }
 
 export type ConversationMessagePayload = Omit<
   ConversationMessage,
   'id' | 'from' | 'reactions'
 >
+
+export type MessageReaction = {
+  conversationId: string
+  messageId: string
+  userId: string
+  reactions: string[]
+}
 
 export type MessageReactionPayload = {
   conversationId: string
@@ -48,16 +67,24 @@ export type MessageReactionPayload = {
   remove?: boolean
 }
 
+export type MessageEditPayload = {
+  conversationId: string
+  messageId: string
+  body: string
+}
+
+export type MessageEdit = MessageEditPayload & {
+  lastEditedAt: number
+}
+
 export type Conversation = {
   id: string
   type: 'direct' | 'group'
   name?: string
   participants: string[]
-  typing?: {
-    [key: string]: boolean
-  }
   createdAt: number
   updatedAt: number
+  lastReadAt: number
   message: {
     [key: string]: ConversationMessage
   }

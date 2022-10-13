@@ -1,5 +1,5 @@
 <div class="cropper-container" data-cy="cropper-container">
-  <InteractablesClose class="close" :action="close" />
+  <InteractablesClose @click="close" />
   <vue-croppie
     ref="croppieRef"
     :enableExif="true"
@@ -10,7 +10,6 @@
   />
   <InteractablesButton
     @click="crop"
-    color="primary"
     :text="$t('controls.crop')"
     class="button is-primary create-server-btn"
   />

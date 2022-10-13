@@ -1,12 +1,19 @@
-// TODO: Replace User (friends/types.ts) and GroupMemberDetails (groups/types.ts) with User (users/types.ts)
+import { CID } from 'multiformats'
+
 export type User = {
   did: string
   name: string
+  status?: string
   peerId?: string
-  status?: 'online' | 'offline' | 'busy' | 'away'
   seen?: number
-  photoHash?: string
+  photoHash?: string | CID
+  accountUrl?: string
+  about?: string
+  location?: string
+  note?: string
 }
+
+export type UserStatus = 'online' | 'offline' | 'busy' | 'away' | 'mobile'
 
 export const UsersError = {
   NETWORK_ERROR: 'errors.users.network',

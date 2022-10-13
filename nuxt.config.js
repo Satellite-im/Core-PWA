@@ -42,7 +42,7 @@ export default defineNuxtConfig({
       {
         name: 'viewport',
         content:
-          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
+          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0',
       },
       { hid: 'description', name: 'description', content: '' },
       { name: 'mobile-web-app-capable', content: 'yes' },
@@ -52,25 +52,25 @@ export default defineNuxtConfig({
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon_16.png',
+        href: '/favicon_16.png',
         sizes: '16x16',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon_32.png',
+        href: '/favicon_32.png',
         sizes: '32x32',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon.png',
+        href: '/favicon.png',
         sizes: '96x96',
       },
       {
         rel: 'icon',
         type: 'image/png',
-        href: '/static/favicon.png',
+        href: '/favicon.png',
       },
     ],
   },
@@ -86,12 +86,9 @@ export default defineNuxtConfig({
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // Third Party
-    { src: '~/plugins/thirdparty/vscrolllock.ts', ssr: false },
     { src: '~/plugins/thirdparty/clickoutside.ts' },
     { src: '~/plugins/thirdparty/filesize.ts' },
     { src: '~/plugins/thirdparty/persist.ts', ssr: false },
-    { src: '~/plugins/thirdparty/multiselect.ts' },
-    { src: '~/plugins/thirdparty/v-calendar.ts' },
     { src: '~/plugins/thirdparty/videoplayer.ts' },
     { src: '~/plugins/thirdparty/tooltip.ts' },
     // Local
@@ -120,7 +117,22 @@ export default defineNuxtConfig({
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    'nuxt-i18n',
+    [
+      '@nuxtjs/i18n',
+      {
+        defaultLocale: 'en',
+        langDir: '~/locales',
+        locales: [
+          {
+            code: 'en',
+            file: 'en-US.js',
+          },
+        ],
+        vueI18n: {
+          fallbackLocale: 'en',
+        },
+      },
+    ],
     '@nuxtjs/toast',
     '@nuxtjs/pwa',
     [
@@ -140,7 +152,7 @@ export default defineNuxtConfig({
 
   toast: {
     position: 'top-center',
-    duration: 1000,
+    duration: 3000,
     containerClass: 'toasty-container',
   },
 
@@ -168,7 +180,7 @@ export default defineNuxtConfig({
       permissions: ['unlimitedStorage', 'fullscreen'],
     },
     icon: {
-      source: '/static/favicon.png',
+      source: '/favicon.png',
     },
     workbox: {
       // uncomment next line to test local
@@ -186,20 +198,6 @@ export default defineNuxtConfig({
           },
         },
       ],
-    },
-  },
-
-  i18n: {
-    defaultLocale: 'en',
-    langDir: '~/locales',
-    locales: [
-      {
-        code: 'en',
-        file: 'en-US.js',
-      },
-    ],
-    vueI18n: {
-      fallbackLocale: 'en',
     },
   },
 
@@ -260,6 +258,7 @@ export default defineNuxtConfig({
   publicRuntimeConfig: {
     clientName: pkg.name,
     clientVersion: pkg.version,
+    feedbackUrl: process.env.NUXT_ENV_FEEDBACK_URL,
   },
   webpack: {
     watchOptions: {

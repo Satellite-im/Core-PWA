@@ -1,17 +1,14 @@
-<div id="status">
-  <UiUserState
-    :user="{did: accounts.active, status: accounts.details.state}"
-    :src="src"
-  />
-  <div class="user-info" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
-    <TypographyTitle
-      data-cy="user-name"
-      :text="accounts.details.name"
-      :size="6"
-    />
-    <TypographySubtitle
-      :text="accounts.details.status || $t('pages.settings.accounts.no_status')"
-      :size="6"
-    />
+<div class="status" ref="status">
+  <UiUserState :user="profile" clickable @click="openQuickProfile" />
+  <div class="user-info">
+    <button class="name" v-tooltip.top="$t('controls.copy_id')" @click="copyId">
+      <TypographyText class="ellipsis" as="h4" data-cy="user-name">
+        {{profile.name}}
+      </TypographyText>
+      <ClipboardCopyIcon size="0.9x" />
+    </button>
+    <TypographyText class="ellipsis" size="sm" color="dark">
+      {{profile.status || $t('pages.settings.accounts.no_status')}}
+    </TypographyText>
   </div>
 </div>

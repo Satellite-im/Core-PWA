@@ -8,7 +8,7 @@
       />
     </div>
     <div>
-      <TypographySubtitle :size="6" :text="transaction.user.name" />
+      <TypographyText> {{ transaction.user.name }} </TypographyText>
       <TypographyText>
         {{ `${transaction.state.toUpperCase()} ${transaction.memo ? ' - ' +
         transaction.memo : ''}` }}

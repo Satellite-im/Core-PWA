@@ -2,10 +2,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
-import { UsersIcon, PlusIcon, FolderIcon } from 'satellite-lucide-icons'
-
-import { RootState } from '~/types/store/store'
+import {
+  UsersIcon,
+  PlusIcon,
+  FolderIcon,
+  PackageIcon,
+} from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import type { FriendRequest } from '~/libraries/Iridium/friends/types'
 export default Vue.extend({
@@ -13,22 +15,21 @@ export default Vue.extend({
     UsersIcon,
     PlusIcon,
     FolderIcon,
+    PackageIcon,
   },
   data() {
     return {
       isQuickchatVisible: false,
-      requests: iridium.friends.state.requests,
+      friends: iridium.friends.state,
+      filter: '',
     }
   },
   computed: {
     incomingRequestsLength(): number {
-      return Object.values(this.requests).filter(
+      return Object.values(this.friends.requests).filter(
         (r: FriendRequest) => r.status === 'pending' && r.incoming,
       ).length
     },
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-    }),
   },
   methods: {
     toggleModal() {
