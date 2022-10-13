@@ -1,4 +1,4 @@
-import { Emitter } from '@satellite-im/iridium'
+import { Emitter, IridiumSetOptions } from '@satellite-im/iridium'
 import { User } from '../Users/types'
 import iridium from '../IridiumManager'
 import logger from '~/plugins/local/logger'
@@ -17,6 +17,13 @@ export default class IridiumProfile extends Emitter {
     await this.fetch()
     this.ready = true
     this.emit('ready', this.state)
+
+    // Emit changed if the profile is not empty
+    // needed for account recovery
+    if (this.state?.did) {
+      this.emit('changed', this.state)
+    }
+
     logger.info('iridium/profile', 'profile state loaded', {
       state: this.state,
     })
@@ -41,7 +48,7 @@ export default class IridiumProfile extends Emitter {
 
   onStateChanged(state: { path: string; value: any }) {
     logger.info('iridium/profile', 'state changed', { state })
-    if (state.path.startsWith('/profile')) {
+    if (state.path.startsWith('/')) {
       if (!state.value?.profile || !state.value?.profile?.did) {
         logger.info(
           'iridium/profile',
@@ -51,8 +58,9 @@ export default class IridiumProfile extends Emitter {
       }
       logger.info('iridium/profile', 'profile state changed', state)
       this.state = state.value?.profile
+
       this.setUser()
-      this.emit('changed', state)
+      this.emit('changed', this.state)
     }
   }
 
@@ -60,7 +68,13 @@ export default class IridiumProfile extends Emitter {
     return iridium.connector?.get<T>(`/profile${path}`, options)
   }
 
-  async set(path: string = '/', payload: User, options: any = {}) {
+  async set(
+    path: string = '/',
+    payload: User,
+    options: IridiumSetOptions = {
+      store: { syncPin: true },
+    },
+  ) {
     await iridium.connector?.set(
       `/profile${path === '/' ? '' : `/${path}`}`,
       payload,

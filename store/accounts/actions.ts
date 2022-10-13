@@ -15,6 +15,7 @@ import logger from '~/plugins/local/logger'
 import PhantomAdapter from '~/libraries/BlockchainClient/adapters/Phantom/PhantomAdapter'
 import IdentityManager from '~/libraries/Iridium/IdentityManager'
 import SolanaAdapter from '~/libraries/BlockchainClient/adapters/SolanaAdapter'
+import { User } from '~/libraries/Iridium/users/types'
 
 export default {
   /**
@@ -144,32 +145,32 @@ export default {
   /**
    * @method loadAccount
    * @description Performs all the action needed to retrieve the user account
-   * from Solana
    * @example
    * ```typescript
    * this.$store.dispatch('accounts/loadAccount')
    * ```
    */
-  async loadAccount({
-    commit,
-    state,
-    dispatch,
-  }: ActionsArguments<AccountsState>) {
-    logger.info('accounts/actions/loadAccount', 'beginning account load')
+  async loadAccount(
+    { commit, state, dispatch }: ActionsArguments<AccountsState>,
+    recover: boolean, // In case we are trying to recover an account from the seed phrase
+  ) {
+    const logTag = 'accounts/actions/loadAccount'
+    logger.info(logTag, 'start loading account')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
+
     if (state.adapter === 'Solana') {
       $BlockchainClient.setAdapter(new SolanaAdapter())
-      logger.info('accounts/actions/loadAccount', 'using solana adapter')
+      logger.info(logTag, 'using solana adapter')
     } else {
       $BlockchainClient.setAdapter(new PhantomAdapter())
-      logger.info('accounts/actions/loadAccount', 'using phantom wallet')
+      logger.info(logTag, 'using phantom wallet')
     }
 
     if (state.phrase === '') {
       if (state.encryptedPhrase !== '' && state.pin) {
         await dispatch('unlock', state.pin)
       } else {
-        logger.error('accounts/actions/loadAccount', 'empty mnemonic')
+        logger.error(logTag, 'empty mnemonic')
         throw new Error(AccountsError.MNEMONIC_NOT_PRESENT)
       }
     }
@@ -178,53 +179,59 @@ export default {
     await $BlockchainClient.initFromMnemonic(mnemonic)
 
     if (!$BlockchainClient.isPayerInitialized) {
-      logger.error('accounts/actions/loadAccount', 'user derivation failed')
+      logger.error(logTag, 'user derivation failed')
+      await this.$router.replace('/setup/disclaimer')
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
     if (!iridium.connector) {
-      logger.debug(
-        'accounts/actions/loadAccount',
-        'signing message for iridium',
+      const onProfile = async (payload: User) => {
+        const profile = payload
+
+        logger.debug(logTag, 'fetched iridium profile', {
+          profile,
+        })
+        if (!profile?.did) {
+          try {
+            await this.$router.replace('/auth/register')
+            return
+          } catch (_) {}
+          logger.error(logTag, 'user not registered, redirecting')
+          throw new Error(AccountsError.USER_NOT_REGISTERED)
+        }
+        logger.debug(
+          logTag,
+          'user loaded, dispatching setUserDetails & setRegistrationStatus',
+          profile,
+        )
+        commit('setUserDetails', profile)
+        commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+
+        this.$router.replace(
+          this.$device.isMobile ? '/mobile/chat' : '/friends',
+        )
+      }
+
+      iridium.profile?.once(recover ? 'changed' : 'ready', onProfile)
+      logger.debug(logTag, 'signing message for iridium')
+      const { pinHash } = state
+      const entropyMessage = IdentityManager.generateEntropyMessage(
+        $BlockchainClient.account.publicKey.toBase58(),
+        pinHash,
       )
-      const { entropyMessage } = state
       const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      logger.debug(
-        'accounts/actions/loadAccount',
-        'dispatching iridium/initializeFromEntropy',
-      )
+      logger.debug(logTag, 'initializing iridium with entropy')
       await iridium.initFromEntropy(entropy)
+
+      iridium.once('ready', () => {
+        logger.info(logTag, 'iridium ready')
+        commit('setActiveAccount', iridium.id)
+        logger.info(logTag, 'finished')
+        return dispatch('startup')
+      })
+
       await iridium.start()
     }
-
-    const profile = await iridium.profile?.get()
-    logger.debug('accounts/actions/loadAccount', 'fetched iridium profile', {
-      profile,
-    })
-    if (!profile?.did) {
-      try {
-        this.$router.replace('/auth/register')
-      } catch (_) {}
-      logger.error(
-        'accounts/actions/loadAccount',
-        'user not registered, redirecting',
-      )
-      throw new Error(AccountsError.USER_NOT_REGISTERED)
-    }
-    iridium.on('ready', () => {
-      logger.info('accounts/actions/loadAccount', 'iridium ready')
-      commit('setActiveAccount', iridium.id)
-
-      logger.debug(
-        'accounts/actions/loadAccount',
-        'user loaded, dispatching setUserDetails & setRegistrationStatus',
-        profile,
-      )
-      commit('setUserDetails', profile)
-      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
-      logger.info('accounts/actions/loadAccount', 'finished')
-      return dispatch('startup')
-    })
   },
   /**
    * @method registerUser
@@ -290,14 +297,10 @@ export default {
     }
 
     if (!iridium.connector) {
-      throw new Error('iridium not initialized')
+      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
     }
 
     const imagePath = await uploadPicture(userData.image)
-
-    if (!iridium.connector) {
-      throw new Error(AccountsError.CONNECTOR_NOT_PRESENT)
-    }
 
     const profile = {
       did: iridium.id,
@@ -309,7 +312,7 @@ export default {
 
     commit('setNewAccount', true)
 
-    await iridium.profile?.set('/', profile)
+    await iridium.profile?.set('/', profile, { store: { syncPin: true } })
     commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
     commit('setActiveAccount', iridium.id)
     commit('setUserDetails', profile)
@@ -360,10 +363,10 @@ export default {
     await $BlockchainClient.initFromMnemonic()
 
     const { pinHash } = state
-    const entropyMessage = IdentityManager.generateEntropyMessage(
-      $BlockchainClient.account.publicKey.toBase58(),
-      pinHash,
-    )
+    // const entropyMessage = IdentityManager.generateEntropyMessage(
+    //   $BlockchainClient.account.publicKey.toBase58(),
+    //   pinHash,
+    // )
     // commit('setEntropy', entropyMessage)
 
     const fakeMnemonic = 'fake mnemonic to bypass checks'
@@ -382,14 +385,13 @@ export default {
  */
 async function uploadPicture(image: string) {
   if (!image) {
-    return ''
+    return '' as string
   }
   // convert data string image to File
   const imageFile: File = await fetch(image)
     .then((res) => res.blob())
-    .then((blob) => {
-      return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
-    })
+    .then((blob) => new File([blob], 'profile.jpeg', { type: 'image/jpeg' }))
+
   // store image in IPFS
   return iridium.connector?.store(imageFile)
 }

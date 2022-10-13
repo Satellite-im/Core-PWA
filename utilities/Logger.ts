@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 
 const colors = {
-  debug: ['#2ecc71', '#2ecc71', 'white'],
-  info: ['#1abc9c', '#1abc9c', 'white'],
+  debug: ['#1c6b7b', '#2eaecc', 'white'],
+  info: ['#197541', '#23a159', 'white'],
   log: ['#34495e', '#3498db', 'white'],
   prod: ['#34495e', '#3498db', 'white'],
-  warn: ['#f1c40f', '#f1c40f', 'white'],
-  error: ['#e74c3c', '#e74c3c', 'white'],
+  warn: ['#665308', '#c6a316', 'white'],
+  error: ['#69211a', '#e74c3c', 'white'],
 }
 
 export type LogLevel = 'debug' | 'info' | 'log' | 'prod' | 'warn' | 'error'

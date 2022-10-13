@@ -227,7 +227,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     )
   }
 
-  set(path: string = '', payload: any, options: IridiumSetOptions = {}) {
+  set(
+    path: string = '',
+    payload: any,
+    options: IridiumSetOptions = {
+      store: { syncPin: true },
+    },
+  ) {
     return iridium.connector?.set(
       `/chat${path === '/' ? '' : path}`,
       payload,
