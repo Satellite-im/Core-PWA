@@ -24,16 +24,6 @@
       <WalletPopup />
     </UiModal>
     <!-- <UiModal
-      v-if="ui.modals.createServer"
-      :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
-      :title="$t('servers.create.heading')"
-    >
-      <ServersCreate
-        v-click-outside="() => toggleModal(ModalWindows.CREATE_SERVER)"
-        :close-modal="() => toggleModal(ModalWindows.CREATE_SERVER)"
-      />
-    </UiModal> -->
-    <!-- <UiModal
       v-if="ui.modals.error"
       :title="$t('popups.error.title')"
       @close="toggleModal(ModalWindows.ERROR)"

@@ -12,7 +12,7 @@
   <InteractablesInput
     v-model="filter"
     size="xs"
-    :placeholder="$t('servers.create.select_friends_placeholder')"
+    :placeholder="$t('friends.search_placeholder')"
   />
   <div class="users" :style="{ height: height }">
     <TypographyText
@@ -21,7 +21,7 @@
       color="dark"
       size="sm"
     >
-      {{ $t('servers.create.user_picker_empty') }}
+      {{ $t('ui.no_results') }}
     </TypographyText>
     <InteractablesUserPickerListItem
       v-else
