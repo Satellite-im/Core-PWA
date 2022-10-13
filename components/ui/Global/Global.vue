@@ -7,11 +7,6 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
-import {
-  Notification,
-  NotificationType,
-  NotificationBase,
-} from '~/libraries/Iridium/notifications/types'
 import { listenToNotifications } from '~/components/compositions/listenToNotifications'
 
 export default Vue.extend({

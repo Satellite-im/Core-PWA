@@ -54,10 +54,14 @@ export function listenToNotifications() {
           name: conversation.name,
           server: conversation.name,
         })
+        const description =
+          message.body?.length! > 79
+            ? `${message.body?.substring(0, 80)}...`
+            : message.body || ''
 
         return {
           title: isGroup ? groupTitle : `${sender?.name}`,
-          description: message.body || 'You have a new message',
+          description,
         }
       }
 

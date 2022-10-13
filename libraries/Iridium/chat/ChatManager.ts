@@ -69,16 +69,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     subscriptions: Conversation['id'][]
     conversations: { [key: string]: ConversationMessage[] | undefined }
     activeConversationId: Conversation['id'] | undefined
+    startedAt: number
   } = {
     typing: {},
     subscriptions: [],
     conversations: {},
     activeConversationId: '',
+    startedAt: 0,
   }
 
   private logPrefix = 'iridium/ChatManager'
 
   async start() {
+    this.ephemeral.startedAt = Date.now().valueOf()
     const fetched = await this.get<State>()
     this.state.conversations = {
       ...this.state.conversations,
@@ -285,8 +288,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       // Remove is_typing indicator upon user message receive
       this.setTyping(conversationId, fromDID, false)
 
-      // Send if conversation is not focused or if chat is not active
-      if (!document.hasFocus() || !this.isActive(conversationId)) {
+      const receivedWhileOffline = this.ephemeral.startedAt > message.at
+      if (
+        (!document.hasFocus() || !this.isActive(conversationId)) &&
+        !receivedWhileOffline
+      ) {
         this.sendNotification(message, conversation, fromDID)
       }
     } else if (type === 'chat/reaction') {
@@ -345,11 +351,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     fromDID: string,
   ) {
     const sender = iridium.users.getUser(message?.from)
-    const description =
-      message.body?.length! > 79
-        ? `${message.body?.substring(0, 80)}...`
-        : message.body || ''
-
     const isGroup = conversation.type === 'group'
 
     iridium.notifications.emit('notification/create', {
