@@ -385,14 +385,13 @@ export default {
  */
 async function uploadPicture(image: string) {
   if (!image) {
-    return ''
+    return '' as string
   }
   // convert data string image to File
   const imageFile: File = await fetch(image)
     .then((res) => res.blob())
-    .then((blob) => {
-      return new File([blob], 'profile.jpeg', { type: 'image/jpeg' })
-    })
+    .then((blob) => new File([blob], 'profile.jpeg', { type: 'image/jpeg' }))
+
   // store image in IPFS
   return iridium.connector?.store(imageFile)
 }

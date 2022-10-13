@@ -71,7 +71,9 @@ export default class IridiumProfile extends Emitter {
   async set(
     path: string = '/',
     payload: User,
-    options: IridiumSetOptions = {},
+    options: IridiumSetOptions = {
+      store: { syncPin: true },
+    },
   ) {
     await iridium.connector?.set(
       `/profile${path === '/' ? '' : `/${path}`}`,

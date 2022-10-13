@@ -50,7 +50,13 @@ export default class FilesManager extends Emitter {
     return iridium.connector?.get(`/files${path}`, options)
   }
 
-  set(path: string, payload: any, options: IridiumSetOptions = {}) {
+  set(
+    path: string,
+    payload: any,
+    options: IridiumSetOptions = {
+      store: { syncPin: true },
+    },
+  ) {
     logger.info('iridium/files', 'path and payload', {
       path,
       payload,

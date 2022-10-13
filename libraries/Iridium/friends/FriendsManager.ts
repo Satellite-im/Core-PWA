@@ -226,7 +226,13 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
    * @param options object
    * @returns iridium's connector result
    */
-  set(path: string, payload: any, options: IridiumSetOptions = {}) {
+  set(
+    path: string,
+    payload: any,
+    options: IridiumSetOptions = {
+      store: { syncPin: true },
+    },
+  ) {
     logger.info(this.loggerTag, 'path, paylaod and state', {
       path,
       payload,
