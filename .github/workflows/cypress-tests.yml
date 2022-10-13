@@ -1,5 +1,11 @@
 name: Run Cypress Tests
 
+env:
+  ENVIRONMENT: dev
+  NODE_ENV: development
+  NUXT_ENV_IRIDIUM_SYNC_NODES: ${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }}
+  NUXT_ENV_IRIDIUM_APIS: ${{ secrets.NUXT_ENV_IRIDIUM_APIS }}
+  NUXT_ENV_IRIDIUM_GATEWAYS: ${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }}
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
@@ -20,7 +26,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-
       - name: Change permissions on scripts 🔨
         run: |
           chmod +x ./linkscript.sh
@@ -29,19 +34,6 @@ jobs:
 
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
-      - name: Create env file - Core 🔨
-        working-directory: ./
-        run: |
-          touch .env
-          echo ENVIRONMENT="dev" >> .env
-          cat .env
-      - name: Read .env file
-        id: envfile
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./.env
-      - name: Echo .env
-        run: echo "${{ steps.envfile.outputs.content }}"
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
