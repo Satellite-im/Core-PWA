@@ -25,7 +25,8 @@
     "cy:second-local": "cypress run --config-file cypress-second.config.js --browser chrome",
     "cy:chat-local": "concurrently npm:cy:first-local npm:cy:second-local",
     "prepare": "husky install",
-    "android-generate": "yarn generate; npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd .."
+    "android-generate": "yarn generate; npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..",
+    "android-run": "npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..; npx cap open android"
   },
   "dependencies": {
     "@capacitor/android": "^4.3.0",

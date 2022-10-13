@@ -8,6 +8,7 @@ import { ClipboardIcon } from 'satellite-lucide-icons'
 import { Clipboard } from '@capacitor/clipboard'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   name: 'AccountsSettings',
@@ -15,6 +16,18 @@ export default Vue.extend({
     ClipboardIcon,
   },
   layout: 'settings',
+  setup() {
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+    const { copyText } = capacitorHooks()
+    async function handleCopy(text: string) {
+      copyText(text)
+    }
+
+    return {
+      handleCopy,
+    }
+  },
   data() {
     return {
       showPhrase: false,
@@ -52,16 +65,6 @@ export default Vue.extend({
      */
     togglePhrase() {
       this.showPhrase = !this.showPhrase
-    },
-    async copyText(text: string) {
-      try {
-        await Clipboard.write({
-          string: text,
-        })
-        this.$toast.show(this.$t('ui.copied') as string)
-      } catch {
-        this.$toast.error('Error when copying')
-      }
     },
   },
 })
