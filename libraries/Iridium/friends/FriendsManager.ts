@@ -353,12 +353,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   private sendNotification(user: User) {
     iridium.notifications.emit('notification/create', {
       type: NotificationType.FRIEND_REQUEST,
-      title: 'notifications.friend_request.title',
-      description: 'notifications.friend_request.body',
-      descriptionValues: {
-        name: user.name,
-      },
-      fromName: user.name,
+      senderId: user.did,
       image: user.photoHash,
     } as NotificationBase)
   }
