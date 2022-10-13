@@ -45,5 +45,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+        <key>UIStatusBarStyle</key>
+        <string>lightContent</string>
 </dict>
 </plist>
