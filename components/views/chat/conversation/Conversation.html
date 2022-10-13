@@ -39,8 +39,12 @@
         />
         <Message
           :key="item.message.id"
-          :item="item"
+          :message="item.message"
+          :replies="item.replies"
+          :isLastCallMessage="item.isLastCallMessage"
+          :isFirstUnreadMessage="item.isFirstUnreadMessage"
           :showHeader="item.showHeader"
+          :isScrolling="isScrolling"
           @unreadMessage="onUnreadMessage"
         />
       </template>

@@ -56,7 +56,6 @@ export default Vue.extend({
         rgba(34, 44, 63, 0.5) @half,
         transparent @full
       );
-      animation: loadreverse 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
   .right {
@@ -97,7 +96,6 @@ export default Vue.extend({
         rgba(34, 44, 63, 0.5) @half,
         transparent @full
       );
-      animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
   }
 }

@@ -35,8 +35,12 @@ export default {
     },
   },
   mounted() {
-    this.parentElement.addEventListener('wheel', this.scrollHandler)
-    this.parentElement.addEventListener('touchmove', this.scrollHandler)
+    this.parentElement.addEventListener('wheel', this.scrollHandler, {
+      passive: true,
+    })
+    this.parentElement.addEventListener('touchmove', this.scrollHandler, {
+      passive: true,
+    })
   },
   beforeDestroy() {
     this.parentElement.removeEventListener('wheel', this.scrollHandler)
