@@ -11,6 +11,13 @@ export default Vue.extend({
   components: {
     ClipboardIcon,
   },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   computed: {
     ...mapState({
       passPhrase: (state: RootState) => state.accounts.phrase,

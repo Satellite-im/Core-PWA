@@ -14,6 +14,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 import { ChatItem } from '~/components/views/chat/conversation/Conversation.vue'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   props: {
@@ -29,6 +30,13 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+  },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
   },
   data: () => ({
     users: iridium.users,
@@ -176,7 +184,7 @@ export default Vue.extend({
       if (!this.message.body) {
         return
       }
-      navigator.clipboard.writeText(this.message.body)
+      this.copyText(this.message.body)
     },
     setReplyChatbarMessage() {
       this.$store.commit('chat/setReplyChatbarMessage', {
