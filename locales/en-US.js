@@ -1,31 +1,20 @@
 export default {
   coming_soon: {
     communities: 'Communities\n(Coming Soon)',
-    add_community: 'New Community\n(Coming Soon)',
     send_money: 'Send Money\n(Coming Soon)',
-    alerts: 'Alerts\n(Coming Soon)',
-    marketplace: 'Marketplace\n(Coming Soon)',
     wallet: 'Wallet\n(Coming Soon)',
-    archived: 'Archived Messages\n(Coming Soon)',
     group_call: 'Group Call\n(Coming Soon)',
-    group_chat_search: 'Group Chat Search\n(Coming Soon)',
   },
   welcome_message: {
-    dismiss_forever: 'Dismiss Forever',
     welcome: 'Welcome, {user}!',
     ea_warning:
       'Thank you so much for joining us in our Early Access. Things are changing rapidly, so please be patient with us and check back regularly for updates and improvements.',
   },
   global: {
-    name: 'Satellite.im',
-    encrypted: 'Encrypted',
-    unencrypted: 'Unencrypted',
     upload: 'Upload',
-    upload_files: 'Upload Files',
     uploading: 'Uploading...',
     edit: 'edit',
     save: 'save',
-    dismiss: 'Dismiss',
   },
   ui: {
     talk: 'Speak Freely...',
@@ -715,8 +704,7 @@ export default {
       network: 'We are experiencing network issues, please try again later',
     },
     chat: {
-      drop_file_count: 'Sorry, you can only upload 8 files at a time',
-      contains_nsfw: 'Unable to upload file/s due to NSFW status',
+      contains_nsfw: 'Your profile picture can not contain explicit content',
       empty_message_error:
         'Message must contain at least one non-space character',
       failed_load: 'Image failed to load',
@@ -808,9 +796,6 @@ export default {
     no_friend_request: 'You have no new friend requests.',
     outgoing: 'Outgoing',
     incoming: 'Incoming',
-    blocked_friends: 'Blocked friends',
-    blocked: 'Blocked',
-    no_blocked: 'You have no blocked users, yay!',
     search_placeholder: 'Search friends...',
     add: 'Add Friend',
     add_description:

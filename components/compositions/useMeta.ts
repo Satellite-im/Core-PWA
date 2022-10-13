@@ -4,9 +4,6 @@ import { friendsHooks } from '~/components/compositions/friends'
 import { conversationHooks } from '~/components/compositions/conversations'
 
 const useMeta = () => {
-  // @ts-ignore
-  const $nuxt = useNuxtApp()
-
   const managers = reactive({
     chat: iridium.chat,
   })
@@ -30,7 +27,7 @@ const useMeta = () => {
   // @ts-ignore
   useHead({
     title: computed(() => {
-      const pageTitle = $nuxt.$i18n.t('global.name')
+      const pageTitle = 'Satellite.im'
 
       return totalNotificationCount.value
         ? `(${totalNotificationCount.value}) ${pageTitle}`

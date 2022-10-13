@@ -171,11 +171,6 @@ const Chatbar = Vue.extend({
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
-    placeholder(): string {
-      return !this.hasCommand && this.text === ''
-        ? (this.$t('ui.talk') as string)
-        : ''
-    },
     userLastTextMessage(): ConversationMessage | undefined {
       if (!this.conversationId) return
 
