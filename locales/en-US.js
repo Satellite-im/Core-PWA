@@ -657,22 +657,6 @@ export default {
       new_message: 'New Message',
     },
   },
-  servers: {
-    new_server: 'New Community',
-    create: {
-      heading: 'Create a server',
-      photo_text:
-        'Give your server a face. Choose a memorable photo to show its members.',
-      photo_button: 'Set photo',
-      server_name: 'Enter a server name',
-      server_name_placeholder: 'Server name...',
-      create_server: 'Create server',
-      select_friends: 'Invite your friends to this server',
-      server_name_error: 'Server name must be at least 5 characters.',
-      select_friends_placeholder: 'Search friends...',
-      user_picker_empty: 'No friends found',
-    },
-  },
   conversation: {
     encrypted: 'Messages are secured by end-to-end encryption.',
     reply: 'reply | replies',
