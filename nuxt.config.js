@@ -117,7 +117,22 @@ export default defineNuxtConfig({
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxt/i18n',
+    [
+      '@nuxtjs/i18n',
+      {
+        defaultLocale: 'en',
+        langDir: '~/locales',
+        locales: [
+          {
+            code: 'en',
+            file: 'en-US.js',
+          },
+        ],
+        vueI18n: {
+          fallbackLocale: 'en',
+        },
+      },
+    ],
     '@nuxtjs/toast',
     '@nuxtjs/pwa',
     [
@@ -183,20 +198,6 @@ export default defineNuxtConfig({
           },
         },
       ],
-    },
-  },
-
-  i18n: {
-    defaultLocale: 'en',
-    langDir: '~/locales',
-    locales: [
-      {
-        code: 'en',
-        file: 'en-US.js',
-      },
-    ],
-    vueI18n: {
-      fallbackLocale: 'en',
     },
   },
 
