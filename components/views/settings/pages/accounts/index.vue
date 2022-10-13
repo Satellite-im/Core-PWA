@@ -53,44 +53,15 @@ export default Vue.extend({
     togglePhrase() {
       this.showPhrase = !this.showPhrase
     },
-    copyAddress(copyText: string) {
-      // navigator.clipboard.writeText(copyText)
-
-      // Uses @capacitor plugin now
-      const copyTextPromise = new Promise((resolve, reject) => {
-        resolve(
-          Clipboard.write({
-            string: copyText,
-          }),
-        )
-      })
-      copyTextPromise
-        .then(() => {
-          this.$toast.show(this.$t('ui.copied') as string)
+    async copyText(text: string) {
+      try {
+        await Clipboard.write({
+          string: text,
         })
-        .catch(() => {
-          this.$toast.error('Error when copying') // TODO: Put this in en-US later
-        })
-      this.$toast.show(this.$t('ui.copied') as string)
-    },
-    copyPhrase() {
-      // Uses @capacitor plugin now
-      const copyTextPromise = new Promise((resolve, reject) => {
-        resolve(
-          Clipboard.write({
-            string: this.accountPhrase,
-          }),
-        )
-      })
-      copyTextPromise
-        .then(() => {
-          this.$toast.show(this.$t('ui.copied') as string)
-        })
-        .catch(() => {
-          this.$toast.error('Error when copying') // TODO: Put this in en-US later
-        })
-      this.$toast.show(this.$t('ui.copied') as string)
-      this.$toast.show(this.$t('ui.copied') as string)
+        this.$toast.show(this.$t('ui.copied') as string)
+      } catch {
+        this.$toast.error('Error when copying')
+      }
     },
   },
 })

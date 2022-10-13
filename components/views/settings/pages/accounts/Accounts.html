@@ -11,7 +11,7 @@
       readonly
       :label="$t('pages.settings.accounts.active')"
       :text="getId"
-      @submit="copyAddress(getId)"
+      @submit="copyText(getId)"
     >
       <clipboard-icon size="1x" />
     </InteractablesInput>
@@ -21,7 +21,7 @@
       readonly
       :label="$t('pages.settings.accounts.active_did')"
       :text="profile.did"
-      @submit="copyAddress(profile.did)"
+      @submit="copyText(profile.did)"
     >
       <clipboard-icon size="1x" />
     </InteractablesInput>
@@ -56,7 +56,7 @@
       />
       <InteractablesButton
         :text="$t('pages.settings.accounts.copy_phrase')"
-        @click="copyPhrase"
+        @click="copyText(accountPhrase)"
       />
     </div>
     <div v-if="showPhrase" class="tag-wrap">
