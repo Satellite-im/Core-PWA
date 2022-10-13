@@ -21,7 +21,7 @@ export default Vue.extend({
     return {
       pin: '',
       status: 'idle' as 'idle' | 'loading',
-      error: '',
+      error: '' as any,
       step: 'signup' as 'signup' | 'login',
       isChrome: false,
       confirmClearAccountModalVisible: false,
@@ -109,8 +109,8 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
     async decrypt(redirect = true) {
       const timeout = setTimeout(() => {
         this.pin = ''
-        this.error = `${this.$t('errors.timeout')}`
-      }, 30000)
+        this.error = this.$t('errors.timeout')
+      }, this.$Config.connection.timeout)
       try {
         this.status = 'loading'
         await this.$store.dispatch(

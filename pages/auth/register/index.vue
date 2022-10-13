@@ -54,7 +54,7 @@ export default Vue.extend({
             state: true,
             action: () => this.confirm(userData),
           })
-        }, 30000)
+        }, this.$Config.connection.timeout)
         await this.$store.dispatch('accounts/registerUser', {
           name: userData.username,
           image: userData.photoHash,
