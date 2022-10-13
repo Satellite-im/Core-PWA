@@ -1,10 +1,4 @@
-<div
-  class="quick-profile"
-  ref="quick"
-  @keydown.esc="close"
-  tabindex="-1"
-  v-click-outside="close"
->
+<div class="quick-profile" ref="quick" v-click-outside="close">
   <div class="top">
     <!-- <button @click="openProfile"> -->
     <UiUserState :user="user" :size="40" />

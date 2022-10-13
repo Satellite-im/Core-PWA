@@ -7,11 +7,13 @@ import {
   ChevronRightIcon,
   EditIcon,
 } from 'satellite-lucide-icons'
+import { createFocusTrap, FocusTrap, Options } from 'focus-trap'
 import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { RootState } from '~/types/store/store'
 import { Conversation } from '~/libraries/Iridium/chat/types'
+import { handleEsc } from '~/components/compositions/events'
 
 export default Vue.extend({
   components: {
@@ -19,13 +21,25 @@ export default Vue.extend({
     ChevronRightIcon,
     EditIcon,
   },
-  data() {
+  setup(props, { emit }) {
+    // @ts-ignore
+    const { $store } = useNuxtApp()
+    function close() {
+      $store.commit('ui/setQuickProfile', undefined)
+    }
+
+    handleEsc(close)
+
     return {
-      text: '',
-      isStatusMenuVisible: false,
-      users: iridium.users,
+      close,
     }
   },
+  data: () => ({
+    text: '',
+    isStatusMenuVisible: false,
+    users: iridium.users,
+    trap: null as FocusTrap | null,
+  }),
   computed: {
     ...mapState({
       quickProfile: (state) => (state as RootState).ui.quickProfile,
@@ -51,9 +65,21 @@ export default Vue.extend({
         : this.users?.ephemeral.status[this.user.did] ?? 'offline'
     },
   },
+  beforeDestroy() {
+    this.trap?.deactivate()
+  },
   mounted() {
     const quick = this.$refs.quick as HTMLElement
-    quick.focus()
+
+    // non friend quick profiles do not have buttons. will add profile link later and remove this check
+    if (this.conversationId || this.isMe) {
+      const options: Options = {
+        allowOutsideClick: true,
+        escapeDeactivates: false,
+      }
+      this.trap = createFocusTrap(quick, options)
+      this.trap.activate()
+    }
 
     if (this.$device.isDesktop && this.quickProfile) {
       quick.style.top = `${this.quickProfile.position.y}px`
@@ -62,9 +88,6 @@ export default Vue.extend({
     this.handleOverflow()
   },
   methods: {
-    close() {
-      this.$store.commit('ui/setQuickProfile', undefined)
-    },
     handleOverflow() {
       if (!this.quickProfile || this.$device.isMobile) {
         return
@@ -86,18 +109,12 @@ export default Vue.extend({
       }
     },
     sendMessage() {
-      if (!this.user || !this.text.length || !this.conversationId) {
+      if (!this.user || !this.conversationId) {
         return
       }
-
-      if (this.conversationId !== this.$route.params.id) {
-        this.$router.push(
-          this.$device.isMobile
-            ? `/mobile/chat/${this.conversationId}`
-            : `/chat/${this.conversationId}`,
-        )
-      }
-
+      this.$router.push(
+        `${this.$device.isMobile ? '/mobile' : ''}/chat/${this.conversationId}`,
+      )
       iridium.chat.sendMessage({
         at: Date.now(),
         type: 'text',

@@ -1,8 +1,9 @@
 <template src="./Modal.html"></template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { nextTick, onMounted, onUnmounted, ref, Ref } from 'vue'
 import { createFocusTrap, FocusTrap, Options } from 'focus-trap'
+import { handleEsc } from '~/components/compositions/events'
 
 export default Vue.extend({
   props: {
@@ -24,43 +25,35 @@ export default Vue.extend({
       default: false,
     },
   },
-  data: () => ({
-    trap: null as FocusTrap | null,
-  }),
-  beforeDestroy() {
-    this.removeEventListener()
-    this.trap?.deactivate()
-  },
-  mounted() {
-    const modal = this.$refs.modal as HTMLElement
-    const options: Options = {
-      allowOutsideClick: true,
-      escapeDeactivates: false,
+  setup(props, { emit }) {
+    const trap: Ref<FocusTrap | null> = ref(null)
+    const modal: Ref<HTMLElement | null> = ref(null)
+
+    function close() {
+      emit('close')
     }
 
-    // next tick for conditionally rendered buttons that aren't ready yet
-    this.$nextTick(() => {
-      this.trap = createFocusTrap(modal, options)
-      this.trap.activate()
-    })
-
-    this.addEventListener()
-  },
-  methods: {
-    close() {
-      this.$emit('close')
-    },
-    handleKeydown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        this.close()
+    onMounted(() => {
+      const options: Options = {
+        allowOutsideClick: true,
+        escapeDeactivates: false,
       }
-    },
-    addEventListener() {
-      document.addEventListener('keydown', this.handleKeydown)
-    },
-    removeEventListener() {
-      document.removeEventListener('keydown', this.handleKeydown)
-    },
+
+      nextTick(() => {
+        if (!modal.value) {
+          return
+        }
+        trap.value = createFocusTrap(modal.value, options)
+        trap.value.activate()
+      })
+    })
+    onUnmounted(() => trap.value?.deactivate())
+    handleEsc(close)
+
+    return {
+      modal,
+      close,
+    }
   },
 })
 </script>
