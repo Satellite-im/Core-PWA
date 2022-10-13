@@ -202,4 +202,7 @@ export const Config = {
     width: 320,
     height: 180,
   },
+  connection: {
+    timeout: 30000,
+  },
 }

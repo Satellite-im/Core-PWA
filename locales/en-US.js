@@ -247,6 +247,7 @@ export default {
         enable_consent:
           'Please consent to file scanning in your privacy settings',
         lost: 'Cannot find a file, please try again later',
+        timeout: 'Connection timeout, please try again later',
       },
     },
     unlock: {
