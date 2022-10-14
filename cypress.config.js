@@ -9,6 +9,7 @@ module.exports = defineConfig({
   chromeWebSecurity: false,
   watchForFileChanges: false,
   waitForAnimations: false,
+  experimentalWebKitSupport: true,
   animationDistanceThreshold: 50,
   e2e: {
     setupNodeEvents(on, config) {
