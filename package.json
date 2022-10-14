@@ -25,7 +25,8 @@
     "cy:chat-local": "concurrently npm:cy:first-local npm:cy:second-local",
     "prepare": "husky install",
     "android-generate": "yarn generate; npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..",
-    "android-run": "npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..; npx cap open android"
+    "android-run": "npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..; npx cap open android",
+    "ios-run": "yarn generate; npx cap copy; npx cap sync; cd ios/App; pod install; cd ../..; npx cap open ios;"
   },
   "dependencies": {
     "@capacitor/android": "^4.3.0",
