@@ -3,20 +3,14 @@ import { UIState, GlyphMarketViewStatus, SettingsRoutes } from './types'
 const InitialUIState = (): UIState => ({
   contextMenuStatus: false,
   showSidebar: true,
-  showSettings: false,
   settingsRoute: SettingsRoutes.EMPTY,
   contextMenuValues: [],
   contextMenuPosition: { x: 0, y: 0 },
   modals: {
-    newfolder: false,
-    createServer: false,
     marketplace: false,
     wallet: false,
-    walletMini: false,
-    error: false,
     changelog: false,
     glyph: false,
-    userProfile: false,
     callToAction: false,
     renameFile: false,
     errorNetwork: { isOpen: false, action: null },
@@ -36,7 +30,6 @@ const InitialUIState = (): UIState => ({
   },
   messages: [],
   unreadMessage: 0,
-  showOlderMessagesInfo: false,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   glyphMarketplaceView: {

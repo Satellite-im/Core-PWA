@@ -126,7 +126,6 @@ describe('mutations', () => {
     contextMenuStatus: false,
     showSidebar: true,
     showSearchResult: false,
-    showSettings: false,
     settingsSideBar: true,
     settingsRoute: 'personalize',
     quickProfile: false,
@@ -142,15 +141,11 @@ describe('mutations', () => {
     },
     modals: {
       changelog: false,
-      createServer: false,
       error: false,
       glyph: false,
       marketplace: false,
-      newfolder: false,
       quickchat: false,
-      userProfile: false,
       wallet: false,
-      walletMini: false,
     },
     glyphModalPackId: '',
     chatbarContent: '',
@@ -209,7 +204,6 @@ describe('mutations', () => {
     ],
     unreadMessage: 0,
     isScrollOver: false,
-    showOlderMessagesInfo: false,
     isTyping: {
       address: '0xc61b9bb3a7a0767e3179713f3a5c7a9aedce193c',
       last_message:
@@ -508,18 +502,6 @@ describe('mutations', () => {
       isOpen: argument.state,
       action: argument.action,
     })
-  })
-
-  test('setShowOlderMessagesInfo false status', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setShowOlderMessagesInfo(localizedState, false)
-    expect(localizedState.showOlderMessagesInfo).toBeFalsy()
-  })
-
-  test('setShowOlderMessagesInfo true status', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setShowOlderMessagesInfo(localizedState, true)
-    expect(localizedState.showOlderMessagesInfo).toBeTruthy()
   })
 
   test('setGlyphMarketplaceView', () => {

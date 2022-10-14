@@ -23,17 +23,6 @@
     <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
       <WalletPopup />
     </UiModal>
-    <!-- <UiModal
-      v-if="ui.modals.error"
-      :title="$t('popups.error.title')"
-      @close="toggleModal(ModalWindows.ERROR)"
-    >
-      <UiPopupsError
-        v-click-outside="() => toggleModal(ModalWindows.ERROR)"
-        :close-modal="() => toggleModal(ModalWindows.ERROR)"
-        :set-close-timeout="5000"
-      />
-    </UiModal> -->
     <UiModal
       v-if="ui.modals.marketplace"
       @close="toggleModal(ModalWindows.MARKETPLACE)"
