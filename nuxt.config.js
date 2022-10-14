@@ -246,12 +246,12 @@ export default defineNuxtConfig({
         options.targets = isServer
           ? { node: 'current' }
           : {
-            browsers: [
-              'last 1 chrome version',
-              'last 1 firefox version',
-              'last 1 safari version',
-            ],
-          }
+              browsers: [
+                'last 1 chrome version',
+                'last 1 firefox version',
+                'last 1 safari version',
+              ],
+            }
       },
     },
   },
