@@ -58,7 +58,6 @@ Object {
     "status": false,
   },
   "settingsRoute": "",
-  "showOlderMessagesInfo": false,
   "showSidebar": true,
   "unreadMessage": 0,
 }

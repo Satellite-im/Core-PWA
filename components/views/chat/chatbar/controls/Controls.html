@@ -1,18 +1,4 @@
 <div class="chatbar-controls">
-  <UiComingSoon
-    v-if="!$device.isMobile"
-    :tooltipText="$t('coming_soon.send_money')"
-    data-cy="send-money"
-    :tooltipPosition="'top'"
-  >
-    <button
-      v-tooltip.top="$t('wallet.send_money')"
-      @click="toggleMiniWallet"
-      disabled
-    >
-      <banknote-icon size="1x" class="control-icon" />
-    </button>
-  </UiComingSoon>
   <button
     v-tooltip.top="$t('ui.glyphs')"
     @click="toggleEnhancers('glyphs')"

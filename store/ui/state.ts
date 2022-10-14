@@ -30,7 +30,6 @@ const InitialUIState = (): UIState => ({
   },
   messages: [],
   unreadMessage: 0,
-  showOlderMessagesInfo: false,
   settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   glyphMarketplaceView: {
