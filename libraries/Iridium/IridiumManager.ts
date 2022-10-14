@@ -68,7 +68,7 @@ export class IridiumManager extends Emitter {
   get shortId(): string {
     return this.profile.state
       ? `${this.profile.state.name}#${this.id.substring(this.id.length - 6)}`
-      : `${this.id}`
+      : this.id
   }
 
   async initFromEntropy(entropy: Uint8Array) {
