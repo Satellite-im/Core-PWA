@@ -1,74 +1,85 @@
-<template src="./Nav.html"></template>
+<template>
+  <nav class="nav" :class="{ hide: !isMobileNavVisible }">
+    <button
+      v-for="(item, i) in buttons"
+      :key="i"
+      :class="{ active: isActiveRoute(item.id) }"
+      data-cy="`mobile-nav-${id}`"
+      :aria-label="item.label"
+      @click="item.func"
+    >
+      <component :is="item.icon" v-if="item.icon" size="1.75x" />
+      <UiUserState v-else :user="profile" />
+    </button>
+  </nav>
+</template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import {
-  HomeIcon,
-  MessageSquareIcon,
-  FolderIcon,
-  UsersIcon,
-  SettingsIcon,
-  ShoppingBagIcon,
-} from 'satellite-lucide-icons'
-import { ModalWindows, SettingsRoutes } from '~/store/ui/types'
+import { HomeIcon, FolderIcon, UsersIcon } from 'satellite-lucide-icons'
+import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { UserStatus } from '~/libraries/Iridium/users/types'
-import { FriendRequest } from '~/libraries/Iridium/friends/types'
+import { ButtonAttributes } from '~/types/ui'
+import { friendsHooks } from '~/components/compositions/friends'
 
 export default Vue.extend({
   components: {
     HomeIcon,
-    MessageSquareIcon,
     FolderIcon,
     UsersIcon,
-    SettingsIcon,
-    ShoppingBagIcon,
+  },
+  setup() {
+    const { incomingRequests } = friendsHooks()
+
+    return { incomingRequests }
   },
   data() {
     return {
-      userStatus: iridium.users.ephemeral.status,
       friends: iridium.friends.state,
+      profile: iridium.profile.state,
     }
   },
   computed: {
     ...mapState({
-      accounts: (state) => (state as RootState).accounts,
-      ui: (state) => (state as RootState).ui,
+      isMobileNavVisible: (state) => (state as RootState).ui.isMobileNavVisible,
     }),
-    status(): UserStatus {
-      return 'online'
-    },
-    isMobileNavVisible: {
-      get(): boolean {
-        return this.ui.isMobileNavVisible
-      },
-      set(value: boolean) {
-        this.$store.commit('ui/setIsMobileNavVisible', value)
-      },
-    },
-    incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-      )
-    },
-    hasFriendRequests(): boolean {
-      return this.incomingRequests.length > 0
+    buttons(): (ButtonAttributes & { id: string })[] {
+      return [
+        {
+          id: 'chat',
+          label: this.$t('global.chat'),
+          icon: HomeIcon,
+          func: () => this.$router.push('/mobile/chat'),
+        },
+        {
+          id: 'files',
+          label: this.$t('global.files'),
+          icon: FolderIcon,
+          func: () => this.$router.push('/files'),
+        },
+        {
+          id: 'friends',
+          label: this.$t('global.friends'),
+          icon: UsersIcon,
+          func: () => this.$router.push('/mobile/friends'),
+        },
+        {
+          id: 'settings',
+          label: this.$t('global.settings'),
+          icon: undefined,
+          func: () =>
+            this.isActiveRoute('settings')
+              ? this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
+              : this.$router.push('/mobile/settings'),
+        },
+      ]
     },
   },
   methods: {
-    toggleModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CALL_TO_ACTION,
-        state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
-      })
-    },
     isActiveRoute(route: string): boolean {
       return this.$route.path.includes(route)
-    },
-    emptySettingsRoute() {
-      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
     },
   },
 })

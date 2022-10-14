@@ -13,15 +13,16 @@
     <div class="friend" data-cy="friend">
       <UiUserState :user="user" />
       <div class="text-container">
-        <div data-cy="friend-name" class="ellipsis">{{ user.name }}</div>
+        <div data-cy="friend-label" class="ellipsis">{{ user.name }}</div>
         <div v-if="user.status" class="ellipsis">{{ user.status }}</div>
       </div>
       <div class="button-container">
         <InteractablesButton
           v-if="cancelButton"
-          v-tooltip.top="cancelButton.tooltip"
+          v-tooltip.top="cancelButton.label"
           data-cy="friend-cancel-button"
           :disabled="loading"
+          :label="cancelButton.label"
           color="dark"
           size="sm"
           @click="cancelButton.func"
@@ -30,9 +31,10 @@
         </InteractablesButton>
         <InteractablesButton
           v-if="confirmButton"
-          v-tooltip.top="confirmButton.tooltip"
+          v-tooltip.top="confirmButton.label"
           data-cy="friend-confirm-button"
           :loading="loading"
+          :label="confirmButton.label"
           color="dark"
           size="sm"
           @click="confirmButton.func"
@@ -46,7 +48,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { TranslateResult } from 'vue-i18n'
 import {
   MessageSquareIcon,
   XIcon,
@@ -56,14 +57,9 @@ import {
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ContextMenuItem } from '~/store/ui/types'
+import { ButtonAttributes } from '~/types/ui'
 
 export type UserType = 'friend' | 'stranger' | 'incoming' | 'outgoing'
-
-type ButtonAttributes = {
-  icon: any
-  func: () => void
-  tooltip: TranslateResult
-}
 
 export default Vue.extend({
   components: {
@@ -102,25 +98,25 @@ export default Vue.extend({
         [
           'friend',
           {
+            label: this.$t('friends.message'),
             icon: MessageSquareIcon,
             func: this.openChat,
-            tooltip: this.$t('friends.message'),
           },
         ],
         [
           'incoming',
           {
+            label: this.$t('friends.accept'),
             icon: CheckIcon,
             func: this.acceptFriendRequest,
-            tooltip: this.$t('friends.accept'),
           },
         ],
         [
           'stranger',
           {
+            label: this.$t('friends.send'),
             icon: UserPlusIcon,
             func: this.createFriendRequest,
-            tooltip: this.$t('friends.send'),
           },
         ],
       ])
@@ -131,17 +127,17 @@ export default Vue.extend({
         [
           'incoming',
           {
+            label: this.$t('friends.decline'),
             icon: XIcon,
             func: this.removeRequest,
-            tooltip: this.$t('friends.decline'),
           },
         ],
         [
           'outgoing',
           {
+            label: this.$t('friends.cancel_friend_request'),
             icon: XIcon,
             func: this.removeRequest,
-            tooltip: this.$t('friends.cancel_friend_request'),
           },
         ],
       ])

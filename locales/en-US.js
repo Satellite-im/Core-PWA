@@ -15,6 +15,10 @@ export default {
     uploading: 'Uploading...',
     edit: 'edit',
     save: 'save',
+    chat: 'Chat',
+    files: 'Files',
+    friends: 'Friends',
+    settings: 'Settings',
   },
   ui: {
     talk: 'Speak Freely...',
