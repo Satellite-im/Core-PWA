@@ -2,22 +2,21 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "splash-2732x2732-2.png",
       "scale" : "1x"
     },
     {
+      "filename" : "iphoneplus_splash.png",
       "idiom" : "universal",
-      "filename" : "splash-2732x2732-1.png",
       "scale" : "2x"
     },
     {
+      "filename" : "iphonexsmax_splash.png",
       "idiom" : "universal",
-      "filename" : "splash-2732x2732.png",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
