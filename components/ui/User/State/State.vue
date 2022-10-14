@@ -75,9 +75,7 @@ export default Vue.extend({
       if (this.isTyping) {
         return 'typing'
       }
-      return this.user.did === iridium.id
-        ? 'online'
-        : this.users.ephemeral.status?.[this.user.did] ?? 'offline'
+      return 'busy'
     },
     isTyping(): boolean {
       if (!this.conversationId.length) {
