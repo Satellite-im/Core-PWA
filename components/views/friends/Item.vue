@@ -22,24 +22,30 @@
           v-tooltip.top="cancelButton.label"
           data-cy="friend-cancel-button"
           :disabled="loading"
-          :label="cancelButton.label"
           color="dark"
           size="sm"
           @click="cancelButton.func"
         >
-          <component :is="cancelButton.icon" size="16" />
+          <component
+            :is="cancelButton.icon"
+            size="16"
+            :alt="cancelButton.label"
+          />
         </InteractablesButton>
         <InteractablesButton
           v-if="confirmButton"
           v-tooltip.top="confirmButton.label"
           data-cy="friend-confirm-button"
           :loading="loading"
-          :label="confirmButton.label"
           color="dark"
           size="sm"
           @click="confirmButton.func"
         >
-          <component :is="confirmButton.icon" size="16" />
+          <component
+            :is="confirmButton.icon"
+            size="16"
+            :alt="confirmButton.label"
+          />
         </InteractablesButton>
       </div>
     </div>
