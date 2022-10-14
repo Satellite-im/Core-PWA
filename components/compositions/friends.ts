@@ -10,7 +10,7 @@ export function friendsHooks() {
     users: iridium.users,
   })
 
-  const friendsList: ComputedRef<User[]> = computed(() => {
+  const friends: ComputedRef<User[]> = computed(() => {
     return managers.friends.state.friends
       .map((did) => managers.users.state[did])
       .filter(truthy)
@@ -36,7 +36,7 @@ export function friendsHooks() {
   })
 
   return {
-    friendsList,
+    friends,
     requests,
     incomingRequests,
     outgoingRequests,
