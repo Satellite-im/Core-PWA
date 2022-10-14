@@ -117,16 +117,6 @@ describe('Chat Features Tests', () => {
     cy.get('.file-info > .title').should('contain', 'logo.png')
   })
 
-  it('Chat - Verify when clicking on Send Money, coming soon appears', () => {
-    // Hover over on Send Money and Coming Soon tooltip will appear when clicking on its button
-    cy.hoverOnComingSoonIcon(
-      '[data-cy=send-money]',
-      'Send Money (Coming Soon)',
-    ).then(() => {
-      cy.contains('Send Money (Coming Soon)').should('not.exist')
-    })
-  })
-
   it('Chat - Verify when clicking on Emoji, the emoji picker appears', () => {
     // Emoji picker is displayed  when clicking on its button
     cy.get('[data-cy=send-emoji]').click()
