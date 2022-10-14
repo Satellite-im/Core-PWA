@@ -8,7 +8,7 @@
 import UIKit
 import Capacitor
 
-class ViewController: UIViewController {
+class ViewController: CAPBridgeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
