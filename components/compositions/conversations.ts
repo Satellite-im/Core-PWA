@@ -68,9 +68,7 @@ export function conversationHooks(conversationId?: Conversation['id']) {
       return []
     }
 
-    return Object.values(
-      managers.chat.state.conversations[conversationId]?.message,
-    ).sort((a, b) => a.at - b.at)
+    return sortConversationMessages(conversationId)
   })
 
   const numUnreadMessages: ComputedRef<number> = computed(() => {
@@ -91,6 +89,27 @@ export function conversationHooks(conversationId?: Conversation['id']) {
     return count
   })
 
+  // generic hooks that aren't specific to one conversation
+  const sortedConversations: ComputedRef<Conversation[]> = computed(() => {
+    return Object.values(managers.chat.state.conversations).sort(
+      (a, b) => lastMessageTimestamp(b) - lastMessageTimestamp(a),
+    )
+  })
+
+  // helper functions
+  function lastMessageTimestamp(conversation: Conversation): number {
+    const messages = sortConversationMessages(conversation.id)
+    return messages[messages.length - 1]?.at ?? (conversation.createdAt || 0)
+  }
+
+  function sortConversationMessages(
+    id: Conversation['id'],
+  ): ConversationMessage[] {
+    return Object.values(managers.chat.state.conversations[id]?.message).sort(
+      (a, b) => a.at - b.at,
+    )
+  }
+
   return {
     conversation,
     conversationId,
@@ -101,5 +120,6 @@ export function conversationHooks(conversationId?: Conversation['id']) {
     allParticipantsAlphaSorted,
     sortedMessages,
     numUnreadMessages,
+    sortedConversations,
   }
 }

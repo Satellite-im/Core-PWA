@@ -2,14 +2,16 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Friend } from '~/libraries/Iridium/friends/types'
+import fuzzysort from 'fuzzysort'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { User } from '~/libraries/Iridium/users/types'
+import { truthy } from '~/utilities/typeGuard'
 
 export default Vue.extend({
   name: 'UserPicker',
   props: {
     exclude: {
-      type: Array as PropType<Friend['did'][]>,
+      type: Array as PropType<User['did'][]>,
       default: () => [],
     },
     height: {
@@ -18,26 +20,24 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    selected: [] as Friend[],
+    selected: [] as User[],
     filter: '',
-    fm: iridium.friends.state,
+    friendsState: iridium.friends.state,
   }),
   computed: {
-    friends() {
-      return Object.values(this.fm.friends)
+    friends(): User[] {
+      return this.friendsState.friends
         .filter((did) => !this.exclude.includes(did))
-        .map((did) => {
-          return iridium.users.getUser(did)
-        })
+        .map((did) => iridium.users.getUser(did))
+        .filter(truthy)
     },
-    filteredFriends(): Friend[] {
+    filteredFriends(): User[] {
       if (!this.filter) {
         return this.friends
       }
-      const filterLower = this.filter.toLowerCase()
-      return this.friends.filter((friend: Friend) => {
-        return friend.name.toLowerCase().includes(filterLower)
-      })
+      return fuzzysort
+        .go(this.filter, this.friends, { key: 'name' })
+        .map((result) => result.obj)
     },
   },
   watch: {
@@ -46,7 +46,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    toggle(friend: Friend): void {
+    toggle(friend: User) {
       if (this.isSelected(friend)) {
         const index = this.selected.indexOf(friend)
         this.selected.splice(index, 1)
@@ -54,7 +54,7 @@ export default Vue.extend({
       }
       this.selected.push(friend)
     },
-    isSelected(friend: Friend): boolean {
+    isSelected(friend: User): boolean {
       return this.selected.includes(friend)
     },
   },
