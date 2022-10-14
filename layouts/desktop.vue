@@ -39,7 +39,6 @@ import { notNull } from '~/utilities/typeGuard'
 export default Vue.extend({
   name: 'Desktop',
   middleware: 'authenticated',
-  middleware: ['authenticated', 'safearea'],
   setup() {
     useMeta()
   },

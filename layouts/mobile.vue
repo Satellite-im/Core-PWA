@@ -58,7 +58,10 @@ export default Vue.extend({
   display: flex;
   height: 100%;
   flex-direction: column;
-  padding-bottom: calc(@mobile-nav-height + env(--safe-area-inset-bottom));
+  padding-bottom: max(
+    @mobile-nav-height,
+    calc(@mobile-nav-height + env(--safe-area-inset-bottom))
+  );
   transition: padding @animation-speed-long ease;
 
   &.hidden-nav {
