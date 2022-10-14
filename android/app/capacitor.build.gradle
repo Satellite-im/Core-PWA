@@ -12,6 +12,7 @@ dependencies {
     implementation project(':capacitor-clipboard')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-local-notifications')
+    implementation project(':capacitor-plugin-safe-area')
 
 }
 

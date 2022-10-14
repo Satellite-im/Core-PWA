@@ -1,10 +1,8 @@
 .nav {
-  display: flex;
-  align-items: center;
   width: 100%;
-  height: @mobile-nav-height;
   position: fixed;
   bottom: 0;
+  padding-bottom: var(--safe-area-inset-bottom);
   transition: height @animation-speed-long ease;
   z-index: 1;
   background: linear-gradient(
@@ -29,20 +27,26 @@
     overflow: hidden;
   }
 
-  a {
+  .bar {
     display: flex;
-    height: 100%;
     align-items: center;
-    justify-content: center;
-    flex: 1;
-    font-size: @small-icon-size;
-    color: @text-muted;
-    opacity: 0.7;
+    height: @mobile-nav-height;
 
-    &[aria-current='page'],
-    &.nuxt-link-active {
-      color: @secondary-text;
-      opacity: 1;
+    a {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      font-size: @small-icon-size;
+      color: @text-muted;
+      opacity: 0.7;
+
+      &[aria-current='page'],
+      &.nuxt-link-active {
+        color: @secondary-text;
+        opacity: 1;
+      }
     }
   }
 }

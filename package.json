@@ -44,6 +44,7 @@
     "@vueuse/head": "^0.7.5",
     "@vvo/tzdb": "^6.47.0",
     "bip39": "^3.0.4",
+    "capacitor-plugin-safe-area": "^1.0.0",
     "curve25519-js": "^0.0.4",
     "dayjs": "^1.10.8",
     "deepmerge": "^4.2.2",

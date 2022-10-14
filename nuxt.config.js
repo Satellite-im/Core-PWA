@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
   router: {
     mode: 'hash',
-    middleware: ['authenticated'],
+    middleware: ['authenticated', 'safearea'],
     extendRoutes(routes, resolve) {
       routes.push({
         path: '/friends',
@@ -246,12 +246,12 @@ export default defineNuxtConfig({
         options.targets = isServer
           ? { node: 'current' }
           : {
-              browsers: [
-                'last 1 chrome version',
-                'last 1 firefox version',
-                'last 1 safari version',
-              ],
-            }
+            browsers: [
+              'last 1 chrome version',
+              'last 1 firefox version',
+              'last 1 safari version',
+            ],
+          }
       },
     },
   },

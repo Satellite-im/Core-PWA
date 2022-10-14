@@ -18,10 +18,15 @@
 import useMeta from '~/components/compositions/useMeta'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs } from '~/libraries/Iridium/settings/types'
+import safeArea from '~/middleware/safearea'
 
 const flair = flairs[iridium.settings.state.flair]
 
 useMeta()
+
+definePageMeta({
+  middleware: ['safearea'],
+})
 </script>
 
 <style lang="less" scoped>
