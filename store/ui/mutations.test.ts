@@ -510,18 +510,6 @@ describe('mutations', () => {
     })
   })
 
-  test('setShowOlderMessagesInfo false status', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setShowOlderMessagesInfo(localizedState, false)
-    expect(localizedState.showOlderMessagesInfo).toBeFalsy()
-  })
-
-  test('setShowOlderMessagesInfo true status', () => {
-    const localizedState = { ...initialState }
-    mutations.default.setShowOlderMessagesInfo(localizedState, true)
-    expect(localizedState.showOlderMessagesInfo).toBeTruthy()
-  })
-
   test('setGlyphMarketplaceView', () => {
     const localizedState = { ...initialState }
     const object = { a: 'b' }
