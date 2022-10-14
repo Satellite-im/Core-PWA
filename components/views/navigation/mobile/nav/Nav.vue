@@ -1,75 +1,105 @@
-<template src="./Nav.html"></template>
+<template>
+  <nav class="nav" :class="{ hide: !isMobileNavVisible }">
+    <nuxt-link
+      v-for="item in buttons"
+      :key="item.id"
+      :to="item.path"
+      data-cy="`mobile-nav-${id}`"
+      @click.native="item.id === 'settings' && emptySettingsRoute()"
+    >
+      <UiDotBadge v-if="item.icon" :show="item.showBadge">
+        <component
+          :is="item.icon"
+          v-if="item.icon"
+          size="1.75x"
+          :alt="item.label"
+        />
+      </UiDotBadge>
+      <UiUserState v-else :user="profile" />
+    </nuxt-link>
+  </nav>
+</template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { ComputedRef, computed, reactive } from 'vue'
+import { TranslateResult } from 'vue-i18n'
 import { mapState } from 'vuex'
-import {
-  HomeIcon,
-  MessageSquareIcon,
-  FolderIcon,
-  UsersIcon,
-  SettingsIcon,
-  ShoppingBagIcon,
-} from 'satellite-lucide-icons'
-import { ModalWindows, SettingsRoutes } from '~/store/ui/types'
+import { HomeIcon, FolderIcon, UsersIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { UserStatus } from '~/libraries/Iridium/users/types'
-import { FriendRequest } from '~/libraries/Iridium/friends/types'
+import { friendsHooks } from '~/components/compositions/friends'
+import { conversationHooks } from '~/components/compositions/conversations'
+import { SettingsRoutes } from '~/store/ui/types'
+
+interface NavButton {
+  id: string
+  label: TranslateResult
+  icon: any
+  path: string
+  showBadge: boolean
+}
 
 export default Vue.extend({
   components: {
     HomeIcon,
-    MessageSquareIcon,
     FolderIcon,
     UsersIcon,
-    SettingsIcon,
-    ShoppingBagIcon,
   },
-  data() {
-    return {
-      userStatus: iridium.users.ephemeral.status,
-      friends: iridium.friends.state,
+  setup() {
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
+
+    const { incomingRequests } = friendsHooks()
+    const { totalUnreadMessages } = conversationHooks()
+
+    // todo - fix type definition and assign default value
+    const profile = reactive(iridium.profile.state)
+
+    const buttons: ComputedRef<NavButton[]> = computed(() => {
+      return [
+        {
+          id: 'chat',
+          label: $nuxt.$t('global.chat'),
+          icon: HomeIcon,
+          path: '/mobile/chat',
+          showBadge: Boolean(totalUnreadMessages.value),
+        },
+        {
+          id: 'files',
+          label: $nuxt.$t('global.files'),
+          icon: FolderIcon,
+          path: '/files',
+          showBadge: false,
+        },
+        {
+          id: 'friends',
+          label: $nuxt.$t('global.friends'),
+          icon: UsersIcon,
+          path: '/mobile/friends',
+          showBadge: Boolean(incomingRequests.value.length),
+        },
+        {
+          id: 'settings',
+          label: $nuxt.$t('global.settings'),
+          icon: undefined,
+          path: '/mobile/settings',
+          showBadge: false,
+        },
+      ]
+    })
+
+    function emptySettingsRoute() {
+      if ($nuxt.$route.path.includes('settings')) {
+        $nuxt.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
+      }
     }
+
+    return { profile, buttons, emptySettingsRoute }
   },
   computed: {
     ...mapState({
-      accounts: (state) => (state as RootState).accounts,
-      ui: (state) => (state as RootState).ui,
+      isMobileNavVisible: (state) => (state as RootState).ui.isMobileNavVisible,
     }),
-    status(): UserStatus {
-      return 'online'
-    },
-    isMobileNavVisible: {
-      get(): boolean {
-        return this.ui.isMobileNavVisible
-      },
-      set(value: boolean) {
-        this.$store.commit('ui/setIsMobileNavVisible', value)
-      },
-    },
-    incomingRequests(): FriendRequest[] {
-      return Object.values(this.friends.requests).filter(
-        (r: FriendRequest) => r.incoming && r.status !== 'accepted',
-      )
-    },
-    hasFriendRequests(): boolean {
-      return this.incomingRequests.length > 0
-    },
-  },
-  methods: {
-    toggleModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: ModalWindows.CALL_TO_ACTION,
-        state: !this.ui.modals[ModalWindows.CALL_TO_ACTION],
-      })
-    },
-    isActiveRoute(route: string): boolean {
-      return this.$route.path.includes(route)
-    },
-    emptySettingsRoute() {
-      this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
-    },
   },
 })
 </script>

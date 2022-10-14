@@ -17,6 +17,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import useMeta from '~/components/compositions/useMeta'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { flairs, Flair } from '~/libraries/Iridium/settings/types'
 import 'swiper/css'
@@ -25,6 +26,9 @@ import { Conversation } from '~/libraries/Iridium/chat/types'
 
 export default Vue.extend({
   name: 'Mobile',
+  setup() {
+    useMeta()
+  },
   data() {
     return {
       settings: iridium.settings.state,
