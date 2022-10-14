@@ -9,3 +9,4 @@ plugins
 .nuxt
 pnpm-lock.yaml
 android/
+PULL_REQUEST_TEMPLATE.md
