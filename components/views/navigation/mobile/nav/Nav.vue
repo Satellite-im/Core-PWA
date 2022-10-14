@@ -1,33 +1,43 @@
 <template>
   <nav class="nav" :class="{ hide: !isMobileNavVisible }">
-    <button
+    <nuxt-link
       v-for="item in buttons"
       :key="item.id"
-      :class="{ active: isActiveRoute(item.id) }"
+      :to="item.path"
       data-cy="`mobile-nav-${id}`"
-      :aria-label="item.label"
-      @click="item.func"
+      @click.native="item.id === 'settings' && emptySettingsRoute()"
     >
       <UiDotBadge v-if="item.icon" :show="item.showBadge">
-        <component :is="item.icon" v-if="item.icon" size="1.75x" />
+        <component
+          :is="item.icon"
+          v-if="item.icon"
+          size="1.75x"
+          :alt="item.label"
+        />
       </UiDotBadge>
       <UiUserState v-else :user="profile" />
-    </button>
+    </nuxt-link>
   </nav>
 </template>
 
 <script lang="ts">
 import Vue, { ComputedRef, computed, reactive } from 'vue'
+import { TranslateResult } from 'vue-i18n'
 import { mapState } from 'vuex'
 import { HomeIcon, FolderIcon, UsersIcon } from 'satellite-lucide-icons'
-import { SettingsRoutes } from '~/store/ui/types'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { ButtonAttributes } from '~/types/ui'
 import { friendsHooks } from '~/components/compositions/friends'
 import { conversationHooks } from '~/components/compositions/conversations'
+import { SettingsRoutes } from '~/store/ui/types'
 
-type NavButtonAttributes = ButtonAttributes & { id: string; showBadge: boolean }
+interface NavButton {
+  id: string
+  label: TranslateResult
+  icon: any
+  path: string
+  showBadge: boolean
+}
 
 export default Vue.extend({
   components: {
@@ -45,47 +55,46 @@ export default Vue.extend({
     // todo - fix type definition and assign default value
     const profile = reactive(iridium.profile.state)
 
-    function isActiveRoute(route: string): boolean {
-      return $nuxt.$route.path.includes(route)
-    }
-
-    const buttons: ComputedRef<NavButtonAttributes[]> = computed(() => {
+    const buttons: ComputedRef<NavButton[]> = computed(() => {
       return [
         {
           id: 'chat',
           label: $nuxt.$t('global.chat'),
           icon: HomeIcon,
-          func: () => $nuxt.$router.push('/mobile/chat'),
+          path: '/mobile/chat',
           showBadge: Boolean(totalUnreadMessages.value),
         },
         {
           id: 'files',
           label: $nuxt.$t('global.files'),
           icon: FolderIcon,
-          func: () => $nuxt.$router.push('/files'),
+          path: '/files',
           showBadge: false,
         },
         {
           id: 'friends',
           label: $nuxt.$t('global.friends'),
           icon: UsersIcon,
-          func: () => $nuxt.$router.push('/mobile/friends'),
+          path: '/mobile/friends',
           showBadge: Boolean(incomingRequests.value.length),
         },
         {
           id: 'settings',
           label: $nuxt.$t('global.settings'),
           icon: undefined,
-          func: () =>
-            isActiveRoute('settings')
-              ? $nuxt.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
-              : $nuxt.$router.push('/mobile/settings'),
+          path: '/mobile/settings',
           showBadge: false,
         },
       ]
     })
 
-    return { profile, isActiveRoute, buttons }
+    function emptySettingsRoute() {
+      if ($nuxt.$route.path.includes('settings')) {
+        $nuxt.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
+      }
+    }
+
+    return { profile, buttons, emptySettingsRoute }
   },
   computed: {
     ...mapState({

@@ -48,6 +48,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { TranslateResult } from 'vue-i18n'
 import {
   MessageSquareIcon,
   XIcon,
@@ -57,9 +58,14 @@ import {
 import { User } from '~/libraries/Iridium/users/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ContextMenuItem } from '~/store/ui/types'
-import { ButtonAttributes } from '~/types/ui'
 
 export type UserType = 'friend' | 'stranger' | 'incoming' | 'outgoing'
+
+type ButtonAttributes = {
+  label: TranslateResult
+  icon: any
+  func: () => void
+}
 
 export default Vue.extend({
   components: {

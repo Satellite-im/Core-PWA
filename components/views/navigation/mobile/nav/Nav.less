@@ -29,7 +29,8 @@
     overflow: hidden;
   }
 
-  button {
+  a {
+    display: flex;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -38,7 +39,7 @@
     color: @text-muted;
     opacity: 0.7;
 
-    &.active {
+    &[aria-current='page'] {
       color: @secondary-text;
       opacity: 1;
     }
