@@ -13,7 +13,7 @@
     <div class="friend" data-cy="friend">
       <UiUserState :user="user" />
       <div class="text-container">
-        <div data-cy="friend-label" class="ellipsis">{{ user.name }}</div>
+        <div data-cy="friend-name" class="ellipsis">{{ user.name }}</div>
         <div v-if="user.status" class="ellipsis">{{ user.status }}</div>
       </div>
       <div class="button-container">

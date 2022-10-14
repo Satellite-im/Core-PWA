@@ -96,6 +96,16 @@ export function conversationHooks(conversationId?: Conversation['id']) {
     )
   })
 
+  const totalUnreadMessages: ComputedRef<number> = computed(() => {
+    let count = 0
+
+    Object.keys(managers.chat.state.conversations).forEach((conversationId) => {
+      const { numUnreadMessages } = conversationHooks(conversationId)
+      count += numUnreadMessages.value
+    })
+    return count
+  })
+
   // helper functions
   function lastMessageTimestamp(conversation: Conversation): number {
     const messages = sortConversationMessages(conversation.id)
@@ -121,5 +131,6 @@ export function conversationHooks(conversationId?: Conversation['id']) {
     sortedMessages,
     numUnreadMessages,
     sortedConversations,
+    totalUnreadMessages,
   }
 }

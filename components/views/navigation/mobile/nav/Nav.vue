@@ -1,21 +1,23 @@
 <template>
   <nav class="nav" :class="{ hide: !isMobileNavVisible }">
     <button
-      v-for="(item, i) in buttons"
-      :key="i"
+      v-for="item in buttons"
+      :key="item.id"
       :class="{ active: isActiveRoute(item.id) }"
       data-cy="`mobile-nav-${id}`"
       :aria-label="item.label"
       @click="item.func"
     >
-      <component :is="item.icon" v-if="item.icon" size="1.75x" />
+      <UiDotBadge v-if="item.icon" :show="item.showBadge">
+        <component :is="item.icon" v-if="item.icon" size="1.75x" />
+      </UiDotBadge>
       <UiUserState v-else :user="profile" />
     </button>
   </nav>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { ComputedRef, computed, reactive } from 'vue'
 import { mapState } from 'vuex'
 import { HomeIcon, FolderIcon, UsersIcon } from 'satellite-lucide-icons'
 import { SettingsRoutes } from '~/store/ui/types'
@@ -23,6 +25,9 @@ import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { ButtonAttributes } from '~/types/ui'
 import { friendsHooks } from '~/components/compositions/friends'
+import { conversationHooks } from '~/components/compositions/conversations'
+
+type NavButtonAttributes = ButtonAttributes & { id: string; showBadge: boolean }
 
 export default Vue.extend({
   components: {
@@ -31,56 +36,61 @@ export default Vue.extend({
     UsersIcon,
   },
   setup() {
-    const { incomingRequests } = friendsHooks()
+    // @ts-ignore
+    const $nuxt = useNuxtApp()
 
-    return { incomingRequests }
-  },
-  data() {
-    return {
-      friends: iridium.friends.state,
-      profile: iridium.profile.state,
+    const { incomingRequests } = friendsHooks()
+    const { totalUnreadMessages } = conversationHooks()
+
+    // todo - fix type definition and assign default value
+    const profile = reactive(iridium.profile.state)
+
+    function isActiveRoute(route: string): boolean {
+      return $nuxt.$route.path.includes(route)
     }
+
+    const buttons: ComputedRef<NavButtonAttributes[]> = computed(() => {
+      return [
+        {
+          id: 'chat',
+          label: $nuxt.$t('global.chat'),
+          icon: HomeIcon,
+          func: () => $nuxt.$router.push('/mobile/chat'),
+          showBadge: Boolean(totalUnreadMessages.value),
+        },
+        {
+          id: 'files',
+          label: $nuxt.$t('global.files'),
+          icon: FolderIcon,
+          func: () => $nuxt.$router.push('/files'),
+          showBadge: false,
+        },
+        {
+          id: 'friends',
+          label: $nuxt.$t('global.friends'),
+          icon: UsersIcon,
+          func: () => $nuxt.$router.push('/mobile/friends'),
+          showBadge: Boolean(incomingRequests.value.length),
+        },
+        {
+          id: 'settings',
+          label: $nuxt.$t('global.settings'),
+          icon: undefined,
+          func: () =>
+            isActiveRoute('settings')
+              ? $nuxt.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
+              : $nuxt.$router.push('/mobile/settings'),
+          showBadge: false,
+        },
+      ]
+    })
+
+    return { profile, isActiveRoute, buttons }
   },
   computed: {
     ...mapState({
       isMobileNavVisible: (state) => (state as RootState).ui.isMobileNavVisible,
     }),
-    buttons(): (ButtonAttributes & { id: string })[] {
-      return [
-        {
-          id: 'chat',
-          label: this.$t('global.chat'),
-          icon: HomeIcon,
-          func: () => this.$router.push('/mobile/chat'),
-        },
-        {
-          id: 'files',
-          label: this.$t('global.files'),
-          icon: FolderIcon,
-          func: () => this.$router.push('/files'),
-        },
-        {
-          id: 'friends',
-          label: this.$t('global.friends'),
-          icon: UsersIcon,
-          func: () => this.$router.push('/mobile/friends'),
-        },
-        {
-          id: 'settings',
-          label: this.$t('global.settings'),
-          icon: undefined,
-          func: () =>
-            this.isActiveRoute('settings')
-              ? this.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
-              : this.$router.push('/mobile/settings'),
-        },
-      ]
-    },
-  },
-  methods: {
-    isActiveRoute(route: string): boolean {
-      return this.$route.path.includes(route)
-    },
   },
 })
 </script>
