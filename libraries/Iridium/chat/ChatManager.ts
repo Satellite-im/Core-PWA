@@ -368,19 +368,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return Object.keys(this.state.conversations).includes(id)
   }
 
-  lastMessageTimestamp(conversation: Conversation): number {
-    const messages = Object.values(
-      this.state.conversations[conversation.id].message,
-    ).sort((a, b) => a.at - b.at)
-    return messages[messages.length - 1]?.at ?? (conversation.createdAt || 0)
-  }
-
-  getSortedConversations(): Conversation[] {
-    return Object.values(this.state.conversations).sort(
-      (a, b) => this.lastMessageTimestamp(b) - this.lastMessageTimestamp(a),
-    )
-  }
-
   async hasDirectConversation(did: string) {
     const participants = [iridium.id, did]
     const id = await encoding.hash(participants.sort())
