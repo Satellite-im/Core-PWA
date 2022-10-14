@@ -99,8 +99,8 @@ export function conversationHooks(conversationId?: Conversation['id']) {
   const totalUnreadMessages: ComputedRef<number> = computed(() => {
     let count = 0
 
-    Object.keys(managers.chat.state.conversations).forEach((conversationId) => {
-      const { numUnreadMessages } = conversationHooks(conversationId)
+    Object.keys(managers.chat.state.conversations).forEach((id) => {
+      const { numUnreadMessages } = conversationHooks(id)
       count += numUnreadMessages.value
     })
     return count
@@ -122,7 +122,6 @@ export function conversationHooks(conversationId?: Conversation['id']) {
 
   return {
     conversation,
-    conversationId,
     isGroup,
     otherDids,
     otherParticipants,
