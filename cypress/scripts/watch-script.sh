@@ -1,4 +1,3 @@
 #!/bin/bash
-cd .. 
-cd iridium 
+cd linked-iridium
 pnpm watch > /dev/null

@@ -65,6 +65,12 @@ export class IridiumManager extends Emitter {
     return this.connector.id
   }
 
+  get shortId(): string {
+    return this.profile.state
+      ? `${this.profile.state.name}#${this.id.substring(this.id.length - 6)}`
+      : this.id
+  }
+
   async initFromEntropy(entropy: Uint8Array) {
     logger.info('iridium/manager', 'initFromEntropy()')
     this.connector = await createIridiumIPFS(entropy, {

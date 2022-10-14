@@ -89,9 +89,7 @@ export default Vue.extend({
     })
 
     function emptySettingsRoute() {
-      if ($nuxt.$route.path.includes('settings')) {
-        $nuxt.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
-      }
+      $nuxt.$store.commit('ui/setSettingsRoute', SettingsRoutes.EMPTY)
     }
 
     return { profile, buttons, emptySettingsRoute }
