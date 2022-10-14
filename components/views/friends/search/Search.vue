@@ -65,12 +65,8 @@ export default Vue.extend({
     ...mapState({
       accounts: (state) => (state as RootState).accounts,
     }),
-    shortID() {
-      return iridium.profile.state
-        ? `${iridium.profile.state.name}#${iridium.id.substring(
-            iridium.id.length - 6,
-          )}`
-        : `${iridium.id}`
+    shortID(): string {
+      return iridium.shortId
     },
   },
   mounted() {
