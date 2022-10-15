@@ -27,13 +27,7 @@ describe.skip('Chat - Sending Images Tests', () => {
 
     //Click on file upload for the first time
     cy.get('[data-cy=chat-file-upload-btn-container]').click()
-    cy.get('[data-cy=confirmation-modal]')
-      .find('[data-cy=confirmation-modal-header]')
-      .should('have.text', 'Consent to File Scanning')
-      .and('be.visible')
-    cy.get('[data-cy=confirmation-modal]')
-      .find('[data-cy=confirm-button]')
-      .click()
+    cy.consentFileScanning()
   })
 
   it('PNG image is sent successfully on chat', () => {
