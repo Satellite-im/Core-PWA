@@ -901,15 +901,15 @@ export default {
       body: '{sender} sent you a friend request!',
     },
     new_group_message: {
-      title: '{sender} ({server})',
+      title: '{sender} ({group})',
     },
     new_group: {
       title: 'New Group',
-      body: '{sender} created {server}!',
+      body: '{sender} created {group}!',
     },
     member_join: {
       title: 'New Group Member | {count} New Group Members',
-      body: '{addedMember} joined {server}! | {addedMember} and 1 other joined {server}! | {addedMember} and {numOtherNewMembers} others joined {server}!',
+      body: '{addedMember} joined {group}! | {addedMember} and 1 other joined {group}! | {addedMember} and {numOtherNewMembers} others joined {group}!',
     },
   },
 }

@@ -47,13 +47,10 @@ export function listenToNotifications() {
     switch (type) {
       case NotificationType.FRIEND_REQUEST:
         return {
-          title: $nuxt.$t('notifications.new_friend_request'),
-          description: $nuxt.$t(
-            'notifications.new_friend_request_description',
-            {
-              sender: sender?.name,
-            },
-          ),
+          title: $nuxt.$t('notifications.new_friend_request.title'),
+          description: $nuxt.$t('notifications.new_friend_request.body', {
+            sender: sender?.name,
+          }),
         }
 
       case NotificationType.GROUP_MESSAGE:
@@ -67,7 +64,7 @@ export function listenToNotifications() {
         const isGroup = type === NotificationType.GROUP_MESSAGE
         const groupTitle = $nuxt.$t('notifications.new_group_message.title', {
           sender: sender?.name || '',
-          server: conversation.name || '',
+          group: conversation.name || '',
         })
         const description =
           message.body?.length! > NOTIFICATION_BODY_MAX_LENGTH - 1
@@ -90,7 +87,7 @@ export function listenToNotifications() {
         })
         const description = $nuxt.$t('notifications.new_group.body', {
           sender: sender?.name || '',
-          server: conversation.name || '',
+          group: conversation.name || '',
         })
 
         return {
@@ -124,7 +121,7 @@ export function listenToNotifications() {
           {
             addedMember: newMemberNames[0] || '',
             numOtherNewMembers: numNewMembers - 1 || 0,
-            server: conversation.name || '',
+            group: conversation.name || '',
           },
         )
 
