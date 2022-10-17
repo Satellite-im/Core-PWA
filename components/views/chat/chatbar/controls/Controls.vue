@@ -42,15 +42,6 @@ export default Vue.extend({
         route,
       })
     },
-    toggleMiniWallet() {
-      if (this.disabled) {
-        return
-      }
-      this.$store.commit('ui/toggleModal', {
-        name: 'walletMini',
-        state: !this.ui.modals.walletMini,
-      })
-    },
   },
 })
 </script>
