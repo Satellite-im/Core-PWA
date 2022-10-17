@@ -49,12 +49,12 @@ export default Vue.extend({
 
     handleEsc(close)
 
-    onMounted(() => {
-      // non friend quick profiles do not have buttons. will add profile link later and remove check.value
-      if (conversationId.value || isMe.value) {
-        handleFocusTrap(quick)
-      }
+    // non friend quick profiles do not have buttons. will add profile link later and remove check.value
+    if (conversationId.value || isMe.value) {
+      handleFocusTrap(quick)
+    }
 
+    onMounted(() => {
       if (!quickProfile || $device.isMobile || !quick.value) {
         return
       }
@@ -88,7 +88,7 @@ export default Vue.extend({
       if (!user.value || !conversationId.value) {
         return
       }
-      $router.value.push(
+      $router.push(
         `${$device.isMobile ? '/mobile' : ''}/chat/${conversationId.value}`,
       )
       iridium.chat.sendMessage({
@@ -103,11 +103,11 @@ export default Vue.extend({
     }
 
     function openSettings() {
-      $store.value.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
+      $store.commit('ui/setSettingsRoute', SettingsRoutes.PROFILE)
       close()
 
       if ($device.isMobile) {
-        $router.value.push('/mobile/settings')
+        $router.push('/mobile/settings')
       }
     }
 
