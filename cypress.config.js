@@ -5,7 +5,7 @@ module.exports = defineConfig({
   numTestsKeptInMemory: 0,
   pageLoadTimeout: 120000,
   defaultCommandTimeout: 10000,
-  video: false,
+  video: true,
   chromeWebSecurity: false,
   watchForFileChanges: false,
   waitForAnimations: false,
