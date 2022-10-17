@@ -112,6 +112,7 @@ export default {
     group_join_notice: {
       added: 'added',
       to_group: 'to the group.',
+      you: 'You',
     },
     group_leave_notice: 'left the group.',
     call_incoming: '{name} started a call.',
@@ -777,7 +778,6 @@ export default {
     invalid_id: 'Invalid account ID',
     request_sent: 'Friend request successfully sent!',
     friend_requests: 'Friend requests',
-    new_friend_request: 'New friend request from {user}',
     cancel_friend_request: 'Cancel friend request',
     requests: 'Requests',
     received: 'Received',
@@ -892,14 +892,24 @@ export default {
     copy_link: 'Copy Link',
   },
   notifications: {
-    friend_request: {
-      title: 'Friend Request',
-      body: '{name} sent you a friend request!',
+    default: {
+      title: 'New Notification',
+      body: 'You have a new notification',
     },
-    new_message: {
-      title: 'New Message',
-      group_title: '{name} ({server})',
-      body: 'You have a new message from {name}!',
+    new_friend_request: {
+      title: 'New Friend Request',
+      body: '{sender} sent you a friend request!',
+    },
+    new_group_message: {
+      title: '{sender} ({server})',
+    },
+    new_group: {
+      title: 'New Group',
+      body: '{sender} created {server}!',
+    },
+    member_join: {
+      title: 'New Group Member | {count} New Group Members',
+      body: '{addedMember} joined {server}! | {addedMember} and 1 other joined {server}! | {addedMember} and {numOtherNewMembers} others joined {server}!',
     },
   },
 }

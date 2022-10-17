@@ -77,9 +77,11 @@ export type MessageEdit = MessageEditPayload & {
   lastEditedAt: number
 }
 
+export type ConversationType = 'direct' | 'group'
+
 export type Conversation = {
   id: string
-  type: 'direct' | 'group'
+  type: ConversationType
   name?: string
   participants: string[]
   createdAt: number
@@ -89,6 +91,7 @@ export type Conversation = {
     [key: string]: ConversationMessage
   }
   connected?: boolean
+  ownerId?: IridiumPeerIdentifier
 }
 
 export const ChatError = {
@@ -105,4 +108,5 @@ export type IridiumConversationEvent = {
   type: ConversationEventType
   name?: string
   participants?: IridiumPeerIdentifier[]
+  ownerId?: IridiumPeerIdentifier
 }
