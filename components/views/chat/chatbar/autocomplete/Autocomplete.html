@@ -4,7 +4,9 @@
   role="listbox"
   @mousedown="handleMouseDown"
 >
-  <TypographyText size="sm">Searching for: "<b>{{ text }}</b>"</TypographyText>
+  <TypographyText size="sm"
+    >{{$t('pages.chat.search')}}: <b>{{ text }}</b></TypographyText
+  >
   <div class="items">
     <div
       v-for="user, i in sortedUsers"
