@@ -5,7 +5,7 @@
         v-for="item in buttons"
         :key="item.id"
         :to="item.path"
-        data-cy="`mobile-nav-${id}`"
+        :data-cy="`mobile-nav-${item.id}`"
         @click.native="item.id === 'settings' && emptySettingsRoute()"
       >
         <UiDotBadge v-if="item.icon" :show="item.showBadge">
