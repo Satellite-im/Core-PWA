@@ -459,7 +459,7 @@ Cypress.Commands.add('chatFeaturesSendFile', (filePath, filename) => {
   cy.get('[data-cy=file-item]', { timeout: 30000 }).should('exist')
   cy.get('[data-cy=file-item-filename]').should('contain', filename)
   cy.get('[data-cy=send-message]').click() //sending image message
-  cy.get('[data-cy=file-loader-container]', { timeout: 60000 }).should(
+  cy.get('[data-cy=file-loader-container]', { timeout: 90000 }).should(
     'not.exist',
   )
 })
@@ -755,7 +755,9 @@ Cypress.Commands.add('filesSectionUploadFile', (imagePath, filename) => {
   cy.get('[data-cy=file-upload-status]')
     .should('be.visible')
     .and('contain', 'Uploading ' + filename)
-  cy.get('[data-cy=file-item-name]').contains(filename).should('be.visible')
+  cy.get('[data-cy=file-item-name]', { timeout: 30000 })
+    .contains(filename)
+    .should('be.visible')
 })
 
 Cypress.Commands.add('filesSectionCreateFolder', (folderName) => {

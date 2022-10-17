@@ -5,7 +5,7 @@ const myFileName = 'test-file.txt'
 const myFolderName = 'test-folder'
 
 // New specs being added to files features
-describe.skip(
+describe(
   'Files Features Tests',
   {
     viewportHeight: 800,
