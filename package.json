@@ -26,13 +26,15 @@
     "cy:chat-local": "concurrently npm:cy:first-local npm:cy:second-local",
     "prepare": "husky install",
     "android-generate": "yarn generate; npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..",
-    "android-run": "npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..; npx cap open android"
+    "android-run": "npx cap copy; npx cap sync; cd android; ./gradlew assembleDebug; cd ..; npx cap open android",
+    "ios-run": "yarn generate; npx cap copy; npx cap sync; cd ios/App; pod install; cd ../..; npx cap open ios;"
   },
   "dependencies": {
     "@capacitor/android": "^4.3.0",
     "@capacitor/clipboard": "^4.0.1",
     "@capacitor/core": "^4.3.0",
     "@capacitor/ios": "^4.3.0",
+    "@capacitor/keyboard": "^4.0.1",
     "@capacitor/local-notifications": "^4.1.1",
     "@nuxtjs/i18n": "^7.3.0",
     "@nuxtjs/pwa": "^3.3.5",
@@ -44,6 +46,7 @@
     "@vueuse/head": "^0.7.5",
     "@vvo/tzdb": "^6.47.0",
     "bip39": "^3.0.4",
+    "capacitor-plugin-safe-area": "^1.0.0",
     "curve25519-js": "^0.0.4",
     "dayjs": "^1.10.8",
     "deepmerge": "^4.2.2",

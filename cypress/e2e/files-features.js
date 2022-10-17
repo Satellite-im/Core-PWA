@@ -1,42 +1,54 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const randomNumber = faker.datatype.number() // generate random number
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Only Text')
-    .map((item) => item.recoverySeed) + '{enter}'
+const myFilePath = 'cypress/fixtures/test-file.txt'
+const myFileName = 'test-file.txt'
+const myFolderName = 'test-folder'
 
-describe.skip('Files Features Tests', () => {
-  // Skipping since import account is not working
-  it('Chat - Files - Rename Folder', { retries: 2 }, () => {
-    // Import account
-    cy.importAccount(randomPIN, recoverySeed)
-
-    // Validate profile name displayed
-    cy.validateChatPageIsLoaded()
-
-    // Validate message is sent
-    cy.goToConversation('Only Text Friend')
-
-    //Click on toggle-sidebar only if app is collapsed
-    cy.get('#app-wrap').then(($appWrap) => {
-      if ($appWrap.hasClass('is-collapsed')) {
-        cy.get('[data-cy=toggle-sidebar]').click()
-      }
+// New specs being added to files features
+describe.skip(
+  'Files Features Tests',
+  {
+    viewportHeight: 800,
+    viewportWidth: 1200,
+  },
+  () => {
+    before(() => {
+      //Retrieve username from Chat User B
+      cy.restoreLocalStorage('Chat User B')
     })
-    //Open files screen and rename existing folder
-    cy.openFilesScreen()
-    cy.renameFileOrFolder('test-folder-' + randomNumber, 'folder')
-  })
 
-  it('Chat - Files - Rename Files', () => {
-    //Wait until loading spinner disappears
-    cy.get('.spinner', { timeout: 30000 }).should('not.exist')
+    it('Files - Create File', () => {
+      // Login with User A by restoring LocalStorage Snapshot
+      cy.loginWithLocalStorage('Chat User A')
 
-    //Open files screen and rename existing file
-    cy.openFilesScreen()
-    cy.renameFileOrFolder('test-file-' + randomNumber, 'file')
-  })
-})
+      //After user is logged in, go to Files
+      cy.openFilesScreen()
+
+      //View files as list
+      cy.get('[data-cy=files-view-list]').click()
+
+      //Upload a new file
+      cy.filesSectionUploadFile(myFilePath, myFileName)
+    })
+
+    it('Files - Create Folder', () => {
+      //Create Folder
+      cy.filesSectionCreateFolder(myFolderName)
+    })
+
+    it('Files - Rename Folder', () => {
+      //Open files screen and rename existing folder
+
+      cy.renameFileOrFolder(myFolderName, myFolderName + randomNumber)
+    })
+
+    it('Files - Rename Files', () => {
+      //Wait until loading spinner disappears
+      cy.get('.spinner', { timeout: 30000 }).should('not.exist')
+
+      //Open files screen and rename existing file
+      cy.openFilesScreen()
+      cy.renameFileOrFolder(myFileName, myFileName + randomNumber)
+    })
+  },
+)

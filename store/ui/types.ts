@@ -10,12 +10,8 @@ export enum GlyphMarketViewStatus {
 }
 
 export enum ModalWindows {
-  NEW_FOLDER = 'newfolder',
-  CREATE_SERVER = 'createServer',
   MARKETPLACE = 'marketplace',
   WALLET = 'wallet',
-  WALLET_MINI = 'walletMini',
-  ERROR = 'error',
   CHANGELOG = 'changelog',
   GLYPH = 'glyph',
   CALL_TO_ACTION = 'callToAction',
@@ -91,7 +87,6 @@ export interface UIState {
   enhancers: EnhancerInfo
   messages: any[]
   unreadMessage: number
-  showOlderMessagesInfo: boolean
   settingReaction: object
   hoveredGlyphInfo: object | undefined
   glyphMarketplaceView: object

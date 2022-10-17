@@ -7,7 +7,12 @@
       <TypographyText as="h4" class="ellipsis">
         {{ user.name }}
       </TypographyText>
-      <TypographyText v-if="user?.status" color="dark" size="sm">
+      <TypographyText
+        v-if="user?.status"
+        class="ellipsis"
+        color="dark"
+        size="sm"
+      >
         {{user.status}}
       </TypographyText>
     </div>

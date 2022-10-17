@@ -115,6 +115,7 @@ export default Vue.extend({
   display: flex;
   flex: 1;
   overflow: hidden;
+  padding-top: var(--safe-area-inset-top);
 
   .swiper-slide {
     display: flex;
@@ -122,7 +123,7 @@ export default Vue.extend({
     gap: 24px;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 24px;
+    padding: 16px;
 
     &.profile {
       padding: 0;

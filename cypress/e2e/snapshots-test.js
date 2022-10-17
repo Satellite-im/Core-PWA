@@ -71,7 +71,7 @@ describe.skip('Snapshots Testing', () => {
     //Click on toggle-sidebar
     cy.get('[data-cy=toggle-sidebar]').click()
     // Go to settings
-    cy.get('[data-cy=settings]', { timeout: 30000 }).click()
+    cy.get('[data-cy=go-to-settings]', { timeout: 30000 }).click()
     cy.snapshotTestContains('Personalize Satellite')
   })
 

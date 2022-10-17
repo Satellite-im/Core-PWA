@@ -77,9 +77,6 @@ export default {
   setGlyphModalPackId(state: UIState, packId: string) {
     state.glyphModalPackId = packId
   },
-  setShowOlderMessagesInfo(state: UIState, flag: boolean) {
-    state.showOlderMessagesInfo = flag
-  },
   settingReaction(state: UIState, status: object) {
     state.settingReaction = status // TODO: check this mutation, probably a bug
   },

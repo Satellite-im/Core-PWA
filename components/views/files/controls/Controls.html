@@ -5,6 +5,7 @@
       v-model="searchValue"
       size="xs"
       :placeholder="$t('pages.files.search.placeholder')"
+      data-cy="files-search-bar"
       class="search"
       type="search"
     >
@@ -13,6 +14,7 @@
           @click="toggleSearchAll"
           class="input-button"
           :class="{ 'active': searchAll }"
+          data-cy="files-search-global"
           v-tooltip.top="$t(`pages.files.search.${searchAll ? 'disable_global' : 'enable_global'}`)"
         >
           <globe-icon size="1x" />
@@ -31,6 +33,7 @@
   </div>
   <div class="add-container">
     <InteractablesButton
+      data-cy="files-new-file"
       :text="$t('pages.files.controls.new_file')"
       @click="addFile"
     >
@@ -39,6 +42,7 @@
     <InteractablesInput
       v-model="newFolderName"
       class="name"
+      data-cy="files-folder-name"
       size="xs"
       :placeholder="$t('pages.files.controls.name_folder')"
       @submit="addFolder"
@@ -48,13 +52,16 @@
     <input
       ref="upload"
       type="file"
+      data-cy="files-upload-hidden-input"
       style="display: none"
       multiple
       @click="resetFileUpload"
       @change="handleInput"
     />
   </div>
-  <TypographyText v-if="status" class="status"> {{ status }} </TypographyText>
+  <TypographyText v-if="status" data-cy="file-upload-status" class="status">
+    {{ status }}
+  </TypographyText>
   <div v-if="errors.length" class="error-container">
     <alert-triangle-icon size="1.3x" />
     <div>

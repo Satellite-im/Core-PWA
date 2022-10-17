@@ -40,7 +40,7 @@
       </mask>
       <mask id="mask-state-busy">
         <rect width="12" height="12" fill="white" rx="6" ry="6" y="6" x="16" />
-        <rect width="8" height="4" fill="black" rx="1" ry="1" y="10" x="18" />
+        <rect width="6" height="2" fill="black" rx="1" ry="1" y="11" x="19" />
       </mask>
       <mask id="mask-state-typing">
         <rect width="28" height="12" fill="white" rx="6" ry="6" y="6" x="0" />

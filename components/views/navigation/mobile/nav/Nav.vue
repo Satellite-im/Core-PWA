@@ -1,22 +1,24 @@
 <template>
   <nav class="nav" :class="{ hide: !isMobileNavVisible }">
-    <nuxt-link
-      v-for="item in buttons"
-      :key="item.id"
-      :to="item.path"
-      data-cy="`mobile-nav-${id}`"
-      @click.native="item.id === 'settings' && emptySettingsRoute()"
-    >
-      <UiDotBadge v-if="item.icon" :show="item.showBadge">
-        <component
-          :is="item.icon"
-          v-if="item.icon"
-          size="1.75x"
-          :alt="item.label"
-        />
-      </UiDotBadge>
-      <UiUserState v-else :user="profile" />
-    </nuxt-link>
+    <div class="bar">
+      <nuxt-link
+        v-for="item in buttons"
+        :key="item.id"
+        :to="item.path"
+        :data-cy="`mobile-nav-${item.id}`"
+        @click.native="item.id === 'settings' && emptySettingsRoute()"
+      >
+        <UiDotBadge v-if="item.icon" :show="item.showBadge">
+          <component
+            :is="item.icon"
+            v-if="item.icon"
+            size="1.75x"
+            :alt="item.label"
+          />
+        </UiDotBadge>
+        <UiUserState v-else :user="profile" />
+      </nuxt-link>
+    </div>
   </nav>
 </template>
 
