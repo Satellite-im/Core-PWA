@@ -5,7 +5,7 @@ const myFileName = 'test-file.txt'
 const myFolderName = 'test-folder'
 
 // New specs being added to files features
-describe(
+describe.skip(
   'Files Features Tests',
   {
     viewportHeight: 800,
@@ -17,7 +17,7 @@ describe(
       cy.restoreLocalStorage('Chat User B')
     })
 
-    it.skip('Files - Create File', () => {
+    it('Files - Create File', () => {
       // Login with User A by restoring LocalStorage Snapshot
       cy.loginWithLocalStorage('Chat User A')
 
@@ -42,7 +42,7 @@ describe(
       cy.renameFileOrFolder(myFolderName, myFolderName + randomNumber)
     })
 
-    it.skip('Files - Rename Files', () => {
+    it('Files - Rename Files', () => {
       //Wait until loading spinner disappears
       cy.get('.spinner', { timeout: 30000 }).should('not.exist')
 
