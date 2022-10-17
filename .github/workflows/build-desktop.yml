@@ -20,19 +20,13 @@ jobs:
         with:
           node-version: 16
       - name: Change permissions on scripts 🔨
-        run: |
-          chmod +x ./linkscript.sh
-          chmod +x ./cypress/scripts/watch-script.sh
-          chmod +x ./cypress/scripts/sync-node-script.sh
-
+        run: chmod +x ./linkscript.sh
       - name: Build Core 🔨
-        run: yarn && ./linkscript.sh
+        run: ./linkscript.sh && yarn && yarn generate
       - name: install Rust stable
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - name: install app dependencies and build it
-        run: yarn && yarn build
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,9 +36,3 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
-        with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: 'App v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
-          prerelease: false
