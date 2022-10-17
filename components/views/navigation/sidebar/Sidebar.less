@@ -39,11 +39,12 @@
         height: 44px;
         color: @dark;
 
-        &.selected {
+        &[aria-current='page'],
+        &.nuxt-link-active {
           color: @light;
           .background-semitransparent-lighter();
         }
-        &:hover:not(.selected) {
+        &:hover:not(.nuxt-link-active) {
           color: @body;
           .background-semitransparent-lighter();
         }
