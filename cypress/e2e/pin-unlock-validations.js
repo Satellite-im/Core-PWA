@@ -6,51 +6,31 @@ const userPassphrase = dataRecovery.accounts
   .map((item) => item.recoverySeed)
   .toString()
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
+const firstUserName = faker.internet.userName(name) // generate random username for first user
+const secondUserName = faker.internet.userName(name) // generate random username for first user
+const thirdUserName = faker.internet.userName(name) // generate random username for first user
 
-describe.skip('Unlock pin should be persisted when store pin is enabled', () => {
-  it.skip('Create Account with store pin disabled', { retries: 2 }, () => {
-    //Skipped due to solana issues
-    //Go to URL, add a PIN and make sure that toggle for save pin is disabled
-    cy.createAccountPINscreen(randomPIN)
-
-    //Follow the next steps to create an account
-    cy.createAccountSecondScreen()
-    cy.createAccountRecoverySeed()
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput()
-    cy.createAccountSubmit()
-
-    //Wait until main page is loaded after creating account
-    cy.validateChatPageIsLoaded()
+describe('Unlock pin should be persisted when store pin is enabled', () => {
+  it('Create Account with store pin disabled', () => {
+    //Run create account command passing randomPin, randomName, isMobile=false and savePin=false
+    cy.createAccount(randomPIN, firstUserName, false, false)
 
     // Go to main URL again and validate that user is prompt to enter pin again
-    cy.visit('/').then(() => {
-      cy.contains('Decrypt Account').should('be.visible')
-    })
+    cy.visit('/')
+    cy.contains('Decrypt Account').should('be.visible')
   })
 
-  it.skip('Create Account with store pin enabled', { retries: 2 }, () => {
-    //Skipped due to solana issues
-    //Go to URL, add a PIN and make sure that toggle for save pin is enabled
-    cy.createAccountPINscreen(randomPIN, true, false, false)
+  it('Create Account with store pin enabled', () => {
+    //Run create account command passing randomPin, randomName, isMobile=false and savePin=true
+    cy.createAccount(randomPIN, secondUserName, false, true)
 
-    //Follow the next steps to create an account
-    cy.createAccountSecondScreen()
-    cy.createAccountRecoverySeed()
-    cy.validateUserInputIsDisplayed()
-    cy.createAccountUserInput()
-    cy.createAccountSubmit()
-
-    //Wait until main page is loaded after creating account
+    // Go to main URL again and validate that user is redirected to chat screen since pin was saved
+    cy.visit('/')
     cy.validateChatPageIsLoaded()
-
-    // Go to main URL again and validate that user is redirected to chat screen and pin was saved
-    cy.visit('/').then(() => {
-      cy.validateChatPageIsLoaded()
-    })
   })
 
-  it('Import Account with store pin disabled', { retries: 2 }, () => {
+  //Skipped since Import Account is not currently working
+  it.skip('Import Account with store pin disabled', { retries: 2 }, () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is disabled
     cy.importAccountPINscreen(randomPIN)
 
@@ -66,7 +46,8 @@ describe.skip('Unlock pin should be persisted when store pin is enabled', () => 
     })
   })
 
-  it('Import Account with store pin enabled', { retries: 2 }, () => {
+  //Skipped since Import Account is not currently working
+  it.skip('Import Account with store pin enabled', { retries: 2 }, () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is enabled
     cy.importAccountPINscreen(randomPIN, true, false, false)
 
@@ -80,5 +61,30 @@ describe.skip('Unlock pin should be persisted when store pin is enabled', () => 
     cy.visit('/').then(() => {
       cy.validateChatPageIsLoaded()
     })
+  })
+
+  it('Logout user on /unlock page', () => {
+    //Run create account command passing randomPin and randomName
+    cy.createAccount(randomPIN, thirdUserName)
+
+    //Visit root page again
+    cy.visit('/')
+    cy.contains('Decrypt Account').should('be.visible')
+
+    //Not you? Create or import an account text is displayed and user clicks on it
+    cy.contains('Not you? Create or import an account').click()
+
+    //Confirmation modal is displayed
+    cy.get('[data-cy=confirmation-modal]').should('be.visible')
+    cy.contains('This will clear your account').should('be.visible')
+    cy.contains(
+      'Are you sure you want to clear your account and all data?',
+    ).should('be.visible')
+
+    //Click on confirm
+    cy.get('[data-cy=confirm-button]').click()
+
+    //Now user is prompted to start again creating the pin
+    cy.contains('Choose Your Password').should('be.visible')
   })
 })
