@@ -23,7 +23,8 @@ export default Vue.extend({
     },
     replies: {
       type: Array as PropType<Array<ConversationMessage>>,
-      required: true,
+      required: false,
+      default: () => [],
     },
     isScrolling: {
       type: Boolean,

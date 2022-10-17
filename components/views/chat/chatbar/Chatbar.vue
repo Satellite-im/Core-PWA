@@ -20,6 +20,7 @@ import {
 import { notNull } from '~/utilities/typeGuard'
 import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
 import { AutocompleteRef } from '~/components/views/chat/chatbar/autocomplete/Autocomplete.vue'
+import { isVisible } from '~/utilities/chat'
 
 function typingFunction(conversationId: string) {
   const deb = debounce(() => {
@@ -30,23 +31,6 @@ function typingFunction(conversationId: string) {
     thr: throttle(deb, Config.chat.typingInputThrottle, { trailing: false }),
     deb,
   }
-}
-
-function isVisible(ele: HTMLElement, container: HTMLElement, partial = false) {
-  const cTop = container.scrollTop
-  const cBottom = cTop + container.clientHeight
-
-  const eTop = ele.offsetTop
-  const eBottom = eTop + ele.clientHeight
-
-  const scrolledBefore = eTop >= cTop
-  const scrolledAfter = eBottom <= cBottom
-  const isTotal = scrolledBefore && scrolledAfter
-  const isPartial =
-    partial &&
-    ((eTop < cTop && eBottom > cTop) || (eBottom > cBottom && eTop < cBottom))
-
-  return { isElVisible: isTotal || isPartial, scrolledAfter, scrolledBefore }
 }
 
 const Chatbar = Vue.extend({
@@ -177,7 +161,9 @@ const Chatbar = Vue.extend({
       const sortedMessages = Object.values(
         iridium.chat.state.conversations[this.conversationId].message,
       )
-        .filter((m) => m.from === iridium.id && m.type === 'text')
+        .filter(
+          (m) => m.from === iridium.id && m.type === 'text' && !m.replyToId,
+        )
         .sort((a, b) => a.at - b.at)
       return sortedMessages[sortedMessages.length - 1]
     },
