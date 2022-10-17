@@ -12,7 +12,6 @@
     <ChatbarUpload ref="upload" :disabled="!isSubscribed" />
     <ChatbarAutocomplete
       ref="autocomplete"
-      v-if="isFocused && showAutocomplete"
       :text="autocompleteText"
       :conversationId="conversationId"
       @selection="handleAutocompleteSelection"
