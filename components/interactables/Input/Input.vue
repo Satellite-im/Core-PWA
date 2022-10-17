@@ -15,7 +15,7 @@ enum Appends {
   Custom = 'custom',
 }
 
-export default Vue.extend({
+const Input = Vue.extend({
   components: {
     DeleteIcon,
     EyeIcon,
@@ -175,6 +175,9 @@ export default Vue.extend({
     },
   },
 })
+
+export type InputRef = InstanceType<typeof Input>
+export default Input
 </script>
 
 <style scoped lang="less" src="./Input.less"></style>
