@@ -17,7 +17,7 @@ describe(
       cy.restoreLocalStorage('Chat User B')
     })
 
-    it('Files - Create File', () => {
+    it.skip('Files - Create File', () => {
       // Login with User A by restoring LocalStorage Snapshot
       cy.loginWithLocalStorage('Chat User A')
 
@@ -42,7 +42,7 @@ describe(
       cy.renameFileOrFolder(myFolderName, myFolderName + randomNumber)
     })
 
-    it('Files - Rename Files', () => {
+    it.skip('Files - Rename Files', () => {
       //Wait until loading spinner disappears
       cy.get('.spinner', { timeout: 30000 }).should('not.exist')
 
