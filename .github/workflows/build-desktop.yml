@@ -1,8 +1,7 @@
-name: 'publish'
+name: 'Build Desktop App'
 on:
-  push:
-    branches:
-      - release
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 jobs:
   publish-tauri:
