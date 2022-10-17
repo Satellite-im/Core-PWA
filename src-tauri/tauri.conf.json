@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Core-PWA",
-    "version": "0.1.0"
+    "version": "0.2.1"
   },
   "tauri": {
     "allowlist": {
@@ -32,7 +32,7 @@
       "identifier": "im.satellite.core",
       "longDescription": "",
       "macOS": {
-        "entitlements": null,
+        "entitlements": "./build/mac.entitlements",
         "exceptionDomain": "",
         "frameworks": [],
         "providerShortName": null,
@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 800,
         "resizable": true,
         "title": "Satellite Core",
-        "width": 800
+        "width": 1000
       }
     ]
   }
