@@ -202,9 +202,6 @@ export default {
       profile,
     })
     if (!profile?.did) {
-      try {
-        this.$router.replace('/auth/register')
-      } catch (_) {}
       logger.error(
         'accounts/actions/loadAccount',
         'user not registered, redirecting',
