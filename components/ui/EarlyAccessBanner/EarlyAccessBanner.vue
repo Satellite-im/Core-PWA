@@ -6,7 +6,7 @@
       {{ $t('ui.early_access_message') }}
       <a
         :href="$config.feedbackUrl"
-        class="banner-link"
+        class="link"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -31,7 +31,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.banner-link {
+.link {
   text-decoration-color: #feca5770;
   &:extend(.color-warning);
 }

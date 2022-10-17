@@ -11,11 +11,12 @@
     user-select: none;
     outline-offset: -2px;
 
-    &.selected {
+    &[aria-current='page'],
+    &.nuxt-link-active {
       .background-semitransparent-lighter();
     }
 
-    &:hover:not(.selected) {
+    &:hover:not(.nuxt-link-active) {
       .background-semitransparent-light();
     }
   }

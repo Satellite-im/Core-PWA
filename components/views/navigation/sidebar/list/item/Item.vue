@@ -11,7 +11,6 @@ import Vue, {
   onMounted,
   onBeforeUnmount,
 } from 'vue'
-import VueMarkdown from 'vue-markdown'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -23,9 +22,6 @@ import { $dayjs } from '~/plugins/local/dayjs'
 import { getDate, getTimestamp } from '~/utilities/timestamp'
 
 export default Vue.extend({
-  components: {
-    VueMarkdown,
-  },
   props: {
     conversationId: {
       type: String as PropType<Conversation['id']>,
@@ -52,10 +48,6 @@ export default Vue.extend({
       return numUnreadMessages.value >= 100
         ? '99+'
         : numUnreadMessages.value.toString()
-    })
-
-    const isSelected: ComputedRef<boolean> = computed(() => {
-      return props.conversationId === $nuxt.$route.params.id
     })
 
     const subtitle: ComputedRef<string> = computed(() => {
@@ -200,7 +192,6 @@ export default Vue.extend({
     return {
       contextMenuValues,
       isLoading,
-      isSelected,
       numUnreadMessages,
       otherParticipants,
       sortedMessages,
@@ -212,26 +203,6 @@ export default Vue.extend({
   computed: {
     conversation(): Conversation {
       return iridium.chat.state.conversations[this.conversationId]
-    },
-  },
-  methods: {
-    /**
-     * @method openConversation
-     * @description Navigates to user or group conversation
-     */
-    async openConversation() {
-      if (!this.conversation?.id) {
-        return
-      }
-      if (this.$device.isMobile) {
-        if (this.conversation.id === this.$route.params.id) {
-          this.$emit('slideNext')
-          return
-        }
-        this.$router.push({ params: { id: this.conversation.id } })
-        return
-      }
-      this.$router.push(`/chat/${this.conversation.id}`)
     },
   },
 })

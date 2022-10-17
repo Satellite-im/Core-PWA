@@ -3,11 +3,11 @@
   :class="{ 'is-loading': isLoading}"
   :items="contextMenuValues"
 >
-  <button
+  <nuxt-link
     class="item"
-    :class="{ selected: isSelected }"
+    :to="`${$device.isMobile ? '/mobile' : ''}/chat/${conversationId}`"
     data-cy="sidebar-user"
-    @click="openConversation"
+    @click.native="$device.isMobile && $emit('slideNext')"
   >
     <UiUserState
       v-if="conversation.type === 'direct'"
@@ -57,7 +57,7 @@
         />
       </div>
     </div>
-  </button>
+  </nuxt-link>
 
   <div class="loader">
     <UiLoadersSpinner :spinning="isLoading" />
