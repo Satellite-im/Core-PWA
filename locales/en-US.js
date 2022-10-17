@@ -640,6 +640,7 @@ export default {
         'Select one or more of your friends to chat in groups or one-on-one.',
       no_friends_yet: 'No Friends Yet',
       no_friends_yet_text: "The world doesn't have to be so lonely.",
+      search: 'Searching for',
       enhancers: {
         glyphs: 'Glyphs',
         emoji: 'Emoji',
