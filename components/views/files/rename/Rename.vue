@@ -7,16 +7,11 @@ import { SaveIcon } from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
+import { InputRef } from '~/components/interactables/Input/Input.vue'
 
 export default Vue.extend({
   components: {
     SaveIcon,
-  },
-  props: {
-    closeModal: {
-      type: Function,
-      default: () => {},
-    },
   },
   data() {
     return {
@@ -45,7 +40,7 @@ export default Vue.extend({
       const extString = this.text.slice(
         ((this.text.lastIndexOf('.') - 1) >>> 0) + 1,
       )
-      const input = (this.$refs.inputGroup as Vue).$refs
+      const input = (this.$refs.inputGroup as InputRef).$refs
         .input as HTMLInputElement
       // if file extension is found, highlight everything except the [.ext]
       if (extString) {
@@ -57,9 +52,6 @@ export default Vue.extend({
     })
   },
   methods: {
-    /**
-     * @description attempt to rename item, catch name errors
-     */
     renameItem() {
       if (!this.item) {
         return
@@ -73,7 +65,7 @@ export default Vue.extend({
         this.error = this.$t(e?.message) as string
         return
       }
-      this.closeModal()
+      this.$emit('close')
     },
   },
 })

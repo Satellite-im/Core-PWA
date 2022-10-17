@@ -52,7 +52,7 @@
       v-if="ui.modals.renameFile"
       @close="toggleModal(ModalWindows.RENAME_FILE)"
     >
-      <FilesRename />
+      <FilesRename @close="toggleModal(ModalWindows.RENAME_FILE)" />
     </UiModal>
     <UiModal
       v-if="ui.modals.changelog"
