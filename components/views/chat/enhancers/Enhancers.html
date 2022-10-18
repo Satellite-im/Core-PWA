@@ -1,12 +1,7 @@
 <div
-  class="enhancers"
-  :class="{'enhancers-mobile': $device.isMobile}"
   v-if="ui.enhancers.show"
+  class="enhancers"
   v-click-outside="toggleEnhancers"
-  v-bind:style="!ui.enhancers.floating ? {
-    left: calculatePositionOnScreen(ui.enhancers.position[0]) + 'px',
-    bottom: ui.enhancers.position[1] + 'px'
-  } : {}"
 >
   <div class="navbar">
     <InteractablesButtonGroup
@@ -15,23 +10,24 @@
     >
       <InteractablesButton
         text="Glyphs"
-        :color="ui.enhancers.route === 'glyphs' ? 'primary' : ''"
+        :color="ui.enhancers.route === 'glyphs' ? 'primary' : 'dark'"
+        @click="route = 'glyphs'"
       >
         <grid-icon size="1x" />
       </InteractablesButton>
       <InteractablesButton
         text="Emoji"
-        :color="ui.enhancers.route === 'emoji' ? 'primary' : ''"
+        :color="ui.enhancers.route === 'emoji' ? 'primary' : 'dark'"
+        @click="route = 'emoji'"
       >
         <smile-icon size="1x" />
       </InteractablesButton>
-      <InteractablesButton
+      <!-- <InteractablesButton
         text="Gifs"
         :color="ui.enhancers.route === 'gifs' ? 'primary' : ''"
-        v-if="featureReadyToShow"
       >
         <image-icon size="1x" />
-      </InteractablesButton>
+      </InteractablesButton> -->
     </InteractablesButtonGroup>
   </div>
   <div class="container">
