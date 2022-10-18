@@ -19,7 +19,7 @@ export default Vue.extend({
   },
   computed: {
     from(): string {
-      if (this.message.from === iridium.users.state.user?.did) {
+      if (this.message.from === iridium.id) {
         return this.$t('messaging.group_join_notice.you') as string
       }
       return iridium.users.getUser(this.message.from)?.name || ''
