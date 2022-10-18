@@ -12,6 +12,8 @@ export enum NotificationType {
   GROUP_MESSAGE = 'group_message',
   MENTION = 'mention',
   MEMBER_JOIN = 'member_join',
+  MEMBER_LEAVE = 'member_leave',
+  ADDED_TO_GROUP = 'added_to_group',
   GROUP_CONVERSATION_CREATED = 'group_conversation_created',
 }
 
@@ -31,21 +33,22 @@ export type Notification<P = {}> = {
 export type MessageNotificationPayload = {
   conversationId: string
   messageId: string
-  addedMemberIds?: IridiumPeerIdentifier[]
 }
 
 export type GroupConversationCreatedNotificationPayload = {
   conversationId: string
 }
 
-export type MemberJoinNotificationPayload = {
+export type MemberJoinNotificationPayload = MessageNotificationPayload & {
   addedMemberIds: IridiumPeerIdentifier[]
 }
 
 export type NotificationPayloads =
-  | (MessageNotificationPayload &
-      MemberJoinNotificationPayload &
-      GroupConversationCreatedNotificationPayload)
+  | (
+      | MessageNotificationPayload
+      | MemberJoinNotificationPayload
+      | GroupConversationCreatedNotificationPayload
+    )
   | undefined
 
 export type NotificationBase<P = {}> = Omit<

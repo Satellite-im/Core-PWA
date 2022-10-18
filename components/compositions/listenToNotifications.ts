@@ -3,8 +3,14 @@ import {
   NotificationType,
   NotificationBase,
   NotificationPayloads,
+  MemberJoinNotificationPayload,
+  MessageNotificationPayload,
 } from '~/libraries/Iridium/notifications/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
 
 const NOTIFICATION_BODY_MAX_LENGTH = 80
 
@@ -31,18 +37,36 @@ export function listenToNotifications() {
       iridium.notifications.sendNotification(notification)
     },
   )
+  const getMessageAndConversation = (
+    conversationId?: string,
+    messageId?: string,
+  ) => {
+    let conversation: Conversation | undefined
+    let message: ConversationMessage | undefined
+    if (conversationId) {
+      conversation = iridium.chat.getConversation(conversationId)
+    }
+    if (messageId) {
+      message = conversation?.message[messageId]
+    }
+    return { conversation, message }
+  }
 
   const getNotificationText = (
     notification: NotificationBase<NotificationPayloads>,
   ) => {
     const { type, senderId, payload } = notification
-    const messageId = payload?.messageId
+    const messageId = (payload as MessageNotificationPayload)?.messageId
     const conversationId = payload?.conversationId
     const sender = iridium.users.getUser(senderId)
     const defaultText = {
-      title: $nuxt.$t('notifications.new_notification'),
-      description: $nuxt.$t('notifications.new_notification_description'),
+      title: $nuxt.$t('notifications.default.title'),
+      description: $nuxt.$t('notifications.default.body'),
     }
+    const { conversation, message } = getMessageAndConversation(
+      conversationId,
+      messageId,
+    )
 
     switch (type) {
       case NotificationType.FRIEND_REQUEST:
@@ -55,11 +79,8 @@ export function listenToNotifications() {
 
       case NotificationType.GROUP_MESSAGE:
       case NotificationType.DIRECT_MESSAGE: {
-        if (!conversationId) return defaultText
-        const conversation = iridium.chat.getConversation(conversationId)
         if (!conversation) return defaultText
-        if (!messageId) return defaultText
-        const message = conversation.message[messageId]
+        if (!message) return defaultText
 
         const isGroup = type === NotificationType.GROUP_MESSAGE
         const groupTitle = $nuxt.$t('notifications.new_group_message.title', {
@@ -78,30 +99,37 @@ export function listenToNotifications() {
       }
 
       case NotificationType.GROUP_CONVERSATION_CREATED: {
-        if (!conversationId) return defaultText
-        const conversation = iridium.chat.getConversation(conversationId)
         if (!conversation) return defaultText
 
-        const title = $nuxt.$t('notifications.new_group.title', {
-          name: sender?.name,
-        })
-        const description = $nuxt.$t('notifications.new_group.body', {
-          sender: sender?.name || '',
-          group: conversation.name || '',
-        })
-
         return {
-          title,
-          description,
+          title: $nuxt.$t('notifications.new_group.title', {
+            name: sender?.name,
+          }),
+          description: $nuxt.$t('notifications.new_group.body', {
+            sender: sender?.name || '',
+            group: conversation.name || '',
+          }),
+        }
+      }
+
+      case NotificationType.ADDED_TO_GROUP: {
+        if (!conversation) return defaultText
+        return {
+          title: $nuxt.$t('notifications.added_to_group.title', {
+            group: conversation.name || '',
+          }),
+          description: $nuxt.$t('notifications.added_to_group.body', {
+            sender: sender?.name || '',
+            group: conversation.name || '',
+          }),
         }
       }
 
       case NotificationType.MEMBER_JOIN: {
-        if (!conversationId) return defaultText
-        const conversation = iridium.chat.getConversation(conversationId)
         if (!conversation) return defaultText
+        const memberJoinNotifPayload = payload as MemberJoinNotificationPayload
 
-        const newMemberNames = payload.addedMemberIds
+        const newMemberNames = memberJoinNotifPayload.addedMemberIds
           ?.filter((did) => did !== senderId)
           .map((did) => iridium.users.getUser(did)?.name)
 
@@ -128,6 +156,17 @@ export function listenToNotifications() {
         return {
           title,
           description,
+        }
+      }
+
+      case NotificationType.MEMBER_LEAVE: {
+        if (!conversation) return defaultText
+        return {
+          title: $nuxt.$t('notifications.member_leave.title'),
+          description: $nuxt.$t('notifications.member_leave.body', {
+            removedMember: sender?.name || '',
+            group: conversation.name || '',
+          }),
         }
       }
 
