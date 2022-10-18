@@ -4,7 +4,7 @@ const myFilePath = 'cypress/fixtures/test-file.txt'
 const myFileName = 'test-file.txt'
 const myFolderName = 'test-folder'
 
-// New specs being added to files features
+//Skipping since file uploads fail on CI
 describe.skip(
   'Files Features Tests',
   {
