@@ -355,7 +355,7 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       type: NotificationType.FRIEND_REQUEST,
       senderId: user.did,
       image: user.photoHash,
-    } as NotificationBase)
+    })
   }
 
   /**
