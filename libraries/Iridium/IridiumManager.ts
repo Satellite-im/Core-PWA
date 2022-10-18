@@ -1,4 +1,9 @@
-import { Emitter, createIridiumIPFS, IridiumPeer } from '@satellite-im/iridium'
+import {
+  Emitter,
+  createIridiumIPFS,
+  IridiumPeer,
+  IridiumDocument,
+} from '@satellite-im/iridium'
 import type { IridiumIPFS } from '@satellite-im/iridium'
 import UsersManager from './users/UsersManager'
 import ProfileManager from '~/libraries/Iridium/profile/ProfileManager'
@@ -10,6 +15,28 @@ import FilesManager from '~/libraries/Iridium/files/FilesManager'
 import WebRTCManager from '~/libraries/Iridium/webrtc/WebRTCManager'
 import SettingsManager from '~/libraries/Iridium/settings/SettingsManager'
 import NotificationManager from '~/libraries/Iridium/NotificationManager'
+
+type IridiumRootDocument = {
+  id: string
+  profile: Object
+  friends: Object
+  conversations: Object
+  files: Object
+  notifications: Object
+  settings: Object
+  indexes: Object
+  seen: number
+}
+
+const IridiumDocDefaults = {
+  profile: {},
+  friends: {},
+  conversations: {},
+  files: {},
+  notifications: {},
+  settings: {},
+  indexes: {},
+}
 
 export class IridiumManager extends Emitter {
   ready: boolean = false
@@ -38,11 +65,16 @@ export class IridiumManager extends Emitter {
   }
 
   async start() {
+    const logTag = 'iridium/manager'
+    logger.info(logTag, 'init()')
+
     this.connector?.on('stopping', async () => {
-      logger.info('iridium/manager', 'stopping')
+      logger.info(logTag, 'stopping')
       await this.stop()
     })
-    logger.info('iridium/manager', 'init()')
+
+    logger.info(logTag, 'initializing profile')
+    await this.profile.start()
   }
 
   async stop() {
@@ -83,33 +115,6 @@ export class IridiumManager extends Emitter {
       id: this.connector.id,
     })
 
-    logger.info(logTag, 'starting IPFS')
-    await this.connector.start()
-
-    // check for existing root document
-    let doc = (await this.connector.get('/')) || {}
-    if (!doc.id) {
-      logger.info(logTag, 'creating new root document', doc)
-      doc = {
-        id: this.connector.id,
-        profile: {},
-        friends: {},
-        conversations: {},
-        files: {},
-        notifications: {},
-        settings: {},
-        indexes: {},
-      }
-    } else {
-      logger.info(logTag, 'loaded root document', doc)
-    }
-    doc.seen = Date.now()
-    await this.connector.set('/', doc)
-    this.connector.p2p.peerList
-      .filter((peer) => peer.type === 'node' && peer.connected)
-      .forEach((peer: IridiumPeer) => {
-        this.sendSyncInit(peer.did)
-      })
     this.connector.p2p.on('node/connect', async (node: IridiumPeer) => {
       await this.sendSyncInit(node.did)
     })
@@ -119,13 +124,66 @@ export class IridiumManager extends Emitter {
     this.connector.p2p.on('nodeReady', this.onP2pReady.bind(this))
     this.connector.p2p.on('ready', this.onP2pReady.bind(this))
     this.connector.on('ready', this.onP2pReady.bind(this))
+
+    logger.info(logTag, 'starting IPFS')
+    await this.connector.start()
+
+    this.connector.p2p.peerList
+      .filter((peer) => peer.type === 'node' && peer.connected)
+      .forEach((peer: IridiumPeer) => {
+        this.sendSyncInit(peer.did)
+      })
+
     this.profile.on('ready', this.onP2pReady.bind(this))
     this.profile.on('changed', this.onP2pReady.bind(this))
     this.profile.on('ready', this.onProfileChange.bind(this, 'ready'))
     this.profile.on('changed', this.onProfileChange.bind(this, 'changed'))
+  }
 
-    logger.info(logTag, 'initializing profile')
-    await this.profile.start()
+  async loadRootDocument(): Promise<IridiumDocument | undefined> {
+    const logTag = 'iridium/manager/loadRootDocument'
+
+    if (!this.connector) {
+      logger.error(logTag, 'Connector not initialized')
+      return
+    }
+
+    // check for existing root document
+    const doc = await this.connector.get('/')
+
+    if (!doc) {
+      logger.error(logTag, 'Root document not found in the local IPFS node')
+      return
+    }
+
+    doc.seen = Date.now()
+    await this.connector.set('/', doc)
+
+    return doc
+  }
+
+  async initializeRootDocument(
+    data?: Omit<IridiumRootDocument, 'id'>,
+  ): Promise<IridiumDocument | undefined> {
+    const logTag = 'iridium/manager/loadRootDocument'
+
+    if (!this.connector) {
+      logger.error(logTag, 'Connector not initialized')
+      return
+    }
+
+    const doc: IridiumRootDocument = {
+      ...IridiumDocDefaults,
+      id: this.connector.id,
+      ...data,
+      seen: Date.now(),
+    }
+
+    logger.info(logTag, 'Initializing root document', doc)
+
+    await this.connector.set('/', doc)
+
+    return doc
   }
 
   async onProfileChange(data: string) {
