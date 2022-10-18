@@ -82,15 +82,16 @@ async function confirm() {
     iridium.id,
     ...selected.value.map((friend) => friend.did),
   ]
-  const id = await iridium.chat
-    .createGroupConversation({
+  try {
+    const id = await iridium.chat.createGroupConversation({
       name: name.value,
       participants,
     })
-    .catch((e) => (error.value = $i18n.t(e.message)))
-
-  emit('toggle')
-  $router.push(`/chat/${id}`)
+    emit('toggle')
+    $router.push(`/chat/${id}`)
+  } catch (e: any) {
+    error.value = $i18n.t(e.message)
+  }
 }
 </script>
 
