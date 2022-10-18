@@ -1,4 +1,4 @@
-export type ButtonType =
+export type ButtonColor =
   | 'primary'
   | 'dark'
   | 'link'
@@ -8,3 +8,5 @@ export type ButtonType =
   | 'danger'
 
 export type ButtonSize = 'sm' | 'md' | 'lg'
+
+export type ButtonType = 'submit' | 'reset' | 'button'

@@ -14,12 +14,8 @@
         {{ subtitle }}
       </TypographyText>
     </div>
-    <InteractablesButton
-      @click="download"
-      data-cy="chat-file"
-      :label="$t('controls.download')"
-    >
-      <download-icon size="1x" />
+    <InteractablesButton @click="download" data-cy="chat-file">
+      <download-icon size="1x" :alt="$t('controls.download')" />
     </InteractablesButton>
     <a
       v-show="false"
