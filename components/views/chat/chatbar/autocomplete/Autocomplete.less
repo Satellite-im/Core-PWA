@@ -1,8 +1,9 @@
 .chatbar-autocomplete {
   position: absolute;
   bottom: 100%;
-  left: 0;
-  right: 0;
+  // -1px in order to match chatbar's border
+  left: -1px;
+  right: -1px;
   // background-color: @midground;
   background-image: @semitransparent-dark-gradient;
   border-radius: @corner-rounding @corner-rounding 0 0;
