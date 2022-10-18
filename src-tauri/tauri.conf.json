@@ -1,14 +1,14 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "yarn build",
+    "beforeBuildCommand": "yarn generate",
     "beforeDevCommand": "yarn dev",
     "devPath": "http://localhost:3000",
     "distDir": "../dist",
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "Core-PWA",
+    "productName": "Satellite Core",
     "version": "0.2.1"
   },
   "tauri": {
@@ -57,7 +57,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 800,
+        "height": 1000,
         "resizable": true,
         "title": "Satellite Core",
         "width": 1000
