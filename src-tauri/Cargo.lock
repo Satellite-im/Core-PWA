@@ -2204,7 +2204,9 @@ dependencies = [
 name = "satellite-core"
 version = "0.1.0"
 dependencies = [
+ "cocoa",
  "embed_plist",
+ "objc",
  "serde",
  "serde_json",
  "tauri",
