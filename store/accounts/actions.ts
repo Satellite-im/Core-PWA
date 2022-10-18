@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { Keypair } from '@solana/web3.js'
 import Vue from 'vue'
+import type VueRouter from 'vue-router'
 import {
   AccountsError,
   AccountsState,
@@ -154,6 +155,9 @@ export default {
     { commit, state, dispatch }: ActionsArguments<AccountsState>,
     recover: boolean, // In case we are trying to recover an account from the seed phrase
   ) {
+    // @ts-ignore
+    const $router: VueRouter = this.$router
+
     const logTag = 'accounts/actions/loadAccount'
     logger.info(logTag, 'start loading account')
     const $BlockchainClient: BlockchainClient = BlockchainClient.getInstance()
@@ -180,62 +184,69 @@ export default {
 
     if (!$BlockchainClient.isPayerInitialized) {
       logger.error(logTag, 'user derivation failed')
-      await this.$router.replace('/setup/disclaimer')
+      await $router.replace('/setup/disclaimer')
       throw new Error(AccountsError.USER_DERIVATION_FAILED)
     }
 
-    if (!iridium.connector) {
-      const onProfile = async (payload: User) => {
-        const profile = payload
+    if (iridium.connector) {
+      logger.info(logTag, 'Iridium already initialized')
+      return
+    }
 
-        logger.debug(logTag, 'fetched iridium profile', {
-          profile,
-        })
-        if (!profile?.did) {
-          try {
-            await this.$router.replace('/auth/register')
-            return
-          } catch (_) {}
-          logger.error(logTag, 'user not registered, redirecting')
-          throw new Error(AccountsError.USER_NOT_REGISTERED)
-        }
-        logger.debug(
-          logTag,
-          'user loaded, dispatching setUserDetails & setRegistrationStatus',
-          profile,
-        )
-        commit('setUserDetails', profile)
-        commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+    const onProfile = async (payload: User) => {
+      const profile = payload
 
-        this.$router.replace(
-          this.$device.isMobile ? '/mobile/chat' : '/friends',
-        )
-      }
-
-      iridium.profile?.once(recover ? 'changed' : 'ready', onProfile)
-      logger.debug(logTag, 'signing message for iridium')
-      const { pinHash } = state
-      const entropyMessage = IdentityManager.generateEntropyMessage(
-        $BlockchainClient.account.publicKey.toBase58(),
-        pinHash,
-      )
-      const entropy = await $BlockchainClient.signMessage(entropyMessage)
-      logger.debug(logTag, 'initializing iridium with entropy')
-      await iridium.initFromEntropy(entropy)
-
-      iridium.once('ready', () => {
-        logger.info(logTag, 'iridium ready')
-        commit('setActiveAccount', iridium.id)
-        logger.info(logTag, 'finished')
-        return dispatch('startup')
+      logger.debug(logTag, 'Iridium profile received', {
+        profile,
       })
 
-      await iridium.start()
+      if (!profile?.did) {
+        await $router.replace('/auth/register').catch()
+        return
+      }
+
+      logger.debug(
+        logTag,
+        'user loaded, dispatching setUserDetails & setRegistrationStatus',
+        profile,
+      )
+      commit('setUserDetails', profile)
+      commit('setRegistrationStatus', RegistrationStatus.REGISTERED)
+
+      // @ts-ignore
+      $router.replace(this.$device.isMobile ? '/mobile/chat' : '/friends')
     }
+
+    logger.debug(logTag, 'signing message for iridium')
+    const { pinHash } = state
+    const entropyMessage = IdentityManager.generateEntropyMessage(
+      $BlockchainClient.account.publicKey.toBase58(),
+      pinHash,
+    )
+    const entropy = await $BlockchainClient.signMessage(entropyMessage)
+    await iridium.initFromEntropy(entropy)
+
+    iridium.profile?.once('ready', onProfile)
+
+    const doc = await iridium.loadRootDocument()
+
+    if (!doc) {
+      logger.info(logTag, 'Local document not present')
+      await iridium.initializeRootDocument()
+    }
+
+    iridium.once('ready', () => {
+      logger.info(logTag, 'iridium ready')
+      commit('setActiveAccount', iridium.id)
+      logger.info(logTag, 'finished')
+      return dispatch('startup')
+    })
+
+    await iridium.start()
   },
   /**
    * @method registerUser
-   * @description Registers a new user on the Solana blockchain
+   * @description Registers a new user
    * @param userData User information to register
    * @example
    * ```typescript

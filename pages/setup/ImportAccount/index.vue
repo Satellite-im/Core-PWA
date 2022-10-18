@@ -45,7 +45,7 @@ export default Vue.extend({
         await this.$store.commit('accounts/setPhrase', mnemonic)
         await this.$store.dispatch('accounts/setRecoverMnemonic', mnemonic)
         await this.$store.dispatch('accounts/loadAccount', true)
-        this.$router.push('/')
+        // this.$router.push('/')
       } catch (error: any) {
         this.error = error.message
         // return
