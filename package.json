@@ -118,6 +118,7 @@
     "cypress-image-snapshot": "^4.0.1",
     "cypress-localstorage-commands": "^2.2.1",
     "cypress-real-events": "^1.7.0",
+    "del": "^6.0.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-cypress": "^2.12.1",

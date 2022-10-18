@@ -6,7 +6,7 @@ const path = require('path')
 let secondUserName
 
 // Skipping due to errors on file uploads - file is missing
-describe('Chat - Sending Images Tests', () => {
+describe.skip('Chat - Sending Images Tests', () => {
   before(() => {
     //Retrieve username from Chat User B
     cy.restoreLocalStorage('Chat User B')
