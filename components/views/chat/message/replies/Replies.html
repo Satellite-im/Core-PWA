@@ -13,7 +13,7 @@
       <Message
         v-for="item in replyItems"
         :key="item.message.id"
-        :item="item"
+        :message="item.message"
         :showHeader="!item.isSameAuthor"
         hideReplyAction
       />

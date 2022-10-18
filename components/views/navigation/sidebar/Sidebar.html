@@ -10,29 +10,18 @@
       <InteractablesSidebarToggle />
     </div>
     <div class="sidebar-nav">
-      <button
-        class="sidebar-button"
-        :class="{selected: $route.path.includes('/files')}"
-        data-cy="sidebar-files"
-        @click="$router.push('/files')"
-      >
+      <nuxt-link class="sidebar-button" to="/files" data-cy="sidebar-files">
         <folder-icon size="20" />
         <TypographyText size="sm"> {{$t('files.files')}} </TypographyText>
-      </button>
+      </nuxt-link>
 
-      <button
-        class="sidebar-button"
-        :class="{selected: $route.path.includes('/friends')}"
-        data-cy="sidebar-friends"
-        @click="$router.push('/friends')"
-      >
+      <nuxt-link class="sidebar-button" to="/friends" data-cy="sidebar-friends">
         <users-icon size="20" />
         <TypographyText size="sm"> {{$t('friends.friends')}} </TypographyText>
-
         <TypographyTag v-if="incomingRequestsLength" class="tag" small>
           {{incomingRequestsLength}}
         </TypographyTag>
-      </button>
+      </nuxt-link>
     </div>
 
     <div v-show="$config.feedbackUrl" class="banner-wrapper">

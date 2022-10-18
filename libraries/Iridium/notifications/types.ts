@@ -1,4 +1,5 @@
 import { type } from 'os'
+import { IridiumPeerIdentifier } from '~/../iridium/dist'
 import { User } from '~/libraries/Iridium/users/types'
 
 export const NotificationsError = {
@@ -10,27 +11,47 @@ export enum NotificationType {
   DIRECT_MESSAGE = 'direct_message',
   GROUP_MESSAGE = 'group_message',
   MENTION = 'mention',
+  MEMBER_JOIN = 'member_join',
+  GROUP_CONVERSATION_CREATED = 'group_conversation_created',
 }
 
-export type Notification = {
+export type Notification<P = {}> = {
   at: number
   type: NotificationType
-  senderId: string
+  senderId: IridiumPeerIdentifier
   title: string
   description: string
   seen: boolean
   id?: string
-  messageId?: string
-  conversationId?: string
   image?: string
+  payload?: P
   onNotificationClick?: () => void
 }
 
-export interface NotificationBase
-  extends Omit<Notification, 'title' | 'description'> {
-  titleValues?: Record<string, string>
-  desriptionValues?: Record<string, string>
+export type MessageNotificationPayload = {
+  conversationId: string
+  messageId: string
+  addedMemberIds?: IridiumPeerIdentifier[]
 }
+
+export type GroupConversationCreatedNotificationPayload = {
+  conversationId: string
+}
+
+export type MemberJoinNotificationPayload = {
+  addedMemberIds: IridiumPeerIdentifier[]
+}
+
+export type NotificationPayloads =
+  | (MessageNotificationPayload &
+      MemberJoinNotificationPayload &
+      GroupConversationCreatedNotificationPayload)
+  | undefined
+
+export type NotificationBase<P = {}> = Omit<
+  Notification<P>,
+  'title' | 'description'
+>
 
 export type NotificationClickEvent = {
   from: string

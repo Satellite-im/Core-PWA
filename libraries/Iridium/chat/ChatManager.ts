@@ -15,6 +15,7 @@ import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
+import { IridiumPeerIdentifier } from '~/../iridium/src/types'
 import {
   ChatError,
   Conversation,
@@ -26,6 +27,8 @@ import {
   MessageEditPayload,
   MessageReaction,
   MessageReactionPayload,
+  ConversationMessageType,
+  ConversationType,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -34,6 +37,8 @@ import { ChatFileUpload } from '~/store/chat/types'
 import { FILE_TYPE } from '~/libraries/Files/types/file'
 import isNSFW from '~/utilities/NSFW'
 import {
+  GroupConversationCreatedNotificationPayload,
+  MessageNotificationPayload,
   NotificationBase,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
@@ -42,7 +47,7 @@ import { truthy } from '~/utilities/typeGuard'
 
 export type ConversationPubsubEvent = IridiumMessage<
   IridiumDecodedPayload<{
-    message?: ConversationMessage
+    message?: ConversationMessage | MessageEdit
     cid?: string
     type: 'chat/message' | 'chat/reaction' | 'chat/edit'
     reaction?: MessageReaction
@@ -100,19 +105,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
 
     await Promise.all(
       conversations.map(async (conversation) => {
-        const topic = `/chat/conversations/${conversation.id}`
-        logger.info(
-          `${this.logPrefix}/start`,
-          `requesting sync subscription to ${topic}`,
-        )
-        // ask the sync node to subscribe to this topic
-        await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
-          sync: {
-            offline: true,
-          },
-          handler: this.onConversationMessage.bind(this, conversation.id),
-        })
-        this.ephemeral.subscriptions.push(conversation.id)
+        await this.listenToConversation(conversation.id)
       }),
     )
 
@@ -122,6 +115,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   }
 
   async stop() {}
+
+  private async listenToConversation(conversationId: string) {
+    const topic = `/chat/conversations/${conversationId}`
+    logger.info(
+      `${this.logPrefix}/start`,
+      `requesting sync subscription to ${topic}`,
+    )
+    // ask the sync node to subscribe to this topic
+    await iridium.connector?.subscribe<ConversationPubsubEvent>(topic, {
+      sync: {
+        offline: true,
+      },
+      handler: this.onConversationMessage.bind(this, conversationId),
+    })
+    this.ephemeral.subscriptions.push(conversationId)
+  }
 
   private async onConversationAnnounce(
     message: IridiumPubsubMessage<
@@ -147,7 +156,21 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         type: 'group',
         name: payload.name,
         participants,
+        ownerId: payload.ownerId || iridium.id,
       })
+
+      // send browser notification to notify user of new group conversation
+      const notification: NotificationBase<GroupConversationCreatedNotificationPayload> =
+        {
+          type: NotificationType.GROUP_CONVERSATION_CREATED,
+          senderId: payload.ownerId || iridium.id,
+          at: Date.now().valueOf(),
+          seen: false,
+          payload: {
+            conversationId: payload.id,
+          },
+        }
+      iridium.notifications.emit('notification/create', notification)
     } else if (payload.type === 'add_member') {
       await this.appendParticipantsToConversation(payload.id, participants)
     } else if (payload.type === 'remove_member') {
@@ -254,7 +277,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     if (type === 'chat/message') {
       let message: ConversationMessage
       if (payload.body.message) {
-        message = payload.body.message
+        message = payload.body.message as ConversationMessage
       } else {
         throw new Error('no message in payload')
       }
@@ -319,7 +342,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
         message,
       )
     } else if (type === 'chat/edit') {
-      if (!payload.body.message) {
+      if (!payload?.body?.message) {
         console.error('no message in payload')
         return
       }
@@ -345,6 +368,22 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return this.ephemeral.activeConversationId === conversationId
   }
 
+  private getNotificationType(
+    messageType: ConversationMessageType,
+    conversationType: ConversationType,
+  ): NotificationType {
+    switch (messageType) {
+      case 'member_join':
+        return NotificationType.MEMBER_JOIN
+    }
+    switch (conversationType) {
+      case 'group':
+        return NotificationType.GROUP_MESSAGE
+      case 'direct':
+        return NotificationType.DIRECT_MESSAGE
+    }
+  }
+
   private sendNotification(
     message: ConversationMessage,
     conversation: Conversation,
@@ -354,14 +393,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const isGroup = conversation.type === 'group'
 
     iridium.notifications.emit('notification/create', {
-      type: isGroup
-        ? NotificationType.GROUP_MESSAGE
-        : NotificationType.DIRECT_MESSAGE,
+      type: this.getNotificationType(message.type, conversation.type),
       senderId: sender?.did,
-      messageId: message.id,
-      conversationId: conversation.id,
       image: fromDID,
-    } as NotificationBase)
+      payload: {
+        messageId: message.id,
+        conversationId: conversation.id,
+        addedMemberIds: message.members || [],
+      },
+    } as NotificationBase<MessageNotificationPayload>)
   }
 
   hasConversation(id: string) {
@@ -403,11 +443,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     type,
     name,
     participants,
+    ownerId,
   }: {
     id?: string
     type: Conversation['type']
     name: Conversation['name']
     participants: Conversation['participants']
+    ownerId?: IridiumPeerIdentifier
   }): Promise<string> {
     if (!id) {
       id = await this.generateConversationId(type, participants)
@@ -425,17 +467,13 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       lastReadAt: 0,
+      ownerId: ownerId || iridium.id,
     }
     Vue.set(this.state.conversations, id, conversation)
     await this.set(`/conversations/${id}`, conversation)
     this.emit(`conversations/${id}`, conversation)
 
-    // ask the sync node to subscribe to this topic
-    await iridium.connector?.subscribe(`/chat/conversations/${id}`, {
-      sync: { offline: true },
-      handler: this.onConversationMessage.bind(this, id),
-    })
-    this.ephemeral.subscriptions.push(id)
+    this.listenToConversation(id)
     iridium.sendSyncFetch()
 
     return id
@@ -467,6 +505,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       type: 'group',
       name,
       participants,
+      ownerId: iridium.id,
     })
 
     const event: IridiumConversationEvent = {
@@ -474,6 +513,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       type: 'create',
       name,
       participants,
+      ownerId: iridium.id,
     }
 
     await iridium.connector?.publish('/chat/announce', event, {
@@ -531,7 +571,6 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       },
     })
 
-    // send a message in the conversation
     await this.sendMessage({
       conversationId: id,
       type: 'member_join',
