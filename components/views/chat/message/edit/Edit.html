@@ -1,10 +1,20 @@
 <div class="edit-message">
   <div class="edit-message-body" :class="{'is-error': isError}">
-    <Editable
+    <ChatbarAutocomplete
+      ref="autocomplete"
+      v-if="showAutocomplete"
+      :text="autocompleteText"
+      :conversationId="conversationId"
+      @selection="handleAutocompleteSelection"
+      @click="handleAutocompleteClick"
+    />
+    <InteractablesEditable
       v-model="content"
+      ref="editable"
       class="edit-message-body-input"
       data-cy="edit-message-input"
       @keydown="handleInputKeydown"
+      @autocomplete="handleAutocomplete"
     />
     <button v-tooltip.top="$t('ui.emoji')">
       <smile-icon size="1x" />
