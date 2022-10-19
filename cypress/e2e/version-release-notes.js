@@ -1,7 +1,5 @@
-describe.skip('Version Release Notes', () => {
-  //Skipped because version number does not redirect to Version Release Notes
-  it('Release notes appear when clicking on version number', () => {
+describe('Version number appears', () => {
+  it('Version number appears', () => {
     cy.visitRootPage()
-    cy.releaseNotesScreenValidation()
-  })
+    cy.get('[data-cy=version]').should('be.visible').click()  })
 })
