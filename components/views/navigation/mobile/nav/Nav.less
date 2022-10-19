@@ -3,10 +3,24 @@
   position: fixed;
   bottom: 0;
   padding-bottom: var(--safe-area-inset-bottom);
-  height: @mobile-nav-height;
   transition: height @animation-speed-long ease;
   z-index: 1;
-  background: @foreground-gradient;
+  background: linear-gradient(
+      163.91deg,
+      rgba(48, 52, 71, 0.5) 0%,
+      rgba(42, 54, 75, 0) 100%
+    ),
+    linear-gradient(
+      163.91deg,
+      rgba(28, 39, 58, 0.9) 0%,
+      rgba(0, 0, 0, 0.09) 100%
+    ),
+    linear-gradient(
+      359.95deg,
+      rgba(36, 40, 57, 0.9) 0.04%,
+      rgba(34, 44, 63, 0) 99.95%
+    ),
+    @darker;
 
   &.hide {
     height: 0;
