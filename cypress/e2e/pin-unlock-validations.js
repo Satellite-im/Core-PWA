@@ -6,9 +6,9 @@ const userPassphrase = dataRecovery.accounts
   .map((item) => item.recoverySeed)
   .toString()
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const firstUserName = faker.internet.userName(name) // generate random username for first user
-const secondUserName = faker.internet.userName(name) // generate random username for first user
-const thirdUserName = faker.internet.userName(name) // generate random username for first user
+const firstUserName = faker.internet.password(12, true) // Generate username with 12 characters
+const secondUserName = faker.internet.password(12, true) // Generate username with 12 characters
+const thirdUserName = faker.internet.password(12, true) // Generate username with 12 characters
 
 describe('Unlock pin should be persisted when store pin is enabled', () => {
   it('Create Account with store pin disabled', () => {

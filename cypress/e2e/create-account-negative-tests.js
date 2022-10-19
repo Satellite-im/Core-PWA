@@ -1,6 +1,6 @@
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const randomName = faker.internet.userName(name) // generate random name
+const randomName = faker.internet.password(12, true) // Generate username with 12 characters
 const randomStatus = faker.lorem.word() // generate random status
 const filepathNsfw = 'images/negative-create-account-test.png'
 
