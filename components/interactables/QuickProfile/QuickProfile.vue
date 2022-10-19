@@ -47,6 +47,13 @@
     >
       <arrow-right-icon size="1x" />
     </InteractablesInput>
+    <TypographyText color="white">
+      <InteractablesButton
+        color="white"
+        :text="$t('popups.quick_commands.title')"
+        @click="toggleLock"
+      />
+    </TypographyText>
   </div>
 </template>
 <script setup lang="ts">
@@ -153,6 +160,13 @@ function openSettings() {
 
 function setMenuVis(val: boolean) {
   isStatusMenuVisible.value = val
+}
+
+async function toggleLock() {
+  window.console.log('pressdsafads')
+  $store.commit('accounts/lock')
+  location.reload()
+  close()
 }
 </script>
 <style scoped lang="less" src="./QuickProfile.less"></style>
