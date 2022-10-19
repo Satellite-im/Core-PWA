@@ -163,7 +163,6 @@ function setMenuVis(val: boolean) {
 }
 
 async function toggleLock() {
-  window.console.log('pressdsafads')
   $store.commit('accounts/lock')
   location.reload()
   close()
