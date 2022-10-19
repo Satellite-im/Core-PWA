@@ -1,7 +1,7 @@
 const faker = require('faker')
-const firstUserName = faker.internet.userName(name) // generate random username for first user
-const secondUserName = faker.internet.userName(name) // generate random username for first user
-const thirdUserName = faker.internet.userName(name) // generate random username for first user
+const firstUserName = faker.internet.password(12, true) // Generate username with 12 characters
+const secondUserName = faker.internet.password(12, true) // Generate username with 12 characters
+const thirdUserName = faker.internet.password(12, true) // Generate username with 12 characters
 let firstUserID, secondUserID, thirdUserID
 
 describe('Create Test Accounts', () => {

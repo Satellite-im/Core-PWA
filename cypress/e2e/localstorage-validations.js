@@ -2,7 +2,7 @@ import { dataRecovery } from '../fixtures/test-data-accounts.json'
 
 const faker = require('faker')
 const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const randomName = faker.internet.userName(name) // generate random name
+const randomName = faker.internet.password(12, true) // Generate username with 12 characters
 const recoverySeed =
   dataRecovery.accounts
     .filter((item) => item.description === 'Only Text')

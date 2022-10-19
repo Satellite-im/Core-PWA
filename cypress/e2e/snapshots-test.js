@@ -6,7 +6,7 @@ const recoverySeed = dataRecovery.accounts
   .filter((item) => item.description === 'Snap QA')
   .map((item) => item.recoverySeed)
   .toString()
-const randomName = faker.internet.userName(name) // generate random name
+const randomName = faker.internet.password(12, true) // Generate username with 12 characters
 const randomStatus = faker.lorem.word() // generate random status
 
 describe.skip('Snapshots Testing', () => {
