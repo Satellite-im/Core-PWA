@@ -3,7 +3,7 @@
     <InteractablesInput
       v-model="filter"
       class="search"
-      :placeholder="`${$t('ui.search')}...`"
+      :placeholder="$t('ui.search')"
       input-kind="text"
       type="dark"
     />

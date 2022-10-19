@@ -10,7 +10,7 @@
             v-model="filter"
             class="search"
             type="search"
-            :placeholder="`${$t('ui.search')}...`"
+            :placeholder="$t('ui.search')"
           />
           <button v-if="$route.params.id" @click="swiper.slideNext()">
             <menu-icon class="font-color-flair" size="1.5x" />

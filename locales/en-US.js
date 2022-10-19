@@ -25,7 +25,7 @@ export default {
     close: 'Close',
     cancel: 'Cancel',
     clear_all: 'Clear All',
-    search: 'Search',
+    search: 'Search...',
     home: 'Home',
     peer_not_active: 'Please wait while peer connects...',
     chat_not_ready: 'Please wait while connecting...',
