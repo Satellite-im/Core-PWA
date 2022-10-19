@@ -8,7 +8,7 @@
     @click.stop="hideMenu"
   >
     <!-- Quick Reactions -->
-    <!-- <div
+    <div
       v-if="quickReactions.length && mostUsedEmojis.length"
       class="actions-group"
     >
@@ -34,7 +34,7 @@
           </div>
         </div>
       </template>
-    </div> -->
+    </div>
 
     <!-- Item Buttons -->
     <div class="actions-group">
