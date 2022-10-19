@@ -17,7 +17,7 @@
       v-if="ui.modals.callToAction"
       @close="() => toggleModal(ModalWindows.CALL_TO_ACTION)"
     >
-      <CallToAction @close="toggleModal(ModalWindows.CALL_TO_ACTION)" />
+      <CallToAction />
     </UiModal>
     <SettingsModal v-if="ui.settingsRoute && !$device.isMobile" />
     <UiModal v-if="ui.modals.wallet" @close="toggleModal(ModalWindows.WALLET)">
