@@ -1,11 +1,15 @@
 <template>
-  <button
+  <component
+    :is="link ? 'a' : 'button'"
     ref="button"
     class="button"
     :class="`size-${size} color-${color}`"
     :disabled="disabled || loading"
-    :type="type"
-    @click="handleClick"
+    :type="link ? null : type"
+    :href="link || null"
+    :rel="link ? 'noopener noreferrer' : null"
+    :target="link ? '_blank' : null"
+    @click="!link && handleClick($event)"
     @mousemove.stop="handleMouseMove"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -16,7 +20,7 @@
       <span v-if="text.length">{{ text }}</span>
     </div>
     <div class="cursor-glow" :style="cursorGlowStyle"></div>
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -35,6 +39,7 @@ interface Props {
   loading?: boolean
   type?: ButtonType
   disabled?: boolean
+  link?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
@@ -43,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   type: 'button',
   disabled: false,
+  link: '',
 })
 
 interface Emits {
