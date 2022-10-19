@@ -599,15 +599,9 @@ Cypress.Commands.add('validateComingSoonModal', () => {
 })
 
 Cypress.Commands.add('validateURLComingSoonModal', () => {
-  cy.window().then((win) => {
-    cy.stub(win, 'open').as('open')
-  })
-  cy.contains('Keep Me Posted').click()
-  cy.get('@open').should(
-    'have.been.calledOnceWithExactly',
-    'https://twitter.com/satellite_im',
-    '_blank',
-  )
+  cy.get('[data-cy=btn-call-to-action]')
+    .should('have.attr', 'href', 'https://twitter.com/satellite_im')
+    .should('have.attr', 'target', '_blank')
 })
 
 Cypress.Commands.add('validateGlyphsModal', () => {
