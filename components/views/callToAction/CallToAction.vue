@@ -20,6 +20,7 @@
     </TypographyText>
     <InteractablesButton
       class="button"
+      data-cy="btn-call-to-action"
       :text="$t('modal.call_to_action.btn')"
       size="lg"
       link="https://twitter.com/satellite_im"
