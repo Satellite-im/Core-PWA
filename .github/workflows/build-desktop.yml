@@ -21,6 +21,8 @@ jobs:
           node-version: 16
       - name: Change permissions on scripts 🔨
         run: chmod +x ./linkscript.sh
+      - name: Yarn config 🔨
+        run: yarn config set network-timeout 600000 -g
       - name: Build Core 🔨
         run: ./linkscript.sh && yarn && yarn generate
       - name: install Rust stable
