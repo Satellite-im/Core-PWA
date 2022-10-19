@@ -1,79 +1,98 @@
-<template src="./Quick.html"></template>
+<template>
+  <div class="quick-chat">
+    <TypographyText font="heading" size="sm" color="dark">
+      {{ $t('pages.chat.new_chat') }}
+    </TypographyText>
+    <TypographyText size="sm" color="dark">
+      {{ $t('pages.chat.new_chat_description') }}
+    </TypographyText>
+    <InteractablesUserPicker v-model="selected" height="220px" />
+    <template v-if="selected.length > 1">
+      <InteractablesInput
+        v-model.trim="name"
+        size="xs"
+        :placeholder="$t('pages.chat.new_group_name')"
+        :min-length="Config.chat.groupNameMinLength"
+        :max-length="Config.chat.groupNameMaxLength"
+        :invalid="isInvalidName && Boolean(error)"
+        :error="error"
+        @submit="confirm"
+      />
+    </template>
+    <InteractablesButton
+      :text="
+        selected.length > 1
+          ? $t('pages.chat.create_group')
+          : $t('pages.chat.chat_now')
+      "
+      :loading="isLoading"
+      :disabled="!selected.length"
+      @click="confirm"
+    />
+  </div>
+</template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { mapState } from 'vuex'
-import { TranslateResult } from 'vue-i18n'
+<script setup lang="ts">
+import { computed, ComputedRef, ref, Ref } from 'vue'
+import { Config } from '~/config'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { Friend } from '~/libraries/Iridium/friends/types'
-import { RootState } from '~/types/store/store'
-import { Conversation } from '~/libraries/Iridium/chat/types'
+import { User } from '~/libraries/Iridium/users/types'
 
-export default Vue.extend({
-  data() {
-    return {
-      friends: [] as Friend[],
-      isLoading: false,
-      error: '' as TranslateResult,
-      name: '',
-    }
-  },
-  computed: {
-    ...mapState({
-      accounts: (state) => (state as RootState).accounts,
-    }),
-    isInvalidName(): boolean {
-      return (
-        !this.name ||
-        this.name.length < this.$Config.chat.groupNameMinLength ||
-        this.name.length > this.$Config.chat.groupNameMaxLength
-      )
-    },
-  },
-  methods: {
-    async confirm() {
-      this.error = ''
-      // if only 1 friend, direct to DM instead
-      if (this.friends.length === 1) {
-        this.$router.push(
-          `/chat/${iridium.chat?.directConversationIdFromDid(
-            this.friends[0].did,
-          )}`,
-        )
-        this.$emit('toggle')
-        return
-      }
-      // validate group name, then create group
-      if (this.isInvalidName) {
-        this.error = this.$t('errors.chat.group_name', {
-          min: this.$Config.chat.groupNameMinLength,
-          max: this.$Config.chat.groupNameMaxLength,
-        })
-        return
-      }
-      this.isLoading = true
-      try {
-        if (!iridium.connector) {
-          return
-        }
-        const participants = [
-          iridium.id,
-          ...this.friends.map((friend) => friend.did),
-        ]
-        const id = await iridium.chat.createGroupConversation({
-          name: this.name,
-          participants,
-        })
-        this.$emit('toggle')
-        this.$router.push(`/chat/${id}`)
-      } catch (e: any) {
-        this.error = this.$t(e.message)
-      } finally {
-        this.isLoading = false
-      }
-    },
-  },
+// @ts-ignore
+const { $router, $i18n } = useNuxtApp()
+
+const emit = defineEmits(['toggle'])
+
+const selected: Ref<User[]> = ref([])
+const isLoading: Ref<boolean> = ref(false)
+const error: Ref<string> = ref('')
+const name: Ref<string> = ref('')
+
+const isInvalidName: ComputedRef<boolean> = computed(() => {
+  return (
+    !name.value ||
+    name.value.length < Config.chat.groupNameMinLength ||
+    name.value.length > Config.chat.groupNameMaxLength
+  )
 })
+
+async function confirm() {
+  error.value = ''
+  // if only 1 friend, direct to DM instead
+  if (selected.value.length === 1) {
+    const conversationId = iridium.chat.directConversationIdFromDid(
+      selected.value[0].did,
+    )
+    $router.push(`/chat/${conversationId}`)
+    emit('toggle')
+    return
+  }
+  // validate group name
+  if (isInvalidName.value) {
+    error.value = $i18n.t('errors.chat.group_name', {
+      min: Config.chat.groupNameMinLength,
+      max: Config.chat.groupNameMaxLength,
+    })
+    return
+  }
+
+  // create group
+  isLoading.value = true
+  const participants = [
+    iridium.id,
+    ...selected.value.map((friend) => friend.did),
+  ]
+  try {
+    const id = await iridium.chat.createGroupConversation({
+      name: name.value,
+      participants,
+    })
+    emit('toggle')
+    $router.push(`/chat/${id}`)
+  } catch (e: any) {
+    error.value = $i18n.t(e.message)
+  }
+}
 </script>
 
 <style scoped lang="less" src="./Quick.less"></style>
