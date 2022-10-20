@@ -1,10 +1,6 @@
 <template>
-  <button
-    data-cy="close-button"
-    :aria-label="$t('ui.close')"
-    @click="$emit('click', $event)"
-  >
-    <x-icon size="1.6x" aria-hidden="true" />
+  <button data-cy="close-button" @click="$emit('click', $event)">
+    <x-icon size="1.6x" :alt="$t('ui.close')" />
   </button>
 </template>
 
