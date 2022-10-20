@@ -41,8 +41,10 @@ jobs:
         with:
           toolchain: stable
       - name: Tauri build 🔨
+        if: always()
         run: yarn tauri build
       - name: Codesign executable
+        if: always()
         env:
           MACOS_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
@@ -55,6 +57,7 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k test001 build.keychain
           /usr/bin/codesign --force -s <identity-id> ./src-tauri/target/release/bundle/dmg/Satellite Core_0.2.1_aarch64.dmg
       - name: Upload dmg 🔨
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: dmg
