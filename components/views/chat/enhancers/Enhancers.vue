@@ -2,16 +2,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    convertRem: (value: string) => number
-    toggleEnhancers: () => void
-    resetSearch: () => void
-  }
-}
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -20,10 +13,8 @@ export default Vue.extend({
     ImageIcon,
   },
   computed: {
-    ...mapState(['ui']),
-    ...mapGetters({
-      recipient: 'conversation/recipient',
-      getSortedMostUsedEmojis: 'ui/getSortedMostUsedEmojis',
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
     }),
     route: {
       get(): string {
@@ -63,7 +54,6 @@ export default Vue.extend({
       /* Ignore outside toggling when glyph & emoji toggle btn is clickd (for preventing twice-toggling)  */
       const glyphToggleElm = document.getElementById('glyph-toggle')
       const emojiToggleElm = document.getElementById('emoji-toggle')
-      // @ts-ignore
       if (
         !event ||
         !(
@@ -83,20 +73,6 @@ export default Vue.extend({
           messageID: null,
         })
       }
-    },
-    /**
-     * @method calculatePositionOnScreen
-     * @description This returns a "x cordinate" to have the Enhancer window to load on the right or left screen
-     * @example calculatePositionOnScreen(ui.enhancers.position[0])
-     */
-    calculatePositionOnScreen(locationX: number): number {
-      if (
-        this.convertRem(this.ui.enhancers.defaultWidth) + locationX >
-        window.innerWidth
-      ) {
-        return locationX - this.convertRem(this.ui.enhancers.defaultWidth) * 2
-      }
-      return locationX - this.convertRem(this.ui.enhancers.defaultWidth)
     },
     /**
      * @method convertRem
