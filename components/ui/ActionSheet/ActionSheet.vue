@@ -93,11 +93,12 @@ const handleAction = (func: Function, type?: string) => {
   emit('action', func)
 }
 
-const isVisible = computed(() => props.isVisible)
-
-watch(isVisible, (isVisible) => {
-  $store.commit('ui/setIsMobileNavVisible', !isVisible)
-})
+watch(
+  () => props.isVisible,
+  (isVisible) => {
+    $store.commit('ui/setIsMobileNavVisible', !isVisible)
+  },
+)
 
 const hideMenu = () => {
   emit('hide')
