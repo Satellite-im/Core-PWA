@@ -1,20 +1,22 @@
-<template src="./Checkbox.html"></template>
+<template>
+  <div class="checkbox" :class="{ checked: value }">
+    <check-icon />
+    <input
+      type="checkbox"
+      :checked="value"
+      @change="$emit('input', $event.target.checked)"
+    />
+  </div>
+</template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script setup lang="ts">
 import { CheckIcon } from 'satellite-lucide-icons'
 
-export default Vue.extend({
-  name: 'Checkbox',
-  components: {
-    CheckIcon,
-  },
-  props: {
-    value: {
-      type: Boolean,
-      default: false,
-    },
-  },
+interface Props {
+  value?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  value: false,
 })
 </script>
 
