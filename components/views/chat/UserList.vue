@@ -26,36 +26,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue, { computed, ComputedRef } from 'vue'
+<script setup lang="ts">
+import { computed, ComputedRef } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { User } from '~/libraries/Iridium/users/types'
 
-export default Vue.extend({
-  setup() {
-    // @ts-ignore
-    const $nuxt = useNuxtApp()
-    const conversationId: ComputedRef<string | undefined> = computed(() => {
-      return $nuxt.$route.params.id
-    })
-
-    const { allParticipantsAlphaSorted } = conversationHooks(
-      conversationId.value,
-    )
-
-    return { conversationId, allParticipantsAlphaSorted }
-  },
-  methods: {
-    showQuickProfile(e: MouseEvent, user: User) {
-      setTimeout(() => {
-        this.$store.commit('ui/setQuickProfile', {
-          user,
-          position: { x: e.x, y: e.y },
-        })
-      }, 0)
-    },
-  },
+const { $route, $store } = useNuxtApp()
+const conversationId: ComputedRef<string | undefined> = computed(() => {
+  return $route.params.id
 })
+
+const { allParticipantsAlphaSorted } = conversationHooks(conversationId.value)
+
+function showQuickProfile(e: MouseEvent, user: User) {
+  setTimeout(() => {
+    $store.commit('ui/setQuickProfile', {
+      user,
+      position: { x: e.x, y: e.y },
+    })
+  }, 0)
+}
 </script>
 
 <style lang="less" scoped>
