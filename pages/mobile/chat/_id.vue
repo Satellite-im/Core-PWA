@@ -44,6 +44,7 @@ import { RootState } from '~/types/store/store'
 import 'swiper/css'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import EarlyAccessBanner from '~/components/ui/EarlyAccessBanner/EarlyAccessBanner.vue'
+import { DismissSoftwareKeyboard, swiperOptions } from '~/utilities/swiper'
 
 export default Vue.extend({
   name: 'MobileChat',
@@ -65,8 +66,7 @@ export default Vue.extend({
       return iridium.webRTC.isActiveCall(this.$route.params.id)
     },
     swiperConfig(): SwiperOptions {
-      return {
-        noSwipingClass: 'disable-swipe',
+      return swiperOptions({
         allowSlidePrev: false,
         on: {
           activeIndexChange: ({ activeIndex }) => {
@@ -85,7 +85,7 @@ export default Vue.extend({
             }
           },
         },
-      }
+      })
     },
     isMobileNavVisible: {
       get(): boolean {
@@ -125,7 +125,6 @@ export default Vue.extend({
   display: flex;
   flex: 1;
   overflow: hidden;
-  padding-top: var(--safe-area-inset-top);
 
   .swiper-slide {
     display: flex;

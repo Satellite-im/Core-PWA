@@ -47,9 +47,11 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { Swiper, SwiperOptions } from 'swiper'
+import { App } from '@capacitor/app'
 import { RootState } from '~/types/store/store'
 import 'swiper/css'
 import { SettingsRoutes } from '~/store/ui/types'
+import { swiperOptions, SWIPER_TRANSITION_SPEED } from '~/utilities/swiper'
 
 export default Vue.extend({
   name: 'MobileSettings',
@@ -64,8 +66,7 @@ export default Vue.extend({
     }),
     SettingsRoutes: () => SettingsRoutes,
     swiperConfig(): SwiperOptions {
-      return {
-        noSwipingClass: 'disable-swipe',
+      return swiperOptions({
         allowSlidePrev: false,
         on: {
           slideChangeTransitionEnd: ({ activeIndex }) => {
@@ -83,7 +84,7 @@ export default Vue.extend({
             }
           },
         },
-      }
+      })
     },
   },
   watch: {
@@ -115,7 +116,6 @@ export default Vue.extend({
   display: flex;
   flex: 1;
   overflow: hidden;
-  padding-top: var(--safe-area-inset-top);
 
   .swiper-slide {
     display: flex;
