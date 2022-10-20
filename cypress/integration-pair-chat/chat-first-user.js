@@ -1,5 +1,4 @@
 let urlToValidate = 'https://www.google.com'
-let secondUserID
 
 describe('Chat features with two accounts at the same time - First User', () => {
   it.only('Create test account for First User', () => {
@@ -11,20 +10,17 @@ describe('Chat features with two accounts at the same time - First User', () => 
   })
 
   it.only('Send friend request to Second User', () => {
-    //Get second user DID to add it as friend
-    cy.readFile('cypress/fixtures/second-user-account.txt', {
-      timeout: 60000,
-    }).then((value) => {
-      cy.log(value)
-      secondUserID = value
-    })
-
-    cy.log(secondUserID)
-
     // Go to Friends and send a friend request to First User
     cy.goToFriendsPage('Add Friend')
 
-    cy.sendFriendRequest(secondUserID, 'Chat User B')
+    //Get second user DID to add it as friend
+    cy.readFile('cypress/fixtures/second-user-account.txt', {
+      timeout: 15000,
+    })
+      .should('exist')
+      .then((secondUserID) => {
+        cy.sendFriendRequest(secondUserID, 'Chat User B')
+      })
   })
 
   it('Wait until friend request sent is accepted by remote user', () => {
