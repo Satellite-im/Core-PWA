@@ -19,7 +19,6 @@ export default {
     files: 'Files',
     friends: 'Friends',
     settings: 'Settings',
-    sidebar: 'hide sidebar | show sidebar',
   },
   ui: {
     talk: 'Speak Freely...',

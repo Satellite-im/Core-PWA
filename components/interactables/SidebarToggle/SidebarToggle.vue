@@ -1,10 +1,11 @@
 <template>
-  <button data-cy="hamburger-button" @click="toggleMenu">
-    <menu-icon
-      class="button-icon"
-      size="1.5x"
-      :alt="$tc('global.sidebar', Number($store.state.ui.showSidebar))"
-    />
+  <button
+    data-cy="hamburger-button"
+    aria-hidden="true"
+    tabindex="-1"
+    @click="toggleMenu"
+  >
+    <menu-icon class="button-icon" size="1.5x" />
   </button>
 </template>
 
