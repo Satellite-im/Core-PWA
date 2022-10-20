@@ -7,7 +7,8 @@ env:
   APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
   APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
   APPLE_ID: ${{ secrets.APPLE_ID }}
-  APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }
+  APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
