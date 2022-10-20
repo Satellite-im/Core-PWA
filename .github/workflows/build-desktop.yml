@@ -43,7 +43,7 @@ jobs:
       - name: Tauri build 🔨
         run: yarn tauri build
       - name: Codesign executable
-        env: 
+        env:
           MACOS_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
