@@ -9,7 +9,7 @@
   >
     <!-- Quick Reactions -->
     <div
-      v-if="quickReactions.length && mostUsedEmojis.length"
+      v-if="quickReactions?.length && mostUsedEmojis?.length"
       class="actions-group"
     >
       <template v-for="reaction in quickReactions">
@@ -57,7 +57,6 @@
 
 <script setup lang="ts">
 import { watch, computed, ComputedRef, ref } from 'vue'
-import { mapGetters } from 'vuex'
 import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 
 interface Props {
@@ -75,12 +74,15 @@ const props = defineProps<Props>()
 // @ts-ignore
 const { $store } = useNuxtApp()
 const contextMenu = ref<HTMLElement>()
-const { getSortedMostUsedEmojis } = mapGetters('ui', [
-  'getSortedMostUsedEmojis',
-])
-const mostUsedEmojis: ComputedRef<EmojiUsage[]> = computed(
-  () => getSortedMostUsedEmojis() || [],
-)
+
+// TODO: Enable when feature is ready
+// const { getSortedMostUsedEmojis } = mapGetters('ui', [
+//   'getSortedMostUsedEmojis',
+// ])
+// const mostUsedEmojis: ComputedRef<EmojiUsage[]> = computed(
+//   () => getSortedMostUsedEmojis() || [],
+// )
+const mostUsedEmojis: ComputedRef<EmojiUsage[]> = computed(() => [])
 
 const quickReactions = computed(() => {
   return props.items.filter((item) => item.text === 'quickReaction')
