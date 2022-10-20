@@ -36,7 +36,7 @@ jobs:
           run: |
             sh ./cypress/scripts/watch-script.sh
             sh ./cypress/scripts/sync-node-script.sh
-            yarn add --dev cypress
+            yarn cypress install --force
             yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
