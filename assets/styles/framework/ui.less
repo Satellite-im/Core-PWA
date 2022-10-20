@@ -73,13 +73,14 @@
   user-select: none;
 }
 
-// hide from view, but not from screenreaders https://www.a11yproject.com/posts/how-to-hide-content/
+// hide from view, but not from screenreaders https://gomakethings.com/revisting-aria-label-versus-a-visually-hidden-class/
 .hidden {
-  width: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
   height: 1px;
   overflow: hidden;
+  padding: 0;
   position: absolute;
   white-space: nowrap;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
+  width: 1px;
 }
