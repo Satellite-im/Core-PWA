@@ -1,88 +1,62 @@
 <template>
   <div :class="`chip-item size-${size}`">
     <UiCircle
-      v-if="friend"
+      v-if="user"
       :type="src ? 'image' : 'random'"
-      :seed="friend.did"
+      :seed="user.did"
       :size="16"
       :source="src"
     />
-    <div class="text">
+    <TypographyText class="text" :size="size">
       {{ text }}
-    </div>
-    <x-icon class="delete-icon" size="1x" @click="$emit('delete')" />
+    </TypographyText>
+    <button @click="$emit('delete')">
+      <x-icon size="1x" />
+    </button>
   </div>
 </template>
 
-<script lang="ts">
-import Vue, { PropType } from 'vue'
+<script setup lang="ts">
+import { computed, ComputedRef } from 'vue'
 import { XIcon } from 'satellite-lucide-icons'
-import { Friend } from '~/types/ui/friends'
+import { User } from '~/libraries/Iridium/users/types'
+import { Size } from '~/types/typography'
+import { Config } from '~/config'
 
-export enum ChipSize {
-  Medium = 'medium',
-  Small = 'small',
+interface Props {
+  text?: string
+  size?: Size
+  user?: User
 }
+const props = withDefaults(defineProps<Props>(), {
+  text: '',
+  size: 'md',
+  user: undefined,
+})
 
-export default Vue.extend({
-  components: {
-    XIcon,
-  },
-  props: {
-    text: {
-      type: String,
-      default: '',
-    },
-    size: {
-      type: String as unknown as PropType<ChipSize>,
-      default: ChipSize.Medium,
-    },
-    friend: {
-      type: Object as PropType<Friend> | undefined,
-      default: undefined,
-    },
-  },
-  computed: {
-    src(): string {
-      const hash = this.friend.profilePicture
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
-    },
-  },
+const src: ComputedRef<string> = computed(() => {
+  const hash = props.user.photoHash
+  return hash ? `${Config.ipfs.gateway}${hash}` : ''
 })
 </script>
 
 <style scoped lang="less">
 .chip-item {
-  .fa-times {
-    cursor: pointer;
-  }
-
   display: inline-flex;
   flex-shrink: 0;
-  flex-direction: row;
   align-items: center;
   padding: @xlight-spacing;
-  border-radius: @corner-rounding-xxlarge;
+  border-radius: 24px;
   color: white;
   max-width: 100%;
 
-  .circle,
-  .delete-icon {
+  > *:not(.text) {
     flex-shrink: 0;
   }
 
   .text {
-    margin: 0 0.125rem 0 @xlight-spacing;
-    &:extend(.ellipsis);
-    align-self: stretch;
-  }
-
-  &.size-small {
-    font-size: @mini-text-size;
-  }
-
-  .delete-icon {
-    cursor: pointer;
+    margin: 0 0.125rem 0 0.25rem;
+    .ellipsis();
   }
 }
 </style>

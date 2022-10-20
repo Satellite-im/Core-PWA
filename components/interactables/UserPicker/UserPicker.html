@@ -4,8 +4,8 @@
       v-for="(friend, i) in selected"
       :key="friend.address"
       :text="friend.name"
-      :friend="friend"
-      size="small"
+      :user="friend"
+      size="xs"
       @delete="toggle(friend)"
     />
   </div>
