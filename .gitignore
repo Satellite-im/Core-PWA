@@ -111,3 +111,5 @@ cypress/screenshots-chat-pair/
 cypress/videos-chat-pair/
 cypress/videos/
 cypress/screenshots/
+cypress/support/first-user/snapshots/
+cypress/support/second-user/snapshots/
