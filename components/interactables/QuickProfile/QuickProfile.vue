@@ -47,13 +47,13 @@
     >
       <arrow-right-icon size="1x" />
     </InteractablesInput>
-    <TypographyText color="white">
+    <div v-if="isMe">
       <InteractablesButton
-        color="white"
+        color="dark"
         :text="$t('popups.quick_commands.title')"
         @click="toggleLock"
       />
-    </TypographyText>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -162,7 +162,7 @@ function setMenuVis(val: boolean) {
   isStatusMenuVisible.value = val
 }
 
-async function toggleLock() {
+function toggleLock() {
   $store.commit('accounts/lock')
   location.reload()
   close()
