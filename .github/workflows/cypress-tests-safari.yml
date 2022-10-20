@@ -32,7 +32,7 @@ jobs:
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
       - name: Install webkit
-        run: npm install --save-dev playwright-webkit
+        run: npm install --save-dev playwright-webkit --force
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
       - name: Execute Cypress Tests 🌡️
