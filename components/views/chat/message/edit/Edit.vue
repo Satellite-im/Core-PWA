@@ -6,14 +6,17 @@ import { mapState } from 'vuex'
 import { SmileIcon } from 'satellite-lucide-icons'
 import { Config } from '~/config'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
-import Editable from '~/components/interactables/Editable/Editable.vue'
-import { ConversationMessage } from '~/libraries/Iridium/chat/types'
+import {
+  Conversation,
+  ConversationMessage,
+} from '~/libraries/Iridium/chat/types'
+import { EditableRef } from '~/components/interactables/Editable/Editable.vue'
+import { AutocompleteRef } from '~/components/views/chat/chatbar/autocomplete/Autocomplete.vue'
 import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
     SmileIcon,
-    Editable,
   },
   props: {
     message: {
@@ -29,6 +32,9 @@ export default Vue.extend({
   data() {
     return {
       content: '',
+      showAutocomplete: false,
+      autocompleteText: '',
+      autocompleteSelection: '',
     }
   },
   computed: {
@@ -43,6 +49,9 @@ export default Vue.extend({
     },
     isError(): boolean {
       return this.charlimit || !this.content.length
+    },
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
     },
   },
   mounted() {
@@ -65,6 +74,13 @@ export default Vue.extend({
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case KeybindingEnum.ENTER:
+          if (this.showAutocomplete && this.autocompleteSelection) {
+            event.preventDefault()
+            ;(this.$refs.editable as EditableRef).doAutocomplete(
+              this.autocompleteSelection,
+            )
+            return
+          }
           if (!event.shiftKey) {
             event.preventDefault()
             this.saveMessage()
@@ -72,6 +88,18 @@ export default Vue.extend({
           break
         case KeybindingEnum.ESCAPE:
           this.cancelMessage()
+          break
+        case KeybindingEnum.ARROW_UP:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectPrev()
+          }
+          break
+        case KeybindingEnum.ARROW_DOWN:
+          if (this.showAutocomplete) {
+            event.preventDefault()
+            ;(this.$refs.autocomplete as AutocompleteRef).selectNext()
+          }
           break
         default:
           break
@@ -82,6 +110,17 @@ export default Vue.extend({
         show: !this.ui.enhancers.show,
         floating: true,
       })
+    },
+
+    handleAutocomplete(event: { show: boolean; text: string }) {
+      this.showAutocomplete = event.show
+      this.autocompleteText = event.text
+    },
+    handleAutocompleteSelection(val: string) {
+      this.autocompleteSelection = val
+    },
+    handleAutocompleteClick(val: string) {
+      ;(this.$refs.editable as EditableRef).doAutocomplete(val)
     },
   },
 })

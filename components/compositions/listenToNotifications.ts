@@ -3,10 +3,19 @@ import {
   NotificationType,
   NotificationBase,
   NotificationPayloads,
+  MemberJoinNotificationPayload,
+  MessageNotificationPayload,
+  GroupConversationCreatedNotificationPayload,
+  NotificationTypeValues,
 } from '~/libraries/Iridium/notifications/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 
 const NOTIFICATION_BODY_MAX_LENGTH = 80
+
+type NotificationHandler<P = {}> = {
+  handler: (notif: P) => void
+}
 
 export function listenToNotifications() {
   // @ts-ignore
@@ -14,95 +23,164 @@ export function listenToNotifications() {
 
   iridium.notifications.on(
     'notification/create',
-    (data: NotificationBase<NotificationPayloads>) => {
-      const { title, description } = getNotificationText(data)
-
-      const notification: Notification = {
-        at: data.at || Date.now(),
-        type: data.type,
-        senderId: data.senderId,
-        title,
-        description,
-        seen: false,
-        image: data.image || '',
-        onNotificationClick: () => handleNotificationClick(data),
-      }
-
-      iridium.notifications.sendNotification(notification)
+    (notification: NotificationBase<keyof NotificationTypeValues>) => {
+      const notifHandler = notifHandlers[notification.type].handler
+      notifHandler(notification)
     },
   )
 
-  const getNotificationText = (
-    notification: NotificationBase<NotificationPayloads>,
+  const sendNotification = (
+    data: NotificationBase<NotificationPayloads>,
+    text: { title: string; description: string },
+    onClick: () => void,
   ) => {
-    const { type, senderId, payload } = notification
-    const messageId = payload?.messageId
-    const conversationId = payload?.conversationId
-    const sender = iridium.users.getUser(senderId)
-    const defaultText = {
-      title: $nuxt.$t('notifications.new_notification'),
-      description: $nuxt.$t('notifications.new_notification_description'),
+    const notification: Notification = {
+      at: data.at || Date.now(),
+      type: data.type,
+      senderId: data.senderId,
+      title: text.title,
+      description: text.description,
+      seen: false,
+      payload: data.payload,
+      image: data.image || '',
+      onNotificationClick: onClick,
     }
+    iridium.notifications.sendNotification(notification)
+  }
 
-    switch (type) {
-      case NotificationType.FRIEND_REQUEST:
-        return {
+  const notifHandlers: {
+    [key in NotificationType]: NotificationHandler<
+      NotificationBase<NotificationPayloads[keyof NotificationTypeValues]>
+    >
+  } = {
+    [NotificationType.FRIEND_REQUEST]: {
+      handler: (notif: NotificationBase<NotificationPayloads>) => {
+        const sender = iridium.users.getUser(notif.senderId)
+        const text = {
           title: $nuxt.$t('notifications.new_friend_request.title'),
           description: $nuxt.$t('notifications.new_friend_request.body', {
             sender: sender?.name,
           }),
         }
 
-      case NotificationType.GROUP_MESSAGE:
-      case NotificationType.DIRECT_MESSAGE: {
-        if (!conversationId) return defaultText
-        const conversation = iridium.chat.getConversation(conversationId)
-        if (!conversation) return defaultText
-        if (!messageId) return defaultText
-        const message = conversation.message[messageId]
+        const onClick = navigateToFriends
 
-        const isGroup = type === NotificationType.GROUP_MESSAGE
-        const groupTitle = $nuxt.$t('notifications.new_group_message.title', {
-          sender: sender?.name || '',
-          group: conversation.name || '',
-        })
-        const description =
-          message.body?.length! > NOTIFICATION_BODY_MAX_LENGTH - 1
-            ? `${message.body?.substring(0, NOTIFICATION_BODY_MAX_LENGTH)}...`
-            : message.body
+        sendNotification(notif, text, onClick)
+      },
+    },
 
-        return {
-          title: isGroup ? groupTitle : `${sender?.name}`,
+    [NotificationType.DIRECT_MESSAGE]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {
+        const message = iridium.chat.getConversationMessage(
+          notif.payload.conversationId,
+          notif.payload.messageId,
+        )
+        const sender = iridium.users.getUser(notif.senderId)
+
+        const description = getMessageDescription(message)
+
+        const text = {
+          title: `${sender?.name}`,
           description: description || '',
         }
-      }
 
-      case NotificationType.GROUP_CONVERSATION_CREATED: {
-        if (!conversationId) return defaultText
-        const conversation = iridium.chat.getConversation(conversationId)
-        if (!conversation) return defaultText
-
-        const title = $nuxt.$t('notifications.new_group.title', {
-          name: sender?.name,
-        })
-        const description = $nuxt.$t('notifications.new_group.body', {
-          sender: sender?.name || '',
-          group: conversation.name || '',
-        })
-
-        return {
-          title,
-          description,
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
         }
-      }
 
-      case NotificationType.MEMBER_JOIN: {
-        if (!conversationId) return defaultText
-        const conversation = iridium.chat.getConversation(conversationId)
-        if (!conversation) return defaultText
+        sendNotification(notif, text, onClick)
+      },
+    },
 
-        const newMemberNames = payload.addedMemberIds
-          ?.filter((did) => did !== senderId)
+    [NotificationType.GROUP_MESSAGE]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {
+        const conversation = iridium.chat.getConversation(
+          notif.payload.conversationId,
+        )
+        const message = iridium.chat.getConversationMessage(
+          notif.payload.conversationId,
+          notif.payload.messageId,
+        )
+        const sender = iridium.users.getUser(notif.senderId)
+
+        const description = getMessageDescription(message)
+
+        const text = {
+          title: $nuxt.$t('notifications.new_group_message.title', {
+            sender: sender?.name || '',
+            group: conversation.name || '',
+          }),
+          description: description || '',
+        }
+
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
+    },
+
+    [NotificationType.GROUP_CONVERSATION_CREATED]: {
+      handler: (
+        notif: NotificationBase<GroupConversationCreatedNotificationPayload>,
+      ) => {
+        const sender = iridium.users.getUser(notif.senderId)
+        const conversation = iridium.chat.getConversation(
+          notif.payload.conversationId,
+        )
+
+        const text = {
+          title: $nuxt.$t('notifications.new_group.title', {
+            name: sender?.name,
+          }),
+          description: $nuxt.$t('notifications.new_group.body', {
+            sender: sender?.name || '',
+            group: conversation.name || '',
+          }),
+        }
+
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
+    },
+
+    [NotificationType.ADDED_TO_GROUP]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {
+        const sender = iridium.users.getUser(notif.senderId)
+        const conversation = iridium.chat.getConversation(
+          notif.payload.conversationId,
+        )
+
+        const text = {
+          title: $nuxt.$t('notifications.added_to_group.title', {
+            group: conversation.name || '',
+          }),
+          description: $nuxt.$t('notifications.added_to_group.body', {
+            sender: sender?.name || '',
+            group: conversation.name || '',
+          }),
+        }
+
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
+    },
+
+    [NotificationType.MEMBER_JOIN]: {
+      handler: (notif: NotificationBase<MemberJoinNotificationPayload>) => {
+        const sender = iridium.users.getUser(notif.senderId)
+        const conversation = iridium.chat.getConversation(
+          notif.payload.conversationId,
+        )
+        const newMemberNames = notif.payload.addedMemberIds
+          ?.filter((did) => did !== notif.senderId)
           .map((did) => iridium.users.getUser(did)?.name)
 
         const numNewMembers = newMemberNames.length
@@ -125,38 +203,63 @@ export function listenToNotifications() {
           },
         )
 
-        return {
+        const text = {
           title,
           description,
         }
-      }
 
-      default:
-        return defaultText
-    }
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
+    },
+
+    [NotificationType.MEMBER_LEAVE]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {
+        const sender = iridium.users.getUser(notif.senderId)
+        const conversation = iridium.chat.getConversation(
+          notif.payload.conversationId,
+        )
+
+        const text = {
+          title: $nuxt.$t('notifications.member_leave.title'),
+          description: $nuxt.$t('notifications.member_leave.body', {
+            removedMember: sender?.name || '',
+            group: conversation.name || '',
+          }),
+        }
+
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
+    },
+
+    // TODO: Add handling of this event when mentions are implemented
+    [NotificationType.MENTION]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {},
+    },
   }
 
-  const handleNotificationClick = (
-    notification: NotificationBase<NotificationPayloads>,
-  ) => {
-    switch (notification.type) {
-      case NotificationType.FRIEND_REQUEST: {
-        const mobileLink = '/mobile/friends?route=requests'
-        const desktopLink = '/friends?route=requests'
-        $nuxt.$router.push($nuxt.$device.isMobile ? mobileLink : desktopLink)
-        break
-      }
-      case NotificationType.GROUP_MESSAGE:
-      case NotificationType.DIRECT_MESSAGE:
-      case NotificationType.MEMBER_JOIN:
-      case NotificationType.GROUP_CONVERSATION_CREATED:
-      case NotificationType.MENTION: {
-        const conversationId = notification?.payload?.conversationId || ''
-        const mobileLink = `/mobile/chat/${conversationId}`
-        const desktopLink = `/chat/${conversationId}`
-        $nuxt.$router.push($nuxt.$device.isMobile ? mobileLink : desktopLink)
-        break
-      }
-    }
+  const getMessageDescription = (message: ConversationMessage) => {
+    return message.body?.length! > NOTIFICATION_BODY_MAX_LENGTH - 1
+      ? `${message.body?.substring(0, NOTIFICATION_BODY_MAX_LENGTH)}...`
+      : message.body
+  }
+
+  const navigateToFriends = () => {
+    const mobileLink = '/mobile/friends?route=requests'
+    const desktopLink = '/friends?route=requests'
+    $nuxt.$router.push($nuxt.$device.isMobile ? mobileLink : desktopLink)
+  }
+
+  const navigateToChat = (conversationId: string) => {
+    const mobileLink = `/mobile/chat/${conversationId}`
+    const desktopLink = `/chat/${conversationId}`
+    $nuxt.$router.push($nuxt.$device.isMobile ? mobileLink : desktopLink)
   }
 }

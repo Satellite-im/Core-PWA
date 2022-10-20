@@ -19,7 +19,6 @@ export default {
     files: 'Files',
     friends: 'Friends',
     settings: 'Settings',
-    sidebar: 'hide sidebar | show sidebar',
   },
   ui: {
     talk: 'Speak Freely...',
@@ -908,9 +907,17 @@ export default {
       title: 'New Group',
       body: '{sender} created {group}!',
     },
+    added_to_group: {
+      title: '{group}',
+      body: '{sender} added you to {group}!',
+    },
     member_join: {
       title: 'New Group Member | {count} New Group Members',
       body: '{addedMember} joined {group}! | {addedMember} and 1 other joined {group}! | {addedMember} and {numOtherNewMembers} others joined {group}!',
+    },
+    member_leave: {
+      title: 'Group Member Left',
+      body: '{removedMember} left {group}',
     },
   },
 }

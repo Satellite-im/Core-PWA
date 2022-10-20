@@ -1,75 +1,80 @@
-<template src="./DragBar.html"></template>
+<template>
+  <div
+    ref="dragBar"
+    class="drag-bar"
+    :class="`side-${side} ${overlay ? 'drag-bar-overlay' : ''}`"
+    @mousedown="handleMouseDown"
+  >
+    <div v-if="showHandle" class="handle"></div>
+  </div>
+</template>
 
-<script lang="ts">
-import Vue, { PropType } from 'vue'
+<script setup lang="ts">
+import { computed, ComputedRef, onUnmounted, Ref, ref } from 'vue'
 import { SideType } from './types'
 
-export default Vue.extend({
-  name: 'DragBar',
-  props: {
-    side: {
-      type: String as PropType<SideType>,
-      required: true,
-    },
-    showHandle: {
-      type: Boolean,
-      default: () => false,
-    },
-    overlay: {
-      type: Boolean,
-      default: () => false,
-    },
-  },
-  data: () => ({
-    isDragging: false,
-    startPoint: null as number | null,
-  }),
-  computed: {
-    isVertical(): boolean {
-      return this.side === 'top' || this.side === 'bottom'
-    },
-  },
-  beforeDestroy() {
-    this.removeEventListeners()
-  },
-  methods: {
-    handleMouseDown(event: MouseEvent) {
-      this.addEventListeners()
-      this.isDragging = true
-      this.initialEvent = event
-      this.initialClientRect = this.$parent.$el.getBoundingClientRect()
-    },
-    handleMouseMove(event: MouseEvent) {
-      if (!this.isDragging) {
-        return
-      }
-      const delta = this.isVertical
-        ? event.y - this.initialEvent.y
-        : event.x - this.initialEvent.x
+interface Props {
+  side: SideType
+  showHandle?: boolean
+  overlay?: boolean
+}
 
-      const emitValue = this.isVertical
-        ? this.initialClientRect.height + delta
-        : this.initialClientRect.width + delta
-
-      this.$emit('resize', `${emitValue}px`)
-    },
-    handleMouseUp(event: MouseEvent) {
-      this.removeEventListeners()
-      this.isDragging = false
-      this.initialEvent = undefined
-    },
-    addEventListeners() {
-      document.addEventListener('mousemove', this.handleMouseMove)
-      document.addEventListener('mouseup', this.handleMouseUp)
-    },
-    removeEventListeners() {
-      if (!this.isDragging) {
-        return
-      }
-      document.removeEventListener('mousemove', this.handleMouseMove)
-      document.removeEventListener('mouseup', this.handleMouseUp)
-    },
-  },
+interface Emits {
+  (e: 'resize', val: string): void
+}
+const props = withDefaults(defineProps<Props>(), {
+  showHandle: false,
+  overlay: false,
 })
+const emit = defineEmits<Emits>()
+
+const isDragging: Ref<boolean> = ref(false)
+const initialEvent: Ref<MouseEvent | null> = ref(null)
+const initialClientRect: Ref<DOMRect | undefined> = ref(undefined)
+const dragBar: Ref<HTMLElement | null> = ref(null)
+
+const isVertical: ComputedRef<boolean> = computed(() => {
+  return props.side === 'top' || props.side === 'bottom'
+})
+
+onUnmounted(removeEventListeners)
+
+function handleMouseDown(event: MouseEvent) {
+  addEventListeners()
+  isDragging.value = true
+  initialEvent.value = event
+  initialClientRect.value =
+    dragBar.value?.parentElement?.getBoundingClientRect()
+}
+function handleMouseMove(event: MouseEvent) {
+  if (!isDragging.value || !initialEvent.value || !initialClientRect.value) {
+    return
+  }
+  const delta = isVertical.value
+    ? event.y - initialEvent.value.y
+    : event.x - initialEvent.value.x
+
+  const emitValue = isVertical.value
+    ? initialClientRect.value.height + delta
+    : initialClientRect.value.width + delta
+
+  emit('resize', `${emitValue}px`)
+}
+function handleMouseUp() {
+  removeEventListeners()
+  isDragging.value = false
+  initialEvent.value = null
+}
+function addEventListeners() {
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mouseup', handleMouseUp)
+}
+function removeEventListeners() {
+  if (!isDragging.value) {
+    return
+  }
+  document.removeEventListener('mousemove', handleMouseMove)
+  document.removeEventListener('mouseup', handleMouseUp)
+}
 </script>
 <style scoped lang="less" src="./DragBar.less"></style>
