@@ -29,7 +29,9 @@ To start running locally complete the Environment setup and then run `yarn dev`.
 
 ## Running Cypress tests
 
-To run Cypress tests you need to do yarn dev in order to build out `localhost:3000`, that's the one we use as the baseUrl
+To run Cypress tests you need to do `yarn dev` in order to build out `localhost:3000`, that's the one we use as the baseUrl
+
+You also need to go to the iridium repo and run `pnpm i`, `pnpm build` and `pnpm sync-node`
 
 When `localhost:3000` is running you can either use
 
