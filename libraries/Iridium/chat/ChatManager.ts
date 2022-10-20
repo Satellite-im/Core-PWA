@@ -15,7 +15,6 @@ import * as json from 'multiformats/codecs/json'
 import type { EmitterCallback } from '@satellite-im/iridium'
 import type { SyncFetchResponse } from '@satellite-im/iridium/src/sync/types'
 import { v4 } from 'uuid'
-import { IridiumPeerIdentifier } from '~/../iridium/src/types'
 import {
   ChatError,
   Conversation,
@@ -27,7 +26,6 @@ import {
   MessageEditPayload,
   MessageReaction,
   MessageReactionPayload,
-  ConversationMessageType,
   ConversationType,
 } from '~/libraries/Iridium/chat/types'
 import { Friend } from '~/libraries/Iridium/friends/types'
@@ -377,7 +375,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   private getNotificationType(
     message: ConversationMessage,
     conversationType: ConversationType,
-  ): NotificationType | undefined {
+  ): NotificationType {
     switch (message.type) {
       case 'member_join': {
         if (message.members?.includes(iridium.id)) {
@@ -400,14 +398,11 @@ export default class ChatManager extends Emitter<ConversationMessage> {
   getNotificationPayload = (
     conversation: Conversation,
     message: ConversationMessage,
-  ): NotificationPayloads => {
+  ): NotificationPayloads | undefined => {
     const notificationType = this.getNotificationType(
       message,
       conversation.type,
     )
-    if (!notificationType) {
-      throw new Error('no notification type')
-    }
 
     const notificationPayload: NotificationPayloads = {
       messageId: message.id,
@@ -417,18 +412,15 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     switch (notificationType) {
       case NotificationType.GROUP_MESSAGE:
       case NotificationType.DIRECT_MESSAGE:
+      case NotificationType.MEMBER_LEAVE:
         return notificationPayload
 
       case NotificationType.ADDED_TO_GROUP:
       case NotificationType.MEMBER_JOIN:
-      case NotificationType.MEMBER_LEAVE:
         return {
           ...notificationPayload,
           addedMemberIds: message.members,
         }
-
-      default:
-        throw new Error('no notification type')
     }
   }
 
@@ -722,18 +714,19 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
   }
 
-  getConversation(id: Conversation['id']): Conversation | undefined {
-    return this.state.conversations[id]
+  getConversation(id: Conversation['id']): Conversation {
+    const conversation = this.state.conversations[id]
+    if (!conversation) {
+      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
+    }
+    return conversation
   }
 
   getConversationMessage(
     conversationId: string,
     messageId: string,
   ): ConversationMessage {
-    const conversation = this.state.conversations[conversationId]
-    if (!conversation) {
-      throw new Error(ChatError.CONVERSATION_NOT_FOUND)
-    }
+    const conversation = this.getConversation(conversationId)
     const message = conversation.message[messageId]
     if (!message) {
       throw new Error(ChatError.MESSAGE_NOT_FOUND)
