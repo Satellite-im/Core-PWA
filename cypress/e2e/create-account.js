@@ -36,6 +36,15 @@ describe('Create Account Validations', () => {
     //Finishing Account Creation
     cy.createAccountSubmit()
     cy.welcomeModal(randomName)
+
+    cy.contains(`Early Access`).should('be.visible')
+
+    cy.contains('Please report any bugs or issues at').should('be.visible')
+
+    cy.contains('https://issues.satellite.im/')
+      .click()
+      .should('have.attr', 'href', 'https://issues.satellite.im/')
+      .should('have.attr', 'target', '_blank')
   })
 
   //Skipped since loading profile picture is disabled now
