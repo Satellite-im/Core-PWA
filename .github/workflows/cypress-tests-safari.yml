@@ -11,13 +11,8 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  cypress:
-    name: Run Cypress Tests on CorePWA 🌡️ - Safari
-    runs-on: ubuntu-20.04
-    container:
-      image: cypress/browsers:node16.17.0-chrome106
-      options: --user 1001
-
+  cypress-run:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout 🔖
         uses: actions/checkout@v2
