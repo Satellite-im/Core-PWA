@@ -105,3 +105,9 @@ solana-localnet
 
 ./iridium
 linked-iridium
+
+# Cypress Files
+cypress/screenshots-chat-pair/
+cypress/videos-chat-pair/
+cypress/videos/
+cypress/screenshots/

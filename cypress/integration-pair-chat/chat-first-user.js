@@ -1,22 +1,37 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
-const faker = require('faker')
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat Pair A')
-    .map((item) => item.recoverySeed) + '{enter}'
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 let urlToValidate = 'https://www.google.com'
+let secondUserID
 
-describe.skip('Chat features with two accounts at the same time - First User', () => {
-  it('Load account from Chat Pair A (first account)', { retries: 2 }, () => {
-    //Import first account
-    cy.importAccount(randomPIN, recoverySeed)
-    //Validate Chat Screen is loaded
+describe('Chat features with two accounts at the same time - First User', () => {
+  it.only('Create test account for First User', () => {
+    // Create one account
+    cy.createAccount('12345', 'Chat User A', false, true)
+
+    // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
+  })
+
+  it.only('Send friend request to Second User', () => {
+    //Get second user DID to add it as friend
+    cy.readFile('cypress/fixtures/second-user-account.txt', {
+      timeout: 60000,
+    }).then((value) => {
+      cy.log(value)
+      secondUserID = value
+    })
+
+    cy.log(secondUserID)
+
+    // Go to Friends and send a friend request to First User
+    cy.goToFriendsPage('Add Friend')
+
+    cy.sendFriendRequest(secondUserID, 'Chat User B')
+  })
+
+  it('Wait until friend request sent is accepted by remote user', () => {
+    //Wait until friend request is accepted
 
     //Open a chat conversation with Chat Pair B
-    cy.goToConversation('Chat Pair B')
+    cy.goToConversation('Chat User B')
   })
 
   it('Wait until Chat Pair B account is online to start', () => {

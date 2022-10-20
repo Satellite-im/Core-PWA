@@ -1,23 +1,32 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat Pair B')
-    .map((item) => item.recoverySeed) + '{enter}'
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const longMessage = faker.lorem.words(100) // generate random sentence
 
-describe.skip('Chat features with two accounts at the same time - Second User', () => {
-  it('Load account from Chat Pair B (second account)', { retries: 2 }, () => {
-    //Import first account
-    cy.importAccount(randomPIN, recoverySeed)
+describe('Chat features with two accounts at the same time - Second User', () => {
+  it.only('Create test account for Second User', () => {
+    // Create one account
+    cy.createAccount('12345', 'Chat User B', false, true)
 
-    //Validate Chat Screen is loaded
+    // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
 
+    //Save userDID on file
+    cy.getLocalStorage('Satellite-Store').then((value) => {
+      let valueObject = JSON.parse(value)
+      let userDID = valueObject.accounts.active
+      cy.writeFile('cypress/fixtures/second-user-account.txt', userDID, 'utf-8')
+    })
+  })
+
+  it.only('Accept friend request received from first user', () => {
+    // Go to Friends tab and validate that a friend request was received
+    cy.goToFriendsPage('Requests')
+    cy.validateRequestsBadge()
+    cy.acceptUpcomingFriendRequest('Chat User A')
+  })
+
+  it('Go to conversation with first user', () => {
     //Open a chat conversation
-    cy.goToConversation('Chat Pair A')
+    cy.goToConversation('Chat User A')
   })
 
   it('Wait until Chat Pair A account is online to start', () => {
