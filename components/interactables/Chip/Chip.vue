@@ -11,7 +11,7 @@
       {{ text }}
     </TypographyText>
     <button @click="$emit('delete')">
-      <x-icon class="delete-icon" size="1x" />
+      <x-icon size="1x" />
     </button>
   </div>
 </template>
