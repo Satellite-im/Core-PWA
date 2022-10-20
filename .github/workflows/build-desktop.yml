@@ -8,6 +8,7 @@ env:
   APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
   APPLE_ID: ${{ secrets.APPLE_ID }}
   APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
@@ -41,7 +42,7 @@ jobs:
       - name: Tauri build 🔨
         run: yarn tauri build
       - name: Upload dmg 🔨
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: dmg
           path: src-tauri/target/release/bundle/dmg/Satellite Core_0.2.1_aarch64.dmg
