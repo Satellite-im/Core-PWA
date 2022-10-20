@@ -4,10 +4,7 @@
   v-click-outside="toggleEnhancers"
 >
   <div class="navbar">
-    <InteractablesButtonGroup
-      v-model="route"
-      :values="['glyphs','emoji','gif']"
-    >
+    <InteractablesButtonGroup>
       <InteractablesButton
         text="Glyphs"
         :color="ui.enhancers.route === 'glyphs' ? 'primary' : 'dark'"
