@@ -76,6 +76,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { Friend, FriendRequest } from '~/libraries/Iridium/friends/types'
 import { FriendsTabs } from '~/libraries/Enums/enums'
 import { truthy } from '~/utilities/typeGuard'
+import { DismissSoftwareKeyboard, swiperOptions } from '~/utilities/swiper'
 
 export default Vue.extend({
   name: 'MobileFriends',
@@ -95,8 +96,7 @@ export default Vue.extend({
       return this.$route.query.route as FriendsTabs
     },
     swiperConfig(): SwiperOptions {
-      return {
-        noSwipingClass: 'disable-swipe',
+      return swiperOptions({
         allowSlidePrev: false,
         on: {
           activeIndexChange: ({ activeIndex }) => {
@@ -114,7 +114,7 @@ export default Vue.extend({
             }
           },
         },
-      }
+      })
     },
     friendsList(): Friend[] {
       return this.friends.friends
