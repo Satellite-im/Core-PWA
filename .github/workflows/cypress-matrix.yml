@@ -35,14 +35,15 @@ jobs:
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
 
+      - name: Tar files
+        run: tar -cvf build.tar .nuxt/ linked-iridium/
+
       - name: Save Build Folders
         uses: actions/upload-artifact@v3
         with:
           name: build
           if-no-files-found: error
-          path: |
-            .nuxt/
-            linked-iridium/
+          path: build.tar
           retention-days: 1
 
   cypress-on-chrome:
@@ -61,6 +62,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build
+
+      - name: Extract the build files
+        run: tar xvf build.tar
 
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
@@ -103,6 +107,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build
+
+      - name: Extract the build files
+        run: tar xvf build.tar
 
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
