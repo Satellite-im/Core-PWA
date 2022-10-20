@@ -33,9 +33,10 @@ jobs:
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
-          start: |
+          run: |
             sh ./cypress/scripts/watch-script.sh
             sh ./cypress/scripts/sync-node-script.sh
+            yarn add --dev cypress
             yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
