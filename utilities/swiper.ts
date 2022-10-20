@@ -1,7 +1,7 @@
 import { Swiper, SwiperOptions } from 'swiper'
+import { Capacitor, PluginListenerHandle } from '@capacitor/core'
 import { Keyboard } from '@capacitor/keyboard'
 import { App } from '@capacitor/app'
-import { PluginListenerHandle } from '@capacitor/core'
 
 let backButtonHandle: PluginListenerHandle | undefined
 
@@ -17,7 +17,9 @@ export function DismissSoftwareKeyboard({
     if (activeElement) {
       activeElement.blur()
     }
-    Keyboard.hide()
+    if (Capacitor.getPlatform() !== 'web') {
+      Keyboard.hide()
+    }
   })
 
   on('beforeInit', async () => {
