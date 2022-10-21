@@ -73,7 +73,11 @@ export type Position = {
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile?: { user: User; position: Position; showStatusChange?: boolean }
+  quickProfile?: {
+    user: User
+    position: Position
+    isSidebarProfile?: boolean
+  }
   fullProfile?: User
   contextMenuPosition: Position
   settingsRoute: SettingsRoutes

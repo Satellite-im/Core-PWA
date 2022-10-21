@@ -33,7 +33,7 @@ export default Vue.extend({
       this.$store.commit('ui/setQuickProfile', {
         user: this.profile,
         position: { x: x - horizOffset, y: y - vertOffset },
-        showStatusChange: true,
+        isSidebarProfile: true,
       })
     },
   },

@@ -21,7 +21,7 @@
         <edit-icon size="1x" />
       </InteractablesButton>
     </div>
-    <div v-if="quickProfile?.showStatusChange" class="status-container">
+    <div v-if="quickProfile?.isSidebarProfile" class="status-container">
       <button
         v-click-outside="() => setMenuVis(false)"
         class="open-status-button"
@@ -47,6 +47,13 @@
     >
       <arrow-right-icon size="1x" />
     </InteractablesInput>
+    <InteractablesButton
+      v-if="quickProfile?.isSidebarProfile"
+      class="lock-button"
+      color="dark"
+      :text="$t('popups.quick_commands.title')"
+      @click="toggleLock"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -153,6 +160,12 @@ function openSettings() {
 
 function setMenuVis(val: boolean) {
   isStatusMenuVisible.value = val
+}
+
+function toggleLock() {
+  $store.commit('accounts/lock')
+  location.reload()
+  close()
 }
 </script>
 <style scoped lang="less" src="./QuickProfile.less"></style>

@@ -168,6 +168,9 @@ export default {
       away: 'Away',
       offline: 'Offline',
     },
+    quick_commands: {
+      title: 'Lock App',
+    },
   },
   files: {
     files: 'Files',
