@@ -1,94 +1,65 @@
-<template src="./Enhancers.html"></template>
+<template>
+  <div v-click-outside="close" class="enhancers">
+    <div class="navbar">
+      <InteractablesButtonGroup>
+        <InteractablesButton
+          v-for="el in buttons"
+          :key="el.id"
+          :text="el.label"
+          :color="enhancersRoute === el.id ? 'primary' : 'dark'"
+          @click="enhancersRoute = el.id"
+        >
+          <component :is="el.icon" size="1x" />
+        </InteractablesButton>
+      </InteractablesButtonGroup>
+    </div>
+    <div class="container">
+      <EnhancersGlyphs v-if="enhancersRoute === 'glyph'" />
+      <EnhancersEmoji v-else-if="enhancersRoute === 'emoji'" />
+    </div>
+  </div>
+</template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { mapState } from 'vuex'
-import { SmileIcon, GridIcon, ImageIcon } from 'satellite-lucide-icons'
-import { RootState } from '~/types/store/store'
+<script setup lang="ts">
+import { computed, WritableComputedRef } from 'vue'
+import { SmileIcon, BoxSelectIcon } from 'satellite-lucide-icons'
+import { TranslateResult } from 'vue-i18n'
+import { EnhancersRoute } from '~/store/chat/types'
 
-export default Vue.extend({
-  components: {
-    SmileIcon,
-    GridIcon,
-    ImageIcon,
-  },
-  computed: {
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-    }),
-    route: {
-      get(): string {
-        return this.ui.enhancers.route
-      },
-      set(newRoute: string) {
-        const prevRoute = this.ui.enhancers.route
-        if (newRoute !== prevRoute) {
-          this.$store.commit('ui/toggleEnhancers', {
-            show: true,
-            route: newRoute,
-          })
-        }
-      },
-    },
-  },
-  methods: {
-    /**
-     * @method setRoute DocsTODO
-     * @description
-     * @param route
-     * @example
-     */
-    setRoute(route: string) {
-      this.$store.commit('ui/toggleEnhancers', {
-        show: true,
-        floating: !!this.$device.isMobile,
-        route,
-      })
-    },
-    /**
-     * @method toggleEnhancers DocsTODO
-     * @description Toggles enhancers by committing the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
-     * @example v-on:click="toggleEnhancers"
-     */
-    toggleEnhancers(event: Event) {
-      /* Ignore outside toggling when glyph & emoji toggle btn is clickd (for preventing twice-toggling)  */
-      const glyphToggleElm = document.getElementById('glyph-toggle')
-      const emojiToggleElm = document.getElementById('emoji-toggle')
-      if (
-        !event ||
-        !(
-          glyphToggleElm?.contains(event.target) ||
-          emojiToggleElm?.contains(event.target)
-        )
-      ) {
-        this.$store.commit('ui/toggleEnhancers', {
-          show: !this.ui.enhancers.show,
-          floating: this.$device.isMobile,
-        })
-      }
-      if (this.ui.settingReaction.status) {
-        this.$store.commit('ui/settingReaction', {
-          status: false,
-          groupID: null,
-          messageID: null,
-        })
-      }
-    },
-    /**
-     * @method convertRem
-     * @description This converts an rem value into a pixel value
-     * @example convertRem('24rem') => if the document font size is 16px, this returns the value of 24*16, or 384.
-     * @todo TODO: Move this function into an utility folder
-     */
-    convertRem(value: string): number {
-      const fontSize = parseFloat(
-        getComputedStyle(document.documentElement).fontSize, // Get the font size on the html tag, eg 16 (px), 2 (px), etc
-      )
-      const remNumber = Number(value.replace('rem', ''))
-      return remNumber * fontSize
-    },
-  },
+type EnhancersButton = {
+  id: EnhancersRoute
+  label: string | TranslateResult
+  icon: any
+}
+
+const { $store, $i18n } = useNuxtApp()
+
+const enhancersRoute: WritableComputedRef<EnhancersRoute> = computed({
+  get: () => $store.state.chat.enhancersRoute,
+  set: (v: EnhancersRoute) => $store.commit('chat/setEnhancersRoute', v),
 })
+
+const buttons: EnhancersButton[] = [
+  {
+    id: 'glyph',
+    label: $i18n.t('ui.glyphs'),
+    icon: BoxSelectIcon,
+  },
+  {
+    id: 'emoji',
+    label: $i18n.t('ui.emoji'),
+    icon: SmileIcon,
+  },
+  // {
+  //   id: 'gif',
+  //   label: $i18n.t('ui.emoji'),
+  //   icon: SmileIcon,
+  // },
+]
+
+function close() {
+  enhancersRoute.value = ''
+}
 </script>
 
 <style scoped lang="less" src="./Enhancers.less"></style>

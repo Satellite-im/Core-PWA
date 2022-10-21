@@ -1,5 +1,5 @@
 <div ref="chatbar" class="chatbar">
-  <Enhancers @click="handleChatTextFromOutside" />
+  <Enhancers v-if="chat.enhancersRoute" @click="handleChatTextFromOutside" />
   <!-- Hide commands for early access -->
   <!-- <ChatbarCommandsPreview :recipient="recipient" :message="ui.chatbarContent" /> -->
   <ChatbarReply />
