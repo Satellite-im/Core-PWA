@@ -3,8 +3,8 @@
   width: @enhancers-width;
   max-width: @enhancers-width;
   position: absolute;
-  right: @normal-spacing;
-  bottom: calc(@chatbar-size + @normal-spacing + @light-spacing);
+  right: 16px;
+  bottom: calc(@chatbar-size + 16px);
   overflow: hidden;
   box-shadow: @ui-shadow;
   display: flex;
@@ -13,7 +13,7 @@
   &:extend(.background-semitransparent-light);
   &:extend(.blur);
 
-  &-mobile {
+  @media (max-width: @mobile-breakpoint) {
     width: 100%;
     right: 0;
   }
@@ -28,13 +28,5 @@
   .container {
     width: 100%;
     overflow: hidden;
-  }
-}
-
-@media only screen and (max-width: @mobile-breakpoint) {
-  #enhancers {
-    width: calc(100vw - @normal-spacing*2);
-    min-width: calc(100vw - @normal-spacing*2);
-    margin-right: 0;
   }
 }

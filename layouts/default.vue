@@ -39,5 +39,6 @@ export default Vue.extend({
   justify-content: center;
   height: 100%;
   overflow-y: auto;
+  padding-bottom: var(--safe-area-inset-bottom);
 }
 </style>
