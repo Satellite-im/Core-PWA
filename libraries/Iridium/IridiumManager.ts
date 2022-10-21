@@ -157,7 +157,7 @@ export class IridiumManager extends Emitter {
     }
 
     doc.seen = Date.now()
-    await this.connector.set('/', doc)
+    await this.connector.set('/', doc, { store: { syncPin: true } })
 
     return doc
   }
