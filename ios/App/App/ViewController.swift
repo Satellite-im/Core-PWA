@@ -23,8 +23,8 @@ class ViewController: CAPBridgeViewController {
         let targetFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let height = UIScreen.main.bounds.height - targetFrame.origin.y
         
-        self.webView?.evaluateJavaScript("app.style.transitionDuration = '\(duration)s'")
-        self.webView?.evaluateJavaScript("app.style.paddingBottom = '\(height)px'")
+        self.webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('keyboardHeight', { detail: { height: \(height), duration: \(duration) } }));")
+
     }
 
 }
