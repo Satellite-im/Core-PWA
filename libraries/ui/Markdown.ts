@@ -276,6 +276,28 @@ const rules: MarkdownRules = {
           )
     },
   },
+  userTag: {
+    ...markdown.defaultRules.strong,
+    match: (source) => /^@[^\s]+/i.exec(source),
+    parse: (capture) => {
+      return {
+        content: [
+          {
+            type: 'text',
+            content: capture[0],
+          },
+        ],
+      }
+    },
+    html: (node, output, state) => {
+      return htmlTag(
+        'span',
+        output(node.content, state),
+        { class: 'user-tag' },
+        state,
+      )
+    },
+  },
 }
 
 const _parser = markdown.parserFor(rules)
