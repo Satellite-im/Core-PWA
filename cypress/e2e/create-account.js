@@ -43,7 +43,7 @@ describe('Create Account Validations', () => {
 
     cy.contains('https://issues.satellite.im')
       .click()
-      .should('have.attr', 'href', 'https://issues.satellite.im/')
+      .should('have.attr', 'href', 'https://issues.satellite.im')
       .should('have.attr', 'target', '_blank')
   })
 
