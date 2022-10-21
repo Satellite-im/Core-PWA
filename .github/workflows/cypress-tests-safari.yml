@@ -26,8 +26,6 @@ jobs:
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
-      - name: Install webkit
-        run: npm install --save-dev playwright-webkit --force
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
       - name: Execute Cypress Tests 🌡️
@@ -37,6 +35,7 @@ jobs:
             sh ./cypress/scripts/watch-script.sh
             sh ./cypress/scripts/sync-node-script.sh
             yarn cypress install --force
+            npx playwright install-deps
             yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
