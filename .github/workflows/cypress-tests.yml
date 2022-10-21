@@ -6,6 +6,8 @@ env:
   NUXT_ENV_IRIDIUM_SYNC_NODES: ${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }}
   NUXT_ENV_IRIDIUM_APIS: ${{ secrets.NUXT_ENV_IRIDIUM_APIS }}
   NUXT_ENV_IRIDIUM_GATEWAYS: ${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }}
+  NUXT_ENV_FEEDBACK_URL: https://issues.satellite.im
+  
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
