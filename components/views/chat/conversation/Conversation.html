@@ -47,12 +47,12 @@
         />
       </template>
       <UiLoadersMessage
-        v-if="leadingIndex > 0"
+        v-if="!noLeading"
         ref="leadingLoader"
         data-id="leading-message-scroll-loader"
         :count="20"
       />
-      <UiSpacer v-if="leadingIndex === 0" :height="16" />
+      <UiSpacer v-if="noLeading" :height="16" />
       <div
         v-if="activeUploadChats.includes(conversation?.id)"
         data-cy="file-loader-container"

@@ -191,9 +191,15 @@ export default Vue.extend({
           scroller.scrollToBottom()
         }
 
-        // if (this.trailingIndex < MESSAGES_WINDOW) {
-        //   this.trailingIndex++
-        // }
+        // Fill the available spots
+        if (this.trailingIndex < MESSAGES_WINDOW) {
+          this.trailingIndex++
+        }
+        // If we're full and not at the bottom, keep the message position
+        else if (!scroller.isLockedToBottom) {
+          this.trailingIndex++
+          this.leadingIndex++
+        }
       }
     },
     isLastChatItemAuthor(newValue) {
@@ -264,7 +270,12 @@ export default Vue.extend({
       const firstMessage = this.chatItems[this.chatItems.length - 1]?.message.id
       // These should be cached, so hopefully this will be almost instant
       setTimeout(() => {
-        this.trailingIndex -= MESSAGE_PAGE_SIZE
+        const delta =
+          this.trailingIndex - MESSAGES_WINDOW >= MESSAGE_PAGE_SIZE
+            ? MESSAGE_PAGE_SIZE
+            : this.trailingIndex - MESSAGES_WINDOW
+
+        this.trailingIndex -= delta
         this.isLoadingMore = false
 
         const container = (this.$refs.container as ScrollerRef).$el
@@ -281,7 +292,7 @@ export default Vue.extend({
             currentScrollTop -
             Math.max(container.scrollTop - bottom, 0)
 
-          this.leadingIndex -= MESSAGE_PAGE_SIZE
+          this.leadingIndex -= delta
         })
       }, 100)
     },
