@@ -105,13 +105,6 @@ export default Vue.extend({
           break
       }
     },
-    emojiReaction() {
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-        floating: true,
-      })
-    },
-
     handleAutocomplete(event: { show: boolean; text: string }) {
       this.showAutocomplete = event.show
       this.autocompleteText = event.text

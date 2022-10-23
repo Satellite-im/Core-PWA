@@ -75,10 +75,7 @@ export default Vue.extend({
         pack: this.pack,
         url: this.src,
       })
-      this.$store.commit('ui/toggleEnhancers', {
-        show: false,
-        floating: this.$device.isMobile,
-      })
+      this.$store.commit('chat/setEnhancersRoute', '')
     },
     setLoaded() {
       this.isLoaded = true
