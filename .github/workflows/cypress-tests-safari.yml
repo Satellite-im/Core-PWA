@@ -31,16 +31,13 @@ jobs:
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
-          run: |
-            sh ./cypress/scripts/watch-script.sh
-            sh ./cypress/scripts/sync-node-script.sh
-            npx playwright install-deps
-            yarn cypress install --force
-            yarn dev
-          wait-on: 'http://localhost:3000'
+          working-directory: ./
+          install: false
+          start: yarn dev
+          command: npm run cy:run
+          wait-on: http://localhost:3000
           wait-on-timeout: 300
           browser: webkit
-
       - name: Upload screenshots of tests failed 📷
         uses: actions/upload-artifact@v2
         if: failure()
