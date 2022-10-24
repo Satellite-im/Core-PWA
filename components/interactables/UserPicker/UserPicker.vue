@@ -83,7 +83,7 @@ const toggle = (friend: User) => {
   emit('input', selected.value)
 }
 
-watch(selected, (value: User[]) => emit('input', value), { deep: true })
+watch(selected, (value: User[]) => emit('input', value))
 </script>
 
 <style scoped lang="less" src="./UserPicker.less"></style>
