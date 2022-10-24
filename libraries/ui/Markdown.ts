@@ -278,7 +278,16 @@ const rules: MarkdownRules = {
   },
   userTag: {
     ...markdown.defaultRules.strong,
-    match: (source) => /^@[^\s]+/i.exec(source),
+    match: (source, state) => {
+      if (
+        (state.prevCapture && !/^$|\s+$/.test(state.prevCapture[0])) ||
+        state.liveTyping
+      ) {
+        return null
+      }
+      console.log('#####', state)
+      return /^@([^\s]+)/.exec(source)
+    },
     parse: (capture) => {
       return {
         content: [

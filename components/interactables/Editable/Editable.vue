@@ -413,6 +413,17 @@ export default Editable
       .emoji {
         letter-spacing: 4px;
       }
+
+      .user-tag {
+        background: @flair-color;
+        color: @white;
+        font-weight: 600;
+        padding: 0.125rem 0.25rem;
+        margin: 0 2px;
+        border-radius: 3px;
+        cursor: pointer;
+        caret-color: @white;
+      }
     }
   }
 }
