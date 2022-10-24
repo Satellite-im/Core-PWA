@@ -1,49 +1,73 @@
-<template src="./Controls.html"></template>
+<template>
+  <div class="chatbar-controls">
+    <button
+      v-for="el in buttons"
+      :key="el.id"
+      v-tooltip.top="el.label"
+      :disabled="disabled"
+      :data-cy="`send-${el.id}`"
+      @click="el.func"
+    >
+      <component :is="el.icon" />
+    </button>
+  </div>
+</template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { mapState } from 'vuex'
-
+<script setup lang="ts">
 import {
   ArrowRightIcon,
   SmileIcon,
   BoxSelectIcon,
-  BanknoteIcon,
 } from 'satellite-lucide-icons'
+import { computed, WritableComputedRef } from 'vue'
+import { TranslateResult } from 'vue-i18n'
+import { EnhancersRoute } from '~/store/chat/types'
 
-export default Vue.extend({
-  components: {
-    BanknoteIcon,
-    SmileIcon,
-    BoxSelectIcon,
-    ArrowRightIcon,
-  },
-  props: {
-    disabled: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  computed: {
-    ...mapState(['ui']),
-  },
-  methods: {
-    /**
-     * @method toggleEnhancers
-     * @description Toggles enhancers by committing the opposite of it's current value (this.ui.enhancers.show) to toggleEnhancers in state
-     * @example v-on:click="toggleEnhancers"
-     */
-    toggleEnhancers(route: string) {
-      this.$store.commit('ui/toggleEnhancers', {
-        show:
-          (this.ui.enhancers.show && this.ui.enhancers.route !== route) ||
-          !this.ui.enhancers.show,
-        floating: true,
-        route,
-      })
-    },
-  },
+type ChatbarButton = {
+  id: EnhancersRoute | 'message'
+  label: string | TranslateResult
+  icon: any
+  func: Function
+}
+
+interface Props {
+  disabled: boolean
+}
+
+interface Emits {
+  (e: 'send'): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const { $store, $i18n } = useNuxtApp()
+
+const enhancersRoute: WritableComputedRef<EnhancersRoute> = computed({
+  get: () => $store.state.chat.enhancersRoute,
+  set: (v: EnhancersRoute) => $store.commit('chat/setEnhancersRoute', v),
 })
+
+const buttons: ChatbarButton[] = [
+  {
+    id: 'glyph',
+    label: $i18n.t('ui.glyphs'),
+    icon: BoxSelectIcon,
+    func: () => (enhancersRoute.value = 'glyph'),
+  },
+  {
+    id: 'emoji',
+    label: $i18n.t('ui.emoji'),
+    icon: SmileIcon,
+    func: () => (enhancersRoute.value = 'emoji'),
+  },
+  {
+    id: 'message',
+    label: $i18n.t('ui.send'),
+    icon: ArrowRightIcon,
+    func: () => emit('send'),
+  },
+]
 </script>
 
 <style lang="less" src="./Controls.less"></style>

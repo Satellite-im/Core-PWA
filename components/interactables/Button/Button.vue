@@ -41,6 +41,10 @@ interface Props {
   disabled?: boolean
   link?: string
 }
+interface Emits {
+  (e: 'click', event: MouseEvent): void
+}
+
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   color: 'primary',
@@ -50,10 +54,6 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   link: '',
 })
-
-interface Emits {
-  (e: 'click', event: MouseEvent): void
-}
 const emit = defineEmits<Emits>()
 
 const cursorX: Ref<number> = ref(0)

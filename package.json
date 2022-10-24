@@ -44,6 +44,7 @@
     "@solana/wallet-adapter-wallets": "^0.16.8",
     "@solana/web3.js": "1.43.1",
     "@tensorflow/tfjs": "^3.13.0",
+    "@vueuse/core": "^9.3.1",
     "@vueuse/head": "^0.7.5",
     "@vvo/tzdb": "^6.47.0",
     "bip39": "^3.0.4",

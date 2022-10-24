@@ -31,32 +31,6 @@ export default {
   ) {
     state.chatImageOverlay = file
   },
-  toggleEnhancers(state: UIState, options: EnhancerInfo) {
-    state.enhancers = {
-      show: options.show,
-      floating:
-        typeof options.floating !== 'undefined'
-          ? options.floating
-          : state.enhancers.floating,
-      position:
-        typeof options.position !== 'undefined'
-          ? options.position
-          : state.enhancers.position,
-      defaultWidth:
-        typeof options.defaultWidth !== 'undefined'
-          ? options.defaultWidth
-          : state.enhancers.defaultWidth,
-      defaultHeight:
-        typeof options.defaultHeight !== 'undefined'
-          ? options.defaultHeight
-          : state.enhancers.defaultHeight,
-      containerWidth:
-        typeof options.containerWidth !== 'undefined'
-          ? options.containerWidth
-          : state.enhancers.containerWidth,
-      route: options.route || 'emoji',
-    }
-  },
   setSettingsRoute(
     state: UIState,
     route: SettingsRoutes = SettingsRoutes.PERSONALIZE,
@@ -76,9 +50,6 @@ export default {
   },
   setGlyphModalPackId(state: UIState, packId: string) {
     state.glyphModalPackId = packId
-  },
-  settingReaction(state: UIState, status: object) {
-    state.settingReaction = status // TODO: check this mutation, probably a bug
   },
   /**
    * Called when user click the Edit Message on Context Menu or Edit action in message listings
