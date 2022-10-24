@@ -59,3 +59,50 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+  cypress-two-users:
+    name: Cypress Tests for Two Users At The Same Time 🌡️
+    runs-on: ubuntu-20.04
+    container:
+      image: cypress/browsers:node16.17.0-chrome106
+      options: --user 1001
+
+    steps:
+      - name: Checkout 🔖
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 🔨
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Change permissions on scripts 🔨
+        run: |
+          chmod +x ./linkscript.sh
+          chmod +x ./cypress/scripts/watch-script.sh
+          chmod +x ./cypress/scripts/sync-node-script.sh
+      - name: Build Core 🔨
+        run: yarn && ./linkscript.sh
+      - name: Execute Cypress Tests 🌡️
+        uses: cypress-io/github-action@v4
+        with:
+          start: |
+            sh ./cypress/scripts/watch-script.sh
+            sh ./cypress/scripts/sync-node-script.sh
+            yarn dev
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 300
+          command: npm run cy:chat
+
+      - name: Upload screenshots of tests failed 📷
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots-chat-pair
+          path: cypress/screenshots-chat-pair
+
+      - name: Upload videos of tests failed 📺
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos-chat-pair
+          path: cypress/videos-chat-pair

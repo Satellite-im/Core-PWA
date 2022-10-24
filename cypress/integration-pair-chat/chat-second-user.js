@@ -1,29 +1,32 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
 const faker = require('faker')
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat Pair B')
-    .map((item) => item.recoverySeed) + '{enter}'
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
 const longMessage = faker.lorem.words(100) // generate random sentence
 
-describe.skip('Chat features with two accounts at the same time - Second User', () => {
-  it('Load account from Chat Pair B (second account)', { retries: 2 }, () => {
-    //Import first account
-    cy.importAccount(randomPIN, recoverySeed)
+describe('Chat features with two accounts at the same time - Second User', () => {
+  it('Create test account for Second User', () => {
+    // Create one account
+    cy.createAccount('12345', 'Chat User B', false, true)
 
-    //Validate Chat Screen is loaded
+    // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
 
-    //Open a chat conversation
-    cy.goToConversation('Chat Pair A')
+    //Save userDID on file
+    cy.getLocalStorage('Satellite-Store').then((value) => {
+      let valueObject = JSON.parse(value)
+      let userDID = valueObject.accounts.active
+      cy.writeFile('cypress/fixtures/second-user-account.txt', userDID, 'utf-8')
+    })
   })
 
-  it('Wait until Chat Pair A account is online to start', () => {
-    cy.contains('Chat Pair A is online', { timeout: 300000 }).should(
-      'be.visible',
-    )
+  it('Accept friend request received from first user', () => {
+    // Go to Friends tab and validate that a friend request was received
+    cy.goToFriendsPage('Requests')
+    cy.validateRequestsBadge()
+    cy.acceptUpcomingFriendRequest('Chat User A')
+  })
+
+  it('Go to conversation with first user', () => {
+    //Open a chat conversation
+    cy.goToConversation('Chat User A')
   })
 
   it('Type a long message in chat bar without sending it', () => {
@@ -37,8 +40,9 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
 
   it('Receive Incoming Video Call', () => {
     //Answer remote videocall
-    cy.get('[data-cy=incoming-call]', { timeout: 180000 }).should('be.visible')
-    cy.wait(5000) //Wait 5 seconds before answering to validate calling status on the other user
+    cy.get('[data-cy=incoming-call]', { timeout: 30000 }).should('be.visible')
+
+    //Accept incoming video call
     cy.get('[data-cy=incoming-call-accept]').click()
 
     //Wait until all validations from other user are completed
@@ -59,10 +63,7 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.get('[data-cy=call-video]').click()
 
     // Local Camera is loaded
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=video-stream]')
-      .should('be.visible')
-      .and('have.class', 'loaded')
+    cy.validateVideoPresentOnCall('local', true)
 
     //Video buttons show as unmuted
     cy.get('[data-cy=video-unmuted]').should('be.visible')
@@ -75,9 +76,7 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.get('[data-cy=call-video]').click()
 
     // Local Camera is not loaded
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=video-stream]')
-      .should('not.exist')
+    cy.validateVideoPresentOnCall('local', false)
 
     //Video buttons show as muted
     cy.get('[data-cy=video-muted]').should('be.visible')
@@ -90,10 +89,7 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.get('[data-cy=call-screen-share]').click()
 
     // Local Screenshare is loaded
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=screen-stream]')
-      .should('be.visible')
-      .and('have.class', 'loaded')
+    cy.validateScreenSharePresentOnCall('local', true)
 
     //Screen share button show enabled
     cy.get('[data-cy=screen-unmuted]').should('be.visible')
@@ -105,9 +101,7 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.get('[data-cy=call-screen-share]').click()
 
     // Local Screenshare is no longer visible
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=screen-stream]')
-      .should('not.exist')
+    cy.validateScreenSharePresentOnCall('local', false)
 
     //Screen share button show enabled
     cy.get('[data-cy=screen-muted]').should('be.visible')
@@ -143,14 +137,17 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.validateChatPageIsLoaded()
 
     //Go to conversation
-    cy.goToConversation('Chat Pair A')
+    cy.goToConversation('Chat User A')
   })
 
   it('Call again to User A for a fourth time', () => {
     //Wait until Chat Pair A is online again
-    cy.contains('Chat Pair A is online', { timeout: 90000 }).should(
-      'be.visible',
-    )
+    cy.get('[data-cy=chat-header-name]')
+      .contains('Chat User A')
+      .should('be.visible')
+    cy.get('[data-cy=chat-header-status]')
+      .contains('online', { timeout: 90000 })
+      .should('be.visible')
 
     //Start videocall
     cy.get('[data-cy=toolbar-enable-audio]').click()
