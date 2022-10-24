@@ -97,7 +97,7 @@
     "@capacitor/cli": "^4.3.0",
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge",
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge@3.0.0-27747000.69db93e",
     "@nuxt/types": "^2.15.8",
     "@nuxtjs/device": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
