@@ -1,5 +1,5 @@
 <template>
-  <div v-click-outside="close" class="enhancers">
+  <div ref="enhancers" class="enhancers">
     <div class="navbar">
       <InteractablesButtonGroup>
         <InteractablesButton
@@ -21,7 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, WritableComputedRef } from 'vue'
+import { computed, Ref, ref, WritableComputedRef } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 import { SmileIcon, BoxSelectIcon } from 'satellite-lucide-icons'
 import { TranslateResult } from 'vue-i18n'
 import { EnhancersRoute } from '~/store/chat/types'
@@ -33,6 +34,10 @@ type EnhancersButton = {
 }
 
 const { $store, $i18n } = useNuxtApp()
+
+const enhancers: Ref<HTMLElement | null> = ref(null)
+
+onClickOutside(enhancers, close)
 
 const enhancersRoute: WritableComputedRef<EnhancersRoute> = computed({
   get: () => $store.state.chat.enhancersRoute,
