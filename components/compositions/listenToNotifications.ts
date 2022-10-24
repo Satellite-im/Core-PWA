@@ -252,7 +252,7 @@ export function listenToNotifications() {
   }
 
   const navigateToFriends = () => {
-    const mobileLink = '/mobile/friends?route=requests'
+    const mobileLink = '/mobile/friends?route=request'
     const desktopLink = '/friends?route=requests'
     $nuxt.$router.push($nuxt.$device.isMobile ? mobileLink : desktopLink)
   }
