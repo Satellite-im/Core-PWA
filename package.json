@@ -64,7 +64,7 @@
     "minisearch": "^4.0.3",
     "mousetrap": "^1.6.5",
     "nsfwjs": "^2.4.1",
-    "nuxt-edge": "latest",
+    "nuxt-edge": "2.16.0-27616340.013f051b",
     "nuxt-mq": "^2.0.2",
     "peer-id": "^0.16.0",
     "qrcode.vue": "^1.7.0",
