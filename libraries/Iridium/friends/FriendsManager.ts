@@ -15,6 +15,7 @@ import { User } from '../users/types'
 import { FriendRequest, FriendRequestStatus, FriendsError } from './types'
 import logger from '~/plugins/local/logger'
 import {
+  FriendRequestNotificationPayload,
   NotificationBase,
   NotificationType,
 } from '~/libraries/Iridium/notifications/types'
@@ -351,11 +352,15 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
   }
 
   private sendNotification(user: User) {
-    iridium.notifications.emit('notification/create', {
+    const notification: NotificationBase<FriendRequestNotificationPayload> = {
+      at: Date.now(),
+      seen: false,
       type: NotificationType.FRIEND_REQUEST,
       senderId: user.did,
-      image: user.photoHash,
-    })
+      payload: {},
+      image: user.photoHash as string,
+    }
+    iridium.notifications.emit('notification/create', notification)
   }
 
   /**
