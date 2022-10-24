@@ -24,6 +24,11 @@ elif [$DEPLOY_ENV == "qa"]; then
   export SYNC_NODE_ADDR=/dns4/sync-qa-lon.satellite.im/tcp/443/wss,/dns4/sync-qa-ny.satellite.im/tcp/443/wss
   export NUXT_ENV_IRIDIUM_GATEWAYS=/dns4/sync-qa-lon.satellite.im/tcp/9090,/dns4/sync-qa-ny.satellite.im/tcp/9090
   export NUXT_ENV_IRIDIUM_APIS=/dns4/sync-qa-ny.satellite.im/tcp/5002,/dns4/sync-qa-lon.satellite.im/tcp/5002
+elif [$DEPLOY_ENV == "rd"]; then
+  echo "Checking out RD Environment"
+  export SYNC_NODE_ADDR=/dns4/sync-rd-sf.satellite.im/tcp/443/wss
+  export NUXT_ENV_IRIDIUM_GATEWAYS=/dns4/sync-rd-sf.satellite.im/tcp/9090
+  export NUXT_ENV_IRIDIUM_APIS=/dns4/sync-rd-sf.satellite.im/tcp/5002
 elif [$DEPLOY_ENV == "prod"]; then
   echo "Checking out Prod Environment"
   export SYNC_NODE_ADDR=/dns4/sync-ny-1.satellite.im/tcp/443/wss,/dns4/sync-sf-1.satellite.im/tcp/443/wss,/dns4/sync-fra-1.satellite.im/tcp/443/wss,/dns4/sync-sgp-1.satellite.im/tcp/443/wss
