@@ -1,24 +1,19 @@
 <template>
   <ModalDialog
     :primary-button="primaryButton"
-    :height="'600px'"
+    height="600px"
     class="update-modal"
-    @primary-button-click="skipVersion"
   >
     <template #image>
       <img src="~/assets/svg/mascot/new_things.svg" />
     </template>
 
-    <template v-if="releaseData && releaseData.tag_name" #title>
+    <template v-if="releaseData.tag_name" #title>
       {{ $t('modal.update_modal.title', { tagName: releaseData.tag_name }) }}
     </template>
 
     <template #body>
-      <div
-        v-if="releaseData && releaseData.body"
-        class="body"
-        v-html="releaseData.body"
-      />
+      <div v-if="releaseData.body" class="body" v-html="releaseData.body" />
 
       <div v-if="isLoading" class="update-modal-spinner">
         <UiLoadersSpinner spinning />
@@ -36,22 +31,26 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { XIcon } from 'satellite-lucide-icons'
 import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
+import { ModalDialogButton } from '~/components/views/ModalDialog/ModalDialog.vue'
 
 export default Vue.extend({
   data() {
     return {
       hasMinorUpdate: false,
       requiresUpdate: false,
-      releaseData: {},
+      releaseData: {
+        body: '',
+        tag_name: '',
+      },
       isLoading: false,
     }
   },
   computed: {
     ...mapState(['ui']),
-    primaryButton() {
+    primaryButton(): ModalDialogButton {
       return {
         text: this.$t('modal.update_modal.got_it'),
-        action: this.skipVersion,
+        action: () => this.$emit('close'),
         icon: XIcon,
       }
     },
@@ -60,17 +59,6 @@ export default Vue.extend({
     await this.getReleaseBody()
   },
   methods: {
-    /* clearAndReload() {
-     commented out until we can test this - we probably won't want to clean all of local storage'
-       localStorage.removeItem('local-version')
-       window.location.reload()
-     }, */
-    skipVersion() {
-      localStorage.setItem('local-version', this.$config.clientVersion)
-      this.$data.requiresUpdate = false
-      this.$data.hasMinorUpdate = false
-      this.toggleVisibility()
-    },
     async getReleaseBody() {
       this.isLoading = true
       try {
@@ -80,12 +68,6 @@ export default Vue.extend({
       } finally {
         this.isLoading = false
       }
-    },
-    toggleVisibility() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'changelog',
-        state: !this.ui.modals.changelog,
-      })
     },
   },
 })

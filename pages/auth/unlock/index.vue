@@ -77,18 +77,6 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
   },
   methods: {
     /**
-     * @method toggleChangelogVisibility
-     * @description This toggles the changelog modal on and off
-     * @returns void
-     * @example this.toggleChangelogVisibility()
-     */
-    toggleChangelogVisibility(): void {
-      this.$store.commit('ui/toggleModal', {
-        name: 'changelog',
-        state: !this.ui.modals.changelog,
-      })
-    },
-    /**
      * @method getIcon DocsTODO
      * @description
      * @returns
@@ -167,12 +155,6 @@ ${this.$t('pages.unlock.choose_pin_description_2')}`
         return
       }
       this.create()
-    },
-    togglePinInfoModal() {
-      this.$store.commit('ui/toggleModal', {
-        name: 'pinInfo',
-        state: !this.ui.modals.pinInfo,
-      })
     },
     // FOR DEVELOPMENT PURPOSES ONLY
     async createRandom() {

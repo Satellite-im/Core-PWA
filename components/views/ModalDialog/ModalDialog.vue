@@ -44,9 +44,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { TranslateResult } from 'vue-i18n'
 
-type ModalDialogButton = {
-  text: string
+export type ModalDialogButton = {
+  text: string | TranslateResult
   action: () => void
   icon?: any
 }

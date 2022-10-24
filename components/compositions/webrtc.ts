@@ -4,6 +4,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { conversationHooks } from '~/components/compositions/conversations'
+import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 
 export function webrtcHooks(conversationId?: Conversation['id']) {
   const managers = reactive({
@@ -22,8 +23,16 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
     )
   })
 
+  const incomingCall: ComputedRef<WebRTCIncomingCall | null> = computed(() => {
+    return managers.webrtc.state.incomingCall
+  })
+
   const isActiveCall: ComputedRef<boolean> = computed(() => {
     return managers.webrtc.isActiveCall(conversationId)
+  })
+
+  const isBackgroundCall: ComputedRef<boolean> = computed(() => {
+    return managers.webrtc.isBackgroundCall(conversationId)
   })
 
   async function call({
@@ -60,5 +69,5 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
       $nuxt.$toast.error($nuxt.$i18n.t(e.message))
     }
   }
-  return { enableRTC, isActiveCall, call }
+  return { enableRTC, incomingCall, isActiveCall, isBackgroundCall, call }
 }

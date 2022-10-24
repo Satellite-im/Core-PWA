@@ -66,14 +66,7 @@
     </div>
   </div>
 
-  <UiVersion name version @click="toggleChangelogVisibility" />
-
-  <UiModal
-    v-if="ui.modals.changelog"
-    @close="toggleModal(ModalWindows.CHANGELOG)"
-  >
-    <UiUpdateModal />
-  </UiModal>
+  <UiVersion name version />
 
   <UiConfirmationModal
     :show-modal="confirmClearAccountModalVisible"

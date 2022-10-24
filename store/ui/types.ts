@@ -12,7 +12,6 @@ export enum GlyphMarketViewStatus {
 export enum ModalWindows {
   MARKETPLACE = 'marketplace',
   WALLET = 'wallet',
-  CHANGELOG = 'changelog',
   GLYPH = 'glyph',
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
