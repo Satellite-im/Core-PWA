@@ -11,10 +11,10 @@
         <InteractablesSidebarToggle />
       </div>
       <div class="sidebar-nav">
-        <nuxt-link class="sidebar-button" to="/files" data-cy="sidebar-files">
+        <!-- <nuxt-link class="sidebar-button" to="/files" data-cy="sidebar-files">
           <folder-icon size="20" />
           <TypographyText size="sm"> {{ $t('files.files') }} </TypographyText>
-        </nuxt-link>
+        </nuxt-link> -->
 
         <nuxt-link
           class="sidebar-button"

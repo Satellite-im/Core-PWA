@@ -43,7 +43,7 @@ or
 
 if you want to run a specific test on terminal you can also use
 
-- `npx cypress run --spec "cypress/integration/test-name-here.js" --browser chrome`
+- `npx cypress run --spec "cypress/e2e/test-name-here.js" --browser chrome`
 
 ## Running Jest tests
 

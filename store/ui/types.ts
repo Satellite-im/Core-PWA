@@ -19,16 +19,6 @@ export enum ModalWindows {
   CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
 }
 
-export interface EnhancerInfo {
-  show: boolean
-  floating?: boolean
-  position?: number[]
-  defaultWidth?: string
-  defaultHeight?: string
-  containerWidth?: number
-  route: string
-}
-
 export interface EmojiUsage {
   code: string
   count: number
@@ -73,7 +63,11 @@ export type Position = {
 export interface UIState {
   contextMenuStatus: boolean
   contextMenuValues: ContextMenuItem[]
-  quickProfile?: { user: User; position: Position; showStatusChange?: boolean }
+  quickProfile?: {
+    user: User
+    position: Position
+    isSidebarProfile?: boolean
+  }
   fullProfile?: User
   contextMenuPosition: Position
   settingsRoute: SettingsRoutes
@@ -84,10 +78,6 @@ export interface UIState {
   glyphModalPackId?: string
   chatbarContent: string
   chatbarFocus: boolean
-  enhancers: EnhancerInfo
-  messages: any[]
-  unreadMessage: number
-  settingReaction: object
   hoveredGlyphInfo: object | undefined
   glyphMarketplaceView: object
   editMessage: {

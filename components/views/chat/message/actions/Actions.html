@@ -5,10 +5,7 @@
     v-tooltip.top="$t('ui.emoji')"
     @click="emojiReaction"
   >
-    <smile-icon
-      size="1x"
-      :class="`control-icon emoji-icon ${ui.enhancers.show ? 'primary' : ''}`"
-    />
+    <smile-icon size="1x" class="control-icon" />
   </div>
   <div
     v-if="!hideReply"
@@ -17,14 +14,14 @@
     v-tooltip.top="$t('messaging.reply')"
     @click="setReplyChatbarMessage"
   >
-    <corner-down-right-icon size="1x" :class="'control-icon'" />
+    <corner-down-right-icon size="1x" class="control-icon" />
   </div>
   <div
     v-if="featureReadyToShow"
     class="reply-command"
     v-tooltip.top="$t('messaging.pin')"
   >
-    <archive-icon size="1x" :class="'control-icon'" />
+    <archive-icon size="1x" class="control-icon" />
   </div>
   <div
     v-if="isEditable"
@@ -33,13 +30,13 @@
     v-tooltip.top="$t('controls.edit')"
     @click="editMessage"
   >
-    <edit-icon size="1x" :class="'control-icon'" />
+    <edit-icon size="1x" class="control-icon" />
   </div>
   <div
     v-if="hasMoreSettings"
     class="reply-command"
     v-tooltip.top="$t('ui.more')"
   >
-    <more-vertical-icon size="1x" :class="'control-icon'" />
+    <more-vertical-icon size="1x" class="control-icon" />
   </div>
 </div>

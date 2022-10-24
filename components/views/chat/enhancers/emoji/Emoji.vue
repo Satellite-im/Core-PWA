@@ -6,6 +6,7 @@ import { mapGetters, mapState } from 'vuex'
 import { EmojiPicker } from 'vue-emoji-picker'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { EmojiUsage } from '~/store/ui/types'
+import { RootState } from '~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -17,7 +18,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      chatbarContent: (state) => (state as RootState).ui.chatbarContent,
+      messageReaction: (state) => (state as RootState).chat.messageReaction,
+    }),
     ...mapGetters({
       recipient: 'conversation/recipient',
       getSortedMostUsedEmojis: 'ui/getSortedMostUsedEmojis',
@@ -27,49 +31,25 @@ export default Vue.extend({
     },
   },
   methods: {
-    addEmoji(emoji: any, emojiName: string) {
-      if (this.ui.settingReaction.status) {
-        iridium.chat.toggleMessageReaction({
-          conversationId: this.ui.settingReaction.conversationId,
-          messageId: this.ui.settingReaction.messageId,
+    async addEmoji(emoji: string, emojiName: string) {
+      if (this.messageReaction?.messageId) {
+        await iridium.chat.toggleMessageReaction({
+          conversationId: this.messageReaction.conversationId,
+          messageId: this.messageReaction.messageId,
           reaction: emoji,
         })
+        this.$store.commit('chat/setMessageReaction', undefined)
       } else {
         this.$store.dispatch('ui/setChatbarContent', {
-          content: this.ui.chatbarContent + emoji,
+          content: this.chatbarContent + emoji,
         })
         this.$store.dispatch('ui/setChatbarFocus')
       }
-      this.toggleEnhancers()
+      this.$store.commit('chat/setEnhancersRoute', '')
       this.$store.commit('ui/updateMostUsedEmoji', { emoji, name: emojiName })
     },
     resetSearch(): void {
       this.search = ''
-    },
-    toggleEnhancers(event: Event) {
-      /* Ignore outside toggling when glyph & emoji toggle btn is clickd (for preventing twice-toggling)  */
-      const glyphToggleElm = document.getElementById('glyph-toggle')
-      const emojiToggleElm = document.getElementById('emoji-toggle')
-      // @ts-ignore
-      if (
-        !event ||
-        !(
-          glyphToggleElm?.contains(event.target) ||
-          emojiToggleElm?.contains(event.target)
-        )
-      ) {
-        this.$store.commit('ui/toggleEnhancers', {
-          show: !this.ui.enhancers.show,
-          floating: this.$device.isMobile,
-        })
-      }
-      if (this.ui.settingReaction.status) {
-        this.$store.commit('ui/settingReaction', {
-          status: false,
-          groupID: null,
-          messageID: null,
-        })
-      }
     },
   },
 })

@@ -19,18 +19,6 @@ const InitialUIState = (): UIState => ({
   glyphModalPackId: undefined,
   chatbarContent: '',
   chatbarFocus: false,
-  enhancers: {
-    show: false,
-    floating: false,
-    position: [0, 0],
-    defaultWidth: '24rem',
-    defaultHeight: '30rem',
-    containerWidth: 0,
-    route: 'emoji',
-  },
-  messages: [],
-  unreadMessage: 0,
-  settingReaction: { status: false, groupID: null, messageID: null },
   hoveredGlyphInfo: undefined,
   glyphMarketplaceView: {
     view: GlyphMarketViewStatus.HOME,

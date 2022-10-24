@@ -66,13 +66,13 @@ export default Vue.extend({
           path: '/mobile/chat',
           showBadge: Boolean(totalUnreadMessages.value),
         },
-        {
-          id: 'files',
-          label: $nuxt.$t('global.files'),
-          icon: FolderIcon,
-          path: '/files',
-          showBadge: false,
-        },
+        // {
+        //   id: 'files',
+        //   label: $nuxt.$t('global.files'),
+        //   icon: FolderIcon,
+        //   path: '/files',
+        //   showBadge: false,
+        // },
         {
           id: 'friends',
           label: $nuxt.$t('global.friends'),

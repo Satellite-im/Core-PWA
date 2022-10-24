@@ -4,6 +4,7 @@ exports[`state.default 0 1`] = `
 Object {
   "activeUploadChats": Array [],
   "draftMessages": Object {},
+  "enhancersRoute": "",
   "files": Object {},
   "replyChatbarMessages": Object {},
 }

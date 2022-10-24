@@ -43,8 +43,7 @@ const mutations = {
   //   state.files[id][index].progress = progress
   // },
   deleteFiles(state: ChatState, address: string) {
-    delete state.files[address]
-    state.files = { ...state.files }
+    Vue.delete(state.files, address)
   },
   setDraftMessage(
     state: ChatState,
@@ -62,23 +61,25 @@ const mutations = {
       message,
     }: { conversationId: Conversation['id']; message: ConversationMessage },
   ) {
-    state.replyChatbarMessages = {
-      ...state.replyChatbarMessages,
-      [conversationId]: message,
-    }
+    Vue.set(state.replyChatbarMessages, conversationId, message)
   },
   clearReplyChatbarMessage(
     state: ChatState,
     { conversationId }: { conversationId: Conversation['id'] },
   ) {
-    delete state.replyChatbarMessages[conversationId]
-    state.replyChatbarMessages = { ...state.replyChatbarMessages }
+    Vue.delete(state.replyChatbarMessages, conversationId)
   },
   setActiveUploadChat(state: ChatState, id: Conversation['id']) {
     state.activeUploadChats.push(id)
   },
   removeActiveUploadChat(state: ChatState, id: Conversation['id']) {
     state.activeUploadChats.splice(state.activeUploadChats.indexOf(id), 1)
+  },
+  setEnhancersRoute(state: ChatState, route: ChatState['enhancersRoute']) {
+    state.enhancersRoute = route
+  },
+  setMessageReaction(state: ChatState, val: ChatState['messageReaction']) {
+    Vue.set(state, 'messageReaction', val)
   },
 }
 
