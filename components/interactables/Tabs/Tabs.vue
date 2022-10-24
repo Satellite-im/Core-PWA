@@ -2,7 +2,7 @@
   <div class="tabs" data-cy="tab-group">
     <button
       v-for="tab in tabs"
-      :key="tab.text"
+      :key="tab.route"
       class="tab"
       data-cy="tab-element"
       :class="{ active: route === tab.route }"
