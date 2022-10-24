@@ -46,7 +46,7 @@ interface Props {
   height: string
   exclude?: User['did'][]
 }
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   exclude: () => [],
 })
 
@@ -59,10 +59,14 @@ const { friends } = friendsHooks()
 const selected: Ref<User[]> = ref([])
 const filter: Ref<string> = ref('')
 
+const friendsWithoutExcluded: ComputedRef<User[]> = computed(() => {
+  return friends.value.filter((friend) => !props.exclude.includes(friend.did))
+})
+
 const filteredFriends: ComputedRef<User[]> = computed(() => {
   if (!filter.value) return friends.value
   return fuzzysort
-    .go(filter.value, friends.value, {
+    .go(filter.value, friendsWithoutExcluded.value, {
       keys: ['name'],
     })
     .map((result) => result.obj)
