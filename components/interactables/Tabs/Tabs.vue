@@ -27,7 +27,7 @@ interface Emits {
   (e: 'setRoute', route: string): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   route: '',
 })
 const emit = defineEmits<Emits>()
