@@ -30,6 +30,8 @@ export type Notification<P = {}> = {
   onNotificationClick?: () => void
 }
 
+export type FriendRequestNotificationPayload = {}
+
 export type MessageNotificationPayload = {
   conversationId: string
   messageId: string
@@ -44,6 +46,7 @@ export type MemberJoinNotificationPayload = MessageNotificationPayload & {
 }
 
 export type NotificationPayloads =
+  | FriendRequestNotificationPayload
   | MessageNotificationPayload
   | MemberJoinNotificationPayload
   | GroupConversationCreatedNotificationPayload
