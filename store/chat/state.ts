@@ -5,6 +5,7 @@ const InitialChatState = (): ChatState => ({
   activeUploadChats: [],
   draftMessages: {},
   replyChatbarMessages: {},
+  enhancersRoute: '',
 })
 
 export default InitialChatState
