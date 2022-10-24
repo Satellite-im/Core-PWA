@@ -64,7 +64,7 @@ const friendsWithoutExcluded: ComputedRef<User[]> = computed(() => {
 })
 
 const filteredFriends: ComputedRef<User[]> = computed(() => {
-  if (!filter.value) return friends.value
+  if (!filter.value) return friendsWithoutExcluded.value
   return fuzzysort
     .go(filter.value, friendsWithoutExcluded.value, {
       keys: ['name'],
