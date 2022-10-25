@@ -63,7 +63,6 @@ export default Vue.extend({
     calc(@mobile-nav-height + var(--safe-area-inset-bottom))
   );
   padding-top: var(--safe-area-inset-top);
-  transition: padding-bottom var(--keyboard-animation-duration) ease;
 
   &.hidden-nav {
     padding-bottom: var(--safe-area-inset-bottom);
