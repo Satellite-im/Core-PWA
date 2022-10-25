@@ -124,7 +124,8 @@ const hideMenu = () => {
 
   opacity: 0;
   height: 0;
-  transition: opacity @animation-speed-long ease, height 0.5s ease 2s;
+  transition: opacity @animation-speed-long ease,
+    height 0s ease @animation-speed-long;
 
   &.is-visible {
     opacity: 1;
