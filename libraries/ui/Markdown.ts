@@ -285,7 +285,6 @@ const rules: MarkdownRules = {
       ) {
         return null
       }
-      console.log('#####', state)
       return /^@([^\s]+)/.exec(source)
     },
     parse: (capture) => {
@@ -302,7 +301,11 @@ const rules: MarkdownRules = {
       return htmlTag(
         'span',
         output(node.content, state),
-        { class: 'user-tag' },
+        {
+          class: 'user-tag',
+          tabindex: '0',
+          role: 'button',
+        },
         state,
       )
     },
