@@ -1,0 +1,38 @@
+# name: 'Build Desktop App'
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened, edited]
+
+# jobs:
+#   publish-tauri:
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         platform: [macos-latest]
+
+#     runs-on: ${{ matrix.platform }}
+#     steps:
+#       - name: Checkout 🔖
+#         uses: actions/checkout@v2
+
+#       - name: Setup Node.js 🔨
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 16
+#       - name: Change permissions on scripts 🔨
+#         run: chmod +x ./linkscript.sh
+#       - name: Build Core 🔨
+#         run: ./linkscript.sh && yarn && yarn generate
+#       - name: install Rust stable
+#         uses: actions-rs/toolchain@v1
+#         with:
+#           toolchain: stable
+#       - uses: tauri-apps/tauri-action@v0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           ENABLE_CODE_SIGNING: ${{ secrets.APPLE_CERTIFICATE }}
+#           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+#           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+#           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+#           APPLE_ID: ${{ secrets.APPLE_ID }}
+#           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
