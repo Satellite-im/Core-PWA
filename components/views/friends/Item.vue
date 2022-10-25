@@ -206,6 +206,7 @@ export default Vue.extend({
     gap: 12px;
     user-select: none;
     flex-grow: 1;
+    min-width: 0;
 
     padding: 8px 16px;
     &:hover {
