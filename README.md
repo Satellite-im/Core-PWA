@@ -2,9 +2,9 @@
 
 # Satellite Core-PWA
 
-#### Dev Site (Most up-to-date): [dev.Satellite.one](https://dev.satellite.one)
+#### Dev Site (Most up-to-date): [core-dev.Satellite.im](https://core.satellite.im)
 
-#### Release Site: [Satellite.one](https://satellite.one)
+#### Release Site: [core.Satellite.im](https://core.satellite.im)
 
 #### Bugs and Feature Requests: [issues.satellite.im](https://issues.satellite.im)
 
@@ -25,7 +25,13 @@ Currently, the only environment variable you need is comma separated list of syn
 
 ## Running Locally
 
-To start running locally complete the Environment setup and then run `yarn dev`.
+To start running locally complete the Environment setup and then:
+
+Run the linkscript - this will build iridium and let you install it:
+
+- Allow execution and run `chmod +x linkscript.sh && ./linkscript.sh`
+- Install dependencies `yarn`
+- Run hot reload/dev version `yarn dev`
 
 ## Running Cypress tests
 
@@ -54,6 +60,15 @@ To run Jest tests you can use
 if you want to run a specific test you can also use
 
 - `yarn test folder-name/test-name-here.test.ts`
+
+## Building Desktop Apps
+
+You have to go through the normal install process/linkscript process to get iridium installed as a package.
+
+Then:
+
+- `yarn generate`
+- `yarn tauri build`
 
 # Contributing
 
