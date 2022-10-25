@@ -3,7 +3,7 @@
     <button v-if="conversationId" @click="$emit('slidePrev')">
       <menu-icon class="font-color-flair" size="1.5x" alt="previous" />
     </button>
-    <TypographyText as="h3">
+    <TypographyText as="h3" class="ellipsis">
       {{ conversation?.name }}
     </TypographyText>
     <button

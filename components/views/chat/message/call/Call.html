@@ -4,7 +4,7 @@
     <PhoneIncomingIcon size="1.4x" v-else />
   </div>
   <div class="content">
-    <TypographyText size="md" color="body">
+    <TypographyText size="md" color="body" class="ellipsis">
       <template v-if="isOutgoingCall">
         {{ $t('messaging.call_outgoing') }}
       </template>

@@ -1,4 +1,22 @@
-<template src="./BackgroundCall.html"></template>
+<template>
+  <div class="background-call" @click="navigateToActiveConversation">
+    <TypographyText size="xs" class="text">
+      {{ $t('ui.background_call') }} -&nbsp;
+    </TypographyText>
+
+    <TypographyText
+      v-if="remoteParticipant"
+      size="xs"
+      class="ellipsis text name"
+    >
+      {{ remoteParticipant.name }}
+    </TypographyText>
+
+    <TypographyText v-if="callTimeString" size="xs" class="text">
+      &nbsp;-&nbsp; {{ callTimeString }}
+    </TypographyText>
+  </div>
+</template>
 
 <script lang="ts">
 import Vue from 'vue'
