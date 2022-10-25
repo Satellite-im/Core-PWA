@@ -28,7 +28,15 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.goToFriendsPage('Friends')
 
     //Validate friend appears
-    cy.validateFriendIsActive('Chat User B')
+    cy.goToConversation('Chat User B')
+
+    //Wait until Chat User B is online
+    cy.get('[data-cy=chat-header-name]')
+      .contains('Chat User B')
+      .should('be.visible')
+    cy.get('[data-cy=chat-header-status]')
+      .contains('online', { timeout: 90000 })
+      .should('be.visible')
   })
 
   //Is typing indicator is displayed
