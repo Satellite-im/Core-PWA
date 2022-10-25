@@ -14,7 +14,14 @@ const useMeta = () => {
   useHead({
     title: computed(() => {
       const pageTitle = 'Satellite.im'
-
+      // If this is a tauri build, you can set the badge icon count here
+      // @ts-ignore
+      if (window.__TAURI__) {
+        // @ts-ignore
+        window.__TAURI__?.tauri.invoke('set_badge', {
+          count: totalNotificationCount.value,
+        })
+      }
       return totalNotificationCount.value
         ? `(${totalNotificationCount.value}) ${pageTitle}`
         : pageTitle

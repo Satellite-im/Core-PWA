@@ -5,8 +5,10 @@
     class="conversation"
     ref="container"
     :isLoading="isLoadingMore"
-    :noMore="noMore"
+    :noTrailing="noMore"
+    :noLeading="noLeading"
     @loadMore="loadMore"
+    @loadLess="loadLess"
     v-slot="{ isScrolling }"
   >
     <div class="messages" ref="messages">
@@ -21,7 +23,7 @@
       </template>
       <UiLoadersMessage
         v-if="!noMore"
-        data-id="message-scroll-loader"
+        data-id="trailing-message-scroll-loader"
         :count="20"
       />
       <template v-for="(item, i) of chatItems">
@@ -44,6 +46,13 @@
           @unreadMessage="onUnreadMessage"
         />
       </template>
+      <UiLoadersMessage
+        v-if="!noLeading"
+        ref="leadingLoader"
+        data-id="leading-message-scroll-loader"
+        :count="20"
+      />
+      <UiSpacer v-if="noLeading" :height="16" />
       <div
         v-if="activeUploadChats.includes(conversation?.id)"
         data-cy="file-loader-container"

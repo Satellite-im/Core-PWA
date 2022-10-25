@@ -17,9 +17,6 @@
 import { debounce, throttle } from 'lodash'
 import Vue from 'vue'
 
-// the higher the sooner we trigger the 'loadMore' emit
-const LOADING_TOLERANCE = 0.25
-
 const Scroller = Vue.extend({
   name: 'InfiniteScroll',
   props: {
@@ -27,7 +24,11 @@ const Scroller = Vue.extend({
       type: Boolean,
       required: true,
     },
-    noMore: {
+    noTrailing: {
+      type: Boolean,
+      default: false,
+    },
+    noLeading: {
       type: Boolean,
       default: false,
     },
@@ -40,11 +41,18 @@ const Scroller = Vue.extend({
     timeoutScrolling: undefined as undefined | NodeJS.Timer,
   }),
   computed: {
-    messageLoader(): HTMLElement | null {
-      return this.noMore
+    trailingMessageLoader(): HTMLElement | null {
+      return this.noTrailing
         ? null
         : (document.querySelector(
-            `[data-id="message-scroll-loader"]`,
+            `[data-id="trailing-message-scroll-loader"]`,
+          ) as HTMLElement)
+    },
+    leadingMessageLoader(): HTMLElement | null {
+      return this.noLeading
+        ? null
+        : (document.querySelector(
+            `[data-id="leading-message-scroll-loader"]`,
           ) as HTMLElement)
     },
   },
@@ -72,7 +80,7 @@ const Scroller = Vue.extend({
         this.isScrolling = false
       }, 150)
 
-      this.emitMore()
+      this.emit()
     }, 100),
     onScrollDebounce: debounce(function (this: any) {
       const container = this.$refs.container as HTMLElement | null
@@ -80,35 +88,45 @@ const Scroller = Vue.extend({
 
       this.isLockedToBottom =
         container.scrollTop + container.clientHeight >=
-        container.scrollHeight - 1
+          container.scrollHeight - 1 && this.noLeading
 
       // when reaching the top of the loader bring the scroll to the beginning of the loader
       if (
-        this.messageLoader &&
+        this.trailingMessageLoader &&
         container.scrollTop === 0 &&
         !this.isScrollbarDragged
       ) {
-        this.messageLoader.scrollIntoView(false)
+        this.trailingMessageLoader.scrollIntoView(false)
       }
     }, 100),
-    emitMore() {
+    emit() {
       const container = this.$refs.container as HTMLElement | null
-      if (!container || !this.messageLoader) return
+      if (!container) return
 
-      const contentPart =
-        (container.scrollHeight - this.messageLoader.offsetHeight) *
-        LOADING_TOLERANCE
+      const commonCond = !this.isLoading && !this.isScrollbarDragged
+      if (this.leadingMessageLoader) {
+        const distanceFromBottom =
+          container.scrollHeight - container.clientHeight - container.scrollTop
 
-      if (
-        this.isLoading ||
-        this.noMore ||
-        this.isScrollbarDragged ||
-        container.scrollTop > this.messageLoader.offsetHeight + contentPart
-      ) {
-        return
+        if (
+          commonCond &&
+          !this.noLeading &&
+          distanceFromBottom <=
+            this.leadingMessageLoader.offsetHeight + container.clientHeight
+        ) {
+          this.$emit('loadLess')
+        }
       }
 
-      this.$emit('loadMore')
+      if (
+        this.trailingMessageLoader &&
+        commonCond &&
+        !this.noTrailing &&
+        container.scrollTop <=
+          this.trailingMessageLoader.offsetHeight + container.clientHeight
+      ) {
+        this.$emit('loadMore')
+      }
     },
     scrollToBottom() {
       this.$nextTick(() => {
@@ -123,7 +141,7 @@ const Scroller = Vue.extend({
 
       if (this.isScrollbarDragged) {
         this.isScrollbarDragged = false
-        this.emitMore()
+        this.emit()
       }
     },
     onMouseDown(e: MouseEvent) {
