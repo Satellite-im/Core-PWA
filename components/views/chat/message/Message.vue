@@ -192,12 +192,10 @@ export default Vue.extend({
      * @example v-on:click="showQuickProfile"
      */
     showQuickProfile(e: MouseEvent) {
-      setTimeout(() => {
-        this.$store.commit('ui/setQuickProfile', {
-          user: this.author,
-          position: { x: e.x, y: e.y },
-        })
-      }, 0)
+      this.$store.commit('ui/setQuickProfile', {
+        user: this.author,
+        position: { x: e.x, y: e.y },
+      })
     },
     /**
      * @method copyMessage

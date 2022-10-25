@@ -39,12 +39,10 @@ const conversationId: ComputedRef<string | undefined> = computed(() => {
 const { allParticipantsAlphaSorted } = conversationHooks(conversationId.value)
 
 function showQuickProfile(e: MouseEvent, user: User) {
-  setTimeout(() => {
-    $store.commit('ui/setQuickProfile', {
-      user,
-      position: { x: e.x, y: e.y },
-    })
-  }, 0)
+  $store.commit('ui/setQuickProfile', {
+    user,
+    position: { x: e.x, y: e.y },
+  })
 }
 </script>
 
