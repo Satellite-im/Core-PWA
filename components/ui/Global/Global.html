@@ -27,20 +27,10 @@
       v-if="ui.modals.marketplace"
       @close="toggleModal(ModalWindows.MARKETPLACE)"
     >
-      <Marketplace
-        v-click-outside="() => toggleModal(ModalWindows.MARKETPLACE)"
-        @close="toggleModal(ModalWindows.MARKETPLACE)"
-      />
+      <Marketplace @close="toggleModal(ModalWindows.MARKETPLACE)" />
     </UiModal>
-    <UiModal
-      v-if="ui.modals.glyph"
-      @close="toggleModal(ModalWindows.GLYPH)"
-      small
-    >
-      <Glyphs
-        v-click-outside="() => toggleModal(ModalWindows.GLYPH)"
-        @close="toggleModal(ModalWindows.GLYPH)"
-      />
+    <UiModal v-if="ui.modals.glyph" @close="toggleModal(ModalWindows.GLYPH)">
+      <Glyphs @close="toggleModal(ModalWindows.GLYPH)" />
     </UiModal>
     <UiModal
       v-if="ui.fullProfile"
