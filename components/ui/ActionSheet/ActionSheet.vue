@@ -1,7 +1,6 @@
 // ActionSheet
 <template>
   <div
-    ref="contextMenu"
     class="context-menu-container"
     :class="{ 'is-visible': isVisible }"
     data-cy="context-menu"
@@ -56,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, computed, ComputedRef, ref } from 'vue'
+import { computed, ComputedRef } from 'vue'
 import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 
 interface Props {
@@ -68,12 +67,7 @@ interface Emits {
   (e: 'hide'): void
 }
 const emit = defineEmits<Emits>()
-
 const props = defineProps<Props>()
-
-// @ts-ignore
-const { $store } = useNuxtApp()
-const contextMenu = ref<HTMLElement>()
 
 // TODO: Enable when feature is ready
 // const { getSortedMostUsedEmojis } = mapGetters('ui', [
@@ -94,13 +88,6 @@ const handleAction = (func: Function, type?: string) => {
   }
   emit('action', func)
 }
-
-watch(
-  () => props.isVisible,
-  (isVisible) => {
-    $store.commit('ui/setIsMobileNavVisible', !isVisible)
-  },
-)
 
 const hideMenu = () => {
   emit('hide')
