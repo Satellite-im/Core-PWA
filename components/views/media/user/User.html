@@ -60,7 +60,7 @@
       {{user.name}}
     </TypographyTag>
 
-    <div class="indicators" v-if="!isPending || isLocal">
+    <div class="indicators" data-cy="indicators" v-if="!isPending || isLocal">
       <div class="indicator" data-cy="muted-indicator" v-if="audioMuted">
         <mic-off-icon />
       </div>

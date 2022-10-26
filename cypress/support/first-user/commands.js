@@ -1064,15 +1064,22 @@ Cypress.Commands.add('validateFriendIsActive', (friendName) => {
 Cypress.Commands.add(
   'validateVideoPresentOnCall',
   (type = 'local', available = true, customTimeout = 10000) => {
-    if (type === 'local') {
-      cy.get('[data-cy=local-video-stream]').as('myLocator')
-    } else {
-      cy.get('[data-cy=remote-video-stream]').as('myLocator')
-    }
-    if (available) {
-      cy.get('@myLocator', { timeout: customTimeout }).should('be.visible')
-    } else {
-      cy.get('@myLocator', { timeout: customTimeout }).should('not.exist')
+    if (type === 'local' && available) {
+      cy.get('[data-cy=local-video-stream]', { timeout: customTimeout }).should(
+        'exist',
+      )
+    } else if (type === 'local' && !available) {
+      cy.get('[data-cy=local-video-stream]', { timeout: customTimeout }).should(
+        'not.exist',
+      )
+    } else if (type === 'remote' && available) {
+      cy.get('[data-cy=remote-video-stream]', {
+        timeout: customTimeout,
+      }).should('exist')
+    } else if (type === 'remote' && !available) {
+      cy.get('[data-cy=remote-video-stream]', {
+        timeout: customTimeout,
+      }).should('not.exist')
     }
   },
 )
@@ -1080,34 +1087,68 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'validateScreenSharePresentOnCall',
   (type = 'local', available = true, customTimeout = 10000) => {
-    if (type === 'local') {
-      cy.get('[data-cy=local-screen-stream]').as('myLocator')
-    } else {
-      cy.get('[data-cy=remote-screen-stream]').as('myLocator')
-    }
-    if (available) {
-      cy.get('@myLocator', { timeout: customTimeout }).should('be.visible')
-    } else {
-      cy.get('@myLocator', { timeout: customTimeout }).should('not.exist')
+    if (type === 'local' && available) {
+      cy.get('[data-cy=local-screen-stream]', {
+        timeout: customTimeout,
+      }).should('exist')
+    } else if (type === 'local' && !available) {
+      cy.get('[data-cy=local-screen-stream]', {
+        timeout: customTimeout,
+      }).should('not.exist')
+    } else if (type === 'remote' && available) {
+      cy.get('[data-cy=remote-screen-stream]', {
+        timeout: customTimeout,
+      }).should('exist')
+    } else if (type === 'remote' && !available) {
+      cy.get('[data-cy=remote-screen-stream]', {
+        timeout: customTimeout,
+      }).should('not.exist')
     }
   },
 )
 
 Cypress.Commands.add(
   'validateAudioPresentOnCall',
-  (username, available = true, customTimeout = 10000) => {
-    cy.get('[data-cy=info-overlay-username]')
-      .contains(username)
-      .parents('[data-cy=stream-participant]')
-      .as('myLocator')
-    if (available) {
-      cy.get('@myLocator')
-        .find('[data-cy=muted-indicator]', { timeout: customTimeout })
-        .should('be.visible')
-    } else {
-      cy.get('@myLocator')
-        .find('data-cy=muted-indicator]', { timeout: customTimeout })
-        .should('not.exist')
+  (username, muted = true, customTimeout = 10000) => {
+    if (muted) {
+      cy.get(
+        '[title="' +
+          username +
+          '"] > [data-cy=indicators] > [data-cy=muted-indicator]',
+        { timeout: customTimeout },
+      ).should('exist')
+    } else if (!muted) {
+      cy.get(
+        '[title="' +
+          username +
+          '"] > [data-cy=indicators] > [data-cy=muted-indicator]',
+        { timeout: customTimeout },
+      ).should('not.exist')
     }
   },
 )
+
+Cypress.Commands.add('answerVideocall', (customTimeout = 15000) => {
+  //Accept incoming video call
+  cy.get('[data-cy=incoming-call]', { timeout: customTimeout }).should(
+    'be.visible',
+  )
+  cy.get('[data-cy=incoming-call-accept]').click()
+  cy.get('[data-cy=mediastream]').should('be.visible')
+})
+
+Cypress.Commands.add('callUser', () => {
+  cy.get('[data-cy=toolbar-enable-audio]').click()
+  cy.get('[data-cy=mediastream]').should('be.visible')
+})
+
+Cypress.Commands.add('finishCall', () => {
+  cy.get('[data-cy=call-hangup]').click()
+  cy.get('[data-cy=mediastream]').should('not.exist')
+})
+
+Cypress.Commands.add('waitUntilRemoteCallEnds', (customTimeout = 15000) => {
+  cy.get('[data-cy=mediastream]', { timeout: customTimeout }).should(
+    'not.exist',
+  )
+})

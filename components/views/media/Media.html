@@ -2,7 +2,7 @@
   ref="mediastream"
   class="mediastream"
   :class="{ 'has-presenter': presenter !== null, 'is-fullscreen': isFullscreen }"
-  data-cy="mediastream"
+  :data-cy="`${isFullscreen ? 'mediastream-full-screen' : 'mediastream'}`"
   :style="`height:${height}`"
 >
   <div v-show="presenter !== null" class="presenter" ref="presenter">
