@@ -36,7 +36,7 @@ export function delay(ms: number) {
 export async function uploadFile(
   file: File,
   participants: User['did'][],
-): Promise<{ cid: string; valid: boolean } | undefined> {
+): Promise<{ cid: string; valid: boolean; signature: string } | undefined> {
   return new Promise((resolve) => {
     if (!iridium.connector?.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
@@ -57,8 +57,12 @@ export async function uploadFile(
           const { payload } = msg
           const { body } = payload
           const { result } = body
-          if (result.originalCID === cid.toString()) {
-            resolve({ cid: result.cid, valid: result.valid })
+          if (result.cid === cid.toString()) {
+            resolve({
+              cid: result.cid,
+              valid: result.valid,
+              signature: result.signature,
+            })
           }
           iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
         }
@@ -67,7 +71,7 @@ export async function uploadFile(
         setTimeout(() => {
           iridium.connector?.p2p?.off('node/message/sync/pin', onSyncPin)
           resolve(undefined)
-        }, 60000)
+        }, 120000)
       })
   })
 }

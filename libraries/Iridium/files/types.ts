@@ -22,6 +22,7 @@ export interface IridiumFile extends Shared {
   thumbnail: string
   extension: string
   nsfw: boolean
+  signature?: string
 }
 
 export interface IridiumDirectory extends Shared {
