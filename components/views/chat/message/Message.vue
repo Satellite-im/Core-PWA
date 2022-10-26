@@ -179,6 +179,16 @@ export default Vue.extend({
         spoiler.classList.add('spoiler-open')
       })
     })
+
+    Array.from(
+      (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
+        'user-tag',
+      ),
+    ).forEach((tag) => {
+      tag.addEventListener('click', (e) => {
+        this.showQuickProfile(e as MouseEvent)
+      })
+    })
   },
   beforeDestroy() {
     this.intersectionObserver?.disconnect()
