@@ -42,22 +42,23 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
       return
     }
 
-    await iridium.chat?.sendMessage({
-      conversationId,
-      type: 'call',
-      at: Date.now(),
-      attachments: [],
-      call: {},
-    })
-
     // todo - refactor to accept multiple recipients for group calls
-    await iridium.webRTC
-      .call({
+    try {
+      await iridium.webRTC.call({
         recipient,
         conversationId,
         kinds,
       })
-      .catch((e) => $nuxt.$toast.error($nuxt.$i18n.t(e.message)))
+      await iridium.chat?.sendMessage({
+        conversationId,
+        type: 'call',
+        at: Date.now(),
+        attachments: [],
+        call: {},
+      })
+    } catch (e) {
+      $nuxt.$toast.error($nuxt.$i18n.t(e.message))
+    }
   }
   return { enableRTC, isActiveCall, call }
 }

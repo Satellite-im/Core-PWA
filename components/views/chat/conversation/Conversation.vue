@@ -29,7 +29,13 @@ export interface ChatItem {
   isLastCallMessage: boolean
 }
 
-const MESSAGE_PAGE_SIZE = 50
+const MIN_MESSAGE_HEIGHT = 24 // 1.5 rem (reset.css)
+const MULTIPLIER = 50
+const MESSAGE_PAGE_SIZE = Math.max(
+  Math.floor(window.innerHeight / MIN_MESSAGE_HEIGHT / MULTIPLIER) * MULTIPLIER,
+  MULTIPLIER,
+)
+const MESSAGES_WINDOW = MESSAGE_PAGE_SIZE * 4
 
 export default Vue.extend({
   components: {
@@ -42,7 +48,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      numMessages: MESSAGE_PAGE_SIZE,
+      trailingIndex: MESSAGE_PAGE_SIZE * 2,
+      leadingIndex: 0,
       isLoadingMore: false,
       isBlurred: false,
       firstUnreadMessageElement: null as HTMLElement | null,
@@ -88,9 +95,11 @@ export default Vue.extend({
       return lastMessage.at > this.conversation.lastReadAt
     },
     chatItems(): ChatItem[] {
-      const messages = this.messages
-        .filter((message) => !message.replyToId)
-        .slice(-this.numMessages)
+      const filtered = this.messages.filter((message) => !message.replyToId)
+      const messages = filtered.slice(
+        Math.max(filtered.length - this.trailingIndex, 0),
+        filtered.length - this.leadingIndex,
+      )
       const items = messages.map((message, index) => {
         const prevMessage = index >= 0 ? messages[index - 1] : undefined
         const isSameAuthor = prevMessage
@@ -140,15 +149,15 @@ export default Vue.extend({
       return items
     },
     isLastChatItemAuthor(): boolean {
-      const lastItem = this.chatItems[this.chatItems.length - 1]
+      const lastItem = this.messages[this.messages.length - 1]
       if (!lastItem || !iridium.connector) {
         return false
       }
-      return lastItem.message.from === iridium.connector.id
+      return lastItem.from === iridium.connector.id
     },
     noMore(): boolean {
       return (
-        this.numMessages >=
+        this.trailingIndex >=
         this.messages.filter((message) => !message.replyToId).length
       )
     },
@@ -167,30 +176,30 @@ export default Vue.extend({
       }
       return null
     },
+    messageWindow(): number {
+      return this.trailingIndex - this.leadingIndex
+    },
+    noLeading(): boolean {
+      return this.leadingIndex === 0
+    },
   },
   watch: {
-    chatItems(newValue, oldValue) {
+    messages(newValue, oldValue) {
       const scroller = this.$refs.container as ScrollerRef
-      if (
-        (this.isLastChatItemAuthor || scroller.isLockedToBottom) &&
-        newValue[newValue.length - 1]?.message.id !==
-          oldValue[oldValue.length - 1]?.message.id
-      ) {
-        scroller.scrollToBottom()
-      }
+      if (newValue.length !== oldValue.length) {
+        if (this.isLastChatItemAuthor || scroller.isLockedToBottom) {
+          scroller.scrollToBottom()
+        }
 
-      const maxTime = Math.max(...this.messages.map((message) => message.at))
-      if (
-        oldValue[oldValue.length - 1] !== newValue[newValue.length - 1] &&
-        (!maxTime || maxTime > this.conversation.lastReadAt) &&
-        !this.isBlurred &&
-        scroller.isLockedToBottom
-      ) {
-        const currentTimestamp = this.$dayjs().valueOf()
-        iridium.chat.updateConversationReadAt(
-          this.conversation.id,
-          maxTime || currentTimestamp,
-        )
+        // Fill the available spots
+        if (this.trailingIndex < MESSAGES_WINDOW) {
+          this.trailingIndex++
+        }
+        // If we're full and not at the bottom, keep the message position
+        else if (!scroller.isLockedToBottom) {
+          this.trailingIndex++
+          this.leadingIndex++
+        }
       }
     },
     isLastChatItemAuthor(newValue) {
@@ -232,14 +241,14 @@ export default Vue.extend({
       const lastMessage = this.chatItems[0]
       setTimeout(() => {
         this.isLoadingMore = false
-        this.numMessages += MESSAGE_PAGE_SIZE
+        this.trailingIndex += MESSAGE_PAGE_SIZE
         const container = (this.$refs.container as ScrollerRef).$el
 
         const currentScrollTop = container.scrollTop
         const currentScrollHeight = container.scrollHeight
-        const lastMessageOffsetTop = this.getMessageOffsetTop(
-          lastMessage.message.id,
-        )
+
+        const top = this.getMessageOffsets(lastMessage.message.id).top
+        const difference = container.scrollTop + container.clientHeight - top
 
         this.$nextTick(() => {
           container.scrollTop =
@@ -248,14 +257,44 @@ export default Vue.extend({
             // in case the user has scrolled in the meanwhile, make up the difference
             currentScrollTop -
             // in case the user has scrolled beyond the loaders, lets reset the scroll position above the lastMessage
-            Math.min(
-              container.scrollTop +
-                container.clientHeight -
-                lastMessageOffsetTop,
-              0,
-            )
+            Math.min(difference, 0)
+
+          if (this.messageWindow > MESSAGES_WINDOW) {
+            this.leadingIndex += MESSAGE_PAGE_SIZE
+          }
         })
-      }, Math.random() * 1500)
+      }, Math.random() * 1000)
+    },
+    loadLess() {
+      this.isLoadingMore = true
+      const firstMessage = this.chatItems[this.chatItems.length - 1]?.message.id
+      // These should be cached, so hopefully this will be almost instant
+      setTimeout(() => {
+        const delta =
+          this.trailingIndex - MESSAGES_WINDOW >= MESSAGE_PAGE_SIZE
+            ? MESSAGE_PAGE_SIZE
+            : this.trailingIndex - MESSAGES_WINDOW
+
+        this.trailingIndex -= delta
+        this.isLoadingMore = false
+
+        const container = (this.$refs.container as ScrollerRef).$el
+
+        const currentScrollTop = container.scrollTop
+        const currentScrollHeight = container.scrollHeight
+
+        this.$nextTick(() => {
+          const bottom = this.getMessageOffsets(firstMessage).bottom
+          container.scrollTop =
+            container.scrollHeight -
+            currentScrollHeight +
+            // in case the user has scrolled in the meanwhile, make up the difference
+            currentScrollTop -
+            Math.max(container.scrollTop - bottom, 0)
+
+          this.leadingIndex -= delta
+        })
+      }, 100)
     },
     onUnreadMessage({
       message,
@@ -301,8 +340,8 @@ export default Vue.extend({
       this.isUnreadBelowViewport = false
       iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
     },
-    getMessageOffsetTop(id: string) {
-      let offsetTop = 0
+    getMessageOffsets(id: string) {
+      const offsets = { top: 0, bottom: 0 }
       const el = document.querySelector(
         `[data-message-id="${id}"]`,
       ) as HTMLElement | null
@@ -312,13 +351,15 @@ export default Vue.extend({
         const currentLastMessage = this.chatItems.find(
           (i) => i.message.id === id,
         )
-        offsetTop = // take the offsetTop from the body only if the currentLastMessage does not have to show the header
+        offsets.top = // take the offsetTop from the body only if the currentLastMessage does not have to show the header
           elBody && !currentLastMessage?.showHeader
             ? elBody.offsetTop
             : el.offsetTop
+
+        offsets.bottom = offsets.top + el.offsetHeight
       }
 
-      return offsetTop
+      return offsets
     },
   },
 })

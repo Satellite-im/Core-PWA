@@ -59,14 +59,16 @@ export default Vue.extend({
   height: 100%;
   flex-direction: column;
   padding-bottom: max(
-    @mobile-nav-height,
-    calc(@mobile-nav-height + var(--safe-area-inset-bottom))
+    calc(var(--safe-area-inset-bottom) + @mobile-nav-height),
+    var(--keyboard-height, 0px)
   );
   padding-top: var(--safe-area-inset-top);
-  transition: padding-bottom var(--keyboard-animation-duration) ease;
 
   &.hidden-nav {
-    padding-bottom: var(--safe-area-inset-bottom);
+    padding-bottom: max(
+      var(--safe-area-inset-bottom),
+      var(--keyboard-height, 0px)
+    );
   }
 }
 </style>

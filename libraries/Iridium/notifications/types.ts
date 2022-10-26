@@ -13,6 +13,7 @@ export enum NotificationType {
   MEMBER_LEAVE = 'member_leave',
   ADDED_TO_GROUP = 'added_to_group',
   GROUP_CONVERSATION_CREATED = 'group_conversation_created',
+  CALL_INCOMING = 'call_incoming',
 }
 
 export type NotificationTypeValues = NotificationType[keyof NotificationType]

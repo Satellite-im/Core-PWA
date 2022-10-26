@@ -922,5 +922,9 @@ export default {
       title: 'Group Member Left',
       body: '{removedMember} left {group}',
     },
+    call: {
+      title: 'Incoming Call',
+      body: 'Incoming call from {sender}',
+    },
   },
 }
