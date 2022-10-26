@@ -1,5 +1,5 @@
 <template>
-  <div ref="quick" v-click-outside="close" class="quick-profile">
+  <div ref="quick" class="quick-profile">
     <div class="top">
       <!-- <button @click="openProfile"> -->
       <UiUserState :user="user" :size="40" />
@@ -57,12 +57,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import Vue, { computed, ComputedRef, onMounted, Ref, ref } from 'vue'
+import { computed, ComputedRef, onMounted, Ref, ref } from 'vue'
 import {
   ArrowRightIcon,
   ChevronRightIcon,
   EditIcon,
 } from 'satellite-lucide-icons'
+import { onClickOutside } from '@vueuse/core'
+
 import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes, UIState } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -76,6 +78,8 @@ const quickProfile: UIState['quickProfile'] = $store.state.ui.quickProfile
 const quick: Ref<HTMLElement | null> = ref(null)
 const text: Ref<string> = ref('')
 const isStatusMenuVisible: Ref<boolean> = ref(false)
+
+onClickOutside(quick, close)
 
 const user: ComputedRef<User | undefined> = computed(() => {
   return quickProfile?.user
