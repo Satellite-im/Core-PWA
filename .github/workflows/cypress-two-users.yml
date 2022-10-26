@@ -12,8 +12,8 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  cypress:
-    name: Run Cypress Tests on CorePWA 🌡️
+  cypress-two-users:
+    name: Cypress Tests for Two Users At The Same Time 🌡️
     runs-on: ubuntu-20.04
     container:
       image: cypress/browsers:node16.17.0-chrome106
@@ -32,7 +32,6 @@ jobs:
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
-
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
       - name: Execute Cypress Tests 🌡️
@@ -44,18 +43,18 @@ jobs:
             yarn dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
-          browser: chrome
+          command: npm run cy:chat
 
       - name: Upload screenshots of tests failed 📷
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+          name: cypress-screenshots-chat-pair
+          path: cypress/screenshots-chat-pair
 
       - name: Upload videos of tests failed 📺
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-videos
-          path: cypress/videos
+          name: cypress-videos-chat-pair
+          path: cypress/videos-chat-pair
