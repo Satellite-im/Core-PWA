@@ -1,6 +1,6 @@
 const faker = require('faker')
-const longMessage = faker.lorem.words(100) // generate random sentence
-let urlToValidate = 'https://www.google.com'
+const longMessage = faker.lorem.words(5) // generate random sentence
+let urlToValidate = 'https://www.satellite.im'
 
 describe('Chat features with two accounts at the same time - First User', () => {
   Cypress.on('uncaught:exception', (err, runnable) => {
