@@ -169,12 +169,15 @@
               <div
                 v-show="inputs.about || editing.has('about')"
                 class="editable-wrapper"
-                :class="{ readonly: !editing.has('about') }"
+                :class="{ readonly: !editing.has('about'),'outline': isAboutFocused }"
               >
                 <InteractablesEditable
+                  class="editable"
                   v-model="inputs.about"
                   :placeholder="$t('pages.settings.profile.about.placeholder')"
                   :enabled="editing.has('about')"
+                  @focus="handleFocus"
+                  @blur="handleBlur"
                 />
               </div>
             </div>

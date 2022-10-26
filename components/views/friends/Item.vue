@@ -200,6 +200,7 @@ export default Vue.extend({
 <style scoped lang="less">
 .friend-wrapper {
   display: flex;
+
   .friend {
     display: flex;
     align-items: center;
@@ -209,6 +210,7 @@ export default Vue.extend({
     min-width: 0;
 
     padding: 8px 16px;
+
     &:hover {
       .background-semitransparent-light();
     }
