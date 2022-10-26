@@ -113,7 +113,7 @@ export default class FilesManager extends Emitter {
     if (!safer || !safer.valid) {
       throw new Error(ItemErrors.BLOCKED)
     }
-    const syncPinResult = await iridium.connector?.load(safer.cid)
+    // const syncPinResult = await iridium.connector?.load(safer.cid)
 
     const thumbnailBlob = await createThumbnail(file, 400)
     const thumbnail = thumbnailBlob
@@ -122,7 +122,8 @@ export default class FilesManager extends Emitter {
 
     const target = parent?.children ?? this.state.items
     target.push({
-      id: syncPinResult.cid,
+      id: safer.cid,
+      signature: safer.signature,
       name: file.name,
       size: file.size,
       nsfw: await isNSFW(file),
