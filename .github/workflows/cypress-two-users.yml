@@ -1,4 +1,4 @@
-name: Run Cypress Tests
+name: Cypress Tests For Two Users At The Same Time
 
 env:
   ENVIRONMENT: dev

@@ -1,4 +1,4 @@
-name: Run Cypress Tests
+name: Cypress Tests for One User
 
 env:
   ENVIRONMENT: dev
