@@ -32,7 +32,7 @@
           :value="item.message.at.toString()"
         />
         <UiCaretDivider
-          v-if="item.message.id === unreadMarkerMessageId"
+          v-if="item.message.id === currentMarkerMessageId"
           :text="$tc('messaging.new_messages', numUnread)"
         />
         <Message
@@ -52,7 +52,7 @@
         data-id="leading-message-scroll-loader"
         :count="20"
       />
-      <UiSpacer v-if="noLeading" :height="16" />
+      <UiSpacer v-else :height="16" />
       <div
         v-if="activeUploadChats.includes(conversation?.id)"
         data-cy="file-loader-container"
