@@ -43,7 +43,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
   it('Receive First Incoming Video Call for initial validations', () => {
     //Answer remote videocall
-    cy.answerVideocall()
+    cy.answerVideocall(30000)
   })
 
   it('Receive Second Incoming Video Call for not muted indicators', () => {

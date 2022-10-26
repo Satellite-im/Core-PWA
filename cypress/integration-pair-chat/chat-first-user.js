@@ -1,5 +1,5 @@
 const faker = require('faker')
-const longMessage = faker.lorem.words(5) // generate random sentence
+const longMessage = faker.lorem.words(15) // generate random sentence
 let urlToValidate = 'https://www.satellite.im'
 
 describe('Chat features with two accounts at the same time - First User', () => {
@@ -412,6 +412,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
   it('User can deny an incoming call', () => {
     //Deny incoming second videocall
     cy.get('[data-cy=incoming-call]').should('be.visible')
+    cy.wait(2000) // wait 2 seconds before denying call
     cy.get('[data-cy=incoming-call-deny]').click()
   })
 

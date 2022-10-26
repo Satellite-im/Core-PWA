@@ -1137,13 +1137,13 @@ Cypress.Commands.add('answerVideocall', (customTimeout = 15000) => {
   cy.get('[data-cy=mediastream]').should('be.visible')
 })
 
-Cypress.Commands.add('callUser', () => {
-  cy.get('[data-cy=toolbar-enable-audio]').click()
+Cypress.Commands.add('callUser', (customTimeout = 15000) => {
+  cy.get('[data-cy=toolbar-enable-audio]', { timeout: customTimeout }).click()
   cy.get('[data-cy=mediastream]').should('be.visible')
 })
 
-Cypress.Commands.add('finishCall', () => {
-  cy.get('[data-cy=call-hangup]').click()
+Cypress.Commands.add('finishCall', (customTimeout = 15000) => {
+  cy.get('[data-cy=call-hangup]', { timeout: customTimeout }).click()
   cy.get('[data-cy=mediastream]').should('not.exist')
 })
 
