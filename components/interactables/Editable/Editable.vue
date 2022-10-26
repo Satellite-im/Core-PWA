@@ -420,7 +420,7 @@ export default Editable
   flex: 1;
   display: flex;
   align-self: center;
-  max-height: calc(50vh - var(--safe-area-inset-bottom));
+  max-height: calc(50vh - var(--keyboard-height, 0px));
   padding: @light-spacing 0;
   position: relative;
   overflow-y: scroll;
