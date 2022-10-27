@@ -1,5 +1,5 @@
 const faker = require('faker')
-const longMessage = faker.lorem.words(15) // generate random sentence
+const longMessage = faker.lorem.words(25) // generate random sentence
 let urlToValidate = 'https://www.satellite.im'
 
 describe('Chat features with two accounts at the same time - First User', () => {
@@ -46,9 +46,9 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=chat-header-name]')
       .contains('Chat User B')
       .should('be.visible')
-    cy.get('[data-cy=chat-header-status]')
+    cy.get('[data-cy=chat-header-status]', { timeout: 120000 })
+      .should('contain', 'online')
       .contains('online')
-      .should('be.visible')
   })
 
   it('Type a long message in chat bar without sending it', () => {

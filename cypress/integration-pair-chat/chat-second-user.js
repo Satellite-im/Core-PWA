@@ -34,11 +34,21 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   it('Go to conversation with first user', () => {
     //Open a chat conversation
     cy.goToConversation('Chat User A')
+
+    //Wait until Chat User A is online
+    cy.get('[data-cy=chat-header-name]')
+      .contains('Chat User A')
+      .should('be.visible')
+    cy.get('[data-cy=chat-header-status]', { timeout: 120000 })
+      .should('contain', 'online')
+      .contains('online')
   })
 
   //Is typing indicator is displayed
   it('Validate that is typing message is displayed', () => {
-    cy.get('[data-cy=footer-typing-indicator]').should('be.visible')
+    cy.get('[data-cy=footer-typing-indicator]', { timeout: 30000 }).should(
+      'be.visible',
+    )
   })
 
   it('Receive First Incoming Video Call for initial validations', () => {
