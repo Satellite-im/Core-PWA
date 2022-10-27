@@ -46,6 +46,8 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import EarlyAccessBanner from '~/components/ui/EarlyAccessBanner/EarlyAccessBanner.vue'
 import { DismissSoftwareKeyboard, swiperOptions } from '~/utilities/swiper'
 
+const SLIDE_TRANSITION_DURATION = 100 // ms
+
 export default Vue.extend({
   name: 'MobileChat',
   components: {
@@ -77,6 +79,10 @@ export default Vue.extend({
               this.swiper.allowSlidePrev = false
               this.swiper.allowSlideNext = true
               this.isMobileNavVisible = true
+
+              setTimeout(() => {
+                this.$router.push({ path: '/mobile/chat' })
+              }, SLIDE_TRANSITION_DURATION)
             }
             if (activeIndex === 1) {
               this.swiper.allowSlidePrev = true
