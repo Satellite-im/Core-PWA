@@ -39,7 +39,7 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
   })
 
   //Clear indexed DB if browser is chrome
-  if (Cypress.isBrowser('chrome')) {
+  if (Cypress.isBrowser('!firefox')) {
     cy.window().then((win) => {
       win.indexedDB.databases().then((r) => {
         for (var i = 0; i < r.length; i++)
@@ -177,7 +177,7 @@ Cypress.Commands.add('loginWithLocalStorage', (username) => {
   })
 
   //Clear indexed DB if browser is chrome
-  if (Cypress.isBrowser('chrome')) {
+  if (Cypress.isBrowser('!firefox')) {
     cy.window().then((win) => {
       win.indexedDB.databases().then((r) => {
         for (var i = 0; i < r.length; i++)
