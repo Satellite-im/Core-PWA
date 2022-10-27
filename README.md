@@ -33,6 +33,8 @@ Run the linkscript - this will build iridium and let you install it:
 - Install dependencies `yarn`
 - Run hot reload/dev version `yarn dev`
 
+Or for short: $ chmod +x linkscript.sh && ./linkscript.sh && yarn && yarn dev $. If any error comes up during the process, be sure to remove your `node_modules`, clear your yarn cache, and run it again.
+
 ## Running Cypress tests
 
 To run Cypress tests you need to do `yarn dev` in order to build out `localhost:3000`, that's the one we use as the baseUrl

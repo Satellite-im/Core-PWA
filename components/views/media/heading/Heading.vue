@@ -17,14 +17,21 @@ export default Vue.extend({
       callTimeString: '',
     }
   },
-  watch: {
-    webrtc: {
-      handler() {
-        this.callTimeString = formatDuration(
-          (Date.now() - this.webrtc.callStartedAt) / 1000,
-        )
-      },
-      deep: true,
+  created() {
+    setInterval(() => {
+      this.getNow()
+    }, 1000)
+  },
+  methods: {
+    hangUp() {
+      iridium.webRTC.hangUp()
+    },
+    getNow() {
+      const currentTimestamp = Date.now()
+      const durationOfCall = currentTimestamp - this.webrtc.callStartedAt
+      const formattedDuration = formatDuration(durationOfCall / 1000)
+
+      this.callTimeString = formattedDuration
     },
   },
 })
