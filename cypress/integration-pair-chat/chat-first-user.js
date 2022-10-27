@@ -3,14 +3,16 @@ const longMessage = faker.lorem.words(25) // generate random sentence
 let urlToValidate = 'https://www.satellite.im'
 
 describe('Chat features with two accounts at the same time - First User', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => {
-    if (err.message.includes('multiaddr must have a valid')) {
-      console.log(
-        'Error: multiaddr must have a valid format: /{ip4, ip6, dns4, dns6, dnsaddr}/{address}/{tcp, udp}/{port',
-      )
-    }
-    // returning false here prevents Cypress from failing the test
-    return false
+  beforeEach(() => {
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      if (err.message.includes('multiaddr must have a valid')) {
+        console.log(
+          'Error: multiaddr must have a valid format: /{ip4, ip6, dns4, dns6, dnsaddr}/{address}/{tcp, udp}/{port',
+        )
+      }
+      // returning false here prevents Cypress from failing the test
+      return false
+    })
   })
 
   it('Create test account for First User', () => {
@@ -339,7 +341,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   it('Remote screen share stopped - User will stop seeing the remote screen', () => {
     // Remote Screenshare is removed
-    cy.validateScreenSharePresentOnCall('remote', false)
+    cy.validateScreenSharePresentOnCall('remote', false, 30000)
   })
 
   it('Videocall Audio Indicator - Is displayed in screen', () => {
@@ -416,7 +418,6 @@ describe('Chat features with two accounts at the same time - First User', () => 
     cy.get('[data-cy=incoming-call-deny]').click()
   })
 
-  // Skipped since refreshing page on Cypress is showing Choose Your Password Screen instead of Decrypt Account
   it('If remote users refreshes the page, the call is eneded on both sides', () => {
     //Accept the third incoming call from Chat User B
     cy.answerVideocall()
