@@ -125,6 +125,9 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
     //Screen share button show enabled
     cy.get('[data-cy=screen-unmuted]').should('be.visible')
+
+    // Wait 3 seconds before disabling screen share
+    cy.wait(3000)
   })
 
   it('Disable screenshare', () => {
@@ -139,7 +142,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
   })
 
   it('Call finished on remote side should end call in local side', () => {
-    cy.waitUntilRemoteCallEnds(30000)
+    cy.waitUntilRemoteCallEnds(45000)
   })
 
   it('When a friend hangs up on a call, a call should end on both sides', () => {

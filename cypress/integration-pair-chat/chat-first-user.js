@@ -341,7 +341,7 @@ describe('Chat features with two accounts at the same time - First User', () => 
 
   it('Remote screen share stopped - User will stop seeing the remote screen', () => {
     // Remote Screenshare is removed
-    cy.validateScreenSharePresentOnCall('remote', false, 30000)
+    cy.validateScreenSharePresentOnCall('remote', false, 45000)
   })
 
   it('Videocall Audio Indicator - Is displayed in screen', () => {
