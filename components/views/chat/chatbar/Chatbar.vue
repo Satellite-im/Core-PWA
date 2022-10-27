@@ -207,6 +207,9 @@ const Chatbar = Vue.extend({
     handleInputKeydown(event: KeyboardEvent) {
       switch (event.key) {
         case KeybindingEnum.ENTER:
+          if (this.$device.isMobileOrTablet) {
+            return
+          }
           if (this.showAutocomplete && this.autocompleteSelection) {
             event.preventDefault()
             ;(this.$refs.editable as EditableRef).doAutocomplete(

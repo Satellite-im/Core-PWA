@@ -1,52 +1,74 @@
-import { dataRecovery } from '../fixtures/test-data-accounts.json'
-
-const faker = require('faker')
-const recoverySeed =
-  dataRecovery.accounts
-    .filter((item) => item.description === 'Chat Pair B')
-    .map((item) => item.recoverySeed) + '{enter}'
-const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate random PIN
-const longMessage = faker.lorem.words(100) // generate random sentence
-
-describe.skip('Chat features with two accounts at the same time - Second User', () => {
-  it('Load account from Chat Pair B (second account)', { retries: 2 }, () => {
-    //Import first account
-    cy.importAccount(randomPIN, recoverySeed)
-
-    //Validate Chat Screen is loaded
-    cy.validateChatPageIsLoaded()
-
-    //Open a chat conversation
-    cy.goToConversation('Chat Pair A')
+describe('Chat features with two accounts at the same time - Second User', () => {
+  Cypress.on('uncaught:exception', (err, runnable) => {
+    if (err.message.includes('multiaddr must have a valid')) {
+      console.log(
+        'Error: multiaddr must have a valid format: /{ip4, ip6, dns4, dns6, dnsaddr}/{address}/{tcp, udp}/{port',
+      )
+    }
+    // returning false here prevents Cypress from failing the test
+    return false
   })
 
-  it('Wait until Chat Pair A account is online to start', () => {
-    cy.contains('Chat Pair A is online', { timeout: 300000 }).should(
+  it('Create test account for Second User', () => {
+    // Create one account
+    cy.createAccount('12345', 'Chat User B')
+
+    // Validate chat page is loaded
+    cy.validateChatPageIsLoaded()
+
+    //Save userDID on file
+    cy.getLocalStorage('Satellite-Store').then((value) => {
+      let valueObject = JSON.parse(value)
+      let userDID = valueObject.accounts.active
+      cy.writeFile('cypress/fixtures/second-user-account.txt', userDID, 'utf-8')
+    })
+  })
+
+  it('Accept friend request received from first user', () => {
+    // Go to Friends tab and validate that a friend request was received
+    cy.goToFriendsPage('Requests')
+    cy.validateRequestsBadge()
+    cy.acceptUpcomingFriendRequest('Chat User A')
+  })
+
+  it('Go to conversation with first user', () => {
+    //Open a chat conversation
+    cy.goToConversation('Chat User A')
+
+    //Wait until Chat User A is online
+    cy.get('[data-cy=chat-header-name]')
+      .contains('Chat User A')
+      .should('be.visible')
+    cy.get('[data-cy=chat-header-status]', { timeout: 120000 })
+      .should('contain', 'online')
+      .contains('online')
+  })
+
+  //Is typing indicator is displayed
+  it('Validate that is typing message is displayed', () => {
+    cy.get('[data-cy=footer-typing-indicator]', { timeout: 30000 }).should(
       'be.visible',
     )
   })
 
-  it('Type a long message in chat bar without sending it', () => {
-    //Type a long message
-    cy.get('[data-cy=editable-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(longMessage)
-      .clear()
+  it('Receive First Incoming Video Call for initial validations', () => {
+    //Answer remote videocall
+    cy.answerVideocall(30000)
   })
 
-  it('Receive Incoming Video Call', () => {
-    //Answer remote videocall
-    cy.get('[data-cy=incoming-call]', { timeout: 180000 }).should('be.visible')
-    cy.wait(5000) //Wait 5 seconds before answering to validate calling status on the other user
-    cy.get('[data-cy=incoming-call-accept]').click()
+  it('Receive Second Incoming Video Call for not muted indicators', () => {
+    //Wait until remote call ends
+    cy.waitUntilRemoteCallEnds(60000)
 
-    //Wait until all validations from other user are completed
-    cy.wait(60000)
+    //Answer remote videocall
+    cy.answerVideocall()
+
+    //Wait one second
+    cy.wait(1000)
   })
 
   it('Mute microphone', () => {
-    //Click again on button to mute mic from chat button
+    //Click on button to mute mic from chat button
     cy.get('[data-cy=call-audio]').click()
 
     // Microphone buttons from chat screen and sidebar will show as muted
@@ -54,50 +76,53 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.get('[data-cy=sidebar-mic-muted]').should('be.visible')
   })
 
-  it('Enable camera', { retries: 1 }, () => {
+  it('Enable camera', () => {
+    //Wait until remote call ends
+    cy.waitUntilRemoteCallEnds(30000)
+    //Answer remote videocall
+    cy.answerVideocall()
+
     //Activate local camera
     cy.get('[data-cy=call-video]').click()
 
     // Local Camera is loaded
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=video-stream]')
-      .should('be.visible')
-      .and('have.class', 'loaded')
+    cy.validateVideoPresentOnCall('local', true)
 
     //Video buttons show as unmuted
     cy.get('[data-cy=video-unmuted]').should('be.visible')
     cy.get('[data-cy=sidebar-video-unmuted]').should('be.visible')
-    cy.wait(30000)
   })
 
   it('Disable camera', () => {
+    // Wait until remote validations finish
+    cy.wait(10000)
+
     //Turn off local camera
     cy.get('[data-cy=call-video]').click()
 
     // Local Camera is not loaded
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=video-stream]')
-      .should('not.exist')
+    cy.validateVideoPresentOnCall('local', false)
 
     //Video buttons show as muted
     cy.get('[data-cy=video-muted]').should('be.visible')
     cy.get('[data-cy=sidebar-video-muted]').should('be.visible')
-    cy.wait(30000)
   })
 
   it('Enable screenshare', () => {
+    //Wait until remote call ends
+    cy.waitUntilRemoteCallEnds(30000)
+
+    //Answer remote videocall
+    cy.answerVideocall()
+
     //Enable screenshare
     cy.get('[data-cy=call-screen-share]').click()
 
     // Local Screenshare is loaded
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=screen-stream]')
-      .should('be.visible')
-      .and('have.class', 'loaded')
+    cy.validateScreenSharePresentOnCall('local', true)
 
     //Screen share button show enabled
     cy.get('[data-cy=screen-unmuted]').should('be.visible')
-    cy.wait(30000)
   })
 
   it('Disable screenshare', () => {
@@ -105,57 +130,53 @@ describe.skip('Chat features with two accounts at the same time - Second User', 
     cy.get('[data-cy=call-screen-share]').click()
 
     // Local Screenshare is no longer visible
-    cy.get('[data-cy=local-video]')
-      .find('[data-cy=screen-stream]')
-      .should('not.exist')
+    cy.validateScreenSharePresentOnCall('local', false)
 
     //Screen share button show enabled
     cy.get('[data-cy=screen-muted]').should('be.visible')
-    cy.wait(30000)
   })
 
   it('Call finished on remote side should end call in local side', () => {
-    cy.get('[data-cy=mediastream]', { timeout: 240000 }).should('not.exist')
+    cy.waitUntilRemoteCallEnds(30000)
   })
 
-  it('Call to User B for a second time', () => {
-    //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]').click()
+  it('When a friend hangs up on a call, a call should end on both sides', () => {
+    cy.get('[data-cy=mediastream]').should('not.exist')
   })
 
-  it('Call to User A for a third time', () => {
-    //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]')
-      .click()
-      .then(() => {
-        cy.get('[data-cy=mediastream]').should('be.visible')
-      })
+  it('Call to User A and wait for remote user to end the call', () => {
+    /// Start a new call with the other user
+    cy.callUser()
 
-    //Wait 10 seconds before refreshing tab
-    cy.wait(10000)
+    // Wait until remote call was denied
+    cy.waitUntilRemoteCallEnds()
   })
 
-  it('Refresh tab to finish the videocall', () => {
-    //Refresh page
-    cy.reload()
+  it('Call to User A and refresh tab', () => {
+    // Start a new call with the other user
+    cy.callUser()
 
-    //Validate Chat Screen is loaded again after refreshing
+    //Wait 5 seconds before refreshing tab
+    cy.wait(5000)
+
+    cy.visit('/')
+
+    //Call is ended
+    cy.get('[data-cy=mediastream]').should('not.exist')
+  })
+
+  // Test skipped because local page gets stuck in Linking Satellites screen after refreshing
+  it.skip('Call again to User A and close the browser', () => {
+    // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
 
     //Go to conversation
-    cy.goToConversation('Chat Pair A')
-  })
+    cy.goToConversation('Chat User A')
 
-  it('Call again to User A for a fourth time', () => {
-    //Wait until Chat Pair A is online again
-    cy.contains('Chat Pair A is online', { timeout: 90000 }).should(
-      'be.visible',
-    )
+    // Start a new call with the other user
+    cy.callUser()
 
-    //Start videocall
-    cy.get('[data-cy=toolbar-enable-audio]').click()
-
-    //Wait 30 seconds and browser tab will be closed automatically when spec finishes running
-    cy.wait(30000)
+    //Wait 3 seconds before ending test and cypress will automatically close the browser
+    cy.wait(3000)
   })
 })

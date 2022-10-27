@@ -1,32 +1,35 @@
+// ActionSheet
 <template>
   <div
-    v-if="isVisible"
-    ref="contextMenu"
-    v-click-outside="hideMenu"
     class="context-menu-container"
+    :class="{ 'is-visible': isVisible }"
     data-cy="context-menu"
+    @click.stop="hideMenu"
   >
     <!-- Quick Reactions -->
-    <div class="actions-group">
-      <template v-for="item in items">
+    <div
+      v-if="quickReactions?.length && mostUsedEmojis?.length"
+      class="actions-group"
+    >
+      <template v-for="reaction in quickReactions">
         <div
-          v-if="item.text === 'quickReaction' && mostUsedEmojis.length"
-          :key="String(item.text) + '-action'"
+          v-if="reaction.text === 'quickReaction' && mostUsedEmojis.length"
+          :key="String(reaction.text) + '-action'"
           class="quick-reaction-container"
         >
           <div
-            v-for="reaction of mostUsedEmojis"
-            :key="reaction.content"
+            v-for="emoji of mostUsedEmojis"
+            :key="emoji.content"
             class="reaction"
             data-cy="quick-reaction"
-            @click="
-              (e) =>
-                handleAction(e, () => {
-                  item.func(reaction)
+            @click.stop="
+              () =>
+                handleAction(() => {
+                  reaction.func(reaction)
                 })
             "
           >
-            {{ reaction.content }}
+            {{ emoji.content }}
           </div>
         </div>
       </template>
@@ -39,10 +42,10 @@
           v-if="item.text !== 'quickReaction'"
           :key="String(item.text) + '-action'"
           class="action-button"
-          :class="item?.type"
-          @click="(e) => handleAction(e, item.func)"
+          :class="item.type"
+          @click.stop="() => handleAction(item.func, item.type)"
         >
-          <TypographyText :color="item?.type">
+          <TypographyText :color="item?.type" class="action-button-text">
             {{ item.text }}
           </TypographyText>
         </button>
@@ -51,56 +54,44 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, ComputedRef, defineComponent, ref, PropType } from 'vue'
-import { mapGetters } from 'vuex'
+<script setup lang="ts">
+import { computed, ComputedRef } from 'vue'
 import { ContextMenuItem, EmojiUsage } from '~/store/ui/types'
 
-export default defineComponent({
-  props: {
-    items: {
-      type: Array as PropType<ContextMenuItem[]>,
-      required: true,
-    },
-    isVisible: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  emits: ['click', 'action', 'hide'],
-  setup(props, { emit }) {
-    const contextMenu = ref<HTMLElement>()
-    const { getSortedMostUsedEmojis } = mapGetters('ui', [
-      'getSortedMostUsedEmojis',
-    ])
-    const mostUsedEmojis: ComputedRef<EmojiUsage[]> = computed(
-      () => getSortedMostUsedEmojis() || [],
-    )
+interface Props {
+  items: ContextMenuItem[]
+  isVisible: boolean
+}
+interface Emits {
+  (e: 'action', event: Function): void
+  (e: 'hide'): void
+}
+const emit = defineEmits<Emits>()
+const props = defineProps<Props>()
 
-    const handleAction = (e: Event, func: Function) => {
-      emit('action', e, func)
-    }
+// TODO: Enable when feature is ready
+// const { getSortedMostUsedEmojis } = mapGetters('ui', [
+//   'getSortedMostUsedEmojis',
+// ])
+// const mostUsedEmojis: ComputedRef<EmojiUsage[]> = computed(
+//   () => getSortedMostUsedEmojis() || [],
+// )
+const mostUsedEmojis: ComputedRef<EmojiUsage[]> = computed(() => [])
 
-    const hideMenu = (e: Event) => {
-      emit('hide', e)
-    }
-
-    const handleClick = (e: Event) => {
-      if (props.isVisible) {
-        hideMenu(e)
-        return
-      }
-      emit('click')
-    }
-
-    return {
-      contextMenu,
-      mostUsedEmojis,
-      handleAction,
-      handleClick,
-    }
-  },
+const quickReactions = computed(() => {
+  return props.items.filter((item) => item.text === 'quickReaction')
 })
+
+const handleAction = (func: Function, type?: string) => {
+  if (type === 'disabled') {
+    return
+  }
+  emit('action', func)
+}
+
+const hideMenu = () => {
+  emit('hide')
+}
 </script>
 
 <style lang="less" scoped>
@@ -113,36 +104,48 @@ export default defineComponent({
   &:extend(.fourth-layer);
   position: fixed;
   width: 100%;
-  height: 100%;
   &:extend(.blur-less);
   gap: @normal-spacing;
   left: 0;
   top: 0;
 
+  opacity: 0;
+  height: 0;
+  transition: opacity @animation-speed-long ease,
+    height 0s ease @animation-speed-long;
+
+  &.is-visible {
+    opacity: 1;
+    height: 100%;
+    transition: opacity @animation-speed-long ease;
+  }
+
   .actions-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     max-width: 600px;
     width: 100%;
     margin: 0 @normal-spacing;
 
-    &:extend(.background-semitransparent-dark);
-    &:extend(.round-corners);
+    .background-semitransparent-light();
+    .round-corners();
+    .blur();
 
     .action-button {
+      .background-semitransparent-light();
+      .blur();
       height: 56px;
       justify-content: center;
       align-items: center;
       width: 100%;
 
       &.disabled {
-        opacity: 0.5;
+        .action-button-text {
+          color: @dark;
+          opacity: 0.5;
+        }
       }
 
       &:not(:last-child) {
-        border-bottom: 0.5px solid @foreground;
+        border-bottom: 0.5px solid @foreground-alt;
       }
     }
 

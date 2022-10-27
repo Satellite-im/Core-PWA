@@ -5,10 +5,15 @@
     <UiGroupIcon v-else :members="conversation.participants" />
   </div>
   <div class="user-info">
-    <TypographyText class="header" as="h4" v-if="conversation">
+    <TypographyText
+      class="header"
+      data-cy="chat-header-name"
+      as="h4"
+      v-if="conversation"
+    >
       {{ conversation.name }}
     </TypographyText>
-    <TypographyText class="header" color="dark">
+    <TypographyText class="header" data-cy="chat-header-status" color="dark">
       {{ subtitleText }}
     </TypographyText>
   </div>

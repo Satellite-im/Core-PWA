@@ -41,6 +41,7 @@ export default Vue.extend({
         about: iridium.profile.state?.about ?? '',
         accountUrl: '',
       } as Partial<User>,
+      isAboutFocused: false,
     }
   },
   computed: {
@@ -185,6 +186,12 @@ export default Vue.extend({
         return this.$t('global.save') as string
       }
       return this.$t('global.edit') as string
+    },
+    handleFocus() {
+      this.isAboutFocused = true
+    },
+    handleBlur() {
+      this.isAboutFocused = false
     },
   },
 })

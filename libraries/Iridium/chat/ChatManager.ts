@@ -271,10 +271,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     const fromDID = didUtils.didString(from)
     const conversation = this.getConversation(conversationId)
-    if (
-      !conversation ||
-      !conversation.participants.includes(didUtils.didString(from))
-    ) {
+
+    if (!conversation) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
     const { type, cid } = payload.body
@@ -372,6 +370,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     return this.ephemeral.activeConversationId === conversationId
   }
 
+  // TODO: refactor and remove the need for this
   private getNotificationType(
     message: ConversationMessage,
     conversationType: ConversationType,
@@ -385,6 +384,9 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       }
       case 'member_leave': {
         return NotificationType.MEMBER_LEAVE
+      }
+      case 'call': {
+        return NotificationType.CALL_INCOMING
       }
     }
     switch (conversationType) {
@@ -409,19 +411,14 @@ export default class ChatManager extends Emitter<ConversationMessage> {
       conversationId: conversation.id,
     }
 
-    switch (notificationType) {
-      case NotificationType.GROUP_MESSAGE:
-      case NotificationType.DIRECT_MESSAGE:
-      case NotificationType.MEMBER_LEAVE:
-        return notificationPayload
-
-      case NotificationType.ADDED_TO_GROUP:
-      case NotificationType.MEMBER_JOIN:
-        return {
-          ...notificationPayload,
-          addedMemberIds: message.members,
-        }
+    if (message.members) {
+      return {
+        ...notificationPayload,
+        addedMemberIds: message.members,
+      }
     }
+
+    return notificationPayload
   }
 
   private sendNotification(

@@ -112,7 +112,7 @@ export default {
     group_join_notice: {
       added: 'added',
       to_group: 'to the group.',
-      you: 'You',
+      you: 'you',
     },
     group_leave_notice: 'left the group.',
     call_incoming: '{name} started a call.',
@@ -921,6 +921,10 @@ export default {
     member_leave: {
       title: 'Group Member Left',
       body: '{removedMember} left {group}',
+    },
+    call: {
+      title: 'Incoming Call',
+      body: 'Incoming call from {sender}',
     },
   },
 }

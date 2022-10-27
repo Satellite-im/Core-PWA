@@ -200,14 +200,17 @@ export default Vue.extend({
 <style scoped lang="less">
 .friend-wrapper {
   display: flex;
+
   .friend {
     display: flex;
     align-items: center;
     gap: 12px;
     user-select: none;
     flex-grow: 1;
+    min-width: 0;
 
     padding: 8px 16px;
+
     &:hover {
       .background-semitransparent-light();
     }

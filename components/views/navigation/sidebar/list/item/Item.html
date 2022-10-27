@@ -7,7 +7,6 @@
     class="item"
     :to="`${$device.isMobile ? '/mobile' : ''}/chat/${conversationId}`"
     data-cy="sidebar-user"
-    @click.native="$device.isMobile && $emit('slideNext')"
   >
     <UiUserState
       v-if="conversation.type === 'direct'"
