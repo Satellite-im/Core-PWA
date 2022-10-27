@@ -136,8 +136,7 @@ describe.skip('Snapshots Testing', () => {
     cy.createAccountSecondScreen()
   })
 
-  it.skip('Create Account - User Input Screen', () => {
-    //Skipped because account creation fails due to Solana issues
+  it('Create Account - User Input Screen', () => {
     //Recovery Seed Screen then User Input Snapshot
     cy.createAccountRecoverySeed().then(() => {
       cy.validateUserInputIsDisplayed()

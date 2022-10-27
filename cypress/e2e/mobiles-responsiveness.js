@@ -129,10 +129,9 @@ data.allDevices.forEach((item) => {
         cy.get('#mobile-nav').should('be.visible')
       })
 
-      //Skipped because version number does not redirect to Version Release Notes
-      it.skip(`Release Notes Screen on ${item.description}`, () => {
+      it(`Version number is displayed ${item.description}`, () => {
         cy.visitRootPage()
-        cy.releaseNotesScreenValidation()
+        cy.get('[data-cy=version]').should('be.visible').click()
       })
     },
   )
