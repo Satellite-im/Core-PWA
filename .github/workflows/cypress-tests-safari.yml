@@ -33,7 +33,7 @@ jobs:
         with:
           run: sh ./cypress/scripts/watch-script.sh & sh ./cypress/scripts/sync-node-script.sh
           start: yarn dev
-          command: npm run cy:run
+          command: cypress install & npm run cy:run
           wait-on: http://localhost:3000
           wait-on-timeout: 300
           browser: webkit
