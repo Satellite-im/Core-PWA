@@ -63,7 +63,7 @@ jobs:
     name: Run Cypress Tests on Firefox 🌡️
     runs-on: ubuntu-20.04
     container:
-      image: cypress/node16.17.1-chrome106-ff105-edge
+      image: cypress/browsers:node18.6.0-chrome105-ff104
       options: --user 1001
 
     steps:
