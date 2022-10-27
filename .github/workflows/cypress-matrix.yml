@@ -11,8 +11,8 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  build-cypress:
-    name: Build Application For Cypress Tests 🌡️
+  cypress-on-chrome:
+    name: Run Cypress Tests on Chrome 🌡️
     runs-on: ubuntu-20.04
     container:
       image: cypress/browsers:node16.17.0-chrome106
@@ -34,38 +34,6 @@ jobs:
 
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
-
-      - name: Tar files
-        run: tar -cvf build.tar .nuxt/ linked-iridium/
-
-      - name: Save Build Folders
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          if-no-files-found: error
-          path: build.tar
-          retention-days: 1
-
-  cypress-on-chrome:
-    name: Execute Cypress Tests on Chrome 🌡️
-    runs-on: ubuntu-20.04
-    needs: build-cypress
-    container:
-      image: cypress/browsers:node16.17.0-chrome106
-      options: --user 1001
-
-    steps:
-      - name: Checkout 🔖
-        uses: actions/checkout@v2
-
-      - name: Download the build
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-
-      - name: Extract the build files
-        run: tar xvf build.tar
-
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
@@ -81,36 +49,39 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-chrome
           path: cypress/screenshots
 
       - name: Upload videos of tests failed 📺
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-videos
+          name: cypress-videos-chrome
           path: cypress/videos
 
   cypress-on-firefox:
-    name: Execute Cypress Tests on Chrome 🌡️
+    name: Run Cypress Tests on Firefox 🌡️
     runs-on: ubuntu-20.04
-    needs: build-cypress
     container:
-      image: cypress/browsers:node16.17.0-chrome106
+      image: cypress/node16.17.1-chrome106-ff105-edge
       options: --user 1001
 
     steps:
       - name: Checkout 🔖
         uses: actions/checkout@v2
 
-      - name: Download the build
-        uses: actions/download-artifact@v3
+      - name: Setup Node.js 🔨
+        uses: actions/setup-node@v3
         with:
-          name: build
+          node-version: 16
+      - name: Change permissions on scripts 🔨
+        run: |
+          chmod +x ./linkscript.sh
+          chmod +x ./cypress/scripts/watch-script.sh
+          chmod +x ./cypress/scripts/sync-node-script.sh
 
-      - name: Extract the build files
-        run: tar xvf build.tar
-
+      - name: Build Core 🔨
+        run: yarn && ./linkscript.sh
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
@@ -126,12 +97,57 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-firefox
           path: cypress/screenshots
 
       - name: Upload videos of tests failed 📺
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: cypress-videos
+          name: cypress-videos-firefox
+          path: cypress/videos
+
+  cypress-on-edge:
+    name: Run Cypress Tests on Edge 🌡️
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout 🔖
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 🔨
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Change permissions on scripts 🔨
+        run: |
+          chmod +x ./linkscript.sh
+          chmod +x ./cypress/scripts/watch-script.sh
+          chmod +x ./cypress/scripts/sync-node-script.sh
+
+      - name: Build Core 🔨
+        run: yarn && ./linkscript.sh
+      - name: Execute Cypress Tests 🌡️
+        uses: cypress-io/github-action@v4
+        with:
+          start: |
+            sh ./cypress/scripts/watch-script.sh
+            sh ./cypress/scripts/sync-node-script.sh
+            yarn dev
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 300
+          browser: edge
+
+      - name: Upload screenshots of tests failed 📷
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots-edge
+          path: cypress/screenshots
+
+      - name: Upload videos of tests failed 📺
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos-edge
           path: cypress/videos
