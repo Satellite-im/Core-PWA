@@ -35,6 +35,8 @@ import { toHTML } from '~/libraries/ui/Markdown'
 import Cursor from '~/libraries/ui/Cursor'
 import { KeybindingEnum } from '~/libraries/Enums/enums'
 import WithHistory, { Operation } from '~/components/mixins/UI/WithHistory'
+import { Conversation } from '~/libraries/Iridium/chat/types'
+import { conversationHooks } from '~/components/compositions/conversations'
 
 /**
  * @method wordUnderCursor
@@ -106,6 +108,11 @@ const Editable = Vue.extend({
       autocompleteText: '',
     }
   },
+  computed: {
+    conversationId(): Conversation['id'] {
+      return this.$route.params.id
+    },
+  },
   watch: {
     value(newValue) {
       this.handleNewValue(newValue)
@@ -145,7 +152,12 @@ const Editable = Vue.extend({
      * @param {string} text The text to be parsed
      */
     buildChatbarRow(text: string) {
-      return `<div class="chat-row-content"><span>${toHTML(text).replace(
+      const { allParticipantsAlphaSorted } = conversationHooks(
+        this.conversationId,
+      )
+      return `<div class="chat-row-content"><span>${toHTML(text, {
+        conversationParticipants: allParticipantsAlphaSorted?.value,
+      }).replace(
         this.$Config.regex.emojiWrapper,
         (emoji: string) => `<span class="emoji">${emoji}</span>`,
       )}<br /></span></div>`
@@ -415,14 +427,19 @@ export default Editable
       }
 
       .user-tag {
-        background: @flair-color;
         color: @white;
         font-weight: 600;
         padding: 0.125rem 0.25rem;
         margin: 0 2px;
         border-radius: 3px;
-        cursor: pointer;
-        caret-color: @white;
+
+        &.dark {
+          border: 2px solid @flair-color;
+        }
+        &.light {
+          background: @flair-color;
+          cursor: pointer;
+        }
       }
     }
   }

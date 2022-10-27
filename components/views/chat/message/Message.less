@@ -135,13 +135,19 @@
     }
 
     .user-tag {
-      background: @flair-color;
       color: @white;
       font-weight: 600;
       padding: 0.125rem 0.25rem;
       margin: 0 2px;
       border-radius: 3px;
-      cursor: pointer;
+
+      &.dark {
+        border: 1px solid @flair-color;
+      }
+      &.light {
+        background: @flair-color;
+        cursor: pointer;
+      }
     }
   }
 

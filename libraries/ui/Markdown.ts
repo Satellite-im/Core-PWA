@@ -1,9 +1,11 @@
 import * as markdown from 'simple-markdown'
+import { User } from '~/libraries/Iridium/users/types'
 
 interface Options {
   liveTyping?: boolean
   escapeHTML?: boolean
   cssModuleNames?: Record<string, string>
+  conversationParticipants?: User[] | null
 }
 
 type MarkdownRules = Record<
@@ -281,7 +283,9 @@ const rules: MarkdownRules = {
     match: (source, state) => {
       if (
         (state.prevCapture && !/^$|\s+$/.test(state.prevCapture[0])) ||
-        state.liveTyping
+        !state.conversationParticipants?.find(
+          (el: User) => el.name === /^@([^\s]+)/.exec(source)?.[1],
+        )
       ) {
         return null
       }
@@ -298,16 +302,27 @@ const rules: MarkdownRules = {
       }
     },
     html: (node, output, state) => {
-      return htmlTag(
-        'span',
-        output(node.content, state),
-        {
-          class: 'user-tag',
-          tabindex: '0',
-          role: 'button',
-        },
-        state,
-      )
+      return state.liveTyping
+        ? htmlTag(
+            'span',
+            output(node.content, state),
+            {
+              class: 'user-tag dark',
+              tabindex: '0',
+              role: 'button',
+            },
+            state,
+          )
+        : htmlTag(
+            'span',
+            output(node.content, state),
+            {
+              class: 'user-tag light',
+              tabindex: '0',
+              role: 'button',
+            },
+            state,
+          )
     },
   },
 }
@@ -325,6 +340,7 @@ export function toHTML(source: string, options: Options = {}): string {
     liveTyping: options.liveTyping ?? true,
     escapeHTML: options.escapeHTML ?? true,
     cssModuleNames: options.cssModuleNames || null,
+    conversationParticipants: options.conversationParticipants ?? null,
   }
 
   return _htmlOutput(_parser(source, state), state)

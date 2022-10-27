@@ -15,6 +15,7 @@ import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 import { capacitorHooks } from '~/components/compositions/capacitor'
 import { getTimestamp } from '~/utilities/timestamp'
+import { conversationHooks } from '~/components/compositions/conversations'
 
 export default Vue.extend({
   props: {
@@ -67,6 +68,13 @@ export default Vue.extend({
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
+    participants() {
+      const { allParticipantsAlphaSorted } = conversationHooks(
+        this.conversationId,
+      )
+      return allParticipantsAlphaSorted.value
+    },
+
     author(): User | undefined {
       return this.users.getUser(this.message.from)
     },
@@ -95,7 +103,10 @@ export default Vue.extend({
       return onlyHasEmoji(this.message?.body ?? '')
     },
     markdownToHtml(): string {
-      const html = toHTML(this.message?.body ?? '', { liveTyping: false })
+      const html = toHTML(this.message?.body ?? '', {
+        liveTyping: false,
+        conversationParticipants: this.participants,
+      })
       return html.replace(
         this.$Config.regex.emojiWrapper,
         (emoji) => `<span class="emoji">${emoji}</span>`,
@@ -186,7 +197,10 @@ export default Vue.extend({
       ),
     ).forEach((tag) => {
       tag.addEventListener('click', (e) => {
-        this.showQuickProfile(e as MouseEvent)
+        this.showQuickProfile(
+          e as MouseEvent,
+          tag.textContent?.substring(1, tag.textContent.length) as string,
+        )
       })
     })
   },
@@ -199,11 +213,18 @@ export default Vue.extend({
      * @param e Event object from group component click
      * @example v-on:click="showQuickProfile"
      */
-    showQuickProfile(e: MouseEvent) {
+    showQuickProfile(e: MouseEvent, user: string) {
       this.$store.commit('ui/setQuickProfile', {
-        user: this.author,
+        user: user ? this.getParticipants(user) : this.author,
         position: { x: e.x, y: e.y },
       })
+    },
+    /**
+     * @method getParticipants
+     * @description returns user object giving username as parameter
+     */
+    getParticipants(user: string) {
+      return this.participants.find((el) => el.name === user)
     },
     /**
      * @method copyMessage
