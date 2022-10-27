@@ -19,7 +19,7 @@
         <div v-show="$config.feedbackUrl" class="banner-wrapper">
           <EarlyAccessBanner />
         </div>
-        <SidebarList :filter="filter" @slideNext="swiper.slideNext()" />
+        <SidebarList :filter="filter" />
       </div>
       <div class="swiper-slide">
         <MobileToolbar @slidePrev="swiper.slidePrev()" />
