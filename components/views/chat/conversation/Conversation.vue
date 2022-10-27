@@ -231,7 +231,9 @@ export default Vue.extend({
     },
     handleFocus() {
       this.isBlurred = false
-      iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
+      if (this.conversationId) {
+        iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
+      }
     },
     loadMore() {
       // TODO: we'll want to instead call iridium in this method once paginated
