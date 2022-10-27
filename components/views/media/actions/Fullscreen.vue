@@ -3,13 +3,10 @@
     v-tooltip.top="
       isFullscreen ? $t('ui.exit_fullscreen') : $t('ui.fullscreen')
     "
+    data-cy="call-fullscreen"
     @click="$emit('toggle')"
   >
-    <component
-      :is="isFullscreen ? MinimizeIcon : MaximizeIcon"
-      size="1.2x"
-      :data-cy="isFullscreen ? 'exit-fullscreen' : 'go-fullscreen'"
-    />
+    <component :is="isFullscreen ? MinimizeIcon : MaximizeIcon" size="1.2x" />
   </button>
 </template>
 

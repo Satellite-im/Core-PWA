@@ -17,7 +17,7 @@
     :id="`${isLocal ? 'local' : 'remote'}-video-${user.did}`"
     class="video-stream"
     :class="{ flip: flipVideo }"
-    data-cy="video-stream"
+    :data-cy="`${isLocal ? 'local-video-stream' : 'remote-video-stream'}`"
     :src-object.prop="videoStream"
     playsinline
     autoplay
@@ -27,7 +27,7 @@
     v-else-if="stream === 'screen'"
     :id="`${isLocal ? 'local' : 'remote'}-screen-${user.did}`"
     class="video-stream"
-    data-cy="screen-stream"
+    :data-cy="`${isLocal ? 'local-screen-stream' : 'remote-screen-stream'}`"
     :src-object.prop="screenStream"
     playsinline
     autoplay
@@ -51,11 +51,16 @@
   </div>
 
   <div class="info-overlay">
-    <TypographyTag :title="user.name" class="username" inverted>
+    <TypographyTag
+      :title="user.name"
+      data-cy="info-overlay-username"
+      class="username"
+      inverted
+    >
       {{user.name}}
     </TypographyTag>
 
-    <div class="indicators" v-if="!isPending || isLocal">
+    <div class="indicators" data-cy="indicators" v-if="!isPending || isLocal">
       <div class="indicator" data-cy="muted-indicator" v-if="audioMuted">
         <mic-off-icon />
       </div>
