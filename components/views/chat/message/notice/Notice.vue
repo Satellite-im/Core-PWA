@@ -29,7 +29,12 @@ export default Vue.extend({
         return ''
       }
       return this.message.members
-        .map((did) => iridium.users.getUser(did)?.name)
+        .map((did) => {
+          if (did === iridium.id) {
+            return this.$t('messaging.group_join_notice.you')
+          }
+          return iridium.users.getUser(did)?.name
+        })
         .filter((name) => name)
         .join(', ')
     },
