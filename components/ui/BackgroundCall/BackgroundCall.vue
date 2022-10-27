@@ -50,8 +50,6 @@ export default Vue.extend({
         return
       }
 
-      console.log('test', conversationId)
-
       this.$router.push(`/mobile/chat/${conversationId}`)
     },
   },
