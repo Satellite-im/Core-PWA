@@ -11,3 +11,4 @@ pnpm-lock.yaml
 android/
 ios/
 PULL_REQUEST_TEMPLATE.md
+src-tauri/
