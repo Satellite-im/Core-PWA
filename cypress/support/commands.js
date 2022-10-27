@@ -37,11 +37,16 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
   cy.window().then((win) => {
     win.sessionStorage.clear()
   })
-  cy.window().then((win) => {
-    win.indexedDB.databases().then((r) => {
-      for (var i = 0; i < r.length; i++) win.indexedDB.deleteDatabase(r[i].name)
+
+  //Clear indexed DB if browser is chrome
+  if (Cypress.isBrowser('chrome')) {
+    cy.window().then((win) => {
+      win.indexedDB.databases().then((r) => {
+        for (var i = 0; i < r.length; i++)
+          win.indexedDB.deleteDatabase(r[i].name)
+      })
     })
-  })
+  }
 
   //Only if viewport is mobile, then pass this specific window setup
   if (isMobile === true) {
@@ -172,11 +177,16 @@ Cypress.Commands.add('loginWithLocalStorage', (username) => {
   cy.window().then((win) => {
     win.sessionStorage.clear()
   })
-  cy.window().then((win) => {
-    win.indexedDB.databases().then((r) => {
-      for (var i = 0; i < r.length; i++) win.indexedDB.deleteDatabase(r[i].name)
+
+  //Clear indexed DB if browser is chrome
+  if (Cypress.isBrowser('chrome')) {
+    cy.window().then((win) => {
+      win.indexedDB.databases().then((r) => {
+        for (var i = 0; i < r.length; i++)
+          win.indexedDB.deleteDatabase(r[i].name)
+      })
     })
-  })
+  }
 
   //Restore profile passed for localstorage
   cy.restoreLocalStorage(username)

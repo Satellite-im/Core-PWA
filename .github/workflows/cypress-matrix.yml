@@ -6,6 +6,7 @@ env:
   NUXT_ENV_IRIDIUM_SYNC_NODES: ${{ secrets.NUXT_ENV_IRIDIUM_SYNC_NODES }}
   NUXT_ENV_IRIDIUM_APIS: ${{ secrets.NUXT_ENV_IRIDIUM_APIS }}
   NUXT_ENV_IRIDIUM_GATEWAYS: ${{ secrets.NUXT_ENV_IRIDIUM_GATEWAYS }}
+  NUXT_ENV_FEEDBACK_URL: https://issues.satellite.im
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
@@ -105,49 +106,4 @@ jobs:
         if: failure()
         with:
           name: cypress-videos-firefox
-          path: cypress/videos
-
-  cypress-on-edge:
-    name: Run Cypress Tests on Edge 🌡️
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout 🔖
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js 🔨
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Change permissions on scripts 🔨
-        run: |
-          chmod +x ./linkscript.sh
-          chmod +x ./cypress/scripts/watch-script.sh
-          chmod +x ./cypress/scripts/sync-node-script.sh
-
-      - name: Build Core 🔨
-        run: yarn && ./linkscript.sh
-      - name: Execute Cypress Tests 🌡️
-        uses: cypress-io/github-action@v4
-        with:
-          start: |
-            sh ./cypress/scripts/watch-script.sh
-            sh ./cypress/scripts/sync-node-script.sh
-            yarn dev
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 300
-          browser: edge
-
-      - name: Upload screenshots of tests failed 📷
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-screenshots-edge
-          path: cypress/screenshots
-
-      - name: Upload videos of tests failed 📺
-        uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: cypress-videos-edge
           path: cypress/videos
