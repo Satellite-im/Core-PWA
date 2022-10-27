@@ -61,37 +61,35 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
 
 //Create Account Commands
 
-Cypress.Commands.add(
-  'createAccount',
-  (pin, username, isMobile = false, savePin = false) => {
-    cy.visitRootPage(isMobile)
-    cy.url().should('contain', '#/auth/unlock')
-    cy.get('[data-cy=input-group]')
-      .should('be.visible')
-      .trigger('input')
-      .type(pin, { log: false }, { force: true })
-    if (savePin === true) {
-      cy.get('.switch-button').click().should('have.class', 'enabled')
-    } else {
-      cy.get('.switch-button').should('not.have.class', 'enabled')
-    }
-    cy.get('[data-cy=submit-input]').click()
-    cy.get('[data-cy=create-account-button]').click()
-    cy.get('.font-heading').should('contain', 'Recovery Seed')
-    cy.contains('I Saved It').click()
-    cy.validateUserInputIsDisplayed()
-    cy.get('[data-cy=username-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(username)
-    cy.get('[data-cy=status-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type('testing')
-    cy.get('[data-cy=sign-in-button]').click()
-    cy.welcomeModal(username)
-  },
-)
+Cypress.Commands.add('createAccount', (pin, username, savePin = false) => {
+  cy.visit('/')
+  cy.contains('Choose Your Password').should('be.visible')
+  cy.url().should('contain', '#/auth/unlock')
+  cy.get('[data-cy=input-group]')
+    .should('be.visible')
+    .trigger('input')
+    .type(pin, { log: false }, { force: true })
+  if (savePin === true) {
+    cy.get('.switch-button').click().should('have.class', 'enabled')
+  } else {
+    cy.get('.switch-button').should('not.have.class', 'enabled')
+  }
+  cy.get('[data-cy=submit-input]').click()
+  cy.get('[data-cy=create-account-button]').click()
+  cy.get('.font-heading').should('contain', 'Recovery Seed')
+  cy.contains('I Saved It').click()
+  cy.validateUserInputIsDisplayed()
+  cy.get('[data-cy=username-input]')
+    .should('be.visible')
+    .trigger('input')
+    .type(username)
+  cy.get('[data-cy=status-input]')
+    .should('be.visible')
+    .trigger('input')
+    .type('testing')
+  cy.get('[data-cy=sign-in-button]').click()
+  cy.welcomeModal(username)
+})
 
 Cypress.Commands.add(
   'createAccountPINscreen',

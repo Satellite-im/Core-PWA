@@ -11,7 +11,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
   it('Create test account for Second User', () => {
     // Create one account
-    cy.createAccount('12345', 'Chat User B', false, true)
+    cy.createAccount('12345', 'Chat User B')
 
     // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
