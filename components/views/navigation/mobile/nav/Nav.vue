@@ -26,7 +26,11 @@
 import Vue, { ComputedRef, computed, reactive } from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import { mapState } from 'vuex'
-import { HomeIcon, FolderIcon, UsersIcon } from 'satellite-lucide-icons'
+import {
+  MessageCircleIcon,
+  FolderIcon,
+  UsersIcon,
+} from 'satellite-lucide-icons'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { friendsHooks } from '~/components/compositions/friends'
@@ -43,7 +47,7 @@ interface NavButton {
 
 export default Vue.extend({
   components: {
-    HomeIcon,
+    MessageCircleIcon,
     FolderIcon,
     UsersIcon,
   },
@@ -62,7 +66,7 @@ export default Vue.extend({
         {
           id: 'chat',
           label: $nuxt.$t('global.chat'),
-          icon: HomeIcon,
+          icon: MessageCircleIcon,
           path: '/mobile/chat',
           showBadge: Boolean(totalUnreadMessages.value),
         },

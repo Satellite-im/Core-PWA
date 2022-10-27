@@ -6,7 +6,11 @@
   @mouseover="showSlider"
   @mouseleave="hideSlider"
 >
-  <div class="wrapper" v-if="!isPopup || sliderVisible">
+  <div
+    class="wrapper"
+    data-cy="volume-wrapper"
+    v-if="!isPopup || sliderVisible"
+  >
     <div class="inner">
       <InteractablesVolume
         :value="volume"

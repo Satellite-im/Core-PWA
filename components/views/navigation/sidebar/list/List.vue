@@ -4,7 +4,6 @@
       v-for="conversation in filteredConversations"
       :key="conversation.id"
       :conversation-id="conversation.id"
-      @slideNext="$emit('slideNext')"
     />
     <div v-if="!filteredConversations.length" class="empty-friends-wrapper">
       <TypographyText v-if="filter" color="dark">

@@ -41,7 +41,7 @@ export function listenToNotifications() {
       title: text.title,
       description: text.description,
       seen: false,
-      payload: data.payload,
+      payload: data.payload || {},
       image: data.image || '',
       onNotificationClick: onClick,
     }
@@ -242,6 +242,25 @@ export function listenToNotifications() {
     // TODO: Add handling of this event when mentions are implemented
     [NotificationType.MENTION]: {
       handler: (notif: NotificationBase<MessageNotificationPayload>) => {},
+    },
+
+    [NotificationType.CALL_INCOMING]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {
+        const sender = iridium.users.getUser(notif.senderId)
+
+        const text = {
+          title: $nuxt.$t('notifications.call.title'),
+          description: $nuxt.$t('notifications.call.body', {
+            sender: sender?.name || '',
+          }),
+        }
+
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
     },
   }
 
