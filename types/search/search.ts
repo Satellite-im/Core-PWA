@@ -133,7 +133,6 @@ export type SearchParam = {
 }
 
 export interface UISearchResultData {
-  [x: string]: any
   at: number
   conversation: string
   from: string
