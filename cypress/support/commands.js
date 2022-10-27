@@ -599,8 +599,9 @@ Cypress.Commands.add('validateComingSoonModal', () => {
 })
 
 Cypress.Commands.add('validateURLComingSoonModal', () => {
-  cy.get('[data-cy=btn-call-to-action]')
-    .should('have.attr', 'href', 'https://twitter.com/satellite_im')
+  cy.contains('https://issues.satellite.im/')
+    .click()
+    .should('have.attr', 'href', 'https://issues.satellite.im/')
     .should('have.attr', 'target', '_blank')
 })
 
