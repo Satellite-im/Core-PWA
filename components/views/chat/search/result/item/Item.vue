@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 import { mapGetters } from 'vuex'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { UISearchResultData } from '~/types/search/search'
+import { getTimestamp } from '~/utilities/timestamp'
 
 export default Vue.extend({
   props: {
@@ -14,7 +15,6 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapGetters('settings', ['getTimestamp']),
     src(): string {
       const hash = this.data.user?.profilePicture
       return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
@@ -23,17 +23,13 @@ export default Vue.extend({
       const msgTimestamp = this.$dayjs(this.data.at)
       // if today
       if (this.$dayjs().isSame(msgTimestamp, 'day')) {
-        return `${this.$t('time.today')} ${this.getTimestamp({
-          time: this.data.at,
-        })}`
+        return `${this.$t('time.today')} ${getTimestamp(this.data.at)}`
       }
       // if yesterday
       if (this.$dayjs().diff(msgTimestamp, 'day') <= 1) {
-        return `${this.$t('time.yesterday')} ${this.getTimestamp({
-          time: this.data.at,
-        })}`
+        return `${this.$t('time.yesterday')} ${getTimestamp(this.data.at)}`
       }
-      return this.getTimestamp({ time: this.data.at, full: true })
+      return getTimestamp(this.data.at, true)
     },
     htmlPayload(): any {
       return toHTML(this.data.payload, { liveTyping: false })
