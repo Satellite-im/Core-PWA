@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { SettingsRoutes, UIState, EnhancerInfo, RecentGlyph } from './types'
+import { SettingsRoutes, UIState, RecentGlyph } from './types'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 

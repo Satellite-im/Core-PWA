@@ -50,7 +50,7 @@ describe('SatelliteDB/SearchIndex', () => {
     expect(idx.search('match')?.map((r) => r.id)).toEqual(['3', '2', '1'])
   })
 
-  test('searchIndex.update()', async () => {
+  test('update search', async () => {
     const data = [
       { id: '1', text: 'first match' },
       { id: '2', text: 'second match' },

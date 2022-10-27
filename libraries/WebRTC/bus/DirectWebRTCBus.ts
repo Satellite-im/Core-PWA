@@ -1,5 +1,4 @@
 import { IridiumDocument, IridiumMessage } from '@satellite-im/iridium'
-import Peer from 'simple-peer'
 import type { Instance } from 'simple-peer'
 import { Bus, BusListeners, BusOptions } from '~/libraries/WebRTC/bus/bus'
 import Emitter from '~/libraries/WebRTC/Emitter'

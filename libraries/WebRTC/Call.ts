@@ -9,8 +9,6 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { Wire } from '~/libraries/WebRTC/Wire'
 import logger from '~/plugins/local/logger'
 
-const PERMISSION_DENIED_BY_SYSTEM = 'Permission denied by system'
-
 export class CallPeer extends Peer {
   id: string
   name: string
@@ -420,7 +418,7 @@ export class Call extends Emitter<CallEventListeners> {
     const screenTrack = screenStream.getVideoTracks()[0]
     screenTrack.enabled = true
 
-    screenTrack.addEventListener('ended', (event) => {
+    screenTrack.addEventListener('ended', () => {
       this.mute({ kind: 'screen', did: iridium.id })
     })
 
@@ -1221,7 +1219,7 @@ export class Call extends Emitter<CallEventListeners> {
    */
 
   protected _onBusScreenshare({ payload }: { payload: any }) {
-    const { did, streamId, trackId } = payload.body
+    const { did, streamId } = payload.body
     const peer = this.peers[did]
     if (!peer) {
       return
