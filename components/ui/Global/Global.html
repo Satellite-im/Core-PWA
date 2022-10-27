@@ -46,6 +46,7 @@
     </UiModal>
     <UiModal
       v-if="ui.modals.changelog"
+      :showCloseButton="false"
       @close="toggleModal(ModalWindows.CHANGELOG)"
     >
       <UiUpdateModal />
@@ -67,6 +68,7 @@
     </UiModal>
     <UiModal
       v-if="isNewAccount"
+      :showCloseButton="false"
       @close="$store.commit('accounts/setNewAccount', false)"
     >
       <UiWelcomeModal />

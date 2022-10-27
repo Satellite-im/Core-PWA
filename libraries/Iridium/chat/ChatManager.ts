@@ -271,10 +271,8 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     }
     const fromDID = didUtils.didString(from)
     const conversation = this.getConversation(conversationId)
-    if (
-      !conversation ||
-      !conversation.participants.includes(didUtils.didString(from))
-    ) {
+
+    if (!conversation) {
       throw new Error(ChatError.CONVERSATION_NOT_FOUND)
     }
     const { type, cid } = payload.body
