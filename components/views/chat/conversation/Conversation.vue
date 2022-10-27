@@ -18,6 +18,7 @@ import {
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { RootState } from '~/types/store/store'
 import { ScrollerRef } from '~/components/ui/Chat/InfiniteScroll/InfiniteScroll.vue'
+import { getTimestamp } from '~/utilities/timestamp'
 
 export interface ChatItem {
   message: ConversationMessage
@@ -62,9 +63,6 @@ export default Vue.extend({
   computed: {
     ...mapState({
       activeUploadChats: (state) => (state as RootState).chat.activeUploadChats,
-    }),
-    ...mapGetters({
-      getTimestamp: 'settings/getTimestamp',
     }),
     myDid(): string {
       return iridium.id ?? ''
@@ -172,7 +170,7 @@ export default Vue.extend({
         (item) => item.isFirstUnreadMessage,
       )?.message
       if (message) {
-        return this.getTimestamp({ time: message.at })
+        return getTimestamp(message.at)
       }
       return null
     },

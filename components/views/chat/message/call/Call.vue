@@ -16,6 +16,7 @@ import {
   WebRTCIncomingCall,
 } from '~/libraries/Iridium/webrtc/types'
 import { formatDuration } from '~/utilities/duration'
+import { getTimestamp } from '~/utilities/timestamp'
 
 export default Vue.extend({
   components: {
@@ -40,9 +41,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters({
-      getTimestamp: 'settings/getTimestamp',
-    }),
     isOutgoingCall(): boolean {
       return this.message.from === iridium.id
     },
@@ -50,7 +48,7 @@ export default Vue.extend({
       return (iridium.users.getUser(this.message.from) as User).name
     },
     startedAtTimestamp(): string {
-      return this.getTimestamp({ time: this.message.at })
+      return getTimestamp(this.message.at)
     },
     currentDuration(): string {
       return formatDuration(Date.now() - this.message.at)
