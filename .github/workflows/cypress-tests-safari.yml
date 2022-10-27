@@ -32,7 +32,6 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           run: sh ./cypress/scripts/watch-script.sh & sh ./cypress/scripts/sync-node-script.sh
-          install: false
           start: yarn dev
           command: npm run cy:run
           wait-on: http://localhost:3000
