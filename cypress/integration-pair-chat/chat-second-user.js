@@ -1,17 +1,19 @@
 describe('Chat features with two accounts at the same time - Second User', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => {
-    if (err.message.includes('multiaddr must have a valid')) {
-      console.log(
-        'Error: multiaddr must have a valid format: /{ip4, ip6, dns4, dns6, dnsaddr}/{address}/{tcp, udp}/{port',
-      )
-    }
-    // returning false here prevents Cypress from failing the test
-    return false
+  beforeEach(() => {
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      if (err.message.includes('multiaddr must have a valid')) {
+        console.log(
+          'Error: multiaddr must have a valid format: /{ip4, ip6, dns4, dns6, dnsaddr}/{address}/{tcp, udp}/{port',
+        )
+      }
+      // returning false here prevents Cypress from failing the test
+      return false
+    })
   })
 
   it('Create test account for Second User', () => {
     // Create one account
-    cy.createAccount('12345', 'Chat User B')
+    cy.createAccount('12345', 'Chat User B', false)
 
     // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
@@ -165,8 +167,14 @@ describe('Chat features with two accounts at the same time - Second User', () =>
     cy.get('[data-cy=mediastream]').should('not.exist')
   })
 
-  // Test skipped because local page gets stuck in Linking Satellites screen after refreshing
+  // Skipped since refreshing page on Cypress is showing Choose Your Password Screen instead of Decrypt Account
   it.skip('Call again to User A and close the browser', () => {
+    //Enter Pin once that Decrypt Account is displayed
+
+    cy.contains('Decrypt Account', { timeout: 30000 }).should('be.visible')
+    cy.get('[data-cy=input-group]').trigger('input').type('12345')
+    cy.get('[data-cy=submit-input]').click()
+
     // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
 
