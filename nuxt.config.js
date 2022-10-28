@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   },
   bridge: {
     nitro: false,
-    meta: true,
+    meta: false, // disabled because this was adding a viewport meta tag which was overriding our configuration
   },
   server: {
     host: '0.0.0.0',
@@ -42,7 +42,7 @@ export default defineNuxtConfig({
       {
         name: 'viewport',
         content:
-          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0',
+          'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
       },
       { hid: 'description', name: 'description', content: '' },
       { name: 'mobile-web-app-capable', content: 'yes' },
@@ -246,12 +246,12 @@ export default defineNuxtConfig({
         options.targets = isServer
           ? { node: 'current' }
           : {
-              browsers: [
-                'last 1 chrome version',
-                'last 1 firefox version',
-                'last 1 safari version',
-              ],
-            }
+            browsers: [
+              'last 1 chrome version',
+              'last 1 firefox version',
+              'last 1 safari version',
+            ],
+          }
       },
     },
   },
