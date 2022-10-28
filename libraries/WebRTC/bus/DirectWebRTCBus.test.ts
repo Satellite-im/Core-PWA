@@ -1,6 +1,3 @@
-import Peer from 'simple-peer'
-import type { Instance } from 'simple-peer'
-import Emitter from '~/libraries/WebRTC/Emitter'
 import { DirectWebrtc } from '~/libraries/WebRTC/bus/DirectWebRTCBus'
 
 describe('Test DirectWebrtc', () => {

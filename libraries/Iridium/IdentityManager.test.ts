@@ -3,7 +3,7 @@ import IdentityManager from './IdentityManager'
 
 Object.defineProperty(global, 'crypto', {
   value: {
-    getRandomValues: (arr) => crypto.randomBytes(arr.length),
+    getRandomValues: (arr: string | any[]) => crypto.randomBytes(arr.length),
     hash: () => 'hashed string',
     subtle: {
       digest: () => 'digest',
