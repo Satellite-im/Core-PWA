@@ -5,12 +5,12 @@
     data-cy="friend-page-list"
     class="friend-wrapper"
   >
-    <!-- <button
+    <button
       class="friend"
       :disabled="loading"
+      data-cy="friend"
       @click="showQuickProfile($event, user)"
-    > -->
-    <div class="friend" data-cy="friend">
+    >
       <UiUserState :user="user" />
       <div class="text-container">
         <div data-cy="friend-name" class="ellipsis">{{ user.name }}</div>
@@ -24,7 +24,7 @@
           :disabled="loading"
           color="dark"
           size="sm"
-          @click="cancelButton.func"
+          @click.stop="cancelButton?.func()"
         >
           <component
             :is="cancelButton.icon"
@@ -39,7 +39,7 @@
           :loading="loading"
           color="dark"
           size="sm"
-          @click="confirmButton.func"
+          @click.stop="confirmButton?.func()"
         >
           <component
             :is="confirmButton.icon"
@@ -48,7 +48,7 @@
           />
         </InteractablesButton>
       </div>
-    </div>
+    </button>
   </component>
 </template>
 
@@ -93,6 +93,7 @@ export default Vue.extend({
   data() {
     return {
       loading: false,
+      isActive: false,
     }
   },
   computed: {
@@ -201,6 +202,10 @@ export default Vue.extend({
 .friend-wrapper {
   display: flex;
 
+  &:hover {
+    .background-semitransparent-light();
+  }
+
   .friend {
     display: flex;
     align-items: center;
@@ -208,15 +213,16 @@ export default Vue.extend({
     user-select: none;
     flex-grow: 1;
     min-width: 0;
-
     padding: 8px 16px;
+    outline-offset: -2px;
 
     &:hover {
       .background-semitransparent-light();
     }
 
     @media (max-width: @mobile-breakpoint) {
-      padding: 12px 0;
+      padding: 12px 16px;
+
       &:hover {
         background: none;
       }

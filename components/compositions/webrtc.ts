@@ -60,7 +60,9 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
         call: {},
       })
     } catch (e) {
-      $nuxt.$toast.error($nuxt.$i18n.t(e.message))
+      if (e instanceof Error) {
+        $nuxt.$toast.error($nuxt.$i18n.t(e.message))
+      }
     }
   }
   return { enableRTC, isActiveCall, call }

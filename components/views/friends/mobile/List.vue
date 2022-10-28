@@ -49,11 +49,11 @@ export default Vue.extend({
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0 1rem 1rem;
   overflow-y: auto;
 
   .search {
     margin-bottom: 1rem;
+    padding: 0 16px;
   }
 }
 </style>
