@@ -1,12 +1,12 @@
 <template src="./TypingIndicator.html"></template>
 
 <script lang="ts">
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import Vue, { ComputedRef, computed } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
 
 export default Vue.extend({
   setup() {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
     const conversationId: ComputedRef<string | undefined> = computed(() => {
       return $nuxt.$route.params.id

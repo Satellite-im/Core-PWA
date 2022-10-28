@@ -31,6 +31,7 @@ import {
   FolderIcon,
   UsersIcon,
 } from 'satellite-lucide-icons'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { friendsHooks } from '~/components/compositions/friends'
@@ -52,7 +53,6 @@ export default Vue.extend({
     UsersIcon,
   },
   setup() {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
 
     const { incomingRequests } = friendsHooks()

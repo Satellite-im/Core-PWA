@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { computed, ComputedRef } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { User } from '~/libraries/Iridium/users/types'

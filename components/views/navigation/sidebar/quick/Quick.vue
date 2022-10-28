@@ -33,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { computed, ComputedRef, ref, Ref } from 'vue'
 import { Config } from '~/config'
 import iridium from '~/libraries/Iridium/IridiumManager'

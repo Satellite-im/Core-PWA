@@ -25,6 +25,7 @@ import { computed, Ref, ref, WritableComputedRef } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { SmileIcon, BoxSelectIcon } from 'satellite-lucide-icons'
 import { TranslateResult } from 'vue-i18n'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { EnhancersRoute } from '~/store/chat/types'
 
 type EnhancersButton = {
