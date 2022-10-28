@@ -16,4 +16,10 @@
   .round-corners();
   .bordered();
   .blur();
+
+  @media (max-width: @mobile-breakpoint) {
+    inset: unset;
+    bottom: 0;
+    width: 100%;
+  }
 }

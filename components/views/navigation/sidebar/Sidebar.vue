@@ -42,16 +42,12 @@
           <button
             v-tooltip.left="$t('pages.chat.new_chat')"
             title="$t('pages.chat.new_chat')"
-            @click="toggleModal"
+            @click="toggleQuickchat"
           >
             <plus-icon size="20" />
           </button>
         </div>
-        <SidebarQuick
-          v-if="isQuickchatVisible"
-          v-click-outside="toggleModal"
-          @toggle="toggleModal"
-        />
+        <SidebarQuick v-if="isQuickchatVisible" @toggle="toggleQuickchat" />
       </div>
       <SidebarList :filter="filter" />
     </div>
@@ -72,7 +68,7 @@ const filter: Ref<string> = ref('')
 
 const { incomingRequests } = friendsHooks()
 
-function toggleModal() {
+function toggleQuickchat() {
   isQuickchatVisible.value = !isQuickchatVisible.value
 }
 </script>

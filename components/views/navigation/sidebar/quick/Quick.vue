@@ -1,5 +1,6 @@
 <template>
-  <div class="quick-chat">
+  <div ref="quickChat" class="quick-chat">
+    <InteractablesClose @click="emit('toggle')" />
     <TypographyText font="heading" size="sm" color="dark">
       {{ $t('pages.chat.new_chat') }}
     </TypographyText>
@@ -35,12 +36,17 @@
 <script setup lang="ts">
 import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { computed, ComputedRef, ref, Ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 import { Config } from '~/config'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
+import { handleEsc } from '~/components/compositions/events'
 
-// @ts-ignore
-const { $router, $i18n } = useNuxtApp()
+handleEsc(() => {
+  emit('toggle')
+})
+
+const { $device, $router, $i18n } = useNuxtApp()
 
 const emit = defineEmits(['toggle'])
 
@@ -48,6 +54,12 @@ const selected: Ref<User[]> = ref([])
 const isLoading: Ref<boolean> = ref(false)
 const error: Ref<string> = ref('')
 const name: Ref<string> = ref('')
+
+const quickChat = ref<HTMLElement>()
+
+onClickOutside(quickChat, () => {
+  emit('toggle')
+})
 
 const isInvalidName: ComputedRef<boolean> = computed(() => {
   return (
@@ -61,11 +73,9 @@ async function confirm() {
   error.value = ''
   // if only 1 friend, direct to DM instead
   if (selected.value.length === 1) {
-    const conversationId = iridium.chat.directConversationIdFromDid(
-      selected.value[0].did,
-    )
-    $router.push(`/chat/${conversationId}`)
+    const id = iridium.chat.directConversationIdFromDid(selected.value[0].did)
     emit('toggle')
+    $router.push(`${$device.isMobile ? '/mobile' : ''}/chat/${id}`)
     return
   }
   // validate group name
@@ -89,7 +99,7 @@ async function confirm() {
       participants,
     })
     emit('toggle')
-    $router.push(`/chat/${id}`)
+    $router.push(`${$device.isMobile ? '/mobile' : ''}/chat/${id}`)
   } catch (e: any) {
     error.value = $i18n.t(e.message)
   }

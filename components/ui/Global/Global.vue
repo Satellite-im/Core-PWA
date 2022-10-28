@@ -8,11 +8,14 @@ import { WebRTCIncomingCall } from '~/libraries/Iridium/webrtc/types'
 import { PropCommonEnum } from '~/libraries/Enums/enums'
 import { RootState } from '~/types/store/store'
 import { listenToNotifications } from '~/components/compositions/listenToNotifications'
+import { modal, ModalTypes } from '~/composables/modal'
 
 export default Vue.extend({
   name: 'Global',
   setup() {
     listenToNotifications()
+
+    return { modal, ModalTypes }
   },
   data() {
     return {
