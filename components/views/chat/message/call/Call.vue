@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapGetters } from 'vuex'
 import {
   PhoneOutgoingIcon,
   PhoneIncomingIcon,
@@ -17,6 +16,7 @@ import {
 } from '~/libraries/Iridium/webrtc/types'
 import { formatDuration } from '~/utilities/duration'
 import { getTimestamp } from '~/utilities/timestamp'
+import { webrtcHooks } from '~/components/compositions/webrtc'
 
 export default Vue.extend({
   components: {
@@ -33,6 +33,13 @@ export default Vue.extend({
       type: Boolean,
       default: () => false,
     },
+  },
+  setup() {
+    const { updateDuration } = webrtcHooks()
+
+    return {
+      updateDuration,
+    }
   },
   data() {
     return {
@@ -65,9 +72,9 @@ export default Vue.extend({
     },
   },
   created() {
-    this.updateDuration()
+    this.updateLocalDuration()
     this.timestampInterval = setInterval(() => {
-      this.updateDuration()
+      this.updateLocalDuration()
     }, 1000)
   },
   beforeDestroy() {
@@ -77,9 +84,8 @@ export default Vue.extend({
     hangUp() {
       iridium.webRTC.hangUp()
     },
-    updateDuration() {
-      const durationOfCall = Date.now() - this.webrtc.callStartedAt
-      this.callDuration = formatDuration(durationOfCall / 1000)
+    updateLocalDuration() {
+      this.callDuration = this.updateDuration(this.webrtc.callStartedAt)
     },
   },
 })

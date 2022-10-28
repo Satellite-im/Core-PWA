@@ -3,9 +3,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import iridium from '~/libraries/Iridium/IridiumManager'
-import { formatDuration } from '~/utilities/duration'
+import { webrtcHooks } from '~/components/compositions/webrtc'
 
 export default Vue.extend({
+  setup() {
+    const { updateDuration } = webrtcHooks()
+
+    return {
+      updateDuration,
+    }
+  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
@@ -14,18 +21,17 @@ export default Vue.extend({
     }
   },
   created() {
-    this.updateDuration()
+    this.updateLocalDuration()
     this.timestampInterval = setInterval(() => {
-      this.updateDuration()
+      this.updateLocalDuration()
     }, 1000)
   },
   beforeDestroy() {
     clearInterval(this.timestampInterval)
   },
   methods: {
-    updateDuration() {
-      const durationOfCall = Date.now() - this.webrtc.callStartedAt
-      this.callDuration = formatDuration(durationOfCall / 1000)
+    updateLocalDuration() {
+      this.callDuration = this.updateDuration(this.webrtc.callStartedAt)
     },
   },
 })

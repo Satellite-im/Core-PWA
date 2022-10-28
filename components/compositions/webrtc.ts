@@ -5,6 +5,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
 import { TrackKind } from '~/libraries/WebRTC/types'
 import { conversationHooks } from '~/components/compositions/conversations'
+import { formatDuration } from '~/utilities/duration'
 
 export function webrtcHooks(conversationId?: Conversation['id']) {
   const managers = reactive({
@@ -65,5 +66,11 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
       }
     }
   }
-  return { enableRTC, isActiveCall, call }
+
+  function updateDuration(callStartedAt: number) {
+    const durationOfCall = Date.now() - callStartedAt
+    return formatDuration(durationOfCall / 1000)
+  }
+
+  return { enableRTC, isActiveCall, call, updateDuration }
 }
