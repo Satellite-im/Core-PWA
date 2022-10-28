@@ -48,7 +48,6 @@ describe('Create Account Validations', () => {
 
     cy.contains('Early Access').should('be.visible')
 
-
     cy.contains('Please report any bugs or issues at').should('be.visible')
 
     cy.contains('https://issues.satellite.im')
