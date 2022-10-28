@@ -15,6 +15,9 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
 
   // todo remove group check after group call implementation
   const enableRTC: ComputedRef<boolean> = computed(() => {
+    if (isActiveCall.value) {
+      return false
+    }
     return Boolean(
       otherDids.value?.filter(
         (did) => managers.users.ephemeral.status[did] === 'online',

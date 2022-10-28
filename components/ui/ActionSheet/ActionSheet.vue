@@ -100,21 +100,20 @@ const hideMenu = () => {
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
-  padding: 0 @normal-spacing @normal-spacing;
+  padding: 0 1rem 1rem;
   &:extend(.fourth-layer);
   position: fixed;
   width: 100%;
   &:extend(.blur-less);
   gap: @normal-spacing;
-  left: 0;
-  top: 0;
-
+  top: -100vh;
   opacity: 0;
   height: 0;
   transition: opacity @animation-speed-long ease,
     height 0s ease @animation-speed-long;
 
   &.is-visible {
+    top: 0;
     opacity: 1;
     height: 100%;
     transition: opacity @animation-speed-long ease;
