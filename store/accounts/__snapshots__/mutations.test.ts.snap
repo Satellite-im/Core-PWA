@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test accounts/mutations should setProfilePicture 1`] = `
+Object {
+  "active": "",
+  "adapter": "",
+  "encryptedPhrase": "",
+  "entropyMessage": "",
+  "error": "",
+  "gasPrice": "",
+  "initialized": false,
+  "isNewAccount": false,
+  "lastVisited": "/",
+  "loading": false,
+  "locked": true,
+  "phrase": "",
+  "pinHash": "",
+  "registered": false,
+  "registrationStatus": "unknown",
+  "registry": false,
+  "storePin": false,
+}
+`;
