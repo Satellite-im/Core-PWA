@@ -2,29 +2,30 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { MaximizeIcon, MinimizeIcon } from 'satellite-lucide-icons'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { formatDuration } from '~/utilities/duration'
 
 export default Vue.extend({
-  components: {
-    MaximizeIcon,
-    MinimizeIcon,
-  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
-      callTimeString: '',
+      callDuration: '',
+      timestampInterval: undefined as undefined | NodeJS.Timer,
     }
   },
-  watch: {
-    webrtc: {
-      handler() {
-        this.callTimeString = formatDuration(
-          (Date.now() - this.webrtc.callStartedAt) / 1000,
-        )
-      },
-      deep: true,
+  created() {
+    this.updateDuration()
+    this.timestampInterval = setInterval(() => {
+      this.updateDuration()
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timestampInterval)
+  },
+  methods: {
+    updateDuration() {
+      const durationOfCall = Date.now() - this.webrtc.callStartedAt
+      this.callDuration = formatDuration(durationOfCall / 1000)
     },
   },
 })

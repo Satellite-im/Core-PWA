@@ -38,6 +38,7 @@ export default Vue.extend({
     return {
       webrtc: iridium.webRTC.state,
       callDuration: '',
+      timestampInterval: undefined as undefined | NodeJS.Timer,
     }
   },
   computed: {
@@ -63,19 +64,22 @@ export default Vue.extend({
         : null
     },
   },
-  watch: {
-    webrtc: {
-      handler() {
-        this.callDuration = formatDuration(
-          (Date.now() - this.webrtc.callStartedAt) / 1000,
-        )
-      },
-      deep: true,
-    },
+  created() {
+    this.updateDuration()
+    this.timestampInterval = setInterval(() => {
+      this.updateDuration()
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timestampInterval)
   },
   methods: {
     hangUp() {
       iridium.webRTC.hangUp()
+    },
+    updateDuration() {
+      const durationOfCall = Date.now() - this.webrtc.callStartedAt
+      this.callDuration = formatDuration(durationOfCall / 1000)
     },
   },
 })
