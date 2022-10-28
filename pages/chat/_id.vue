@@ -1,6 +1,7 @@
 <template src="./Chat.html"></template>
 
 <script lang="ts">
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import Vue, { computed, ComputedRef } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { webrtcHooks } from '~/components/compositions/webrtc'
@@ -9,7 +10,6 @@ export default Vue.extend({
   name: 'Chat',
   layout: 'desktop',
   setup() {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
     const conversationId: ComputedRef<string> = computed(() => {
       return $nuxt.$route.params.id

@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import {
   ArrowRightIcon,
   SmileIcon,
@@ -38,7 +39,7 @@ interface Emits {
   (e: 'send'): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { $store, $i18n } = useNuxtApp()

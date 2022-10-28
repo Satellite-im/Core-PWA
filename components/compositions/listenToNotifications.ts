@@ -1,3 +1,4 @@
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import {
   Notification,
   NotificationType,
@@ -18,7 +19,6 @@ type NotificationHandler<P = {}> = {
 }
 
 export function listenToNotifications() {
-  // @ts-ignore
   const $nuxt = useNuxtApp()
 
   iridium.notifications.on(

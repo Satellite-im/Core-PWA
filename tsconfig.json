@@ -1,5 +1,5 @@
 {
-  "extends": ".nuxt/tsconfig.json",
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "target": "es2019",
     "module": "ESNext",
@@ -13,17 +13,12 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "resolveJsonModule": true,
-    "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./*"]
-    },
     "types": [
       "@nuxt/types",
       "@types/node",
       "@nuxtjs/i18n",
       "@nuxtjs/device",
       "@nuxtjs/toast",
-      "types/modules",
       "jest-extended",
       "jest"
     ]

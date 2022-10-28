@@ -36,6 +36,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { Swiper, SwiperOptions } from 'swiper'
 import 'swiper/css'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { swiperOptions, SWIPER_TRANSITION_SPEED } from '~/utilities/swiper'
 import { webrtcHooks } from '~/components/compositions/webrtc'
 export default {

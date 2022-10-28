@@ -1,4 +1,5 @@
 import { computed, ComputedRef, reactive } from 'vue'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { User } from '~/libraries/Iridium/users/types'
@@ -38,7 +39,6 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
     conversationId: Conversation['id']
     kinds: TrackKind[]
   }) {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
 
     if (!enableRTC.value) {

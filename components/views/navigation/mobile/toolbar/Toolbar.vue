@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { computed, ComputedRef, reactive } from 'vue'
 import { PhoneCallIcon, MenuIcon } from 'satellite-lucide-icons'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { webrtcHooks } from '~/components/compositions/webrtc'

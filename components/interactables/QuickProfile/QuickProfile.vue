@@ -65,13 +65,13 @@ import {
 } from 'satellite-lucide-icons'
 import { onClickOutside } from '@vueuse/core'
 
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { User, UserStatus } from '~/libraries/Iridium/users/types'
 import { SettingsRoutes, UIState } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import { handleEsc, handleFocusTrap } from '~/components/compositions/events'
 
-// @ts-ignore
 const { $store, $device, $router } = useNuxtApp()
 const quickProfile: UIState['quickProfile'] = $store.state.ui.quickProfile
 
