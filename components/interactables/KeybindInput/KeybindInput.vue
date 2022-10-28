@@ -7,6 +7,7 @@ import {
   windowsShortcuts,
   macShortcuts,
   keyCodeToKey,
+  charToCode,
 } from '~/utilities/Keyboard'
 
 const modifiers = ['Control', 'Alt', 'Shift', 'Meta']
@@ -150,10 +151,10 @@ export default Vue.extend({
       if (this.activeModifiers.length === 0) {
         const editButton = (this.$refs.editButton as Vue)
           ?.$el as HTMLButtonElement
-        if (event.keyCode === 13) {
+        if (event.keyCode === charToCode.CR) {
           this.save()
           editButton.focus()
-        } else if (event.keyCode === 27) {
+        } else if (event.keyCode === charToCode.ESC) {
           this.cancel()
           editButton.focus()
         }
