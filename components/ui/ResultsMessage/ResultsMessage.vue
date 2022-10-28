@@ -1,5 +1,5 @@
 <template>
-  <div class="no-results">
+  <div class="no-results" :class="{ large: !!subtitle }">
     <TypographyText class="no-results-icon">
       <message-circle-icon />
     </TypographyText>
@@ -45,6 +45,10 @@ export default Vue.extend({
   height: 100%;
   gap: 8px;
   padding: 16px 0;
+
+  &.large {
+    gap: 16px;
+  }
 
   .no-results-icon {
     display: flex;

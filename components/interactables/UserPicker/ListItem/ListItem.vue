@@ -1,30 +1,37 @@
-<template src="./ListItem.html"></template>
+<template>
+  <div class="list-item" @click="emit('click')">
+    <UiCircle
+      :type="src ? 'image' : 'random'"
+      :seed="friend.did"
+      :size="32"
+      :source="src"
+    />
+    <div class="name" :title="friend.name">{{ friend.name }}</div>
+    <InteractablesCheckbox :value="selected" />
+  </div>
+</template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Friend } from '~/types/ui/friends'
+<script setup lang="ts">
+import { computed, ComputedRef } from 'vue'
+import { Config } from '~/config'
+import { User } from '~/libraries/Iridium/users/types'
 
-export default Vue.extend({
-  name: 'ListItem',
-  props: {
-    friend: {
-      type: Object as PropType<Friend>,
-      required: true,
-    },
-    selected: {
-      type: Boolean,
-      default: () => false,
-    },
-  },
-  computed: {
-    src(): string {
-      const hash =
-        this.friend?.photoHash ||
-        this.friend?.profilePicture ||
-        this.friend?.request?.userInfo?.photoHash
-      return hash ? `${this.$Config.ipfs.gateway}${hash}` : ''
-    },
-  },
+interface Props {
+  friend: User
+  selected?: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  selected: false,
+})
+
+interface Emits {
+  (e: 'click'): void
+}
+const emit = defineEmits<Emits>()
+
+const src: ComputedRef<string> = computed(() => {
+  const hash = props.friend?.photoHash
+  return hash ? `${Config.ipfs.gateway}${hash}` : ''
 })
 </script>
 

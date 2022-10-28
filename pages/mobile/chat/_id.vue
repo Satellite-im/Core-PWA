@@ -1,5 +1,5 @@
 <template>
-  <div ref="swiper" class="chat">
+  <div ref="swiperRef" class="chat">
     <div class="swiper-wrapper">
       <div
         class="swiper-slide"
@@ -12,22 +12,19 @@
             type="search"
             :placeholder="$t('ui.search')"
           />
-          <button v-if="$route.params.id" @click="swiper.slideNext()">
+          <!-- todo - replace with mobile group chat button -->
+          <!-- <button v-if="$route.params.id" @click="swiper.slideNext()">
             <menu-icon class="font-color-flair" size="1.5x" />
-          </button>
+          </button> -->
         </div>
         <div v-show="$config.feedbackUrl" class="banner-wrapper">
-          <EarlyAccessBanner />
+          <UiEarlyAccessBanner />
         </div>
-        <SidebarList :filter="filter" @slideNext="swiper.slideNext()" />
+        <SidebarList :filter="filter" />
       </div>
       <div class="swiper-slide">
-        <MobileToolbar @slidePrev="swiper.slidePrev()" />
-        <Media
-          v-if="isActiveCall"
-          :max-viewable-users="10"
-          :fullscreen-max-viewable-users="6"
-        />
+        <MobileToolbar @slidePrev="swiper?.slidePrev()" />
+        <Media v-if="isActiveCall" />
         <Conversation />
         <Chatbar ref="chatbar" />
       </div>
@@ -36,87 +33,76 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapState } from 'vuex'
-import { MenuIcon } from 'satellite-lucide-icons'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { Swiper, SwiperOptions } from 'swiper'
-import { RootState } from '~/types/store/store'
 import 'swiper/css'
-import iridium from '~/libraries/Iridium/IridiumManager'
-import EarlyAccessBanner from '~/components/ui/EarlyAccessBanner/EarlyAccessBanner.vue'
-import { DismissSoftwareKeyboard, swiperOptions } from '~/utilities/swiper'
-
-export default Vue.extend({
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
+import { swiperOptions, SWIPER_TRANSITION_SPEED } from '~/utilities/swiper'
+import { webrtcHooks } from '~/components/compositions/webrtc'
+export default {
   name: 'MobileChat',
-  components: {
-    MenuIcon,
-    EarlyAccessBanner,
-  },
   layout: 'mobile',
-  data: () => ({
-    swiper: undefined as Swiper | undefined,
-    webrtc: iridium.webRTC.state,
-    filter: '',
-  }),
-  computed: {
-    ...mapState({
-      ui: (state) => (state as RootState).ui,
-    }),
-    isActiveCall(): boolean {
-      return iridium.webRTC.isActiveCall(this.$route.params.id)
-    },
-    swiperConfig(): SwiperOptions {
-      return swiperOptions({
-        allowSlidePrev: false,
-        on: {
-          activeIndexChange: ({ activeIndex }) => {
-            if (!this.swiper) {
-              return
-            }
-            if (activeIndex === 0) {
-              this.swiper.allowSlidePrev = false
-              this.swiper.allowSlideNext = true
-              this.isMobileNavVisible = true
-            }
-            if (activeIndex === 1) {
-              this.swiper.allowSlidePrev = true
-              this.swiper.allowSlideNext = false
-              this.isMobileNavVisible = false
-            }
-          },
-        },
-      })
-    },
-    isMobileNavVisible: {
-      get(): boolean {
-        return this.ui.isMobileNavVisible
-      },
-      set(value: boolean) {
-        this.$store.commit('ui/setIsMobileNavVisible', value)
-      },
-    },
-  },
+}
+</script>
 
-  watch: {
-    isActiveCall(val) {
-      if (val) {
-        this.swiper?.slideNext()
+<script setup lang="ts">
+const { $route, $router, $store } = useNuxtApp()
+
+const swiperRef = ref<HTMLElement>()
+const swiper = ref<Swiper>()
+const filter = ref<string>('')
+
+const conversationId = computed<string | undefined>(() => {
+  return $route.params.id
+})
+
+const { isActiveCall } = webrtcHooks(conversationId.value)
+
+const swiperConfig: SwiperOptions = swiperOptions({
+  allowSlidePrev: false,
+  on: {
+    activeIndexChange: ({ activeIndex }) => {
+      if (!swiper.value) {
+        return
+      }
+      if (activeIndex === 0) {
+        swiper.value.allowSlidePrev = false
+        swiper.value.allowSlideNext = true
+        isMobileNavVisible.value = true
+
+        setTimeout(() => {
+          $router.push({ path: '/mobile/chat' })
+        }, SWIPER_TRANSITION_SPEED)
+      }
+      if (activeIndex === 1) {
+        swiper.value.allowSlidePrev = true
+        swiper.value.allowSlideNext = false
+        isMobileNavVisible.value = false
       }
     },
   },
-  // component is remounted anytime the route param changes
-  mounted() {
-    this.swiper = new Swiper(
-      this.$refs.swiper as HTMLElement,
-      this.swiperConfig,
-    )
-    if (this.$route.params.id) {
-      this.swiper.slideNext()
-    }
-  },
-  beforeDestroy() {
-    this.isMobileNavVisible = true
-  },
+})
+
+const isMobileNavVisible = computed<boolean>({
+  get: () => $store.state.ui.isMobileNavVisible,
+  set: (v: boolean) => $store.commit('ui/setIsMobileNavVisible', v),
+})
+
+watch(isActiveCall, (val) => val && swiper.value?.slideNext())
+
+// component is remounted anytime the route param changes
+onMounted(() => {
+  if (!swiperRef.value) {
+    return
+  }
+  swiper.value = new Swiper(swiperRef.value, swiperConfig)
+  if ($route.params.id) {
+    swiper.value.slideNext()
+  }
+})
+
+onUnmounted(() => {
+  isMobileNavVisible.value = true
 })
 </script>
 
@@ -124,7 +110,7 @@ export default Vue.extend({
 .chat {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  min-height: 0;
 
   .swiper-slide {
     display: flex;

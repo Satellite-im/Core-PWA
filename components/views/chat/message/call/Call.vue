@@ -16,6 +16,7 @@ import {
   WebRTCIncomingCall,
 } from '~/libraries/Iridium/webrtc/types'
 import { formatDuration } from '~/utilities/duration'
+import { getTimestamp } from '~/utilities/timestamp'
 
 export default Vue.extend({
   components: {
@@ -37,12 +38,10 @@ export default Vue.extend({
     return {
       webrtc: iridium.webRTC.state,
       callDuration: '',
+      timestampInterval: undefined as undefined | NodeJS.Timer,
     }
   },
   computed: {
-    ...mapGetters({
-      getTimestamp: 'settings/getTimestamp',
-    }),
     isOutgoingCall(): boolean {
       return this.message.from === iridium.id
     },
@@ -50,7 +49,7 @@ export default Vue.extend({
       return (iridium.users.getUser(this.message.from) as User).name
     },
     startedAtTimestamp(): string {
-      return this.getTimestamp({ time: this.message.at })
+      return getTimestamp(this.message.at)
     },
     currentDuration(): string {
       return formatDuration(Date.now() - this.message.at)
@@ -65,19 +64,22 @@ export default Vue.extend({
         : null
     },
   },
-  watch: {
-    webrtc: {
-      handler() {
-        this.callDuration = formatDuration(
-          (Date.now() - this.webrtc.callStartedAt) / 1000,
-        )
-      },
-      deep: true,
-    },
+  created() {
+    this.updateDuration()
+    this.timestampInterval = setInterval(() => {
+      this.updateDuration()
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timestampInterval)
   },
   methods: {
     hangUp() {
       iridium.webRTC.hangUp()
+    },
+    updateDuration() {
+      const durationOfCall = Date.now() - this.webrtc.callStartedAt
+      this.callDuration = formatDuration(durationOfCall / 1000)
     },
   },
 })

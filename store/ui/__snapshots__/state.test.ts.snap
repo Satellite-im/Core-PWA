@@ -17,18 +17,6 @@ Object {
     "id": "",
     "payload": "",
   },
-  "enhancers": Object {
-    "containerWidth": 0,
-    "defaultHeight": "30rem",
-    "defaultWidth": "24rem",
-    "floating": false,
-    "position": Array [
-      0,
-      0,
-    ],
-    "route": "emoji",
-    "show": false,
-  },
   "glyphMarketplaceView": Object {
     "shopId": null,
     "view": "home",
@@ -36,7 +24,6 @@ Object {
   "glyphModalPackId": undefined,
   "hoveredGlyphInfo": undefined,
   "isMobileNavVisible": true,
-  "messages": Array [],
   "modals": Object {
     "callToAction": false,
     "changelog": false,
@@ -52,13 +39,7 @@ Object {
   },
   "mostEmojiUsed": Array [],
   "recentGlyphs": Array [],
-  "settingReaction": Object {
-    "groupID": null,
-    "messageID": null,
-    "status": false,
-  },
   "settingsRoute": "",
   "showSidebar": true,
-  "unreadMessage": 0,
 }
 `;

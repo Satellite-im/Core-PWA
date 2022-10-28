@@ -12,6 +12,7 @@ import {
 } from 'satellite-lucide-icons'
 
 import { mapState } from 'vuex'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { searchRecommend } from '~/mock/search'
 import { SearchQueryItem } from '~/types/search/search'
@@ -38,7 +39,6 @@ export default Vue.extend({
     },
   },
   setup() {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
     const conversationId: ComputedRef<string | undefined> = computed(() => {
       return $nuxt.$route.params.id

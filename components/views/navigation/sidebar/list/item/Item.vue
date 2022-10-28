@@ -11,6 +11,7 @@ import Vue, {
   onMounted,
   onBeforeUnmount,
 } from 'vue'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { toHTML } from '~/libraries/ui/Markdown'
 import { ContextMenuItem } from '~/store/ui/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -29,7 +30,6 @@ export default Vue.extend({
     },
   },
   setup(props) {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
     const {
       conversation,

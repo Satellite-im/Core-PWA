@@ -13,6 +13,7 @@ export enum NotificationType {
   MEMBER_LEAVE = 'member_leave',
   ADDED_TO_GROUP = 'added_to_group',
   GROUP_CONVERSATION_CREATED = 'group_conversation_created',
+  CALL_INCOMING = 'call_incoming',
 }
 
 export type NotificationTypeValues = NotificationType[keyof NotificationType]
@@ -30,6 +31,8 @@ export type Notification<P = {}> = {
   onNotificationClick?: () => void
 }
 
+export type FriendRequestNotificationPayload = {}
+
 export type MessageNotificationPayload = {
   conversationId: string
   messageId: string
@@ -44,6 +47,7 @@ export type MemberJoinNotificationPayload = MessageNotificationPayload & {
 }
 
 export type NotificationPayloads =
+  | FriendRequestNotificationPayload
   | MessageNotificationPayload
   | MemberJoinNotificationPayload
   | GroupConversationCreatedNotificationPayload

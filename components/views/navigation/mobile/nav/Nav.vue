@@ -26,7 +26,12 @@
 import Vue, { ComputedRef, computed, reactive } from 'vue'
 import { TranslateResult } from 'vue-i18n'
 import { mapState } from 'vuex'
-import { HomeIcon, FolderIcon, UsersIcon } from 'satellite-lucide-icons'
+import {
+  MessageCircleIcon,
+  FolderIcon,
+  UsersIcon,
+} from 'satellite-lucide-icons'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { RootState } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { friendsHooks } from '~/components/compositions/friends'
@@ -43,12 +48,11 @@ interface NavButton {
 
 export default Vue.extend({
   components: {
-    HomeIcon,
+    MessageCircleIcon,
     FolderIcon,
     UsersIcon,
   },
   setup() {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
 
     const { incomingRequests } = friendsHooks()
@@ -62,17 +66,17 @@ export default Vue.extend({
         {
           id: 'chat',
           label: $nuxt.$t('global.chat'),
-          icon: HomeIcon,
+          icon: MessageCircleIcon,
           path: '/mobile/chat',
           showBadge: Boolean(totalUnreadMessages.value),
         },
-        {
-          id: 'files',
-          label: $nuxt.$t('global.files'),
-          icon: FolderIcon,
-          path: '/files',
-          showBadge: false,
-        },
+        // {
+        //   id: 'files',
+        //   label: $nuxt.$t('global.files'),
+        //   icon: FolderIcon,
+        //   path: '/files',
+        //   showBadge: false,
+        // },
         {
           id: 'friends',
           label: $nuxt.$t('global.friends'),

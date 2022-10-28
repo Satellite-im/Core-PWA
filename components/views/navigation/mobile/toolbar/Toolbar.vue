@@ -3,7 +3,7 @@
     <button v-if="conversationId" @click="$emit('slidePrev')">
       <menu-icon class="font-color-flair" size="1.5x" alt="previous" />
     </button>
-    <TypographyText as="h3">
+    <TypographyText as="h3" class="ellipsis">
       {{ conversation?.name }}
     </TypographyText>
     <button
@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { computed, ComputedRef, reactive } from 'vue'
 import { PhoneCallIcon, MenuIcon } from 'satellite-lucide-icons'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { webrtcHooks } from '~/components/compositions/webrtc'

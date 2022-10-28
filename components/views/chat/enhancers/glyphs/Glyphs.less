@@ -27,6 +27,10 @@
     height: 100%;
     padding-bottom: 80px;
 
+    @media only screen and (max-width: @mobile-breakpoint) {
+      padding-bottom: 0;
+    }
+
     > div {
       display: flex;
       flex-direction: column;

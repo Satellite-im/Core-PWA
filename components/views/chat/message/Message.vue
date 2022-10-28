@@ -14,6 +14,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { conversationMessageIsNotice } from '~/utilities/chat'
 import { onlyHasEmoji } from '~/utilities/onlyHasEmoji'
 import { capacitorHooks } from '~/components/compositions/capacitor'
+import { getTimestamp } from '~/utilities/timestamp'
 
 export default Vue.extend({
   props: {
@@ -63,9 +64,6 @@ export default Vue.extend({
       ui: (state) => (state as RootState).ui,
       chat: (state) => (state as RootState).chat,
     }),
-    ...mapGetters({
-      getTimestamp: 'settings/getTimestamp',
-    }),
     conversationId(): Conversation['id'] {
       return this.$route.params.id
     },
@@ -85,7 +83,7 @@ export default Vue.extend({
       )
     },
     timestamp(): string {
-      return this.getTimestamp({ time: this.message.at })
+      return getTimestamp(this.message.at)
     },
     isNotice(): boolean {
       return conversationMessageIsNotice(this.message)
@@ -192,12 +190,10 @@ export default Vue.extend({
      * @example v-on:click="showQuickProfile"
      */
     showQuickProfile(e: MouseEvent) {
-      setTimeout(() => {
-        this.$store.commit('ui/setQuickProfile', {
-          user: this.author,
-          position: { x: e.x, y: e.y },
-        })
-      }, 0)
+      this.$store.commit('ui/setQuickProfile', {
+        user: this.author,
+        position: { x: e.x, y: e.y },
+      })
     },
     /**
      * @method copyMessage
@@ -222,15 +218,11 @@ export default Vue.extend({
      * @example
      */
     emojiReaction() {
-      this.$store.commit('ui/settingReaction', {
-        status: true,
+      this.$store.commit('chat/setMessageReaction', {
         conversationId: this.message.conversationId,
         messageId: this.message.id,
       })
-      this.$store.commit('ui/toggleEnhancers', {
-        show: !this.ui.enhancers.show,
-        floating: true,
-      })
+      this.$store.commit('chat/setEnhancersRoute', 'emoji')
     },
     quickReaction(emoji: EmojiUsage) {
       iridium.chat.toggleMessageReaction({

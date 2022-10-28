@@ -16,7 +16,7 @@ describe('Test PhantomManager after Solana mock', () => {
   })
 })
 
-describe('Test PhantomManager after Solana mock', () => {
+describe('PhantomManager after Solana mock', () => {
   beforeAll(() => {
     Object.defineProperty(window, 'solana', {
       configurable: true,
@@ -46,7 +46,7 @@ describe('Test PhantomManager after Solana mock', () => {
     }
   })
 
-  it('should fail to initialize wallet', async () => {
+  it('expected to fail to initialize wallet', async () => {
     // Reason for failing: related to non-existence of isPhantom on window.solana
     try {
       const constructor = new PhantomManager()

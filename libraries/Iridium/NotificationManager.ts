@@ -121,6 +121,7 @@ export default class NotificationManager extends Emitter<Notification> {
    * @method sendNotification
    */
   async sendNotification(notification: Exclude<Notification, 'id'>) {
+    // Removes onNotification from the payload as it can't be saved to iridium
     const { onNotificationClick, ...iridiumNotification } = notification
 
     if (!iridium.connector) return

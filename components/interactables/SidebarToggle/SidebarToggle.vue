@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { MenuIcon } from 'satellite-lucide-icons'
 
 const { $store } = useNuxtApp()

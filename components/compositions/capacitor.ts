@@ -1,8 +1,8 @@
 import { Clipboard } from '@capacitor/clipboard'
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 
 export function capacitorHooks() {
   async function copyText(text: string) {
-    // @ts-ignore
     const $nuxt = useNuxtApp()
     try {
       await Clipboard.write({

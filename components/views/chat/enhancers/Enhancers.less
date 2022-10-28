@@ -29,4 +29,16 @@
     width: 100%;
     overflow: hidden;
   }
+
+  @media (max-width: @mobile-breakpoint) {
+    position: fixed;
+    inset: auto 0 0 0;
+    box-shadow: 0 0 0 100vh rgba(0, 0, 0, 0.25);
+    z-index: 1;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: calc(0px - var(--keyboard-height));
+    padding-bottom: var(--keyboard-height);
+    height: calc(@enhancers-height + var(--keyboard-height));
+  }
 }

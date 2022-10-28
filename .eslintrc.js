@@ -11,7 +11,15 @@ module.exports = {
     // 'plugin:vue/vue3-recommended',
     'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['/cypress/*', 'package.json', '/iridium/*', '/dist/*'],
+  ignorePatterns: [
+    '/cypress/*',
+    'package.json',
+    '/linked-iridium/*',
+    '/dist/*',
+    '/android/*',
+    '/iOS/*',
+    '/src-tauri/*',
+  ],
   plugins: ['jest'],
   rules: {
     'jest/no-disabled-tests': 'warn',

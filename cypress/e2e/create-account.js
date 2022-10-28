@@ -46,8 +46,8 @@ describe('Create Account Validations', () => {
     cy.createAccountSubmit()
     cy.welcomeModal(randomName)
 
-    //Early Access Modal in Sidebar
-    cy.contains(`Early Access`).should('be.visible')
+    cy.contains('Early Access').should('be.visible')
+
 
     cy.contains('Please report any bugs or issues at').should('be.visible')
 

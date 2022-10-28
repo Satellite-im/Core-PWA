@@ -41,6 +41,15 @@
         font-size: 22px;
         aspect-ratio: 1;
         cursor: pointer;
+        line-height: 0;
+      }
+
+      @media (max-width: @mobile-breakpoint) {
+        grid-template-columns: repeat(10, 1fr);
+
+        .emoji {
+          font-size: 26px;
+        }
       }
     }
   }

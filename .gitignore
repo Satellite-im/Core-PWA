@@ -105,3 +105,10 @@ solana-localnet
 
 ./iridium
 linked-iridium
+
+# Cypress Screenshots and Files
+cypress/videos/
+cypress/videos-chat-pair/
+cypress/screenshots/
+cypress/screenshots-chat-pair/
+cypress/fixtures/second-user-account.txt

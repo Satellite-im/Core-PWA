@@ -1,3 +1,4 @@
+import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import {
   Notification,
   NotificationType,
@@ -18,7 +19,6 @@ type NotificationHandler<P = {}> = {
 }
 
 export function listenToNotifications() {
-  // @ts-ignore
   const $nuxt = useNuxtApp()
 
   iridium.notifications.on(
@@ -41,7 +41,7 @@ export function listenToNotifications() {
       title: text.title,
       description: text.description,
       seen: false,
-      payload: data.payload,
+      payload: data.payload || {},
       image: data.image || '',
       onNotificationClick: onClick,
     }
@@ -243,6 +243,25 @@ export function listenToNotifications() {
     [NotificationType.MENTION]: {
       handler: (notif: NotificationBase<MessageNotificationPayload>) => {},
     },
+
+    [NotificationType.CALL_INCOMING]: {
+      handler: (notif: NotificationBase<MessageNotificationPayload>) => {
+        const sender = iridium.users.getUser(notif.senderId)
+
+        const text = {
+          title: $nuxt.$t('notifications.call.title'),
+          description: $nuxt.$t('notifications.call.body', {
+            sender: sender?.name || '',
+          }),
+        }
+
+        const onClick = () => {
+          navigateToChat(notif.payload.conversationId)
+        }
+
+        sendNotification(notif, text, onClick)
+      },
+    },
   }
 
   const getMessageDescription = (message: ConversationMessage) => {
@@ -252,7 +271,7 @@ export function listenToNotifications() {
   }
 
   const navigateToFriends = () => {
-    const mobileLink = '/mobile/friends?route=requests'
+    const mobileLink = '/mobile/friends?route=request'
     const desktopLink = '/friends?route=requests'
     $nuxt.$router.push($nuxt.$device.isMobile ? mobileLink : desktopLink)
   }
