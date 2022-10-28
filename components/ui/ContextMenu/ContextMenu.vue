@@ -1,4 +1,3 @@
-// ContextMenu
 <template>
   <!-- Desktop Context Menu -->
   <div
