@@ -12,6 +12,7 @@
             type="search"
             :placeholder="$t('ui.search')"
           />
+          <!-- todo - replace with mobile group chat button -->
           <!-- <button v-if="$route.params.id" @click="swiper.slideNext()">
             <menu-icon class="font-color-flair" size="1.5x" />
           </button> -->
@@ -22,7 +23,7 @@
         <SidebarList :filter="filter" />
       </div>
       <div class="swiper-slide">
-        <MobileToolbar @slidePrev="swiper.slidePrev()" />
+        <MobileToolbar @slidePrev="swiper?.slidePrev()" />
         <Media v-if="isActiveCall" />
         <Conversation />
         <Chatbar ref="chatbar" />

@@ -106,7 +106,7 @@ const hideMenu = () => {
   width: 100%;
   &:extend(.blur-less);
   gap: @normal-spacing;
-  top: -999px;
+  top: -100vh;
   opacity: 0;
   height: 0;
   transition: opacity @animation-speed-long ease,
