@@ -1,6 +1,10 @@
 <template>
   <div>
-    <button class="info-icon-button" @click="toggleShowModal">
+    <button
+      class="info-icon-button"
+      data-cy="info-icon-button"
+      @click="toggleShowModal"
+    >
       <info-icon size="1.5x" />
     </button>
 

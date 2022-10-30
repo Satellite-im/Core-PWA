@@ -8,6 +8,15 @@ const randomPIN = faker.internet.password(7, false, /[A-Z]/, 'test') // generate
 
 describe('Create Account Validations', () => {
   it('Create Account without profile picture', () => {
+    //PIN Info Modal
+    cy.visit('/')
+    cy.get('[data-cy=info-icon-button]').should('be.visible').click()
+    cy.contains('Create Account Password')
+    cy.contains(
+      "Create a Password to protect your account. The Password can be anything you want, just don't forget it.",
+    )
+    cy.closeModal('[data-cy=confirmation-modal]')
+
     //Enter PIN screen
     cy.createAccountPINscreen(randomPIN)
 

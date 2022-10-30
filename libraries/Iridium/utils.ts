@@ -37,6 +37,8 @@ export async function uploadFile(
   file: File,
   participants: User['did'][],
 ): Promise<{ cid: string; valid: boolean } | undefined> {
+  const fileBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(fileBuffer)
   return new Promise((resolve) => {
     if (!iridium.connector?.p2p.primaryNodeID) {
       throw new Error('not connected to primary node')
@@ -44,7 +46,7 @@ export async function uploadFile(
 
     iridium.connector
       ?.fileStore(
-        { file, name: file.name, type: file.type },
+        { file: buffer, name: file.name, type: file.type },
         {
           syncPin: true,
           encrypt: {
