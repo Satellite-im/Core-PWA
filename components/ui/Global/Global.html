@@ -76,6 +76,10 @@
   </transition>
   <transition :name="$device.isMobile ? 'slide' : ''">
     <InteractablesQuickProfile v-if="ui.quickProfile" />
+    <SidebarQuick
+      v-if="$device.isMobile && modal.type === ModalTypes.QUICK_CHAT"
+      @toggle="modal.type = ModalTypes.EMPTY"
+    />
   </transition>
   <UiPip
     v-if="$device.isDesktop && isBackgroundCall"

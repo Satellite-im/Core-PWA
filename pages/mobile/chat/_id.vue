@@ -12,10 +12,9 @@
             type="search"
             :placeholder="$t('ui.search')"
           />
-          <!-- todo - replace with mobile group chat button -->
-          <!-- <button v-if="$route.params.id" @click="swiper.slideNext()">
-            <menu-icon class="font-color-flair" size="1.5x" />
-          </button> -->
+          <button @click="modal.type = ModalTypes.QUICK_CHAT">
+            <plus-icon size="1.5x" />
+          </button>
         </div>
         <div v-show="$config.feedbackUrl" class="banner-wrapper">
           <UiEarlyAccessBanner />
@@ -35,10 +34,12 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { Swiper, SwiperOptions } from 'swiper'
+import { PlusIcon } from 'satellite-lucide-icons'
 import 'swiper/css'
 import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { swiperOptions, SWIPER_TRANSITION_SPEED } from '~/utilities/swiper'
 import { webrtcHooks } from '~/components/compositions/webrtc'
+import { modal, ModalTypes } from '~/composables/modal'
 export default {
   name: 'MobileChat',
   layout: 'mobile',
