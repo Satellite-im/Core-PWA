@@ -69,11 +69,10 @@
     </InteractablesButton>
   </div>
   <TypographyText
-    v-if="showLimit"
+    v-if="showLimit && maxLength - text.length <= 100"
     size="xs"
     color="dark"
     class="attachment limit"
-    :class="{display: maxLength - text.length <= 100}"
   >
     {{ text.length }}/{{ maxLength }}
   </TypographyText>
