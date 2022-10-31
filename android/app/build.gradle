@@ -39,6 +39,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 }
 
 apply from: 'capacitor.build.gradle'
