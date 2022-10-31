@@ -53,6 +53,13 @@
             </button>
           </template>
         </div>
+
+        <!-- Cancel Button -->
+        <div class="actions-group">
+          <button class="action-button" @click.stop="hideMenu">
+            {{ $t('ui.cancel') }}
+          </button>
+        </div>
       </div>
     </div>
   </transition>
