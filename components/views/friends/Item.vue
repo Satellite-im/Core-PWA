@@ -93,7 +93,6 @@ export default Vue.extend({
   data() {
     return {
       loading: false,
-      isActive: false,
     }
   },
   computed: {
