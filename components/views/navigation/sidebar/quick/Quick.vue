@@ -1,5 +1,5 @@
 <template>
-  <div ref="quickChat" class="quick-chat">
+  <div ref="quickChat" class="quick-chat" :class="{ mobile: $device.isMobile }">
     <InteractablesClose @click="emit('toggle')" />
     <TypographyText font="heading" size="sm" color="dark">
       {{ $t('pages.chat.new_chat') }}
