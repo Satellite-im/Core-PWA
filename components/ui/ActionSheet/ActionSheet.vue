@@ -178,18 +178,18 @@ const hideMenu = () => {
 }
 
 .context-menu-enter-active {
-  transition: background @animation-speed ease;
+  transition: background @animation-speed-medium ease;
 
   .inner {
-    transition: transform @animation-speed ease-out;
+    transition: transform @animation-speed-medium ease-out;
   }
 }
 
 .context-menu-leave-active {
-  transition: background @animation-speed ease;
+  transition: background @animation-speed-medium ease;
 
   .inner {
-    transition: transform @animation-speed ease-in;
+    transition: transform @animation-speed-medium ease-in;
   }
 }
 
