@@ -3,6 +3,7 @@ import { UIState, ModalWindows } from './types'
 import { ActionsArguments } from '~/types/store/store'
 import { getCorrectKeybind } from '~/utilities/Keybinds'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { Friend } from '~~/libraries/Iridium/friends/types'
 
 export default {
   /**

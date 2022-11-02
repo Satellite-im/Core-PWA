@@ -2,8 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
-import { Realm } from '~/types/ui/core'
+import { Realm } from '~~/types/ui/realm'
 
 export default Vue.extend({
   props: {

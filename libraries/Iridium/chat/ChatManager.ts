@@ -984,7 +984,7 @@ export default class ChatManager extends Emitter<ConversationMessage> {
     const index = conversationMessages?.findIndex(
       (msg) => msg.id === message.id,
     )
-    if (index >= 0) conversationMessages?.splice(index, 1)
+    if (index && index >= 0) conversationMessages?.splice(index, 1)
   }
 
   // Check if user is in other groups other than `exlude` groups.

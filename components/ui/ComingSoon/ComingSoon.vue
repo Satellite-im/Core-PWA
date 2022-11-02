@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { ModalWindows } from '~/store/ui/types'
+import { RootState } from '~~/types/store/store'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -51,7 +52,9 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     ModalWindows: () => ModalWindows,
   },
   methods: {

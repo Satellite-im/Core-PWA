@@ -2,17 +2,20 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { findKey, shuffle } from 'lodash'
+import { shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
 import { Glyphs, Pack } from '~/mock/glyphs'
-import { GlyphMarketViewStatus, ModalWindows } from '~/store/ui/types'
+import { ModalWindows } from '~/store/ui/types'
+import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   components: {
     ShoppingBagIcon,
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     pack(): Pack | undefined {
       return Object.values(Glyphs).find(
         (pack) => pack.id === this.ui.glyphModalPackId,

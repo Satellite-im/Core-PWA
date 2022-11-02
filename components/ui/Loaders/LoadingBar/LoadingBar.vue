@@ -1,24 +1,23 @@
 <template>
-  <div class="loading-bar" :class="{ short: short }">
-    <div class="bar" :style="`height: ${height}px`" />
+  <div class="loading-bar" :class="{ short }">
+    <div class="bar" :style="{ height: `${height}px` }" />
   </div>
 </template>
-<script lang="ts">
-import Vue from 'vue'
 
-export default Vue.extend({
-  props: {
-    height: {
-      type: Number,
-      default: 6,
-    },
-    short: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+defineProps({
+  height: {
+    type: Number,
+    default: 6,
+  },
+  short: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>
+})
+
 <style scoped lang="less">
 .loading-bar {
   &:extend(.full-width);

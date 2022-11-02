@@ -3,7 +3,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { Realm } from '~/types/ui/core'
+import { RootState } from '~~/types/store/store'
+import { Realm } from '~~/types/ui/realm'
 
 export default Vue.extend({
   name: 'NetworkSettings',
@@ -12,7 +13,9 @@ export default Vue.extend({
     network: 'testnet',
   }),
   computed: {
-    ...mapState(['settings']),
+    ...mapState({
+      settings: (state) => (state as RootState).settings,
+    }),
     realms() {
       return this.$Config.realms.map((r: Realm) => {
         const d: any = { ...r }

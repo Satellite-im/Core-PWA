@@ -3,6 +3,7 @@ import { Sounds } from '~/libraries/SoundManager/SoundManager'
 import { ActionsArguments } from '~/types/store/store'
 import iridium from '~/libraries/Iridium/IridiumManager'
 import logger from '~/plugins/local/logger'
+import { WebRTCEnum } from '~~/libraries/Enums/enums'
 
 export default {
   initialize({ state, commit }: ActionsArguments<AudioState>) {
@@ -21,12 +22,12 @@ export default {
         )
         if (did === iridium.id) {
           iridium.webRTC[state.muted ? 'mute' : 'unmute']({
-            kind: 'audio',
+            kind: WebRTCEnum.AUDIO,
             did,
           })
         } else {
           iridium.webRTC[state.deafened ? 'mute' : 'unmute']({
-            kind: 'audio',
+            kind: WebRTCEnum.AUDIO,
             did,
           })
         }
@@ -65,11 +66,11 @@ export default {
     console.info('toggle audio mute', state.muted)
     if (!state.muted) {
       commit('setMute', true)
-      await iridium.webRTC.mute({ kind: 'audio' })
+      await iridium.webRTC.mute({ kind: WebRTCEnum.AUDIO, did: iridium.id })
       return
     }
     commit('setMute', false)
-    await iridium.webRTC.unmute({ kind: 'audio' })
+    await iridium.webRTC.unmute({ kind: WebRTCEnum.AUDIO })
   },
   /**
    * @method toggleDeafen

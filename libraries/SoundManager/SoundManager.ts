@@ -81,7 +81,10 @@ export default class SoundManager {
    * @returns array of sounds that are currently playing
    */
   playingSounds() {
-    return Object.keys(this.sounds).filter((s: string) => this.isPlaying(s))
+    const soundKeys = Object.keys(this.sounds) as Sounds[]
+    return soundKeys.filter((sound: Sounds) => {
+      return this.isPlaying(sound)
+    })
   }
 
   setMuteSounds(flag: boolean) {

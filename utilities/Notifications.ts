@@ -76,7 +76,7 @@ export const Notifications = class Notifications {
    * @returns
    * @example
    */
-  async requestNotificationPermission(): any {
+  async requestNotificationPermission(): Promise<boolean> {
     if (
       (this.currentPlatform === PlatformTypeEnum.WEB ||
         this.currentPlatform === PlatformTypeEnum.ELECTRON) &&
@@ -90,6 +90,7 @@ export const Notifications = class Notifications {
         return result
       })
     }
+    return true
   }
 
   /* Not sure if this section will be needed yet - in web and android it is not

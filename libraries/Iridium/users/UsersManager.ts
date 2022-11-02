@@ -78,11 +78,11 @@ export default class UsersManager extends Emitter<IridiumUserPubsub> {
     })
     logger.log(this.loggerTag, 'listening for user activity', this.state)
 
-    iridium.connector?.p2p.on('peer/disconnect', (peer) => {
+    iridium.connector?.p2p.on('peer/disconnect', (peer: User) => {
       logger.info(this.loggerTag, 'peer disconnected', peer)
       if (this.getUser(peer.did)) {
         this.setUser(peer.did, {
-          ...this.state[peer.did],
+          ...(this.state[peer.did] as User),
           seen: Date.now(),
         })
         this.setUserStatus(peer.did, 'offline')

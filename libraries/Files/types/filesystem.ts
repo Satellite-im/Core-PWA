@@ -1,4 +1,4 @@
-import { ExportItem } from '~/libraries/Iridium/files/types'
+import { IridiumItem } from '~/libraries/Iridium/files/types'
 
 export enum FILESYSTEM_TYPE {
   DEFAULT = 'FS_DEFAULT',
@@ -7,7 +7,7 @@ export enum FILESYSTEM_TYPE {
 export type PersonalBucketIndex = {
   type: FILESYSTEM_TYPE
   version: number
-  content: Array<ExportItem>
+  content: Array<IridiumItem>
 }
 
 export interface SharedBucketIndexItem {

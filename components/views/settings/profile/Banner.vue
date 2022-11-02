@@ -14,9 +14,11 @@ import { sampleProfileInfo } from '~/mock/profile'
 
 export default Vue.extend({
   computed: {
-    url: () => sampleProfileInfo.bannerUrl || sampleProfileInfo.imageUrl,
+    url: () =>
+      (sampleProfileInfo.bannerUrl || sampleProfileInfo.imageUrl) as string,
     bannerUrlExists: () => !!sampleProfileInfo.bannerUrl,
     sampleProfileInfo: () => sampleProfileInfo,
+    imgClass: () => (sampleProfileInfo.bannerUrl ? '' : 'img-default'),
   },
 })
 </script>

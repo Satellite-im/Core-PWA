@@ -54,7 +54,7 @@ export async function uploadFile(
           },
         },
       )
-      .then((cid) => {
+      .then((cid: string) => {
         const onSyncPin = (msg: any) => {
           const { payload } = msg
           const { body } = payload

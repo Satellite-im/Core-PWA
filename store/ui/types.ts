@@ -17,6 +17,7 @@ export enum ModalWindows {
   CALL_TO_ACTION = 'callToAction',
   RENAME_FILE = 'renameFile',
   CONSENT_SCAN_CONFIRMATION = 'consentScanConfirmation',
+  ERROR_NETWORK = 'errorNetwork',
 }
 
 export interface EmojiUsage {
