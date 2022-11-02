@@ -1,4 +1,12 @@
-import { computed, ComputedRef, reactive } from 'vue'
+import {
+  onMounted,
+  onUnmounted,
+  computed,
+  ComputedRef,
+  reactive,
+  ref,
+  Ref,
+} from 'vue'
 import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
 import { Conversation } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
@@ -67,9 +75,22 @@ export function webrtcHooks(conversationId?: Conversation['id']) {
     }
   }
 
-  function updateDuration(callStartedAt: number) {
-    const durationOfCall = Date.now() - callStartedAt
-    return formatDuration(durationOfCall / 1000)
+  function updateDuration(element: Ref<HTMLElement | null>) {
+    let intervalId: NodeJS.Timer
+
+    function handleUpdateDuration() {
+      const durationOfCall = Date.now() - managers.webrtc.state.callStartedAt
+      return formatDuration(durationOfCall / 1000)
+    }
+
+    onMounted(() => {
+      intervalId = setInterval(() => {
+        return handleUpdateDuration()
+      }, 1000)
+    })
+    onUnmounted(() => {
+      clearInterval(intervalId)
+    })
   }
 
   return { enableRTC, isActiveCall, call, updateDuration }

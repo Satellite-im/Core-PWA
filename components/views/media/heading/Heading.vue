@@ -31,7 +31,7 @@ export default Vue.extend({
   },
   methods: {
     updateLocalDuration() {
-      this.callDuration = this.updateDuration(this.webrtc.callStartedAt)
+      this.callDuration = this.updateDuration()
     },
   },
 })
