@@ -49,15 +49,30 @@ export function swiperOptions(options: SwiperOptions) {
     allowSlidePrev: false,
     speed: SWIPER_TRANSITION_SPEED,
     resistanceRatio: 0,
-    onTransitionEnd: function (swiper: Swiper) {
+    onTransitionEnd(swiper: Swiper) {
       swiper.params.speed = SWIPER_TRANSITION_SPEED
     },
-    onTouchStart: function (swiper: Swiper) {
+    onTouchStart(swiper: Swiper) {
       swiper.params.speed = SWIPER_TRANSITION_SPEED
     },
-    onTransitionStart: function (swiper: Swiper) {
+    onTransitionStart(swiper: Swiper) {
       swiper.params.speed = SWIPER_TRANSITION_SPEED
     },
     ...options,
-  }
+    on: {
+      ...options.on,
+      setTranslate(swiper: Swiper, translate: number) {
+        options.on?.setTranslate?.(swiper, translate)
+
+        swiper.slides.forEach((slide, index) => {
+          const el = slide as HTMLElement
+          const opacity = Math.max(
+            0,
+            Math.min(1, (swiper.width * index + translate) / swiper.width + 1),
+          )
+          el.style.setProperty('opacity', opacity.toString())
+        })
+      },
+    },
+  } as SwiperOptions
 }
