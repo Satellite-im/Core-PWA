@@ -3,7 +3,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
-import { Glyphs, Pack } from '~/mock/glyphs'
+import { Glyphs, Pack } from '~~/libraries/glyphs'
 import { MessageGlyph } from '~/libraries/Iridium/chat/types'
 import { RootState } from '~~/types/store/store'
 

@@ -26,7 +26,6 @@ const InitialUIState = (): UIState => ({
   },
   editMessage: { id: '', from: '', payload: '' },
   mostEmojiUsed: [],
-  recentGlyphs: [],
   chatImageOverlay: undefined,
   isMobileNavVisible: true,
   callHeight: 'auto',

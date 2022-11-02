@@ -11,7 +11,7 @@
         {{ $t('glyphs.sale') }}
       </div>
       <TypographyText>
-        {{ `${featuredGlyph.glyph.stickerURLs.length} glyphs` }}
+        {{ `${featuredGlyph.glyph.urls.length} glyphs` }}
       </TypographyText>
     </div>
   </div>
@@ -24,7 +24,7 @@
     </div>
     <div class="glyph-list">
       <EnhancersGlyphsItem
-        v-for="url in featuredGlyph.glyph.stickerURLs"
+        v-for="url in featuredGlyph.glyph.urls"
         :key="url"
         :src="url"
         :width="48"

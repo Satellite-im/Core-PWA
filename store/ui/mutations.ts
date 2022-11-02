@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { SettingsRoutes, UIState, RecentGlyph } from './types'
+import { SettingsRoutes, UIState } from './types'
 import { MessageAttachment } from '~/libraries/Iridium/chat/types'
 import { User } from '~/libraries/Iridium/users/types'
 
@@ -83,18 +83,6 @@ export default {
     state.mostEmojiUsed.push({
       code: emojiObj.name,
       content: emojiObj.emoji,
-      count: 1,
-    })
-  },
-  updateRecentGlyphs(state: UIState, glyph: RecentGlyph) {
-    const glyphUsed = state.recentGlyphs.find((e) => e.url === glyph.url)
-    if (glyphUsed) {
-      glyphUsed.count++
-      return
-    }
-    state.recentGlyphs.push({
-      pack: glyph.pack,
-      url: glyph.url,
       count: 1,
     })
   },

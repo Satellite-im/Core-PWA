@@ -26,12 +26,6 @@ export interface EmojiUsage {
   content: string
 }
 
-export interface RecentGlyph {
-  pack: Glyph
-  url: string
-  count: number
-}
-
 export enum SettingsRoutes {
   EMPTY = '',
   PERSONALIZE = 'personalize',
@@ -87,7 +81,6 @@ export interface UIState {
     payload: string
   }
   mostEmojiUsed: EmojiUsage[]
-  recentGlyphs: RecentGlyph[]
   chatImageOverlay?: MessageAttachment & { dataURL: string }
   isMobileNavVisible: boolean
   callHeight: string

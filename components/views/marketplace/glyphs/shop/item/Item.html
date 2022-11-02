@@ -5,7 +5,7 @@
         <div v-if="item.isNew" class="badge-new">New</div>
         <div v-if="item.isSale" class="badge-sale">Sale</div>
         <TypographyText>
-          {{ `${item.glyph.stickerURLs.length} glyphs` }}
+          {{ `${item.glyph.urls.length} glyphs` }}
         </TypographyText>
       </div>
       <div class="favorite">
@@ -14,7 +14,7 @@
     </div>
     <div class="glyph-list">
       <EnhancersGlyphsItem
-        v-for="url in item.glyph.stickerURLs"
+        v-for="url in item.glyph.urls"
         :key="url"
         :src="url"
         :width="38"

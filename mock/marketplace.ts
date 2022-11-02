@@ -1,6 +1,7 @@
-import { Glyphs } from './glyphs'
-import * as bg1 from '~/assets/img/glyphShopBg1.webp'
-import * as bg2 from '~/assets/img/glyphShopBg2.webp'
+// @ts-ignore
+import { Glyphs } from '../libraries/glyphs'
+import bg1 from '~/assets/img/glyphShopBg1.webp'
+import bg2 from '~/assets/img/glyphShopBg2.webp'
 import {
   CategoryOption,
   FilterOption,

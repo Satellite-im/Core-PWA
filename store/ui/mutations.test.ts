@@ -167,57 +167,6 @@ describe('mutations', () => {
     expect(localizedState.callHeight).toEqual(argument)
   })
 
-  test('updateRecentGlyphs', () => {
-    const localizedState = { ...InitialUIState() }
-    const argument = {
-      pack: {
-        name: 'Count 1',
-        artist: 'Dina Brodsky',
-        id: '0903',
-        stickerURLs: [
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/hawk.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/owl.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/penguins.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/robin.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/stork.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
-        ],
-      },
-      url: 'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
-      count: 1,
-    }
-    mutations.updateRecentGlyphs(localizedState, argument)
-    expect(localizedState.recentGlyphs).toEqual([argument])
-  })
-
-  test('updateRecentGlyphs with existing glyph', () => {
-    const localizedState = { ...InitialUIState() }
-    const argument = {
-      pack: {
-        name: 'Count 1',
-        artist: 'Dina Brodsky',
-        id: '0903',
-        stickerURLs: [
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/hawk.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/owl.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/penguins.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/robin.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/stork.webp',
-          'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/yellow_bird.webp',
-        ],
-      },
-      url: 'https://satellite.mypinata.cloud/ipfs/QmS1NEujgAT8iogdK3jsQzDf751U6LCSpCNojg1JJhs3zz/$1/ducklings.webp',
-      count: 1,
-    }
-    mutations.updateRecentGlyphs(localizedState, argument)
-    expect(localizedState.recentGlyphs).toEqual([argument])
-    mutations.updateRecentGlyphs(localizedState, argument)
-    expect(localizedState.recentGlyphs[0]).toMatchObject({ count: 2 })
-    // We use [0] because there is only 1 element in the array
-  })
-
   test('updateMostUsedEmoji', () => {
     const localizedState = { ...InitialUIState() }
     const argument = {

@@ -5,7 +5,7 @@
   :src="getSrc"
   @mouseover="mouseOver"
   @mouseleave="mouseLeave"
-  v-on="sendOnClick ? {click: sendGlyph} : {}"
   @load="setLoaded"
+  @click="sendOnClick && sendGlyph()"
   draggable="false"
 />
