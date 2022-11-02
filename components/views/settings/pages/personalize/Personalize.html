@@ -1,11 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{$t('pages.settings.personalize.title')}}
-    <template #subheading>
-      {{$t('pages.settings.personalize.subtitle')}}
-    </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.personalize.title')"
+  :subtitle="$t('pages.settings.personalize.subtitle')"
+>
   <SettingsSection>
     <SettingsUnit>
       <InteractablesSelect

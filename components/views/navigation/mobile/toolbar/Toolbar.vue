@@ -1,21 +1,16 @@
 <template>
-  <div class="toolbar">
-    <button v-if="conversationId" @click="$emit('slidePrev')">
-      <menu-icon class="font-color-flair" size="1.5x" alt="previous" />
-    </button>
-    <TypographyText as="h3" class="ellipsis">
-      {{ conversation?.name }}
-    </TypographyText>
-    <button
-      class="phone"
-      :class="{ disabled: !enableRTC || webrtc.activeCall || isGroup }"
-      :disabled="!enableRTC || Boolean(webrtc.activeCall)"
-      data-cy="toolbar-enable-audio"
-      @click="handleCall"
-    >
-      <phone-call-icon size="1.4x" alt="call" />
-    </button>
-    <!-- <button
+  <UiHeader :title="conversation?.name">
+    <template #controls>
+      <button
+        class="phone"
+        :class="{ disabled: !enableRTC || webrtc.activeCall || isGroup }"
+        :disabled="!enableRTC || Boolean(webrtc.activeCall)"
+        data-cy="toolbar-enable-audio"
+        @click="handleCall"
+      >
+        <phone-call-icon size="1.4x" alt="call" />
+      </button>
+      <!-- <button
     title="video call"
     :disabled="!enableRTC || webrtc.activeCall"
     data-cy="toolbar-enable-audio"
@@ -23,11 +18,12 @@
   >
     <video-icon size="1.4x" />
   </button> -->
-    <template v-if="otherParticipants.length">
-      <UiUserState v-if="!isGroup" :user="otherParticipants[0]" />
-      <UiGroupIcon v-else :members="conversation?.participants" />
+      <template v-if="otherParticipants.length">
+        <UiUserState v-if="!isGroup" :user="otherParticipants[0]" />
+        <UiGroupIcon v-else :members="conversation?.participants" />
+      </template>
     </template>
-  </div>
+  </UiHeader>
 </template>
 
 <script setup lang="ts">

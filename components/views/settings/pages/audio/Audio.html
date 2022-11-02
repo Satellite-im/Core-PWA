@@ -1,9 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{$t('pages.settings.audio.pageTitle')}}
-    <template #subheading> {{$t('pages.settings.audio.subtitle')}} </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.audio.pageTitle')"
+  :subtitle="$t('pages.settings.audio.subtitle')"
+>
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.settings.audio.title')"

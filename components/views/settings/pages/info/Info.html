@@ -1,9 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{ $t('pages.settings.info.title') }}
-    <template #subheading> {{ $t('pages.settings.info.subtitle') }} </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.info.title')"
+  :subtitle="$t('pages.settings.info.subtitle')"
+>
   <SettingsUnit>
     <TypographyText as="h3">
       {{ $t('pages.settings.app_info') }}

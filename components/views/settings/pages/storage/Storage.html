@@ -1,11 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{ $t('pages.settings.storage.title') }}
-    <template #subheading>
-      {{ $t('pages.settings.storage.subtitle') }}
-    </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.storage.title')"
+  :subtitle="$t('pages.settings.storage.subtitle')"
+>
   <SettingsUnit v-if="false">
     <TypographyText as="h3">
       {{ $t('pages.settings.storage.export.title') }}

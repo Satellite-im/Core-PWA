@@ -1,11 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{ $t('pages.settings.accounts.title') }}
-    <template #subheading>
-      {{ $t('pages.settings.accounts.subtitle') }}
-    </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.accounts.title')"
+  :subtitle="$t('pages.settings.accounts.subtitle')"
+>
   <SettingsUnit>
     <InteractablesInput
       readonly

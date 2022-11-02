@@ -28,6 +28,10 @@ export default Vue.extend({
   overflow: hidden;
   background-color: @gray;
 
+  @media only screen and (max-width: @mobile-breakpoint) {
+    margin: 0 -16px;
+  }
+
   img {
     height: 300px;
     width: 100%;

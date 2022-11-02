@@ -1,3 +1,6 @@
 <div class="settings-page" data-cy="settings-page">
-  <slot />
+  <UiHeader :title="title" :subtitle="subtitle" />
+  <div class="page">
+    <slot />
+  </div>
 </div>

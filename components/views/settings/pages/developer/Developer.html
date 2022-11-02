@@ -1,11 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{$t('pages.settings.developer.title')}}
-    <template #subheading>
-      {{$t('pages.settings.developer.subtitle')}}
-    </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.developer.title')"
+  :subtitle="$t('pages.settings.developer.subtitle')"
+>
   <SettingsSection>
     <SettingsUnit>
       <TypographyLabel :text="$t('pages.settings.developer.identifier')" />

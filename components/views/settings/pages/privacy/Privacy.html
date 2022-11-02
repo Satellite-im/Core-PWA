@@ -1,9 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{ $t('pages.privacy.title') }}
-    <template #subheading> {{ $t('pages.privacy.subtitle') }} </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.privacy.title')"
+  :subtitle="$t('pages.privacy.subtitle')"
+>
   <TypographyHorizontalRuleText
     plaintext
     :value="$t('pages.privacy.permissions.title')"

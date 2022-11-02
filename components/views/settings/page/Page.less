@@ -1,10 +1,19 @@
 .settings-page {
   display: flex;
   flex-direction: column;
-  gap: @large-spacing;
   min-width: 0;
+  height: 100%;
 
   .separator {
     margin: 0;
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    padding: 0 16px 16px 16px;
   }
 }

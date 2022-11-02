@@ -626,6 +626,7 @@ export default {
       },
     },
     chat: {
+      title: 'Chats',
       alerts: 'Alerts',
       archived_messages: 'Archived Messages',
       add_channel: 'Add Channel',

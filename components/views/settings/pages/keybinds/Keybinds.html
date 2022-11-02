@@ -1,11 +1,7 @@
-<SettingsPage>
-  <SettingsHeader>
-    {{ $t('pages.settings.keybinds.title') }}
-    <template #subheading>
-      {{ $t('pages.settings.keybinds.subtitle') }}
-    </template>
-  </SettingsHeader>
-
+<SettingsPage
+  :title="$t('pages.settings.keybinds.title')"
+  :subtitle="$t('pages.settings.keybinds.subtitle')"
+>
   <SettingsSection>
     <SettingsUnit
       v-for="[key, value] in Object.entries(settings.keybinds).filter(([key, value]) => key.length > 0)"

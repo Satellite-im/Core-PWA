@@ -5,7 +5,7 @@
         class="swiper-slide"
         :class="{ 'disable-swipe': !Boolean(settingsRoute) }"
       >
-        <TypographyText as="h1">Settings</TypographyText>
+        <UiHeader :title="$t('pages.settings.settings')" />
         <SettingsSidebar class="sidebar" />
       </div>
       <div
@@ -120,17 +120,13 @@ export default Vue.extend({
   .swiper-slide {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 16px;
 
     &.profile {
       padding: 0;
     }
 
-    .settings-page {
-      width: 100%;
+    .menu {
+      padding: 0 1rem;
     }
   }
 }

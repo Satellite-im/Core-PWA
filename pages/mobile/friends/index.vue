@@ -2,9 +2,8 @@
   <div ref="swiper" class="friends">
     <div class="swiper-wrapper">
       <div class="swiper-slide" :class="{ 'disable-swipe': !Boolean(route) }">
-        <div class="top">
-          <div>Friends</div>
-          <div class="button-container">
+        <UiHeader :title="$t('friends.friends')">
+          <template #controls>
             <button @click="next('add')">
               <user-plus-icon />
             </button>
@@ -13,22 +12,15 @@
                 <user-check-icon />
               </UiDotBadge>
             </button>
-          </div>
-        </div>
+          </template>
+        </UiHeader>
         <FriendsMobileList v-if="friendsList.length" :list="friendsList" />
         <div v-else class="empty-friends-container">
           <FriendsEmptyMessage class="empty-friends" @click="setSwiperAsTab" />
         </div>
       </div>
       <div class="swiper-slide">
-        <div class="top">
-          <button @click="previous">
-            <arrow-left-icon class="arrow" />
-          </button>
-          <TypographyText v-if="route">
-            {{ $t(`friends.${route}`) }}
-          </TypographyText>
-        </div>
+        <UiHeader :title="$t(`friends.${route}`)" />
         <div class="bottom">
           <template v-if="route === 'request'">
             <UiResultsMessage
