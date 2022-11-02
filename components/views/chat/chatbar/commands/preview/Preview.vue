@@ -9,7 +9,8 @@ import {
   hasCommandPreview,
   parseCommand,
 } from '~/libraries/ui/Commands'
-import { Friend } from '~/types/ui/friends'
+import { Friend } from '~~/libraries/Iridium/friends/types'
+import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -23,7 +24,9 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     /**
      * @method hasCommand DocsTODO
      * @description

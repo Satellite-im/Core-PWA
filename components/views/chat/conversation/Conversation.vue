@@ -1,7 +1,7 @@
 <template src="./Conversation.html"></template>
 <script lang="ts">
 import Vue from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import {
   ChevronDownIcon,
   KeyIcon,

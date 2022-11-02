@@ -32,7 +32,7 @@ export default class Emitter<
   off<T extends keyof Listeners>(event: T, listenerToRemove: Listeners[T]) {
     if (!this._events[event]) {
       throw new Error(
-        `Can't remove a listener. Event "${event}" doesn't exits.`,
+        `Can't remove a listener. Event "${String(event)}" doesn't exits.`,
       )
     }
 

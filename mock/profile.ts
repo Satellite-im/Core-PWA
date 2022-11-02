@@ -30,7 +30,7 @@ export const profileBadges = [
 ] as ProfileBadge[]
 
 export const sampleProfileInfo = {
-  imageUrl: url,
+  imageUrl: url as typeof import('*.webp'),
   bannerUrl: '',
   badges: [],
   locations: [] as string[],

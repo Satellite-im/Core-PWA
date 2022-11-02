@@ -3,7 +3,8 @@
 import Vue, { PropType } from 'vue'
 import { Suggestion } from 'minisearch'
 import { DeleteIcon } from 'satellite-lucide-icons'
-import { InputSize, InputStyle } from '~/components/interactables/Input/types'
+import { InputColor } from '~/components/interactables/Input/types'
+import { Size } from '~/types/typography'
 import SearchIndex from '~/libraries/SatelliteDB/SearchIndex'
 
 export default Vue.extend({
@@ -29,7 +30,7 @@ export default Vue.extend({
      * Size of the input, reference InputSize types or Bulma.io
      */
     size: {
-      type: String as PropType<InputSize>,
+      type: String as PropType<Size>,
       default: 'normal',
       required: false,
     },
@@ -45,7 +46,7 @@ export default Vue.extend({
      * Style of the input, reference InputStyle types or Bulma.io
      */
     type: {
-      type: String as PropType<InputStyle>,
+      type: String as PropType<InputColor>,
       required: false,
       default: 'normal',
     },

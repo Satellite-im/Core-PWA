@@ -13,6 +13,7 @@ import { BusOptions } from '~/libraries/WebRTC/bus/bus'
 import { IridiumBus } from '~/libraries/WebRTC/bus/IridiumBus'
 import { delay } from '~/libraries/Iridium/utils'
 import { Config } from '~/config'
+import { truthy } from '~~/utilities/typeGuard'
 
 type WireEventListeners = {
   'wire:message': (data: {
@@ -342,8 +343,9 @@ export class Wire extends Emitter<WireEventListeners> {
     const profile = iridium.profile.state
     const users = iridium.users.list.filter(
       (u) =>
-        iridium.friends.isFriend(u.did) ||
-        iridium.chat.isUserInOtherGroups(u.did, [], false),
+        u &&
+        (iridium.friends.isFriend(u.did) ||
+          iridium.chat.isUserInOtherGroups(u.did, [], false)),
     )
 
     if (!profile || !users) return
@@ -351,7 +353,8 @@ export class Wire extends Emitter<WireEventListeners> {
     if (!users || !users.length || !profile.name) return
 
     const recipients = users
-      .map((u) => u.did)
+      .map((u) => u?.did)
+      .filter(truthy)
       .filter(
         (did) =>
           !this.peers[did]?.peer?.connected && !this.peers[did]?.isConnecting,

@@ -6,13 +6,21 @@
  * @example
  */
 
+export type ReleaseNotesType = { body: string; tag_name: string }
+
 let responseBody: object
-export async function ReleaseNotes(): Promise<any> {
+export async function ReleaseNotes(): Promise<ReleaseNotesType | undefined> {
   if (!responseBody) {
-    const response = await fetch(
-      'https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest',
-    )
-    responseBody = await response.json()
+    try {
+      const response = await fetch(
+        'https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest',
+      )
+      responseBody = await response.json()
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+      }
+    }
   }
-  return responseBody
+  return responseBody as ReleaseNotesType
 }

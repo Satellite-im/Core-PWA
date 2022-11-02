@@ -13,6 +13,7 @@ import {
 import { ContextMenuItem } from '~/store/ui/types'
 import { isMimeArchive } from '~/utilities/FileType'
 import { IridiumItem } from '~/libraries/Iridium/files/types'
+import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   components: {
@@ -35,7 +36,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     /**
      * @returns {boolean} if item has discrete MIME type of image
      */

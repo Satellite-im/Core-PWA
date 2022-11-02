@@ -14,7 +14,7 @@ export type ProfileBadge = {
 }
 
 export type ProfileInfo = {
-  imageUrl: string
+  imageUrl: string | typeof import('*.webp')
   bannerUrl: string
   badges: ProfileBadge[]
   locations: string[]

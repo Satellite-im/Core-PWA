@@ -6,7 +6,7 @@
     </template>
 
     <template #title>
-      {{ $t('welcome_message.welcome', { user: profile.name }) }}
+      {{ $t('welcome_message.welcome', { user: profile?.name }) }}
     </template>
 
     <template #subtitle>{{ $t('welcome_message.ea_warning') }}</template>

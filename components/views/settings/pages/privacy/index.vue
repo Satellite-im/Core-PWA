@@ -120,7 +120,11 @@ export default Vue.extend({
   },
   methods: {
     checkBrowserPermissions() {
-      const permissionCheck = ['notifications', 'microphone', 'camera']
+      const permissionCheck = [
+        'notifications',
+        'microphone',
+        'camera',
+      ] as PermissionName[]
       permissionCheck.forEach((permName) =>
         navigator.permissions.query({ name: permName }).then((result) => {
           result.onchange = (e) => {
@@ -149,7 +153,7 @@ export default Vue.extend({
       }
       this.permissions.push({ name: permName, state: newState })
     },
-    async handlePermission(permName: string) {
+    async handlePermission(permName: PermissionName) {
       this.loading.push(permName)
       navigator.permissions.query({ name: permName }).then(async (result) => {
         if (result.state === 'granted' || result.state === 'denied') {

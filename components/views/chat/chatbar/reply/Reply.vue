@@ -5,18 +5,21 @@ import { mapState } from 'vuex'
 import { XIcon } from 'satellite-lucide-icons'
 import { ConversationMessage } from '~/libraries/Iridium/chat/types'
 import iridium from '~/libraries/Iridium/IridiumManager'
+import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   components: {
     XIcon,
   },
   computed: {
-    ...mapState(['chat']),
+    ...mapState({
+      chat: (state) => (state as RootState).chat,
+    }),
     replyChatbarMessage(): ConversationMessage {
       return this.chat.replyChatbarMessages[this.$route.params.id]
     },
     authorName(): string {
-      return iridium.users.getUser(this.replyChatbarMessage.from).name
+      return iridium.users.getUser(this.replyChatbarMessage.from)?.name || ''
     },
   },
   methods: {

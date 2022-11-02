@@ -10,7 +10,7 @@ import { sampleProfileInfo } from '~/mock/profile'
 
 export default Vue.extend({
   computed: {
-    url: () => sampleProfileInfo.imageUrl,
+    url: () => sampleProfileInfo.imageUrl as string,
     sampleProfileInfo: () => sampleProfileInfo,
   },
 })

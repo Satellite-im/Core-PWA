@@ -107,6 +107,7 @@
     "@types/ed2curve": "^0.2.2",
     "@types/howler": "^2.2.5",
     "@types/jest": "^28.1.7",
+    "@types/lodash": "^4.14.186",
     "@types/mousetrap": "^1.6.9",
     "@types/node": "^16.11.26",
     "@types/simple-peer": "^9.11.4",

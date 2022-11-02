@@ -29,7 +29,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      buttonsLoading: [],
+      buttonsLoading: [] as (keyof PeerMutedState)[],
       webrtc: iridium.webRTC.state,
     }
   },
