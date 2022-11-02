@@ -235,7 +235,8 @@ export default Vue.extend({
     },
     handleFocus() {
       this.isBlurred = false
-      if (this.conversationId) {
+      const scroller = this.$refs.container as ScrollerRef
+      if (this.conversationId && scroller.isLockedToBottom) {
         iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
       }
     },
