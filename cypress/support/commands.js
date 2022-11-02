@@ -30,7 +30,7 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add('visitRootPage', (isMobile = false) => {
+Cypress.Commands.add('visitRootPage', () => {
   //Clear localstorage, cookies, sessionstorage and indexedDB before starting
   cy.clearLocalStorage()
   cy.clearCookies()
@@ -48,17 +48,6 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
     })
   }
 
-  //Only if viewport is mobile, then pass this specific window setup
-  if (isMobile === true) {
-    // Pass user agent with data for a mobile device
-    cy.on('window:before:load', (win) => {
-      Object.defineProperty(win.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-      })
-    })
-  }
-
   // Visit root page and ensure that Choose Your Password is displayed
   cy.visit('/')
   cy.contains('Choose Your Password').should('be.visible')
@@ -66,42 +55,39 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
 
 //Create Account Commands
 
-Cypress.Commands.add(
-  'createAccount',
-  (pin, username, isMobile = false, savePin = false) => {
-    cy.visitRootPage(isMobile)
-    cy.url().should('contain', '#/auth/unlock')
-    cy.get('[data-cy=input-group]')
-      .should('be.visible')
-      .trigger('input')
-      .type(pin, { log: false }, { force: true })
-    if (savePin === true) {
-      cy.get('.switch-button').click().should('have.class', 'enabled')
-    } else {
-      cy.get('.switch-button').should('not.have.class', 'enabled')
-    }
-    cy.get('[data-cy=submit-input]').click()
-    cy.get('[data-cy=create-account-button]').click()
-    cy.get('.font-heading').should('contain', 'Recovery Seed')
-    cy.contains('I Saved It').click()
-    cy.validateUserInputIsDisplayed()
-    cy.get('[data-cy=username-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(username)
-    cy.get('[data-cy=status-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type('testing')
-    cy.get('[data-cy=sign-in-button]').click()
-    cy.welcomeModal(username)
-  },
-)
+Cypress.Commands.add('createAccount', (pin, username, savePin = false) => {
+  cy.visitRootPage()
+  cy.url().should('contain', '#/auth/unlock')
+  cy.get('[data-cy=input-group]')
+    .should('be.visible')
+    .trigger('input')
+    .type(pin, { log: false }, { force: true })
+  if (savePin === true) {
+    cy.get('.switch-button').click().should('have.class', 'enabled')
+  } else {
+    cy.get('.switch-button').should('not.have.class', 'enabled')
+  }
+  cy.get('[data-cy=submit-input]').click()
+  cy.get('[data-cy=create-account-button]').click()
+  cy.get('.font-heading').should('contain', 'Recovery Seed')
+  cy.contains('I Saved It').click()
+  cy.validateUserInputIsDisplayed()
+  cy.get('[data-cy=username-input]')
+    .should('be.visible')
+    .trigger('input')
+    .type(username)
+  cy.get('[data-cy=status-input]')
+    .should('be.visible')
+    .trigger('input')
+    .type('testing')
+  cy.get('[data-cy=sign-in-button]').click()
+  cy.welcomeModal(username)
+})
 
 Cypress.Commands.add(
   'createAccountPINscreen',
-  (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.visitRootPage(isMobile)
+  (pin, savePin = false, snapshot = false) => {
+    cy.visitRootPage()
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
       cy.snapshotTestGet(
@@ -198,34 +184,31 @@ Cypress.Commands.add('loginWithLocalStorage', (username) => {
   cy.validateChatPageIsLoaded()
 })
 
-Cypress.Commands.add(
-  'importAccount',
-  (pin, recoverySeed, isMobile = false, savePin = false) => {
-    cy.visitRootPage(isMobile)
-    cy.url().should('contain', '#/auth/unlock')
-    cy.get('[data-cy=add-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(pin, { log: false }, { force: true })
-    if (savePin === true) {
-      cy.get('[data-cy=switch-button]').click().should('have.class', 'enabled')
-    } else {
-      cy.get('[data-cy=switch-button]').should('not.have.class', 'enabled')
-    }
-    cy.get('[data-cy=submit-input]').click()
-    cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
-    cy.get('[data-cy=add-passphrase]')
-      .should('be.visible')
-      .trigger('input')
-      .type(recoverySeed, { log: false }, { force: true })
-    cy.contains('Recover Account').click()
-  },
-)
+Cypress.Commands.add('importAccount', (pin, recoverySeed, savePin = false) => {
+  cy.visitRootPage()
+  cy.url().should('contain', '#/auth/unlock')
+  cy.get('[data-cy=add-input]')
+    .should('be.visible')
+    .trigger('input')
+    .type(pin, { log: false }, { force: true })
+  if (savePin === true) {
+    cy.get('[data-cy=switch-button]').click().should('have.class', 'enabled')
+  } else {
+    cy.get('[data-cy=switch-button]').should('not.have.class', 'enabled')
+  }
+  cy.get('[data-cy=submit-input]').click()
+  cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
+  cy.get('[data-cy=add-passphrase]')
+    .should('be.visible')
+    .trigger('input')
+    .type(recoverySeed, { log: false }, { force: true })
+  cy.contains('Recover Account').click()
+})
 
 Cypress.Commands.add(
   'importAccountPINscreen',
-  (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.visitRootPage(isMobile)
+  (pin, savePin = false, snapshot = false) => {
+    cy.visitRootPage()
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
       cy.snapshotTestGet('.subtitle', 'Create Account Pin')
@@ -266,8 +249,12 @@ Cypress.Commands.add('importAccountEnterPassphrase', (userPassphrase) => {
 
 Cypress.Commands.add('chatFeaturesProfileName', () => {
   // clicks on user name
-  cy.get('[data-cy=user-name]').should('be.visible').click()
-  cy.wait(1000)
+  cy.get('[data-cy=user-name]')
+    .should('be.visible')
+    .click()
+    .then(() => {
+      cy.contains('ATTN: Copied to clipboard.').should('be.visible')
+    })
 })
 
 Cypress.Commands.add('copyUserIDFromProfile', () => {

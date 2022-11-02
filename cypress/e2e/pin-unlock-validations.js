@@ -12,8 +12,8 @@ const thirdUserName = faker.internet.password(12, true) // Generate username wit
 
 describe('Unlock pin should be persisted when store pin is enabled', () => {
   it('Create Account with store pin disabled', () => {
-    //Run create account command passing randomPin, randomName, isMobile=false and savePin=false
-    cy.createAccount(randomPIN, firstUserName, false, false)
+    //Run create account command passing randomPin, randomName and savePin=false
+    cy.createAccount(randomPIN, firstUserName, false)
 
     // Go to main URL again and validate that user is prompt to enter pin again
     cy.visit('/')
@@ -21,8 +21,8 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
   })
 
   it('Create Account with store pin enabled', () => {
-    //Run create account command passing randomPin, randomName, isMobile=false and savePin=true
-    cy.createAccount(randomPIN, secondUserName, false, true)
+    //Run create account command passing randomPin, randomName and savePin=true
+    cy.createAccount(randomPIN, secondUserName, true)
 
     // Go to main URL again and validate that user is redirected to chat screen since pin was saved
     cy.visit('/')
@@ -49,7 +49,7 @@ describe('Unlock pin should be persisted when store pin is enabled', () => {
   //Skipped since Import Account is not currently working
   it.skip('Import Account with store pin enabled', { retries: 2 }, () => {
     //Go to URL, add a PIN and make sure that toggle for save pin is enabled
-    cy.importAccountPINscreen(randomPIN, true, false, false)
+    cy.importAccountPINscreen(randomPIN, true, false)
 
     //Follow the next steps to import an account
     cy.importAccountEnterPassphrase(userPassphrase)

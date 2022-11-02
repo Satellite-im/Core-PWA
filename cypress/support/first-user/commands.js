@@ -30,7 +30,7 @@ for (const command of [
 
 //Commands to retry visiting root page when previous PIN data is not cleared correctly
 
-Cypress.Commands.add('visitRootPage', (isMobile = false) => {
+Cypress.Commands.add('visitRootPage', () => {
   //Clear localstorage, cookies, sessionstorage and indexedDB before starting
   cy.clearLocalStorage()
   cy.clearCookies()
@@ -44,17 +44,6 @@ Cypress.Commands.add('visitRootPage', (isMobile = false) => {
       win.indexedDB.databases().then((r) => {
         for (var i = 0; i < r.length; i++)
           win.indexedDB.deleteDatabase(r[i].name)
-      })
-    })
-  }
-
-  //Only if viewport is mobile, then pass this specific window setup
-  if (isMobile === true) {
-    // Pass user agent with data for a mobile device
-    cy.on('window:before:load', (win) => {
-      Object.defineProperty(win.navigator, 'userAgent', {
-        value:
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
       })
     })
   }
@@ -98,8 +87,8 @@ Cypress.Commands.add('createAccount', (pin, username, savePin = false) => {
 
 Cypress.Commands.add(
   'createAccountPINscreen',
-  (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.visitRootPage(isMobile)
+  (pin, savePin = false, snapshot = false) => {
+    cy.visitRootPage()
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
       cy.snapshotTestGet(
@@ -196,34 +185,31 @@ Cypress.Commands.add('loginWithLocalStorage', (username) => {
   cy.validateChatPageIsLoaded()
 })
 
-Cypress.Commands.add(
-  'importAccount',
-  (pin, recoverySeed, isMobile = false, savePin = false) => {
-    cy.visitRootPage(isMobile)
-    cy.url().should('contain', '#/auth/unlock')
-    cy.get('[data-cy=add-input]')
-      .should('be.visible')
-      .trigger('input')
-      .type(pin, { log: false }, { force: true })
-    if (savePin === true) {
-      cy.get('[data-cy=switch-button]').click().should('have.class', 'enabled')
-    } else {
-      cy.get('[data-cy=switch-button]').should('not.have.class', 'enabled')
-    }
-    cy.get('[data-cy=submit-input]').click()
-    cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
-    cy.get('[data-cy=add-passphrase]')
-      .should('be.visible')
-      .trigger('input')
-      .type(recoverySeed, { log: false }, { force: true })
-    cy.contains('Recover Account').click()
-  },
-)
+Cypress.Commands.add('importAccount', (pin, recoverySeed, savePin = false) => {
+  cy.visitRootPage()
+  cy.url().should('contain', '#/auth/unlock')
+  cy.get('[data-cy=add-input]')
+    .should('be.visible')
+    .trigger('input')
+    .type(pin, { log: false }, { force: true })
+  if (savePin === true) {
+    cy.get('[data-cy=switch-button]').click().should('have.class', 'enabled')
+  } else {
+    cy.get('[data-cy=switch-button]').should('not.have.class', 'enabled')
+  }
+  cy.get('[data-cy=submit-input]').click()
+  cy.get('[data-cy=import-account-button]', { timeout: 60000 }).click()
+  cy.get('[data-cy=add-passphrase]')
+    .should('be.visible')
+    .trigger('input')
+    .type(recoverySeed, { log: false }, { force: true })
+  cy.contains('Recover Account').click()
+})
 
 Cypress.Commands.add(
   'importAccountPINscreen',
-  (pin, savePin = false, snapshot = false, isMobile = false) => {
-    cy.visitRootPage(isMobile)
+  (pin, savePin = false, snapshot = false) => {
+    cy.visitRootPage()
     cy.url().should('contain', '#/auth/unlock')
     if (snapshot === true) {
       cy.snapshotTestGet('.subtitle', 'Create Account Pin')
