@@ -1,0 +1,48 @@
+.ui-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  user-select: none;
+  margin: 16px;
+  z-index: 1;
+
+  .header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .back-button {
+    display: flex;
+    align-items: center;
+
+    &:active {
+      opacity: 0.5;
+    }
+  }
+
+  .title {
+    flex-grow: 1;
+    .ellipsis();
+  }
+
+  button {
+    padding: 16px;
+    margin: -16px;
+    color: @dark;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+
+  @media only screen and (min-width: @small-breakpoint) {
+    .back-button {
+      display: none;
+    }
+  }
+}

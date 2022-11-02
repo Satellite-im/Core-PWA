@@ -1,0 +1,20 @@
+<div class="ui-header">
+  <div class="header">
+    <button
+      v-if="shouldShowBack"
+      class="back-button swiper-button-prev"
+      @click="goBack"
+    >
+      <ChevronLeftIcon />
+    </button>
+
+    <TypographyText as="h1" class="title">
+      <slot name="icon" />
+      {{ title }}
+    </TypographyText>
+
+    <div v-if="$slots.controls" class="controls">
+      <slot name="controls" />
+    </div>
+  </div>
+</div>
