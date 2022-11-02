@@ -14,7 +14,7 @@ on:
 jobs:
   cypress-on-chrome:
     name: Run Cypress Tests on Chrome 🌡️
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.17.0-chrome106
       options: --user 1001
