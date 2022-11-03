@@ -1,56 +1,67 @@
 <template>
-  <div
-    class="context-menu-container"
-    :class="{ 'is-visible': isVisible }"
-    data-cy="context-menu"
-    @click.stop="hideMenu"
-  >
-    <!-- Quick Reactions -->
+  <transition name="context-menu">
     <div
-      v-if="quickReactions?.length && mostUsedEmojis?.length"
-      class="actions-group"
+      v-if="isVisible"
+      class="context-menu-container"
+      data-cy="context-menu"
+      @click.stop="hideMenu"
     >
-      <template v-for="reaction in quickReactions">
+      <div class="inner">
+        <!-- Quick Reactions -->
         <div
-          v-if="reaction.text === 'quickReaction' && mostUsedEmojis.length"
-          :key="String(reaction.text) + '-action'"
-          class="quick-reaction-container"
+          v-if="quickReactions?.length && mostUsedEmojis?.length"
+          class="actions-group"
         >
-          <div
-            v-for="emoji of mostUsedEmojis"
-            :key="emoji.content"
-            class="reaction"
-            data-cy="quick-reaction"
-            @click.stop="
-              () =>
-                handleAction(() => {
-                  reaction.func(reaction)
-                })
-            "
-          >
-            {{ emoji.content }}
-          </div>
+          <template v-for="reaction in quickReactions">
+            <div
+              v-if="reaction.text === 'quickReaction' && mostUsedEmojis.length"
+              :key="String(reaction.text) + '-action'"
+              class="quick-reaction-container"
+            >
+              <div
+                v-for="emoji of mostUsedEmojis"
+                :key="emoji.content"
+                class="reaction"
+                data-cy="quick-reaction"
+                @click.stop="
+                  () =>
+                    handleAction(() => {
+                      reaction.func(reaction)
+                    })
+                "
+              >
+                {{ emoji.content }}
+              </div>
+            </div>
+          </template>
         </div>
-      </template>
-    </div>
 
-    <!-- Item Buttons -->
-    <div class="actions-group">
-      <template v-for="item in items">
-        <button
-          v-if="item.text !== 'quickReaction'"
-          :key="String(item.text) + '-action'"
-          class="action-button"
-          :class="item.type"
-          @click.stop="() => handleAction(item.func, item.type)"
-        >
-          <TypographyText :color="item?.type" class="action-button-text">
-            {{ item.text }}
-          </TypographyText>
-        </button>
-      </template>
+        <!-- Item Buttons -->
+        <div class="actions-group">
+          <template v-for="item in items">
+            <button
+              v-if="item.text !== 'quickReaction'"
+              :key="String(item.text) + '-action'"
+              class="action-button"
+              :class="item.type"
+              @click.stop="() => handleAction(item.func, item.type)"
+            >
+              <TypographyText :color="item?.type" class="action-button-text">
+                {{ item.text }}
+              </TypographyText>
+            </button>
+          </template>
+        </div>
+
+        <!-- Cancel Button -->
+        <div class="actions-group">
+          <button class="action-button" @click.stop="hideMenu">
+            {{ $t('ui.cancel') }}
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -95,41 +106,38 @@ const hideMenu = () => {
 
 <style lang="less" scoped>
 .context-menu-container {
+  position: fixed;
+  background: fade(@black, 25%);
+  z-index: 100;
+  top: calc(0px - var(--safe-area-inset-top));
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
   flex-direction: column;
-  padding: 0 1rem 1rem;
-  &:extend(.fourth-layer);
-  position: fixed;
-  width: 100%;
-  &:extend(.blur-less);
-  gap: @normal-spacing;
-  top: -100vh;
-  opacity: 0;
-  height: 0;
-  transition: opacity @animation-speed-long ease,
-    height 0s ease @animation-speed-long;
 
-  &.is-visible {
-    top: 0;
-    opacity: 1;
-    height: 100%;
-    transition: opacity @animation-speed-long ease;
+  .inner {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    padding-bottom: ~'max(1rem, var(--safe-area-inset-bottom))';
   }
 
   .actions-group {
     max-width: 600px;
     width: 100%;
-    margin: 0 @normal-spacing;
+    overflow: hidden;
 
     .background-semitransparent-light();
     .round-corners();
     .blur();
+    box-shadow: @ui-shadow;
 
     .action-button {
-      .background-semitransparent-light();
-      .blur();
       height: 56px;
       justify-content: center;
       align-items: center;
@@ -165,6 +173,33 @@ const hideMenu = () => {
         font-size: 24px;
       }
     }
+  }
+}
+
+.context-menu-enter-active {
+  transition: background @animation-speed-medium ease;
+
+  .inner {
+    transition: transform @animation-speed-medium ease-out;
+  }
+}
+
+.context-menu-leave-active {
+  transition: background @animation-speed-medium ease;
+
+  .inner {
+    transition: transform @animation-speed-medium ease-in;
+  }
+}
+
+.context-menu-enter,
+.context-menu-leave-to {
+  background: fade(@black, 0%);
+
+  .inner {
+    transform: translateY(
+      calc(100% + max(@normal-spacing, var(--safe-area-inset-bottom)))
+    );
   }
 }
 </style>

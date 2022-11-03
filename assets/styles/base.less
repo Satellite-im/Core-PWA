@@ -40,8 +40,6 @@ html {
 }
 
 body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
   font-family: @body-font;
   font-variant-ligatures: none;
   touch-action: pan-x pan-y;
@@ -115,6 +113,8 @@ a {
   cursor: pointer;
   color: @flair-color-secondary;
   text-decoration: none;
+  -webkit-touch-callout: none;
+
   &.link:hover {
     text-decoration: underline;
   }
@@ -404,4 +404,9 @@ hr {
     color: #ccc !important;
     fill: currentColor;
   }
+}
+
+/* Disable dragging anchor links on iOS */
+a {
+  -webkit-user-drag: none;
 }

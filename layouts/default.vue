@@ -39,6 +39,18 @@ export default Vue.extend({
   justify-content: center;
   height: 100%;
   overflow-y: auto;
-  padding-bottom: var(--safe-area-inset-bottom);
+
+  padding-bottom: max(
+    calc(var(--safe-area-inset-bottom) + @mobile-nav-height),
+    var(--keyboard-height, 0px)
+  );
+  padding-top: var(--safe-area-inset-top);
+
+  &.hidden-nav {
+    padding-bottom: max(
+      var(--safe-area-inset-bottom),
+      var(--keyboard-height, 0px)
+    );
+  }
 }
 </style>
