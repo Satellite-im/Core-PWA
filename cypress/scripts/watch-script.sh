@@ -1,3 +1,3 @@
 #!/bin/bash
 cd linked-iridium
-pnpm watch > /dev/null
+pnpm watch > /dev/null 2>&1 &
