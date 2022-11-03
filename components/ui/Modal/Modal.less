@@ -29,6 +29,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    padding-bottom: max(
+      calc(var(--safe-area-inset-bottom)),
+      var(--keyboard-height, 0px)
+    );
+
+    @media only screen and (max-width: @mobile-breakpoint) {
+      padding-bottom: max(
+        calc(var(--safe-area-inset-bottom) + @mobile-nav-height),
+        var(--keyboard-height, 0px)
+      );
+    }
+
+    padding-top: var(--safe-area-inset-top);
   }
 }
 
