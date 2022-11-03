@@ -7,7 +7,7 @@ describe('ReleaseNotes.ReleaseNotes', () => {
     fetchMock.resetMocks()
   })
 
-  test('0', async () => {
+  test('Receive successful response', async () => {
     fetchMock.mockResponseOnce(JSON.stringify({ mockedField: 'mockedData' }))
 
     const result = await ReleaseNotes.ReleaseNotes()
@@ -16,5 +16,19 @@ describe('ReleaseNotes.ReleaseNotes', () => {
     expect(fetchMock.mock.calls[0][0]).toEqual(
       'https://api.github.com/repos/Satellite-im/Core-PWA/releases/latest',
     )
+  })
+
+  test('Receive TypeError response', async () => {
+    fetchMock.mockResponseOnce(() => {
+      throw new TypeError('mock error')
+    })
+    global.console.error = jest.fn()
+
+    try {
+      const result = await ReleaseNotes.ReleaseNotes()
+    } catch (error) {
+      expect(error).toBeInstanceOf(TypeError)
+      expect(console.error).toHaveBeenCalled()
+    }
   })
 })
