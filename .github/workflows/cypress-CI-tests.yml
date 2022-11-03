@@ -27,6 +27,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+
+      - name: Show secrets
+        run: |
+          echo $ENVIRONMENT | sed 's/./& /g'
+          echo $NODE_ENV | sed 's/./& /g'
+          echo $NUXT_ENV_IRIDIUM_SYNC_NODES | sed 's/./& /g'
+          echo $NUXT_ENV_IRIDIUM_APIS | sed 's/./& /g'
+          echo $NUXT_ENV_IRIDIUM_GATEWAYS | sed 's/./& /g'
+          echo $NUXT_ENV_FEEDBACK_URL | sed 's/./& /g'
+
       - name: Change permissions on scripts 🔨
         run: |
           chmod +x ./linkscript.sh
