@@ -16,7 +16,7 @@ export default Vue.extend({
     setLoaded() {
       this.isLoaded = true
     },
-    getSrc(src) {
+    getSrc(src: string) {
       let imgSrc = src
       if (src.includes('/$1/')) {
         imgSrc = src.replace('$1', 'small')

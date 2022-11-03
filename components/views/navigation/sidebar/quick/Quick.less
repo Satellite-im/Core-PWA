@@ -16,4 +16,16 @@
   .round-corners();
   .bordered();
   .blur();
+
+  @media (max-width: @mobile-breakpoint) {
+    &:not(.mobile) {
+      left: 0;
+    }
+  }
+
+  &.mobile {
+    inset: unset;
+    bottom: 0;
+    width: 100%;
+  }
 }

@@ -41,7 +41,7 @@ export type GlyphShopItem = {
   id: number
   glyph: Glyph
   price: number
-  image: string
+  image: string | typeof import('*.webp')
   isNew: boolean
   isSale: boolean
   like: boolean

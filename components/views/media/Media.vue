@@ -72,7 +72,10 @@ export default Vue.extend({
 
       const muted = Object.entries(iridium.webRTC.state.streamMuted)
       const participantStreams = muted
-        .filter(([did]) => did === iridium.id || Boolean(this.call?.peers[did]))
+        .filter(
+          ([did]) =>
+            did === iridium.id || Boolean((this.call as Call).peers[did]),
+        )
         .map(([did, mutedStreams]) => {
           const participant = iridium.users.getUser(did)
           let streams = Object.entries(mutedStreams)
@@ -206,7 +209,7 @@ export default Vue.extend({
         containerWidth: entry?.contentRect.width ?? media.clientWidth,
         containerHeight: entry?.contentRect.height ?? media.clientHeight,
         aspectRatio: 16 / 9,
-        numBoxes: this.streams.length,
+        numBoxes: (this.streams as Stream[]).length,
         gap: 10,
       })
     },

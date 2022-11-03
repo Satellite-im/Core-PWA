@@ -119,4 +119,4 @@ export type DataOf<
 > = {
   at: number
   event: T
-} & OptionalPayload<T, B>
+} & OptionalPayload<B, T>

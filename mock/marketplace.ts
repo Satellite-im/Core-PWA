@@ -1,7 +1,5 @@
-// @ts-ignore
 import { Glyphs } from './glyphs'
 import * as bg1 from '~/assets/img/glyphShopBg1.webp'
-// @ts-ignore
 import * as bg2 from '~/assets/img/glyphShopBg2.webp'
 import {
   CategoryOption,
@@ -90,7 +88,7 @@ export const marketProducts = [
   },
 ] as ProductItem[]
 
-export const marketGlyphs = [
+export const marketGlyphs: GlyphShopItem[] = [
   {
     id: 1,
     glyph: Glyphs.genshin,

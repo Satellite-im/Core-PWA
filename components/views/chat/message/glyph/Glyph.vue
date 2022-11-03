@@ -5,6 +5,7 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { Glyphs, Pack } from '~/mock/glyphs'
 import { MessageGlyph } from '~/libraries/Iridium/chat/types'
+import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -19,7 +20,9 @@ export default Vue.extend({
     },
   },
   computed: {
-    ...mapState(['ui']),
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
     src(): string {
       return this.glyph.src.replace('$1', 'small')
     },
@@ -27,7 +30,6 @@ export default Vue.extend({
       const p = Object.values(Glyphs).find(
         (pack) => pack.id === this.glyph.packId,
       )
-      console.log(p)
       return p
     },
   },

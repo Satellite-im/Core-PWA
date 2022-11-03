@@ -9,8 +9,8 @@
       <img src="~/assets/svg/mascot/new_things.svg" />
     </template>
 
-    <template v-if="releaseData && releaseData.tag_name" #title>
-      {{ $t('modal.update_modal.title', { tagName: releaseData.tag_name }) }}
+    <template v-if="releaseData?.tag_name" #title>
+      {{ $t('modal.update_modal.title', { tagName: releaseData?.tag_name }) }}
     </template>
 
     <template #body>
@@ -35,22 +35,25 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { XIcon } from 'satellite-lucide-icons'
-import { ReleaseNotes } from '~/libraries/ui/ReleaseNotes'
+import { ReleaseNotes, ReleaseNotesType } from '~/libraries/ui/ReleaseNotes'
+import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   data() {
     return {
       hasMinorUpdate: false,
       requiresUpdate: false,
-      releaseData: {},
+      releaseData: {} as ReleaseNotesType | undefined,
       isLoading: false,
     }
   },
   computed: {
-    ...mapState(['ui']),
-    primaryButton() {
+    ...mapState({
+      ui: (state) => (state as RootState).ui,
+    }),
+    primaryButton(): { text: string; action: () => void; icon: any } {
       return {
-        text: this.$t('modal.update_modal.got_it'),
+        text: this.$t('modal.update_modal.got_it') as string,
         action: this.skipVersion,
         icon: XIcon,
       }

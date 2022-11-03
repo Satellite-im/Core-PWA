@@ -1,6 +1,6 @@
 import { MatchInfo } from 'minisearch'
-import { Friend } from '../ui/friends'
-import { User } from '../ui/user'
+import { Friend } from '~~/libraries/Iridium/friends/types'
+import { User } from '~~/libraries/Iridium/users/types'
 
 export enum SearchCommandType {
   User = 'user',

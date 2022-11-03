@@ -37,6 +37,7 @@ import iridium from '~/libraries/Iridium/IridiumManager'
 import { friendsHooks } from '~/components/compositions/friends'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { SettingsRoutes } from '~/store/ui/types'
+import { User } from '~~/libraries/Iridium/users/types'
 
 interface NavButton {
   id: string

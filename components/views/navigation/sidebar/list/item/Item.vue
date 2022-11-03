@@ -158,25 +158,29 @@ export default Vue.extend({
      * "2d" 2 days before
      * "MM/DD/YYYY" > 2 days before
      */
-    function setTimestamp() {
-      const lastMsg = sortedMessages.value.at(-1)?.at
-      if (!lastMsg) {
+    function setTimestamp(): string | undefined {
+      const lastMsgAt =
+        sortedMessages.value.at(-1)?.at || conversation.value?.createdAt
+
+      if (!lastMsgAt) {
         return
       }
+
       clearTimeout(timeoutId.value)
-      if ($dayjs().diff(lastMsg, 'second') < 30) {
+
+      if ($dayjs().diff(lastMsgAt, 'second') < 30) {
         timeoutId.value = setTimeout(setTimestamp, 30000)
         timestamp.value = $nuxt.$i18n.t('time.now')
         return
       }
-      if ($dayjs().isSame(lastMsg, 'day')) {
-        timestamp.value = getTimestamp(lastMsg)
-      } else if ($dayjs().diff(lastMsg, 'day') <= 1) {
+      if ($dayjs().isSame(lastMsgAt, 'day')) {
+        timestamp.value = getTimestamp(lastMsgAt)
+      } else if ($dayjs().diff(lastMsgAt, 'day') <= 1) {
         timestamp.value = $nuxt.$i18n.t('time.yesterday')
-      } else if ($dayjs().diff(lastMsg, 'day') <= 2) {
+      } else if ($dayjs().diff(lastMsgAt, 'day') <= 2) {
         timestamp.value = '2 d'
       } else {
-        timestamp.value = getDate(lastMsg)
+        timestamp.value = getDate(lastMsgAt)
       }
       const midnight = $dayjs().add(1, 'day').startOf('day').valueOf()
       // update timestamp at midnight tonight

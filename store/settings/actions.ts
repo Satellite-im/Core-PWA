@@ -14,10 +14,13 @@ if (window.indexedDB && typeof window.indexedDB.databases === 'undefined') {
 
   IDBFactory.prototype.databases = () =>
     Promise.resolve(
-      Object.entries(getFromStorage()).reduce((acc, [name, version]) => {
-        acc.push({ name, version })
-        return acc
-      }, []),
+      Object.entries(getFromStorage()).reduce(
+        (acc: { name: string; version: any }[], [name, version]) => {
+          acc.push({ name, version })
+          return acc
+        },
+        [],
+      ),
     )
 
   // Intercept the existing open handler to write our DBs names

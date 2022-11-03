@@ -1,4 +1,3 @@
-// ActionSheet
 <template>
   <transition name="context-menu">
     <div

@@ -62,10 +62,10 @@ const Upload = Vue.extend({
      * @param event Input event object
      * @example <input @change="handleFile" />
      */
-    async handleFile(event: InputEvent) {
+    async handleFile(event: { target: { files: File[] } }) {
       document.body.style.cursor = 'progress'
       this.$store.dispatch('ui/setChatbarFocus')
-      const target = event.target as HTMLInputElement
+      const target = event.target
       if (target.files === null) {
         return
       }

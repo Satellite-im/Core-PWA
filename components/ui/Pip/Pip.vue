@@ -195,7 +195,7 @@ export default Vue.extend({
         this.y = (this.y * 2 + finalY) / 3
       })
     },
-    onResize: throttle(function () {
+    onResize: throttle(function (this: any) {
       this.moveToQuarter(this.quarter)
     }, Config.pip.throttleTime),
     doubleClick(e: MouseEvent) {

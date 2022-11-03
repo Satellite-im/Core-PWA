@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Satellite</string>
+	<string>Satellite</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -43,9 +43,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+        <string>Camera is required for video calling</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone is required for audio calling</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-        <key>UIStatusBarStyle</key>
-        <string>lightContent</string>
+	<key>UIStatusBarStyle</key>
+	<string>lightContent</string>
 </dict>
 </plist>
