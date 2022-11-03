@@ -41,9 +41,9 @@ jobs:
         with:
           start: |
             ls -la
-            sh ./cypress/scripts/watch-script.sh
+            cd linked-iridium && pnpm watch &
+            cd linked-iridium && pnpm sync-node &
             yarn dev
-            sh ./cypress/scripts/sync-node-script.sh
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 300
           browser: chrome
