@@ -1,6 +1,24 @@
-<template src="./Pack.html"></template>
+<template>
+  <div class="pack-group" data-cy="glyph-pack">
+    <button class="pack-title" @click="togglePack">
+      <image-icon size="1x" />
+      <TypographyText size="sm">{{ pack.name }}</TypographyText>
+      <chevron-down-icon v-if="isOpen" size="1x" />
+      <chevron-up-icon v-else size="1x" />
+    </button>
+    <div v-if="isOpen" class="glyph-list-box">
+      <EnhancersGlyphsItem
+        v-for="glyph in pack.urls"
+        :key="glyph"
+        :src="glyph"
+        data-cy="pack-glyph-item"
+        :pack="pack"
+        send-on-click
+      />
+    </div>
+  </div>
+</template>
 <script lang="ts">
-// eslint-disable-next-line import/named
 import Vue, { PropType } from 'vue'
 import {
   ChevronDownIcon,

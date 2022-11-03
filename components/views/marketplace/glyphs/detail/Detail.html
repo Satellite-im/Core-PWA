@@ -23,7 +23,7 @@
           <heart-icon size="1.5x" />
         </div>
         <TypographyText>
-          {{ `${glyphDetail.glyph.stickerURLs.length} glyphs` }}
+          {{ `${glyphDetail.glyph.urls.length} glyphs` }}
         </TypographyText>
         <TypographyText> {{ glyphDetail.glyph.description }} </TypographyText>
         <TypographySubtitle :size="4" :text="`$${glyphDetail.price}`" />
@@ -34,7 +34,7 @@
       </div>
       <div class="glyph-list">
         <EnhancersGlyphsItem
-          v-for="url in glyphDetail.glyph.stickerURLs"
+          v-for="url in glyphDetail.glyph.urls"
           :key="url"
           :src="url"
           :width="52"

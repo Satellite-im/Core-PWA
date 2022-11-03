@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 defineProps({
   /**
    * @description Height of spacer (in pixels)

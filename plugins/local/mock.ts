@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Glyphs } from '~/mock/glyphs'
+import { Glyphs } from '~~/libraries/glyphs'
 import {
   marketCategories,
   marketFilters,
