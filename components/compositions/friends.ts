@@ -11,12 +11,12 @@ export function friendsHooks() {
   })
 
   const friends: ComputedRef<User[]> = computed(() => {
+    const collator = new Intl.Collator()
+
     return managers.friends.state.friends
       .map((did) => managers.users.state[did])
       .filter(truthy)
-      .sort((a, b) =>
-        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
-      )
+      .sort((a, b) => collator.compare(a.name, b.name))
   })
 
   const requests: ComputedRef<FriendRequest[]> = computed(() => {

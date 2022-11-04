@@ -53,10 +53,11 @@ export function conversationHooks(conversationId?: Conversation['id']) {
     if (!conversation.value) {
       return []
     }
+    const collator = new Intl.Collator()
     const arr = conversation.value.participants
       .map((p) => managers.users.getUser(p))
       .filter(truthy)
-    return arr.sort((a, b) => a?.name?.localeCompare(b?.name))
+    return arr.sort((a, b) => collator.compare(a.name, b.name))
   })
 
   const sortedMessages: ComputedRef<ConversationMessage[]> = computed(() => {
