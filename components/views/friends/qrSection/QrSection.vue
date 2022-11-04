@@ -9,20 +9,20 @@
       <div class="qr-container">
         <div class="qr-section">
           <TypographyText>
-            {{ $t('friends.scan_code') }}
-          </TypographyText>
-          <InteractablesButton :text="$t('friends.camera_scan')" />
-        </div>
-        <div class="qr-section">
-          <TypographyText>
             {{ $t('friends.friend_code') }}
           </TypographyText>
           <qrcode-vue
             :value="friendInviteUrl"
-            :size="150"
+            :size="200"
             level="H"
             class="qr-code"
+            @click="copyId"
           />
+          <div class="copy-button">
+            <button @click="copyId">
+              <TypographyText align="center"> Invitation Link </TypographyText>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -33,19 +33,40 @@
 import Vue from 'vue'
 // @ts-ignore
 import QrcodeVue from 'qrcode.vue'
+import iridium from '~/libraries/Iridium/IridiumManager'
+import { capacitorHooks } from '~/components/compositions/capacitor'
 
 export default Vue.extend({
   name: 'QrSection',
   components: {
     QrcodeVue,
   },
+  setup() {
+    const { copyText } = capacitorHooks()
+
+    return {
+      copyText,
+    }
+  },
   data() {
     return {
-      friendInviteUrl: '',
+      friendInviteUrl:
+        window.location.origin +
+        '/#/invite/friend?did=' +
+        iridium.shortId.split('#')[1],
     }
   },
   async mounted() {
     // this.friendInviteUrl = await iridium.friends.getFriendInviteUrl()
+  },
+  methods: {
+    copyId() {
+      this.copyText(
+        window.location.origin +
+          '/#/invite/friend?did=' +
+          iridium.shortId.split('#')[1],
+      )
+    },
   },
 })
 </script>
@@ -55,7 +76,7 @@ export default Vue.extend({
   &:extend(.background-semitransparent-light);
   &:extend(.bordered);
   &:extend(.font-primary);
-  max-width: 400px;
+  max-width: 250px;
   margin: auto;
   margin-top: 32px;
 
