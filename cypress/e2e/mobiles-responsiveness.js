@@ -80,12 +80,6 @@ data.allDevices.forEach((item) => {
         cy.goToLastGlyphOnChat().click()
         cy.get('[data-cy=glyphs-modal]').should('be.visible')
         cy.closeModal('[data-cy=glyphs-modal]')
-
-        //Glyph Selection - Coming Soon Modal
-        cy.get('[data-cy=send-glyph]').click()
-        cy.get('[data-cy=glyphs-marketplace]').click()
-        cy.get('[data-cy=modal-cta]').should('be.visible')
-        cy.closeModal('[data-cy=modal-cta]')
       })
 
       it(`Marketplace - Coming Soon Modal on ${item.description}`, () => {

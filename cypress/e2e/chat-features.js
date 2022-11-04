@@ -140,7 +140,6 @@ describe('Chat Features Tests', () => {
     // Glyphs picker is displayed when clicking on its button
     cy.get('[data-cy=emoji-picker]').should('not.exist')
     cy.get('[data-cy=send-glyph]').click()
-    cy.contains('Try using some glyphs').should('be.visible')
     cy.get('[data-cy=glyphs-picker]').should('be.visible')
     //Click outside to close the glyphs picker
     cy.get('body')

@@ -1026,9 +1026,8 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('validateRequestsBadge', (pendingReqs = '1') => {
-  cy.get('[data-cy=tab-element]')
-    .contains('Requests')
-    .find('[data-cy=tab-badge]')
+  cy.get('[data-cy=sidebar-friends]')
+    .find('.tag')
     .should('contain', pendingReqs)
 })
 
