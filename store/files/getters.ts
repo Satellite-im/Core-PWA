@@ -81,7 +81,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
           break
         default:
           // Sort alphabetically
-          items.sort((a, b) => collator.compare(a.name, b.name))
+          items.sort((a, b) => collator.compare(a[key], b[key]))
       }
 
       // Reverse the sort if the selected key is descending
