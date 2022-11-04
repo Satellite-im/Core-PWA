@@ -1,18 +1,30 @@
 export type Pack = {
-  id: string
+  id: number
   name: string
   description: string
   artist: string
-  stickerURLs: string[]
+  urls: string[]
 }
 
-export const Glyphs: { [key: string]: Pack } = {
+export enum PackName {
+  ASTRO = 'astrobunny',
+  GRIM = 'grimreaper',
+  MARSH = 'marshmellow',
+  FOOD = 'food',
+  BLACKCAT = 'blackcat',
+  GENSHIN = 'genshin',
+  GENSHIN2 = 'genshin2',
+  STARWARS = 'starwars',
+  BIRDS = 'birds',
+}
+
+export const Glyphs: Record<PackName, Pack> = {
   astrobunny: {
+    id: 1,
     name: 'Astrobunny',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
-    id: '0123',
-    stickerURLs: [
+    urls: [
       `glyphs/astrobunny/$1/AHH.gif`,
       `glyphs/astrobunny/$1/AHHcloseup.gif`,
       `glyphs/astrobunny/$1/Coy_02.gif`,
@@ -28,11 +40,11 @@ export const Glyphs: { [key: string]: Pack } = {
     ],
   },
   grimreaper: {
+    id: 2,
     name: 'Grim Reaper',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'LAM',
-    id: '012312',
-    stickerURLs: [
+    urls: [
       `glyphs/grim_reaper/$1/1.webp`,
       `glyphs/grim_reaper/$1/2.webp`,
       `glyphs/grim_reaper/$1/3.webp`,
@@ -42,11 +54,11 @@ export const Glyphs: { [key: string]: Pack } = {
     ],
   },
   marshmellow: {
+    id: 3,
     name: 'Marshmello',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
-    id: '012312c',
-    stickerURLs: [
+    urls: [
       `glyphs/marshmello/$1/Ahhhhh.gif`,
       `glyphs/marshmello/$1/Emoji_01.webp`,
       `glyphs/marshmello/$1/Emoji_02.webp`,
@@ -67,11 +79,11 @@ export const Glyphs: { [key: string]: Pack } = {
     ],
   },
   food: {
+    id: 4,
     name: 'Food',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'Lya',
-    id: 'jdsoer',
-    stickerURLs: [
+    urls: [
       `glyphs/lya/$1/Beer.gif`,
       `glyphs/lya/$1/Toast.gif`,
       `glyphs/lya/$1/chocolate_angry.gif`,
@@ -87,11 +99,11 @@ export const Glyphs: { [key: string]: Pack } = {
     ],
   },
   blackcat: {
+    id: 5,
     name: 'Black Cat',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'Dan Tavis',
-    id: 'k321r',
-    stickerURLs: [
+    urls: [
       `glyphs/black_cat/$1/Black-Cat-Attention-2.webp`,
       `glyphs/black_cat/$1/Cat-+-Flowers.webp`,
       `glyphs/black_cat/$1/Cat-Vs-Yarn-%28cover%29.webp`,
@@ -101,11 +113,11 @@ export const Glyphs: { [key: string]: Pack } = {
     ],
   },
   genshin: {
+    id: 6,
     name: 'Genshin Impact 1',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
-    id: '001',
-    stickerURLs: [
+    urls: [
       `glyphs/genshin_1/$1/JohnTreanor_GenshinImpactFood_01.webp`,
       `glyphs/genshin_1/$1/JohnTreanor_GenshinImpactFood_02.webp`,
       `glyphs/genshin_1/$1/JohnTreanor_GenshinImpactFood_03.webp`,
@@ -119,12 +131,12 @@ export const Glyphs: { [key: string]: Pack } = {
       // `glyphs/genshin_1/$1/JohnTreanor_GenshinImpactFood_23.webp`,
     ],
   },
-  genshinTwo: {
+  genshin2: {
+    id: 7,
     name: 'Genshin Impact 2',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
-    id: '002',
-    stickerURLs: [
+    urls: [
       `glyphs/genshin_2/$1/JohnTreanor_GenshinImpactFood_10.webp`,
       `glyphs/genshin_2/$1/JohnTreanor_GenshinImpactFood_11.webp`,
       `glyphs/genshin_2/$1/JohnTreanor_GenshinImpactFood_12.webp`,
@@ -141,12 +153,12 @@ export const Glyphs: { [key: string]: Pack } = {
       // `glyphs/genshin_2/$1/JohnTreanor_GenshinImpactFood_23.webp`,
     ],
   },
-  starWars: {
+  starwars: {
+    id: 8,
     name: 'Star Wars',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'John Treanor',
-    id: '0053',
-    stickerURLs: [
+    urls: [
       `glyphs/star_wars/$1/JohnTreanor_StarWarsPack_01.webp`,
       `glyphs/star_wars/$1/JohnTreanor_StarWarsPack_02.webp`,
       `glyphs/star_wars/$1/JohnTreanor_StarWarsPack_03.webp`,
@@ -159,11 +171,11 @@ export const Glyphs: { [key: string]: Pack } = {
     ],
   },
   birds: {
+    id: 9,
     name: 'Birds',
     description: 'Short description can go here. Lorem ipsum.',
     artist: 'Dina Brodsky',
-    id: '0903',
-    stickerURLs: [
+    urls: [
       `glyphs/birds/$1/hawk.webp`,
       `glyphs/birds/$1/ducklings.webp`,
       `glyphs/birds/$1/owl.webp`,

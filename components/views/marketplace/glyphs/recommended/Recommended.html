@@ -5,7 +5,7 @@
         <div v-if="item.isNew" class="badge-new">{{ $t('glyphs.new') }}</div>
         <div v-if="item.isSale" class="badge-sale">{{ $t('glyphs.sale') }}</div>
         <TypographyText>
-          {{ `${item.glyph.stickerURLs.length} glyphs` }}
+          {{ `${item.glyph.urls.length} glyphs` }}
         </TypographyText>
       </div>
       <div class="favorite">
@@ -20,8 +20,8 @@
       <InteractablesButton :text="$t('glyphs.shop_now')" @click="goToShopItem">
       </InteractablesButton>
       <EnhancersGlyphsItem
-        :key="item.glyph.stickerURLs[0]"
-        :src="item.glyph.stickerURLs[0]"
+        :key="item.glyph.urls[0]"
+        :src="item.glyph.urls[0]"
         :width="50"
         :height="50"
       ></EnhancersGlyphsItem>

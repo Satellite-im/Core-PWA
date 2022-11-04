@@ -4,9 +4,10 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { shuffle } from 'lodash'
 import { ShoppingBagIcon } from 'satellite-lucide-icons'
-import { Glyphs, Pack } from '~/mock/glyphs'
-import { ModalWindows } from '~/store/ui/types'
-import { RootState } from '~~/types/store/store'
+import { RootState } from '~/types/store/store'
+import { Glyphs } from '~/libraries/glyphs'
+import { GlyphMarketViewStatus, ModalWindows } from '~/store/ui/types'
+import { Pack } from '~~/types/glyphs'
 
 export default Vue.extend({
   components: {
@@ -25,7 +26,7 @@ export default Vue.extend({
       if (!this.pack) {
         return []
       }
-      return shuffle(this.pack.stickerURLs).slice(1, 4)
+      return shuffle(this.pack.urls).slice(1, 4)
     },
   },
   methods: {

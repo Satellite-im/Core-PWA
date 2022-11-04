@@ -1,31 +1,40 @@
-<template src="./Glyphs.html"></template>
-<script lang="ts">
-import Vue from 'vue'
-import VirtualList from 'vue-virtual-scroll-list'
-import PackGroup from './pack/PackGroup.vue'
+<template>
+  <div class="glyphs" data-cy="glyphs-picker">
+    <div class="search-glyph-box">
+      <InteractablesInput
+        v-model="search"
+        :placeholder="$t('ui.search')"
+        size="xs"
+        type="search"
+      />
+    </div>
+    <div class="glyph-content">
+      <EnhancersGlyphsPack
+        v-for="pack in filteredGlyphs"
+        :key="pack.id"
+        :pack="pack"
+      />
+    </div>
+    <EnhancersGlyphsItemInfo />
+  </div>
+</template>
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import fuzzysort from 'fuzzysort'
+import { Glyphs, Pack } from '~/libraries/glyphs'
 
-export default Vue.extend({
-  components: { VirtualList },
-  data() {
-    return {
-      filteredGlyphs: Object.values(this.$mock.glyphs),
-      searchText: '',
-      selectedPack: null,
-      packGroup: PackGroup,
-    }
-  },
-  watch: {
-    searchText() {
-      this.filter(this.searchText)
-    },
-  },
-  methods: {
-    filter(filterValue: any) {
-      this.filteredGlyphs = Object.values(this.$mock.glyphs).filter((pack) =>
-        pack.name.toLowerCase().includes(filterValue.toLowerCase()),
-      )
-    },
-  },
+const search = ref<string>('')
+
+const filteredGlyphs = computed<Pack[]>(() => {
+  const glyphsArray = Object.values(Glyphs)
+  if (!search.value) {
+    return glyphsArray
+  }
+  return fuzzysort
+    .go(search.value, glyphsArray, {
+      keys: ['name'],
+    })
+    .map((result) => result.obj)
 })
 </script>
 <style lang="less" src="./Glyphs.less"></style>

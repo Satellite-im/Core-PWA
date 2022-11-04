@@ -158,6 +158,11 @@ export const macShortcuts = [
   'meta+0',
 ]
 
+export const charToCode = {
+  CR: 13,
+  ESC: 27,
+}
+
 export const keyCodeToKey: { [key: number]: string } = {
   8: 'Backspace',
   9: 'Tab',

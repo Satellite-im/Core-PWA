@@ -12,14 +12,14 @@
           {{ $t('glyphs.sale') }}
         </div>
         <TypographyText>
-          {{ `${popularGlyph.glyph.stickerURLs.length} glyphs` }}
+          {{ `${popularGlyph.glyph.urls.length} glyphs` }}
         </TypographyText>
       </div>
     </div>
     <div class="glyph-content">
       <div class="glyph-list">
         <EnhancersGlyphsItem
-          v-for="url in popularGlyph.glyph.stickerURLs"
+          v-for="url in popularGlyph.glyph.urls"
           :key="url"
           :src="url"
           :width="38"

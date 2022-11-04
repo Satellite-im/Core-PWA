@@ -7,7 +7,7 @@ Vue.directive('contextmenu', {
     let timeout: NodeJS.Timeout
     let isLongPressed = false
 
-    const start = (e: MouseEvent) => {
+    const start = (e: MouseEvent | TouchEvent) => {
       timeout = setTimeout(() => handler(e), LONG_PRESS_DURATION)
     }
 
@@ -17,13 +17,13 @@ Vue.directive('contextmenu', {
       }
     }
 
-    const handler = (e: MouseEvent) => {
+    const handler = (e: MouseEvent | TouchEvent) => {
       e.preventDefault()
       binding.value(e)
       isLongPressed = true
     }
 
-    const prevent = (e: MouseEvent) => {
+    const prevent = (e: MouseEvent | TouchEvent) => {
       if (isLongPressed) {
         e.stopPropagation()
         e.preventDefault()
@@ -33,7 +33,9 @@ Vue.directive('contextmenu', {
 
     element.addEventListener('contextmenu', handler)
     element.addEventListener('mousedown', start)
+    element.addEventListener('touchstart', start)
     element.addEventListener('mouseup', cancel)
+    element.addEventListener('touchend', cancel)
     element.addEventListener('mouseleave', cancel)
     element.addEventListener('click', prevent)
   },

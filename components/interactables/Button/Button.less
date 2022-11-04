@@ -86,4 +86,10 @@
   background-repeat: no-repeat;
   mix-blend-mode: overlay;
   transition: opacity 500ms ease;
+
+  // Disabled on mobile
+  // NOTE: disabled mix-blend-mode on mobile because it was breaking the backdrop-filter on the mobile friends page action sheet
+  @media (max-width: @mobile-breakpoint) {
+    display: none;
+  }
 }

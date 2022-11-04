@@ -38,7 +38,6 @@ Object {
     "wallet": false,
   },
   "mostEmojiUsed": Array [],
-  "recentGlyphs": Array [],
   "settingsRoute": "",
   "showSidebar": true,
 }
