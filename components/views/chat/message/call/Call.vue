@@ -2,7 +2,6 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapGetters } from 'vuex'
 import {
   PhoneOutgoingIcon,
   PhoneIncomingIcon,
@@ -15,8 +14,8 @@ import {
   WebRTCActiveCall,
   WebRTCIncomingCall,
 } from '~/libraries/Iridium/webrtc/types'
-import { formatDuration } from '~/utilities/duration'
 import { getTimestamp } from '~/utilities/timestamp'
+import { webrtcHooks } from '~/components/compositions/webrtc'
 
 export default Vue.extend({
   components: {
@@ -24,6 +23,7 @@ export default Vue.extend({
     PhoneIncomingIcon,
     PhoneOffIcon,
   },
+
   props: {
     message: {
       type: Object as PropType<ConversationMessage>,
@@ -34,11 +34,18 @@ export default Vue.extend({
       default: () => false,
     },
   },
+  setup() {
+    const { useDuration } = webrtcHooks()
+
+    const callDuration = useDuration()
+
+    return {
+      callDuration,
+    }
+  },
   data() {
     return {
       webrtc: iridium.webRTC.state,
-      callDuration: '',
-      timestampInterval: undefined as undefined | NodeJS.Timer,
     }
   },
   computed: {
@@ -51,9 +58,6 @@ export default Vue.extend({
     startedAtTimestamp(): string {
       return getTimestamp(this.message.at)
     },
-    currentDuration(): string {
-      return formatDuration(Date.now() - this.message.at)
-    },
     incomingCall(): WebRTCIncomingCall | null {
       return this.webrtc.incomingCall
     },
@@ -64,22 +68,9 @@ export default Vue.extend({
         : null
     },
   },
-  created() {
-    this.updateDuration()
-    this.timestampInterval = setInterval(() => {
-      this.updateDuration()
-    }, 1000)
-  },
-  beforeDestroy() {
-    clearInterval(this.timestampInterval)
-  },
   methods: {
     hangUp() {
       iridium.webRTC.hangUp()
-    },
-    updateDuration() {
-      const durationOfCall = Date.now() - this.webrtc.callStartedAt
-      this.callDuration = formatDuration(durationOfCall / 1000)
     },
   },
 })

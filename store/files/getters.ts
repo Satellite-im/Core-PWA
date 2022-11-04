@@ -70,6 +70,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
         }
       }
 
+      const collator = new Intl.Collator()
       // Sort the items by the selected key
       switch (key) {
         case FileSortEnum.SIZE:
@@ -80,11 +81,7 @@ const getters: GetterTree<FilesState, RootState> & FilesGetters = {
           break
         default:
           // Sort alphabetically
-          items.sort((a, b) =>
-            a[key].localeCompare(b[key], undefined, {
-              sensitivity: 'base',
-            }),
-          )
+          items.sort((a, b) => collator.compare(a[key], b[key]))
       }
 
       // Reverse the sort if the selected key is descending
