@@ -1911,33 +1911,6 @@ describe('mutations.default.displayCurrentActivity', () => {
 })
 
 describe('mutations misc', () => {
-  test('mutations.default.setTimezone', () => {
-    const localState = {
-      audioInput:
-        'Reiciendis libero maiores quia commodi vitae magnam minima ut. Eos sed suscipit consectetur doloribus aut esse soluta qui ipsum. Culpa quos et sint. Id alias iste ad qui omnis numquam qui sint. Aliquam magni sit sed. Aperiam est sed distinctio sint voluptas eum consequatur minus aliquam.',
-      audioOutput: 'Nostrum neque nam sit.',
-      videoInput: 'vero aut sit',
-      captureMouse: 'culpa',
-      noiseSuppression: false,
-      echoCancellation: true,
-      bitrate: 17771,
-      sampleSize: 67365,
-      userHasGivenAudioAccess: true,
-      userDeniedAudioAccess: false,
-      keybinds: {},
-      embeddedLinks: false,
-      displayCurrentActivity: true,
-      timezone: 'quis quisquam sunt',
-      removeState: true,
-      serverType: 'et',
-      ownInfo: 'maxime',
-    }
-    const passedInValue = '+07:00'
-
-    mutations.default.setTimezone(localState, passedInValue)
-    expect(localState.timezone).toBe(passedInValue)
-  })
-
   test('mutations.default.removeAppState', () => {
     const localState = {
       audioInput:

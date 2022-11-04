@@ -2,12 +2,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-
-import { mapState } from 'vuex'
 import { ProfileInfo } from '~/types/profile/profile'
-import { recommendLocations } from '~/mock/profile'
-import { getTimezoneDropdowns } from '~/utilities/Timezone'
-import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
   props: {
@@ -18,24 +13,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      timezones: getTimezoneDropdowns(),
       languages: [],
-      recommendLocations,
-      featureReadyToShow: false,
     }
-  },
-  computed: {
-    ...mapState({
-      settings: (state) => (state as RootState).settings,
-    }),
-    timezone: {
-      set(value: string) {
-        this.$store.commit('settings/setTimezone', value)
-      },
-      get() {
-        return this.settings.timezone
-      },
-    },
   },
 })
 </script>

@@ -1,26 +1,41 @@
-<template src="./Chat.html"></template>
+<template>
+  <div class="chat" data-cy="chat-page">
+    <Toolbar />
+    <Media
+      v-if="isActiveCall"
+      :max-viewable-users="10"
+      :fullscreen-max-viewable-users="20"
+    />
+    <div class="outer-wrapper">
+      <div class="inner-wrapper">
+        <Conversation />
+        <!-- dont remove ref, used in layouts/desktop.vue -->
+        <Chatbar ref="chatbar" />
+      </div>
+      <UserList v-if="isGroup" />
+    </div>
+  </div>
+</template>
 
 <script lang="ts">
 import { useNuxtApp } from '@nuxt/bridge/dist/runtime/app'
-import Vue, { computed, ComputedRef } from 'vue'
+import { computed, ComputedRef } from 'vue'
 import { conversationHooks } from '~/components/compositions/conversations'
 import { webrtcHooks } from '~/components/compositions/webrtc'
 
-export default Vue.extend({
+export default {
   name: 'Chat',
   layout: 'desktop',
-  setup() {
-    const $nuxt = useNuxtApp()
-    const conversationId: ComputedRef<string> = computed(() => {
-      return $nuxt.$route.params.id
-    })
-
-    const { isGroup } = conversationHooks(conversationId.value)
-    const { isActiveCall } = webrtcHooks(conversationId.value)
-
-    return { isGroup, isActiveCall }
-  },
+}
+</script>
+<script setup lang="ts">
+const $nuxt = useNuxtApp()
+const conversationId: ComputedRef<string> = computed(() => {
+  return $nuxt.$route.params.id
 })
+
+const { isGroup } = conversationHooks(conversationId.value)
+const { isActiveCall } = webrtcHooks(conversationId.value)
 </script>
 
 <style lang="less" scoped>
