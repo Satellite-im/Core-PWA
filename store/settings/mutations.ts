@@ -31,9 +31,7 @@ const mutations = {
   displayCurrentActivity(state: SettingsState, value: boolean) {
     state.displayCurrentActivity = value
   },
-  setTimezone(state: SettingsState, value: string) {
-    state.timezone = value
-  },
+
   removeAppState(state: SettingsState) {
     state.removeState = true
   },
