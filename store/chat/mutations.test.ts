@@ -157,6 +157,40 @@ describe('misc', () => {
     expect(state.draftMessages[argument.conversationId]).toBe(argument.message)
   })
 
+  test('module.default.clearReplyChatbarMessage', () => {
+    const state = {
+      ...InitialChatState,
+      replyChatbarMessages: {
+        conversation_id: 'no_message',
+      },
+    }
+    const argument = {
+      conversationId: 'conversation_id',
+      message: 'message',
+    }
+
+    module.default.clearReplyChatbarMessage(state, argument)
+    expect(state.replyChatbarMessages).toEqual({})
+  })
+
+  test('module.default.setReplyChatbarMessage', () => {
+    const state = {
+      ...InitialChatState,
+      replyChatbarMessages: {
+        conversation_id: 'no_message',
+      },
+    }
+    const argument = {
+      conversationId: 'conversation_id',
+      message: 'message',
+    }
+
+    module.default.setReplyChatbarMessage(state, argument)
+    expect(state.replyChatbarMessages[argument.conversationId]).toBe(
+      argument.message,
+    )
+  })
+
   test('module.default.setActiveUploadChat', () => {
     const state = InitialChatState()
     const argument = 'conversation_id'
