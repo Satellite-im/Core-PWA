@@ -3,6 +3,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { ArrowRightIcon } from 'satellite-lucide-icons'
+import { Capacitor } from '@capacitor/core'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 
 export default Vue.extend({
@@ -15,7 +16,7 @@ export default Vue.extend({
     return {
       NotificationsEnabled: false,
       NotificationStatus: '',
-      Platform: PlatformTypeEnum.ANDROID,
+      Platform: Capacitor.getPlatform(),
       NotificationText: '',
     }
   },

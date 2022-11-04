@@ -1,14 +1,74 @@
-import { LocalNotifications } from '@capacitor/local-notifications'
+import {
+  LocalNotifications,
+  RegisterActionTypesOptions,
+} from '@capacitor/local-notifications'
 import { EnvInfo } from './EnvInfo'
 import { PlatformTypeEnum } from '~/libraries/Enums/enums'
 import { Config } from '~/config'
-import { Notification as NotificationType } from '~/libraries/Iridium/notifications/types'
+import {
+  ActionTypeIds,
+  NotifActionHandler,
+  NotifActionTypes,
+  Notification,
+  NotificationPayloads,
+  NotificationType,
+} from '~/libraries/Iridium/notifications/types'
+import useNotifActionHandlers from '~~/components/compositions/useNotifActionHandlers'
 
 const isSupported = (): boolean =>
   'Notification' in window &&
   'serviceWorker' in navigator &&
   'PushManager' in window
 
+const MOBILE_NOTIF_DELAY = 1000
+
+const MOBILE_ACTION_TYPES: RegisterActionTypesOptions = {
+  types: [
+    {
+      id: ActionTypeIds.CALL_INCOMING,
+      actions: [
+        // TODO
+        // {
+        //   id: 'accept',
+        //   title: 'Accept',
+        //   destructive: true,
+        // },
+        // {
+        //   id: 'decline',
+        //   title: 'Decline',
+        //   input: true,
+        // },
+      ],
+    },
+    {
+      id: ActionTypeIds.DEFAULT,
+      actions: [],
+    },
+    {
+      id: ActionTypeIds.FRIEND_REQUEST,
+      actions: [
+        {
+          id: 'accept',
+          title: 'Accept',
+        },
+        {
+          id: 'decline',
+          title: 'Decline',
+        },
+      ],
+    },
+    {
+      id: ActionTypeIds.MESSAGE,
+      actions: [
+        {
+          id: 'respond',
+          title: 'Respond',
+          input: true,
+        },
+      ],
+    },
+  ],
+}
 export const Notifications = class Notifications {
   currentPlatform: PlatformTypeEnum = PlatformTypeEnum.ANDROID
   notificationPermission: string = 'denied' // web: 'denied' 'granted' 'default'
@@ -18,40 +78,23 @@ export const Notifications = class Notifications {
     const envinfo = new EnvInfo()
     this.currentPlatform = envinfo.currentPlatform
 
-    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
+    if (
+      this.currentPlatform === PlatformTypeEnum.ANDROID ||
+      this.currentPlatform === PlatformTypeEnum.IOS
+    ) {
       // These are shown in the notification as options the user can interact with outside of the app
-      LocalNotifications.registerActionTypes({
-        types: [
-          {
-            id: 'CHAT_MESSAGE',
-            actions: [
-              {
-                id: 'view',
-                title: 'View',
-              },
-              {
-                id: 'dismiss',
-                title: 'Dismiss',
-                destructive: true,
-              },
-              {
-                id: 'respond',
-                title: 'Respond',
-                input: true,
-              },
-            ],
-          },
-        ],
-      })
+      LocalNotifications.registerActionTypes(MOBILE_ACTION_TYPES)
 
       // This notification channel allows the notification to be sent and pop over the screen and other apps
-      LocalNotifications.createChannel({
-        id: 'pop-notifications',
-        name: 'Pop notifications',
-        description: 'Pop notifications',
-        importance: 5,
-        visibility: 1,
-      })
+      if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
+        LocalNotifications.createChannel({
+          id: 'pop-notifications',
+          name: 'Pop notifications',
+          description: 'Pop notifications',
+          importance: 5,
+          visibility: 1,
+        })
+      }
     }
   }
 
@@ -84,7 +127,10 @@ export const Notifications = class Notifications {
     ) {
       await Notification.requestPermission()
     }
-    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
+    if (
+      this.currentPlatform === PlatformTypeEnum.ANDROID ||
+      this.currentPlatform === PlatformTypeEnum.IOS
+    ) {
       // and maybe iOS?
       LocalNotifications.requestPermissions().then((result: any) => {
         return result
@@ -107,6 +153,28 @@ export const Notifications = class Notifications {
      }
    } */
 
+  getActionTypeId = (type: NotificationType): ActionTypeIds => {
+    switch (type) {
+      case NotificationType.CALL_INCOMING:
+        return ActionTypeIds.CALL_INCOMING
+
+      case NotificationType.FRIEND_REQUEST:
+        return ActionTypeIds.FRIEND_REQUEST
+
+      case NotificationType.DIRECT_MESSAGE:
+      case NotificationType.GROUP_MESSAGE:
+      case NotificationType.MENTION:
+      case NotificationType.MEMBER_JOIN:
+      case NotificationType.MEMBER_LEAVE:
+      case NotificationType.ADDED_TO_GROUP:
+      case NotificationType.GROUP_CONVERSATION_CREATED:
+        return ActionTypeIds.MESSAGE
+
+      default:
+        return ActionTypeIds.DEFAULT
+    }
+  }
+
   /**
    * @method sendNotifications DocsTODO
    * @description
@@ -121,14 +189,14 @@ export const Notifications = class Notifications {
     title,
     image,
     description,
-    onNotificationClick,
-  }: NotificationType): Promise<void> {
+    payload,
+  }: Notification): Promise<void> {
     if (
       this.currentPlatform === PlatformTypeEnum.WEB ||
       this.currentPlatform === PlatformTypeEnum.ELECTRON
     ) {
       if (this.notificationPermission !== 'granted' && isSupported()) {
-        Notification.requestPermission().then((result: any) => {
+        Notification.requestPermission().then((result) => {
           this.notificationPermission = result
         })
       }
@@ -143,27 +211,41 @@ export const Notifications = class Notifications {
 
       notification.onclick = (event: any) => {
         event.preventDefault()
-        if (onNotificationClick) {
-          onNotificationClick()
+        const { notifActionHandlers } = useNotifActionHandlers()
+
+        const notifActionHandler = notifActionHandlers[
+          ActionTypeIds.MESSAGE
+        ] as NotifActionHandler<NotificationPayloads>
+
+        if (notifActionHandler) {
+          const handler = notifActionHandler[NotifActionTypes.TAP]
+
+          if (handler) {
+            handler(payload as NotificationPayloads)
+          }
         }
+
         window.focus()
         notification.close()
       }
     }
 
-    if (this.currentPlatform === PlatformTypeEnum.ANDROID) {
+    if (
+      this.currentPlatform === PlatformTypeEnum.ANDROID ||
+      this.currentPlatform === PlatformTypeEnum.IOS
+    ) {
       await LocalNotifications.schedule({
         notifications: [
           {
             title,
             body: description,
             id: new Date().getTime(),
+            extra: payload,
             schedule: {
-              at: new Date(new Date().getTime() + 3000),
+              at: new Date(new Date().getTime() + MOBILE_NOTIF_DELAY),
               allowWhileIdle: true,
             },
-            actionTypeId: 'CHAT_MESSAGE',
-            extra: null,
+            actionTypeId: this.getActionTypeId(type),
             attachments: [
               {
                 id: 'face',
