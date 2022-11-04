@@ -9,6 +9,7 @@
     :noLeading="noLeading"
     @loadMore="loadMore"
     @loadLess="loadLess"
+    @bottomReached="onBottomReached"
     v-slot="{ isScrolling }"
   >
     <div class="messages" ref="messages">

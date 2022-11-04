@@ -409,6 +409,11 @@ export default Vue.extend({
         filtered.length - this.leadingIndex - 1,
       ]
     },
+    onBottomReached() {
+      if (this.conversationId && !this.isBlurred) {
+        iridium.chat.updateConversationReadAt(this.conversation.id, Date.now())
+      }
+    },
   },
 })
 </script>
