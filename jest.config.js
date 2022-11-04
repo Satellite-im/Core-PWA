@@ -1,3 +1,6 @@
+// set timezone to UTC for consistent timestamp tests
+process.env.TZ = 'UTC'
+
 module.exports = {
   preset: 'ts-jest',
   setupFiles: [
