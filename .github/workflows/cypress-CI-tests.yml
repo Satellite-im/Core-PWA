@@ -16,7 +16,7 @@ jobs:
     name: Run Cypress Tests on Chrome 🌡️
     runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node18.12.0-chrome106-ff106
+      image: cypress/browsers:node16.17.0-chrome106
       options: --user 1001
 
     steps:
@@ -26,13 +26,18 @@ jobs:
       - name: Setup Node.js 🔨
         uses: actions/setup-node@v3
         with:
-          node-version: 18.12.0
+          node-version: 16.17.0
 
       - name: Change permissions on scripts 🔨
         run: |
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
+
+      - name: Copy temp yarn.lock to main folder
+        run: |
+          mv -i ./cypress/scripts/temp-yarn.lock ./cypress/scripts/yarn.lock
+          cp ./cypress/scripts/yarn.lock ./
 
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
@@ -64,9 +69,9 @@ jobs:
 
   cypress-two-users:
     name: Cypress Tests for Two Users At The Same Time 🌡️
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
-      image: cypress/browsers:node18.12.0-chrome106-ff106
+      image: cypress/browsers:node16.17.0-chrome106
       options: --user 1001
 
     steps:
@@ -76,13 +81,18 @@ jobs:
       - name: Setup Node.js 🔨
         uses: actions/setup-node@v3
         with:
-          node-version: 18.12.0
+          node-version: 16.17.0
 
       - name: Change permissions on scripts 🔨
         run: |
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
+
+      - name: Copy temp yarn.lock to main folder
+        run: |
+          mv -i ./cypress/scripts/temp-yarn.lock ./cypress/scripts/yarn.lock
+          cp ./cypress/scripts/yarn.lock ./
 
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
