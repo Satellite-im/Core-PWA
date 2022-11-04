@@ -12,7 +12,7 @@ describe('Create Test Accounts', () => {
 
   it('Create First Account', () => {
     // Create one account
-    cy.createAccount('12345', firstUserName, false, true)
+    cy.createAccount('12345', firstUserName, true)
 
     // Validate chat page is loaded
     cy.validateChatPageIsLoaded()
@@ -28,7 +28,7 @@ describe('Create Test Accounts', () => {
 
   it('Create Second Account', () => {
     // Create Second User Account
-    cy.createAccount('12345', secondUserName, false, true)
+    cy.createAccount('12345', secondUserName, true)
 
     // Save User ID from LocalStorage
     cy.validateChatPageIsLoaded()
@@ -44,7 +44,7 @@ describe('Create Test Accounts', () => {
 
   it('Create Third Account', () => {
     // Create Third User Account
-    cy.createAccount('12345', thirdUserName, false, true)
+    cy.createAccount('12345', thirdUserName, true)
 
     // Save User ID from LocalStorage
     cy.validateChatPageIsLoaded()

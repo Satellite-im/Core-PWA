@@ -9,6 +9,12 @@ const randomMessage = faker.lorem.sentence() // generate random sentence
 let secondUserName
 
 data.allDevices.forEach((item) => {
+  cy.on('window:before:load', (win) => {
+    Object.defineProperty(win.navigator, 'userAgent', {
+      value:
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1',
+    })
+  })
   describe(
     `Run mobile responsiveness tests on ${item.description}`,
     {
@@ -17,12 +23,6 @@ data.allDevices.forEach((item) => {
     },
     () => {
       before(() => {
-        cy.on('window:before:load', (win) => {
-          Object.defineProperty(win.navigator, 'userAgent', {
-            value:
-              'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-          })
-        })
         //Retrieve username from Chat User B
         cy.restoreLocalStorage('Chat User B')
         cy.getLocalStorage('Satellite-Store').then((ls) => {
@@ -32,7 +32,7 @@ data.allDevices.forEach((item) => {
       })
 
       it.only(`Create Account on ${item.description}`, () => {
-        cy.createAccountPINscreen(randomPIN, false, false, true)
+        cy.createAccountPINscreen(randomPIN, false, false)
 
         //Create or Import account selection screen
         cy.createAccountSecondScreen()
@@ -80,12 +80,6 @@ data.allDevices.forEach((item) => {
         cy.goToLastGlyphOnChat().click()
         cy.get('[data-cy=glyphs-modal]').should('be.visible')
         cy.closeModal('[data-cy=glyphs-modal]')
-
-        //Glyph Selection - Coming Soon Modal
-        cy.get('[data-cy=send-glyph]').click()
-        cy.get('[data-cy=glyphs-marketplace]').click()
-        cy.get('[data-cy=modal-cta]').should('be.visible')
-        cy.closeModal('[data-cy=modal-cta]')
       })
 
       it(`Marketplace - Coming Soon Modal on ${item.description}`, () => {
@@ -129,9 +123,12 @@ data.allDevices.forEach((item) => {
         cy.get('#mobile-nav').should('be.visible')
       })
 
-      it(`Version number is displayed ${item.description}`, () => {
-        cy.visitRootPage()
-        cy.get('[data-cy=version]').should('be.visible').click()
+      it.only(`Version number is displayed ${item.description}`, () => {
+        cy.visit('/')
+        cy.get('[data-cy=version]')
+          .should('be.visible')
+          .find('span')
+          .contains('Core-PWA')
       })
     },
   )

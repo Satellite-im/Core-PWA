@@ -72,7 +72,8 @@ describe('Chat Toolbar Tests', () => {
     cy.closeModal('[data-cy=glyphs-modal]')
   })
 
-  it('Chat - Glyphs Selection - Coming soon modal', () => {
+  // Skipped since glyphs marketplace was removed from glyphs modal
+  it.skip('Chat - Glyphs Selection - Coming soon modal', () => {
     cy.get('[data-cy=send-glyph]').click()
     cy.get('[data-cy=glyphs-marketplace]').click()
     cy.get('[data-cy=modal-cta]').should('be.visible')

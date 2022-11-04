@@ -32,7 +32,8 @@ describe('Chat - Sending Glyphs Tests', () => {
     cy.goToLastGlyphOnChat()
   })
 
-  it('Send a glyph from the recents section', () => {
+  // Skipped since Glyphs recent section removed
+  it.skip('Send a glyph from the recents section', () => {
     //Send a glyph from recents section
     cy.get('[data-cy=send-glyph]').click()
     cy.get('[data-cy=glyphs-picker]').should('be.visible')

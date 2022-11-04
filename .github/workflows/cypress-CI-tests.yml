@@ -14,27 +14,34 @@ on:
 jobs:
   cypress-on-chrome:
     name: Run Cypress Tests on Chrome 🌡️
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.17.0-chrome106
       options: --user 1001
 
     steps:
       - name: Checkout 🔖
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js 🔨
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 16.17.0
+
       - name: Change permissions on scripts 🔨
         run: |
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
 
+      - name: Copy temp yarn.lock to main folder
+        run: |
+          mv -i ./cypress/scripts/temp-yarn.lock ./cypress/scripts/yarn.lock
+          cp ./cypress/scripts/yarn.lock ./
+
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
+
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
@@ -47,14 +54,14 @@ jobs:
           browser: chrome
 
       - name: Upload screenshots of tests failed 📷
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots-chrome
           path: cypress/screenshots
 
       - name: Upload videos of tests failed 📺
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-videos-chrome
@@ -62,26 +69,34 @@ jobs:
 
   cypress-two-users:
     name: Cypress Tests for Two Users At The Same Time 🌡️
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node16.17.0-chrome106
       options: --user 1001
 
     steps:
       - name: Checkout 🔖
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js 🔨
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 16.17.0
+
       - name: Change permissions on scripts 🔨
         run: |
           chmod +x ./linkscript.sh
           chmod +x ./cypress/scripts/watch-script.sh
           chmod +x ./cypress/scripts/sync-node-script.sh
+
+      - name: Copy temp yarn.lock to main folder
+        run: |
+          mv -i ./cypress/scripts/temp-yarn.lock ./cypress/scripts/yarn.lock
+          cp ./cypress/scripts/yarn.lock ./
+
       - name: Build Core 🔨
         run: yarn && ./linkscript.sh
+
       - name: Execute Cypress Tests 🌡️
         uses: cypress-io/github-action@v4
         with:
@@ -94,14 +109,14 @@ jobs:
           command: npm run cy:chat
 
       - name: Upload screenshots of tests failed 📷
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots-chat-pair
           path: cypress/screenshots-chat-pair
 
       - name: Upload videos of tests failed 📺
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-videos-chat-pair
