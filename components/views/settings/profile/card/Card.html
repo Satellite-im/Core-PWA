@@ -10,26 +10,17 @@
         <!-- <UiDynamicIcon size="1x" icon="badge.badge.icon" /> -->
       </span>
     </div>
-    <div class="profile-preferences">
+    <!-- <div class="profile-preferences">
       <TypographyTitle
         :size="6"
         :text="$t('pages.settings.profile.info.preferences')"
       />
-      <div class="profile-preferences-timezone">
-        <InteractablesSelect
-          v-model="timezone"
-          :options="timezones"
-          :label="$t('pages.settings.profile.info.timezone')"
-          :placeholder="$t('pages.settings.profile.info.selectTimezone')"
-          show-label
-          small
-        />
-      </div>
-      <div class="profile-preferences-language" v-if="featureReadyToShow">
+
+       <div class="profile-preferences-language">
         <TypographyText>
           {{ $t('pages.settings.profile.info.language')}}
         </TypographyText>
-        <!-- <multiselect
+        <multiselect
           :options="[]"
           :multiple="true"
           :close-on-select="false"
@@ -46,7 +37,7 @@
           <span slot="noResult"
             >{{ $t('pages.settings.profile.info.noResult') }}</span
           >
-        </multiselect> -->
+        </multiselect> 
         <div class="mg-half">
           <InteractablesChip
             v-for="(lng, i) in info.languages"
@@ -54,7 +45,8 @@
             :text="lng"
           />
         </div>
-      </div>
+      </div> 
     </div>
+  </div>-->
   </div>
 </div>

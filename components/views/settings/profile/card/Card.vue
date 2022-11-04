@@ -6,7 +6,6 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 import { ProfileInfo } from '~/types/profile/profile'
 import { recommendLocations } from '~/mock/profile'
-import { getTimezoneDropdowns } from '~/utilities/Timezone'
 import { RootState } from '~~/types/store/store'
 
 export default Vue.extend({
@@ -18,7 +17,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      timezones: getTimezoneDropdowns(),
+      timezones: [],
       languages: [],
       recommendLocations,
       featureReadyToShow: false,
