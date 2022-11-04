@@ -284,7 +284,9 @@ const rules: MarkdownRules = {
       if (
         (state.prevCapture && !/^$|\s+$/.test(state.prevCapture[0])) ||
         !state.conversationParticipants?.find(
-          (el: User) => el.name === /^@([^\s]+)/.exec(source)?.[1],
+          (el: User) =>
+            el.did === /^@([^\s]+)/.exec(source)?.[1] ||
+            el.name === /^@([^\s]+)/.exec(source)?.[1],
         )
       ) {
         return null
@@ -293,20 +295,21 @@ const rules: MarkdownRules = {
     },
     parse: (capture) => {
       return {
-        content: [
-          {
-            type: 'text',
-            content: capture[0],
-          },
-        ],
+        content: capture[0],
       }
     },
-    html: (node, output, state) => {
+    html: (node, _, state) => {
+      const content = node.content.substring(1)
+      const user = state.conversationParticipants?.find(
+        (el: User) => el.did === content || el.name === content,
+      )
+
       return state.liveTyping
         ? htmlTag(
             'span',
-            output(node.content, state),
+            '@' + user.name,
             {
+              key: user.did,
               class: 'user-tag dark',
               tabindex: '0',
               role: 'button',
@@ -315,8 +318,9 @@ const rules: MarkdownRules = {
           )
         : htmlTag(
             'span',
-            output(node.content, state),
+            '@' + user.name,
             {
+              key: user.did,
               class: 'user-tag light',
               tabindex: '0',
               role: 'button',

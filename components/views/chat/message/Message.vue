@@ -199,7 +199,7 @@ export default Vue.extend({
       tag.addEventListener('click', (e) => {
         this.showQuickProfile(
           e as MouseEvent,
-          tag.textContent?.substring(1, tag.textContent.length) as string,
+          tag.attributes[0]?.value as string,
         )
       })
     })
@@ -224,7 +224,7 @@ export default Vue.extend({
      * @description returns user object giving username as parameter
      */
     getParticipants(user: string) {
-      return this.participants.find((el) => el.name === user)
+      return this.participants.find((el) => el.did === user)
     },
     /**
      * @method copyMessage
