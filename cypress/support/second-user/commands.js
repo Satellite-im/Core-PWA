@@ -1025,11 +1025,14 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('validateRequestsBadge', (pendingReqs = '1') => {
-  cy.get('[data-cy=sidebar-friends]')
-    .find('.tag')
-    .should('contain', pendingReqs)
-})
+Cypress.Commands.add(
+  'validateRequestsBadge',
+  (pendingReqs = '1', customTimeout = 30000) => {
+    cy.get('[data-cy=sidebar-friends]')
+      .find('.tag', { timeout: customTimeout })
+      .should('contain', pendingReqs)
+  },
+)
 
 Cypress.Commands.add('goToFriendsPage', (page) => {
   cy.get('[data-cy=sidebar-friends]').click()
