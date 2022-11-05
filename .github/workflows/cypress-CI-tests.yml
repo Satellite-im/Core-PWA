@@ -69,7 +69,7 @@ jobs:
 
   cypress-two-users:
     name: Cypress Tests for Two Users At The Same Time 🌡️
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     container:
       image: cypress/browsers:node16.17.0-chrome106
       options: --user 1001
