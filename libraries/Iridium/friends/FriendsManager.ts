@@ -357,7 +357,9 @@ export default class FriendsManager extends Emitter<IridiumFriendPubsub> {
       seen: false,
       type: NotificationType.FRIEND_REQUEST,
       senderId: user.did,
-      payload: {},
+      payload: {
+        senderId: user.did,
+      },
       image: user.photoHash as string,
     }
     iridium.notifications.emit('notification/create', notification)

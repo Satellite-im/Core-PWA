@@ -28,10 +28,11 @@ export type Notification<P = {}> = {
   payload: P
   id?: string
   image?: string
-  onNotificationClick?: () => void
 }
 
-export type FriendRequestNotificationPayload = {}
+export type FriendRequestNotificationPayload = {
+  senderId: IridiumPeerIdentifier
+}
 
 export type MessageNotificationPayload = {
   conversationId: string
@@ -46,19 +47,35 @@ export type MemberJoinNotificationPayload = MessageNotificationPayload & {
   addedMemberIds: IridiumPeerIdentifier[]
 }
 
+export enum ActionTypeIds {
+  CALL_INCOMING = 'call_incoming',
+  DEFAULT = 'default',
+  FRIEND_REQUEST = 'friend_request',
+  MESSAGE = 'message',
+}
+
 export type NotificationPayloads =
   | FriendRequestNotificationPayload
-  | MessageNotificationPayload
-  | MemberJoinNotificationPayload
   | GroupConversationCreatedNotificationPayload
+  | MemberJoinNotificationPayload
+  | MessageNotificationPayload
 
 export type NotificationBase<P = {}> = Omit<
   Notification<P>,
   'title' | 'description'
 >
 
-export type NotificationClickEvent = {
-  from: string
-  topic: string
-  payload: { type: NotificationType }
+export type NotifCreateHandler<P = {}> = {
+  handler: (notif: P) => void
+}
+
+export enum NotifActionTypes {
+  TAP = 'tap',
+  RESPOND = 'respond',
+  ACCEPT = 'accept',
+  DECLINE = 'decline',
+}
+
+export type NotifActionHandler<P = {}> = {
+  [key in NotifActionTypes]?: (payload: P, inputValue?: string) => void
 }
