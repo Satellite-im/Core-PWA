@@ -28,8 +28,8 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
   it('Accept friend request received from first user', () => {
     // Go to Friends tab and validate that a friend request was received
-    cy.goToFriendsPage('Requests')
     cy.validateRequestsBadge()
+    cy.goToFriendsPage('Requests')
     cy.acceptUpcomingFriendRequest('Chat User A')
   })
 
@@ -55,7 +55,7 @@ describe('Chat features with two accounts at the same time - Second User', () =>
 
   it('Receive First Incoming Video Call for initial validations', () => {
     //Answer remote videocall
-    cy.answerVideocall(30000)
+    cy.answerVideocall(45000)
   })
 
   it('Receive Second Incoming Video Call for not muted indicators', () => {

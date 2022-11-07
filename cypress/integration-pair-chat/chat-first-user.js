@@ -1,5 +1,5 @@
 const faker = require('faker')
-const longMessage = faker.lorem.words(25) // generate random sentence
+const longMessage = faker.lorem.words(50) // generate random sentence
 let urlToValidate = 'https://www.satellite.im'
 
 describe('Chat features with two accounts at the same time - First User', () => {

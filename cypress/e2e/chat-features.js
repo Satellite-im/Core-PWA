@@ -28,20 +28,17 @@ describe('Chat Features Tests', () => {
     cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
   })
 
-  // Skipping for now, due to bug on messages sent twice
-  it.skip('Chat - Edit message on chat by hovering and selecting edit button', () => {
+  it('Chat - Edit message on chat by hovering and selecting edit button', () => {
     cy.chatFeaturesEditMessage(randomMessage, randomNumber, 'hover')
     expecedEditedMessage += randomNumber
   })
 
-  // Skipping for now, due to bug on messages sent twice
-  it.skip('Chat - Edit message on chat using right-click', () => {
+  it('Chat - Edit message on chat using right-click', () => {
     cy.chatFeaturesEditMessage(expecedEditedMessage, randomNumber, 'rightClick')
     expecedEditedMessage += randomNumber
   })
 
-  // Skipping for now, due to bug on messages sent twice
-  it.skip('Chat - Message edited shows edited status', () => {
+  it('Chat - Message edited shows edited status', () => {
     // Edited message shows (Edited) status
     cy.get('[data-cy=message-edited]').last().should('contain', '(edited)')
 
@@ -52,7 +49,6 @@ describe('Chat Features Tests', () => {
       .should('contain', expecedEditedMessage)
   })
 
-  // Skipping for now, due to bug on messages sent twice
   it('Chat - Copy paste text', () => {
     // Allowing Chrome Browser to have read and write access to clipboard
     cy.wrap(
