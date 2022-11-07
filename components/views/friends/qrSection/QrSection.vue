@@ -52,7 +52,9 @@ export default Vue.extend({
     return {
       friendInviteUrl:
         window.location.origin +
-        '/#/invite/friend?did=' +
+        '/#/invite/friend?username=' +
+        iridium.shortId.split('#')[0] +
+        '&did=' +
         iridium.shortId.split('#')[1],
     }
   },
@@ -61,11 +63,7 @@ export default Vue.extend({
   },
   methods: {
     copyId() {
-      this.copyText(
-        window.location.origin +
-          '/#/invite/friend?did=' +
-          iridium.shortId.split('#')[1],
-      )
+      this.copyText(this.friendInviteUrl)
     },
   },
 })
