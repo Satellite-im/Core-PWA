@@ -29,7 +29,6 @@ export interface SettingsState {
   keybinds: object
   embeddedLinks: boolean
   displayCurrentActivity: boolean
-  timezone: string
   removeState: boolean
   serverType: string
   ownInfo: string

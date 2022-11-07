@@ -13,7 +13,7 @@ describe.skip('Snapshots Testing', () => {
   //Skipping snapshots tests because cursor behavior makes tests to fail
   //Import account and snapshot on each screen
   it('Import account - PIN screen', () => {
-    cy.importAccountPINscreen(randomPIN, false, true, false)
+    cy.importAccountPINscreen(randomPIN, false, true)
   })
 
   it('Import account - Create or Import Account Selection screen', () => {
@@ -128,7 +128,7 @@ describe.skip('Snapshots Testing', () => {
 
   it('Create Account - PIN screen', () => {
     //Open URL and snapshot
-    cy.createAccountPINscreen(randomPIN, false, true, false)
+    cy.createAccountPINscreen(randomPIN, false, true)
   })
 
   it('Create Account - Create or Import Account Selection screen', () => {
