@@ -1,4 +1,4 @@
-import { htmlTag, toHTML } from './Markdown'
+import { htmlTag, toHTML, parser } from './Markdown'
 const assert = require('assert').strict
 
 const htmlFromMarkdown = function (source: string) {
@@ -122,5 +122,16 @@ describe('html output', function () {
       '||spoiler||',
       `${decorator('||')}<span>spoiler</span>${decorator('||')}`,
     )
+  })
+})
+
+describe('parser', () => {
+  it('should parse single h1 header', () => {
+    const result = parser('# Hello, world!')
+    expect(result).toEqual([
+      { content: '# Hello', type: 'text' },
+      { content: ', world', type: 'text' },
+      { content: '!', type: 'text' },
+    ])
   })
 })

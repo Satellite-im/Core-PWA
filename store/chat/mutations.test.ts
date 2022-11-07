@@ -224,6 +224,28 @@ describe('misc', () => {
     expect(state.activeUploadChats).toEqual([])
   })
 
+  test('module.default.setEnhancersRoute', () => {
+    const state = InitialChatState()
+    const argument = 'emoji'
+
+    module.default.setEnhancersRoute(state, argument)
+    expect(state.enhancersRoute).toEqual(argument)
+  })
+
+  test('module.default.setMessageReaction', () => {
+    const state = InitialChatState()
+    const argument = {
+      messageId: 'message',
+      conversationId: 'conversation',
+    }
+
+    module.default.setMessageReaction(state, argument)
+    expect(state.messageReaction).toEqual({
+      conversationId: 'conversation',
+      messageId: 'message',
+    })
+  })
+
   test('module.default.removeActiveUploadChat for more than two calls', () => {
     const state = InitialChatState()
 
