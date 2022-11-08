@@ -931,6 +931,63 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('validateAppTheme', (themeName = 'Default') => {
+  let expectedClass
+  if (themeName === 'Default') {
+    expectedClass = 'theme-default'
+  } else if (themeName === 'Moonless Night') {
+    expectedClass = 'theme-moonlessNight'
+  }
+  cy.get('#app').should('have.class', expectedClass)
+  cy.get('[data-cy=settings-color-theme-selector]')
+    .find('[data-cy=list-container-selected]')
+    .should('contain', themeName)
+})
+
+Cypress.Commands.add('validateAppFlair', (flairName = 'Satellite') => {
+  let expectedRgb
+  if (flairName === 'Satellite') {
+    expectedRgb = 'rgb(39, 97, 253)'
+  } else if (flairName === 'Lime') {
+    expectedRgb = 'rgb(163, 203, 56)'
+  }
+  cy.get('body').should('have.css', 'caret-color', expectedRgb)
+  cy.get('[data-cy=settings-flair-selector]')
+    .find('[data-cy=list-container-selected]')
+    .should('contain', flairName)
+})
+
+Cypress.Commands.add('validateListOptions', (option, expectedList) => {
+  // Determine the selector to be assigned to the alias based on the option to validate
+  if (option === 'theme') {
+    cy.get('[data-cy=settings-color-theme-selector]').as('option')
+  } else if (option === 'flair') {
+    cy.get('[data-cy=settings-flair-selector]').as('option')
+  }
+
+  //Click on the option to display the list
+  cy.get('@option').find('[data-cy=list-container-button]').click()
+
+  //Validate the options displayed in the list
+  cy.get('@option')
+    .find('[data-cy=list-value]')
+    .should('have.length', expectedList.length)
+    .each(($option, $index, $list) => {
+      expect($option.text().trim()).to.be.eq(expectedList[$index])
+    })
+})
+
+Cypress.Commands.add('selectThemeOrFlair', (option, value) => {
+  // Determine the selector to be assigned to the alias based on the option to validate
+  if (option === 'theme') {
+    cy.get('[data-cy=settings-color-theme-selector]').as('option')
+  } else if (option === 'flair') {
+    cy.get('[data-cy=settings-flair-selector]').as('option')
+  }
+  // Click on "Flair" and change the selected value to "Lime"
+  cy.get('@option').find('[data-cy=list-value]').contains(value).click()
+})
+
 // LocalStorage Validations
 
 Cypress.Commands.add('validatePopulatedLocalStorage', (username = 'qa123') => {
