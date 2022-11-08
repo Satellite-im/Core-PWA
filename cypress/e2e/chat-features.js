@@ -158,4 +158,11 @@ describe('Chat Features Tests', () => {
   it.skip('Chat - Assert note from user profile', () => {
     cy.addOrAssertProfileNote('This is a test note' + randomNumber, 'assert')
   })
+
+  it('Chat - Send each letter on alphabet as message', () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    for (let letter of alphabet) {
+      cy.chatFeaturesSendMessage(letter, true)
+    }
+  })
 })
