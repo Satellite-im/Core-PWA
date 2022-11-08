@@ -8,6 +8,7 @@ const randomNumber = faker.datatype.number() // generate random number
 const randomMessage = faker.lorem.sentence() // generate random sentence
 let secondUserName
 
+// We will require to pass this configuration as a custom npm script once that import account works
 data.allDevices.forEach((item) => {
   cy.on('window:before:load', (win) => {
     Object.defineProperty(win.navigator, 'userAgent', {
@@ -31,7 +32,7 @@ data.allDevices.forEach((item) => {
         })
       })
 
-      it.only(`Create Account on ${item.description}`, () => {
+      it(`Create Account on ${item.description}`, () => {
         cy.createAccountPINscreen(randomPIN, false, false)
 
         //Create or Import account selection screen
@@ -48,7 +49,7 @@ data.allDevices.forEach((item) => {
         cy.createAccountSubmit()
       })
 
-      it.only(`Load Account from LocalStorage on ${item.description}`, () => {
+      it(`Load Account from LocalStorage on ${item.description}`, () => {
         // Login with User A by restoring LocalStorage Snapshot
         cy.loginWithLocalStorage('Chat User A')
 
@@ -56,7 +57,7 @@ data.allDevices.forEach((item) => {
         cy.goToConversation(secondUserName, true)
       })
 
-      it.skip(`Chat Features on ${item.description}`, () => {
+      it(`Chat Features on ${item.description}`, () => {
         //Validate message and emojis are sent
         cy.chatFeaturesSendMessage(randomMessage)
         cy.chatFeaturesSendEmoji('[title="smile"]', '😄')
@@ -90,7 +91,8 @@ data.allDevices.forEach((item) => {
         cy.closeModal('[data-cy=modal-cta]')
       })
 
-      it(`Swipe on Settings Screen on ${item.description}`, () => {
+      // Keeping this test skipped since we need to add a custom user agent to execute these tests
+      it.skip(`Swipe on Settings Screen on ${item.description}`, () => {
         //Skipped because chat conversation does not finish loading on mobile
         // From the chat screen, swipe to the right to return to main screen
         cy.get('body').realSwipe('toRight')
@@ -112,7 +114,8 @@ data.allDevices.forEach((item) => {
         cy.get('[data-cy=settings-close-button]').click()
       })
 
-      it(`Swipe on Chat Screen on ${item.description}`, () => {
+      // Keeping this test skipped since we need to add a custom user agent to execute these tests
+      it.skip(`Swipe on Chat Screen on ${item.description}`, () => {
         //Skipped because chat conversation does not finish loading on mobile
         // Return to chat screen, doing a swipe from main screen
         cy.get('body').realSwipe('toLeft')
@@ -123,7 +126,7 @@ data.allDevices.forEach((item) => {
         cy.get('#mobile-nav').should('be.visible')
       })
 
-      it.only(`Version number is displayed ${item.description}`, () => {
+      it(`Version number is displayed ${item.description}`, () => {
         cy.visit('/')
         cy.get('[data-cy=version]')
           .should('be.visible')

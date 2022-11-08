@@ -157,16 +157,17 @@ Cypress.Commands.add('welcomeModal', (username) => {
 //Import Account Commands
 
 Cypress.Commands.add('loginWithLocalStorage', (username) => {
-  //Clear localstorage, cookies, sessionstorage and indexedDB before starting
+  //Execute the following steps before starting
+  //Clear localstorage
   cy.clearLocalStorage()
-  cy.clearCookies()
-  cy.window().then((win) => {
-    win.sessionStorage.clear()
-  })
 
-  //Clear indexed DB if browser is chrome
-  if (Cypress.isBrowser('!firefox')) {
+  //Clear cookies
+  cy.clearCookies()
+
+  //Clear Session Storage and IndexedDB if test is executed on Chrome
+  if (Cypress.browser.name === 'chrome') {
     cy.window().then((win) => {
+      win.sessionStorage.clear()
       win.indexedDB.databases().then((r) => {
         for (var i = 0; i < r.length; i++)
           win.indexedDB.deleteDatabase(r[i].name)
