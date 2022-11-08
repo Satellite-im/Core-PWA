@@ -309,7 +309,7 @@ const rules: MarkdownRules = {
             'span',
             '@' + user.name,
             {
-              key: user.did,
+              'data-key': user.did,
               class: 'user-tag dark',
               tabindex: '0',
               role: 'button',
@@ -320,7 +320,7 @@ const rules: MarkdownRules = {
             'span',
             '@' + user.name,
             {
-              key: user.did,
+              'data-key': user.did,
               class: 'user-tag light',
               tabindex: '0',
               role: 'button',

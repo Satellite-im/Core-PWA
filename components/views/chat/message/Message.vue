@@ -107,6 +107,7 @@ export default Vue.extend({
         liveTyping: false,
         conversationParticipants: this.participants,
       })
+      this.updateTags()
       return html.replace(
         this.$Config.regex.emojiWrapper,
         (emoji) => `<span class="emoji">${emoji}</span>`,
@@ -153,6 +154,13 @@ export default Vue.extend({
       return this.message.type !== 'call' && !this.message.status
     },
   },
+  watch: {
+    message() {
+      setTimeout(() => {
+        this.updateTags()
+      }, 10)
+    },
+  },
   mounted() {
     const conversationEl = document.querySelector(
       '.conversation-wrapper',
@@ -177,32 +185,7 @@ export default Vue.extend({
       },
     )
     this.intersectionObserver.observe(messageEl)
-
-    if (!this.$refs['message-row']) return
-    Array.from(
-      (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
-        'spoiler-container',
-      ),
-    ).forEach((spoiler) => {
-      spoiler.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        spoiler.classList.add('spoiler-open')
-      })
-    })
-
-    Array.from(
-      (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
-        'user-tag',
-      ),
-    ).forEach((tag) => {
-      tag.addEventListener('click', (e) => {
-        this.showQuickProfile(
-          e as MouseEvent,
-          tag.attributes[0]?.value as string,
-        )
-      })
-    })
+    this.updateTags()
   },
   beforeDestroy() {
     this.intersectionObserver?.disconnect()
@@ -288,6 +271,9 @@ export default Vue.extend({
       if (this.$device.isDesktop) {
         this.$store.dispatch('ui/setChatbarFocus')
       }
+      setTimeout(() => {
+        this.updateTags()
+      }, 10)
     },
     cancelMessage() {
       this.$store.commit('ui/setEditMessage', {
@@ -298,6 +284,48 @@ export default Vue.extend({
       if (this.$device.isDesktop) {
         this.$store.dispatch('ui/setChatbarFocus')
       }
+      setTimeout(() => {
+        this.updateTags()
+      }, 10)
+    },
+    updateTags() {
+      const items = document.querySelectorAll('[data-key]')
+      items?.forEach((item) => {
+        const participant = this.participants.find(
+          (p) => p.did === item.attributes[0].textContent,
+        )
+        item.textContent =
+          iridium.profile.state?.did === item.attributes[0].textContent
+            ? 'me'
+            : participant?.name || ''
+        return item
+      })
+
+      if (!this.$refs['message-row']) return
+      Array.from(
+        (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
+          'spoiler-container',
+        ),
+      ).forEach((spoiler) => {
+        spoiler.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          spoiler.classList.add('spoiler-open')
+        })
+      })
+
+      Array.from(
+        (this.$refs['message-row'] as HTMLElement).getElementsByClassName(
+          'user-tag',
+        ),
+      ).forEach((tag) => {
+        tag.addEventListener('click', (e) => {
+          this.showQuickProfile(
+            e as MouseEvent,
+            tag.attributes[0]?.value as string,
+          )
+        })
+      })
     },
   },
 })
