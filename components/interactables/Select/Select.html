@@ -18,19 +18,25 @@
       {{ option.text }}
     </option>
   </select>
-  <div v-else class="list-container" v-click-outside="hideListbox">
+  <div
+    v-else
+    class="list-container"
+    data-cy="list-container"
+    v-click-outside="hideListbox"
+  >
     <button
       :id="`${label}-button-label`"
       :disabled="disabled"
       :aria-labelledby="`${label}-label ${label}-button-label`"
       type="button"
+      data-cy="list-container-button"
       :title="value ? selectedOptionLabel : placeholder"
       aria-haspopup="listbox"
       @click="toggleListbox"
       @keydown="checkShow"
       ref="button"
     >
-      <div class="label">
+      <div class="label" data-cy="list-container-selected">
         {{ value ? selectedOptionLabel : placeholder }}
         <div class="width-buffer" aria-hidden="true">
           <div v-for="(option, index) in options">{{ option.text }}</div>
@@ -53,6 +59,7 @@
           v-for="(option, index) in options"
           :key="`${label}-option-${index}`"
           :aria-selected="option.value === value"
+          data-cy="list-value"
           :data-value="option.value"
           :style="option.color ? 'background:' + option.color : ''"
           role="option"
