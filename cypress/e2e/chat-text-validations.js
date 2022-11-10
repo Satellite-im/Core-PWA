@@ -1,10 +1,10 @@
 const faker = require('faker')
 const randomMessage = faker.lorem.sentence() // generate random sentence
-let longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
+const longMessage = faker.random.alphaNumeric(2060) // generate random alphanumeric text with 2060 chars
 const randomURL = faker.internet.url() // generate random url
-let urlToValidate = 'https://www.google.com'
-let urlToValidateTwo = 'http://www.google.com'
-let urlToValidateThree = 'www.google.com'
+const urlToValidate = 'https://www.google.com'
+const urlToValidateTwo = 'http://www.google.com'
+const urlToValidateThree = 'www.google.com'
 let secondUserName
 
 describe('Chat Text and Sending Links Validations', () => {
@@ -12,7 +12,7 @@ describe('Chat Text and Sending Links Validations', () => {
     //Retrieve username from Chat User B
     cy.restoreLocalStorage('Chat User B')
     cy.getLocalStorage('Satellite-Store').then((ls) => {
-      let tempLS = JSON.parse(ls)
+      const tempLS = JSON.parse(ls)
       secondUserName = tempLS.accounts.details.name
     })
   })
@@ -36,7 +36,7 @@ describe('Chat Text and Sending Links Validations', () => {
       'have.text',
       longMessage,
     )
-    let expectedMessage = longMessage.length.toString() + '/2048'
+    const expectedMessage = longMessage.length.toString() + '/2048'
     cy.validateCharlimit(expectedMessage, true)
   })
 
@@ -51,7 +51,7 @@ describe('Chat Text and Sending Links Validations', () => {
     )
 
     //Charlimit will continue to be red since message was not sent
-    let expectedMessage = longMessage.length.toString() + '/2048'
+    const expectedMessage = longMessage.length.toString() + '/2048'
     cy.validateCharlimit(expectedMessage, true)
 
     //Attempt to send message again now by pressing ENTER key
@@ -120,7 +120,7 @@ describe('Chat Text and Sending Links Validations', () => {
     )
     cy.validateCharlimit('22/2048', false)
     cy.get('[data-cy=send-message]').click()
-    let locatorURL = 'a[href="' + urlToValidate + '"]'
+    const locatorURL = 'a[href="' + urlToValidate + '"]'
     cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
   })
 
@@ -139,7 +139,7 @@ describe('Chat Text and Sending Links Validations', () => {
     )
     cy.validateCharlimit('21/2048', false)
     cy.get('[data-cy=send-message]').click()
-    let locatorURL = 'a[href="' + urlToValidateTwo + '"]'
+    const locatorURL = 'a[href="' + urlToValidateTwo + '"]'
     cy.get(locatorURL).last().scrollIntoView().should('have.attr', 'href')
   })
 
@@ -215,8 +215,8 @@ describe('Chat Text and Sending Links Validations', () => {
   })
 
   it('User should use markdown "<>" to insert an autolink', () => {
-    let locatorURL = 'a[href="' + randomURL + '"]'
-    let autolink = '<' + randomURL + '>'
+    const locatorURL = 'a[href="' + randomURL + '"]'
+    const autolink = '<' + randomURL + '>'
     cy.chatFeaturesSendMessage(autolink, false)
     cy.get(locatorURL)
       .last()
@@ -230,5 +230,12 @@ describe('Chat Text and Sending Links Validations', () => {
 
   it('User should use markdown "||" to insert an spoiler', () => {
     cy.sendMessageWithMarkdown(randomMessage, '||')
+  })
+
+  it('Chat - Send each letter on alphabet as message', () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    for (let letter of alphabet) {
+      cy.chatFeaturesSendMessage(letter, true)
+    }
   })
 })

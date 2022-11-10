@@ -24,11 +24,13 @@
         <div class="emoji-section">
           <div
             class="emojis"
+            data-cy="emoji-frequently-used-list"
             v-if="category === 'Frequently used' && mostUsedEmojis.length"
           >
             <div
               v-for="(emoji, index) in mostUsedEmojis"
               class="emoji"
+              data-cy="emoji-frequently-used-item"
               :key="index"
               @click="addEmoji(emoji.content, emoji.code)"
               :title="index"
