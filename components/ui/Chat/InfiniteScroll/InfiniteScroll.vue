@@ -90,6 +90,9 @@ const Scroller = Vue.extend({
         container.scrollTop + container.clientHeight >=
           container.scrollHeight - 1 && this.noLeading
 
+      if (this.isLockedToBottom) {
+        this.$emit('bottomReached')
+      }
       // when reaching the top of the loader bring the scroll to the beginning of the loader
       if (
         this.trailingMessageLoader &&
