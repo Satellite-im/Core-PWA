@@ -6,6 +6,11 @@
           v-for="el in buttons"
           :key="el.id"
           :text="el.label"
+          :data-cy="
+            enhancersRoute === el.id
+              ? 'glyphs-emoji-active'
+              : 'glyphs-emoji-inactive'
+          "
           :color="enhancersRoute === el.id ? 'primary' : 'dark'"
           @click="enhancersRoute = el.id"
         >

@@ -315,14 +315,44 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('chatFeaturesSendEmoji', (emojiLocator, emojiValue) => {
+Cypress.Commands.add(
+  'chatFeaturesSendEmoji',
+  (emojiLocator, emojiValue, sendMessage = true) => {
+    cy.get('[data-cy=send-emoji]').click()
+    cy.get(emojiLocator).click() // sending emoji
+
+    // Only if sendMessage is true, then send message and assert it appears on chat
+    if (sendMessage) {
+      cy.get('[data-cy=send-message]').click() //sending emoji message
+      cy.contains(emojiValue)
+        .last()
+        .scrollIntoView({ timeout: 20000 })
+        .should('exist')
+    }
+  },
+)
+
+Cypress.Commands.add('validateFrequentEmojiItems', (expectedEmojiList) => {
+  let actualEmojiList = ''
+
+  //Open Emoji Picker
   cy.get('[data-cy=send-emoji]').click()
-  cy.get(emojiLocator).click() // sending emoji
-  cy.get('[data-cy=send-message]').click() //sending emoji message
-  cy.contains(emojiValue)
-    .last()
-    .scrollIntoView({ timeout: 20000 })
-    .should('exist')
+
+  //Validate Frequent Emoji List
+  cy.get('[data-cy=emoji-frequently-used-list]')
+    .find('[data-cy=emoji-frequently-used-item]')
+    .should('have.length', 10)
+    .each(($emoji) => {
+      actualEmojiList += $emoji.text().trim()
+    })
+    .then(() => {
+      cy.log('actual emoji list is: ' + actualEmojiList)
+      cy.log('expected emoji list is: ' + expectedEmojiList)
+      expect(actualEmojiList).to.eq(expectedEmojiList)
+    })
+
+  //Close Emoji Picker
+  cy.get('body').type('{esc}')
 })
 
 Cypress.Commands.add(
@@ -374,6 +404,28 @@ Cypress.Commands.add('validateCharlimit', (text, error) => {
         cy.get('[data-cy=chatbar-wrap]').should('not.have.class', 'is-error')
       }
     })
+})
+
+Cypress.Commands.add('validateActiveGlyphsEmojiPicker', (active = 'emoji') => {
+  if (active === 'emoji') {
+    cy.get('[data-cy=emoji-picker]').should('be.visible')
+    cy.get('[data-cy=glyphs-picker]').should('not.exist')
+    cy.get('[data-cy=glyphs-emoji-active]')
+      .find('span')
+      .should('contain', 'Emoji')
+    cy.get('[data-cy=glyphs-emoji-inactive]')
+      .find('span')
+      .should('contain', 'Glyphs')
+  } else if (active === 'glyphs') {
+    cy.get('[data-cy=glyphs-picker]').should('be.visible')
+    cy.get('[data-cy=emoji-picker]').should('not.exist')
+    cy.get('[data-cy=glyphs-emoji-active]')
+      .find('span')
+      .should('contain', 'Glyphs')
+    cy.get('[data-cy=glyphs-emoji-inactive]')
+      .find('span')
+      .should('contain', 'Emoji')
+  }
 })
 
 // Chat - Replies Commands
