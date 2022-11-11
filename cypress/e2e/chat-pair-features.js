@@ -1,5 +1,6 @@
 const faker = require('faker')
 const randomMessage = faker.lorem.sentence() // generate random sentence
+const randomMessageTwo = faker.lorem.sentence() // generate a second random sentence
 const imageLocalPath = 'cypress/fixtures/images/logo.png'
 const fileLocalPath = 'cypress/fixtures/test-file.txt'
 let glyphURL,
@@ -14,11 +15,17 @@ const textReply = 'This is a reply to the message'
 
 describe('Chat pair features with Chat User A  - Part 1', () => {
   before(() => {
-    //Retrieve username from Chat User B
+    //Retrieve username from Chat User B and Chat User C
     cy.restoreLocalStorage('Chat User B')
     cy.getLocalStorage('Satellite-Store').then((ls) => {
       let tempLS = JSON.parse(ls)
       secondUserName = tempLS.accounts.details.name
+    })
+    //Retrieve username from Chat User B and Chat User C
+    cy.restoreLocalStorage('Chat User C')
+    cy.getLocalStorage('Satellite-Store').then((ls) => {
+      let tempLS = JSON.parse(ls)
+      thirdUserName = tempLS.accounts.details.name
     })
   })
 
@@ -137,6 +144,23 @@ describe('Chat pair features with Chat User A  - Part 1', () => {
   //Skipping since there is no context menu now for file messages
   it.skip('File messages cannot be edited', () => {
     cy.validateOptionNotInContextMenu('[data-cy=chat-file]', 'Edit')
+  })
+
+  it('Messages not sent should persist when switching conversations', () => {
+    // Type a message without sent it in conversation with Chat User B
+    cy.get('[data-cy=editable-input]').trigger('input').type(randomMessage)
+
+    // Go to Conversation with Chat User C and type a different message
+    cy.goToConversation(thirdUserName)
+    cy.get('[data-cy=editable-input]').trigger('input').type(randomMessageTwo)
+
+    // Return to conversation with Chat User B and assert that first message not sent yet is still present
+    cy.goToConversation(secondUserName)
+    cy.get('[data-cy=editable-input]').should('have.text', randomMessage)
+
+    // Return to conversation with Chat User C and assert that last message not sent yet is still present
+    cy.goToConversation(thirdUserName)
+    cy.get('[data-cy=editable-input]').should('have.text', randomMessageTwo)
   })
 })
 
