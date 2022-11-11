@@ -257,4 +257,43 @@ describe('Chat Features Tests', () => {
     //Close Emoji Picker
     cy.get('body').type('{esc}')
   })
+
+  it('Chat - Emoji Size - Big Emoji when sending one emoji', () => {
+    //Send a message with one emoji
+    cy.chatFeaturesSendEmoji('[title="joy"]', '😂', true)
+
+    //Validate chat message has class bigmoji
+    cy.get('[data-cy=chat-message]')
+      .last()
+      .scrollIntoView()
+      .should('have.text', '😂')
+      .and('have.class', 'bigmoji')
+  })
+
+  it('Chat - Emoji Size - Big Emoji when sending more than one emoji', () => {
+    //Send a message with three emojis
+    cy.chatFeaturesSendEmoji('[title="heart_eyes"]', '😍', false)
+    cy.chatFeaturesSendEmoji('[title="joy"]', '😂', false)
+    cy.chatFeaturesSendEmoji('[title="wink"]', '😉', true)
+
+    //Validate chat message has class bigmoji
+    cy.get('[data-cy=chat-message]')
+      .last()
+      .scrollIntoView()
+      .should('have.text', '😍😂😉')
+      .and('have.class', 'bigmoji')
+  })
+
+  it('Chat - Emoji Size - Small Emoji when sending emoji with text', () => {
+    //Send a message with one character and one emoji
+    cy.get('[data-cy=editable-input]').trigger('input').type('a')
+    cy.chatFeaturesSendEmoji('[title="wink"]', '😉', true)
+
+    //Validate chat message does not have class bigmoji
+    cy.get('[data-cy=chat-message]')
+      .last()
+      .scrollIntoView()
+      .should('have.text', 'a😉')
+      .and('not.have.class', 'bigmoji')
+  })
 })
