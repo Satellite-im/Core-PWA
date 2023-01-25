@@ -31,7 +31,7 @@
         </nuxt-link>
       </div>
 
-      <div v-show="$config.feedbackUrl" class="banner-wrapper">
+      <div class="banner-wrapper">
         <UiEarlyAccessBanner />
       </div>
       <div class="toggle-container">

@@ -6,7 +6,11 @@
           {{ $t('pages.unlock.browser_warning_header') }}
         </template>
         <template #content>
-          {{ $t('pages.unlock.browser_warning_content') }}
+          {{ $t('pages.unlock.browser_warning_content') }} {{
+          $t('pages.unlock.browser_warning_content2') }}
+          <a :href="$t('pages.unlock.browser_warning_link')" target="_blank"
+            >Blog post.
+          </a>
         </template>
       </UiBanner>
     </div>

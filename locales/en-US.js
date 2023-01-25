@@ -258,9 +258,13 @@ export default {
       store_pin: 'Store Password? (Less Secure)',
       delete_account_label: 'Not you? Create or import an account',
       generate_random_user: 'Generate a Random User (DEV)',
-      browser_warning_header: 'Satellite is optimized for Chromium browsers',
+      browser_warning_header: 'Satellite Core will become Uplink!',
       browser_warning_content:
-        'You may experience UI and functional issues. We will optimize for more browsers in the future.',
+        'Core is being replaced with a native version, called Uplink. We are focusing all our efforts there.',
+      browser_warning_content2:
+        'To read more please check out our blog post and discord server.',
+      browser_warning_link:
+        'https://medium.com/@satellite-im/we-have-some-updates-about-what-our-team-has-been-up-to-and-our-direction-going-forward-8f1d929d6542',
       confirm_clear_account: 'This will clear your account',
       confirm_clear_account_description:
         'Are you sure you want to clear your account and all data?',

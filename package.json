@@ -73,7 +73,7 @@
     "nuxt-mq": "^2.0.2",
     "peer-id": "^0.16.0",
     "qrcode.vue": "^1.7.0",
-    "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue#0485f5e414bd006c79154a8ebae6503e4107c73b",
+    "satellite-lucide-icons": "git+https://git@github.com/Satellite-im/satellite-lucide-vue",
     "simple-markdown": "^0.7.3",
     "simple-peer": "^9.11.1",
     "skaler": "^1.0.7",
