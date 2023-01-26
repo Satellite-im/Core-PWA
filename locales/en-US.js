@@ -264,7 +264,7 @@ export default {
       browser_warning_content2:
         'To read more please check out our blog post and discord server.',
       browser_warning_link:
-        'https://medium.com/@satellite-im/we-have-some-updates-about-what-our-team-has-been-up-to-and-our-direction-going-forward-8f1d929d6542',
+        'https://satellite-im.medium.com/prepare-for-uplink-8f1d929d6542',
       confirm_clear_account: 'This will clear your account',
       confirm_clear_account_description:
         'Are you sure you want to clear your account and all data?',
