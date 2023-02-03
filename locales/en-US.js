@@ -262,7 +262,7 @@ export default {
       browser_warning_content:
         'Core is being replaced with a native version, called Uplink. We are focusing all our efforts there.',
       browser_warning_content2:
-        'To read more please check out our blog post and discord server.',
+        'To read more please check out our blog post and Discord server.',
       browser_warning_link:
         'https://satellite-im.medium.com/prepare-for-uplink-8f1d929d6542',
       confirm_clear_account: 'This will clear your account',
