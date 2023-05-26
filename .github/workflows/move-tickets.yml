@@ -12,4 +12,4 @@ jobs:
         with:
           project: Core Planning
           column: Backlog
-          repo-token: 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
+          repo-token: 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
