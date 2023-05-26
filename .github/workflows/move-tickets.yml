@@ -12,4 +12,4 @@ jobs:
         with:
           project: Core Planning
           column: Backlog
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ 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 }}
